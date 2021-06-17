@@ -18,6 +18,7 @@ import configurationResolver from "./configuration.resolver";
 
 const apolloServer = new ApolloServer({
   uploads: false,
+  playground: true,
   typeDefs: mergeTypeDefs([
     shared,
     mediaSchema,
