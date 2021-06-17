@@ -11,14 +11,6 @@ const pageSchema = Schema({
   content: {
     type: Schema.Types.Mixed,
   },
-  title: {
-    type: String,
-    default: "",
-  },
-  description: {
-    type: String,
-    default: "",
-  },
 });
 
 export default models["page"] ?? model("page", pageSchema);

@@ -13,7 +13,7 @@ const withPageCMS =
       initialValues: _page,
       fields: [
         {
-          name: "seo",
+          name: "content.seo",
           component: "group",
           label: "SEO設定 SEO Config",
           fields: [
@@ -74,8 +74,6 @@ const withPageCMS =
             PageUpdate(input: $input) {
               key
               lang
-              title
-              description
               content
             }
           }

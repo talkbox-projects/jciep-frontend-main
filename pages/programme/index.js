@@ -27,10 +27,10 @@ export const getServerSideProps = async (context) => {
 const Programme = ({ page }) => {
   return (
     <VStack w="100%" align="stretch">
-      {page?.seo?.title && (
+      {page?.content?.seo?.title && (
         <NextSeo
-          title={page?.seo?.title}
-          description={page?.seo?.description}
+          title={page?.content?.seo?.title}
+          description={page?.content?.seo?.description}
         ></NextSeo>
       )}
       <Text>{JSON.stringify(page)}</Text>

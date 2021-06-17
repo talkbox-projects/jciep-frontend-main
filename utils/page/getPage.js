@@ -7,8 +7,6 @@ export const getPage = async ({ key, lang }) => {
       PageGet(key: $key, lang: $lang) {
         key
         lang
-        title
-        description
         content
       }
     }

@@ -10,20 +10,12 @@ export default gql`
 
     "follow page structure (defined in tinaCMS)"
     content: JsonContent
-
-    title: String
-    description: String
-    thumbnail: File
   }
 
   input PageUpdateInput {
     key: String!
     lang: Language
     content: JsonContent
-
-    title: String
-    description: String
-    thumbnail: FileInput
   }
 
   type Query {

@@ -52,8 +52,11 @@ const useCounter = (start, length, initial = start) => {
 const Home = ({ page }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0}>
-      {page?.title && (
-        <NextSeo title={page.title} description={page.description}></NextSeo>
+      {page?.content?.seo?.title && (
+        <NextSeo
+          title={page?.content?.seo?.title}
+          description={page?.content?.seo?.description}
+        ></NextSeo>
       )}
 
       {/* First Section */}
