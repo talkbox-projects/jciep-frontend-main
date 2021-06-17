@@ -125,6 +125,7 @@ export default [
               },
             ],
           },
+
           {
             name: "serviceHighlights",
             label: "重點活動/服務 Service Highlights",
@@ -138,27 +139,15 @@ export default [
             }),
             fields: [
               {
-                name: "audience",
-                label: "目標群眾 Audience",
+                name: "title",
+                label: "標題 Title",
                 component: "text",
               },
               {
-                name: "sections",
-                label: "區段 Sections",
-                component: "group-list",
-                fields: [
-                  {
-                    name: "title",
-                    label: "標題 Title",
-                    component: "text",
-                  },
-                  {
-                    name: "content",
-                    label: "內容 Content",
-                    component: "blocks",
-                    templates: metaTextTemplates,
-                  },
-                ],
+                name: "content",
+                label: "內容 Content",
+                component: "blocks",
+                templates: metaTextTemplates,
               },
             ],
           },
@@ -225,6 +214,11 @@ export default [
               {
                 name: "phone",
                 label: "電話 Phone",
+                component: "text",
+              },
+              {
+                name: "fax",
+                label: "傳真 Fax",
                 component: "text",
               },
               {

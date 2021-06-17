@@ -5,7 +5,7 @@ import Container from "./Container";
 import NextLink from "next/link";
 const Navigation = ({ navigation }) => {
   return (
-    <Box position="fixed" zIndex={100} top={8} w="100%">
+    <Box position="fixed" zIndex={100} top={16} w="100%">
       <Container>
         <HStack
           alignItems="stretch"
