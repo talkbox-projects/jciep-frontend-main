@@ -10,11 +10,7 @@ import { MarkdownFieldPlugin } from "react-tinacms-editor";
 const App = ({ Component, pageProps }) => {
   return (
     <ChakraProvider resetCSS={true}>
-      <NextSeo
-        title="香"
-        description="This example uses more of the available config options."
-        canonical="https://www.canonical.ie/"
-      />
+      <NextSeo title="賽馬會共融． 知行計劃" />
       <VStack w="100vw" align="stretch" spacing={0}>
         <Header {...pageProps}></Header>
         <Navigation {...pageProps}></Navigation>
