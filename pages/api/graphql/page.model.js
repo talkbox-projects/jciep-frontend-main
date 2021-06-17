@@ -6,7 +6,7 @@ const pageSchema = Schema({
   },
   lang: {
     type: String,
-    default: "en",
+    default: "zh",
   },
   content: {
     type: Schema.Types.Mixed,
