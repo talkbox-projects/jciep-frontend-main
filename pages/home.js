@@ -221,7 +221,7 @@ const Home = ({ page }) => {
       <Box bg="#F6D644" position="relative">
         <Container>
           <Box py={32}>
-            <SimpleGrid align="center" py={16} columns={[1, 2, 2, 4]}>
+            <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
               {(page?.content?.transitionBanner?.slides ?? []).map(
                 ({ caption, image }, index) => (
                   <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: 12 }}>
@@ -235,8 +235,8 @@ const Home = ({ page }) => {
                       bgImage={`url(${image})`}
                       bgSize="cover"
                       bgPos="center"
-                      w="260px"
-                      h="260px"
+                      w="240px"
+                      h="240px"
                       maxW="100%"
                     />
                   </Box>
