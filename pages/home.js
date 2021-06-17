@@ -286,12 +286,13 @@ const Home = ({ page }) => {
               <Container key={index}>
                 <Stack
                   align="center"
+                  justifyContent="center"
                   spacing={[6, 8, 10, 16]}
                   h={800}
                   direction={["column", "column", "row"]}
                 >
-                  <Box w="40%">
-                    <Image w="30%" src={image} />
+                  <Box w={["100%", "50%", "40%"]}>
+                    <Image src={image} />
                   </Box>
                   <VStack
                     px={8}
