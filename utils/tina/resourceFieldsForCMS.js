@@ -245,7 +245,7 @@ export default [
           },
           {
             name: "services",
-            label: "服務對象 ServiceTarget",
+            label: "支援服務 Services",
             component: "group-list",
             itemProps: ({ id: key, category: label }) => ({
               key,
