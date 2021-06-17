@@ -3,8 +3,9 @@ module.exports = {
     GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT,
   },
   i18n: {
-    locales: ["en", "zh"],
+    locales: ["zh", "en"],
     defaultLocale: "zh",
+    localeDetection: false,
   },
   async redirects() {
     return [

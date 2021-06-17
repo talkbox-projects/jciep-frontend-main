@@ -75,29 +75,54 @@ export default [
         component: "blocks",
         templates: metaTextTemplates,
       },
-
       {
-        name: "qna",
+        name: "qnaSection",
         label: "問與答 Q&A Section",
-        component: "group-list",
-        itemProps: ({ id: key, question: label }) => ({
-          key,
-          label,
-        }),
-        defaultItem: () => ({
-          id: Math.random().toString(36).substr(2, 9),
-        }),
+        component: "group",
         fields: [
           {
-            name: "question",
-            label: "問題 Question",
-            component: "text",
-          },
-          {
-            name: "response",
-            label: "回應 Response",
-            component: "blocks",
-            templates: metaTextTemplates,
+            name: "sections",
+            label: "區段 sections",
+            component: "group-list",
+            itemProps: ({ id: key, title: label }) => ({
+              key,
+              label,
+            }),
+            defaultItem: () => ({
+              id: Math.random().toString(36).substr(2, 9),
+            }),
+            fields: [
+              {
+                name: "title",
+                label: "區段標題 Subsection Title",
+                component: "text",
+              },
+              {
+                name: "items",
+                label: "項目 Items",
+                component: "group-list",
+                itemProps: ({ id: key, question: label }) => ({
+                  key,
+                  label,
+                }),
+                defaultItem: () => ({
+                  id: Math.random().toString(36).substr(2, 9),
+                }),
+                fields: [
+                  {
+                    name: "question",
+                    label: "問題 Question",
+                    component: "text",
+                  },
+                  {
+                    name: "response",
+                    label: "回應 Response",
+                    component: "blocks",
+                    templates: metaTextTemplates,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -123,6 +148,15 @@ export default [
                 name: "text",
                 label: "顯示文字 Text",
                 component: "text",
+              },
+              {
+                name: "style",
+                label: "樣式 Style",
+                component: "select",
+                options: [
+                  { key: "default", label: "預設白色" },
+                  { key: "highlight", label: "高亮黃色" },
+                ],
               },
             ],
           },
