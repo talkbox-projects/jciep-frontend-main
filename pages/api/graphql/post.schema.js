@@ -1,37 +1,23 @@
 import gql from "graphql-tag";
 
 export default gql`
-  type Authur {
-    id: ID!
-    name: MultiLangString!
-    description: String!
-    avatar: File!
-  }
-
-  type Category {
-    id: ID!
-    icon: File!
-    color: String!
-    name: MultiLangString!
-  }
-
   enum PostStatus {
-    DRAFT
-    PUBLISHED
-    REMOVED
+    draft
+    published
+    removed
   }
 
   "An post (unique key = id + lang)"
   type Post {
     id: ID!
     lang: Language!
-    publishDate: String
+    slug: String
+    publishDate: Timestamp
     title: String
     excerpt: String
     coverImage: File
-    authur: Authur
-    category: [Category]!
-    tag: [String]!
+    category: String
+    tag: [String]
     status: PostStatus!
     content: JsonContent
     viewCount: Int!
@@ -39,41 +25,38 @@ export default gql`
 
   input PostCreateInput {
     lang: Language!
-    id: ID
+    slug: String
     title: String
-    publishDate: String
+    publishDate: Timestamp
     excerpt: String
     coverImage: FileInput
-    authur: ID
-    category: [ID]
-    status: PostStatus!
+    category: String
     content: JsonContent
   }
 
   input PostUpdateInput {
     id: ID!
     lang: Language!
+    slug: String
     title: String
-    publishDate: String
+    publishDate: Timestamp
     excerpt: String
     coverImage: FileInput
-    authur: ID
-    category: [ID]
-    status: PostStatus!
+    category: String
     content: JsonContent
+    status: PostStatus
   }
 
   type Query {
     PostSearch(
       lang: Language!
       status: [PostStatus]
-      authur: [ID]
-      category: [ID]!
+      category: String
       limit: Int!
-      afterId: ID
+      offset: Int!
     ): [Post]
 
-    PostGet(ids: [ID]!): Post
+    PostGet(idOrSlug: String!, lang: Language!): Post
     "get related posts for post specfiied by id. 延伸閱讀"
     PostGetRelated(id: ID): [Post]
     "熱門文章 limit default = 3"
@@ -81,11 +64,10 @@ export default gql`
   }
 
   type Mutation {
-    PostCreate(data: PostCreateInput): Post @auth(roles: [staff])
-    PostUpdate(data: PostUpdateInput): Post @auth(roles: [staff])
+    PostCreate(input: PostCreateInput): Post @auth(roles: [staff])
+    PostUpdate(input: PostUpdateInput): Post @auth(roles: [staff])
     PostDelete(id: ID): Boolean @auth(roles: [staff])
 
     PostRead(id: ID): Boolean
-    PostCategoryList: [Category]
   }
 `;

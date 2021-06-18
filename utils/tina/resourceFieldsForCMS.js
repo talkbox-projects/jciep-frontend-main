@@ -221,9 +221,10 @@ export default [
             label: "category 分類",
             component: "select",
             options: [
-              { key: "gov", label: "政府主導的計劃" },
-              { key: "non-gov", label: "非政府組織提供的服務" },
+              { value: "gov", label: "政府主導的計劃" },
+              { value: "non-gov", label: "非政府組織提供的服務" },
             ],
+            defaultValue: "gov",
           },
           {
             name: "name",
@@ -257,16 +258,17 @@ export default [
             fields: [
               {
                 name: "category",
-                label: "分類 category ",
+                label: "分類 category",
                 component: "select",
                 options: [
-                  { key: "assessment", label: "工作/就業評估" },
-                  { key: "matching", label: "工作配對" },
-                  { key: "followUp", label: "就業後跟進" },
-                  { key: "training", label: "職業訓練/就業培訓" },
-                  { key: "instruction", label: "職場督導/指導" },
-                  { key: "guidance", label: "為僱主和職員提供培訓/指導" },
+                  { value: "assessment", label: "工作/就業評估" },
+                  { value: "matching", label: "工作配對" },
+                  { value: "followUp", label: "就業後跟進" },
+                  { value: "training", label: "職業訓練/就業培訓" },
+                  { value: "instruction", label: "職場督導/指導" },
+                  { value: "guidance", label: "為僱主和職員提供培訓/指導" },
                 ],
+                defaultValue: "assessment",
               },
 
               {
@@ -305,9 +307,10 @@ export default [
                 label: "資助對象 target",
                 component: "select",
                 options: [
-                  { key: "employer", label: "僱主" },
-                  { key: "trainee", label: "僱員/實習生/訓練生" },
+                  { value: "employer", label: "僱主" },
+                  { value: "trainee", label: "僱員/實習生/訓練生" },
                 ],
+                defaultValue: "employer",
               },
               {
                 name: "description",

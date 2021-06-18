@@ -154,9 +154,10 @@ export default [
                 label: "樣式 Style",
                 component: "select",
                 options: [
-                  { key: "default", label: "預設白色" },
-                  { key: "highlight", label: "高亮黃色" },
+                  { value: "default", label: "預設白色" },
+                  { value: "highlight", label: "高亮黃色" },
                 ],
+                defaultValue: "default",
               },
             ],
           },

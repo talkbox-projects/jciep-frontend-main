@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { NextSeo } from "next-seo";
 import MongooseMediaStore from "../media/store";
 import { MarkdownFieldPlugin } from "react-tinacms-editor";
+import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 
 const App = ({ Component, pageProps }) => {
   return (
@@ -21,9 +22,66 @@ const App = ({ Component, pageProps }) => {
   );
 };
 
-export default withTina(App, {
-  media: new MongooseMediaStore(),
-  plugins: [MarkdownFieldPlugin],
-  enabled: true,
-  sidebar: true,
-});
+export default withTina(
+  withConfigurationCMS(App, {
+    key: "setting",
+    label: "設定 Setting",
+    fields: [
+      {
+        name: "categories",
+        component: "group-list",
+        label: "分類 Categories",
+        itemProps: ({ id: key, label }) => ({
+          key,
+          label: label?.zh || label?.en ? `${label?.zh} ${label?.en}` : "",
+        }),
+        defaultItem: () => ({
+          id: Math.random().toString(36).substr(2, 9),
+        }),
+        fields: [
+          {
+            name: "key",
+            component: "text",
+            label: "關鍵碼 Post Category Key",
+          },
+          {
+            name: "label",
+            component: "group",
+            label: "分類名稱 Category Label",
+            fields: [
+              {
+                name: "en",
+                component: "text",
+                label: "英文 English",
+              },
+              {
+                name: "zh",
+                component: "text",
+                label: "繁體中文 Traditional Chinese",
+              },
+            ],
+          },
+          {
+            name: "color",
+            component: "color",
+            label: "顏色 Color",
+          },
+          {
+            label: "圖示 Icon",
+            name: "image",
+            component: "image",
+            uploadDir: () => "/sharing/categories",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
+      },
+    ],
+  }),
+  {
+    media: new MongooseMediaStore(),
+    plugins: [MarkdownFieldPlugin],
+    enabled: true,
+    sidebar: true,
+  }
+);

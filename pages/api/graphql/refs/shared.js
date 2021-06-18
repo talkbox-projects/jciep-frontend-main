@@ -38,6 +38,7 @@ export default gql`
   scalar FileInput
   scalar Timestamp
   scalar JsonContent
+  scalar Timestamp
 
   enum District {
     central_east
