@@ -4,7 +4,7 @@ import { getGraphQLClient } from "../apollo";
 
 const PostCreatorPlugin = {
   __type: "content-creator",
-  name: "新增分享",
+  name: "新增分享 Create New Post",
   fields: [
     {
       name: "lang",
