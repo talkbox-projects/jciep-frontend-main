@@ -14,12 +14,13 @@ import configurationSchema from "./configuration.schema";
 import configurationResolver from "./configuration.resolver";
 import postSchema from "./post.schema";
 import postResolver from "./post.resolver";
+import sharedSchema from "./shared.schema";
 
 const apolloServer = new ApolloServer({
   uploads: false,
   playground: true,
   typeDefs: mergeTypeDefs([
-    shared,
+    sharedSchema,
     mediaSchema,
     pageSchema,
     postSchema,
