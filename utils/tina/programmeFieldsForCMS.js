@@ -97,6 +97,14 @@ export default [
               "The partner detail route would be /programme/partner/{slug}",
           },
           {
+            label: "圖標 Logo",
+            name: "logo",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
             name: "agencyName",
             label: "機構名稱 Agency Name",
             component: "text",
