@@ -26,6 +26,15 @@ const postSchema = Schema({
   status: {
     type: String,
   },
+  tags: {
+    type: [String],
+  },
+  references: [
+    {
+      label: String,
+      url: String,
+    },
+  ],
   content: {
     type: Schema.Types.Mixed,
   },

@@ -3,7 +3,37 @@ import { Image, TabList, Tabs, Tab, Link } from "@chakra-ui/react";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
 import NextLink from "next/link";
+import { useMemo, useRef } from "react";
+import { useRouter } from "next/router";
 const Navigation = ({ navigation }) => {
+  const router = useRouter();
+
+  const tabIndex = useMemo(() => {
+    const kv = {
+      0: /^(\/home)/g,
+      1: /^(\/programme)/g,
+      2: /^(\/people-with-disabilities)/g,
+      3: /^(\/resources)/g,
+      4: /^(\/job-opportunities)/g,
+      5: /^(\/talents)/g,
+      6: /^(\/sharing)/g,
+    };
+    return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
+      if (tabIndex === undefined) {
+        console.log(router.pathname, router.pathname.match(regexr));
+        if (router.pathname.match(regexr)) {
+          return index;
+        } else {
+          return tabIndex;
+        }
+      } else {
+        return tabIndex;
+      }
+    }, undefined);
+  }, [router.pathname]);
+
+  console.log(tabIndex);
+
   return (
     <Box position="fixed" zIndex={100} top={16} w="100%">
       <Container>
@@ -19,7 +49,7 @@ const Navigation = ({ navigation }) => {
         >
           <Image p={2} h="100%" src={navigation?.logo} />
           <Box flex={1} minW={0} w="100%" />
-          <Tabs h="100%">
+          <Tabs h="100%" index={Number(tabIndex)}>
             <TabList h="100%" border={0}>
               {(navigation.menu ?? []).map(({ id, label, path = "/" }) => (
                 <NextLink href={path}>

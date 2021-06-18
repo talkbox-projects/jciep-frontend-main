@@ -7,6 +7,11 @@ export default gql`
     removed
   }
 
+  type PostReference {
+    label: String
+    url: String
+  }
+
   "An post (unique key = id + lang)"
   type Post {
     id: ID!
@@ -17,10 +22,16 @@ export default gql`
     excerpt: String
     coverImage: File
     category: String
-    tag: [String]
+    tags: [String]
+    references: [PostReference]
     status: PostStatus!
     content: JsonContent
     viewCount: Int!
+  }
+
+  input PostReferenceInput {
+    label: String
+    url: String
   }
 
   input PostCreateInput {
@@ -32,6 +43,8 @@ export default gql`
     coverImage: FileInput
     category: String
     content: JsonContent
+    tags: [String]
+    references: [PostReferenceInput]
   }
 
   input PostUpdateInput {
@@ -45,6 +58,8 @@ export default gql`
     category: String
     content: JsonContent
     status: PostStatus
+    tags: [String]
+    references: [PostReferenceInput]
   }
 
   type Query {
@@ -60,7 +75,10 @@ export default gql`
     "get related posts for post specfiied by id. 延伸閱讀"
     PostGetRelated(id: ID): [Post]
     "熱門文章 limit default = 3"
-    PostGetLatest(limit: Int): [Post]
+    PostGetHotest(offset: Int!, limit: Int!): [Post]
+
+    "最新文章 Latest Article with pagination"
+    PostGetLatest(offset: Int!, limit: Int!): [Post]
   }
 
   type Mutation {

@@ -17,15 +17,32 @@ export default {
     PostGet: async (_parent, { lang, idOrSlug }) => {
       const isObjectId = mongoose.isValidObjectId(idOrSlug);
       if (isObjectId) {
-        const post = await PostModel.findById(idOrSlug).exec();
+        const post = await PostModel.findById(idOrSlug);
         return post;
       } else {
         const post = await PostModel.findOne({
           lang,
           slug: idOrSlug,
-        }).exec();
+        });
         return post;
       }
+    },
+    PostGetHottest: (_parent, { limit = 3 }) => {
+      /**
+       * get first {limit} posts with greatest view count
+       */
+    },
+    PostGetRelated: (_parent, { id }) => {
+      /**
+       * get related posts of a post specified by id
+       * logic to be confirmed
+       */
+    },
+    PostGetLatest: (_parent, { page = 1, limit = 10 }) => {
+      /**
+       * get latest posts of a post specified by id
+       * logic to be confirmed
+       */
     },
   },
   Mutation: {
@@ -37,6 +54,22 @@ export default {
     },
     PostCreate: async (_parent, { input: _post }) => {
       const post = await PostModel.create(_post);
+      return post;
+    },
+
+    PostDelete: async (_parent, { input: { id } }) => {
+      try {
+        const post = await PostModel.findByIdAndDelete(id);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+
+    PostRead: async (_parent, { input: { id } }) => {
+      const post = await PostModel.findByIdAndUpdate(id, {
+        $inc: { viewCount: 1 },
+      }).exec();
       return post;
     },
   },

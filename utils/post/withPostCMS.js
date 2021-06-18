@@ -72,12 +72,36 @@ const withPostCMS =
           component: "textarea",
         },
         {
-          name: "tag",
+          name: "tags",
           label: "標籤 Tags",
           component: "list",
           field: {
             component: "text",
           },
+        },
+        {
+          name: "references",
+          label: "參考資料 References",
+          component: "group-list",
+          itemProps: ({ id: key, title: label }) => ({
+            key,
+            label,
+          }),
+          defaultItem: () => ({
+            id: Math.random().toString(36).substr(2, 9),
+          }),
+          fields: [
+            {
+              name: "label",
+              component: "text",
+              label: "標籤 Label",
+            },
+            {
+              name: "url",
+              component: "text",
+              label: "網址 URL",
+            },
+          ],
         },
       ],
       onSubmit: async (values) => {
@@ -91,14 +115,24 @@ const withPostCMS =
               excerpt
               publishDate
               status
-              tag
+              tags
+              references {
+                label
+                url
+              }
               category
               content
             }
           }
         `;
+
         const variables = {
-          input: values,
+          input: {
+            ...values,
+            references: (values?.references ?? []).map(
+              ({ id, ...reference }) => reference
+            ),
+          },
         };
         await getGraphQLClient().request(mutation, variables);
       },

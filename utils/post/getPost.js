@@ -11,6 +11,12 @@ export const getPost = async ({ idOrSlug, lang }) => {
         title
         excerpt
         content
+        category
+        tags
+        references {
+          label
+          url
+        }
       }
     }
   `;

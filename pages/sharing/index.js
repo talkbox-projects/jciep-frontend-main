@@ -5,6 +5,7 @@ import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import withPageCMS from "../../utils/page/withPageCMS";
 import withPostCMS from "../../utils/post/withPostCMS";
+import withPostCreatorCMS from "../../utils/post/withPostCreatorCMS";
 
 const PAGE_KEY = "sharing";
 
@@ -39,7 +40,9 @@ const Sharing = ({ page, setting }) => {
   );
 };
 
-export default withPageCMS(Sharing, {
-  key: PAGE_KEY,
-  fields: sharingFieldsForCMS,
-});
+export default withPostCreatorCMS(
+  withPageCMS(Sharing, {
+    key: PAGE_KEY,
+    fields: sharingFieldsForCMS,
+  })
+);
