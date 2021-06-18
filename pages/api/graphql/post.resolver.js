@@ -27,7 +27,7 @@ export default {
         return post;
       }
     },
-    PostGetHottest: (_parent, { limit = 3 }) => {
+    PostGetHotest: (_parent, { limit = 3 }) => {
       /**
        * get first {limit} posts with greatest view count
        */

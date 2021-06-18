@@ -29,9 +29,9 @@ export default [
     ],
   },
   {
-    name: "hottestSection",
+    name: "hotestSection",
     component: "group",
-    label: "熱門文章區段 Hottest Section",
+    label: "熱門文章區段 Hotest Section",
     fields: [
       {
         component: "text",
