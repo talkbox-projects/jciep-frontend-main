@@ -3,205 +3,194 @@ import { gql } from "apollo-server-core";
 export default gql`
   # graphql-upload
 
-  type StaffProfile {
-    name: String!
+  enum JoinStatus {
+    binded
+    invited
   }
-  type JobSeekerProfile {
-    introductionVideo: Media
-    interestedEmploymentType: EmploymentType
-    interestedIndustry: Industry
-    school: School
-    degree: Degree
-    fieldOfStudy: String
-    studyStartYear: String
-    studyEndYear: String
-    studyDescription: String
-    studyMedia: Media
-    studyTitle: String
-    employmentType: EmploymentType
-    companyName: String
-    industry: Industry
-    currentJob: Boolean
-    currentJobStartYear: String
-    currentJobEndYear: String
-    currentJobDescription: String
-    currentJobMedia: Media
-    language: Language
-    accomplishmentName: String
-    accomplishmentMedia: Media
-    otherMedia: Media
-    skillName: String
-    skillMedia: Media
+  enum PwdType {
+    adhd
   }
 
-  type NgoProfile {
-    district: District!
-    website: String!
-  }
-
-  type EmployerProfile {
-    industry: Industry!
-    district: District!
-    website: String!
-    businessRegistration: File!
-    companyBenefit: String
-  }
-
-  type PublicProfile {
-    name: String!
-  }
-
-  enum ApplicationStatus {
-    approved
-    reject
-    pending
-    resubmit
-  }
-
-  type Application {
-    id: ID!
-    userId: ID!
-    role: Role!
-    status: ApplicationStatus!
-    employer: EmployerProfile
-    ngo: NgoProfile
-    createAt: Timestamp!
-    updateAt: Timestamp!
-    approveAt: Timestamp!
-    # staff fills in information/reason when status = resubmit/rejected
-    remark: String!
-    createBy: ID
-  }
-
-  input EmployerProfileInput {
-    industry: Industry!
-    district: District!
-    website: String!
-    businessRegistration: FileInput!
-    companyBenefit: String
-  }
-
-  input NgoProfileInput {
-    district: District!
-    website: String!
-  }
-  input PublicProfileInput {
-    name: String!
-  }
-  input JobSeekerProfileInput {
-    introductionVideo: MediaInput
-    interestedEmploymentType: EmploymentType
-    interestedIndustry: Industry
-    school: School
-    degree: Degree
-    fieldOfStudy: String
-    studyStartYear: String
-    studyEndYear: String
-    studyDescription: String
-    studyMedia: MediaInput
-    studyTitle: String
-    employmentType: EmploymentType
-    companyName: String
-    industry: Industry
-    currentJob: Boolean
-    currentJobStartYear: String
-    currentJobEndYear: String
-    currentJobDescription: String
-    currentJobMedia: MediaInput
-    language: Language
-    accomplishmentName: String
-    accomplishmentMedia: MediaInput
-    otherMedia: MediaInput
-    skillName: String
-    skillMedia: MediaInput
-
-    "job seeker profile can be managed by an ngo account. managedBy is the userId of the ngo"
-    managedBy: ID
-  }
-
-  input UserCreateInput {
-    email: String!
-    password: String
-    facebookId: String
-    appleId: String
-    chineseName: String!
-    profilePic: FileInput
-    bio: String!
-    acceptTnc: Boolean!
-    employer: EmployerProfileInput
-    ngo: NgoProfileInput
-    public: PublicProfileInput
-    jobSeeker: JobSeekerProfileInput
-  }
-
-  input UserUpdateInput {
-    id: ID!
-    email: String!
-    password: String
-    facebookId: String
-    appleId: String
-    chineseName: String!
-    profilePic: FileInput
-    bio: String!
-    acceptTnc: Boolean!
-    employer: EmployerProfileInput
-    ngo: NgoProfileInput
-    public: PublicProfileInput
-    jobSeeker: JobSeekerProfileInput
+  type OrganizationRole {
+    organization: Organization
+    status: JoinStatus!
+    role: Role
   }
 
   type User {
-    id: ID!
-    email: String!
+    phone: String
+    email: String
     password: String
     facebookId: String
     appleId: String
-    chineseName: String!
-    profilePic: File
-    bio: String!
-    acceptTnc: Boolean!
-    application: [Application]
-    createAt: Timestamp!
-    updateAt: Timestamp!
+    googleId: String
+    identities: [Identity]
+  }
 
-    employer: EmployerProfile
-    ngo: NgoProfile
-    public: PublicProfile
-    jobSeeker: JobSeekerProfile
+  type Education {
+    school: String
+    degree: Degree
+    fieldOfStudy: String
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+    present: Boolean
+  }
+
+  type Employment {
+    employmentType: EmploymentMode
+    CompanyName: String
+    Industry: Industry
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+    present: Boolean
+  }
+
+  type Activity {
+    name: String
+    description: String
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+  }
+
+  input EducationInput {
+    school: String
+    degree: Degree
+    fieldOfStudy: String
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+    present: Boolean
+  }
+
+  input EmploymentInput {
+    employmentType: EmploymentMode
+    CompanyName: String
+    Industry: Industry
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+    present: Boolean
+  }
+
+  input ActivityInput {
+    name: String
+    description: String
+    startDatetime: Timestamp
+    endDatetime: Timestamp
+  }
+
+  type Identity {
+    id: ID!
+    identity: IdentityType!
+    chineseName: String!
+    englishName: String!
+    dob: Timestamp
+    gender: Gender
+    district: District
+    pwdType: PwdType
+    interestedEmploymentMode: EmploymentMode
+    interestedIndustry: [Industry]
+    industry: Industry
+    tncAccept: Boolean
+    email: String
+    phone: String
+
+    biography: JsonContent
+    portfolio: [Media]
+    writtenLanguage: [WrittenLanguage]
+    oralLanguage: [WrittenLanguage]
+    hobby: String
+    education: [Education]
+    employment: [Employment]
+    activity: [Activity]
+
+    organizationRole: OrganizationRole
+  }
+
+  input IdentityCreateInput {
+    userId: ID
+    inviteToken: String
+    identity: IdentityType!
+    chineseName: String!
+    englishName: String!
+    dob: Timestamp
+    gender: Gender
+    district: District
+    pwdType: PwdType
+    interestedEmploymentMode: EmploymentMode
+    interestedIndustry: [Industry]
+    industry: Industry
+    tncAccept: Boolean
+    email: String
+    phone: String
+
+    biography: JsonContent
+    portfolio: [MediaInput]
+    writtenLanguage: [WrittenLanguage]
+    oralLanguage: [WrittenLanguage]
+    hobby: String
+    education: [EducationInput]
+    employment: [EmploymentInput]
+    activity: [ActivityInput]
+  }
+
+  input IdentityUpdateInput {
+    id: ID
+    organizationId: ID
+    userId: ID
+    identity: IdentityType!
+    chineseName: String!
+    englishName: String!
+    dob: Timestamp
+    gender: Gender
+    district: District
+    pwdType: PwdType
+    interestedEmploymentMode: EmploymentMode
+    interestedIndustry: [Industry]
+    industry: Industry
+    tncAccept: Boolean
+    email: String
+    phone: String
+
+    biography: JsonContent
+    portfolio: [MediaInput]
+    writtenLanguage: [WrittenLanguage]
+    oralLanguage: [WrittenLanguage]
+    hobby: String
+    education: [EducationInput]
+    employment: [EmploymentInput]
+    activity: [ActivityInput]
+  }
+
+  input LoginInput {
+    phone: String
+    otp: String
+    facebookToken: String
+    googleToken: String
+    appleToken: String
+    emailVerificationToken: String
+    password: String
   }
 
   type Query {
-    "return null if not exists"
-    UserGet(ids: [ID]): User
+    UserEmailValidityCheck(emailVerificationToken: String!): Boolean
 
-    UserSearch(
-      chineseName: String
-      role: [Role]
-      email: String
+    IdentityGet(id: ID): User
+    IdentitySearch(
+      identityTypes: [IdentityType]
       limit: Int!
       page: Int!
-    ): [User]
-    UserGetMe: User
-
-    ApplicationSearch(
-      role: Role
-      status: ApplicationStatus
-      limit: Int!
-      page: Int!
-    ): [Application]
-    ApplicationGet(id: ID!): Application
+    ): [User] @auth(identityTypes: [admin])
   }
+
   type Mutation {
-    "header: x-token, require 'adminUser'"
-    UserCreate(data: UserCreateInput): User
+    UserPhoneVerify(phone: String!): Boolean
+    UserEmailVerify(email: String!): Boolean
 
-    "user uses this mutation to update his/her own profile"
-    MeUpdate(data: UserUpdateInput): User @auth(roles: [staff, ngo])
+    UserLogin(input: LoginInput): User
 
-    "staff uses this mutation to update any user profiles;  ngo uses this mutation to update ITS SUBORDINATE job seeker profiles"
-    UserUpdate(data: UserUpdateInput): User @auth(roles: [staff, ngo])
+    UserPasswordResetEmailSend(email: String!): Boolean
+    UserPasswordReset(token: String!, password: String!): Boolean
 
-    "staff uses this mutation to update any user profiles;  ngo uses this mutation to update ITS SUBORDINATE job seeker profiles"
-    UserSuspense(id: ID): Boolean @auth(roles: [staff, ngo])
+    IdentityCreate(input: IdentityCreateInput!): Identity @auth
+    IdentityUpdate(input: IdentityUpdateInput!): Identity @auth
   }
 `;

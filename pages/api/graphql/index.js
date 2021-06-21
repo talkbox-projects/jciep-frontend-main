@@ -4,7 +4,6 @@ import {
   mergeTypeDefs,
 } from "apollo-server-micro";
 import connectDB from "../../../server/db";
-import shared from "./refs/shared";
 import { processRequest } from "graphql-upload";
 import mediaResolver from "./media.resolver";
 import mediaSchema from "./media.schema";
@@ -15,6 +14,9 @@ import configurationResolver from "./configuration.resolver";
 import postSchema from "./post.schema";
 import postResolver from "./post.resolver";
 import sharedSchema from "./shared.schema";
+import userSchema from "./user.schema";
+import organizationSchema from "./organization.schema";
+import userResolver from "./user.resolver";
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -25,12 +27,17 @@ const apolloServer = new ApolloServer({
     pageSchema,
     postSchema,
     configurationSchema,
+
+    organizationSchema,
+    userSchema,
   ]),
   resolvers: mergeResolvers([
     mediaResolver,
     pageResolver,
     postResolver,
     configurationResolver,
+
+    userResolver,
   ]),
 });
 

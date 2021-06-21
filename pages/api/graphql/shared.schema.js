@@ -1,18 +1,32 @@
 import gql from "graphql-tag";
 
 export default gql`
-  directive @auth(roles: [Role]) on OBJECT | FIELD_DEFINITION
+  """
+  Restricted to particular identity type(s) of user
+  If identityTypes is empty, check whether user is logged in
+  """
+  directive @auth(identityTypes: [IdentityType]) on OBJECT | FIELD_DEFINITION
+
+  enum Gender {
+    male
+    female
+    notSpecified
+  }
+
+  enum IdentityType {
+    admin
+    pwd
+    public
+    employer
+    staff
+  }
 
   enum Role {
     staff
     pwd
-    employer
-    ngo
-    public
   }
-  enum EmploymentType {
+  enum EmploymentMode {
     freelance
-    contract
     fullTime
     partTime
   }
@@ -32,6 +46,19 @@ export default gql`
   enum Language {
     en
     zh
+  }
+
+  enum WrittenLanguage {
+    chinese
+    english
+    other
+  }
+
+  enum OralLanguage {
+    cantonese
+    english
+    mandarin
+    other
   }
 
   scalar Upload

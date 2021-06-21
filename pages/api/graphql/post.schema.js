@@ -82,9 +82,9 @@ export default gql`
   }
 
   type Mutation {
-    PostCreate(input: PostCreateInput): Post @auth(roles: [staff])
-    PostUpdate(input: PostUpdateInput): Post @auth(roles: [staff])
-    PostDelete(id: ID): Boolean @auth(roles: [staff])
+    PostCreate(input: PostCreateInput): Post @auth(identityTypes: [staff])
+    PostUpdate(input: PostUpdateInput): Post @auth(identityTypes: [staff])
+    PostDelete(id: ID): Boolean @auth(identityTypes: [staff])
 
     PostRead(id: ID): Boolean
   }
