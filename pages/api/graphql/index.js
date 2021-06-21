@@ -17,9 +17,11 @@ import sharedSchema from "./shared.schema";
 import userSchema from "./user.schema";
 import organizationSchema from "./organization.schema";
 import userResolver from "./user.resolver";
+import organizationResolver from "./organization.resolver";
 
 const apolloServer = new ApolloServer({
   uploads: false,
+  introspection: true,
   playground: true,
   typeDefs: mergeTypeDefs([
     sharedSchema,
@@ -37,6 +39,7 @@ const apolloServer = new ApolloServer({
     postResolver,
     configurationResolver,
 
+    organizationResolver,
     userResolver,
   ]),
 });

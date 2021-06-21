@@ -20,7 +20,6 @@ const Navigation = ({ navigation }) => {
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
-        console.log(router.pathname, router.pathname.match(regexr));
         if (router.pathname.match(regexr)) {
           return index;
         } else {
@@ -31,8 +30,6 @@ const Navigation = ({ navigation }) => {
       }
     }, undefined);
   }, [router.pathname]);
-
-  console.log(tabIndex);
 
   return (
     <Box position="fixed" zIndex={100} top={16} w="100%">
