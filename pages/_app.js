@@ -8,6 +8,8 @@ import MongooseMediaStore from "../media/store";
 import { MarkdownFieldPlugin } from "react-tinacms-editor";
 import { AppProvider } from "../store/AppStore";
 
+import "../global.css";
+
 const App = ({ Component, pageProps }) => {
   return (
     <AppProvider>

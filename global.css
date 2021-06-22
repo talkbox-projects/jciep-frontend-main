@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "GenJyuuGotic";
+  src: url("/fonts/GenJyuuGotic/GenJyuuGothicRegular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "EBGaramond";
+  src: url("/fonts/EBGaramond/EBGaramond-Medium.ttf");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+body {
+  font-family: "GenJyuuGotic";
+  color: #1e1e1e;
+}
