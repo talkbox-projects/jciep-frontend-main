@@ -49,7 +49,7 @@ const Navigation = ({ navigation }) => {
           <Tabs h="100%" index={Number(tabIndex)}>
             <TabList h="100%" border={0}>
               {(navigation.menu ?? []).map(({ id, label, path = "/" }) => (
-                <NextLink href={path}>
+                <NextLink key={id} href={path}>
                   <Tab
                     px={2}
                     _focus={{ outline: "none" }}

@@ -411,12 +411,17 @@ const Home = ({ page }) => {
                           }
                         )}
                       </Text>
-                      <SimpleGrid columns={[1, 2, 3]} mt={8} spacing={12}>
+                      <SimpleGrid
+                        columns={[1, 1, 3, 3]}
+                        mt={8}
+                        spacing={[2, 2, 2, 12]}
+                      >
                         {(features ?? []).map(
                           ({ id, icon, title, caption, remark }) => (
                             <GridItem
                               as={VStack}
                               borderWidth={1}
+                              bg="white"
                               _hover={{
                                 boxShadow: "lg",
                                 bg: "white",
