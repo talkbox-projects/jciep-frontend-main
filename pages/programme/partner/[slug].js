@@ -8,6 +8,7 @@ import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, Flex, HStack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
+import BorderedTitle from "./../../../components/BorderedTitle";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -33,14 +34,13 @@ const Partner = ({ page }) => {
       {/* Banner Section */}
 
       <Box
-        h="calc(50vw - 40px)"
-        minH="70vh"
+        h="calc(50vw - 55px)"
         w="100%"
         position="relative"
         overflowY="visible"
         backgroundImage={`url(${page?.content?.partnerSection?.slugBannerSection?.image})`}
-        backgroundSize="cover"
-        backgroundPosition="center center"
+        backgroundSize="contain"
+        backgroundRepeat="no-repeat"
         display="flex"
         flexDirection="column"
         alignItems="center"
@@ -207,48 +207,15 @@ const Partner = ({ page }) => {
 
       {/* Service Targets */}
       <Box bg={page?.content?.partnerSection?.serviceTarget?.bgColor}>
-        <Box
-          textAlign="center"
-          pos="relative"
-          fontSize={["24", "30", "36"]}
-          w={["80%", "80%", "100%"]}
-          mx={["20", "30"]}
-        >
-          <chakra.span pos="relative">
-            <chakra.span
-              background={page?.content?.partnerSection?.serviceTarget?.titleColor}
-              width={["0%", "106%"]}
-              pos="absolute"
-              height={["0%", "67%"]}
-              bottom="-2"
-              right="-1"
-              zIndex="1"
-            />
-            <chakra.span zIndex="2" fontWeight="bold" pos="relative">
-              {page?.content?.partnerSection?.serviceTarget?.title}
-            </chakra.span>
-          </chakra.span>
-          {/* Mobile view highlight spans*/}
-          <chakra.span
-            background={page?.content?.partnerSection?.serviceTarget?.titleColor}
-            width="106%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            top="4"
-            right="-1"
-            zIndex="1"
+        <VStack w="100%">
+          <BorderedTitle
+            title={page?.content?.partnerSection?.serviceTarget?.title}
+            color={page?.content?.partnerSection?.serviceTarget?.titleColor}
+            mobileWidth="40%"
+            right="30%"
+            width={["0%", "106%"]}
           />
-          <chakra.span
-            background={page?.content?.partnerSection?.serviceTarget?.titleColor}
-            width="60%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            bottom="-1"
-            right="70"
-            zIndex="1"
-          />
-        </Box>
-
+        </VStack>
         <HStack justifyContent="center" w="100%" pt="56px">
           <SimpleGrid justifyContent="center" w="60%" gap="36px" columns={[2, 2, 4, 4]}>
             {(partner?.serviceTargets ?? []).map(({ label, description, image }, index) => {
