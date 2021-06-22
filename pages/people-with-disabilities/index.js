@@ -127,6 +127,7 @@ const PwdMain = ({ page }) => {
               alignItems="center"
               px="12px"
               onClick={() => router.push(`people-with-disabilities/${data.slug}`)}
+              zIndex={1}
             >
               <Image src={data.icon} h="48px" w="48px" />
               <Text fontSize={["16px", "16px", "24px"]} textAlign="center">{data.name}</Text>
