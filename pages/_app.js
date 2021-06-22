@@ -7,6 +7,7 @@ import { NextSeo } from "next-seo";
 import MongooseMediaStore from "../media/store";
 import { MarkdownFieldPlugin } from "react-tinacms-editor";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
+import "../global.css";
 
 const App = ({ Component, pageProps }) => {
   return (
