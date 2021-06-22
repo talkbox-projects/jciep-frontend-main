@@ -121,58 +121,61 @@ const PwdDetail = ({ page }) => {
         flexDirection="column"
         alignItems="center"
       >
-        <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>{wordExtractor(page?.content?.wordings, "qnaSectionTitle")}</Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(-30deg)"
-          />
-        </Box>
-
-        <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
-          {(pwd?.qna ?? []).map((qna, index) => (
-            <AccordionItem
-              background="#fff"
-              borderRadius={10}
-              key={index}
-              mt={index > 0 ? "16px" : "0px"}
-              border="none"
-              w={["288px", "288px", "616px"]}
-            >
-              {({ isExpanded }) => (
-                <>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        {qna.question}
-                      </Box>
-                      {isExpanded ? <MinusIcon fontSize="12px" /> : <AddIcon fontSize="12px" />}
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    <MultiTextRenderer textAlign="center" fontSize={16} data={qna.response} />
-                  </AccordionPanel>
-                </>
-              )}
-            </AccordionItem>
-          ))}
-        </Accordion>
+        {(pwd?.qna ?? []).map((qnGroup, i) => (
+          <Box key={i} pos="relative" display="flex" flexDirection="column" alignItems="center" pb="16px">
+            <Box pos="relative">
+              <Text fontSize={["24", "24", "36"]}>{qnGroup.accordionGroup?.title}</Text>
+              <Box
+                width="6.15px"
+                height="27.69px"
+                borderRadius="5px"
+                pos="absolute"
+                right={["-6", "-6", "-12"]}
+                bottom="0"
+                background="#fff"
+                transform="rotate(30deg)"
+              />
+              <Box
+                width="6.15px"
+                height="27.69px"
+                borderRadius="5px"
+                pos="absolute"
+                left={["-6", "-6", "-12"]}
+                bottom="0"
+                background="#fff"
+                transform="rotate(-30deg)"
+              />
+            </Box>
+            <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
+              {(qnGroup.accordionGroup?.accordions ?? []).map((qna, index) => (
+                <AccordionItem
+                  background="#fff"
+                  borderRadius={10}
+                  key={index}
+                  mt={index > 0 ? "16px" : "0px"}
+                  border="none"
+                  w={["288px", "288px", "616px"]}
+                >
+                  {({ isExpanded }) => (
+                    <>
+                      <h2>
+                        <AccordionButton>
+                          <Box flex="1" textAlign="left">
+                            {qna.question}
+                          </Box>
+                          {isExpanded ? <MinusIcon fontSize="12px" /> : <AddIcon fontSize="12px" />}
+                        </AccordionButton>
+                      </h2>
+                      <AccordionPanel pb={4}>
+                        <MultiTextRenderer textAlign="center" fontSize={16} data={qna.response} />
+                      </AccordionPanel>
+                    </>
+                  )}
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Box>
+        ))}
 
         <Image
           src={pwd?.qnaStyles?.imageTop}
