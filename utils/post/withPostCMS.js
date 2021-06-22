@@ -8,7 +8,6 @@ const withPostCMS =
   (props) => {
     const router = useRouter();
     const _post = props?.[propName];
-    console.log(props);
 
     const categories = props?.setting?.value?.categories ?? [];
     const [post, form] = useForm({
