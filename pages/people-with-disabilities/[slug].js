@@ -419,19 +419,10 @@ const PwdDetail = ({ page }) => {
         pos="relative"
         overflow="hidden"
       >
-        <Box position="relative">
-          <chakra.span
-            background="#fff"
-            width={["106%", "106%"]}
-            pos="absolute"
-            height={["67%", "67%"]}
-            bottom="-2"
-            right="-1"
-            zIndex="0"
-          />
-          <Text fontWeight="bold" fontSize={["24px", "24px", "36px"]} zIndex="1" pos="relative">
+        <Box mx="46px">
+          <chakra.span textAlign="center" lineHeight={2} fontWeight="bold" fontSize={["24px", "24px", "36px"]} zIndex="1" pos="relative" backgroundImage="linear-gradient(#fff, #fff)" backgroundRepeat="no-repeat" backgroundPosition="0 0.5em" pl="5px" pb="16px">
             {wordExtractor(page?.content?.wordings, "videosTitle")}
-          </Text>
+          </chakra.span>
         </Box>
 
         <Box pos="relative" mt={["45px", "45px", "59px"]} mb={["20px", "20px", "27px"]} px={["46px"]}>

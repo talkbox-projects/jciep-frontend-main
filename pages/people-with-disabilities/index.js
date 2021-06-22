@@ -100,12 +100,8 @@ const PwdMain = ({ page }) => {
       >
         <Box textAlign="center" pos="relative" fontSize={["24", "30", "36"]} w={["80%", "80%", "auto"]} mx={["50", "auto"]}>
           <chakra.span pos="relative">
-            <chakra.span background="#fff" width={["0%", "106%"]} pos="absolute" height={["0%", "67%"]} bottom="-2" right="-1" zIndex="1" />
-            <chakra.span zIndex="2" pos="relative">{pwdTitle()}</chakra.span>
+            <chakra.span backgroundImage="linear-gradient(#fff, #fff)" lineHeight={2} backgroundRepeat="no-repeat" backgroundPosition="0 0.5em" zIndex="2" pos="relative" pl="15px" pb="6px">{pwdTitle()}</chakra.span>
           </chakra.span>
-          {/* Mobile view highlight spans*/}
-          <chakra.span background="#fff" width="106%" pos="absolute" height={["30%", "0%"]} top="4" right="-1" zIndex="1" />
-          <chakra.span background="#fff" width="60%" pos="absolute" height={["30%", "0%"]} bottom="-1" right="70" zIndex="1" />
         </Box>
 
         
