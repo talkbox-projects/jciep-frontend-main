@@ -459,7 +459,7 @@ const PwdDetail = ({ page }) => {
           <Image src={pwd?.videoSection?.leftImage} pos="absolute" left="16%" top="0" w={["0", "0", "184px"]} />
           <Image src={pwd?.videoSection?.rightImage} pos="absolute" right="18%" bottom="0" w={["0", "0", "145px"]} />
           {pwd?.videoSection?.videos.map((video) => (
-            <AspectRatio maxW="668px" ratio={668 / 376} margin="auto" px={["24px", "24px", "0"]}>
+            <AspectRatio maxW="668px" ratio={668 / 376} margin="auto" px={["24px", "24px", "0"]} mb={["24px", "24px", "24px"]}>
               <iframe
                 src={video.url}
                 title="PWD Video"

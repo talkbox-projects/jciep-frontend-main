@@ -62,8 +62,8 @@ const PwdMain = ({ page }) => {
           <MultiTextRenderer textAlign="left" fontSize={["24", "24", "56", "56"]} data={page?.content?.banner?.quote} parentStyles={{zIndex: "1"}} />
           <Box position="absolute" bottom={["1", "1", "2", "2"]} right={["-1", "-1", "-3", "-3"]} pt={["0", "0", "6", "6"]} pb="5" background="#fff" w={["110px", "110px", "250px", "250px"]} zIndex="-1" />
         </Box>
-        <Image position="absolute" bottom="-74px" left="149" src={page?.content?.banner?.bgImageLeft}  h={["0%", "0%", "57%", "57%"]} w="auto" maxW="334" zIndex="1" />
-        <Image position="absolute" bottom="-27px" right={["20px", "20px", "100", "100"]} src={page?.content?.banner?.bgImageRight} h={["25%", "25%", "45%"]} w="auto" maxW="551" zIndex="1" />
+        <Image position="absolute" bottom="-74px" left="149" src={page?.content?.banner?.bgImageLeft}  h={["0%", "0%", "388px", "57%"]} w="auto" maxW="334" zIndex="1" />
+        <Image position="absolute" bottom="-27px" right={["20px", "20px", "100", "100"]} src={page?.content?.banner?.bgImageRight} h={["142px", "142px", "306px"]} w="auto" maxW="551" zIndex="1" />
         <Image position="absolute" bottom="-1px" src={page?.content?.banner?.bgImageBottom} width="100%" fit="contain" />
       </Box>
 
@@ -127,6 +127,7 @@ const PwdMain = ({ page }) => {
               alignItems="center"
               px="12px"
               onClick={() => router.push(`people-with-disabilities/${data.slug}`)}
+              zIndex={1}
             >
               <Image src={data.icon} h="48px" w="48px" />
               <Text fontSize={["16px", "16px", "24px"]} textAlign="center">{data.name}</Text>
@@ -136,7 +137,7 @@ const PwdMain = ({ page }) => {
 
         <Image pos="absolute" src={page?.content?.pwdList?.bgStyle?.bgGradient1} bottom={0} right={0} />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
-          <Image pos="absolute" right={["22px", "35px", "81px"]} bottom="0" h="100%" width={["66%", "54%", "52%"]} src={page?.content?.pwdList?.bgStyle?.bottomImage} zIndex="1" />
+          <Image pos="absolute" right={["22px", "35px", "81px"]} bottom="0" h={["124px", "135px", "380px"]} width={["248px", "270px", "749px"]} src={page?.content?.pwdList?.bgStyle?.bottomImage} zIndex="1" />
           <Image pos="absolute" right="0px" bottom="0" width="100%" objectFit="contain" src={page?.content?.pwdList?.bgStyle?.bottomBorder} zIndex="0" />
         </Box>        
       </Box>
