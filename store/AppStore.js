@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 
 const [AppProvider, useAppContext] = constate((props) => {
@@ -35,6 +35,11 @@ const [AppProvider, useAppContext] = constate((props) => {
   const loginModalDisclosure = useDisclosure();
   const [user, setUser] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
+
+  const onLogin = useCallback(() => {}, []);
+  useEffect(() => {
+    onLogin();
+  }, []);
 
   return {
     wordings,
