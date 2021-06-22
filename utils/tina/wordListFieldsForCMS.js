@@ -1,4 +1,4 @@
-export default ({ name = "wordings" }) => ({
+const wordListFieldsForCMS = ({ name = "wordings" }) => ({
   name,
   component: "group-list",
   label: "字串 Static Wordings",
@@ -23,3 +23,4 @@ export default ({ name = "wordings" }) => ({
     },
   ],
 });
+export default wordListFieldsForCMS;

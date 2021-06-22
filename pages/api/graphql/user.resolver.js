@@ -45,7 +45,6 @@ export default {
       }
     },
     UserLogin: async (_parent, { input }, { user, res }) => {
-      console.log("user", user);
       /**
        * Login via facebook/google/apple/email+password/phone+otp method. 
        * 
@@ -81,6 +80,7 @@ export default {
                 return error
 
        */
+
       if (input?.emailVerificationToken) {
         const emailVerify = await EmailVerify.findOne({
           token: input?.emailVerificationToken,
