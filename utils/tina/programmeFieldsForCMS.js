@@ -50,9 +50,10 @@ export default [
         component: "color",
       },
       {
-        name: "description",
+        name: "detail",
         label: "描述 Description",
-        component: "textarea",
+        component: "blocks",
+        templates: metaTextTemplates,
       },
       {
         name: "sections",
@@ -74,7 +75,8 @@ export default [
           {
             name: "description",
             label: "描述 Description",
-            component: "textarea",
+            component: "blocks",
+            templates: metaTextTemplates,
           },
         ],
       },
@@ -518,7 +520,8 @@ export default [
               {
                 name: "description",
                 label: "描述 Description",
-                component: "textarea",
+                component: "blocks",
+                templates: metaTextTemplates,
               },
               {
                 name: "links",
