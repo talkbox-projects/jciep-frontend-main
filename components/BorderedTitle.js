@@ -1,7 +1,7 @@
 import { Box, chakra } from "@chakra-ui/react";
 const BorderedTitle = ({ title, color, width, mobileWidth, right }) => {
   return (
-    <Box textAlign="center" pos="relative" fontSize={["24", "30", "36"]} w={["80%", "80%", "100%"]} mx={["20", "30"]}>
+    <Box textAlign="center" pos="relative" fontSize={["22", "30", "36"]} w={["80%", "80%", "100%"]} mx={["20", "30"]}>
       <chakra.span pos="relative">
         <chakra.span
           background={color}
