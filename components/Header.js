@@ -1,4 +1,5 @@
-import { Box, HStack, Text } from "@chakra-ui/layout";
+import { Box, HStack } from "@chakra-ui/layout";
+import wordListFieldsForCMS from "../utils/tina/wordListFieldsForCMS";
 import {
   Avatar,
   Link,
@@ -18,9 +19,9 @@ const Header = ({ header }) => {
   const router = useRouter();
   const cms = useCMS();
   return (
-    <Box zIndex={100}>
+    <Box zIndex={1000}>
       <Container>
-        <HStack zIndex={100} py={2} fontSize="sm" alignItems="center">
+        <HStack py={2} fontSize="sm" alignItems="center">
           <Box flex={1} minW={0} w="100%" />
           <Link href="/web-accessibility" fontSize="sm">
             字體大小
@@ -69,13 +70,7 @@ export default withConfigurationCMS(
   withConfigurationCMS(Header, {
     key: "header",
     label: "頁首 Header",
-    fields: [
-      {
-        name: "title",
-        label: "title",
-        component: "text",
-      },
-    ],
+    fields: [wordListFieldsForCMS({ name: "wordings" })],
   }),
   {
     key: "setting",
