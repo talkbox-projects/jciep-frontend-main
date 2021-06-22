@@ -8,7 +8,6 @@ import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import metaTextTemplates from "../../utils/tina/metaTextTemplates";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import Accordian from "../../components/Acordian";
-import BorderedTitle from "../../components/BorderedTitle";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
 
@@ -49,13 +48,15 @@ const Programme = ({ page }) => {
         alignItems="center"
         zIndex="-1"
       >
-        <Box position="absolute" left={["25%", "25%", "18%"]} bottom={["30%", "40%", "40%"]}>
+        <Box position="absolute" maxW="80%" left={["25%", "25%", "18%"]} bottom={["30%", "40%", "40%"]}>
           <Text
             w="max"
+            maxW="80%"
             fontWeight="semibold"
             fontSize={["12px", "16px", "24px", "56px"]}
             bg={page?.content?.heroBannerSection?.titleBgColor}
             color="black"
+            display="inline"
           >
             {page?.content?.heroBannerSection["title 標題"]}
           </Text>
@@ -72,14 +73,13 @@ const Programme = ({ page }) => {
       {/* Vision Section */}
       <Box bg={page?.content?.visionSection?.bgColor}>
         <Container>
-          <VStack align="center" py={16}>
-            <BorderedTitle
-              right="-1"
-              mobileWidth="106%"
-              width={["0%", "106%", "106%"]}
-              title={page?.content?.visionSection?.title}
-              color="#FFFFFF"
-            />
+          <VStack align="center" spacing={0} py={16}>
+            <Box mx={["20px", "30px"]}>
+              <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#fff, #fff)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+                {page?.content?.visionSection?.title}
+              </chakra.span>
+            </Box>
+            
             <Box pt={8}>
               <MultiTextRenderer
                 data={page?.content?.visionSection?.detail}
@@ -117,7 +117,7 @@ const Programme = ({ page }) => {
                       transform="rotate(-30deg)"
                     />
                   </Box>
-                  <Box pt={8}>
+                  <Box pt={8} px="16px">
                     <MultiTextRenderer data={description} textAlign="center" text />
                   </Box>
                 </VStack>
@@ -137,16 +137,14 @@ const Programme = ({ page }) => {
           position="relative"
         >
           <Container>
-            <VStack pt={["36px", "36px", "53px"]} textAlign="center">
-              <BorderedTitle
-                mobileWidth="40%"
-                right="30%"
-                width={["0%", "106%"]}
-                title={page?.content?.partnerSection?.title}
-                color="#F6D644"
-              />
+            <VStack spacing={0} pt={["36px", "36px", "53px"]} textAlign="center">
+              <Box>
+                <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#F6D644, #F6D644)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+                  {page?.content?.partnerSection?.title}
+                </chakra.span>
+              </Box>
 
-              <Text>{page?.content?.partnerSection?.description}</Text>
+              <Text zIndex="2">{page?.content?.partnerSection?.description}</Text>
             </VStack>
             <SimpleGrid
               justifyContent="center"
@@ -231,13 +229,11 @@ const Programme = ({ page }) => {
         mt="0"
       >
         <VStack>
-          <BorderedTitle
-            title={page?.content?.referenceSection?.title}
-            color={page?.content?.referenceSection?.titleBgColor}
-            mobileWidth="40%"
-            right="30%"
-            width={["0%", "106%"]}
-          />
+          <Box px="16px">
+            <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#F6D644, #F6D644)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+              {page?.content?.referenceSection?.title}
+            </chakra.span>
+          </Box>
         </VStack>
         <Box px={["8", "12", "24", "48"]}>
           <SimpleGrid columns={[1, 1, 2, 2]} gap="36px" mt={["36px", "56px"]} justifyContent="center">

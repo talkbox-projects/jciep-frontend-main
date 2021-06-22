@@ -466,7 +466,7 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={["36px", "36px", "66px"]}>
+        <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={["36px", "36px", "66px"]} px="16px">
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <Box key={index}>
               <Box w="100%" display="flex" flexDirection="column" borderBottom="1px solid #1E1E1E" mb="8px">
