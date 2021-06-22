@@ -6,7 +6,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Button,
   Select,
   VStack,
 } from "@chakra-ui/react";
@@ -14,8 +13,11 @@ import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
+import { useAppContext } from "../store/AppStore";
+import LoginModal from "./LoginModal";
 
 const Header = ({ header }) => {
+  const { loginModalDisclosure } = useAppContext();
   const router = useRouter();
   const cms = useCMS();
   return (
@@ -55,13 +57,14 @@ const Header = ({ header }) => {
             </PopoverTrigger>
             <PopoverContent p={4} w={48}>
               <VStack alignItems="flex-start">
-                <Link>登入</Link>
+                <Link onClick={loginModalDisclosure.onOpen}>登入</Link>
                 <Link>會員註冊</Link>
               </VStack>
             </PopoverContent>
           </Popover>
         </HStack>
       </Container>
+      <LoginModal />
     </Box>
   );
 };

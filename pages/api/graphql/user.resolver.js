@@ -101,7 +101,7 @@ export default {
         }
       } else if (input?.email && input?.password) {
         const user = await User.findOne({ email: input?.email.trim() });
-        if (await user.comparePassword(input?.password)) {
+        if (await user?.comparePassword(input?.password)) {
           nookies.set(
             { res },
             "x-token",
