@@ -7,9 +7,10 @@ import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import metaTextTemplates from "../../utils/tina/metaTextTemplates";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
-import AccordianContainer from "../../components/AccordianContainer";
+import Accordian from "../../components/Acordian";
 import BorderedTitle from "../../components/BorderedTitle";
 import NextLink from "next/link";
+import MultiTextRenderer from "./../../components/MultiTextRenderer";
 
 const PAGE_KEY = "programme";
 
@@ -80,10 +81,14 @@ const Programme = ({ page }) => {
               title={page?.content?.visionSection?.title}
               color="#FFFFFF"
             />
-
-            <Text textAlign="center" pt={8} fontSize={["lg", "xl", "xl"]}>
-              {page?.content?.visionSection?.description}
-            </Text>
+            <Box pt={8}>
+              <MultiTextRenderer
+                data={page?.content?.visionSection?.detail}
+                fontSize={["lg", "xl", "xl"]}
+                textAlign="center"
+                text
+              />
+            </Box>
 
             {(page?.content?.visionSection?.sections ?? []).map(({ title, description, id }, index) => {
               return (
@@ -113,10 +118,9 @@ const Programme = ({ page }) => {
                       transform="rotate(-30deg)"
                     />
                   </Box>
-
-                  <Text textAlign="center" pt={8}>
-                    {description}
-                  </Text>
+                  <Box pt={8}>
+                    <MultiTextRenderer data={description} textAlign="center" text />
+                  </Box>
                 </VStack>
               );
             })}
@@ -125,97 +129,99 @@ const Programme = ({ page }) => {
       </Box>
 
       {/* Partner Section */}
-      <Box
-        backgroundImage={`url(${page?.content?.partnerSection?.bgImageMain})`}
-        backgroundSize="auto"
-        backgroundRepeat="no-repeat"
-        w="100%"
-        position="relative"
-      >
-        <Container>
-          <VStack pt={["36px", "36px", "53px"]} textAlign="center">
-            <BorderedTitle
-              mobileWidth="40%"
-              right="30%"
-              width={["0%", "106%"]}
-              title={page?.content?.partnerSection?.title}
-              color="#F6D644"
-            />
+      <Box bg="#FAFAFA">
+        <Box
+          backgroundImage={`url(${page?.content?.partnerSection?.bgImageMain})`}
+          backgroundSize="contain"
+          backgroundRepeat="no-repeat"
+          w="100%"
+          position="relative"
+        >
+          <Container>
+            <VStack pt={["36px", "36px", "53px"]} textAlign="center">
+              <BorderedTitle
+                mobileWidth="40%"
+                right="30%"
+                width={["0%", "106%"]}
+                title={page?.content?.partnerSection?.title}
+                color="#F6D644"
+              />
 
-            <Text>{page?.content?.partnerSection?.description}</Text>
-          </VStack>
-          <SimpleGrid
-            justifyContent="center"
-            alignItems="center"
-            alignContent="center"
-            columns={[1, 1, 2, 3]}
-            mt={8}
-            spacing={24}
-          >
-            {(page?.content?.partnerSection?.partners ?? []).map(({ id, agencyName, projectName, contact, slug }) => (
-              <NextLink href={`/programme/partner/${slug}`}>
-                <VStack>
-                  <GridItem
-                    as={VStack}
-                    borderWidth={1}
-                    w={["80%", "80%", "100%"]}
-                    _hover={{
-                      boxShadow: "lg",
-                      bg: "white",
-                      opacity: 1,
-                    }}
-                    cursor="pointer"
-                    borderRadius={16}
-                    key={id}
-                    py={5}
-                    px={5}
-                    h={["250px", "320px"]}
-                    textAlign="left"
-                    align="left"
-                    zIndex="1000"
-                  >
-                    <Text fontSize="xl">{agencyName}</Text>
-                    <Text fontSize="lg">{projectName}</Text>
-                    <Box flex={1} minH="max-content" h="100%" />
-                    <Image w={["75%"]} src={contact?.logo}></Image>
-                  </GridItem>
-                </VStack>
-              </NextLink>
-            ))}
-          </SimpleGrid>
-        </Container>
+              <Text>{page?.content?.partnerSection?.description}</Text>
+            </VStack>
+            <SimpleGrid
+              justifyContent="center"
+              alignItems="center"
+              alignContent="center"
+              columns={[1, 1, 2, 3]}
+              mt={8}
+              spacing={24}
+            >
+              {(page?.content?.partnerSection?.partners ?? []).map(({ id, agencyName, projectName, contact, slug }) => (
+                <NextLink href={`/programme/partner/${slug}`}>
+                  <VStack>
+                    <GridItem
+                      as={VStack}
+                      borderWidth={1}
+                      bg="#FAFAFA"
+                      w={["80%", "80%", "100%"]}
+                      _hover={{
+                        boxShadow: "lg",
+                        bg: "white",
+                        opacity: 1,
+                      }}
+                      cursor="pointer"
+                      borderRadius={16}
+                      key={id}
+                      py={5}
+                      px={5}
+                      h={["250px", "320px"]}
+                      textAlign="left"
+                      align="left"
+                      zIndex="10"
+                    >
+                      <Text fontSize="xl">{agencyName}</Text>
+                      <Text fontSize="lg">{projectName}</Text>
+                      <Box flex={1} minH="max-content" h="100%" />
+                      <Image w={["75%"]} src={contact?.logo}></Image>
+                    </GridItem>
+                  </VStack>
+                </NextLink>
+              ))}
+            </SimpleGrid>
+          </Container>
 
-        <Image
-          pos="absolute"
-          zIndex="1"
-          src={page?.content?.partnerSection?.bgImageLeft}
-          top={["100px", "100px", "72px"]}
-          left={["2%", "5%", "10%"]}
-          h={["100px", "150px", "220px"]}
-          w={["100px", "150px", "220px"]}
-        />
-        <Box pos="relative" pb={["124px", "124px", "380px"]}>
           <Image
             pos="absolute"
-            right={["50px", "50px", "105px"]}
-            bottom={["15%"]}
-            h={["175px", "175px", "279px"]}
-            width={["129px", "129px", "205px"]}
-            src={page?.content?.partnerSection?.bgImageRight}
             zIndex="1"
+            src={page?.content?.partnerSection?.bgImageLeft}
+            top={["100px", "100px", "72px"]}
+            left={["2%", "5%", "10%"]}
+            h={["100px", "150px", "220px"]}
+            w={["100px", "150px", "220px"]}
           />
-          <Image
-            pos="absolute"
-            right="0px"
-            bottom="0"
-            width="100%"
-            objectFit="contain"
-            src={page?.content?.partnerSection?.bgImageBottom}
-            zIndex="0"
-          />
+          <Box pos="relative" pb={["124px", "124px", "380px"]}>
+            <Image
+              pos="absolute"
+              right={["50px", "50px", "105px"]}
+              bottom={["15%"]}
+              h={["175px", "175px", "279px"]}
+              width={["129px", "129px", "205px"]}
+              src={page?.content?.partnerSection?.bgImageRight}
+              zIndex="1"
+            />
+            <Image
+              pos="absolute"
+              right="0px"
+              bottom="0"
+              width="100%"
+              objectFit="contain"
+              src={page?.content?.partnerSection?.bgImageBottom}
+              zIndex="0"
+            />
+          </Box>
         </Box>
       </Box>
-
       {/* Reference Section */}
       <Box
         bg={page?.content?.referenceSection?.bgStyle?.bgColor}
@@ -239,8 +245,24 @@ const Programme = ({ page }) => {
             {(page?.content?.referenceSection?.references ?? []).map(({ categoryName, icon, items }, index) => {
               return (
                 <GridItem>
-                  {" "}
-                  <AccordianContainer key={index} title={categoryName} image={icon} accordians={items} />
+                  <VStack w="100%" spacing={0} align="stretch" alignItems={["center", "center", "start", "start"]}>
+                    <Image w={["130px", "120px", "110px", "100px"]} src={icon} />
+                    <Heading as="h4" fontWeight="normal">
+                      {categoryName}
+                    </Heading>
+                    {(items ?? []).map((d, i) => {
+                      return (
+                        <Accordian
+                          multi={true}
+                          bgColor="#FAFAFA"
+                          key={i}
+                          title={d.title}
+                          description={d.description}
+                          link={d.links}
+                        />
+                      );
+                    })}
+                  </VStack>{" "}
                 </GridItem>
               );
             })}

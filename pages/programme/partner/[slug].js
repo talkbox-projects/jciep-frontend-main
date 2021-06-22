@@ -1,3 +1,5 @@
+import React from "react";
+
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../utils/page/getPage";
@@ -29,6 +31,7 @@ const Partner = ({ page }) => {
   const router = useRouter();
   const slug = router.query.slug;
   const partner = (page?.content?.partnerSection?.partners ?? [])?.find((x) => x.slug === slug);
+
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {/* Banner Section */}
@@ -130,8 +133,8 @@ const Partner = ({ page }) => {
 
       {/* Services Highlights*/}
       <Box
-        minH="70vh"
         w="100%"
+        minH="70vh"
         position="relative"
         bg={page?.content?.partnerSection?.serviceSection?.bgColor}
         display="flex"
@@ -139,47 +142,58 @@ const Partner = ({ page }) => {
         alignItems="center"
         zIndex="0"
         pt="16"
+        pb="8%"
       >
-        <Box position="relative" mb="34px" mx={["47px", "47px", "0px"]}>
-          <Text fontSize={["16", "16", "24"]} textAlign="center">
-            {page?.content?.partnerSection?.serviceSection?.title}
-          </Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="-3"
-            background="#F6D644"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="-3"
-            background="#F6D644"
-            transform="rotate(-30deg)"
-          />
-        </Box>
-        <Box zIndex="10000" w={["80%", "65%", "55%", "45%"]} pt="36px">
-          {(partner?.serviceHighlights[0].sections ?? []).map(({ title, content }, index) => {
+        {partner?.serviceHighlights &&
+          Object.keys(partner.serviceHighlights).map((key) => {
             return (
-              <Accordian
-                textAlign="center"
-                title={title}
-                boldTitle
-                description={content}
-                multi={true}
-                key={index}
-                bgColor="#FFFFFF"
-              />
+              <>
+                <Box mb="34px" mx={["47px", "47px", "0px"]}>
+                  <Box>
+                    <Text fontSize={["16", "16", "24"]} textAlign="center">
+                      {partner?.serviceHighlights[key].audience}
+                    </Text>
+                    <Box
+                      width="6.15px"
+                      height="27.69px"
+                      borderRadius="5px"
+                      pos="absolute"
+                      right={["-6", "-6", "-12"]}
+                      bottom="-3"
+                      background="#F6D644"
+                      transform="rotate(30deg)"
+                    />
+                    <Box
+                      width="6.15px"
+                      height="27.69px"
+                      borderRadius="5px"
+                      pos="absolute"
+                      left={["-6", "-6", "-12"]}
+                      bottom="-3"
+                      background="#F6D644"
+                      transform="rotate(-30deg)"
+                    />
+                  </Box>
+                </Box>
+                <Box mb="10px" zIndex="10000" w={["80%", "65%", "55%", "45%"]} pt="36px">
+                  {(partner?.serviceHighlights[key]?.sections ?? []).map(({ title, content }, index) => {
+                    return (
+                      <Accordian
+                        textAlign="center"
+                        title={title}
+                        boldTitle
+                        description={content}
+                        multi={true}
+                        key={index}
+                        bgColor="#FFFFFF"
+                      />
+                    );
+                  })}
+                </Box>
+              </>
             );
           })}
-        </Box>
+
         <Image
           pos="absolute"
           left={["5%", "10%", "15%"]}
@@ -231,16 +245,18 @@ const Partner = ({ page }) => {
           </SimpleGrid>
         </HStack>
 
-        <Flex px={["12", "36", "56"]} wrap="wrap" pt={["16", "36"]}>
-          <VStack bg="white" w={["100%", "50%"]}>
-            <Image w="150px" src={partner?.contact?.logo} />
-            <Text>{partner?.contact?.label}</Text>
+        <Flex px={["0", "0", "56"]} wrap="wrap" pt={["16", "36"]}>
+          <VStack bg="white" w={["100%", "100%", "50%"]}>
+            <Box w="80%">
+              <Image w="310px" src={partner?.contact?.logo} />
+            </Box>
+            <Text w="80%">{partner?.contact?.label}</Text>
           </VStack>
-          <VStack bg="white" pt={["10px", ""]} w={["100%", "50%"]}>
-            <Text w="100%">{partner?.contact?.address}</Text>
-            <Text w="100%">{partner?.contact?.email}</Text>
-            <Text w="100%">{partner?.contact?.phone}</Text>
-            <Text w="100%">{partner?.contact?.fax}</Text>
+          <VStack bg="white" pt={["10px", "10px", ""]} w={["100%", "100%", "50%"]}>
+            <Text w="80%">{partner?.contact?.address}</Text>
+            <Text w="80%">{partner?.contact?.email}</Text>
+            <Text w="80%">{partner?.contact?.phone}</Text>
+            <Text w="80%">{partner?.contact?.fax}</Text>
           </VStack>
         </Flex>
       </Box>
