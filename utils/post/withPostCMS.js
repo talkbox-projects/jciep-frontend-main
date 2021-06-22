@@ -72,6 +72,60 @@ const withPostCMS =
           component: "textarea",
         },
         {
+          name: "content.blocks",
+          component: "blocks",
+          description: "Content of blocks",
+          label: "文章內容",
+          templates: {
+            "content-block": {
+              label: "文字內容 Text Content",
+              key: "content-block",
+              defaultItem: {
+                content: "",
+              },
+              fields: [
+                { name: "content", label: "Content", component: "markdown" },
+              ],
+            },
+            "image-block": {
+              label: "圖片 Image",
+              key: "content-block",
+              defaultItem: {
+                content: "",
+              },
+              fields: [
+                {
+                  label: "圖片 Image",
+                  name: "image",
+                  component: "image",
+                  uploadDir: () => "/sharing/images",
+                  parse: ({ previewSrc }) => previewSrc,
+                  previewSrc: (src) => src,
+                },
+                { name: "caption", label: "描述 Caption", component: "text" },
+              ],
+            },
+
+            "video-block": {
+              label: "影片 Video",
+              key: "video-block",
+              defaultItem: {
+                content: "",
+              },
+              fields: [
+                {
+                  label: "影片 Video Link",
+                  name: "link",
+                  placeholder: "",
+                  description: "Youtube embedded link",
+                  component: "text",
+                },
+                { name: "caption", label: "描述 Caption", component: "text" },
+              ],
+            },
+          },
+        },
+        {
           name: "tags",
           label: "標籤 Tags",
           component: "list",
