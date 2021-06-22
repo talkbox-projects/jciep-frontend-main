@@ -26,6 +26,10 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      wordings: await getConfiguration({
+        key: "wordings",
+        lang: context.locale,
+      }),
       header: await getConfiguration({ key: "header", lang: context.locale }),
       footer: await getConfiguration({ key: "footer", lang: context.locale }),
       navigation: await getConfiguration({
@@ -39,7 +43,9 @@ export const getServerSideProps = async (context) => {
 const PwdDetail = ({ page }) => {
   const router = useRouter();
   const slug = router.query.slug;
-  const pwd = (page?.content?.pwdList?.pwds ?? [])?.find((x) => x.slug === slug);
+  const pwd = (page?.content?.pwdList?.pwds ?? [])?.find(
+    (x) => x.slug === slug
+  );
   const [activeJob, setActiveJob] = React.useState("");
   const [activeJobItems, setActiveJobItems] = React.useState([]);
   const [remainingPwds, setRemainingPwds] = React.useState([]);
@@ -106,9 +112,25 @@ const PwdDetail = ({ page }) => {
         <Text fontWeight="bold" fontSize={["24", "24", "56"]}>
           {pwd?.name}
         </Text>
-        <MultiTextRenderer textAlign="center" fontSize={["16", "16", "24", "24"]} data={pwd?.description} />
-        <Image pos="absolute" bottom="0" right="0" height="86%" src={pwd?.descriptionStyles?.bgGradient} />
-        <Image pos="absolute" bottom="0" src={pwd?.descriptionStyles?.bottomBorder} width="100%" fit="contain" />
+        <MultiTextRenderer
+          textAlign="center"
+          fontSize={["16", "16", "24", "24"]}
+          data={pwd?.description}
+        />
+        <Image
+          pos="absolute"
+          bottom="0"
+          right="0"
+          height="86%"
+          src={pwd?.descriptionStyles?.bgGradient}
+        />
+        <Image
+          pos="absolute"
+          bottom="0"
+          src={pwd?.descriptionStyles?.bottomBorder}
+          width="100%"
+          fit="contain"
+        />
       </Box>
 
       {/* Q&A Section */}
@@ -122,7 +144,9 @@ const PwdDetail = ({ page }) => {
         alignItems="center"
       >
         <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>{wordExtractor(page?.content?.wordings, "qnaSectionTitle")}</Text>
+          <Text fontSize={["24", "24", "36"]}>
+            {wordExtractor(page?.content?.wordings, "qnaSectionTitle")}
+          </Text>
           <Box
             width="6.15px"
             height="27.69px"
@@ -162,11 +186,19 @@ const PwdDetail = ({ page }) => {
                       <Box flex="1" textAlign="left">
                         {qna.question}
                       </Box>
-                      {isExpanded ? <MinusIcon fontSize="12px" /> : <AddIcon fontSize="12px" />}
+                      {isExpanded ? (
+                        <MinusIcon fontSize="12px" />
+                      ) : (
+                        <AddIcon fontSize="12px" />
+                      )}
                     </AccordionButton>
                   </h2>
                   <AccordionPanel pb={4}>
-                    <MultiTextRenderer textAlign="center" fontSize={16} data={qna.response} />
+                    <MultiTextRenderer
+                      textAlign="center"
+                      fontSize={16}
+                      data={qna.response}
+                    />
                   </AccordionPanel>
                 </>
               )}
@@ -202,17 +234,33 @@ const PwdDetail = ({ page }) => {
             zIndex="0"
           />
         </Box>
-        <Image pos="absolute" bottom="0" src={pwd?.qnaStyles?.bottomBorder} width="100%" fit="contain" zIndex={2} />
+        <Image
+          pos="absolute"
+          bottom="0"
+          src={pwd?.qnaStyles?.bottomBorder}
+          width="100%"
+          fit="contain"
+          zIndex={2}
+        />
       </Box>
 
       {/* Traits Section */}
-      <Box pb={["80px", "80px", "56px"]} px={["16px", "16px", "14%"]} background={pwd?.traitSection?.bgColor}>
+      <Box
+        pb={["80px", "80px", "56px"]}
+        px={["16px", "16px", "14%"]}
+        background={pwd?.traitSection?.bgColor}
+      >
         <Box display="flex" pos="relative">
           <Box mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {wordExtractor(page?.content?.wordings, "traitSectionTitle")}
             </Text>
-            <Text fontSize="16px">{wordExtractor(page?.content?.wordings, "traitSectionDescription")}</Text>
+            <Text fontSize="16px">
+              {wordExtractor(
+                page?.content?.wordings,
+                "traitSectionDescription"
+              )}
+            </Text>
           </Box>
           <Image
             src={pwd?.traitSection?.imageTop}
@@ -240,7 +288,11 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         <Grid
-          templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]}
+          templateColumns={[
+            "repeat(1, 1fr)",
+            "repeat(1, 1fr)",
+            "repeat(2, 1fr)",
+          ]}
           gap="24px"
           justifyContent="center"
           mt="26px"
@@ -290,7 +342,9 @@ const PwdDetail = ({ page }) => {
         overflow="hidden"
       >
         <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>{wordExtractor(page?.content?.wordings, "jobTypeSectionTitle")}</Text>
+          <Text fontSize={["24", "24", "36"]}>
+            {wordExtractor(page?.content?.wordings, "jobTypeSectionTitle")}
+          </Text>
           <Box
             width="6.15px"
             height="27.69px"
@@ -312,7 +366,9 @@ const PwdDetail = ({ page }) => {
             transform="rotate(-30deg)"
           />
         </Box>
-        <Text fontSize={["14", "14", "16"]}>{wordExtractor(page?.content?.wordings, "jobTypeSectionDescription")}</Text>
+        <Text fontSize={["14", "14", "16"]}>
+          {wordExtractor(page?.content?.wordings, "jobTypeSectionDescription")}
+        </Text>
 
         <Box mt={["24px", "24px", "48px"]}>
           <Box display="flex" justifyContent="center">
@@ -325,7 +381,12 @@ const PwdDetail = ({ page }) => {
                   borderColor={active ? "#fff" : "#000"}
                   variant="outline"
                   key={i}
-                  onClick={() => performSelection(pwd?.careerSection?.sections ?? [], section.id)}
+                  onClick={() =>
+                    performSelection(
+                      pwd?.careerSection?.sections ?? [],
+                      section.id
+                    )
+                  }
                   borderRadius={19}
                   _hover={{ color: "#fff", background: "#00000030" }}
                   mr={i === 0 ? "16px" : "0px"}
@@ -338,11 +399,21 @@ const PwdDetail = ({ page }) => {
           </Box>
 
           <Grid
-            templateColumns={["repeat(1, 288px)", "repeat(1, 288px)", "repeat(2, 320px)"]}
+            templateColumns={[
+              "repeat(1, 288px)",
+              "repeat(1, 288px)",
+              "repeat(2, 320px)",
+            ]}
             gap={["16px", "16px", "48px"]}
           >
             {activeJobItems.map((item, i) => (
-              <Box key={i} bg="#fff" borderRadius="24px" border="1px solid #fff" zIndex={3}>
+              <Box
+                key={i}
+                bg="#fff"
+                borderRadius="24px"
+                border="1px solid #fff"
+                zIndex={3}
+              >
                 <Image src={item.image} />
                 <Box
                   h={["76px", "76px", "92px"]}
@@ -423,13 +494,24 @@ const PwdDetail = ({ page }) => {
             right="-1"
             zIndex="0"
           />
-          <Text fontWeight="bold" fontSize={["24px", "24px", "36px"]} zIndex="1" pos="relative">
+          <Text
+            fontWeight="bold"
+            fontSize={["24px", "24px", "36px"]}
+            zIndex="1"
+            pos="relative"
+          >
             {wordExtractor(page?.content?.wordings, "videosTitle")}
           </Text>
         </Box>
 
-        <Box pos="relative" mt={["45px", "45px", "59px"]} mb={["20px", "20px", "27px"]}>
-          <Text fontSize={["16", "16", "24"]}>{pwd?.videoSection?.description}</Text>
+        <Box
+          pos="relative"
+          mt={["45px", "45px", "59px"]}
+          mb={["20px", "20px", "27px"]}
+        >
+          <Text fontSize={["16", "16", "24"]}>
+            {pwd?.videoSection?.description}
+          </Text>
           <Box
             width="6.15px"
             height="27.69px"
@@ -453,10 +535,27 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         <Box w="100%" h="100%" pos="relative" mb={["36px", "36px", "105px"]}>
-          <Image src={pwd?.videoSection?.leftImage} pos="absolute" left="16%" top="0" w={["0", "0", "184px"]} />
-          <Image src={pwd?.videoSection?.rightImage} pos="absolute" right="18%" bottom="0" w={["0", "0", "145px"]} />
+          <Image
+            src={pwd?.videoSection?.leftImage}
+            pos="absolute"
+            left="16%"
+            top="0"
+            w={["0", "0", "184px"]}
+          />
+          <Image
+            src={pwd?.videoSection?.rightImage}
+            pos="absolute"
+            right="18%"
+            bottom="0"
+            w={["0", "0", "145px"]}
+          />
           {pwd?.videoSection?.videos.map((video) => (
-            <AspectRatio maxW="668px" ratio={668 / 376} margin="auto" px={["24px", "24px", "0"]}>
+            <AspectRatio
+              maxW="668px"
+              ratio={668 / 376}
+              margin="auto"
+              px={["24px", "24px", "0"]}
+            >
               <iframe
                 src={video.url}
                 title="PWD Video"
@@ -469,11 +568,28 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={["36px", "36px", "66px"]}>
+        <Grid
+          templateColumns={[
+            "repeat(1, 1fr)",
+            "repeat(1, 1fr)",
+            "repeat(2, 1fr)",
+          ]}
+          gap={["36px", "36px", "66px"]}
+        >
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <Box key={index}>
-              <Box w="100%" display="flex" flexDirection="column" borderBottom="1px solid #1E1E1E" mb="8px">
-                <Image src={pwd?.referenceSection?.categoryIcon} w="36px" mb="6px" />
+              <Box
+                w="100%"
+                display="flex"
+                flexDirection="column"
+                borderBottom="1px solid #1E1E1E"
+                mb="8px"
+              >
+                <Image
+                  src={pwd?.referenceSection?.categoryIcon}
+                  w="36px"
+                  mb="6px"
+                />
                 <Text fontSize={["20px", "20px", "24px"]} fontWeight="bold">
                   {category.title}
                 </Text>
@@ -494,7 +610,13 @@ const PwdDetail = ({ page }) => {
             </Box>
           ))}
         </Grid>
-        <Image pos="absolute" bottom="0" right="0" height="100%" src={pwd?.referenceSection?.gradient} />
+        <Image
+          pos="absolute"
+          bottom="0"
+          right="0"
+          height="100%"
+          src={pwd?.referenceSection?.gradient}
+        />
         <Image
           pos="absolute"
           bottom="-1px"
@@ -516,7 +638,9 @@ const PwdDetail = ({ page }) => {
         overflow="hidden"
       >
         <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>{wordExtractor(page?.content?.wordings, "otherPwdSectionType")}</Text>
+          <Text fontSize={["24", "24", "36"]}>
+            {wordExtractor(page?.content?.wordings, "otherPwdSectionType")}
+          </Text>
           <Box
             width="6.15px"
             height="27.69px"
@@ -539,7 +663,11 @@ const PwdDetail = ({ page }) => {
           />
         </Box>
         <Grid
-          templateColumns={["repeat(2, 1fr)", "repeat(2, 1fr)", "repeat(4, 1fr)"]}
+          templateColumns={[
+            "repeat(2, 1fr)",
+            "repeat(2, 1fr)",
+            "repeat(4, 1fr)",
+          ]}
           gap={["16px", "16px", "24px"]}
           mt={["36px", "56px"]}
           justifyContent="center"

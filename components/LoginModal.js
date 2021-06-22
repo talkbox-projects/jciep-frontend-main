@@ -17,9 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
+import { useGetWording } from "../utils/wordings/useWording";
 
 const LoginModal = () => {
   const { loginModalDisclosure } = useAppContext();
+  const getWording = useGetWording();
 
   const { handleSubmit, errors, register } = useForm();
   const toast = useToast();
@@ -30,6 +32,9 @@ const LoginModal = () => {
         mutation UserLogin($input: LoginInput) {
           UserLogin(input: $input) {
             email
+            identities {
+              id
+            }
           }
         }
       `;
@@ -68,22 +73,22 @@ const LoginModal = () => {
     >
       <ModalOverlay></ModalOverlay>
       <ModalContent>
-        <ModalHeader>登入</ModalHeader>
+        <ModalHeader>{getWording("login.login_title")}</ModalHeader>
         <ModalBody>
           <Box as="form" onSubmit={handleSubmit(onLogin)}>
             <FormControl>
-              <FormLabel>電郵</FormLabel>
+              <FormLabel>{getWording("login.login_email_label")}</FormLabel>
               <Input {...register("email")} />
               <FormHelperText>{errors?.email?.message}</FormHelperText>
             </FormControl>
             <FormControl>
-              <FormLabel>密碼</FormLabel>
+              <FormLabel>{getWording("login.login_password_label")}</FormLabel>
               <Input type="password" {...register("password")} />
               <FormHelperText>{errors?.password?.message}</FormHelperText>
             </FormControl>
             <FormControl>
               <Button type="submit" variant="outline">
-                登入
+                {getWording("login.login_button_label")}
               </Button>
             </FormControl>
           </Box>

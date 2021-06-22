@@ -12,7 +12,7 @@ import "../global.css";
 
 const App = ({ Component, pageProps }) => {
   return (
-    <AppProvider>
+    <AppProvider {...pageProps}>
       <ChakraProvider resetCSS={true}>
         <NextSeo title="賽馬會共融． 知行計劃" />
         <VStack w="100vw" align="stretch" spacing={0}>

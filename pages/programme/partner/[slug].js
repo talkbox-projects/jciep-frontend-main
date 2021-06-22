@@ -14,6 +14,10 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      wordings: await getConfiguration({
+        key: "wordings",
+        lang: context.locale,
+      }),
       header: await getConfiguration({ key: "header", lang: context.locale }),
       footer: await getConfiguration({ key: "footer", lang: context.locale }),
       navigation: await getConfiguration({
@@ -27,7 +31,9 @@ export const getServerSideProps = async (context) => {
 const Partner = ({ page }) => {
   const router = useRouter();
   const slug = router.query.slug;
-  const partner = (page?.content?.partnerSection?.partners ?? [])?.find((x) => x.slug === slug);
+  const partner = (page?.content?.partnerSection?.partners ?? [])?.find(
+    (x) => x.slug === slug
+  );
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {/* Banner Section */}
@@ -109,7 +115,13 @@ const Partner = ({ page }) => {
               return (
                 <GridItem pt={["20px", ""]} key={index}>
                   <HStack justifyContent="center" alignItems="center">
-                    <Image w="50px" src={page?.content?.partnerSection?.planSection?.objectiveIcon} />
+                    <Image
+                      w="50px"
+                      src={
+                        page?.content?.partnerSection?.planSection
+                          ?.objectiveIcon
+                      }
+                    />
                     <Text fontWeight="bold" w={["70%", "50%"]}>
                       {content}
                     </Text>
@@ -166,19 +178,21 @@ const Partner = ({ page }) => {
           />
         </Box>
         <Box zIndex="10000" w={["80%", "65%", "55%", "45%"]} pt="36px">
-          {(partner?.serviceHighlights[0].sections ?? []).map(({ title, content }, index) => {
-            return (
-              <Accordian
-                textAlign="center"
-                title={title}
-                boldTitle
-                description={content}
-                multi={true}
-                key={index}
-                bgColor="#FFFFFF"
-              />
-            );
-          })}
+          {(partner?.serviceHighlights[0].sections ?? []).map(
+            ({ title, content }, index) => {
+              return (
+                <Accordian
+                  textAlign="center"
+                  title={title}
+                  boldTitle
+                  description={content}
+                  multi={true}
+                  key={index}
+                  bgColor="#FFFFFF"
+                />
+              );
+            }
+          )}
         </Box>
         <Image
           pos="absolute"
@@ -216,7 +230,9 @@ const Partner = ({ page }) => {
         >
           <chakra.span pos="relative">
             <chakra.span
-              background={page?.content?.partnerSection?.serviceTarget?.titleColor}
+              background={
+                page?.content?.partnerSection?.serviceTarget?.titleColor
+              }
               width={["0%", "106%"]}
               pos="absolute"
               height={["0%", "67%"]}
@@ -230,7 +246,9 @@ const Partner = ({ page }) => {
           </chakra.span>
           {/* Mobile view highlight spans*/}
           <chakra.span
-            background={page?.content?.partnerSection?.serviceTarget?.titleColor}
+            background={
+              page?.content?.partnerSection?.serviceTarget?.titleColor
+            }
             width="106%"
             pos="absolute"
             height={["30%", "0%"]}
@@ -239,7 +257,9 @@ const Partner = ({ page }) => {
             zIndex="1"
           />
           <chakra.span
-            background={page?.content?.partnerSection?.serviceTarget?.titleColor}
+            background={
+              page?.content?.partnerSection?.serviceTarget?.titleColor
+            }
             width="60%"
             pos="absolute"
             height={["30%", "0%"]}
@@ -250,17 +270,29 @@ const Partner = ({ page }) => {
         </Box>
 
         <HStack justifyContent="center" w="100%" pt="56px">
-          <SimpleGrid justifyContent="center" w="60%" gap="36px" columns={[2, 2, 4, 4]}>
-            {(partner?.serviceTargets ?? []).map(({ label, description, image }, index) => {
-              return (
-                <VStack>
-                  <Image w="150px" src={image} />
-                  <Text textAlign="center" w="150px" fontSize="2xl" fontWeight="semibold">
-                    {label}
-                  </Text>
-                </VStack>
-              );
-            })}
+          <SimpleGrid
+            justifyContent="center"
+            w="60%"
+            gap="36px"
+            columns={[2, 2, 4, 4]}
+          >
+            {(partner?.serviceTargets ?? []).map(
+              ({ label, description, image }, index) => {
+                return (
+                  <VStack>
+                    <Image w="150px" src={image} />
+                    <Text
+                      textAlign="center"
+                      w="150px"
+                      fontSize="2xl"
+                      fontWeight="semibold"
+                    >
+                      {label}
+                    </Text>
+                  </VStack>
+                );
+              }
+            )}
           </SimpleGrid>
         </HStack>
 

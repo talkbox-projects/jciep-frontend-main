@@ -16,6 +16,10 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      wordings: await getConfiguration({
+        key: "wordings",
+        lang: context.locale,
+      }),
       header: await getConfiguration({ key: "header", lang: context.locale }),
       footer: await getConfiguration({ key: "footer", lang: context.locale }),
       navigation: await getConfiguration({
@@ -120,41 +124,53 @@ const Programme = ({ page }) => {
               {page?.content?.visionSection?.description}
             </Text>
 
-            {(page?.content?.visionSection?.sections ?? []).map(({ title, description, id }, index) => {
-              return (
-                <VStack pt={16} key={id}>
-                  <Box w="200px" position="relative" mb="34px" mx={["47px", "47px", "48px"]}>
-                    <Text pt={8} textAlign="center" fontWeight="normal" fontSize={["lg", "1xl", "2xl"]}>
-                      {title}
-                    </Text>
+            {(page?.content?.visionSection?.sections ?? []).map(
+              ({ title, description, id }, index) => {
+                return (
+                  <VStack pt={16} key={id}>
                     <Box
-                      width="6.15px"
-                      height="27.69px"
-                      borderRadius="5px"
-                      pos="absolute"
-                      right={["-6", "-6", "-12"]}
-                      bottom="-3"
-                      background="#FFFFFF"
-                      transform="rotate(30deg)"
-                    />
-                    <Box
-                      width="6.15px"
-                      height="27.69px"
-                      borderRadius="5px"
-                      pos="absolute"
-                      left={["-6", "-6", "-12"]}
-                      bottom="-3"
-                      background="#FFFFFF"
-                      transform="rotate(-30deg)"
-                    />
-                  </Box>
+                      w="200px"
+                      position="relative"
+                      mb="34px"
+                      mx={["47px", "47px", "48px"]}
+                    >
+                      <Text
+                        pt={8}
+                        textAlign="center"
+                        fontWeight="normal"
+                        fontSize={["lg", "1xl", "2xl"]}
+                      >
+                        {title}
+                      </Text>
+                      <Box
+                        width="6.15px"
+                        height="27.69px"
+                        borderRadius="5px"
+                        pos="absolute"
+                        right={["-6", "-6", "-12"]}
+                        bottom="-3"
+                        background="#FFFFFF"
+                        transform="rotate(30deg)"
+                      />
+                      <Box
+                        width="6.15px"
+                        height="27.69px"
+                        borderRadius="5px"
+                        pos="absolute"
+                        left={["-6", "-6", "-12"]}
+                        bottom="-3"
+                        background="#FFFFFF"
+                        transform="rotate(-30deg)"
+                      />
+                    </Box>
 
-                  <Text textAlign="center" pt={8}>
-                    {description}
-                  </Text>
-                </VStack>
-              );
-            })}
+                    <Text textAlign="center" pt={8}>
+                      {description}
+                    </Text>
+                  </VStack>
+                );
+              }
+            )}
           </VStack>
         </Container>
       </Box>
@@ -222,36 +238,38 @@ const Programme = ({ page }) => {
             mt={8}
             spacing={24}
           >
-            {(page?.content?.partnerSection?.partners ?? []).map(({ id, agencyName, projectName, contact, slug }) => (
-              <NextLink href={`/programme/partner/${slug}`}>
-                <VStack>
-                  <GridItem
-                    as={VStack}
-                    borderWidth={1}
-                    w={["80%", "100%"]}
-                    _hover={{
-                      boxShadow: "lg",
-                      bg: "white",
-                      opacity: 1,
-                    }}
-                    cursor="pointer"
-                    borderRadius={16}
-                    key={id}
-                    py={5}
-                    px={5}
-                    h="320px"
-                    textAlign="left"
-                    align="left"
-                    zIndex="1000"
-                  >
-                    <Text fontSize="xl">{agencyName}</Text>
-                    <Text fontSize="lg">{projectName}</Text>
-                    <Box flex={1} minH="max-content" h="100%" />
-                    <Image w={["75%"]} src={contact?.logo}></Image>
-                  </GridItem>
-                </VStack>
-              </NextLink>
-            ))}
+            {(page?.content?.partnerSection?.partners ?? []).map(
+              ({ id, agencyName, projectName, contact, slug }) => (
+                <NextLink href={`/programme/partner/${slug}`}>
+                  <VStack>
+                    <GridItem
+                      as={VStack}
+                      borderWidth={1}
+                      w={["80%", "100%"]}
+                      _hover={{
+                        boxShadow: "lg",
+                        bg: "white",
+                        opacity: 1,
+                      }}
+                      cursor="pointer"
+                      borderRadius={16}
+                      key={id}
+                      py={5}
+                      px={5}
+                      h="320px"
+                      textAlign="left"
+                      align="left"
+                      zIndex="1000"
+                    >
+                      <Text fontSize="xl">{agencyName}</Text>
+                      <Text fontSize="lg">{projectName}</Text>
+                      <Box flex={1} minH="max-content" h="100%" />
+                      <Image w={["75%"]} src={contact?.logo}></Image>
+                    </GridItem>
+                  </VStack>
+                </NextLink>
+              )
+            )}
           </SimpleGrid>
         </Container>
 
@@ -337,18 +355,35 @@ const Programme = ({ page }) => {
           />
         </Box>
         <Box px={["8", "12", "24", "48"]}>
-          <SimpleGrid columns={[1, 1, 2, 2]} gap="36px" mt={["36px", "56px"]} justifyContent="center">
-            {(page?.content?.referenceSection?.references ?? []).map(({ categoryName, icon, items }, index) => {
-              return (
-                <GridItem>
-                  {" "}
-                  <AccordianContainer key={index} title={categoryName} image={icon} accordians={items} />
-                </GridItem>
-              );
-            })}
+          <SimpleGrid
+            columns={[1, 1, 2, 2]}
+            gap="36px"
+            mt={["36px", "56px"]}
+            justifyContent="center"
+          >
+            {(page?.content?.referenceSection?.references ?? []).map(
+              ({ categoryName, icon, items }, index) => {
+                return (
+                  <GridItem>
+                    {" "}
+                    <AccordianContainer
+                      key={index}
+                      title={categoryName}
+                      image={icon}
+                      accordians={items}
+                    />
+                  </GridItem>
+                );
+              }
+            )}
           </SimpleGrid>
         </Box>
-        <Image pos="absolute" src={page?.content?.referenceSection?.bgStyle?.bgGradient1} bottom={0} right={0} />
+        <Image
+          pos="absolute"
+          src={page?.content?.referenceSection?.bgStyle?.bgGradient1}
+          bottom={0}
+          right={0}
+        />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
           <Image
             pos="absolute"
