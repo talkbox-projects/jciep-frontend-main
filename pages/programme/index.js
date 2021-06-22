@@ -8,6 +8,7 @@ import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import metaTextTemplates from "../../utils/tina/metaTextTemplates";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import AccordianContainer from "../../components/AccordianContainer";
+import BorderedTitle from "../../components/BorderedTitle";
 import NextLink from "next/link";
 
 const PAGE_KEY = "programme";
@@ -30,10 +31,7 @@ const Programme = ({ page }) => {
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {page?.content?.seo?.title && (
-        <NextSeo
-          title={page?.content?.seo?.title}
-          description={page?.content?.seo?.description}
-        ></NextSeo>
+        <NextSeo title={page?.content?.seo?.title} description={page?.content?.seo?.description}></NextSeo>
       )}
 
       {/* Banner Section */}
@@ -53,7 +51,7 @@ const Programme = ({ page }) => {
       >
         <Box position="absolute" left={["6%", "12", "18%"]} bottom={["40%"]}>
           <Text
-            w="225px"
+            w="max"
             fontWeight="semibold"
             fontSize={["36px", "56px"]}
             bg={page?.content?.heroBannerSection?.titleBgColor}
@@ -75,47 +73,14 @@ const Programme = ({ page }) => {
       <Box bg={page?.content?.visionSection?.bgColor}>
         <Container>
           <VStack align="center" py={16}>
-            <Box
-              textAlign="center"
-              pos="relative"
-              fontSize={["24", "30", "36"]}
-              w={["80%", "80%", "100%"]}
-              mx={["20", "30"]}
-            >
-              <chakra.span pos="relative">
-                <chakra.span
-                  background="#FFFFFF"
-                  width={["0%", "106%"]}
-                  pos="absolute"
-                  height={["0%", "67%"]}
-                  bottom="-2"
-                  right="-1"
-                  zIndex="1"
-                />
-                <chakra.span fontWeight="semibold" zIndex="2" pos="relative">
-                  {page?.content?.visionSection?.title}
-                </chakra.span>
-              </chakra.span>
-              {/* Mobile view highlight spans*/}
-              <chakra.span
-                background="#FFFFFF"
-                width="106%"
-                pos="absolute"
-                height={["30%", "0%"]}
-                top="4"
-                right="-1"
-                zIndex="1"
-              />
-              <chakra.span
-                background="#FFFFFF"
-                width="60%"
-                pos="absolute"
-                height={["30%", "0%"]}
-                bottom="-1"
-                right="60"
-                zIndex="1"
-              />
-            </Box>
+            <BorderedTitle
+              right="-1"
+              mobileWidth="106%"
+              width={["0%", "106%"]}
+              title={page?.content?.visionSection?.title}
+              color="#FFFFFF"
+            />
+
             <Text textAlign="center" pt={8} fontSize={["lg", "xl", "xl"]}>
               {page?.content?.visionSection?.description}
             </Text>
@@ -162,56 +127,21 @@ const Programme = ({ page }) => {
       {/* Partner Section */}
       <Box
         backgroundImage={`url(${page?.content?.partnerSection?.bgImageMain})`}
-        backgroundSize="cover"
-        backgroundPosition="center"
+        backgroundSize="auto"
+        backgroundRepeat="no-repeat"
         w="100%"
-        overflow="hidden"
         position="relative"
-        mt="0"
       >
         <Container>
           <VStack pt={["36px", "36px", "53px"]} textAlign="center">
-            <Box
-              textAlign="center"
-              pos="relative"
-              fontSize={["24", "30", "36"]}
-              w={["80%", "80%", "100%"]}
-              mx={["20", "30"]}
-            >
-              <chakra.span pos="relative">
-                <chakra.span
-                  background="#F6D644"
-                  width={["0%", "106%"]}
-                  pos="absolute"
-                  height={["0%", "67%"]}
-                  bottom="-2"
-                  right="-1"
-                  zIndex="1"
-                />
-                <chakra.span fontWeight="semibold" zIndex="2" pos="relative">
-                  {page?.content?.partnerSection?.title}
-                </chakra.span>
-              </chakra.span>
-              {/* Mobile view highlight spans*/}
-              <chakra.span
-                background="#F6D644"
-                width="106%"
-                pos="absolute"
-                height={["30%", "0%"]}
-                top="4"
-                right="-1"
-                zIndex="1"
-              />
-              <chakra.span
-                background="#F6D644"
-                width="60%"
-                pos="absolute"
-                height={["30%", "0%"]}
-                bottom="-1"
-                right="70"
-                zIndex="1"
-              />
-            </Box>
+            <BorderedTitle
+              mobileWidth="40%"
+              right="30%"
+              width={["0%", "106%"]}
+              title={page?.content?.partnerSection?.title}
+              color="#F6D644"
+            />
+
             <Text>{page?.content?.partnerSection?.description}</Text>
           </VStack>
           <SimpleGrid
@@ -228,7 +158,7 @@ const Programme = ({ page }) => {
                   <GridItem
                     as={VStack}
                     borderWidth={1}
-                    w={["80%", "100%"]}
+                    w={["80%", "80%", "100%"]}
                     _hover={{
                       boxShadow: "lg",
                       bg: "white",
@@ -239,7 +169,7 @@ const Programme = ({ page }) => {
                     key={id}
                     py={5}
                     px={5}
-                    h="320px"
+                    h={["250px", "320px"]}
                     textAlign="left"
                     align="left"
                     zIndex="1000"
@@ -259,8 +189,8 @@ const Programme = ({ page }) => {
           pos="absolute"
           zIndex="1"
           src={page?.content?.partnerSection?.bgImageLeft}
-          top={["72px", "50px", "72px"]}
-          left={["5%", "10%"]}
+          top={["100px", "100px", "72px"]}
+          left={["2%", "5%", "10%"]}
           h={["100px", "150px", "220px"]}
           w={["100px", "150px", "220px"]}
         />
@@ -295,47 +225,15 @@ const Programme = ({ page }) => {
         position="relative"
         mt="0"
       >
-        <Box
-          textAlign="center"
-          pos="relative"
-          fontSize={["24", "30", "36"]}
-          w={["80%", "80%", "100%"]}
-          mx={["20", "30"]}
-        >
-          <chakra.span pos="relative">
-            <chakra.span
-              background={page?.content?.referenceSection?.titleBgColor}
-              width={["0%", "106%"]}
-              pos="absolute"
-              height={["0%", "67%"]}
-              bottom="-2"
-              right="-1"
-              zIndex="1"
-            />
-            <chakra.span fontWeight="semibold" zIndex="2" pos="relative">
-              {page?.content?.referenceSection?.title}
-            </chakra.span>
-          </chakra.span>
-          {/* Mobile view highlight spans*/}
-          <chakra.span
-            background={page?.content?.referenceSection?.titleBgColor}
-            width="106%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            top="4"
-            right="-1"
-            zIndex="1"
+        <VStack>
+          <BorderedTitle
+            title={page?.content?.referenceSection?.title}
+            color={page?.content?.referenceSection?.titleBgColor}
+            mobileWidth="40%"
+            right="30%"
+            width={["0%", "106%"]}
           />
-          <chakra.span
-            background={page?.content?.referenceSection?.titleBgColor}
-            width="60%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            bottom="-1"
-            right="70"
-            zIndex="1"
-          />
-        </Box>
+        </VStack>
         <Box px={["8", "12", "24", "48"]}>
           <SimpleGrid columns={[1, 1, 2, 2]} gap="36px" mt={["36px", "56px"]} justifyContent="center">
             {(page?.content?.referenceSection?.references ?? []).map(({ categoryName, icon, items }, index) => {
