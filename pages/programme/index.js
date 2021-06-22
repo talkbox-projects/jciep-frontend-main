@@ -30,7 +30,7 @@ export const getServerSideProps = async (context) => {
 
 const Programme = ({ page }) => {
   return (
-    <VStack w="100%" spacing={0} align="stretch">
+    <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {page?.content?.seo?.title && (
         <NextSeo title={page?.content?.seo?.title} description={page?.content?.seo?.description}></NextSeo>
       )}
@@ -38,23 +38,22 @@ const Programme = ({ page }) => {
       {/* Banner Section */}
       <Box
         h="calc(50vw - 40px)"
-        minH="70vh"
         w="100%"
         position="relative"
         overflowY="visible"
         backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
         backgroundSize="cover"
-        backgroundPosition="center center"
+        backgroundPosition={["", "", "center"]}
         display="flex"
         flexDirection="column"
         alignItems="center"
         zIndex="-1"
       >
-        <Box position="absolute" left={["6%", "12", "18%"]} bottom={["40%"]}>
+        <Box position="absolute" left={["25%", "25%", "18%"]} bottom={["30%", "40%", "40%"]}>
           <Text
             w="max"
             fontWeight="semibold"
-            fontSize={["36px", "56px"]}
+            fontSize={["12px", "16px", "24px", "56px"]}
             bg={page?.content?.heroBannerSection?.titleBgColor}
             color="black"
           >
@@ -77,7 +76,7 @@ const Programme = ({ page }) => {
             <BorderedTitle
               right="-1"
               mobileWidth="106%"
-              width={["0%", "106%"]}
+              width={["0%", "106%", "106%"]}
               title={page?.content?.visionSection?.title}
               color="#FFFFFF"
             />
@@ -94,7 +93,7 @@ const Programme = ({ page }) => {
               return (
                 <VStack pt={16} key={id}>
                   <Box w="200px" position="relative" mb="34px" mx={["47px", "47px", "48px"]}>
-                    <Text pt={8} textAlign="center" fontWeight="normal" fontSize={["lg", "1xl", "2xl"]}>
+                    <Text pt={8} textAlign="center" fontWeight="semibold" fontSize={["lg", "1xl", "2xl"]}>
                       {title}
                     </Text>
                     <Box
@@ -200,7 +199,7 @@ const Programme = ({ page }) => {
             h={["100px", "150px", "220px"]}
             w={["100px", "150px", "220px"]}
           />
-          <Box pos="relative" pb={["124px", "124px", "380px"]}>
+          <Box pt={["20%", "20%", "0"]} pos="relative" pb={["124px", "124px", "380px"]}>
             <Image
               pos="absolute"
               right={["50px", "50px", "105px"]}
@@ -247,13 +246,14 @@ const Programme = ({ page }) => {
                 <GridItem>
                   <VStack w="100%" spacing={0} align="stretch" alignItems={["center", "center", "start", "start"]}>
                     <Image w={["130px", "120px", "110px", "100px"]} src={icon} />
-                    <Heading as="h4" fontWeight="normal">
+                    <Heading as="h4" fontSize={["20px", "24px", ""]} fontWeight="normal">
                       {categoryName}
                     </Heading>
                     {(items ?? []).map((d, i) => {
                       return (
                         <Accordian
                           multi={true}
+                          boldTitle={false}
                           bgColor="#FAFAFA"
                           key={i}
                           title={d.title}
