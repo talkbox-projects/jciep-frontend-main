@@ -20,7 +20,6 @@ export default gql`
   type User {
     phone: String
     email: String
-    password: String
     facebookId: String
     appleId: String
     googleId: String
@@ -79,7 +78,7 @@ export default gql`
 
   type Identity {
     id: ID!
-    identity: IdentityType!
+    type: IdentityType!
     chineseName: String!
     englishName: String!
     dob: Timestamp
@@ -166,12 +165,13 @@ export default gql`
     facebookToken: String
     googleToken: String
     appleToken: String
+    email: String
     emailVerificationToken: String
     password: String
   }
 
   type Query {
-    UserEmailValidityCheck(emailVerificationToken: String!): Boolean
+    UserEmailValidityCheck(token: String!): Boolean
 
     IdentityGet(id: ID): User
     IdentitySearch(
@@ -186,6 +186,7 @@ export default gql`
     UserEmailVerify(email: String!): Boolean
 
     UserLogin(input: LoginInput): User
+    UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean
     UserPasswordReset(token: String!, password: String!): Boolean

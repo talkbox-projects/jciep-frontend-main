@@ -18,6 +18,8 @@ import userSchema from "./user.schema";
 import organizationSchema from "./organization.schema";
 import userResolver from "./user.resolver";
 import organizationResolver from "./organization.resolver";
+import nookies from "nookies";
+import jwt from "jsonwebtoken";
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -42,6 +44,10 @@ const apolloServer = new ApolloServer({
     organizationResolver,
     userResolver,
   ]),
+  context: ({ req, res }) => {
+    const token = nookies.get({ req })?.["x-token"] ?? "";
+    return { req, res, user: token ? jwt.verify(token, "shhhhh") : null };
+  },
 });
 
 export const config = {
