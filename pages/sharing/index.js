@@ -1,7 +1,8 @@
 import { chakra, Image } from "@chakra-ui/react";
-import { Text, VStack, Box } from "@chakra-ui/layout";
+import { Text, VStack, Box, Grid } from "@chakra-ui/layout";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import React from "react";
+import moment from "moment";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -66,11 +67,11 @@ const Sharing = ({ page, setting, lang }) => {
   }
 
   const fetchFeaturedArticle = async (slug) => {
-    const post=  await getPost({
+    const post = await getPost({
       idOrSlug: slug,
       lang: lang,
     });
-    console.log("&&&&&", post);
+    console.log("&&&&& featured: ", post);
     setFeaturedArticle(post);
   }
 
@@ -88,31 +89,59 @@ const Sharing = ({ page, setting, lang }) => {
         w="100%"
         position="relative"
         background={page?.content?.bannerColor}
-        pt={["0", "0", "159px"]}
-        px={["0", "0", "203px"]}
-        pb={["164px","164px", "120px"]}
+        pt={{ base: "0", lg: "159px" }}
+        px={{ base: "0", lg: "203px" }}
+        pb={{ base: "164px", lg: "120px" }}
       >
-        <chakra.span pos="relative">
+        <chakra.span pos="relative" display={{ base: "none", lg: "block" }}>
           <chakra.span backgroundImage="linear-gradient(#fff, #fff)" textAlign="left" ml="43" fontSize={["0", "0", "36px"]} lineHeight={2} backgroundRepeat="no-repeat" backgroundPosition="0 0.5em" zIndex="2" pos="relative" px="15px" pb="6px">{page?.content?.title}</chakra.span>
         </chakra.span>
         {featuredArticle && (
-          <Box mt={["0", "0", "24px"]} display="flex">
-            <Image h="330px" w="429px" src={featuredArticle.coverImage} mr="34px" zIndex={1} />
-            <Box display="flex" flexDir="column">
-              <Image src={getCategoryData(featuredArticle.category).icon} mb="16px" w="48px" h="40px" />
-              <Box mb="8px">
-                <Box fontSize="12px" background={getCategoryData(featuredArticle.category).bgColor} borderRadius="19px" px="9px" mr="9px" display="inline">
-                  {getCategoryData(featuredArticle.category).label}
+          <Box mt={{ base: "0", lg: "24px"}} display="flex" flexDirection={{ base: "column", lg: "row" }}>
+            <Image h={{base: "auto", lg: "330px"}} w={{base: "100%", lg: "429px"}} src={featuredArticle.coverImage} mr={{base: "0", lg: "34px"}} zIndex={{base: 0, lg: 1}} />
+            <Box display="flex" flexDir="column" position={{ base: "absolute", lg: "relative" }} top={{ base: "162px", lg: "unset" }} boxShadow={{ base: "12px 12px 24px 0px rgba(30,30,30,0.1)", lg: "none" }}>
+              <Image src={getCategoryData(featuredArticle.category).icon} mb="16px" w="48px" h="40px" ml={{ base: "16px", lg: "unset" }} />
+              <Box background={{ base: "#fff", lg: "none" }} borderRadius={{ base: "10px", lg: "0px" }} mx={{ base: "16px", lg: "0px" }} zIndex={{ base: 1, lg: "unset" }} p={{ base: "16px", lg: "unset" }}>
+                <Box mb="8px">
+                  <Box fontSize="12px" background={getCategoryData(featuredArticle.category).bgColor} borderRadius="19px" px="9px" mr="9px" display="inline">
+                    {getCategoryData(featuredArticle.category).label}
+                  </Box>
+                  <Text fontSize="12px" display="inline-block">{moment(featuredArticle.publishDate).format("D MMM, hh:mm")}</Text>
                 </Box>
-                <Text fontSize="12px">{featuredArticle.publishDate}</Text>
+                <Text fontSize={{base: "24px", lg: "48px"}} fontWeight="bold" mb={{base: "16px", lg: "8px"}}>{featuredArticle.title}</Text>
+                <Text fontSize={{base: "14px", lg: "16px"}} mb={{base: "49px", lg: "unset"}}>{featuredArticle.excerpt}</Text>
               </Box>
-              <Text fontSize="48px" fontWeight="bold" mb="8px">{featuredArticle.title}</Text>
-              <Text fontSize="16px" mb="49px">{featuredArticle.excerpt}</Text>
             </Box>
           </Box>
         )}
         <Image position="absolute" left="0" bottom="0" src={page?.content?.bottomBorderFeatured} width="100%" fit="contain" />
       </Box>
+
+      {/* Posts Section */}
+      <Box mt={{ base: "38px", lg: "17px" }} px={{ base: "16px", lg: "203px" }}>
+        <Grid templateColumns={{ base: "1fr", lg: "1fr 340px" }} gridGap="22px">
+          <Box>
+            <Box mt="10px" textAlign="center" fontWeight="bold" fontSize="24">
+              <Text position="relative" display="inline-block">
+                {page?.content?.latestSection?.title}
+                <Box width="6.15px" height="27.69px" borderRadius="5px" pos="absolute" right={["-6", "-6", "-12"]} bottom="-3" background="#EFEFEF" transform="rotate(30deg)"/>
+                <Box width="6.15px" height="27.69px" borderRadius="5px" pos="absolute" left={["", "-6", "-12"]} bottom="-3" background="#EFEFEF" transform="rotate(-30deg)"/>
+              </Text>
+            </Box>
+          </Box>
+          <Box>
+            <Box textAlign="left" fontSize="36px">
+              <Text pos="relative" display="inline-block" pl="8px">
+                <Box zIndex={1} pos="relative">{page?.content?.hotestSection?.title}</Box>
+                <Box w="112px" height="33px" borderRadius="16.5px" background="#EFEFEF" pos="absolute" left="0" bottom="-3px"></Box>
+                <Box w="0px" height="0px" borderRight="5px solid transparent" borderLeft="5px solid transparent" borderTop="12px solid #EFEFEF" transform="scaleY(-1) rotate(150deg)" pos="absolute" left="0" bottom="-11px"></Box>
+              </Text>
+            </Box>
+          </Box>
+        </Grid>
+        
+      </Box>
+
       <InfiniteScroll
         dataLength={latestPosts.length}
         next={fetchData}

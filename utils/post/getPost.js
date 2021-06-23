@@ -43,6 +43,7 @@ export const getLatestPosts = async ({ page, limit }) => {
         category
         tags
         publishDate
+        coverImage
       }
     }
   `;
