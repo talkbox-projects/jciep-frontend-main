@@ -30,10 +30,10 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 
-const LoginModal = () => {
+const RegisterModal = () => {
   const {
-    loginModalDisclosure,
     registerModalDisclosure,
+    loginModalDisclosure,
     otpVerifyModalDisclosure,
     setUser,
   } = useAppContext();
@@ -49,15 +49,15 @@ const LoginModal = () => {
   } = useForm();
   const toast = useToast();
 
-  const onPhoneLogin = useCallback(() => {
+  const onPhoneRegister = useCallback(() => {
     otpVerifyModalDisclosure.onOpen();
-    loginModalDisclosure.onClose();
+    registerModalDisclosure.onClose();
   }, []);
-  const onEmailLogin = useCallback(async ({ email, password }) => {
+  const onEmailRegister = useCallback(async ({ email, password }) => {
     try {
       const mutation = gql`
-        mutation UserLogin($input: LoginInput) {
-          UserLogin(input: $input) {
+        mutation UserRegister($input: RegisterInput) {
+          UserRegister(input: $input) {
             email
             identities {
               id
@@ -74,45 +74,38 @@ const LoginModal = () => {
       };
 
       const data = await getGraphQLClient().request(mutation, variables);
-      setUser(data?.UserLogin);
+      setUser(data?.UserRegister);
     } catch (e) {
       setError("password", {
-        message: getWording("login.login_error_message"),
+        message: getWording("register.register_error_message"),
       });
     }
   }, []);
 
   return (
     <Modal
-      isOpen={loginModalDisclosure.isOpen}
-      onClose={loginModalDisclosure.onClose}
+      isOpen={registerModalDisclosure.isOpen}
+      onClose={registerModalDisclosure.onClose}
     >
       <ModalOverlay></ModalOverlay>
       <ModalContent maxW={400} w="95%" py={4}>
         <ModalHeader mt={4} fontSize="3xl">
-          {getWording("login.login_title")}
+          {getWording("register.register_title")}
           <ModalCloseButton />
         </ModalHeader>
         <ModalBody>
           <VStack align="stretch" spacing={4}>
             {tab === "email" && (
-              <VStack as="form" onSubmit={handleSubmit(onEmailLogin)}>
+              <VStack as="form" onSubmit={handleSubmit(onEmailRegister)}>
                 <FormControl>
-                  <FormLabel>{getWording("login.login_email_label")}</FormLabel>
+                  <FormLabel>
+                    {getWording("register.register_email_label")}
+                  </FormLabel>
                   <Input
                     placeholder="testing@example.com"
                     {...register("email")}
                   />
                   <FormHelperText>{errors?.email?.message}</FormHelperText>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>
-                    {getWording("login.login_password_label")}
-                  </FormLabel>
-                  <Input type="password" {...register("password")} />
-                  <FormHelperText color="red.500">
-                    {errors?.password?.message}
-                  </FormHelperText>
                 </FormControl>
                 <FormControl>
                   <Button
@@ -126,15 +119,17 @@ const LoginModal = () => {
                     isLoading={isSubmitting}
                     type="submit"
                   >
-                    {getWording("login.login_button_label")}
+                    {getWording("register.register_button_label")}
                   </Button>
                 </FormControl>
               </VStack>
             )}
             {tab === "phone" && (
-              <VStack as="form" onSubmit={handleSubmit(onPhoneLogin)}>
+              <VStack as="form" onSubmit={handleSubmit(onPhoneRegister)}>
                 <FormControl>
-                  <FormLabel>{getWording("login.login_phone_label")}</FormLabel>
+                  <FormLabel>
+                    {getWording("register.register_phone_label")}
+                  </FormLabel>
                   <Input placeholder="91234567" {...register("phone")} />
                   <FormHelperText>{errors?.phone?.message}</FormHelperText>
                 </FormControl>
@@ -150,7 +145,7 @@ const LoginModal = () => {
                     isLoading={isSubmitting}
                     type="submit"
                   >
-                    {getWording("login.phone_verify_button_label")}
+                    {getWording("register.phone_verify_button_label")}
                   </Button>
                 </FormControl>
               </VStack>
@@ -164,7 +159,7 @@ const LoginModal = () => {
                 borderColor="gray.200"
               ></Box>
               <Box fontSize="sm" color="gray.400">
-                {getWording("login.or_label")}
+                {getWording("register.or_label")}
               </Box>
               <Box
                 flex={1}
@@ -187,7 +182,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <IoMdPhonePortrait size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Phone
+                      Sign Up With Phone
                     </Text>
                   </HStack>
                 </Button>
@@ -203,7 +198,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <AiOutlineMail size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Email
+                      Sign Up With Email
                     </Text>
                   </HStack>
                 </Button>
@@ -212,7 +207,7 @@ const LoginModal = () => {
                 <HStack w="100%">
                   <IoLogoFacebook size={18} color="white" />
                   <Text flex={1} minW={0} w="100%">
-                    Sign In With Facebook
+                    Sign Up With Facebook
                   </Text>
                 </HStack>
               </Button>
@@ -225,7 +220,7 @@ const LoginModal = () => {
                 <HStack w="100%">
                   <IoLogoApple size={18} color="white" />
                   <Text flex={1} minW={0} w="100%">
-                    Sign In With Apple
+                    Sign Up With Apple
                   </Text>
                 </HStack>
               </Button>
@@ -233,7 +228,7 @@ const LoginModal = () => {
                 <HStack w="100%">
                   <IoLogoGoogle size={18} color="white" />
                   <Text flex={1} minW={0} w="100%">
-                    Sign In With Google
+                    Sign Up With Google
                   </Text>
                 </HStack>
               </Button>
@@ -244,11 +239,11 @@ const LoginModal = () => {
               color="black"
               fontWeight="normal"
               onClick={() => {
-                loginModalDisclosure.onClose();
-                registerModalDisclosure.onOpen();
+                registerModalDisclosure.onClose();
+                loginModalDisclosure.onOpen();
               }}
             >
-              {getWording("login.register_message_link")}
+              {getWording("register.login_message_link")}
             </Button>
           </VStack>
         </ModalBody>
@@ -257,4 +252,4 @@ const LoginModal = () => {
   );
 };
 
-export default LoginModal;
+export default RegisterModal;

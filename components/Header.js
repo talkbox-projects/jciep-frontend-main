@@ -15,9 +15,11 @@ import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
 import { useAppContext } from "../store/AppStore";
 import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
+import OtpVerifyModal from "./OtpVerifyModal";
 
 const Header = ({ header }) => {
-  const { loginModalDisclosure } = useAppContext();
+  const { loginModalDisclosure, registerModalDisclosure } = useAppContext();
   const router = useRouter();
   const cms = useCMS();
   return (
@@ -58,13 +60,15 @@ const Header = ({ header }) => {
             <PopoverContent p={4} w={48}>
               <VStack alignItems="flex-start">
                 <Link onClick={loginModalDisclosure.onOpen}>登入</Link>
-                <Link>會員註冊</Link>
+                <Link onClick={registerModalDisclosure.onOpen}>會員註冊</Link>
               </VStack>
             </PopoverContent>
           </Popover>
         </HStack>
       </Container>
       <LoginModal />
+      <RegisterModal />
+      <OtpVerifyModal />
     </Box>
   );
 };

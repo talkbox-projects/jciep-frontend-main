@@ -8,8 +8,15 @@ const [AppProvider, useAppContext] = constate((props) => {
     lists: [
       {
         name: "login",
-        label: "Login 登入 (login)",
-        Description: "Login-related words",
+        label: "Login (login)",
+      },
+      {
+        name: "register",
+        label: "Register (register)",
+      },
+      {
+        name: "otpVerify",
+        label: "OTP Verify (otpVerify)",
       },
     ],
     key: "wordings",
@@ -33,6 +40,8 @@ const [AppProvider, useAppContext] = constate((props) => {
   }, [_wordings]);
 
   const loginModalDisclosure = useDisclosure();
+  const registerModalDisclosure = useDisclosure();
+  const otpVerifyModalDisclosure = useDisclosure();
   const [user, setUser] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
 
@@ -44,6 +53,8 @@ const [AppProvider, useAppContext] = constate((props) => {
   return {
     wordings,
     loginModalDisclosure,
+    registerModalDisclosure,
+    otpVerifyModalDisclosure,
     user,
     setUser,
     isLoggedIn,
