@@ -3,10 +3,11 @@ import PostModel from "./post.model";
 
 export default {
   Query: {
-    PostSearch: async (_parent, { lang, status = [], limit, offset }) => {
+    PostSearch: async (_parent, { lang, status = [], limit, offset, category }) => {
       const posts = await PostModel.find({
         ...(lang && { lang }),
         ...(status?.length && { status: { $in: status } }),
+        ...(category?.length && { category: { $in: category } }),
       })
         .sort({ publishDate: -1 })
         .skip(offset)

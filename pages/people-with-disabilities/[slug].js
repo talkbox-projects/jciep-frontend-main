@@ -160,7 +160,7 @@ const PwdDetail = ({ page }) => {
                     <>
                       <h2>
                         <AccordionButton>
-                          <Box flex="1" textAlign="left">
+                          <Box flex="1" textAlign="center" fontWeight="bold">
                             {qna.question}
                           </Box>
                           {isExpanded ? <MinusIcon fontSize="12px" /> : <AddIcon fontSize="12px" />}
