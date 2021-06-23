@@ -72,6 +72,14 @@ const withPostCMS =
           component: "textarea",
         },
         {
+          label: "圖片 Cover Image",
+          name: "coverImage",
+          component: "image",
+          uploadDir: () => "/sharing/images",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
           name: "content.blocks",
           component: "blocks",
           description: "Content of blocks",
@@ -83,9 +91,7 @@ const withPostCMS =
               defaultItem: {
                 content: "",
               },
-              fields: [
-                { name: "content", label: "Content", component: "markdown" },
-              ],
+              fields: [{ name: "content", label: "Content", component: "markdown" }],
             },
             "image-block": {
               label: "圖片 Image",
@@ -183,9 +189,7 @@ const withPostCMS =
         const variables = {
           input: {
             ...values,
-            references: (values?.references ?? []).map(
-              ({ id, ...reference }) => reference
-            ),
+            references: (values?.references ?? []).map(({ id, ...reference }) => reference),
           },
         };
         await getGraphQLClient().request(mutation, variables);
