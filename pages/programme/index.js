@@ -130,7 +130,7 @@ const Programme = ({ page }) => {
                     />
                   </Box>
                   <Box pt={8} px="16px">
-                    <MultiTextRenderer data={description} textAlign="center" text />
+                    <MultiTextRenderer fontSize={["lg", "xl", "xl"]} data={description} textAlign="center" text />
                   </Box>
                 </VStack>
               );

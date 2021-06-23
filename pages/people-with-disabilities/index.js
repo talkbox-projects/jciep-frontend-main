@@ -59,10 +59,10 @@ const PwdMain = ({ page }) => {
           >
             {page?.content?.banner?.reference}
           </Text>
-          <MultiTextRenderer textAlign="left" fontSize={["24", "24", "56", "56"]} data={page?.content?.banner?.quote} parentStyles={{zIndex: "1"}} />
+          <MultiTextRenderer textAlign="center" fontSize={["24", "24", "56", "56"]} data={page?.content?.banner?.quote} parentStyles={{zIndex: "1"}} />
           <Box position="absolute" bottom={["1", "1", "2", "2"]} right={["-1", "-1", "-3", "-3"]} pt={["0", "0", "6", "6"]} pb="5" background="#fff" w={["110px", "110px", "250px", "250px"]} zIndex="-1" />
         </Box>
-        <Image position="absolute" bottom="-74px" left="149" src={page?.content?.banner?.bgImageLeft}  h={["0%", "0%", "388px", "57%"]} w="auto" maxW="334" zIndex="1" />
+        <Image position="absolute" bottom="-74px" left="149" src={page?.content?.banner?.bgImageLeft}  h={["0%", "0%", "388px"]} w="auto" maxW="334" zIndex="1" />
         <Image position="absolute" bottom="-27px" right={["20px", "20px", "100", "100"]} src={page?.content?.banner?.bgImageRight} h={["142px", "142px", "306px"]} w="auto" maxW="551" zIndex="1" />
         <Image position="absolute" bottom="-1px" src={page?.content?.banner?.bgImageBottom} width="100%" fit="contain" />
       </Box>
@@ -80,7 +80,7 @@ const PwdMain = ({ page }) => {
         zIndex="-2"
       >
         <Box position="relative" mb="34px" mx={["47px", "47px", "0px"]}>
-          <Text fontSize={["16", "16", "24"]} textAlign="center">{page?.content?.excerpt?.tagline}</Text>
+          <Text fontSize={["16", "16", "24"]} textAlign="center" fontWeight="bold">{page?.content?.excerpt?.tagline}</Text>
           <Box width="6.15px" height="27.69px" borderRadius="5px" pos="absolute" right={["-6", "-6", "-12"]} bottom="-3" background="#fff" transform="rotate(30deg)"/>
           <Box width="6.15px" height="27.69px" borderRadius="5px" pos="absolute" left={["-6", "-6", "-12"]} bottom="-3" background="#fff" transform="rotate(-30deg)"/>
         </Box>

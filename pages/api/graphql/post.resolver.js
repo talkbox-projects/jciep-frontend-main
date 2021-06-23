@@ -3,10 +3,11 @@ import PostModel from "./post.model";
 
 export default {
   Query: {
-    PostSearch: async (_parent, { lang, status = [], limit, offset }) => {
+    PostSearch: async (_parent, { lang, status = [], limit, offset, category }) => {
       const posts = await PostModel.find({
         ...(lang && { lang }),
         ...(status?.length && { status: { $in: status } }),
+        ...(category?.length && { category: { $in: category } }),
       })
         .sort({ publishDate: -1 })
         .skip(offset)
@@ -53,8 +54,16 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }) => {
-      const post = await PostModel.create(_post);
-      return post;
+      if (!_post.slug) {
+        throw new Error("Invalid Slug");
+      }
+      const existingPost = await PostModel.findOne({ slug: _post.slug });
+      if (existingPost) {
+        throw new Error("Slug is already in use");
+      } else {
+        const post = await PostModel.create(_post);
+        return post;
+      }
     },
 
     PostDelete: async (_parent, { input: { id } }) => {
