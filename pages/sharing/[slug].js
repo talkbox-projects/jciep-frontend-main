@@ -52,12 +52,19 @@ const data = [
   },
 ];
 
-const PostDetail = ({ post, setting, page }) => {
+const PostDetail = ({ post, setting, page, lang }) => {
   const categories = setting?.value?.categories;
   const postBg = page?.content?.postSection;
 
   const router = useRouter();
-
+  const getCategoryData = (key) => {
+    const category = categories.find((c) => c.key === key);
+    const data = {};
+    data.label = lang === "en" ? category.label.en : category.label.zh;
+    data.icon = category.image;
+    data.bgColor = category.color;
+    return data;
+  };
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {/* Banner Section */}
@@ -147,11 +154,15 @@ const PostDetail = ({ post, setting, page }) => {
             <GridItem colSpan={[12, 12, 12, 7]}>
               <VStack pl={["", "", "20px"]} pr={["0px", "0px", "0px", "150px"]}>
                 <Box w="100%">
-                  <Image src={postBg?.doubleQuoteImage} w={["20px", "20px", "40px"]} h={["16px", "16px", "32px"]} />
+                  <Image
+                    src={getCategoryData(post?.category).icon}
+                    w={["20px", "20px", "40px"]}
+                    h={["16px", "16px", "32px"]}
+                  />
                 </Box>
                 <HStack pt={["8px"]} w="100%" justify="space-between">
                   <Flex>
-                    <Tag color="#FEB534" fontSize="12px" borderRadius="19px">
+                    <Tag color={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px">
                       {post?.category}
                     </Tag>
                     <Text ml="8px" fontSize="12px" color="#1E1E1E">
@@ -288,11 +299,15 @@ const PostDetail = ({ post, setting, page }) => {
         <Box pb="10%" px={["16px", "16px", "25%", "31%"]} pt={["", "", "14px"]}>
           <VStack w="100%">
             <Box w="100%">
-              <Image src={postBg?.doubleQuoteImage} w={["20px", "20px", "40px"]} h={["16px", "16px", "32px"]} />
+              <Image
+                src={getCategoryData(post?.category).icon}
+                w={["20px", "20px", "40px"]}
+                h={["16px", "16px", "32px"]}
+              />
             </Box>
             <HStack pt={["8px"]} w="100%" justify="space-between">
               <Flex>
-                <Tag color="#FEB534" fontSize="12px" borderRadius="19px">
+                <Tag color={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px">
                   {post?.category}
                 </Tag>
                 <Text ml="8px" fontSize="12px" color="#1E1E1E">

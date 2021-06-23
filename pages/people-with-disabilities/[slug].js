@@ -216,7 +216,9 @@ const PwdDetail = ({ page }) => {
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {wordExtractor(page?.content?.wordings, "traitSectionTitle")}
             </Text>
-            <Text fontSize="16px" position="relative" zIndex="1">{wordExtractor(page?.content?.wordings, "traitSectionDescription")}</Text>
+            <Text fontSize="16px" position="relative" zIndex="1">
+              {wordExtractor(page?.content?.wordings, "traitSectionDescription")}
+            </Text>
           </Box>
           <Image
             src={pwd?.traitSection?.imageTop}
@@ -420,13 +422,27 @@ const PwdDetail = ({ page }) => {
         overflow="hidden"
       >
         <Box mx="46px">
-          <chakra.span textAlign="center" lineHeight={2} fontWeight="bold" fontSize={["24px", "24px", "36px"]} zIndex="1" pos="relative" backgroundImage="linear-gradient(#fff, #fff)" backgroundRepeat="no-repeat" backgroundPosition="0 0.5em" pl="5px" pb="16px">
+          <chakra.span
+            textAlign="center"
+            lineHeight={2}
+            fontWeight="bold"
+            fontSize={["24px", "24px", "36px"]}
+            zIndex="1"
+            pos="relative"
+            backgroundImage="linear-gradient(#fff, #fff)"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="0 0.5em"
+            pl="5px"
+            pb="16px"
+          >
             {wordExtractor(page?.content?.wordings, "videosTitle")}
           </chakra.span>
         </Box>
 
         <Box pos="relative" mt={["45px", "45px", "59px"]} mb={["20px", "20px", "27px"]} px={["46px"]}>
-          <Text fontSize={["16", "16", "24"]} textAlign="center">{pwd?.videoSection?.description}</Text>
+          <Text fontSize={["16", "16", "24"]} textAlign="center">
+            {pwd?.videoSection?.description}
+          </Text>
           <Box
             width="6.15px"
             height="27.69px"
@@ -453,7 +469,14 @@ const PwdDetail = ({ page }) => {
           <Image src={pwd?.videoSection?.leftImage} pos="absolute" left="16%" top="0" w={["0", "0", "184px"]} />
           <Image src={pwd?.videoSection?.rightImage} pos="absolute" right="18%" bottom="0" w={["0", "0", "145px"]} />
           {pwd?.videoSection?.videos.map((video) => (
-            <AspectRatio maxW="668px" ratio={668 / 376} margin="auto" px={["24px", "24px", "0"]} mb={["24px", "24px", "24px"]}>
+            <AspectRatio
+              border="5px solid #FFFFFF"
+              maxW="668px"
+              ratio={668 / 376}
+              margin="auto"
+              px={["24px", "24px", "0"]}
+              mb={["24px", "24px", "24px"]}
+            >
               <iframe
                 src={video.url}
                 title="PWD Video"
@@ -466,7 +489,11 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Grid templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={["36px", "36px", "66px"]} px="16px">
+        <Grid
+          templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]}
+          gap={["36px", "36px", "66px"]}
+          px="16px"
+        >
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <Box key={index}>
               <Box w="100%" display="flex" flexDirection="column" borderBottom="1px solid #1E1E1E" mb="8px">
