@@ -8,7 +8,7 @@ export default {
     }),
     defaultItem: {
       content: "",
-      textcolor: "#000000",
+      textcolor: "#1E1E1E",
       bold: false,
     },
     fields: [
@@ -34,7 +34,7 @@ export default {
     key: "line-break-block",
     defaultItem: {
       content: "",
-      textcolor: "#000000",
+      textcolor: "#1E1E1E",
       bold: false,
     },
     fields: [],

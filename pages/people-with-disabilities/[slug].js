@@ -143,68 +143,78 @@ const PwdDetail = ({ page }) => {
         flexDirection="column"
         alignItems="center"
       >
-        <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>
-            {wordExtractor(page?.content?.wordings, "qnaSectionTitle")}
-          </Text>
+        {(pwd?.qna ?? []).map((qnGroup, i) => (
           <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(-30deg)"
-          />
-        </Box>
-
-        <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
-          {(pwd?.qna ?? []).map((qna, index) => (
-            <AccordionItem
-              background="#fff"
-              borderRadius={10}
-              key={index}
-              mt={index > 0 ? "16px" : "0px"}
-              border="none"
-              w={["288px", "288px", "616px"]}
-            >
-              {({ isExpanded }) => (
-                <>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        {qna.question}
-                      </Box>
-                      {isExpanded ? (
-                        <MinusIcon fontSize="12px" />
-                      ) : (
-                        <AddIcon fontSize="12px" />
-                      )}
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    <MultiTextRenderer
-                      textAlign="center"
-                      fontSize={16}
-                      data={qna.response}
-                    />
-                  </AccordionPanel>
-                </>
-              )}
-            </AccordionItem>
-          ))}
-        </Accordion>
+            key={i}
+            pos="relative"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            pb="16px"
+          >
+            <Box pos="relative">
+              <Text fontSize={["24", "24", "36"]}>
+                {qnGroup.accordionGroup?.title}
+              </Text>
+              <Box
+                width="6.15px"
+                height="27.69px"
+                borderRadius="5px"
+                pos="absolute"
+                right={["-6", "-6", "-12"]}
+                bottom="0"
+                background="#fff"
+                transform="rotate(30deg)"
+              />
+              <Box
+                width="6.15px"
+                height="27.69px"
+                borderRadius="5px"
+                pos="absolute"
+                left={["-6", "-6", "-12"]}
+                bottom="0"
+                background="#fff"
+                transform="rotate(-30deg)"
+              />
+            </Box>
+            <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
+              {(qnGroup.accordionGroup?.accordions ?? []).map((qna, index) => (
+                <AccordionItem
+                  background="#fff"
+                  borderRadius={10}
+                  key={index}
+                  mt={index > 0 ? "16px" : "0px"}
+                  border="none"
+                  w={["288px", "288px", "616px"]}
+                >
+                  {({ isExpanded }) => (
+                    <>
+                      <h2>
+                        <AccordionButton>
+                          <Box flex="1" textAlign="left">
+                            {qna.question}
+                          </Box>
+                          {isExpanded ? (
+                            <MinusIcon fontSize="12px" />
+                          ) : (
+                            <AddIcon fontSize="12px" />
+                          )}
+                        </AccordionButton>
+                      </h2>
+                      <AccordionPanel pb={4}>
+                        <MultiTextRenderer
+                          textAlign="center"
+                          fontSize={16}
+                          data={qna.response}
+                        />
+                      </AccordionPanel>
+                    </>
+                  )}
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Box>
+        ))}
 
         <Image
           src={pwd?.qnaStyles?.imageTop}
@@ -487,24 +497,22 @@ const PwdDetail = ({ page }) => {
         pos="relative"
         overflow="hidden"
       >
-        <Box position="relative">
+        <Box mx="46px">
           <chakra.span
-            background="#fff"
-            width={["106%", "106%"]}
-            pos="absolute"
-            height={["67%", "67%"]}
-            bottom="-2"
-            right="-1"
-            zIndex="0"
-          />
-          <Text
+            textAlign="center"
+            lineHeight={2}
             fontWeight="bold"
             fontSize={["24px", "24px", "36px"]}
             zIndex="1"
             pos="relative"
+            backgroundImage="linear-gradient(#fff, #fff)"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="0 0.5em"
+            pl="5px"
+            pb="16px"
           >
             {wordExtractor(page?.content?.wordings, "videosTitle")}
-          </Text>
+          </chakra.span>
         </Box>
 
         <Box
@@ -565,6 +573,7 @@ const PwdDetail = ({ page }) => {
               ratio={668 / 376}
               margin="auto"
               px={["24px", "24px", "0"]}
+              mb={["24px", "24px", "24px"]}
             >
               <iframe
                 src={video.url}
@@ -585,6 +594,7 @@ const PwdDetail = ({ page }) => {
             "repeat(2, 1fr)",
           ]}
           gap={["36px", "36px", "66px"]}
+          px="16px"
         >
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <Box key={index}>

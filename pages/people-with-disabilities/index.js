@@ -81,7 +81,7 @@ const PwdMain = ({ page }) => {
           bottom="-74px"
           left="149"
           src={page?.content?.banner?.bgImageLeft}
-          h={["0%", "0%", "57%", "57%"]}
+          h={["0%", "0%", "388px", "57%"]}
           w="auto"
           maxW="334"
           zIndex="1"
@@ -91,7 +91,7 @@ const PwdMain = ({ page }) => {
           bottom="-27px"
           right={["20px", "20px", "100", "100"]}
           src={page?.content?.banner?.bgImageRight}
-          h={["25%", "25%", "45%"]}
+          h={["142px", "142px", "306px"]}
           w="auto"
           maxW="551"
           zIndex="1"
@@ -176,37 +176,18 @@ const PwdMain = ({ page }) => {
         >
           <chakra.span pos="relative">
             <chakra.span
-              background="#fff"
-              width={["0%", "106%"]}
-              pos="absolute"
-              height={["0%", "67%"]}
-              bottom="-2"
-              right="-1"
-              zIndex="1"
-            />
-            <chakra.span zIndex="2" pos="relative">
+              backgroundImage="linear-gradient(#fff, #fff)"
+              lineHeight={2}
+              backgroundRepeat="no-repeat"
+              backgroundPosition="0 0.5em"
+              zIndex="2"
+              pos="relative"
+              pl="15px"
+              pb="6px"
+            >
               {pwdTitle()}
             </chakra.span>
           </chakra.span>
-          {/* Mobile view highlight spans*/}
-          <chakra.span
-            background="#fff"
-            width="106%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            top="4"
-            right="-1"
-            zIndex="1"
-          />
-          <chakra.span
-            background="#fff"
-            width="60%"
-            pos="absolute"
-            height={["30%", "0%"]}
-            bottom="-1"
-            right="70"
-            zIndex="1"
-          />
         </Box>
 
         <Grid
@@ -238,6 +219,7 @@ const PwdMain = ({ page }) => {
               onClick={() =>
                 router.push(`people-with-disabilities/${data.slug}`)
               }
+              zIndex={1}
             >
               <Image src={data.icon} h="48px" w="48px" />
               <Text fontSize={["16px", "16px", "24px"]} textAlign="center">
@@ -258,8 +240,8 @@ const PwdMain = ({ page }) => {
             pos="absolute"
             right={["22px", "35px", "81px"]}
             bottom="0"
-            h="100%"
-            width={["66%", "54%", "52%"]}
+            h={["124px", "135px", "380px"]}
+            width={["248px", "270px", "749px"]}
             src={page?.content?.pwdList?.bgStyle?.bottomImage}
             zIndex="1"
           />

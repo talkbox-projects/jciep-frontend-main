@@ -204,15 +204,41 @@ export default [
             }),
             fields: [
               {
-                name: "question",
-                label: "問題 Question",
-                component: "text",
-              },
-              {
-                name: "response",
-                label: "回應 Response",
-                component: "blocks",
-                templates: metaTextTemplates,
+                name: "accordionGroup",
+                label: "Q&A Accordion Group",
+                component: "group",
+                fields: [
+                  {
+                    name: "title",
+                    label: "Accordion Title",
+                    component: "text",
+                  },
+                  {
+                    name: "accordions",
+                    label: "Accordions for Q&A",
+                    component: "group-list",
+                    itemProps: ({ id: key, question: label }) => ({
+                      key,
+                      label,
+                    }),
+                    defaultItem: () => ({
+                      id: Math.random().toString(36).substr(2, 9),
+                    }),
+                    fields: [
+                      {
+                        name: "question",
+                        label: "問題 Question",
+                        component: "text",
+                      },
+                      {
+                        name: "response",
+                        label: "回應 Response",
+                        component: "blocks",
+                        templates: metaTextTemplates,
+                      },
+                    ]
+                  }
+                ]
               },
             ],
           },

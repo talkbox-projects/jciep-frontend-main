@@ -9,13 +9,17 @@ const Accordian = ({ title, description, link, bgColor, multi, fontSize, boldTit
         {({ isExpanded }) => (
           <>
             <h2>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  <Text fontWeight={boldTitle ?? "bold"} textAlign={textAlign}>
+              <AccordionButton w="100%">
+                <Box w="100%" flex="1">
+                  <Text w="100%" fontWeight={boldTitle ?? "bold"} textAlign={textAlign}>
                     {title}
                   </Text>
                 </Box>
-                {isExpanded ? <MinusIcon fontSize="12px" /> : <AddIcon fontSize="12px" />}
+                {isExpanded ? (
+                  <MinusIcon fontSize={["8px", "8px", "12px"]} />
+                ) : (
+                  <AddIcon fontSize={["8px", "8px", "12px"]} />
+                )}
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
