@@ -20,7 +20,7 @@ export default gql`
     publishDate: Timestamp
     title: String
     excerpt: String
-    coverImage: File
+    coverImage: String
     category: String
     tags: [String]
     references: [PostReference]
@@ -40,7 +40,7 @@ export default gql`
     title: String
     publishDate: Timestamp
     excerpt: String
-    coverImage: FileInput
+    coverImage: String
     category: String
     content: JsonContent
     tags: [String]
@@ -54,7 +54,7 @@ export default gql`
     title: String
     publishDate: Timestamp
     excerpt: String
-    coverImage: FileInput
+    coverImage: String
     category: String
     content: JsonContent
     status: PostStatus

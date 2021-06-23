@@ -6,6 +6,29 @@ export default [
   },
   {
     component: "text",
+    label: "頁面標題 Latest Articles Heading",
+    name: "latestPostHeading",
+  },
+  {
+    component: "text",
+    label: "頁面標題 Hottest Articles Heading",
+    name: "hottestPostHeading",
+  },
+  {
+    component: "color",
+    label: "頁面標題 Banner Color",
+    name: "bannerColor",
+  },
+  {
+    label: "圖片 Image Border Featured",
+    name: "bottomBorderFeatured",
+    component: "image",
+    uploadDir: () => "/sharing/images",
+    parse: ({ previewSrc }) => previewSrc,
+    previewSrc: (src) => src,
+  },
+  {
+    component: "text",
     label: "置頂文章 Featured Post",
     description: "Enter the slug of the article (i.e. /sharing/{slug})",
     name: "featured",

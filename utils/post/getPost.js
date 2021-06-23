@@ -17,6 +17,7 @@ export const getPost = async ({ idOrSlug, lang }) => {
           label
           url
         }
+        coverImage
       }
     }
   `;
@@ -27,4 +28,30 @@ export const getPost = async ({ idOrSlug, lang }) => {
 
   const { PostGet: post } = await getGraphQLClient().request(query, variables);
   return post;
+};
+
+export const getLatestPosts = async ({ page, limit }) => {
+  console.log("sending data", page, limit);
+  const query = gql`
+    query PostGetLatest($offset: Int!, $limit: Int!) {
+      PostGetLatest(offset: $offset, limit: $limit) {
+        id
+        slug
+        lang
+        title
+        excerpt
+        category
+        tags
+        publishDate
+      }
+    }
+  `;
+
+  const variables = {
+    offset: page,
+    limit
+  };
+
+  const { PostGetLatest: posts } = await getGraphQLClient().request(query, variables);
+  return posts;
 };

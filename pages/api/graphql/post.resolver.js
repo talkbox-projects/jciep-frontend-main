@@ -28,10 +28,9 @@ export default {
         return post;
       }
     },
-    PostGetHotest: (_parent, { limit = 3 }) => {
-      /**
-       * get first {limit} posts with greatest view count
-       */
+    PostGetHotest: async (_parent, { limit = 3 }) => {
+      const articles = await PostModel.find().sort({ viewCount: -1 }).limit(limit).exec();
+      return articles;
     },
     PostGetRelated: (_parent, { id }) => {
       /**
@@ -39,11 +38,9 @@ export default {
        * logic to be confirmed
        */
     },
-    PostGetLatest: (_parent, { page = 1, limit = 10 }) => {
-      /**
-       * get latest posts of a post specified by id
-       * logic to be confirmed
-       */
+    PostGetLatest: async (_parent, { offset = 1, limit = 10 }) => {
+      const articles = await PostModel.find().sort({ publishDate: -1 }).skip(offset).limit(limit).exec();
+      return articles;
     },
   },
   Mutation: {
@@ -54,6 +51,7 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }) => {
+      console.log("***** post", _post);
       if (!_post.slug) {
         throw new Error("Invalid Slug");
       }
