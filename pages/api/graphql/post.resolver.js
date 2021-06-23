@@ -53,8 +53,16 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }) => {
-      const post = await PostModel.create(_post);
-      return post;
+      if (!_post.slug) {
+        throw new Error("Invalid Slug");
+      }
+      const existingPost = await PostModel.findOne({ slug: _post.slug });
+      if (existingPost) {
+        throw new Error("Slug is already in use");
+      } else {
+        const post = await PostModel.create(_post);
+        return post;
+      }
     },
 
     PostDelete: async (_parent, { input: { id } }) => {

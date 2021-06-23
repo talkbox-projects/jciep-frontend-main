@@ -1,10 +1,12 @@
-import { usePlugin } from "@tinacms/react-core";
+import { usePlugin, useCMS } from "@tinacms/react-core";
 import { gql } from "graphql-request";
 import { useRouter } from "next/router";
 import { getGraphQLClient } from "../apollo";
 
 const withPostCreatorCMS = (Component) => (props) => {
   const router = useRouter();
+  const cms = useCMS();
+
   const PostCreatorPlugin = {
     __type: "content-creator",
     name: "新增分享 Create New Post",
@@ -53,6 +55,7 @@ const withPostCreatorCMS = (Component) => (props) => {
         await getGraphQLClient().request(mutation, variables);
         router.push(`/sharing/${values.slug}`);
       } catch (err) {
+        cms.alerts.error("Error creating Post: " + err)
         console.log("Error creating Post", err);
       }
 
