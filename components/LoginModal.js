@@ -29,17 +29,18 @@ import { AiOutlineMail } from "react-icons/ai";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
+import { useLoginHook } from "../utils/user";
 
 const LoginModal = () => {
   const {
     loginModalDisclosure,
     registerModalDisclosure,
     otpVerifyModalDisclosure,
-    setUser,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
   const getWording = useGetWording();
+  const setLogin = useLoginHook();
 
   const {
     handleSubmit,
@@ -49,8 +50,8 @@ const LoginModal = () => {
   } = useForm();
   const toast = useToast();
 
-  const onPhoneLogin = useCallback(() => {
-    otpVerifyModalDisclosure.onOpen();
+  const onPhoneLogin = useCallback(({ phone }) => {
+    otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
     loginModalDisclosure.onClose();
   }, []);
   const onEmailLogin = useCallback(async ({ email, password }) => {
@@ -74,7 +75,8 @@ const LoginModal = () => {
       };
 
       const data = await getGraphQLClient().request(mutation, variables);
-      setUser(data?.UserLogin);
+      setLogin(data?.UserLogin);
+      // loginModalDisclosure.onClose();
     } catch (e) {
       setError("password", {
         message: getWording("login.login_error_message"),

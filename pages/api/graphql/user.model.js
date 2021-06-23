@@ -1,6 +1,7 @@
 import { model, models, Schema } from "mongoose";
 import { districts, genders, identityTypes } from "./constants/enum";
 import bcrypt from "bcrypt";
+import { uuidv4 } from "../../../utils/uuid";
 
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
@@ -9,8 +10,7 @@ const emailVerifySchema = Schema({
 });
 
 emailVerifySchema.pre("validate", async function (next) {
-  const hash = await bcrypt.hash(this.email, 10);
-  this.token = hash;
+  this.token = uuidv4();
   next();
 });
 

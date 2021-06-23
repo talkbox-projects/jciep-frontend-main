@@ -256,16 +256,12 @@ const PwdDetail = ({ page }) => {
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {wordExtractor(page?.content?.wordings, "traitSectionTitle")}
             </Text>
-<<<<<<< HEAD
-            <Text fontSize="16px">
+            <Text fontSize="16px" position="relative" zIndex="1">
               {wordExtractor(
                 page?.content?.wordings,
                 "traitSectionDescription"
               )}
             </Text>
-=======
-            <Text fontSize="16px" position="relative" zIndex="1">{wordExtractor(page?.content?.wordings, "traitSectionDescription")}</Text>
->>>>>>> develop
           </Box>
           <Image
             src={pwd?.traitSection?.imageTop}
@@ -511,19 +507,15 @@ const PwdDetail = ({ page }) => {
           </Text>
         </Box>
 
-<<<<<<< HEAD
         <Box
           pos="relative"
           mt={["45px", "45px", "59px"]}
           mb={["20px", "20px", "27px"]}
+          px={["46px"]}
         >
-          <Text fontSize={["16", "16", "24"]}>
+          <Text fontSize={["16", "16", "24"]} textAlign="center">
             {pwd?.videoSection?.description}
           </Text>
-=======
-        <Box pos="relative" mt={["45px", "45px", "59px"]} mb={["20px", "20px", "27px"]} px={["46px"]}>
-          <Text fontSize={["16", "16", "24"]} textAlign="center">{pwd?.videoSection?.description}</Text>
->>>>>>> develop
           <Box
             width="6.15px"
             height="27.69px"
@@ -546,8 +538,13 @@ const PwdDetail = ({ page }) => {
           />
         </Box>
 
-<<<<<<< HEAD
-        <Box w="100%" h="100%" pos="relative" mb={["36px", "36px", "105px"]}>
+        <Box
+          w="100%"
+          h="100%"
+          pos="relative"
+          mb={["36px", "36px", "105px"]}
+          px="24px"
+        >
           <Image
             src={pwd?.videoSection?.leftImage}
             pos="absolute"
@@ -562,11 +559,6 @@ const PwdDetail = ({ page }) => {
             bottom="0"
             w={["0", "0", "145px"]}
           />
-=======
-        <Box w="100%" h="100%" pos="relative" mb={["36px", "36px", "105px"]} px="24px">
-          <Image src={pwd?.videoSection?.leftImage} pos="absolute" left="16%" top="0" w={["0", "0", "184px"]} />
-          <Image src={pwd?.videoSection?.rightImage} pos="absolute" right="18%" bottom="0" w={["0", "0", "145px"]} />
->>>>>>> develop
           {pwd?.videoSection?.videos.map((video) => (
             <AspectRatio
               maxW="668px"

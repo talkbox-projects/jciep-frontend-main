@@ -1,11 +1,11 @@
 import { HStack } from "@chakra-ui/layout";
-import withScreenCMS from "../utils/hoc/withScreenCMS";
+import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 
 const Footer = () => {
   return <HStack></HStack>;
 };
 
-export default withScreenCMS(Footer, {
+export default withConfigurationCMS(Footer, {
   key: "footer",
   label: "頁尾 Footer",
   fields: [

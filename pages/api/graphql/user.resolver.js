@@ -4,7 +4,11 @@ import jwt from "jsonwebtoken";
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
-      return await EmailVerify.exists({ token });
+      try {
+        return await EmailVerify.findOne({ token });
+      } catch (error) {
+        return null;
+      }
     },
 
     IdentityGet: async () => {

@@ -35,7 +35,7 @@ const RegisterModal = () => {
     registerModalDisclosure,
     loginModalDisclosure,
     otpVerifyModalDisclosure,
-    setUser,
+    emailVerifySentModalDisclosure,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -49,34 +49,35 @@ const RegisterModal = () => {
   } = useForm();
   const toast = useToast();
 
-  const onPhoneRegister = useCallback(() => {
-    otpVerifyModalDisclosure.onOpen();
-    registerModalDisclosure.onClose();
-  }, []);
-  const onEmailRegister = useCallback(async ({ email, password }) => {
+  const onPhoneRegister = useCallback(async ({ phone }) => {
     try {
       const mutation = gql`
-        mutation UserRegister($input: RegisterInput) {
-          UserRegister(input: $input) {
-            email
-            identities {
-              id
-            }
-          }
+        mutation UserPhoneVerify($phone: String!) {
+          UserPhoneVerify(phone: $phone)
         }
       `;
-
-      const variables = {
-        input: {
-          email,
-          password,
-        },
-      };
-
-      const data = await getGraphQLClient().request(mutation, variables);
-      setUser(data?.UserRegister);
+      await getGraphQLClient().request(mutation, { phone });
+      otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
+      registerModalDisclosure.onClose();
     } catch (e) {
-      setError("password", {
+      setError("email", {
+        message: getWording("register.register_error_message"),
+      });
+    }
+  }, []);
+
+  const onEmailRegister = useCallback(async ({ email }) => {
+    try {
+      const mutation = gql`
+        mutation UserEmailVerify($email: String!) {
+          UserEmailVerify(email: $email)
+        }
+      `;
+      await getGraphQLClient().request(mutation, { email });
+      emailVerifySentModalDisclosure.onOpen();
+      registerModalDisclosure.onClose();
+    } catch (e) {
+      setError("phone", {
         message: getWording("register.register_error_message"),
       });
     }

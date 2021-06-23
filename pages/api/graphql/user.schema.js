@@ -170,8 +170,13 @@ export default gql`
     password: String
   }
 
+  type UserEmailValidityCheckOutput {
+    email: String!
+    meta: JsonContent
+  }
+
   type Query {
-    UserEmailValidityCheck(token: String!): Boolean
+    UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
     IdentityGet(id: ID): User
     IdentitySearch(
