@@ -113,8 +113,8 @@ const Partner = ({ page }) => {
                 return (
                   <GridItem pt={["20px", ""]} key={index}>
                     <Stack direction={["column", "column", "row"]} justifyContent="center" alignItems="center">
-                      <Image w="50px" src={page?.content?.partnerSection?.planSection?.objectiveIcon} />
-                      <Text fontWeight="bold" w={["70%", "50%"]}>
+                      <Image w="38px" w="34px" src={page?.content?.partnerSection?.planSection?.objectiveIcon} />
+                      <Text pl={["", "", "16px"]} fontWeight="bold" fontSize={["", "", "20px"]} w={["70%", "50%"]}>
                         {content}
                       </Text>
                     </Stack>
@@ -151,7 +151,7 @@ const Partner = ({ page }) => {
               <>
                 <Box pos="relative" mb="34px" mx={["47px", "47px", "0px"]}>
                   <Box>
-                    <Text fontSize={["16", "16", "24"]} textAlign="center">
+                    <Text fontWeight="bold" fontSize={["16", "16", "24"]} textAlign="center">
                       {partner?.serviceHighlights[key].audience}
                     </Text>
                     <Box
@@ -182,7 +182,7 @@ const Partner = ({ page }) => {
                       <Accordian
                         textAlign="center"
                         title={title}
-                        boldTitle
+                        boldTitle={true}
                         description={content}
                         multi={true}
                         key={index}
@@ -223,7 +223,18 @@ const Partner = ({ page }) => {
       {/* Service Targets */}
       <Box bg={page?.content?.partnerSection?.serviceTarget?.bgColor}>
         <VStack w="100%">
-          <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight="1.5" backgroundImage="linear-gradient(#F6D644, #F6D644)" backgroundRepeat="no-repeat" backgroundPosition="0 0.8em" pl="15px" pr="15px">
+          <chakra.span
+            fontSize={["22px", "30px", "36px"]}
+            textAlign="center"
+            fontWeight="semibold"
+            pos="relative"
+            lineHeight="1.5"
+            backgroundImage="linear-gradient(#F6D644, #F6D644)"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="0 0.8em"
+            pl="15px"
+            pr="15px"
+          >
             {page?.content?.partnerSection?.serviceTarget?.title}
           </chakra.span>
         </VStack>
@@ -242,28 +253,54 @@ const Partner = ({ page }) => {
           </SimpleGrid>
         </HStack>
 
-        <Flex wrap="wrap" pt={["16px", "16px", "30px"]} pb={["16px", "16px", "24px"]} pl={["16px", "30px"]} pr={["16px", "26px"]} bg="#fff" mb={["90px"]} mx={["0", "0", "56"]} borderRadius="20px">
+        <Flex
+          wrap="wrap"
+          pt={["16px", "16px", "30px"]}
+          pb={["16px", "16px", "24px"]}
+          pl={["16px", "30px"]}
+          pr={["16px", "26px"]}
+          bg="#fff"
+          mb={["90px"]}
+          mx={["0", "0", "56"]}
+          borderRadius="20px"
+        >
           <Box bg="white" w={["100%", "100%", "50%"]}>
             <Box w="80%">
               <Image w="310px" src={partner?.contact?.logo} />
             </Box>
-            <Text w="80%" pt="16px">{partner?.contact?.label}</Text>
+            <Text w="80%" pt="16px">
+              {partner?.contact?.label}
+            </Text>
           </Box>
-          <Box display="flex" flexDirection="column" alignContent="flex-start" w={["100%", "100%", "50%"]} mt={["24px", "24px", "0"]}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignContent="flex-start"
+            w={["100%", "100%", "50%"]}
+            mt={["24px", "24px", "0"]}
+          >
             <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">{wordExtractor(page?.content?.wordings, "addressLabel")}</Text>
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "addressLabel")}
+              </Text>
               <Text color="#666666">{partner?.contact?.address}</Text>
             </Box>
             <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">{wordExtractor(page?.content?.wordings, "emailLabel")}</Text>
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "emailLabel")}
+              </Text>
               <Text color="#666666">{partner?.contact?.email}</Text>
             </Box>
             <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">{wordExtractor(page?.content?.wordings, "phoneLabel")}</Text>
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "phoneLabel")}
+              </Text>
               <Text color="#666666">{partner?.contact?.phone}</Text>
             </Box>
             <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">{wordExtractor(page?.content?.wordings, "faxLabel")}</Text>
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "faxLabel")}
+              </Text>
               <Text color="#666666">{partner?.contact?.fax}</Text>
             </Box>
           </Box>

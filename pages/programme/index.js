@@ -201,7 +201,9 @@ const Programme = ({ page }) => {
                       align="left"
                       zIndex="10"
                     >
-                      <Text fontSize="xl">{agencyName}</Text>
+                      <Text fontWeight="bold" fontSize="xl">
+                        {agencyName}
+                      </Text>
                       <Text fontSize="lg">{projectName}</Text>
                       <Box flex={1} minH="max-content" h="100%" />
                       <Image w={["75%"]} src={contact?.logo}></Image>
@@ -285,7 +287,7 @@ const Programme = ({ page }) => {
                       return (
                         <Accordian
                           multi={true}
-                          boldTitle={false}
+                          boldTitle={true}
                           textAlign="left"
                           bgColor="#FAFAFA"
                           key={i}

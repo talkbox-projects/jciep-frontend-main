@@ -11,7 +11,7 @@ const Accordian = ({ title, description, link, bgColor, multi, fontSize, boldTit
             <h2>
               <AccordionButton w="100%">
                 <Box w="100%" flex="1">
-                  <Text w="100%" fontWeight={boldTitle ?? "bold"} textAlign={textAlign}>
+                  <Text w="100%" fontWeight={boldTitle ? "bold" : "normal"} textAlign={textAlign}>
                     {title}
                   </Text>
                 </Box>
@@ -33,7 +33,14 @@ const Accordian = ({ title, description, link, bgColor, multi, fontSize, boldTit
                 <VStack pt="10" alignItems="start" justifyContent="left">
                   {(link ?? []).map((data, index) => {
                     return (
-                      <Link cursor="pointer" display="block" color="#007878" href={data.url} key={index}>
+                      <Link
+                        fontWeight="bold"
+                        cursor="pointer"
+                        display="block"
+                        color="#007878"
+                        href={data.url}
+                        key={index}
+                      >
                         {data.label}
                       </Link>
                     );
