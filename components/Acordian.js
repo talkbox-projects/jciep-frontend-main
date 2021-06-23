@@ -4,7 +4,7 @@ import { VStack } from "@chakra-ui/layout";
 import MultiTextRenderer from "./MultiTextRenderer";
 const Accordian = ({ title, description, link, bgColor, multi, fontSize, boldTitle, textAlign }) => {
   return (
-    <Accordion zIndex="10000" pt="10px" allowToggle allowMultiple border="transparent" w="100%">
+    <Accordion pt="10px" allowToggle allowMultiple border="transparent" w="100%">
       <AccordionItem _hover={{ borderRadius: "10px", bg: bgColor }} borderRadius="10px" bg={bgColor}>
         {({ isExpanded }) => (
           <>
