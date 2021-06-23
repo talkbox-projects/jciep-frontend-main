@@ -51,7 +51,6 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }) => {
-      console.log("***** post", _post);
       if (!_post.slug) {
         throw new Error("Invalid Slug");
       }

@@ -75,11 +75,23 @@ const Programme = ({ page }) => {
         <Container>
           <VStack align="center" spacing={0} py={16}>
             <Box mx={["20px", "30px"]}>
-              <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#fff, #fff)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+              <chakra.span
+                fontSize={["22px", "30px", "36px"]}
+                textAlign="center"
+                fontWeight="semibold"
+                pos="relative"
+                lineHeight={2}
+                backgroundImage="linear-gradient(#fff, #fff)"
+                backgroundRepeat="no-repeat"
+                backgroundPosition="0 0.7em"
+                pl="15px"
+                pr="15px"
+                pb="10px"
+              >
                 {page?.content?.visionSection?.title}
               </chakra.span>
             </Box>
-            
+
             <Box pt={8}>
               <MultiTextRenderer
                 data={page?.content?.visionSection?.detail}
@@ -139,7 +151,19 @@ const Programme = ({ page }) => {
           <Container>
             <VStack spacing={0} pt={["36px", "36px", "53px"]} textAlign="center">
               <Box>
-                <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#F6D644, #F6D644)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+                <chakra.span
+                  fontSize={["22px", "30px", "36px"]}
+                  textAlign="center"
+                  fontWeight="semibold"
+                  pos="relative"
+                  lineHeight={2}
+                  backgroundImage="linear-gradient(#F6D644, #F6D644)"
+                  backgroundRepeat="no-repeat"
+                  backgroundPosition="0 0.7em"
+                  pl="15px"
+                  pr="15px"
+                  pb="10px"
+                >
                   {page?.content?.partnerSection?.title}
                 </chakra.span>
               </Box>
@@ -230,7 +254,19 @@ const Programme = ({ page }) => {
       >
         <VStack>
           <Box px="16px">
-            <chakra.span fontSize={["22px", "30px", "36px"]} textAlign="center" fontWeight="semibold" pos="relative" lineHeight={2} backgroundImage="linear-gradient(#F6D644, #F6D644)" backgroundRepeat="no-repeat" backgroundPosition="0 0.7em" pl="15px" pr="15px" pb="10px">
+            <chakra.span
+              fontSize={["22px", "30px", "36px"]}
+              textAlign="center"
+              fontWeight="semibold"
+              pos="relative"
+              lineHeight={2}
+              backgroundImage="linear-gradient(#F6D644, #F6D644)"
+              backgroundRepeat="no-repeat"
+              backgroundPosition="0 0.7em"
+              pl="15px"
+              pr="15px"
+              pb="10px"
+            >
               {page?.content?.referenceSection?.title}
             </chakra.span>
           </Box>
@@ -250,6 +286,7 @@ const Programme = ({ page }) => {
                         <Accordian
                           multi={true}
                           boldTitle={false}
+                          textAlign="left"
                           bgColor="#FAFAFA"
                           key={i}
                           title={d.title}
