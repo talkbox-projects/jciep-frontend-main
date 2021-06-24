@@ -48,8 +48,10 @@ const PwdMain = ({ page }) => {
         flexDirection="column"
         alignItems="center"
         zIndex="-1"
+        display="flex"
+        justifyContent="center"
       >
-        <Box pt={["15%", "15%", "12%", "12%"]} position="relative">
+        <Box mb="43px" position="relative">
           <Text textAlign="center" fontSize={["16", "16", "24", "24"]}>
             {page?.content?.banner?.reference}
           </Text>

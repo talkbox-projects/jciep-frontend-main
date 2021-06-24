@@ -9,7 +9,8 @@ const postSchema = Schema({
     type: String,
   },
   publishDate: {
-    type: String,
+    type: Date,
+    index: true,
   },
   slug: {
     type: String,
@@ -40,6 +41,7 @@ const postSchema = Schema({
   },
   viewCount: {
     type: Schema.Types.Number,
+    index: true
   },
 });
 

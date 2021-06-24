@@ -1,6 +1,7 @@
 import { usePlugin, useCMS } from "@tinacms/react-core";
 import { gql } from "graphql-request";
 import { useRouter } from "next/router";
+import moment from "moment";
 import { getGraphQLClient } from "../apollo";
 
 const withPostCreatorCMS = (Component) => (props) => {
@@ -48,6 +49,7 @@ const withPostCreatorCMS = (Component) => (props) => {
           }
         }
       `;
+      values.publishDate = values.publishDate? moment(values.publishDate).toDate() : moment().toDate();
       const variables = {
         input: values,
       };

@@ -4,16 +4,52 @@ import PostModel from "./post.model";
 export default {
   Query: {
     PostSearch: async (_parent, { lang, status = [], limit, offset, category }) => {
-      const posts = await PostModel.find({
-        ...(lang && { lang }),
-        ...(status?.length && { status: { $in: status } }),
-        ...(category?.length && { category: { $in: category } }),
-      })
-        .sort({ publishDate: -1 })
-        .skip(offset)
-        .limit(limit)
-        .exec();
-      return posts;
+      
+      const articlesData = await PostModel.aggregate([
+        {
+          $match: {
+            ...(lang && { lang }),
+            ...(status?.length && { status: { $in: [status] } }),
+            ...(category?.length && { category: { $in: [category] } }),
+          }
+        },
+        {
+          $sort: {
+            publishDate: -1,
+            _id: 1
+          }
+        },
+        {
+          $facet: {
+            totalRecords: [
+              {
+                $count: "total"
+              }
+            ],
+            data: [
+              {
+                $skip: offset > 0 ? ( ( offset - 1 ) * limit ) : 0
+              },
+              {
+                $limit: limit
+              }
+            ]
+          }
+        }
+      ]).exec();
+      const articles = articlesData[0].data.map(post => { post.id = post._id; return post })
+      const data = { data: articles, totalRecords: articlesData[0]?.totalRecords[0]?.total };
+      
+      // await PostModel.find({
+      //   ...(lang && { lang }),
+      //   ...(status?.length && { status: { $in: status } }),
+      //   ...(category?.length && { category: { $in: category } }),
+      // })
+      //   .sort({ publishDate: -1, _id: 1 })
+      //   .skip(offset > 0 ? ( ( offset - 1 ) * limit ) : 0)
+      //   .limit(limit)
+      //   .exec();
+      return data;
     },
     PostGet: async (_parent, { lang, idOrSlug }) => {
       const isObjectId = mongoose.isValidObjectId(idOrSlug);
@@ -29,7 +65,7 @@ export default {
       }
     },
     PostGetHotest: async (_parent, { limit = 3 }) => {
-      const articles = await PostModel.find().sort({ viewCount: -1 }).limit(limit).exec();
+      const articles = await PostModel.find().sort({ viewCount: -1, _id: 1 }).limit(limit).exec();
       return articles;
     },
     PostGetRelated: async (_parent, { category, limit, id }) => {
@@ -37,15 +73,46 @@ export default {
         ...(category?.length && { category: { $in: category } }),
         '_id': { $ne: new mongoose.Types.ObjectId( id )},
       })
-        .sort({ publishDate: -1 })
+        .sort({ publishDate: -1, _id: 1 })
         .limit(limit)
         .exec();
-      console.log(" @@@ Mongooose return", posts);
+      // console.log(" @@@ Mongooose return", posts);
       return posts;
     },
-    PostGetLatest: async (_parent, { offset = 1, limit = 10 }) => {
-      const articles = await PostModel.find().sort({ publishDate: -1 }).skip(offset).limit(limit).exec();
-      return articles;
+    PostGetLatest: async (_parent, { offset = 0, limit = 10 }) => {
+      const articlesData = await PostModel.aggregate([
+        {
+          $sort: {
+            publishDate: -1,
+            _id: 1
+          }
+        },
+        {
+          $facet: {
+            totalRecords: [
+              {
+                $count: "total"
+              }
+            ],
+            data: [
+              {
+                $skip: offset > 0 ? ( ( offset - 1 ) * limit ) : 0
+              },
+              {
+                $limit: limit
+              }
+            ]
+          }
+        }
+      ]).exec();
+      // const articles = await PostModel.find()
+      //   .sort({ publishDate: -1, _id: 1 })
+      //   .skip(offset > 0 ? ( ( offset - 1 ) * limit ) : 0)
+      //   .limit(limit)
+      //   .exec();
+      const articles = articlesData[0].data.map(post => { post.id = post._id; return post })
+      const data = { data: articles, totalRecords: articlesData[0]?.totalRecords[0]?.total };
+      return data;
     },
   },
   Mutation: {
