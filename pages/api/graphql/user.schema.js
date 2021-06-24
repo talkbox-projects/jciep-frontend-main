@@ -183,12 +183,12 @@ export default gql`
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
-    IdentityGet(id: ID): User
+    IdentityGet(id: ID): Identity
     IdentitySearch(
       identityTypes: [IdentityType]
       limit: Int!
       page: Int!
-    ): [User] @auth(identityTypes: [admin])
+    ): [Identity] @auth(identityTypes: [admin])
   }
 
   type Mutation {
@@ -202,7 +202,7 @@ export default gql`
     UserPasswordResetEmailSend(email: String!): Boolean
     UserPasswordReset(token: String!, password: String!): Boolean
 
-    IdentityCreate(input: IdentityCreateInput!): Identity @auth
-    IdentityUpdate(input: IdentityUpdateInput!): Identity @auth
+    IdentityCreate(input: IdentityCreateInput!): Identity
+    IdentityUpdate(input: IdentityUpdateInput!): Identity
   }
 `;

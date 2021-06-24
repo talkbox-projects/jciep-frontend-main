@@ -119,19 +119,7 @@ const Header = ({ header }) => {
             ) : (
               <PopoverContent p={3} w={72}>
                 <VStack align="stretch" spacing={4}>
-                  {user?.identities?.length ? (
-                    <VStack spacing={0} align="stretch">
-                      <Text fontWeight="bold">身份</Text>
-                      <Text
-                        alignSelf="center"
-                        py={6}
-                        color="gray.500"
-                        textAlign="center"
-                      >
-                        未有任何身份
-                      </Text>
-                    </VStack>
-                  ) : (
+                  {
                     <VStack spacing={2} align="stretch">
                       <Text my={1} fontWeight="bold">
                         身份
@@ -183,6 +171,20 @@ const Header = ({ header }) => {
                             )}
                           </HStack>
                         ))}
+                        {!user?.identities?.length && (
+                          <Link href="/user/identity/select">
+                            <Button
+                              mt={4}
+                              w="100%"
+                              alignSelf="center"
+                              variant="ghost"
+                              color="gray.500"
+                              textAlign="center"
+                            >
+                              新增身份
+                            </Button>
+                          </Link>
+                        )}
                       </VStack>
                       <Divider />
                       <VStack mt={2} align="stretch" spacing={2}>
@@ -194,7 +196,7 @@ const Header = ({ header }) => {
                         </Link>
                       </VStack>
                     </VStack>
-                  )}
+                  }
                 </VStack>
               </PopoverContent>
             )}
