@@ -29,7 +29,7 @@ const OrganizationCompanyAdd = () => {
   return (
     <VStack py={36}>
       <Text>Add Company</Text>
-      <Link href="/user/organization/company/id/pending">
+      <Link href="/user/organization/company/organization-id/pending">
         <Button>Submit</Button>
       </Link>
     </VStack>

@@ -4,7 +4,7 @@ import { getConfiguration } from "../../../../../utils/configuration/getConfigur
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 
-const PAGE_KEY = "organization_company_add_pending";
+const PAGE_KEY = "organization_company_pending";
 
 export const getServerSideProps = async (context) => {
   return {
@@ -25,7 +25,7 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-const OrganizationCompanyAdd = () => {
+const OrganizationCompanyPending = () => {
   return (
     <VStack py={36}>
       <Text>Your application is pending for approval</Text>
