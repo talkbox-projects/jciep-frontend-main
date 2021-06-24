@@ -116,6 +116,11 @@ export default withConfigurationCMS(
             label: "顏色 Color",
           },
           {
+            name: "textColor",
+            component: "color",
+            label: "顏色 Color",
+          },
+          {
             label: "圖示 Icon",
             name: "image",
             component: "image",

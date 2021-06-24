@@ -3,6 +3,8 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import moment from "moment";
+
 const withPostCMS =
   (Component, { propName = "post" } = {}) =>
   (props) => {
@@ -185,7 +187,7 @@ const withPostCMS =
             }
           }
         `;
-
+        values.publishDate = values.publishDate? moment(values.publishDate).toDate() : moment().toDate();
         const variables = {
           input: {
             ...values,
