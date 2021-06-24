@@ -38,6 +38,9 @@ const postSchema = Schema({
   content: {
     type: Schema.Types.Mixed,
   },
+  viewCount: {
+    type: Schema.Types.Number,
+  },
 });
 
 export default models["post"] ?? model("post", postSchema);

@@ -10,7 +10,7 @@ import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
-import BorderedTitle from "./../../../components/BorderedTitle";
+import wordExtractor from "../../../utils/wordExtractor";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -118,19 +118,9 @@ const Partner = ({ page }) => {
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
                 return (
                   <GridItem pt={["20px", ""]} key={index}>
-                    <Stack
-                      direction={["column", "column", "row"]}
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Image
-                        w="50px"
-                        src={
-                          page?.content?.partnerSection?.planSection
-                            ?.objectiveIcon
-                        }
-                      />
-                      <Text fontWeight="bold" w={["70%", "50%"]}>
+                    <Stack direction={["column", "column", "row"]} justifyContent="center" alignItems="center">
+                      <Image w="38px" w="34px" src={page?.content?.partnerSection?.planSection?.objectiveIcon} />
+                      <Text pl={["", "", "16px"]} fontWeight="bold" fontSize={["", "", "20px"]} w={["70%", "50%"]}>
                         {content}
                       </Text>
                     </Stack>
@@ -167,7 +157,7 @@ const Partner = ({ page }) => {
               <>
                 <Box pos="relative" mb="34px" mx={["47px", "47px", "0px"]}>
                   <Box>
-                    <Text fontSize={["16", "16", "24"]} textAlign="center">
+                    <Text fontWeight="bold" fontSize={["16", "16", "24"]} textAlign="center">
                       {partner?.serviceHighlights[key].audience}
                     </Text>
                     <Box
@@ -192,27 +182,20 @@ const Partner = ({ page }) => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  mb="10px"
-                  zIndex="10000"
-                  w={["80%", "65%", "55%", "45%"]}
-                  pt="36px"
-                >
-                  {(partner?.serviceHighlights[key]?.sections ?? []).map(
-                    ({ title, content }, index) => {
-                      return (
-                        <Accordian
-                          textAlign="center"
-                          title={title}
-                          boldTitle
-                          description={content}
-                          multi={true}
-                          key={index}
-                          bgColor="#FFFFFF"
-                        />
-                      );
-                    }
-                  )}
+                <Box mb="10px" zIndex="10000" w={["80%", "65%", "55%", "45%"]} pt="36px">
+                  {(partner?.serviceHighlights[key]?.sections ?? []).map(({ title, content }, index) => {
+                    return (
+                      <Accordian
+                        textAlign="center"
+                        title={title}
+                        boldTitle={true}
+                        description={content}
+                        multi={true}
+                        key={index}
+                        bgColor="#FFFFFF"
+                      />
+                    );
+                  })}
                 </Box>
               </>
             );
@@ -246,58 +229,87 @@ const Partner = ({ page }) => {
       {/* Service Targets */}
       <Box bg={page?.content?.partnerSection?.serviceTarget?.bgColor}>
         <VStack w="100%">
-          <BorderedTitle
-            title={page?.content?.partnerSection?.serviceTarget?.title}
-            color={page?.content?.partnerSection?.serviceTarget?.titleColor}
-            mobileWidth="40%"
-            right="30%"
-            width={["0%", "106%"]}
-          />
-        </VStack>
-        <HStack justifyContent="center" w="100%" pt="56px">
-          <SimpleGrid
-            justifyContent="center"
-            w="60%"
-            gap="36px"
-            columns={[2, 2, 4, 4]}
+          <chakra.span
+            fontSize={["22px", "30px", "36px"]}
+            textAlign="center"
+            fontWeight="semibold"
+            pos="relative"
+            lineHeight="1.5"
+            backgroundImage="linear-gradient(#F6D644, #F6D644)"
+            backgroundRepeat="no-repeat"
+            backgroundPosition="0 0.8em"
+            pl="15px"
+            pr="15px"
           >
-            {(partner?.serviceTargets ?? []).map(
-              ({ label, description, image }, index) => {
-                return (
-                  <VStack>
-                    <Image w="150px" src={image} />
-                    <Text
-                      textAlign="center"
-                      w={["100%", "100%", "150px"]}
-                      fontSize={["xl", "2xl"]}
-                      fontWeight="semibold"
-                    >
-                      {label}
-                    </Text>
-                  </VStack>
-                );
-              }
-            )}
+            {page?.content?.partnerSection?.serviceTarget?.title}
+          </chakra.span>
+        </VStack>
+        <HStack justifyContent="center" w="100%" pt="56px" pb="72px">
+          <SimpleGrid justifyContent="center" w="60%" gap="36px" columns={[2, 2, 4, 4]}>
+            {(partner?.serviceTargets ?? []).map(({ label, description, image }, index) => {
+              return (
+                <VStack>
+                  <Image w="150px" src={image} />
+                  <Text textAlign="center" w={["100%", "100%", "150px"]} fontSize={["xl", "2xl"]} fontWeight="semibold">
+                    {label}
+                  </Text>
+                </VStack>
+              );
+            })}
           </SimpleGrid>
         </HStack>
 
-        <Flex px={["0", "0", "56"]} wrap="wrap" pt={["16", "36"]}>
-          <VStack bg="white" w={["100%", "100%", "50%"]}>
+        <Flex
+          wrap="wrap"
+          pt={["16px", "16px", "30px"]}
+          pb={["16px", "16px", "24px"]}
+          pl={["16px", "30px"]}
+          pr={["16px", "26px"]}
+          bg="#fff"
+          mb={["90px"]}
+          mx={["0", "0", "56"]}
+          borderRadius="20px"
+        >
+          <Box bg="white" w={["100%", "100%", "50%"]}>
             <Box w="80%">
               <Image w="310px" src={partner?.contact?.logo} />
             </Box>
-            <Text w="80%">{partner?.contact?.label}</Text>
-          </VStack>
-          <VStack
-            bg="white"
-            pt={["10px", "10px", ""]}
+            <Text w="80%" pt="16px">
+              {partner?.contact?.label}
+            </Text>
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignContent="flex-start"
             w={["100%", "100%", "50%"]}
+            mt={["24px", "24px", "0"]}
           >
-            <Text w="80%">{partner?.contact?.address}</Text>
-            <Text w="80%">{partner?.contact?.email}</Text>
-            <Text w="80%">{partner?.contact?.phone}</Text>
-            <Text w="80%">{partner?.contact?.fax}</Text>
-          </VStack>
+            <Box display="flex" justifyContent="flex-start" pb="16px">
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "addressLabel")}
+              </Text>
+              <Text color="#666666">{partner?.contact?.address}</Text>
+            </Box>
+            <Box display="flex" justifyContent="flex-start" pb="16px">
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "emailLabel")}
+              </Text>
+              <Text color="#666666">{partner?.contact?.email}</Text>
+            </Box>
+            <Box display="flex" justifyContent="flex-start" pb="16px">
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "phoneLabel")}
+              </Text>
+              <Text color="#666666">{partner?.contact?.phone}</Text>
+            </Box>
+            <Box display="flex" justifyContent="flex-start" pb="16px">
+              <Text w="60px" fontWeight="bold" color="#666666">
+                {wordExtractor(page?.content?.wordings, "faxLabel")}
+              </Text>
+              <Text color="#666666">{partner?.contact?.fax}</Text>
+            </Box>
+          </Box>
         </Flex>
       </Box>
     </VStack>

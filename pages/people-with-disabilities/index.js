@@ -31,9 +31,13 @@ const PwdMain = ({ page }) => {
   const router = useRouter();
 
   const pwdTitle = () => {
+<<<<<<< HEAD
     const titleElem = (page?.content?.wordings ?? []).filter(
       (data) => data.key === "pwdSectionTitle"
     );
+=======
+    const titleElem = (page?.content?.wordings ?? []).filter((data) => data.key === "pwdSectionTitle");
+>>>>>>> origin/develop
     if (titleElem && titleElem[0]) {
       return titleElem[0].value;
     }
@@ -60,7 +64,11 @@ const PwdMain = ({ page }) => {
             {page?.content?.banner?.reference}
           </Text>
           <MultiTextRenderer
+<<<<<<< HEAD
             textAlign="left"
+=======
+            textAlign="center"
+>>>>>>> origin/develop
             fontSize={["24", "24", "56", "56"]}
             data={page?.content?.banner?.quote}
             parentStyles={{ zIndex: "1" }}
@@ -81,7 +89,11 @@ const PwdMain = ({ page }) => {
           bottom="-74px"
           left="149"
           src={page?.content?.banner?.bgImageLeft}
+<<<<<<< HEAD
           h={["0%", "0%", "388px", "57%"]}
+=======
+          h={["0%", "0%", "388px"]}
+>>>>>>> origin/develop
           w="auto"
           maxW="334"
           zIndex="1"
@@ -118,7 +130,11 @@ const PwdMain = ({ page }) => {
         zIndex="-2"
       >
         <Box position="relative" mb="34px" mx={["47px", "47px", "0px"]}>
+<<<<<<< HEAD
           <Text fontSize={["16", "16", "24"]} textAlign="center">
+=======
+          <Text fontSize={["16", "16", "24"]} textAlign="center" fontWeight="bold">
+>>>>>>> origin/develop
             {page?.content?.excerpt?.tagline}
           </Text>
           <Box
@@ -151,11 +167,15 @@ const PwdMain = ({ page }) => {
           background="#fff"
           borderRadius="22px"
         >
+<<<<<<< HEAD
           <MultiTextRenderer
             textAlign="center"
             fontSize={["16", "16", "24"]}
             data={page?.content?.excerpt?.content}
           />
+=======
+          <MultiTextRenderer textAlign="center" fontSize={["16", "16", "24"]} data={page?.content?.excerpt?.content} />
+>>>>>>> origin/develop
         </Box>
       </Box>
 
@@ -184,6 +204,10 @@ const PwdMain = ({ page }) => {
               pos="relative"
               pl="15px"
               pb="6px"
+<<<<<<< HEAD
+=======
+              fontWeight="bold"
+>>>>>>> origin/develop
             >
               {pwdTitle()}
             </chakra.span>
@@ -191,11 +215,15 @@ const PwdMain = ({ page }) => {
         </Box>
 
         <Grid
+<<<<<<< HEAD
           templateColumns={[
             "repeat(2, 136px)",
             "repeat(2, 136px)",
             "repeat(3, 296px)",
           ]}
+=======
+          templateColumns={["repeat(2, 136px)", "repeat(2, 136px)", "repeat(3, 296px)"]}
+>>>>>>> origin/develop
           gap={["16px", "16px", "24px"]}
           mt={["36px", "56px"]}
           justifyContent="center"
@@ -222,7 +250,11 @@ const PwdMain = ({ page }) => {
               zIndex={1}
             >
               <Image src={data.icon} h="48px" w="48px" />
+<<<<<<< HEAD
               <Text fontSize={["16px", "16px", "24px"]} textAlign="center">
+=======
+              <Text fontWeight="bold" fontSize={["16px", "16px", "24px"]} textAlign="center">
+>>>>>>> origin/develop
                 {data.name}
               </Text>
             </Box>

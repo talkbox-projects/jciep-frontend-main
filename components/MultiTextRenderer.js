@@ -9,6 +9,7 @@ const MultiTextRenderer = ({ data, textAlign, fontSize, parentStyles, bgColor })
             return (
               <Text
                 d="inline"
+                p="0"
                 bgColor={bgColor}
                 key={index}
                 textColor={textcolor}

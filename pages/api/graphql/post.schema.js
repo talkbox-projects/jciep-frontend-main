@@ -20,7 +20,7 @@ export default gql`
     publishDate: Timestamp
     title: String
     excerpt: String
-    coverImage: File
+    coverImage: String
     category: String
     tags: [String]
     references: [PostReference]
@@ -40,7 +40,7 @@ export default gql`
     title: String
     publishDate: Timestamp
     excerpt: String
-    coverImage: FileInput
+    coverImage: String
     category: String
     content: JsonContent
     tags: [String]
@@ -54,7 +54,7 @@ export default gql`
     title: String
     publishDate: Timestamp
     excerpt: String
-    coverImage: FileInput
+    coverImage: String
     category: String
     content: JsonContent
     status: PostStatus
@@ -73,9 +73,9 @@ export default gql`
 
     PostGet(idOrSlug: String!, lang: Language!): Post
     "get related posts for post specfiied by id. 延伸閱讀"
-    PostGetRelated(id: ID): [Post]
+    PostGetRelated(id: ID!, category: String, limit: Int!): [Post]
     "熱門文章 limit default = 3"
-    PostGetHotest(offset: Int!, limit: Int!): [Post]
+    PostGetHotest(limit: Int!): [Post]
 
     "最新文章 Latest Article with pagination"
     PostGetLatest(offset: Int!, limit: Int!): [Post]

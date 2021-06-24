@@ -3,10 +3,11 @@ import PostModel from "./post.model";
 
 export default {
   Query: {
-    PostSearch: async (_parent, { lang, status = [], limit, offset }) => {
+    PostSearch: async (_parent, { lang, status = [], limit, offset, category }) => {
       const posts = await PostModel.find({
         ...(lang && { lang }),
         ...(status?.length && { status: { $in: status } }),
+        ...(category?.length && { category: { $in: category } }),
       })
         .sort({ publishDate: -1 })
         .skip(offset)
@@ -27,22 +28,24 @@ export default {
         return post;
       }
     },
-    PostGetHotest: (_parent, { limit = 3 }) => {
-      /**
-       * get first {limit} posts with greatest view count
-       */
+    PostGetHotest: async (_parent, { limit = 3 }) => {
+      const articles = await PostModel.find().sort({ viewCount: -1 }).limit(limit).exec();
+      return articles;
     },
-    PostGetRelated: (_parent, { id }) => {
-      /**
-       * get related posts of a post specified by id
-       * logic to be confirmed
-       */
+    PostGetRelated: async (_parent, { category, limit, id }) => {
+      const posts = await PostModel.find({
+        ...(category?.length && { category: { $in: category } }),
+        '_id': { $ne: new mongoose.Types.ObjectId( id )},
+      })
+        .sort({ publishDate: -1 })
+        .limit(limit)
+        .exec();
+      console.log(" @@@ Mongooose return", posts);
+      return posts;
     },
-    PostGetLatest: (_parent, { page = 1, limit = 10 }) => {
-      /**
-       * get latest posts of a post specified by id
-       * logic to be confirmed
-       */
+    PostGetLatest: async (_parent, { offset = 1, limit = 10 }) => {
+      const articles = await PostModel.find().sort({ publishDate: -1 }).skip(offset).limit(limit).exec();
+      return articles;
     },
   },
   Mutation: {
@@ -53,8 +56,16 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }) => {
-      const post = await PostModel.create(_post);
-      return post;
+      if (!_post.slug) {
+        throw new Error("Invalid Slug");
+      }
+      const existingPost = await PostModel.findOne({ slug: _post.slug });
+      if (existingPost) {
+        throw new Error("Slug is already in use");
+      } else {
+        const post = await PostModel.create(_post);
+        return post;
+      }
     },
 
     PostDelete: async (_parent, { input: { id } }) => {
@@ -66,11 +77,12 @@ export default {
       }
     },
 
-    PostRead: async (_parent, { input: { id } }) => {
+    PostRead: async (_parent, {  id }) => {
+      console.log("Received id", id)
       const post = await PostModel.findByIdAndUpdate(id, {
         $inc: { viewCount: 1 },
       }).exec();
-      return post;
+      return true;
     },
   },
 };
