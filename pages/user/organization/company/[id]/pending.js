@@ -36,4 +36,4 @@ const OrganizationCompanyPending = () => {
   );
 };
 
-export default withPageCMS(OrganizationCompanyAdd, { key: PAGE_KEY });
+export default withPageCMS(OrganizationCompanyPending, { key: PAGE_KEY });
