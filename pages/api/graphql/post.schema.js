@@ -62,6 +62,11 @@ export default gql`
     references: [PostReferenceInput]
   }
 
+  type FilteredPosts {
+    data: [Post]
+    totalRecords: Int
+  }
+
   type Query {
     PostSearch(
       lang: Language!
@@ -69,7 +74,7 @@ export default gql`
       category: String
       limit: Int!
       offset: Int!
-    ): [Post]
+    ): FilteredPosts
 
     PostGet(idOrSlug: String!, lang: Language!): Post
     "get related posts for post specfiied by id. 延伸閱讀"
@@ -78,7 +83,7 @@ export default gql`
     PostGetHotest(limit: Int!): [Post]
 
     "最新文章 Latest Article with pagination"
-    PostGetLatest(offset: Int!, limit: Int!): [Post]
+    PostGetLatest(offset: Int!, limit: Int!): FilteredPosts
   }
 
   type Mutation {

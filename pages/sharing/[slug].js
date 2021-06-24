@@ -139,7 +139,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                 {relatedArticles.map(({ category, title, excerpt, slug }, index) => {
                   return (
                     <Box key={index} pb="40px" w="70%" cursor="pointer" onClick={() => router.push(`/sharing/${slug}`)}>
-                      <Tag bg={getCategoryData(category).bgColor} fontSize="12px" borderRadius="19px">
+                      <Tag color={getCategoryData(category).textColor} bg={getCategoryData(category).bgColor} fontSize="12px" borderRadius="19px">
                         {getCategoryData(category).label}
                       </Tag>
                       <Text fontSize="22px" color="#1E1E1E">
@@ -166,7 +166,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                 </Box>
                 <HStack pt={["8px"]} w="100%" justify="space-between">
                   <Flex>
-                    <Box background={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
+                    <Box color={getCategoryData(post?.category).textColor} background={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
                       {getCategoryData(post?.category).label}
                     </Box>
                     <Text ml="8px" fontSize="12px" color="#1E1E1E">
@@ -311,7 +311,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
             </Box>
             <HStack pt={["8px"]} w="100%" justify="space-between">
               <Flex>
-                <Tag background={getCategoryData(relatedArticles[0]?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
+                <Tag color={getCategoryData(relatedArticles[0]?.category).textColor} background={getCategoryData(relatedArticles[0]?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
                   {getCategoryData(relatedArticles[0]?.category).label}
                 </Tag>
                 <Text ml="8px" fontSize="12px" color="#1E1E1E">

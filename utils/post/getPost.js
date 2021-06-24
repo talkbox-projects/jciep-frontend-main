@@ -35,15 +35,18 @@ export const getLatestPosts = async ({ page, limit }) => {
   const query = gql`
     query PostGetLatest($offset: Int!, $limit: Int!) {
       PostGetLatest(offset: $offset, limit: $limit) {
-        id
-        slug
-        lang
-        title
-        excerpt
-        category
-        tags
-        publishDate
-        coverImage
+        totalRecords
+        data {
+          id
+          slug
+          lang
+          title
+          excerpt
+          category
+          tags
+          publishDate
+          coverImage
+        }
       }
     }
   `;
@@ -88,15 +91,18 @@ export const getFilteredPosts = async ({ lang, limit, offset, category }) => {
   const query = gql`
     query PostSearch($limit: Int!, $lang: Language!, $offset: Int!, $category: String) {
       PostSearch(limit: $limit, lang: $lang, offset: $offset, category: $category) {
-        id
-        slug
-        lang
-        title
-        excerpt
-        category
-        tags
-        publishDate
-        coverImage
+        totalRecords
+        data {
+          id
+          slug
+          lang
+          title
+          excerpt
+          category
+          tags
+          publishDate
+          coverImage
+        }
       }
     }
   `;
