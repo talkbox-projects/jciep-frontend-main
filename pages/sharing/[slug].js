@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
-import { getPost } from "../../utils/post/getPost";
+import { getPost, getRelatedPosts } from "../../utils/post/getPost";
+import { updateReadCount } from "../../utils/post/mutatePost"
 import withPostCMS from "../../utils/post/withPostCMS";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import { chakra, Heading, Text, Image, Tag, AspectRatio, Divider } from "@chakra-ui/react";
 import { Box, VStack, Grid, GridItem, HStack, Flex } from "@chakra-ui/layout";
 import moment from "moment";
 import wordExtractor from "../../utils/wordExtractor";
+import marked from "marked";
 
 const PAGE_KEY = "sharing";
 
@@ -31,40 +34,37 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const data = [
-  {
-    title: "我不是弱者，我是快樂的唐寶寶",
-    excerpt: "在家中，我是媽媽的開心果 在舞台，我是一個藝術表演 在家中，我是媽媽的開心果 在舞台，我是一個藝術表演",
-    category: "我們的故事",
-    color: "#FEB534",
-  },
-  {
-    title: "我不是弱者，我是快樂的唐寶寶",
-    excerpt: "在家中，我是媽媽的開心果 在舞台，我是一個藝術表演 在家中，我是媽媽的開心果 在舞台，我是一個藝術表演",
-    category: "我們的故事",
-    color: "#08A3A3",
-  },
-  {
-    title: "我不是弱者，我是快樂的唐寶寶",
-    excerpt: "在家中，我是媽媽的開心果 在舞台，我是一個藝術表演 在家中，我是媽媽的開心果 在舞台，我是一個藝術表演",
-    category: "我們的故事",
-    color: "#F6D644",
-  },
-];
-
 const PostDetail = ({ post, setting, page, lang }) => {
   const categories = setting?.value?.categories;
   const postBg = page?.content?.postSection;
+  const [relatedArticles, setRelatedArticles] = useState([]);
 
   const router = useRouter();
+
+  useEffect(() => {
+    updateReadCount(post.id);
+    fetchRelatedPosts();
+  }, [])
+
   const getCategoryData = (key) => {
     const category = categories.find((c) => c.key === key);
-    const data = {};
-    data.label = lang === "en" ? category.label.en : category.label.zh;
-    data.icon = category.image;
-    data.bgColor = category.color;
-    return data;
+    if (category) {
+      const data = {};
+      data.label = lang === "en" ? category.label.en : category.label.zh;
+      data.icon = category.image;
+      data.bgColor = category.color;
+      return data;
+    }
+    return {};
   };
+
+  const fetchRelatedPosts = async () => {
+    if (post?.id) {
+      const posts = await getRelatedPosts({ limit: 3, category: post.category, id: post.id });
+      setRelatedArticles(posts);
+    }
+  }
+
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {/* Banner Section */}
@@ -132,11 +132,11 @@ const PostDetail = ({ post, setting, page, lang }) => {
                     transform="rotate(-30deg)"
                   />
                 </Box>
-                {(data ?? []).map(({ category, title, color, excerpt }, index) => {
+                {relatedArticles.map(({ category, title, excerpt, slug }, index) => {
                   return (
-                    <Box key={index} pb="40px" w="70%">
-                      <Tag bg={color} fontSize="12px" borderRadius="19px">
-                        {category}
+                    <Box key={index} pb="40px" w="70%" cursor="pointer" onClick={() => router.push(`/sharing/${slug}`)}>
+                      <Tag bg={getCategoryData(category).bgColor} fontSize="12px" borderRadius="19px">
+                        {getCategoryData(category).label}
                       </Tag>
                       <Text fontSize="22px" color="#1E1E1E">
                         {title}
@@ -156,15 +156,15 @@ const PostDetail = ({ post, setting, page, lang }) => {
                 <Box w="100%">
                   <Image
                     src={getCategoryData(post?.category).icon}
-                    w={["20px", "20px", "40px"]}
-                    h={["16px", "16px", "32px"]}
+                    w="auto"
+                    maxH={["16px", "16px", "32px"]}
                   />
                 </Box>
                 <HStack pt={["8px"]} w="100%" justify="space-between">
                   <Flex>
-                    <Tag color={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px">
-                      {post?.category}
-                    </Tag>
+                    <Box background={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
+                      {getCategoryData(post?.category).label}
+                    </Box>
                     <Text ml="8px" fontSize="12px" color="#1E1E1E">
                       {moment(post?.publishDate).format("D MMM, hh:mm")}
                     </Text>
@@ -193,7 +193,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                         return (
                           <chakra.div
                             pt="40px"
-                            dangerouslySetInnerHTML={{ __html: content }}
+                            dangerouslySetInnerHTML={{ __html: marked(content) }}
                             color="#1E1E1E"
                             key={index}
                             fontSize={["14px", "14px", "16px", "16px"]}
@@ -227,7 +227,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                     {wordExtractor(page?.content?.wordings, "tagsHeading")}
                   </Text>
                   <HStack pt="10px" wrap="wrap">
-                    {(post?.tags).map((d, i) => {
+                    {(post?.tags ?? []).map((d, i) => {
                       return (
                         <Tag pt="8px" pr="16px" fontSize="16px" borderRadius="19px" bg="#FAFAFA" key={i}>
                           {d}
@@ -283,7 +283,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Image src={post?.coverImage} w="100%" />
+          <Image src={relatedArticles[0]?.coverImage} w="100%" />
         </Box>
 
         <Image
@@ -295,23 +295,23 @@ const PostDetail = ({ post, setting, page, lang }) => {
           fit="auto"
         />
       </Box>
-      <Box pos="relative" w="100%">
+      {relatedArticles && relatedArticles[0] && (<Box pos="relative" w="100%" cursor="pointer" onClick={() => router.push(`/sharing/${relatedArticles[0].slug}`)}>
         <Box pb="10%" px={["16px", "16px", "25%", "31%"]} pt={["", "", "14px"]}>
           <VStack w="100%">
             <Box w="100%">
               <Image
-                src={getCategoryData(post?.category).icon}
+                src={getCategoryData(relatedArticles[0]?.category).icon}
                 w={["20px", "20px", "40px"]}
                 h={["16px", "16px", "32px"]}
               />
             </Box>
             <HStack pt={["8px"]} w="100%" justify="space-between">
               <Flex>
-                <Tag color={getCategoryData(post?.category).bgColor} fontSize="12px" borderRadius="19px">
-                  {post?.category}
+                <Tag background={getCategoryData(relatedArticles[0]?.category).bgColor} fontSize="12px" borderRadius="19px" px="5px">
+                  {getCategoryData(relatedArticles[0]?.category).label}
                 </Tag>
                 <Text ml="8px" fontSize="12px" color="#1E1E1E">
-                  {moment(post?.publishDate).format("D MMM, hh:mm")}
+                  {moment(relatedArticles[0]?.publishDate).format("D MMM, hh:mm")}
                 </Text>
               </Flex>
               <Flex>
@@ -322,15 +322,15 @@ const PostDetail = ({ post, setting, page, lang }) => {
             </HStack>
             <VStack w="100%">
               <Heading fontWeight="normal" maxW="100%" color="#1e1e1e" fontSize={["24px", "24px", "52px"]}>
-                {post?.title}
+                {relatedArticles[0]?.title}
               </Heading>
               <Heading pt="24px" maxW="100%" fontWeight="normal" color="#1e1e1e" fontSize={["14px", "14p", "16px"]}>
-                {post?.excerpt}
+                {relatedArticles[0]?.excerpt}
               </Heading>
             </VStack>
           </VStack>
         </Box>
-      </Box>
+      </Box>)}
     </VStack>
   );
 };

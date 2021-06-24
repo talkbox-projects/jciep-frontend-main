@@ -32,11 +32,16 @@ export default {
       const articles = await PostModel.find().sort({ viewCount: -1 }).limit(limit).exec();
       return articles;
     },
-    PostGetRelated: (_parent, { id }) => {
-      /**
-       * get related posts of a post specified by id
-       * logic to be confirmed
-       */
+    PostGetRelated: async (_parent, { category, limit, id }) => {
+      const posts = await PostModel.find({
+        ...(category?.length && { category: { $in: category } }),
+        '_id': { $ne: new mongoose.Types.ObjectId( id )},
+      })
+        .sort({ publishDate: -1 })
+        .limit(limit)
+        .exec();
+      console.log(" @@@ Mongooose return", posts);
+      return posts;
     },
     PostGetLatest: async (_parent, { offset = 1, limit = 10 }) => {
       const articles = await PostModel.find().sort({ publishDate: -1 }).skip(offset).limit(limit).exec();
@@ -72,11 +77,12 @@ export default {
       }
     },
 
-    PostRead: async (_parent, { input: { id } }) => {
+    PostRead: async (_parent, {  id }) => {
+      console.log("Received id", id)
       const post = await PostModel.findByIdAndUpdate(id, {
         $inc: { viewCount: 1 },
       }).exec();
-      return post;
+      return true;
     },
   },
 };
