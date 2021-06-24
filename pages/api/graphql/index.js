@@ -44,10 +44,6 @@ const apolloServer = new ApolloServer({
     organizationResolver,
     userResolver,
   ]),
-  context: (_context) => {
-    const token = nookies.get(_context)?.["x-token"] ?? "";
-    return { _context, user: token ? jwt.verify(token, "shhhhh") : null };
-  },
 });
 
 export const config = {

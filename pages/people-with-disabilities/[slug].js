@@ -267,14 +267,10 @@ const PwdDetail = ({ page }) => {
               {wordExtractor(page?.content?.wordings, "traitSectionTitle")}
             </Text>
             <Text fontSize="16px" position="relative" zIndex="1">
-<<<<<<< HEAD
               {wordExtractor(
                 page?.content?.wordings,
                 "traitSectionDescription"
               )}
-=======
-              {wordExtractor(page?.content?.wordings, "traitSectionDescription")}
->>>>>>> origin/develop
             </Text>
           </Box>
           <Image
@@ -519,16 +515,12 @@ const PwdDetail = ({ page }) => {
           </chakra.span>
         </Box>
 
-<<<<<<< HEAD
         <Box
           pos="relative"
           mt={["45px", "45px", "59px"]}
           mb={["20px", "20px", "27px"]}
           px={["46px"]}
         >
-=======
-        <Box pos="relative" mt={["45px", "45px", "59px"]} mb={["20px", "20px", "27px"]} px={["46px"]}>
->>>>>>> origin/develop
           <Text fontSize={["16", "16", "24"]} textAlign="center">
             {pwd?.videoSection?.description}
           </Text>
@@ -577,10 +569,7 @@ const PwdDetail = ({ page }) => {
           />
           {pwd?.videoSection?.videos.map((video) => (
             <AspectRatio
-<<<<<<< HEAD
-=======
               border="5px solid #FFFFFF"
->>>>>>> origin/develop
               maxW="668px"
               ratio={668 / 376}
               margin="auto"
@@ -600,15 +589,11 @@ const PwdDetail = ({ page }) => {
 
         {/* References */}
         <Grid
-<<<<<<< HEAD
           templateColumns={[
             "repeat(1, 1fr)",
             "repeat(1, 1fr)",
             "repeat(2, 1fr)",
           ]}
-=======
-          templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(2, 1fr)"]}
->>>>>>> origin/develop
           gap={["36px", "36px", "66px"]}
           px="16px"
         >
