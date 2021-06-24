@@ -1,20 +1,28 @@
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useAppContext } from "../store/AppStore";
+import { setCookie, destroyCookie } from "nookies";
 
-export const useLoginHook = () => {
+export const useCredential = () => {
   const { setUser, setIdentityId } = useAppContext();
   const router = useRouter();
-  return useCallback(
-    (user) => {
+
+  const setCredential = useCallback(
+    ({ token, user }) => {
+      setCookie(null, "jciep-token", token, { path: "/" });
       const identities = user?.identities;
       const identityId = identities?.[0] ?? null;
       setUser(user);
       setIdentityId(identityId ?? null);
-      if (identities?.length === 0) {
-        router.push("/profile");
-      }
     },
     [router]
   );
+
+  const removeCredential = useCallback(() => {
+    destroyCookie(null, "jciep-token", { path: "/" });
+    setIdentityId(null);
+    setUser(null);
+  }, [router]);
+
+  return [setCredential, removeCredential];
 };

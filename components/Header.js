@@ -23,7 +23,11 @@ import RegisterModal from "./RegisterModal";
 import OtpVerifyModal from "./OtpVerifyModal";
 import EmailVerifySentModal from "./EmailVerifyModal";
 import { useGetWording } from "../utils/wordings/useWording";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { getGraphQLClient } from "../utils/apollo";
+import { gql } from "graphql-request";
+import nookies from "nookies";
+import { useCredential } from "../utils/user";
 
 const Header = ({ header }) => {
   const getWording = useGetWording();
@@ -36,10 +40,38 @@ const Header = ({ header }) => {
   } = useAppContext();
   const router = useRouter();
   const cms = useCMS();
+  const [setCredential, removeCredential] = useCredential();
 
   const onIdentitySwitch = useCallback((identityId) => {
     setIdentityId(identityId);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = nookies.get("jciep-token")?.["jciep-token"];
+
+        const mutation = gql`
+          mutation UserGet($token: String!) {
+            UserGet(token: $token) {
+              email
+              identities {
+                id
+              }
+            }
+          }
+        `;
+        const data = await getGraphQLClient().request(mutation, { token });
+        setCredential({ token, user: data?.UserGet });
+      } catch (e) {
+        removeCredential();
+      }
+    })();
+  }, [setCredential, removeCredential]);
+
+  const onLogout = useCallback(() => {
+    removeCredential();
+  }, [removeCredential]);
 
   return (
     <Box position="fixed" top={0} w="100%" bg="white" zIndex={200}>
@@ -157,7 +189,7 @@ const Header = ({ header }) => {
                         <Link onClick={registerModalDisclosure.onOpen}>
                           {getWording("header.account_setting_label")}
                         </Link>
-                        <Link onClick={registerModalDisclosure.onOpen}>
+                        <Link onClick={onLogout}>
                           {getWording("header.logout_label")}
                         </Link>
                       </VStack>

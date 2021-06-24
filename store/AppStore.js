@@ -1,8 +1,9 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePrevious } from "../utils/hooks/generic";
+import nookies from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
+import { useCredential } from "../utils/user";
 
 const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
@@ -78,12 +79,7 @@ const [AppProvider, useAppContext] = constate((props) => {
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
-  const _user = usePrevious(user);
-
-  const missingProfile = useMemo(
-    () => user && user?.identities?.length === 0,
-    [user]
-  );
+  const [setCredential, removeCredential] = useCredential();
 
   return {
     wordings,

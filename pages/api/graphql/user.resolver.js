@@ -48,7 +48,7 @@ export default {
         return false;
       }
     },
-    UserLogin: async (_parent, { input }, { user, res }) => {
+    UserLogin: async (_parent, { input }) => {
       /**
        * Login via facebook/google/apple/email+password/phone+otp method. 
        * 
@@ -101,23 +101,14 @@ export default {
             { upsert: true, new: true }
           );
           await emailVerify.delete();
-          return user;
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
         }
       } else if (input?.email && input?.password) {
         const user = await User.findOne({ email: input?.email.trim() });
         if (await user?.comparePassword(input?.password)) {
-          nookies.set(
-            { res },
-            "x-token",
-            jwt.sign(user.toObject(), "shhhhh").toString(),
-            {
-              maxAge: 30 * 24 * 60 * 60,
-              path: "",
-              httpOnly: true,
-              secure: true,
-            }
-          );
-          return user;
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
         } else {
           throw new Error("Wrong Email and Password!");
         }
@@ -135,16 +126,25 @@ export default {
             { phone: phoneVerify?.phone },
             { upsert: true, new: true }
           );
-          return user;
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
         }
       }
       return null;
     },
 
-    UserLogout: (_parent, args, { res }) => {
-      nookies.destroy({ res }, "x-token", {
+    UserGet: async (_parent, { token }) => {
+      try {
+        return jwt.decode(token, "shhhhh");
+      } catch (error) {
+        return null;
+      }
+    },
+
+    UserLogout: (_parent, args, { _context }) => {
+      nookies.destroy(_context, "x-token", {
         maxAge: 30 * 24 * 60 * 60,
-        path: "",
+        path: "/",
         httpOnly: true,
         secure: true,
       });

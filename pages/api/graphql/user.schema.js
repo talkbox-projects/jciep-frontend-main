@@ -170,6 +170,11 @@ export default gql`
     password: String
   }
 
+  type LoginOutput {
+    user: User!
+    token: String!
+  }
+
   type UserEmailValidityCheckOutput {
     email: String!
     meta: JsonContent
@@ -190,7 +195,8 @@ export default gql`
     UserPhoneVerify(phone: String!): Boolean
     UserEmailVerify(email: String!): Boolean
 
-    UserLogin(input: LoginInput): User
+    UserLogin(input: LoginInput): LoginOutput
+    UserGet(token: String!): User
     UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean

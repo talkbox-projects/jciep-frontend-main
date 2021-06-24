@@ -23,7 +23,7 @@ import { useGetWording } from "../utils/wordings/useWording";
 import { FaArrowLeft } from "react-icons/fa";
 
 const EmailVerifySentModal = () => {
-  const { emailVerifySentModalDisclosure, setUser } = useAppContext();
+  const { emailVerifySentModalDisclosure } = useAppContext();
 
   const getWording = useGetWording();
 

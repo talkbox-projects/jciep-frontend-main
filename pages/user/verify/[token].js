@@ -19,6 +19,7 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
+import { useLoginHook } from "../../../utils/user";
 
 const PAGE_KEY = "verify_email";
 
@@ -45,7 +46,7 @@ const VerifyToken = () => {
   const emailVerificationToken = router.query.token;
   const getWording = useGetWording();
   const [emailVerify, setEmailVerify] = useState(null);
-  const { setUser } = useAppContext();
+  const setLogin = useLoginHook();
 
   const {
     handleSubmit,
@@ -59,9 +60,12 @@ const VerifyToken = () => {
       const mutation = gql`
         mutation UserLogin($input: LoginInput!) {
           UserLogin(input: $input) {
-            email
-            identities {
-              id
+            token
+            user {
+              email
+              identities {
+                id
+              }
             }
           }
         }
@@ -72,8 +76,8 @@ const VerifyToken = () => {
           password,
         },
       });
-      setUser(data?.UserLogin);
-      setIdentityId(data?.UserLogin?.identities?.[0] ?? null);
+      setLogin(data?.UserLogin?.user);
+      setIdentityId(data?.UserLogin?.user?.identities?.[0] ?? null);
       router.push("/");
     } catch (e) {
       setError("password_confirm", {

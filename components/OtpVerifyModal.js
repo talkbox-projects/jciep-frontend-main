@@ -23,9 +23,10 @@ import { useGetWording } from "../utils/wordings/useWording";
 import { FaArrowLeft } from "react-icons/fa";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
+import { useCredential } from "../utils/user";
 
 const OtpVerifyModal = () => {
-  const { otpVerifyModalDisclosure, setUser } = useAppContext();
+  const { otpVerifyModalDisclosure } = useAppContext();
   const phone = otpVerifyModalDisclosure?.params?.phone;
 
   const getWording = useGetWording();
@@ -36,6 +37,7 @@ const OtpVerifyModal = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
+  const [setCredential] = useCredential();
 
   const onOtpVerify = useCallback(
     async ({ otp }) => {
@@ -43,9 +45,12 @@ const OtpVerifyModal = () => {
         const mutation = gql`
           mutation UserLogin($input: LoginInput!) {
             UserLogin(input: $input) {
-              phone
-              identities {
-                id
+              token
+              user {
+                phone
+                identities {
+                  id
+                }
               }
             }
           }
@@ -56,8 +61,8 @@ const OtpVerifyModal = () => {
             otp,
           },
         });
-        setUser(data?.UserLogin);
-        setIdentityId(data?.UserLogin?.identities?.[0] ?? null);
+
+        setCredential(data?.UserLogin);
         otpVerifyModalDisclosure.onClose();
         router.push("/");
       } catch (e) {
