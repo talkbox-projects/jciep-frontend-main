@@ -118,26 +118,27 @@ const Sharing = ({ page, setting, lang }) => {
     setLatestPosts([]);
     setLatestPostsPage(0);
     setActiveFilter(filter);
+    window.scrollTo(0, window.screen.availHeight);
   }
 
-  const SkeletonPlaceholder = (noDisplay) => (
-    <Grid templateColumns={{ base: "292px", lg: "1fr 1fr" }} columnGap="16px" justifyContent="center">
+  const SkeletonPlaceholder = () => (
+    <Grid templateColumns={{ base: "292px", md: "276px 276px", lg: "276px 276px" }} columnGap="16px" justifyContent="center" pt="40px">
       {skeletonValue?.map(() => (
-        <Stack pt={noDisplay? "" : "40px"} opacity={noDisplay? 0 : 1} h={noDisplay? "40px" : "auto"}>
-          <Skeleton w={{base: "288px", lg: "272px"}} h={{base: "216px", lg: "204px"}} borderRadius="16px" />
-          <Flex justifyContent="flex-start">
+        <Box display="flex" flexDirection="column" justifyContent="space-between" >
+          <Skeleton w={{base: "288px", lg: "272px"}} h={{base: "216px", lg: "204px"}} borderRadius="16px" mt="40px" mb="10px" />
+          <Flex justifyContent="flex-start" mt="8px">
             {[1,2].map(() => <Skeleton w="76px" h="17px" borderRadius="19px" mr="8px" />)}
           </Flex>
-          <Skeleton w="188px" h="36px" borderRadius="8px" />
-          <Skeleton w="272px" h="16px" borderRadius="11.5px" />
-          <Skeleton w="115px" h="16px" borderRadius="11.5px" />
-        </Stack>
+          <Skeleton w="188px" h="36px" borderRadius="8px" mt="8px" />
+          <Skeleton w="272px" h="16px" borderRadius="11.5px" mt="8px" />
+          <Skeleton w="115px" h="16px" borderRadius="11.5px" mt="8px" />
+        </Box>
       ))}
     </Grid>
   );
 
   return (
-    <VStack w="100%" align="stretch" spacing={0}>
+    <VStack w="100%" align="stretch" spacing={0} alignItems="center">
       {page?.content?.seo?.title && (
         <NextSeo
           title={page?.content?.seo?.title}
@@ -161,7 +162,7 @@ const Sharing = ({ page, setting, lang }) => {
           {featuredArticle && (
             <Box mt={{ base: "0", lg: "24px"}} display="flex" flexDirection={{ base: "column", lg: "row" }} cursor="pointer" onClick={() => router.push(`/sharing/${featuredArticle.slug}`)}>
               <Image h={{base: "auto", lg: "330px"}} w={{base: "100%", lg: "429px"}} src={featuredArticle.coverImage} mr={{base: "0", lg: "34px"}} zIndex={{base: 0, lg: 1}} />
-              <Box display="flex" flexDir="column" position={{ base: "absolute", lg: "relative" }} top={{ base: "162px", lg: "unset" }} boxShadow={{ base: "12px 12px 24px 0px rgba(30,30,30,0.1)", lg: "none" }}>
+              <Box display="flex" flexDir="column" position={{ base: "absolute", lg: "relative" }} bottom={{ base: "10px", lg: "unset" }} boxShadow={{ base: "12px 12px 24px 0px rgba(30,30,30,0.1)", lg: "none" }}>
                 <Image src={getCategoryData(featuredArticle.category).icon} mb="16px" w="48px" h="40px" ml={{ base: "16px", lg: "unset" }} />
                 <Box background={{ base: "#fff", lg: "none" }} borderRadius={{ base: "10px", lg: "0px" }} mx={{ base: "16px", lg: "0px" }} zIndex={{ base: 1, lg: "unset" }} p={{ base: "16px", lg: "unset" }}>
                   <Box mb="8px">
@@ -186,7 +187,7 @@ const Sharing = ({ page, setting, lang }) => {
       </Box>
 
       {/* Posts Section */}
-      <Box mt={{ base: "38px", lg: "17px" }} px={{ base: "16px", lg: "203px" }} maxW="1200px" mx="auto">
+      <Box mt={{ base: "38px", lg: "17px" }} px={{ base: "16px" }} maxW="1200px">
         <Box mx="auto" maxW="1200px">
           <Grid templateColumns={{ base: "1fr", lg: "1fr 340px" }} gridGap="22px">
             {/* Latest Articles with scroll */}
@@ -203,7 +204,7 @@ const Sharing = ({ page, setting, lang }) => {
                 next={!activeFilter? fetchData : fetchFilteredPosts}
                 hasMore={latestPosts.length <= totalLatest}
                 loader={<SkeletonPlaceholder />}
-                endMessage={<SkeletonPlaceholder noDisplay />}
+                endMessage={<Box w="100%" h="40px" />}
                 // below props only if you need pull down functionality
                 // refreshFunction={this.refresh}
                 // pullDownToRefresh
@@ -215,23 +216,25 @@ const Sharing = ({ page, setting, lang }) => {
                 //   <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
                 // }
               >
-                <Grid templateColumns={{base: "repeat(1, 292px)", md: "repeat(1, fr)", lg: "repeat(2, 1fr)"}} justifyContent={{ base: "center", lg: "unset" }} rowGap={{base: "36px", lg: "48px"}} columnGap="16px">
+                <Grid templateColumns={{base: "repeat(1, 292px)", md: "repeat(2, 276px)", lg: "repeat(2, 276px)"}} justifyContent={{ base: "center", lg: "space-between" }} rowGap={{base: "36px", lg: "48px"}} columnGap="16px">
                   {latestPosts.map((post, i) => (
                     <Stack key={i} cursor="pointer" onClick={() => router.push(`/sharing/${post.slug}`)}>
                       <Image objectFit="cover" src={post.coverImage} borderRadius="16px" background="#fff" w={{base: "292px", md: "100%", lg: "276px"}} h={{ base: "220px", lg: "208px" }} mb="6px" />
-                      <Flex>
-                        <Box fontSize="12px" color={getCategoryData(post.category).textColor} background={getCategoryData(post.category).bgColor} borderRadius="19px" px="9px" mr="9px" display="inline">
-                          {getCategoryData(post.category).label}
-                        </Box>
-                        <Text fontSize="12px" display="inline-block">{moment(post.publishDate).format("D MMM, hh:mm")}</Text>
-                      </Flex>
-                      <Text fontSize={{base: "20px", lg: "24px"}} fontWeight="bold" mb="5px" mt="5px">{post.title}</Text>
-                      <Text fontSize={{base: "16px", lg: "16px"}} h="70px" overflow="hidden" position="relative">
-                        {post.excerpt}
-                        <Box textAlign="right" position="absolute" bottom="0" right="5px" background="#fff">
-                          ... <chakra.span color="#007878" fontSize="16px" fontWeight="bold">More</chakra.span>
-                        </Box>
-                      </Text>
+                      <Box>
+                        <Flex>
+                          <Box fontSize="12px" color={getCategoryData(post.category).textColor} background={getCategoryData(post.category).bgColor} borderRadius="19px" px="9px" mr="9px" display="inline">
+                            {getCategoryData(post.category).label}
+                          </Box>
+                          <Text fontSize="12px" display="inline-block">{moment(post.publishDate).format("D MMM, hh:mm")}</Text>
+                        </Flex>
+                        <Text fontSize={{base: "20px", lg: "24px"}} fontWeight="bold" mb="5px" mt="5px">{post.title}</Text>
+                        <Text fontSize={{base: "16px", lg: "16px"}} h="70px" overflow="hidden" position="relative">
+                          {post.excerpt}
+                          <Box textAlign="right" position="absolute" bottom="0" right="5px" background="#fff">
+                            ... <chakra.span color="#007878" fontSize="16px" fontWeight="bold">More</chakra.span>
+                          </Box>
+                        </Text>
+                      </Box>
                     </Stack>
                   ))}
                 </Grid>
