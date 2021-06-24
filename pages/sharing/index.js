@@ -44,6 +44,7 @@ const Sharing = ({ page, setting, lang }) => {
   const skeletonValue = useBreakpointValue({ base: [1], md: [1, 2] });
   const [hottestPosts, setHottestPosts] = React.useState([]);
   const [activeFilter, setActiveFilter] = React.useState('');
+  const [prevDataEmpty, setPrevDataEmpty] = React.useState(false);
 
   const router = useRouter();
 
@@ -73,6 +74,12 @@ const Sharing = ({ page, setting, lang }) => {
       fetchFeaturedArticle(page?.content?.featured);
     }
   }, [page?.content])
+
+  React.useEffect(() => {
+    if (activeFilter && latestPosts.length < 1 && totalLatest !== null && !prevDataEmpty) {
+      fetchFilteredPosts();
+    }
+  }, [activeFilter, latestPosts, totalLatest])
 
   const fetchData = async () => {
     try {
@@ -109,12 +116,17 @@ const Sharing = ({ page, setting, lang }) => {
       offset: 1,
       limit: page?.content?.latestSection?.numOfPostsPerPage,
     });
-    setTotalLatest(totalRecords);
+    // console.log("***** data fil", data, totalRecords)
+    if (totalRecords === null) {
+      setPrevDataEmpty(true);
+    }
+    setTotalLatest(totalRecords === null ? 0 : totalRecords);
     setLatestPosts([...latestPosts, ...data]);
     setLatestPostsPage(latestPostsPage + 1);
   }
 
   const handleFilter = (filter) => {
+    setPrevDataEmpty(false);
     setLatestPosts([]);
     setLatestPostsPage(0);
     setActiveFilter(filter);
