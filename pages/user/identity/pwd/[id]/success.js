@@ -1,4 +1,4 @@
-import {Button, Text, VStack } from "@chakra-ui/react";
+import { Button, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
@@ -26,8 +26,6 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPwdAddSuccess = () => {
-
-    const rout
   return (
     <VStack py={36}>
       <Text>Your identity is created.</Text>
