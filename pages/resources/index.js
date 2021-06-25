@@ -206,7 +206,7 @@ const Resources = ({ page }) => {
             </Box>
             <MotionBox
               overflow="hidden"
-              animate={{ height: show ? 100 : 0 }}
+              animate={{ height: show ? "auto" : 0 }}
               transition={{ duration: 0.5 }}
               alignItems="start"
               spacing={0}
@@ -695,7 +695,7 @@ const Resources = ({ page }) => {
 
       {/* Equip Section */}
       <Box background="#FAFAFA">
-        <Box display="flex" pos="relative" maxW="1200px" mx="auto">
+        <Box display="flex" pos="relative" maxW="1200px" mx="auto" px="16px">
           <Box mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {wordExtractor(page?.content?.wordings, "equip")}
@@ -711,7 +711,9 @@ const Resources = ({ page }) => {
           mt="26px"
           position="relative"
           zIndex="1"
-          maxW="1200px" mx="auto"
+          maxW="1200px"
+          mx="auto"
+          px="16px"
         >
           <GridItem rowSpan={[0, 0, 2, 2]} colSpan={[6, 6, 3, 3]}>
             <Box
