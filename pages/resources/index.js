@@ -776,7 +776,7 @@ const Resources = ({ page }) => {
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}
-          px={["16px", "16px", "150px", "20%"]}
+          px={["16px", "16px", "16px", "20%"]}
           background="#FAFAFA"
         >
           <Box display="flex" pos="relative">
@@ -807,7 +807,7 @@ const Resources = ({ page }) => {
                 flexDirection="column"
               >
                 <MultiTextRenderer
-                  fontSize={["24px", "24px", "36px"]}
+                  fontSize={["24px", "24px", "30px", "36px"]}
                   data={page?.content?.equipSection?.left?.content}
                 />
                 {page?.content?.equipSection?.left?.links && (
@@ -851,7 +851,7 @@ const Resources = ({ page }) => {
                 flexDirection="column"
               >
                 <MultiTextRenderer
-                  fontSize={["24px", "24px", "36px"]}
+                  fontSize={["24px", "24px", "30px", "36px"]}
                   data={page?.content?.equipSection?.topRight?.content}
                 />
                 {page?.content?.equipSection?.topRight?.links && (
@@ -895,7 +895,7 @@ const Resources = ({ page }) => {
                 flexDirection="column"
               >
                 <MultiTextRenderer
-                  fontSize={["24px", "24px", "36px"]}
+                  fontSize={["24px", "24px", "30px", "36px"]}
                   data={page?.content?.equipSection?.bottomRight?.content}
                 />
                 {page?.content?.equipSection?.bottomRight?.links && (
