@@ -19,6 +19,7 @@ import {
   Button,
   Grid,
   GridItem,
+  Link,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
 import Carousel from "react-multi-carousel";
