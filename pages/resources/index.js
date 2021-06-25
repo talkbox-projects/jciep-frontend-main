@@ -21,12 +21,17 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
-import { Carousel } from "react-responsive-carousel";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { motion, useMotionValue } from "framer-motion";
+
 const PAGE_KEY = "resources";
+
+const MotionBox = motion(Box);
 
 export const getServerSideProps = async (context) => {
   return {
@@ -42,10 +47,26 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Resources = ({ page }) => {
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [showItems, setShowItems] = useState(3);
+const responsiveCarousel = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1200 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1199, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 0,
+  },
+};
 
+const Resources = ({ page }) => {
   const TextTool = ({ text, link, description, pt, fontSize, hover, share, bold, small }) => {
     return (
       <Text pt={pt} _hover={hover ?? { decoration: "underline" }} color="#1E1E1E">
@@ -72,13 +93,6 @@ const Resources = ({ page }) => {
       </Text>
     );
   };
-  const handleArrow = (val) => () => {
-    if (val === "forward" && slideIndex < page?.content?.resourceSection?.resources.length - 1) {
-      setSlideIndex(slideIndex + 1);
-    } else if (val === "back" && slideIndex >= 0) {
-      setSlideIndex(slideIndex - 1);
-    }
-  };
   const Card = ({
     name,
     category,
@@ -96,24 +110,15 @@ const Resources = ({ page }) => {
     return (
       <Box
         w={["90%", "303px", "303px", "350px"]}
-        bg={topColor ? topColor : "#4E7F8E"}
-        boxShadow=" 12px 12px 24px 0 rgba(30,30,30,0.1)"
+        borderTop={`8px solid ${topColor ? topColor : "#4E7F8E"}`}
+        boxShadow="12px 12px 24px 0px rgba(30,30,30,0.1)"
         borderRadius="10px"
-        pt="8px"
+        mb="8px"
         mr={["", "", "24px"]}
       >
         <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
-          <VStack
-            transition="height 0.2s ease-out"
-            pos="relative"
-            minH="571px"
-            flex={1}
-            borderRadius="10px"
-            alignItems="start"
-            px="18px"
-            w="100%"
-          >
-            <Text pt="40px" fontSize="12px" color={topColor}>
+          <VStack borderRadius="10px" alignItems="start" px="18px" w="100%">
+            <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
               {category}
             </Text>
             <TextTool
@@ -142,57 +147,70 @@ const Resources = ({ page }) => {
               <TextTool text={serviceTarget?.text} description={serviceTarget?.description} fontSize="16px" />
             </HStack>
             <Divider />
-            <UnorderedList styleConfig={{ fontSize: "4px" }}>
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+            <Box minH="281px">
+              <UnorderedList styleConfig={{ fontSize: "4px" }} ml="4px">
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" />
-              </HStack>
-              {(services ?? []).map(({ category, description }, index) => {
-                return (
-                  <ListItem key={index} ml="63px">
-                    <TextTool text={category} description={description} fontSize="12px" small />
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
-            {internship?.value && (
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" pt="8px" />
+                </HStack>
+                {(services ?? []).map(({ category, description }, index) => {
+                  return (
+                    <ListItem key={index} ml="63px">
+                      <TextTool text={category} description={description} fontSize="12px" small />
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+              {internship?.value && (
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool
-                  text={wordExtractor(page?.content?.wordings, "internship")}
-                  description={internship?.description}
-                  fontSize="16px"
-                />
-              </HStack>
-            )}
-            {probationOrReferral?.value && (
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool
+                    text={wordExtractor(page?.content?.wordings, "internship")}
+                    description={internship?.description}
+                    fontSize="16px"
+                    pt="8px"
+                  />
+                </HStack>
+              )}
+              {probationOrReferral?.value && (
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool
-                  text={wordExtractor(page?.content?.wordings, "onProbation")}
-                  description={probationOrReferral?.description}
-                  fontSize="16px"
-                />
-              </HStack>
-            )}
-            <UnorderedList listStyleType="none">
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool
+                    text={wordExtractor(page?.content?.wordings, "onProbation")}
+                    description={probationOrReferral?.description}
+                    fontSize="16px"
+                    pt="8px"
+                  />
+                </HStack>
+              )}
+              <UnorderedList listStyleType="none" ml="4px">
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" />
-              </HStack>
-              {(subsidy ?? []).map(({ target, description }, index) => {
-                return (
-                  <ListItem key={index} ml="63px">
-                    <TextTool text={target} description={description} fontSize="12px" small />
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
-            <Box overflow="hidden" h={show ? "100%" : "0px"} alignItems="start" spacing={0} w="100%">
+                  <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" pt="8px" />
+                </HStack>
+                {(subsidy ?? []).map(({ target, description }, index) => {
+                  return (
+                    <ListItem key={index} ml="63px">
+                      <TextTool text={target} description={description} fontSize="12px" small />
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+            </Box>
+            <motion.div
+              // overflow="hidden"
+              // h={calcHeight}
+              style={{ overflow: "hidden", width: "100%", alignItems: "start" }}
+              animate={{ height: show ? 100 : 0 }}
+              transition={{ duration: 0.5 }}
+              // alignItems="start"
+              // spacing={0}
+              // w="100%"
+            >
               <Divider />
               <HStack pt="8px" spacing="3px">
                 <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
@@ -219,7 +237,7 @@ const Resources = ({ page }) => {
               <Text pl="27px" color="#1E1E1E" fontSize="12px">
                 {remark}
               </Text>
-            </Box>
+            </motion.div>
             <Box pt="32px"></Box>
           </VStack>
           <Box>
@@ -573,39 +591,24 @@ const Resources = ({ page }) => {
       </Box>
 
       {/* resource Section */}
-      <Box background="#FAFAFA" w="100%" pos="relative">
-        <VStack alignItems="start" w="100%" pt={["36px", "36px", "109px"]}>
-          <VStack alignItems="start" w="100%" px={["16px", "16px", "207px", "207px"]}>
+      <Box w="100%" bg="#FAFAFA" pos="relative">
+        <VStack alignItems="start" w="100%" pt={["36px", "36px", "109px"]} maxW="1200px" mx="auto">
+          <VStack alignItems="start" w="100%">
             <Heading fontSize={["24px", "24px", "36px", "54px"]}>
               {page?.content?.resourceSection["title 標題"]}
             </Heading>
           </VStack>
         </VStack>
-        <Box display={["none", "none", "block", "block"]} pt="110px" overflow="hidden" pos="relative">
-          <Button
-            aria-label="Previous slide"
-            pos="absolute"
-            bg="transparent"
-            border="none"
-            top={["20%", "20%", "50%"]}
-            left={["10px", "20%", "50"]}
-            _hover="none"
-            disabled={slideIndex <= 0}
-            zIndex={1}
-            onClick={handleArrow("back")}
-          >
-            <Image src={page?.content?.resourceSection?.leftArrow} />
-          </Button>
-          <Flex
-            direction="row"
-            ml="350px"
-            pb={["112px", "112px", "185px"]}
-            verticalAlign="top"
-            alignItems="flex-start"
-            width={`${page?.content?.resourceSection?.resources.length * 100}vw`}
-            transform={`translateX(-${30 * slideIndex}vw)`}
-            transition="transform 0.5s"
-          >
+
+        <Box
+          display={["none", "none", "block", "block"]}
+          pt="110px"
+          overflow="hidden"
+          pos="relative"
+          maxW="1200px"
+          mx="auto"
+        >
+          <Carousel responsive={responsiveCarousel} swipeable={false} draggable={false} showDots={false}>
             {(page?.content?.resourceSection?.resources ?? []).map(
               (
                 {
@@ -624,12 +627,12 @@ const Resources = ({ page }) => {
                 },
                 index
               ) => (
-                <Stack align="center" justifyContent="center">
+                <Stack align="center" justifyContent="center" key={index}>
                   <Card
                     name={name}
                     topColor={topColor}
                     organization={organization}
-                    category={category}
+                    category={wordExtractor(page?.content?.wordings, category)}
                     serviceTarget={serviceTarget}
                     services={services}
                     internship={internship}
@@ -642,20 +645,7 @@ const Resources = ({ page }) => {
                 </Stack>
               )
             )}
-          </Flex>
-          <Button
-            aria-label="Next slide"
-            pos="absolute"
-            bg="transparent"
-            border="none"
-            top={["20%", "20%", "50%"]}
-            right={["10px", "10px", "50"]}
-            _hover="none"
-            disabled={slideIndex >= page?.content?.resourceSection?.resources.length - 4}
-            onClick={handleArrow("forward")}
-          >
-            <Image src={page?.content?.resourceSection?.rightArrow} />
-          </Button>
+          </Carousel>
         </Box>
         <VStack w="100%" pt="49px" spacing="24px" justifyContent="center" display={["block", "block", "none", "none"]}>
           <VStack spacing="16px" w="100%" justifyContent="center" alignItems="center">
