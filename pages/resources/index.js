@@ -167,7 +167,18 @@ const Resources = ({ page }) => {
                   </HStack>
                   {(services ?? []).map(({ category, description }, index) => {
                     return (
-                      <ListItem key={index} ml="63px">
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          mr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="63px"
+                      >
                         <TextTool text={category} description={description} fontSize="12px" small />
                       </ListItem>
                     );
@@ -209,7 +220,18 @@ const Resources = ({ page }) => {
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
                     return (
-                      <ListItem key={index} ml="63px">
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          mr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="63px"
+                      >
                         <TextTool text={target} description={description} fontSize="12px" small />
                       </ListItem>
                     );
@@ -226,7 +248,7 @@ const Resources = ({ page }) => {
               >
                 <Divider />
                 <HStack pt="8px" spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
+                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
                   <Text color="#1E1E1E" fontSize="16px">
                     {contact?.text}
                   </Text>
@@ -240,7 +262,7 @@ const Resources = ({ page }) => {
                   </Text>
                 </VStack>
                 <HStack pt="32px" spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
+                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
 
                   <Text color="#1E1E1E" fontSize="16px">
                     {wordExtractor(page?.content?.wordings, "remarkHeading")}
@@ -791,7 +813,17 @@ const Resources = ({ page }) => {
                     <UnorderedList fontSize="12px">
                       {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
@@ -825,7 +857,17 @@ const Resources = ({ page }) => {
                     <UnorderedList>
                       {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
@@ -859,7 +901,17 @@ const Resources = ({ page }) => {
                     <UnorderedList>
                       {(page?.content?.equipSection?.bottomRight?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             {" "}
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}

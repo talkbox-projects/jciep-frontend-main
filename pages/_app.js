@@ -15,7 +15,7 @@ const App = ({ Component, pageProps }) => {
       <NextSeo title="賽馬會共融． 知行計劃" />
       <VStack w="100vw" align="stretch" spacing={0}>
         <Header {...pageProps}></Header>
-        {/* <Navigation {...pageProps}></Navigation> */}
+        <Navigation {...pageProps}></Navigation>
         <Component {...pageProps} />
         <Footer {...pageProps}></Footer>
       </VStack>
