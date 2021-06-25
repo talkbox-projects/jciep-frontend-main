@@ -500,6 +500,14 @@ export default [
         fields: equipBlockFields,
       },
       {
+        label: "Background Image 圖片",
+        name: "image",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
         name: "topRight",
         label: "右上區塊 Top Right Block",
         component: "group",
@@ -521,13 +529,21 @@ export default [
     fields: [
       {
         name: "title",
-        component: "title",
+        component: "text",
         label: "標題 title",
       },
       {
         name: "description",
         component: "textarea",
         label: "描述 Remark",
+      },
+      {
+        label: "Background Image 圖片",
+        name: "image",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
       },
       {
         name: "buttons",
