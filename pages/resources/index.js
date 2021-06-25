@@ -628,7 +628,7 @@ const Resources = ({ page }) => {
                     name={name}
                     topColor={topColor}
                     organization={organization}
-                    category={category}
+                    category={wordExtractor(page?.content?.wordings, category)}
                     serviceTarget={serviceTarget}
                     services={services}
                     internship={internship}
