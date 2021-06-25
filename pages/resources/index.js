@@ -253,7 +253,6 @@ const Resources = ({ page }) => {
               </MotionBox>
               <Box pt="32px"></Box>
             </VStack>
-            <VStack></VStack>
           </VStack>
           <Box>
             <Divider />
@@ -793,7 +792,9 @@ const Resources = ({ page }) => {
                       {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
                         return (
                           <ListItem fontSize={["16px", "16px", "20px"]}>
-                            <Link href={url}>{label}</Link>
+                            <Link isExternal textDecoration="underline" href={url}>
+                              {label}
+                            </Link>
                           </ListItem>
                         );
                       })}
@@ -825,7 +826,9 @@ const Resources = ({ page }) => {
                       {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
                         return (
                           <ListItem fontSize={["16px", "16px", "20px"]}>
-                            <Link href={url}>{label}</Link>
+                            <Link isExternal textDecoration="underline" href={url}>
+                              {label}
+                            </Link>
                           </ListItem>
                         );
                       })}
@@ -858,7 +861,9 @@ const Resources = ({ page }) => {
                         return (
                           <ListItem fontSize={["16px", "16px", "20px"]}>
                             {" "}
-                            <Link href={url}>{label}</Link>
+                            <Link isExternal textDecoration="underline" href={url}>
+                              {label}
+                            </Link>
                           </ListItem>
                         );
                       })}
