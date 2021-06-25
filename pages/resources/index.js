@@ -337,7 +337,7 @@ const Resources = ({ page }) => {
                     fontSize={["14px", "14px", "16px", "20px"]}
                     textAlign={["left", "left", "center"]}
                   />
-                  <Image src={page?.content?.dialogue?.tooltip} pos="absolute" bottom="-2" left="0" />
+                  <Box w="0px" height="0px" borderRight="5px solid transparent" borderLeft="5px solid transparent" borderTop="12px solid #FFFFFF" transform="scaleY(-1) rotate(150deg)" pos="absolute" left="0" bottom="-6px"></Box>
                 </Box>
                 <Image
                   mt={["24px", "24px", "68px"]}
@@ -365,7 +365,7 @@ const Resources = ({ page }) => {
                   fontSize={["14px", "14px", "16px", "20px"]}
                   textAlign={["left", "left", "center"]}
                 />
-                <Image src={page?.content?.dialogue?.tooltip} pos="absolute" bottom="-2" left="0" />
+                <Box w="0px" height="0px" borderRight="5px solid transparent" borderLeft="5px solid transparent" borderTop="12px solid #FFFFFF" transform="scaleY(-1) rotate(150deg)" pos="absolute" left="0" bottom="-6px"></Box>
               </Box>
             );
           }
@@ -434,7 +434,7 @@ const Resources = ({ page }) => {
                           fontSize={["14px", "14px", "16px", "20px"]}
                           textAlign={["left", "left", "center"]}
                         />
-                        <Image src={page?.content?.dialogue?.rightTooltip} pos="absolute" bottom="-2" right="0" />
+                        <Box w="0px" height="0px" borderRight="5px solid transparent" borderLeft="5px solid transparent" borderTop="12px solid #FFFFFF" transform="scaleY(-1) rotate(-150deg)" pos="absolute" right="0" bottom="-6px"></Box>
                       </Box>
                     </Flex>
                   );

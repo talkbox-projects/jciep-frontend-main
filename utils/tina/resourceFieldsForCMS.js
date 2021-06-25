@@ -141,22 +141,6 @@ export default [
         previewSrc: (src) => src,
       },
       {
-        label: "Tooltip Image",
-        name: "tooltip",
-        component: "image",
-        uploadDir: () => "/resources",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-      {
-        label: "Tooltip Right Image",
-        name: "rightTooltip",
-        component: "image",
-        uploadDir: () => "/resources",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-      {
         name: "left",
         label: "左面的人 Person On the Left",
         component: "group",
