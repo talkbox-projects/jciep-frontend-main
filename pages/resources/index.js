@@ -218,7 +218,7 @@ const Resources = ({ page }) => {
               </Box>
               <MotionBox
                 overflow="hidden"
-                animate={{ height: show ? 100 : 0 }}
+                animate={{ height: show ? "auto" : 0 }}
                 transition={{ duration: 0.5 }}
                 alignItems="start"
                 spacing={0}
@@ -791,7 +791,11 @@ const Resources = ({ page }) => {
                     </Text>
                     <UnorderedList fontSize="12px">
                       {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
-                        return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                        return (
+                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                            <Link href={url}>{label}</Link>
+                          </ListItem>
+                        );
                       })}
                     </UnorderedList>
                   </Box>
@@ -814,13 +818,16 @@ const Resources = ({ page }) => {
                 />
                 {page?.content?.equipSection?.topRight?.links && (
                   <Box py={["48px", "48px", "84px"]}>
-                    {" "}
                     <Text fontSize={["16px", "16px", "24px"]}>
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
                     <UnorderedList>
                       {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
-                        return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                        return (
+                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                            <Link href={url}>{label}</Link>
+                          </ListItem>
+                        );
                       })}
                     </UnorderedList>
                   </Box>
@@ -843,13 +850,17 @@ const Resources = ({ page }) => {
                 />
                 {page?.content?.equipSection?.bottomRight?.links && (
                   <Box py={["48px", "48px", "84px"]}>
-                    {" "}
                     <Text fontSize={["16px", "16px", "24px"]}>
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
                     <UnorderedList>
                       {(page?.content?.equipSection?.bottomRight?.links ?? []).map(({ label, url }, index) => {
-                        return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                        return (
+                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                            {" "}
+                            <Link href={url}>{label}</Link>
+                          </ListItem>
+                        );
                       })}
                     </UnorderedList>
                   </Box>
