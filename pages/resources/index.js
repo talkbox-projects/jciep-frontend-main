@@ -21,9 +21,10 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
-import { Carousel } from "react-responsive-carousel";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 const PAGE_KEY = "resources";
@@ -40,6 +41,25 @@ export const getServerSideProps = async (context) => {
       }),
     },
   };
+};
+
+const responsiveCarousel = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1200 },
+    items: 3
+  },
+  tablet: {
+    breakpoint: { max: 1199, min: 464 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 0
+  }
 };
 
 const Resources = ({ page }) => {
@@ -573,88 +593,59 @@ const Resources = ({ page }) => {
 
       {/* resource Section */}
       <Box w="100%" bg="#FAFAFA" pos="relative">
-        <VStack alignItems="start" w="100%" pt={["36px", "36px", "109px"]}>
-          <VStack alignItems="start" w="100%" px={["16px", "16px", "207px", "207px"]}>
+        <VStack alignItems="start" w="100%" pt={["36px", "36px", "109px"]} maxW="1200px" mx="auto">
+          <VStack alignItems="start" w="100%">
             <Heading fontSize={["24px", "24px", "36px", "54px"]}>
               {page?.content?.resourceSection["title 標題"]}
             </Heading>
           </VStack>
         </VStack>
-        <Box display={["none", "none", "block", "block"]} pt="110px" overflow="hidden" pos="relative">
-          <Button
-            aria-label="Previous slide"
-            pos="absolute"
-            bg="transparent"
-            border="none"
-            top={["20%", "20%", "50%"]}
-            left={["10px", "20%", "50"]}
-            _hover="none"
-            disabled={slideIndex <= 0}
-            zIndex={1}
-            onClick={handleArrow("back")}
+
+        
+        <Box display={["none", "none", "block", "block"]} pt="110px" overflow="hidden" pos="relative" maxW="1200px" mx="auto">
+          <Carousel
+            responsive={responsiveCarousel}
+            swipeable={false}
+            draggable={false}
+            showDots={false}
           >
-            <Image src={page?.content?.resourceSection?.leftArrow} />
-          </Button>
-          <Flex
-            direction="row"
-            ml="350px"
-            verticalAlign="top"
-            mb="300px"
-            alignItems="flex-start"
-            width={`${page?.content?.resourceSection?.resources.length * 100}vw`}
-            transform={`translateX(-${25 * slideIndex}vw)`}
-            transition="transform 0.5s"
-          >
-            {(page?.content?.resourceSection?.resources ?? []).map(
-              (
-                {
-                  name,
-                  category,
-                  organization,
-                  serviceTarget,
-                  services,
-                  internship,
-                  probationOrReferral,
-                  subsidy,
-                  remark,
-                  topColor,
-                  contact,
-                  reminder,
-                },
-                index
-              ) => (
-                <Stack align="center" justifyContent="center">
-                  <Card
-                    name={name}
-                    topColor={topColor}
-                    organization={organization}
-                    category={wordExtractor(page?.content?.wordings, category)}
-                    serviceTarget={serviceTarget}
-                    services={services}
-                    internship={internship}
-                    probationOrReferral={probationOrReferral}
-                    subsidy={subsidy}
-                    remark={remark}
-                    contact={contact}
-                    reminder={reminder}
-                  />
-                </Stack>
-              )
-            )}
-          </Flex>
-          <Button
-            aria-label="Next slide"
-            pos="absolute"
-            bg="transparent"
-            border="none"
-            top={["20%", "20%", "50%"]}
-            right={["10px", "10px", "50"]}
-            _hover="none"
-            disabled={slideIndex >= page?.content?.resourceSection?.resources.length - 4}
-            onClick={handleArrow("forward")}
-          >
-            <Image src={page?.content?.resourceSection?.rightArrow} />
-          </Button>
+              {(page?.content?.resourceSection?.resources ?? []).map(
+                (
+                  {
+                    name,
+                    category,
+                    organization,
+                    serviceTarget,
+                    services,
+                    internship,
+                    probationOrReferral,
+                    subsidy,
+                    remark,
+                    topColor,
+                    contact,
+                    reminder,
+                  },
+                  index
+                ) => (
+                  <Stack align="center" justifyContent="center" key={index}>
+                    <Card
+                      name={name}
+                      topColor={topColor}
+                      organization={organization}
+                      category={wordExtractor(page?.content?.wordings, category)}
+                      serviceTarget={serviceTarget}
+                      services={services}
+                      internship={internship}
+                      probationOrReferral={probationOrReferral}
+                      subsidy={subsidy}
+                      remark={remark}
+                      contact={contact}
+                      reminder={reminder}
+                    />
+                  </Stack>
+                )
+              )}
+          </Carousel>
         </Box>
         <VStack
           w="100%"
