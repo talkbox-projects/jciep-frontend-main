@@ -252,6 +252,7 @@ const Resources = ({ page }) => {
               </MotionBox>
               <Box pt="32px"></Box>
             </VStack>
+            <VStack></VStack>
           </VStack>
           <Box>
             <Divider />
