@@ -37,7 +37,7 @@
     "react-hook-form": "^7.9.0",
     "react-icons": "^4.2.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-responsive-carousel": "^3.2.18",
+    "react-multi-carousel": "^2.6.3",
     "react-tinacms-editor": "^0.41.1",
     "react-tinacms-inline": "^0.41.1",
     "sharp": "^0.28.3",

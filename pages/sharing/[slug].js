@@ -108,8 +108,8 @@ const PostDetail = ({ post, setting, page, lang }) => {
       {/* post Detail Section */}
       <Box pos="relative" w="100%">
         <Box pb="10%" px={["16px", "16px", "16px", "204px"]} pt={["", "", "14px"]}>
-          <Grid templateColumns="repeat(12, 1fr)" gap={["0px", "0px", "42px"]}>
-            <GridItem display={["none", "none", "none", "block"]} colSpan={[0, 0, 0, 3]}>
+          <Grid templateColumns={{ lg: "160px 1fr", base: "1fr" }} gap={["0px", "0px", "42px"]} maxW="1200px" mx="auto">
+            <GridItem display={["none", "none", "none", "block"]} >
               <VStack display={["none", "none", "none", "block"]} pt="600px">
                 <Box w="200px" position="relative" mb="34px">
                   <Text pt={8} textAlign="center" fontWeight="semibold" fontSize={["lg", "1xl", "2xl"]}>
@@ -138,7 +138,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                 </Box>
                 {relatedArticles.map(({ category, title, excerpt, slug }, index) => {
                   return (
-                    <Box key={index} pb="40px" w="70%" cursor="pointer" onClick={() => router.push(`/sharing/${slug}`)}>
+                    <Box key={index} pb="40px" cursor="pointer" onClick={() => router.push(`/sharing/${slug}`)}>
                       <Tag color={getCategoryData(category).textColor} bg={getCategoryData(category).bgColor} fontSize="12px" borderRadius="19px">
                         {getCategoryData(category).label}
                       </Tag>
@@ -155,7 +155,7 @@ const PostDetail = ({ post, setting, page, lang }) => {
                 })}
               </VStack>
             </GridItem>
-            <GridItem colSpan={[12, 12, 12, 7]}>
+            <GridItem>
               <VStack pl={["", "", "20px"]} pr={["0px", "0px", "0px", "150px"]}>
                 <Box w="100%">
                   <Image

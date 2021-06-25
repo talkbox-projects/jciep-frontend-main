@@ -96,6 +96,14 @@ export default [
         label: "Title",
         component: "text",
       },
+      {
+        label: "Hero Border Image 圖片",
+        name: "bgImageBottom",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
     ],
   },
   {
@@ -109,6 +117,30 @@ export default [
         component: "text",
       },
       {
+        label: "Bottom Image",
+        name: "bottomImage",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
+        label: "Quote Left Image",
+        name: "leftQuoteImage",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
+        label: "Quote Right Image",
+        name: "rightQuoteImage",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
         name: "left",
         label: "左面的人 Person On the Left",
         component: "group",
@@ -117,6 +149,14 @@ export default [
             name: "role",
             label: "角色 Role",
             component: "text",
+          },
+          {
+            label: "Left Role Image 圖片",
+            name: "left",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
           },
           {
             name: "dialogue",
@@ -150,6 +190,14 @@ export default [
             name: "role",
             label: "角色 Role",
             component: "text",
+          },
+          {
+            label: "Right Role Image",
+            name: "rightImage",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
           },
           {
             name: "dialogue",
@@ -192,6 +240,22 @@ export default [
         component: "blocks",
         templates: metaTextTemplates,
       },
+      {
+        label: "Bottom Image",
+        name: "bottomImage",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
+        label: "Background Image",
+        name: "bgImage",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
     ],
   },
   {
@@ -203,6 +267,69 @@ export default [
         name: "title 標題",
         label: "Title",
         component: "text",
+      },
+      {
+        label: "Left Arrow Image 圖片",
+        name: "leftArrow",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
+        label: "Right Image 圖片",
+        name: "rightArrow",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
+        name: "resourceListIcons",
+        label: "Resource Icons Section",
+        component: "group",
+        fields: [
+          {
+            label: "Tick",
+            name: "tick",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Organization",
+            name: "organization",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Avatar",
+            name: "avatar",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Contact",
+            name: "contact",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Remarks",
+            name: "remarks",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
       },
       {
         name: "resources",
@@ -227,6 +354,11 @@ export default [
             defaultValue: "gov",
           },
           {
+            name: "topColor",
+            label: "Top Color",
+            component: "color",
+          },
+          {
             name: "name",
             label: "計劃/服務名稱 Name",
             component: "group",
@@ -244,6 +376,34 @@ export default [
             component: "group",
             fields: textWithTooltip,
           },
+          {
+            name: "contact",
+            label: "Contact",
+            component: "group",
+            fields: [
+              {
+                name: "text",
+                component: "text",
+                label: " Name",
+              },
+              {
+                name: "linkName",
+                component: "text",
+                label: " Link Label",
+              },
+              {
+                name: "link",
+                component: "text",
+                label: " Url",
+              },
+              {
+                name: "description",
+                component: "text",
+                label: "描述 Tooltip description",
+              },
+            ],
+          },
+
           {
             name: "services",
             label: "支援服務 Services",
@@ -340,6 +500,14 @@ export default [
         fields: equipBlockFields,
       },
       {
+        label: "Background Image 圖片",
+        name: "image",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+      {
         name: "topRight",
         label: "右上區塊 Top Right Block",
         component: "group",
@@ -361,13 +529,21 @@ export default [
     fields: [
       {
         name: "title",
-        component: "title",
+        component: "text",
         label: "標題 title",
       },
       {
         name: "description",
         component: "textarea",
         label: "描述 Remark",
+      },
+      {
+        label: "Background Image 圖片",
+        name: "image",
+        component: "image",
+        uploadDir: () => "/resources",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
       },
       {
         name: "buttons",
