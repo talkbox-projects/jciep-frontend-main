@@ -80,12 +80,12 @@ const Header = ({ header }) => {
           <Box flex={1} minW={0} w="100%" />
           <Text>{user ? user.email ?? user.phone : "guest"}</Text>
           <Link href="/web-accessibility" fontSize="sm">
-            字體大小
+            {getWording("header.font_size_level_label")}
           </Link>
           <Select
             border="none"
             size="sm"
-            w={12}
+            w={16}
             variant="flushed"
             value={router.locale}
             onChange={(e) => {
@@ -122,7 +122,7 @@ const Header = ({ header }) => {
                   {
                     <VStack spacing={2} align="stretch">
                       <Text my={1} fontWeight="bold">
-                        身份
+                        {getWording("header.identity_subheading")}
                       </Text>
                       <VStack align="stretch">
                         <HStack
@@ -174,6 +174,7 @@ const Header = ({ header }) => {
                         {!user?.identities?.length && (
                           <Link href="/user/identity/select">
                             <Button
+                              size="sm"
                               mt={4}
                               w="100%"
                               alignSelf="center"
@@ -181,7 +182,7 @@ const Header = ({ header }) => {
                               color="gray.500"
                               textAlign="center"
                             >
-                              新增身份
+                              {getWording("header.add_identity_label")}
                             </Button>
                           </Link>
                         )}
