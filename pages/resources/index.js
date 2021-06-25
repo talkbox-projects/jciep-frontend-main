@@ -27,7 +27,7 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { motion, useMotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 
 const PAGE_KEY = "resources";
 
@@ -215,45 +215,43 @@ const Resources = ({ page }) => {
                   })}
                 </UnorderedList>
               </Box>
+              <MotionBox
+                overflow="hidden"
+                animate={{ height: show ? 100 : 0 }}
+                transition={{ duration: 0.5 }}
+                alignItems="start"
+                spacing={0}
+                w="100%"
+              >
+                <Divider />
+                <HStack pt="8px" spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
+                  <Text color="#1E1E1E" fontSize="16px">
+                    {contact?.text}
+                  </Text>
+                </HStack>
+                <VStack pl="27px" alignItems="start">
+                  <Text color="#1E1E1E" fontSize="12px">
+                    {contact?.description}
+                  </Text>
+                  <Text pt="24px" color="#1E1E1E" fontSize="12px">
+                    {contact?.linkName}
+                  </Text>
+                </VStack>
+                <HStack pt="32px" spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
+
+                  <Text color="#1E1E1E" fontSize="16px">
+                    {wordExtractor(page?.content?.wordings, "remarkHeading")}
+                  </Text>
+                </HStack>
+
+                <Text pl="27px" color="#1E1E1E" fontSize="12px">
+                  {remark}
+                </Text>
+              </MotionBox>
+              <Box pt="32px"></Box>
             </VStack>
-            <motion.div
-              // overflow="hidden"
-              // h={calcHeight}
-              style={{ overflow: "hidden", width: "100%", alignItems: "start" }}
-              animate={{ height: show ? 250 : 0 }}
-              transition={{ duration: 0.5 }}
-              // alignItems="start"
-              // spacing={0}
-              // w="100%"
-            >
-              <Divider />
-              <HStack pt="8px" spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
-                <Text color="#1E1E1E" fontSize="16px">
-                  {contact?.text}
-                </Text>
-              </HStack>
-              <VStack pl="27px" alignItems="start">
-                <Text color="#1E1E1E" fontSize="12px">
-                  {contact?.description}
-                </Text>
-                <Text pt="24px" color="#1E1E1E" fontSize="12px">
-                  {contact?.linkName}
-                </Text>
-              </VStack>
-              <HStack pt="32px" spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
-
-                <Text color="#1E1E1E" fontSize="16px">
-                  {wordExtractor(page?.content?.wordings, "remarkHeading")}
-                </Text>
-              </HStack>
-
-              <Text pl="27px" color="#1E1E1E" fontSize="12px">
-                {remark}
-              </Text>
-            </motion.div>
-            <Box pt="32px"></Box>
           </VStack>
           <Box>
             <Divider />
@@ -353,7 +351,17 @@ const Resources = ({ page }) => {
                     fontSize={["14px", "14px", "16px", "20px"]}
                     textAlign={["left", "left", "center"]}
                   />
-                  <Image src={page?.content?.dialogue?.tooltip} pos="absolute" bottom="-2" left="0" />
+                  <Box
+                    w="0px"
+                    height="0px"
+                    borderRight="5px solid transparent"
+                    borderLeft="5px solid transparent"
+                    borderTop="12px solid #FFFFFF"
+                    transform="scaleY(-1) rotate(150deg)"
+                    pos="absolute"
+                    left="0"
+                    bottom="-6px"
+                  ></Box>
                 </Box>
                 <Image
                   mt={["24px", "24px", "68px"]}
@@ -381,7 +389,17 @@ const Resources = ({ page }) => {
                   fontSize={["14px", "14px", "16px", "20px"]}
                   textAlign={["left", "left", "center"]}
                 />
-                <Image src={page?.content?.dialogue?.tooltip} pos="absolute" bottom="-2" left="0" />
+                <Box
+                  w="0px"
+                  height="0px"
+                  borderRight="5px solid transparent"
+                  borderLeft="5px solid transparent"
+                  borderTop="12px solid #FFFFFF"
+                  transform="scaleY(-1) rotate(150deg)"
+                  pos="absolute"
+                  left="0"
+                  bottom="-6px"
+                ></Box>
               </Box>
             );
           }
@@ -450,7 +468,17 @@ const Resources = ({ page }) => {
                           fontSize={["14px", "14px", "16px", "20px"]}
                           textAlign={["left", "left", "center"]}
                         />
-                        <Image src={page?.content?.dialogue?.rightTooltip} pos="absolute" bottom="-2" right="0" />
+                        <Box
+                          w="0px"
+                          height="0px"
+                          borderRight="5px solid transparent"
+                          borderLeft="5px solid transparent"
+                          borderTop="12px solid #FFFFFF"
+                          transform="scaleY(-1) rotate(-150deg)"
+                          pos="absolute"
+                          right="0"
+                          bottom="-6px"
+                        ></Box>
                       </Box>
                     </Flex>
                   );
