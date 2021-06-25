@@ -34,7 +34,7 @@ export const getServerSideProps = async (context) => {
 const Sharing = ({ page, setting, lang }) => {
   const categories = setting?.value?.categories;
   const [latestPosts, setLatestPosts] = React.useState([]);
-  const [latestPostsPage, setLatestPostsPage] = React.useState(0);
+  const [latestPostsPage, setLatestPostsPage] = React.useState(1);
   const [totalLatest, setTotalLatest] = React.useState(0);
   const [featuredArticle, setFeaturedArticle] = React.useState({});
   const skeletonValue = useBreakpointValue({ base: [1], md: [1, 2] });
@@ -80,6 +80,7 @@ const Sharing = ({ page, setting, lang }) => {
   const fetchData = async () => {
     try {
       const { data, totalRecords } = await getLatestPosts({page: latestPostsPage, limit: page?.content?.latestSection?.numOfPostsPerPage});
+      console.log("!!!!! Page, data:::::", latestPostsPage, totalLatest, data)
       setTotalLatest(totalRecords);
       setLatestPosts([...latestPosts, ...data]);
       setLatestPostsPage(latestPostsPage + 1);
@@ -210,7 +211,7 @@ const Sharing = ({ page, setting, lang }) => {
               <InfiniteScroll
                 dataLength={latestPosts.length}
                 next={!activeFilter? fetchData : fetchFilteredPosts}
-                hasMore={latestPosts.length <= totalLatest}
+                hasMore={latestPosts.length < totalLatest}
                 loader={<SkeletonPlaceholder />}
                 endMessage={<Box w="100%" h="40px" />}
                 // below props only if you need pull down functionality
