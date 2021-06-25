@@ -67,10 +67,15 @@ const responsiveCarousel = {
 };
 
 const Resources = ({ page }) => {
+  const [showItems, setShowItems] = useState(3);
   const TextTool = ({ text, link, description, pt, fontSize, hover, share, bold, small }) => {
     return (
-      <Text pt={pt} _hover={hover ?? { decoration: "underline" }} color="#1E1E1E">
-        <chakra.span fontSize={fontSize} fontWeight={bold ? "bold" : "normal"}>
+      <Text pt={pt} color="#1E1E1E">
+        <chakra.span
+          _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
+          fontSize={fontSize}
+          fontWeight={bold ? "bold" : "normal"}
+        >
           {text}
         </chakra.span>
 
@@ -82,9 +87,9 @@ const Resources = ({ page }) => {
           </chakra.span>
         )}
         {description && description !== "" && (
-          <chakra.span pl="6px" mt={small ? "10px" : "5px"}>
+          <chakra.span pl="6px">
             <Tooltip hasArrow label={description} bg="white" color="#1E1E1E">
-              <Icon w={small ? "16px" : "24px"} h={small ? "16px" : "24px"}>
+              <Icon mt={small ? "5px" : "5px"} w={small ? "16px" : "24px"} h={small ? "16px" : "24px"}>
                 <AiOutlineInfoCircle />
               </Icon>
             </Tooltip>
@@ -118,94 +123,104 @@ const Resources = ({ page }) => {
       >
         <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
           <VStack borderRadius="10px" alignItems="start" px="18px" w="100%">
-            <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
-              {category}
-            </Text>
-            <TextTool
-              text={name?.text}
-              fontSize={["20px", "20px", "24px", "24px"]}
-              description={name?.description}
-              pt="8px"
-              hover
-              bold
-              share={true}
-            />
-            <Divider />
-            <HStack spacing="3px">
-              <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.organization} />
+            <VStack w="100%" minH="520px" alignItems="start">
+              <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
+                {category}
+              </Text>
               <TextTool
+                text={name?.text}
+                fontSize={["20px", "20px", "24px", "24px"]}
+                description={name?.description}
+                pt="8px"
+                hover
+                bold
                 share={true}
-                text={organization?.text}
-                description={organization?.description}
-                fontSize="16px"
               />
-            </HStack>
-            <Divider />
-            <HStack spacing="3px">
-              <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.avatar} />
+              <Divider />
+              <HStack spacing="3px">
+                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.organization} />
+                <TextTool
+                  share={true}
+                  text={organization?.text}
+                  description={organization?.description}
+                  fontSize="16px"
+                />
+              </HStack>
+              <Divider />
+              <HStack spacing="3px">
+                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.avatar} />
 
-              <TextTool text={serviceTarget?.text} description={serviceTarget?.description} fontSize="16px" />
-            </HStack>
-            <Divider />
-            <Box minH="281px">
-              <UnorderedList styleConfig={{ fontSize: "4px" }} ml="4px">
-                <HStack spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                <TextTool text={serviceTarget?.text} description={serviceTarget?.description} fontSize="16px" />
+              </HStack>
+              <Divider />
+              <Box minH="281px">
+                <UnorderedList styleConfig={{ fontSize: "4px" }} ml="4px">
+                  <HStack spacing="3px">
+                    <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                  <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" pt="8px" />
-                </HStack>
-                {(services ?? []).map(({ category, description }, index) => {
-                  return (
-                    <ListItem key={index} ml="63px">
-                      <TextTool text={category} description={description} fontSize="12px" small />
-                    </ListItem>
-                  );
-                })}
-              </UnorderedList>
-              {internship?.value && (
-                <HStack spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                    <TextTool
+                      text={wordExtractor(page?.content?.wordings, "serviceHeading")}
+                      fontSize="16px"
+                      pt="8px"
+                    />
+                  </HStack>
+                  {(services ?? []).map(({ category, description }, index) => {
+                    return (
+                      <ListItem key={index} ml="63px">
+                        <TextTool text={category} description={description} fontSize="12px" small />
+                      </ListItem>
+                    );
+                  })}
+                </UnorderedList>
+                {internship?.value && (
+                  <HStack spacing="3px">
+                    <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                  <TextTool
-                    text={wordExtractor(page?.content?.wordings, "internship")}
-                    description={internship?.description}
-                    fontSize="16px"
-                    pt="8px"
-                  />
-                </HStack>
-              )}
-              {probationOrReferral?.value && (
-                <HStack spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                    <TextTool
+                      text={wordExtractor(page?.content?.wordings, "internship")}
+                      description={internship?.description}
+                      fontSize="16px"
+                      pt="8px"
+                    />
+                  </HStack>
+                )}
+                {probationOrReferral?.value && (
+                  <HStack spacing="3px">
+                    <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                  <TextTool
-                    text={wordExtractor(page?.content?.wordings, "onProbation")}
-                    description={probationOrReferral?.description}
-                    fontSize="16px"
-                    pt="8px"
-                  />
-                </HStack>
-              )}
-              <UnorderedList listStyleType="none" ml="4px">
-                <HStack spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                    <TextTool
+                      text={wordExtractor(page?.content?.wordings, "onProbation")}
+                      description={probationOrReferral?.description}
+                      fontSize="16px"
+                      pt="8px"
+                    />
+                  </HStack>
+                )}
+                <UnorderedList listStyleType="none" ml="4px">
+                  <HStack spacing="3px">
+                    <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                  <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" pt="8px" />
-                </HStack>
-                {(subsidy ?? []).map(({ target, description }, index) => {
-                  return (
-                    <ListItem key={index} ml="63px">
-                      <TextTool text={target} description={description} fontSize="12px" small />
-                    </ListItem>
-                  );
-                })}
-              </UnorderedList>
-            </Box>
+                    <TextTool
+                      text={wordExtractor(page?.content?.wordings, "fundingHeading")}
+                      fontSize="16px"
+                      pt="8px"
+                    />
+                  </HStack>
+                  {(subsidy ?? []).map(({ target, description }, index) => {
+                    return (
+                      <ListItem key={index} ml="63px">
+                        <TextTool text={target} description={description} fontSize="12px" small />
+                      </ListItem>
+                    );
+                  })}
+                </UnorderedList>
+              </Box>
+            </VStack>
             <motion.div
               // overflow="hidden"
               // h={calcHeight}
               style={{ overflow: "hidden", width: "100%", alignItems: "start" }}
-              animate={{ height: show ? 100 : 0 }}
+              animate={{ height: show ? 250 : 0 }}
               transition={{ duration: 0.5 }}
               // alignItems="start"
               // spacing={0}
@@ -702,7 +717,12 @@ const Resources = ({ page }) => {
 
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
-        <Box pb={["46px", "46px", "72px"]} px={["16px", "16px", "150px", "20%"]} background="#FAFAFA">
+        <Box
+          pb={["46px", "46px", "72px"]}
+          pt={["", "", "50px"]}
+          px={["16px", "16px", "150px", "20%"]}
+          background="#FAFAFA"
+        >
           <Box display="flex" pos="relative">
             <Box mt={["110px", "110px", "80px"]}>
               <Text fontSize={["24px", "24px", "54px"]} fontWeight="bold">
@@ -724,7 +744,7 @@ const Resources = ({ page }) => {
               <Box
                 background="#FFFFFF"
                 borderRadius="10"
-                h="100%"
+                h={["100%", "100%", "571px"]}
                 py={["16px", "16px", "36px"]}
                 px={["16px", "16px", "24px"]}
                 display="flex"
