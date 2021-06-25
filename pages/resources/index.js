@@ -69,17 +69,30 @@ const responsiveCarousel = {
 
 const Resources = ({ page }) => {
   const [showItems, setShowItems] = useState(3);
-  const TextTool = ({ text, link, description, pt, fontSize, hover, share, bold, small }) => {
+  const TextTool = ({ text, link, url, description, pt, fontSize, hover, share, bold, small }) => {
     return (
       <Text pt={pt} color="#1E1E1E">
-        <chakra.span
-          _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
-          fontSize={fontSize}
-          fontWeight={bold ? "bold" : "normal"}
-        >
-          {text}
-        </chakra.span>
-
+        {link && (
+          <chakra.span
+            _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
+            fontSize={fontSize}
+            fontWeight={bold ? "bold" : "normal"}
+          >
+            <Link isExternal={true} href={url}>
+              {" "}
+              {text}
+            </Link>
+          </chakra.span>
+        )}
+        {!link && (
+          <chakra.span
+            _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
+            fontSize={fontSize}
+            fontWeight={bold ? "bold" : "normal"}
+          >
+            {text}
+          </chakra.span>
+        )}
         {share && (
           <chakra.span pl="3px">
             <Icon w="15px" h="13px">
@@ -89,7 +102,7 @@ const Resources = ({ page }) => {
         )}
         {description && description !== "" && (
           <chakra.span pl="6px">
-            <Tooltip hasArrow label={description} bg="white" color="#1E1E1E">
+            <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
               <Icon mt={small ? "5px" : "5px"} w={small ? "16px" : "24px"} h={small ? "16px" : "24px"}>
                 <AiOutlineInfoCircle />
               </Icon>
@@ -123,13 +136,15 @@ const Resources = ({ page }) => {
         mr={["", "", "24px"]}
       >
         <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
-          <VStack borderRadius="10px" alignItems="start" px="18px" w="100%">
+          <VStack borderRadius="10px" alignItems="start" px="16px" w="100%">
             <VStack w="100%" minH="520px" alignItems="start">
               <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
                 {category}
               </Text>
               <TextTool
                 text={name?.text}
+                link
+                url={name?.link}
                 fontSize={["20px", "20px", "24px", "24px"]}
                 description={name?.description}
                 pt="8px"
@@ -138,7 +153,7 @@ const Resources = ({ page }) => {
                 share={true}
               />
               <Divider />
-              <HStack spacing="3px">
+              <HStack spacing="5px">
                 <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.organization} />
                 <TextTool
                   share={true}
@@ -148,22 +163,17 @@ const Resources = ({ page }) => {
                 />
               </HStack>
               <Divider />
-              <HStack spacing="3px">
+              <HStack spacing="5px">
                 <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.avatar} />
 
                 <TextTool text={serviceTarget?.text} description={serviceTarget?.description} fontSize="16px" />
               </HStack>
               <Divider />
-              <Box minH="281px">
-                <UnorderedList styleConfig={{ fontSize: "4px" }} ml="4px">
-                  <HStack spacing="3px">
+              <Box w="100%" minH="281px">
+                <UnorderedList m={0} pt="8px">
+                  <HStack spacing="5px">
                     <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
-
-                    <TextTool
-                      text={wordExtractor(page?.content?.wordings, "serviceHeading")}
-                      fontSize="16px"
-                      pt="8px"
-                    />
+                    <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" />
                   </HStack>
                   {(services ?? []).map(({ category, description }, index) => {
                     return (
@@ -172,12 +182,12 @@ const Resources = ({ page }) => {
                         _before={{
                           content: '"."',
                           color: "black",
-                          mr: "6px",
+                          pr: "6px",
                           fontWeight: "bold",
                           fontSize: "12px",
                         }}
                         key={index}
-                        ml="63px"
+                        ml="40px"
                       >
                         <TextTool text={category} description={description} fontSize="12px" small />
                       </ListItem>
@@ -185,38 +195,32 @@ const Resources = ({ page }) => {
                   })}
                 </UnorderedList>
                 {internship?.value && (
-                  <HStack spacing="3px">
+                  <HStack pt="8px" spacing="5px">
                     <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
                     <TextTool
                       text={wordExtractor(page?.content?.wordings, "internship")}
                       description={internship?.description}
                       fontSize="16px"
-                      pt="8px"
                     />
                   </HStack>
                 )}
                 {probationOrReferral?.value && (
-                  <HStack spacing="3px">
+                  <HStack pt="8px" spacing="5px">
                     <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
                     <TextTool
                       text={wordExtractor(page?.content?.wordings, "onProbation")}
                       description={probationOrReferral?.description}
                       fontSize="16px"
-                      pt="8px"
                     />
                   </HStack>
                 )}
-                <UnorderedList listStyleType="none" ml="4px">
-                  <HStack spacing="3px">
+                <UnorderedList pt="8px" m={0} listStyleType="none">
+                  <HStack spacing="5px">
                     <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                    <TextTool
-                      text={wordExtractor(page?.content?.wordings, "fundingHeading")}
-                      fontSize="16px"
-                      pt="8px"
-                    />
+                    <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" />
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
                     return (
@@ -225,12 +229,12 @@ const Resources = ({ page }) => {
                         _before={{
                           content: '"."',
                           color: "black",
-                          mr: "6px",
+                          pr: "6px",
                           fontWeight: "bold",
                           fontSize: "12px",
                         }}
                         key={index}
-                        ml="63px"
+                        ml="40px"
                       >
                         <TextTool text={target} description={description} fontSize="12px" small />
                       </ListItem>
@@ -247,8 +251,8 @@ const Resources = ({ page }) => {
                 w="100%"
               >
                 <Divider />
-                <HStack pt="8px" spacing="3px">
-                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
+                <HStack pt="8px" spacing="5px">
+                  <Image w="24px" h="20px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
                   <Text color="#1E1E1E" fontSize="16px">
                     {contact?.text}
                   </Text>
@@ -261,8 +265,8 @@ const Resources = ({ page }) => {
                     {contact?.linkName}
                   </Text>
                 </VStack>
-                <HStack pt="32px" spacing="3px">
-                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
+                <HStack pt="32px" spacing="5px">
+                  <Image w="24px" h="20px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
 
                   <Text color="#1E1E1E" fontSize="16px">
                     {wordExtractor(page?.content?.wordings, "remarkHeading")}
@@ -815,7 +819,7 @@ const Resources = ({ page }) => {
                     <Text fontSize={["16px", "16px", "24px"]}>
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
-                    <UnorderedList fontSize="12px">
+                    <UnorderedList m={0}>
                       {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
                         return (
                           <ListItem
@@ -823,13 +827,13 @@ const Resources = ({ page }) => {
                             _before={{
                               content: '"."',
                               color: "black",
-                              mr: "6px",
+                              pr: "6px",
                               fontWeight: "bold",
                               fontSize: "20px",
                             }}
-                            fontSize={["16px", "16px", "20px"]}
+                            fontSize="16px"
                           >
-                            <Link isExternal textDecoration="underline" href={url}>
+                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
                           </ListItem>
@@ -859,7 +863,7 @@ const Resources = ({ page }) => {
                     <Text fontSize={["16px", "16px", "24px"]}>
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
-                    <UnorderedList>
+                    <UnorderedList m={0}>
                       {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
                         return (
                           <ListItem
@@ -867,13 +871,13 @@ const Resources = ({ page }) => {
                             _before={{
                               content: '"."',
                               color: "black",
-                              mr: "6px",
+                              pr: "6px",
                               fontWeight: "bold",
                               fontSize: "20px",
                             }}
-                            fontSize={["16px", "16px", "20px"]}
+                            fontSize="16px"
                           >
-                            <Link isExternal textDecoration="underline" href={url}>
+                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
                           </ListItem>
@@ -915,10 +919,10 @@ const Resources = ({ page }) => {
                               fontWeight: "bold",
                               fontSize: "20px",
                             }}
-                            fontSize={["16px", "16px", "20px"]}
+                            fontSize="16px"
                           >
                             {" "}
-                            <Link isExternal textDecoration="underline" href={url}>
+                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
                           </ListItem>
