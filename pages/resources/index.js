@@ -27,7 +27,7 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { motion, useMotionValue  } from "framer-motion";
+import { motion  } from "framer-motion";
 
 const PAGE_KEY = "resources";
 
@@ -203,15 +203,13 @@ const Resources = ({ page }) => {
                 })}
               </UnorderedList>
             </Box>
-            <motion.div
-              // overflow="hidden"
-              // h={calcHeight}
-              style={{ overflow: "hidden", width:"100%", alignItems:"start" }}
+            <MotionBox
+              overflow="hidden"
               animate={{ height: show ? 100 : 0 }}
               transition={{ duration: 0.5 }}
-              // alignItems="start"
-              // spacing={0}
-              // w="100%"
+              alignItems="start"
+              spacing={0}
+              w="100%"
             >
               <Divider />
               <HStack pt="8px" spacing="3px">
@@ -239,7 +237,7 @@ const Resources = ({ page }) => {
               <Text pl="27px" color="#1E1E1E" fontSize="12px">
                 {remark}
               </Text>
-            </motion.div>
+            </MotionBox>
             <Box pt="32px"></Box>
             <Divider />
 
