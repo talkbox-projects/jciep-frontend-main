@@ -27,7 +27,11 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { motion, useMotionValue  } from "framer-motion";
+
 const PAGE_KEY = "resources";
+
+const MotionBox = motion(Box);
 
 export const getServerSideProps = async (context) => {
   return {
@@ -63,7 +67,6 @@ const responsiveCarousel = {
 };
 
 const Resources = ({ page }) => {
-  const [slideIndex, setSlideIndex] = useState(0);
 
   const TextTool = ({ text, link, description, pt, fontSize, hover, share, bold, small }) => {
     return (
@@ -91,13 +94,6 @@ const Resources = ({ page }) => {
       </Text>
     );
   };
-  const handleArrow = (val) => () => {
-    if (val === "forward" && slideIndex < page?.content?.resourceSection?.resources.length - 1) {
-      setSlideIndex(slideIndex + 1);
-    } else if (val === "back" && slideIndex >= 0) {
-      setSlideIndex(slideIndex - 1);
-    }
-  };
   const Card = ({
     name,
     category,
@@ -116,15 +112,15 @@ const Resources = ({ page }) => {
     return (
       <Box
         w={["90%", "303px", "303px", "350px"]}
-        bg={topColor ? topColor : "#4E7F8E"}
-        boxShadow=" 12px 12px 24px 0 rgba(30,30,30,0.1)"
+        borderTop={`8px solid ${topColor ? topColor : "#4E7F8E"}`}
+        boxShadow="12px 12px 24px 0px rgba(30,30,30,0.1)"
         borderRadius="10px"
-        pt="8px"
+        mb="8px"
         mr={["", "", "24px"]}
       >
         <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
           <VStack borderRadius="10px" alignItems="start" px="18px" w="100%">
-            <Text pt="40px" fontSize="12px" color={topColor}>
+            <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
               {category}
             </Text>
             <TextTool
@@ -153,65 +149,69 @@ const Resources = ({ page }) => {
               <TextTool text={serviceTarget?.text} description={serviceTarget?.description} fontSize="16px" />
             </HStack>
             <Divider />
-            <UnorderedList styleConfig={{ fontSize: "4px" }}>
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+            <Box minH="281px">
+              <UnorderedList styleConfig={{ fontSize: "4px" }} ml="4px">
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" pt="8px" />
-              </HStack>
-              {(services ?? []).map(({ category, description }, index) => {
-                return (
-                  <ListItem key={index} ml="63px">
-                    <TextTool text={category} description={description} fontSize="12px" small />
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
-            {internship?.value && (
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool text={wordExtractor(page?.content?.wordings, "serviceHeading")} fontSize="16px" pt="8px" />
+                </HStack>
+                {(services ?? []).map(({ category, description }, index) => {
+                  return (
+                    <ListItem key={index} ml="63px">
+                      <TextTool text={category} description={description} fontSize="12px" small />
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+              {internship?.value && (
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool
-                  text={wordExtractor(page?.content?.wordings, "internship")}
-                  description={internship?.description}
-                  fontSize="16px"
-                  pt="8px"
-                />
-              </HStack>
-            )}
-            {probationOrReferral?.value && (
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool
+                    text={wordExtractor(page?.content?.wordings, "internship")}
+                    description={internship?.description}
+                    fontSize="16px"
+                    pt="8px"
+                  />
+                </HStack>
+              )}
+              {probationOrReferral?.value && (
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool
-                  text={wordExtractor(page?.content?.wordings, "onProbation")}
-                  description={probationOrReferral?.description}
-                  fontSize="16px"
-                  pt="8px"
-                />
-              </HStack>
-            )}
-            <UnorderedList listStyleType="none">
-              <HStack spacing="3px">
-                <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
+                  <TextTool
+                    text={wordExtractor(page?.content?.wordings, "onProbation")}
+                    description={probationOrReferral?.description}
+                    fontSize="16px"
+                    pt="8px"
+                  />
+                </HStack>
+              )}
+              <UnorderedList listStyleType="none" ml="4px">
+                <HStack spacing="3px">
+                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.tick} />
 
-                <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" pt="8px" />
-              </HStack>
-              {(subsidy ?? []).map(({ target, description }, index) => {
-                return (
-                  <ListItem key={index} ml="63px">
-                    <TextTool text={target} description={description} fontSize="12px" small />
-                  </ListItem>
-                );
-              })}
-            </UnorderedList>
-            <Box
-              transition="height 0.2s ease-out"
-              overflow="hidden"
-              h={show ? "100%" : "0px"}
-              alignItems="start"
-              spacing={0}
-              w="100%"
+                  <TextTool text={wordExtractor(page?.content?.wordings, "fundingHeading")} fontSize="16px" pt="8px" />
+                </HStack>
+                {(subsidy ?? []).map(({ target, description }, index) => {
+                  return (
+                    <ListItem key={index} ml="63px">
+                      <TextTool text={target} description={description} fontSize="12px" small />
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+            </Box>
+            <motion.div
+              // overflow="hidden"
+              // h={calcHeight}
+              style={{ overflow: "hidden", width:"100%", alignItems:"start" }}
+              animate={{ height: show ? 100 : 0 }}
+              transition={{ duration: 0.5 }}
+              // alignItems="start"
+              // spacing={0}
+              // w="100%"
             >
               <Divider />
               <HStack pt="8px" spacing="3px">
@@ -239,7 +239,7 @@ const Resources = ({ page }) => {
               <Text pl="27px" color="#1E1E1E" fontSize="12px">
                 {remark}
               </Text>
-            </Box>
+            </motion.div>
             <Box pt="32px"></Box>
             <Divider />
 
