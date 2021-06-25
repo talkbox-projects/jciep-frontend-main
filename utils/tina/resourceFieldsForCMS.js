@@ -301,6 +301,53 @@ export default [
         previewSrc: (src) => src,
       },
       {
+        name: "resourceListIcons",
+        label: "Resource Icons Section",
+        component: "group",
+        fields: [
+          {
+            label: "Tick",
+            name: "tick",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Organization",
+            name: "organization",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Avatar",
+            name: "avatar",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Contact",
+            name: "contact",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "Remarks",
+            name: "remarks",
+            component: "image",
+            uploadDir: () => "/resources",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
+      },
+      {
         name: "resources",
         label: "所有資源 Resource List",
         component: "group-list",
@@ -372,12 +419,7 @@ export default [
               },
             ],
           },
-          {
-            name: "reminder",
-            label: "Reminder",
-            component: "group",
-            fields: textWithTooltip,
-          },
+
           {
             name: "services",
             label: "支援服務 Services",
