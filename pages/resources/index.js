@@ -167,7 +167,18 @@ const Resources = ({ page }) => {
                   </HStack>
                   {(services ?? []).map(({ category, description }, index) => {
                     return (
-                      <ListItem key={index} ml="63px">
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          mr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="63px"
+                      >
                         <TextTool text={category} description={description} fontSize="12px" small />
                       </ListItem>
                     );
@@ -209,7 +220,18 @@ const Resources = ({ page }) => {
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
                     return (
-                      <ListItem key={index} ml="63px">
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          mr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="63px"
+                      >
                         <TextTool text={target} description={description} fontSize="12px" small />
                       </ListItem>
                     );
@@ -226,7 +248,7 @@ const Resources = ({ page }) => {
               >
                 <Divider />
                 <HStack pt="8px" spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
+                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.contact} />
                   <Text color="#1E1E1E" fontSize="16px">
                     {contact?.text}
                   </Text>
@@ -240,7 +262,7 @@ const Resources = ({ page }) => {
                   </Text>
                 </VStack>
                 <HStack pt="32px" spacing="3px">
-                  <Image w="24px" h="24px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
+                  <Image w="16px" h="16px" src={page?.content?.resourceSection?.resourceListIcons?.remarks} />
 
                   <Text color="#1E1E1E" fontSize="16px">
                     {wordExtractor(page?.content?.wordings, "remarkHeading")}
@@ -339,9 +361,9 @@ const Resources = ({ page }) => {
               <Flex>
                 <Box
                   mt={["24px", "24px", "68px"]}
-                  ml={["16px", "16px", "", "325px"]}
-                  w={["75%", "75%", "", "max"]}
-                  borderRadius={["10px", "10px", "20px"]}
+                  ml={["16px", "16px", "16px", "325px"]}
+                  w={["75%", "75%", "65%", "max"]}
+                  borderRadius={["10px", "10px", "10px", "20px"]}
                   bg="white"
                   pos="relative"
                 >
@@ -350,7 +372,7 @@ const Resources = ({ page }) => {
                     parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                     data={message}
                     fontSize={["14px", "14px", "16px", "20px"]}
-                    textAlign={["left", "left", "center"]}
+                    textAlign={["left", "left", "left", "center"]}
                   />
                   <Box
                     w="0px"
@@ -367,8 +389,8 @@ const Resources = ({ page }) => {
                 <Image
                   mt={["24px", "24px", "68px"]}
                   ml={["10px", "10px", "26px", "26px"]}
-                  w={["20px", "20px", "40px"]}
-                  h={["16px", "16px", "32px"]}
+                  w={["20px", "20px", "20px", "40px"]}
+                  h={["16px", "16px", "16px", "32px"]}
                   src={page?.content?.dialogue?.leftQuoteImage}
                 />
               </Flex>
@@ -378,8 +400,8 @@ const Resources = ({ page }) => {
               <Box
                 mt={["16px", "16px", "18px"]}
                 ml={["16px", "16px", "", "218px"]}
-                w={["75%", "75%", "", "max"]}
-                borderRadius={["10px", "10px", "20px"]}
+                w={["75%", "75%", "65%", "max"]}
+                borderRadius={["10px", "10px", "10px", "20px"]}
                 bg="white"
                 pos="relative"
               >
@@ -388,7 +410,7 @@ const Resources = ({ page }) => {
                   data={message}
                   parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                   fontSize={["14px", "14px", "16px", "20px"]}
-                  textAlign={["left", "left", "center"]}
+                  textAlign={["left", "left", "left", "center"]}
                 />
                 <Box
                   w="0px"
@@ -406,7 +428,7 @@ const Resources = ({ page }) => {
           }
         })}
         <Text
-          pb={["30%", "15%", "0", "0"]}
+          pb={["30%", "15%", "15%", "0"]}
           ml={["16px", "16px", "", "211px"]}
           mt={["12px", "12px", "8px"]}
           fontSize="16px"
@@ -415,8 +437,8 @@ const Resources = ({ page }) => {
         </Text>
         <Image
           pos="absolute"
-          left={["16px", "16px", "110px"]}
-          bottom={["0px", "0px", "30px", "40px"]}
+          left={["16px", "16px", "32px", "110px"]}
+          bottom={["0px", "0px", "20px", "40px"]}
           w={["80px", "80px", "100px", "122px"]}
           h={["127px", "127px", "194px", "194px"]}
           src={page?.content?.dialogue?.left?.left}
@@ -433,13 +455,13 @@ const Resources = ({ page }) => {
       </Box>
 
       {/* Conversation Section */}
-      <Box pb={["", "", "20%", "20%"]} w="100%" pos="relative" bg="#FEB534">
-        <Box pos="relative" zIndex="100" pb="15%">
+      <Box pb={["", "", "", "20%"]} w="100%" pos="relative" bg="#FEB534">
+        <Box pos="relative" zIndex="100" pb={["5%", "5%", "5%", "20%"]}>
           <Box
-            pos={["relative", "relative", "absolute", "absolute"]}
-            right={["", "", "0", "0"]}
+            pos={["relative", "relative", "relative", "absolute"]}
+            right={{ lg: "0" }}
             w="100%"
-            top={["", "", "-150px", "-250px"]}
+            top={["", "", "", "-250px"]}
           >
             <VStack w="100%" justifyContent="right" alignItems="right">
               {(page?.content?.dialogue?.right?.dialogue ?? []).map(({ message }, index) => {
@@ -447,18 +469,18 @@ const Resources = ({ page }) => {
                   return (
                     <Flex justifyContent="flex-end" w="100%">
                       <Image
-                        mt={["24px", "24px", "68px"]}
-                        mr={["8px", "8px", "32px", "32px"]}
-                        w={["20px", "20px", "40px"]}
-                        h={["16px", "16px", "32px"]}
+                        mt={["24px", "24px", "24px", "68px"]}
+                        mr={["8px", "8px", "8px", "32px"]}
+                        w={["20px", "20px", "20px", "40px"]}
+                        h={["16px", "16px", "16px", "32px"]}
                         transform="rotate(180deg)"
                         src={page?.content?.dialogue?.leftQuoteImage}
                       />
                       <Box
-                        mt={["24px", "24px", "68px"]}
-                        mr={["16px", "16px", "230px", "230px"]}
-                        w={["75%", "75%", "", "max"]}
-                        borderRadius={["10px", "10px", "20px"]}
+                        mt={["24px", "24px", "24px", "68px"]}
+                        mr={["16px", "16px", "16px", "230px"]}
+                        w={["75%", "75%", "65%", "max"]}
+                        borderRadius={["10px", "10px", "10px", "20px"]}
                         bg="white"
                         pos="relative"
                       >
@@ -467,7 +489,7 @@ const Resources = ({ page }) => {
                           parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                           data={message}
                           fontSize={["14px", "14px", "16px", "20px"]}
-                          textAlign={["left", "left", "center"]}
+                          textAlign={["left", "left", "left", "center"]}
                         />
                         <Box
                           w="0px"
@@ -489,8 +511,8 @@ const Resources = ({ page }) => {
                       <Box
                         mt={["16px", "16px", "18px"]}
                         mr={["16px", "16px", "", "207px"]}
-                        w={["70%", "70%", "", "max"]}
-                        borderRadius={["10px", "10px", "20px"]}
+                        w={["75%", "75%", "65%", "max"]}
+                        borderRadius={["10px", "10px", "10px", "20px"]}
                         bg="white"
                         pos="relative"
                       >
@@ -499,7 +521,7 @@ const Resources = ({ page }) => {
                           parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                           data={message}
                           fontSize={["14px", "14px", "16px", "20px"]}
-                          textAlign={["left", "left", "center"]}
+                          textAlign={["left", "left", "left", "center"]}
                         />
                         <Image src={page?.content?.dialogue?.rightTooltip} pos="absolute" bottom="-2" right="0" />
                       </Box>
@@ -508,20 +530,25 @@ const Resources = ({ page }) => {
                 }
               })}
               <VStack justifyContent="right" alignItems="right" w="100%">
-                <Text textAlign="right" mr={["16px", "16px", "", "207px"]} mt={["12px", "12px", "8px"]} fontSize="16px">
+                <Text
+                  textAlign="right"
+                  mr={["16px", "16px", "24px", "207px"]}
+                  mt={["12px", "12px", "8px"]}
+                  fontSize="16px"
+                >
                   {page?.content?.dialogue?.right?.role}
                 </Text>
               </VStack>
-              <HStack pos={["unset", "unset", "relative", "relative"]} justifyContent="flex-end" w="100%" zIndex="-1">
+              <HStack pos={["unset", "unset", "unset", "relative"]} justifyContent="flex-end" w="100%" zIndex="-1">
                 <Box
                   w="100%"
                   pt="6%"
-                  display={["none", "none", "block", "block"]}
-                  pos={["absolute", "absolute", "unset", "unset"]}
+                  display={["none", "none", "none", "block"]}
+                  pos={["absolute", "absolute", "absoulte", "unset"]}
                 >
                   <VStack w="100%">
-                    <Box textAlign="center" position="relative" mb="34px" w="max" mx={["47px", "47px", "0px"]}>
-                      <Text fontSize={["16", "16", "24"]} textAlign="center" fontWeight="bold">
+                    <Box textAlign="center" position="relative" mb="34px" w="max" mx={["47px", "47px", "47px", "0px"]}>
+                      <Text fontSize={["16", "16", "16", "24"]} textAlign="center" fontWeight="bold">
                         {page?.content?.howSection["title 標題"]}
                       </Text>
                       <Box
@@ -529,7 +556,7 @@ const Resources = ({ page }) => {
                         height="27.69px"
                         borderRadius="5px"
                         pos="absolute"
-                        right={["-6", "-6", "-12"]}
+                        right={["-6", "-6", "-6", "-12"]}
                         bottom="-3"
                         background="#fff"
                         transform="rotate(30deg)"
@@ -539,7 +566,7 @@ const Resources = ({ page }) => {
                         height="27.69px"
                         borderRadius="5px"
                         pos="absolute"
-                        left={["-6", "-6", "-12"]}
+                        left={["-6", "-6", "-6", "-12"]}
                         bottom="-3"
                         background="#fff"
                         transform="rotate(-30deg)"
@@ -547,9 +574,9 @@ const Resources = ({ page }) => {
                     </Box>
 
                     <Box
-                      padding={["16px", "16px", "41px 42px"]}
-                      mx={["16px", "16px", "0px"]}
-                      mt={["17px", "17px", "24.31px"]}
+                      padding={["16px", "16px", "16px ", "42px"]}
+                      mx={["16px", "16px", "16px", "0px"]}
+                      mt={["17px", "17px", "17px", "24.31px"]}
                       maxW="936px"
                       background="#fff"
                       borderRadius="22px"
@@ -563,11 +590,11 @@ const Resources = ({ page }) => {
                   </VStack>
                 </Box>
                 <Image
-                  pos={["unset", "unset", "absolute", "absolute"]}
+                  pos={["unset", "unset", "unset", "absolute"]}
                   top="-80px"
                   right="40px"
-                  w={["152px", "152px", "255px", "255px"]}
-                  h={["206px", "206px", "346px", "346px"]}
+                  w={["152px", "152px", "195px", "255px"]}
+                  h={["206px", "206px", "286px", "346px"]}
                   src={page?.content?.dialogue?.right?.rightImage}
                 />
               </HStack>
@@ -580,10 +607,10 @@ const Resources = ({ page }) => {
           w="100%"
           px="16px"
           justifyContent="center"
-          display={["block", "block", "none", "none"]}
+          display={["block", "block", "block", "none"]}
         >
           <Box position="relative" mb="34px" mx="10%">
-            <Text fontSize={["16", "16", "24"]} textAlign="center" fontWeight="bold">
+            <Text fontSize={["16", "16", "16", "24"]} textAlign="center" fontWeight="bold">
               {page?.content?.howSection["title 標題"]}
             </Text>
             <Box
@@ -591,7 +618,7 @@ const Resources = ({ page }) => {
               height="27.69px"
               borderRadius="5px"
               pos="absolute"
-              right={["6", "12", "-12"]}
+              right={["6", "12", "48", "-12"]}
               bottom="-3"
               background="#fff"
               transform="rotate(30deg)"
@@ -601,7 +628,7 @@ const Resources = ({ page }) => {
               height="27.69px"
               borderRadius="5px"
               pos="absolute"
-              left={["6", "12", "-12"]}
+              left={["6", "12", "48", "-12"]}
               bottom="-3"
               background="#fff"
               transform="rotate(-30deg)"
@@ -609,9 +636,9 @@ const Resources = ({ page }) => {
           </Box>
 
           <Box
-            padding={["16px", "16px", "41px 42px"]}
-            mx={["16px", "16px", "0px"]}
-            mt={["17px", "17px", "24.31px"]}
+            padding={["16px", "16px", "16px", " 42px"]}
+            mx={["16px", "16px", "16px", "0px"]}
+            mt={["17px", "17px", "17px", "24.31px"]}
             maxW="936px"
             background="#fff"
             borderRadius="22px"
@@ -791,7 +818,17 @@ const Resources = ({ page }) => {
                     <UnorderedList fontSize="12px">
                       {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
@@ -825,7 +862,17 @@ const Resources = ({ page }) => {
                     <UnorderedList>
                       {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}
                             </Link>
@@ -859,7 +906,17 @@ const Resources = ({ page }) => {
                     <UnorderedList>
                       {(page?.content?.equipSection?.bottomRight?.links ?? []).map(({ label, url }, index) => {
                         return (
-                          <ListItem fontSize={["16px", "16px", "20px"]}>
+                          <ListItem
+                            display="flex"
+                            _before={{
+                              content: '"."',
+                              color: "black",
+                              mr: "6px",
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                            fontSize={["16px", "16px", "20px"]}
+                          >
                             {" "}
                             <Link isExternal textDecoration="underline" href={url}>
                               {label}
