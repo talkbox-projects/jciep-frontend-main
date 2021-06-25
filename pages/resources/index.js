@@ -19,6 +19,7 @@ import {
   Button,
   Grid,
   GridItem,
+  Link
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
 import Carousel from "react-multi-carousel";
@@ -693,8 +694,8 @@ const Resources = ({ page }) => {
       </Box>
 
       {/* Equip Section */}
-      <Box px={["16px", "16px", "14%"]} background="#FAFAFA">
-        <Box display="flex" pos="relative">
+      <Box background="#FAFAFA">
+        <Box display="flex" pos="relative" maxW="1200px" mx="auto">
           <Box mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {wordExtractor(page?.content?.wordings, "equip")}
@@ -710,6 +711,7 @@ const Resources = ({ page }) => {
           mt="26px"
           position="relative"
           zIndex="1"
+          maxW="1200px" mx="auto"
         >
           <GridItem rowSpan={[0, 0, 2, 2]} colSpan={[6, 6, 3, 3]}>
             <Box
@@ -727,7 +729,10 @@ const Resources = ({ page }) => {
               <Box pt="56px">
                 <UnorderedList fontSize="12px">
                   {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
-                    return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                    return (
+                      <ListItem fontSize={["16px", "16px", "20px"]} isExternal textDecoration="underline" pb="5px">
+                        <Link href={url} >{label}</Link>
+                      </ListItem>);
                   })}
                 </UnorderedList>
               </Box>
@@ -749,7 +754,10 @@ const Resources = ({ page }) => {
               <Box pt="56px">
                 <UnorderedList>
                   {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
-                    return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                    return (
+                      <ListItem fontSize={["16px", "16px", "20px"]} isExternal textDecoration="underline" pb="5px">
+                        <Link href={url} >{label}</Link>
+                      </ListItem>);
                   })}
                 </UnorderedList>
               </Box>
@@ -771,7 +779,10 @@ const Resources = ({ page }) => {
               <Box pt="56px">
                 <UnorderedList>
                   {(page?.content?.equipSection?.bottomRight?.links ?? []).map(({ label, url }, index) => {
-                    return <ListItem fontSize={["16px", "16px", "20px"]}>{label}</ListItem>;
+                    return (
+                      <ListItem fontSize={["16px", "16px", "20px"]} isExternal textDecoration="underline" pb="5px">
+                        <Link href={url} >{label}</Link>
+                      </ListItem>);
                   })}
                 </UnorderedList>
               </Box>
