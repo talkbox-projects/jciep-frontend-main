@@ -49,7 +49,7 @@ const RegisterModal = () => {
   } = useForm();
   const toast = useToast();
 
-  const onPhoneRegister = useCallback(async ({ phone }) => {
+  const onPhoneRegister = useCallback(async ({e, phone }) => {
     try {
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
@@ -59,15 +59,19 @@ const RegisterModal = () => {
       await getGraphQLClient().request(mutation, { phone });
       otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
       registerModalDisclosure.onClose();
+      e.preventDefault()
+
     } catch (e) {
       setError("email", {
         message: getWording("register.register_error_message"),
       });
     }
-  }, []);
+  });
 
-  const onEmailRegister = useCallback(async ({ email }) => {
+  const onEmailRegister = useCallback(async ({e, email }) => {
     try {
+      console.log(email)
+
       const mutation = gql`
         mutation UserEmailVerify($email: String!) {
           UserEmailVerify(email: $email)
@@ -76,12 +80,13 @@ const RegisterModal = () => {
       await getGraphQLClient().request(mutation, { email });
       emailVerifySentModalDisclosure.onOpen();
       registerModalDisclosure.onClose();
+      e.preventDefault()
     } catch (e) {
       setError("phone", {
         message: getWording("register.register_error_message"),
       });
     }
-  }, []);
+  });
 
   return (
     <Modal

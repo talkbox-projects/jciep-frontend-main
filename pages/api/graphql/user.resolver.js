@@ -42,6 +42,7 @@ export default {
        */
       try {
         const emailVerify = await EmailVerify.create({ email });
+        console.log(emailVerify)
         return true;
       } catch (error) {
         console.error(error);
@@ -100,6 +101,7 @@ export default {
             },
             { upsert: true, new: true }
           );
+          console.log(user)
           await emailVerify.delete();
           const token = jwt.sign(user.toObject(), "shhhhh").toString();
           return { token, user };

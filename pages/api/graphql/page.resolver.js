@@ -4,6 +4,7 @@ export default {
   Query: {
     PageGet: async (_parent, { lang, key }) => {
       const page = await PageModel.findOne({ lang, key }).exec();
+      console.log(page)
       return page;
     },
   },
