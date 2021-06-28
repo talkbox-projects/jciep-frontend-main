@@ -10,30 +10,35 @@ const withConfigurationCMS =
     const router = useRouter();
     const lang = router.locale;
     const _configuration = props?.[propName];
-    const [configuration, form] = useForm({
-      key,
-      label,
-      initialValues: _configuration?.value,
-      fields: [...fields],
-      onSubmit: async (value) => {
-        const mutation = gql`
-          mutation ConfigurationUpdate($input: ConfigurationUpdateInput) {
-            ConfigurationUpdate(input: $input) {
-              key
-              value
+    const [configuration, form] = useForm(
+      {
+        key,
+        label,
+        initialValues: _configuration?.value,
+        fields: [...fields],
+        onSubmit: async (value) => {
+          const mutation = gql`
+            mutation ConfigurationUpdate($input: ConfigurationUpdateInput) {
+              ConfigurationUpdate(input: $input) {
+                key
+                value
+              }
             }
-          }
-        `;
-        const variables = {
-          input: {
-            key,
-            lang,
-            value,
-          },
-        };
-        await getGraphQLClient().request(mutation, variables);
+          `;
+          const variables = {
+            input: {
+              key,
+              lang,
+              value,
+            },
+          };
+          await getGraphQLClient().request(mutation, variables);
+        },
       },
-    });
+      {
+        values: _configuration,
+      }
+    );
 
     useFormScreenPlugin(form);
 
