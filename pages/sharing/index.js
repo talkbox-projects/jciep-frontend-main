@@ -129,7 +129,7 @@ const Sharing = ({ page, setting, lang }) => {
   const handleFilter = (filter) => {
     setPrevDataEmpty(false);
     setLatestPosts([]);
-    setLatestPostsPage(0);
+    setLatestPostsPage(1);
     setActiveFilter(filter);
     window.scrollTo(0, window.screen.availHeight);
   }
