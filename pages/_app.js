@@ -70,6 +70,6 @@ const App = ({ Component, pageProps }) => {
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [MarkdownFieldPlugin],
-  enabled: false,
+  enabled: true,
   sidebar: true,
 });
