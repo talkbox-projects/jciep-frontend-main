@@ -47,7 +47,7 @@ const Partner = ({ page }) => {
         w="100%"
         position="relative"
         overflowY="visible"
-        backgroundImage={`url(${page?.content?.partnerSection?.slugBannerSection?.image})`}
+        backgroundImage={`url(${partner?.image})`}
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
         display="flex"
@@ -56,11 +56,21 @@ const Partner = ({ page }) => {
         zIndex="-1"
       >
         <Box position="absolute" left={["5%", "10%", "15%"]} bottom={["40%"]}>
-          <MultiTextRenderer
-            bgColor="#F6D644"
-            fontSize={["12px", "16px", "24px", "56px"]}
-            data={page?.content?.partnerSection?.slugBannerSection?.title}
-          />
+          <Box>
+            <Text
+              fontWeight="bold"
+              bgColor="#F6D644"
+              fontSize={["12px", "16px", "24px", "56px"]}
+              children={partner?.agencyName}
+            />
+          </Box>
+          <Box>
+            <Text
+              bgColor="#F6D644"
+              fontSize={["12px", "16px", "24px", "56px"]}
+              children={partner?.projectName}
+            />
+          </Box>
         </Box>
         <Image
           position="absolute"
@@ -118,9 +128,25 @@ const Partner = ({ page }) => {
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
                 return (
                   <GridItem pt={["20px", ""]} key={index}>
-                    <Stack direction={["column", "column", "row"]} justifyContent="center" alignItems="center">
-                      <Image w="38px" w="34px" src={page?.content?.partnerSection?.planSection?.objectiveIcon} />
-                      <Text pl={["", "", "16px"]} fontWeight="bold" fontSize={["", "", "20px"]} w={["70%", "50%"]}>
+                    <Stack
+                      direction={["column", "column", "row"]}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Image
+                        w="38px"
+                        w="34px"
+                        src={
+                          page?.content?.partnerSection?.planSection
+                            ?.objectiveIcon
+                        }
+                      />
+                      <Text
+                        pl={["", "", "16px"]}
+                        fontWeight="bold"
+                        fontSize={["", "", "20px"]}
+                        w={["70%", "50%"]}
+                      >
                         {content}
                       </Text>
                     </Stack>
@@ -157,7 +183,11 @@ const Partner = ({ page }) => {
               <>
                 <Box pos="relative" mb="34px" mx={["47px", "47px", "0px"]}>
                   <Box>
-                    <Text fontWeight="bold" fontSize={["16", "16", "24"]} textAlign="center">
+                    <Text
+                      fontWeight="bold"
+                      fontSize={["16", "16", "24"]}
+                      textAlign="center"
+                    >
                       {partner?.serviceHighlights[key].audience}
                     </Text>
                     <Box
@@ -182,20 +212,27 @@ const Partner = ({ page }) => {
                     />
                   </Box>
                 </Box>
-                <Box mb="10px" zIndex="10000" w={["80%", "65%", "55%", "45%"]} pt="36px">
-                  {(partner?.serviceHighlights[key]?.sections ?? []).map(({ title, content }, index) => {
-                    return (
-                      <Accordian
-                        textAlign="center"
-                        title={title}
-                        boldTitle={true}
-                        description={content}
-                        multi={true}
-                        key={index}
-                        bgColor="#FFFFFF"
-                      />
-                    );
-                  })}
+                <Box
+                  mb="10px"
+                  zIndex="10000"
+                  w={["80%", "65%", "55%", "45%"]}
+                  pt="36px"
+                >
+                  {(partner?.serviceHighlights[key]?.sections ?? []).map(
+                    ({ title, content }, index) => {
+                      return (
+                        <Accordian
+                          textAlign="center"
+                          title={title}
+                          boldTitle={true}
+                          description={content}
+                          multi={true}
+                          key={index}
+                          bgColor="#FFFFFF"
+                        />
+                      );
+                    }
+                  )}
                 </Box>
               </>
             );
@@ -245,17 +282,29 @@ const Partner = ({ page }) => {
           </chakra.span>
         </VStack>
         <HStack justifyContent="center" w="100%" pt="56px" pb="72px">
-          <SimpleGrid justifyContent="center" w="60%" gap="36px" columns={[2, 2, 4, 4]}>
-            {(partner?.serviceTargets ?? []).map(({ label, description, image }, index) => {
-              return (
-                <VStack>
-                  <Image w="150px" src={image} />
-                  <Text textAlign="center" w={["100%", "100%", "150px"]} fontSize={["xl", "2xl"]} fontWeight="semibold">
-                    {label}
-                  </Text>
-                </VStack>
-              );
-            })}
+          <SimpleGrid
+            justifyContent="center"
+            w="60%"
+            gap="36px"
+            columns={[2, 2, 4, 4]}
+          >
+            {(partner?.serviceTargets ?? []).map(
+              ({ label, description, image }, index) => {
+                return (
+                  <VStack>
+                    <Image w="150px" src={image} />
+                    <Text
+                      textAlign="center"
+                      w={["100%", "100%", "150px"]}
+                      fontSize={["xl", "2xl"]}
+                      fontWeight="semibold"
+                    >
+                      {label}
+                    </Text>
+                  </VStack>
+                );
+              }
+            )}
           </SimpleGrid>
         </HStack>
 

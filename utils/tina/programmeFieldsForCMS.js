@@ -135,26 +135,12 @@ export default [
         component: "group",
         fields: [
           {
-            label: "Hero Image 圖片",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
             label: "图片底部 Image Bottom",
             name: "bgImageBottom",
             component: "image",
             uploadDir: () => "/programme",
             parse: ({ previewSrc }) => previewSrc,
             previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "Title 標題",
-            component: "blocks",
-            templates: metaTextTemplates,
           },
           {
             name: "titleBgColor",
@@ -278,7 +264,16 @@ export default [
             name: "slug",
             label: "後綴路由 Slug for this partner",
             component: "text",
-            description: "The partner detail route would be /programme/partner/{slug}",
+            description:
+              "The partner detail route would be /programme/partner/{slug}",
+          },
+          {
+            label: "Hero Image 圖片",
+            name: "image",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
           },
           {
             name: "agencyName",
