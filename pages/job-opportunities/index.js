@@ -358,7 +358,7 @@ export default withPageCMS(JobOpportunities, {
         {
           name: "remarks",
           component: "markdown",
-          label: "詳情 Description",
+          label: "備註 Remark",
         },
       ],
     },
