@@ -66,7 +66,7 @@ export default {
       });
 
       return {
-        filename: result.filename,
+        filename: result.filename.replace(" ", "_"),
         directory: result.options.metadata.directory,
         contentType: result.options.contentType,
       };
