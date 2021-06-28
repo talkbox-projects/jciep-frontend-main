@@ -252,7 +252,7 @@ export default [
         name: "partners",
         label: "合作伙伴 Partners",
         component: "group-list",
-        itemProps: ({ id: key, name: label }) => ({
+        itemProps: ({ id: key, agencyName: label }) => ({
           key,
           label,
         }),
