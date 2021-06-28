@@ -48,12 +48,15 @@ const LoginModal = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
+
+
   const toast = useToast();
 
   const onPhoneLogin = useCallback(({ phone }) => {
     otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
     loginModalDisclosure.onClose();
   }, []);
+  
   const onEmailLogin = useCallback(async ({ email, password }) => {
     try {
       const mutation = gql`

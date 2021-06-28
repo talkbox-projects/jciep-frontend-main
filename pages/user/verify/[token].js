@@ -19,7 +19,7 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
-import { useLoginHook } from "../../../utils/user";
+import { useLoginHook, useCredential } from "../../../utils/user";
 
 const PAGE_KEY = "verify_email";
 
@@ -46,7 +46,9 @@ const VerifyToken = () => {
   const emailVerificationToken = router.query.token;
   const getWording = useGetWording();
   const [emailVerify, setEmailVerify] = useState(null);
-  const setLogin = useLoginHook();
+  const [setCredential, removeCredential] = useCredential();
+  // const setLogin = useLoginHook();
+  const { setUser, setIdentityId } = useAppContext();
 
   const {
     handleSubmit,
@@ -70,16 +72,24 @@ const VerifyToken = () => {
           }
         }
       `;
+
+      
+
       const data = await getGraphQLClient().request(mutation, {
         input: {
           emailVerificationToken,
           password,
         },
       });
-      setLogin(data?.UserLogin?.user);
+
+      console.log(data)
+      setCredential({token : data?.UserLogin?.token,  user: data?.UserLogin?.user})
+      // setLogin(data?.UserLogin?.user);
       setIdentityId(data?.UserLogin?.user?.identities?.[0] ?? null);
-      router.push("/");
+      router.push("/user/identity/select");
+
     } catch (e) {
+      console.log(e)
       setError("password_confirm", {
         message: getWording("emailVerify.user_create_error_message"),
       });
@@ -97,6 +107,7 @@ const VerifyToken = () => {
             }
           }
         `;
+
         const data = await getGraphQLClient().request(query, {
           token: emailVerificationToken,
         });
