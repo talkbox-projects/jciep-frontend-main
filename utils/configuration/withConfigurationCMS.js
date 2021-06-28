@@ -36,7 +36,7 @@ const withConfigurationCMS =
         },
       },
       {
-        values: _configuration,
+        values: _configuration?.value,
       }
     );
 
