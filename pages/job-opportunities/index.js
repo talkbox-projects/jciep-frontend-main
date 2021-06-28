@@ -4,7 +4,7 @@ import withPageCMS from "../../utils/page/withPageCMS";
 
 const PAGE_KEY = "jobOpportunities";
 
-export const getStaticProps = async (context) => {
+export const getServerSideProps = async (context) => {
   return {
     props: {
       page: await getPage({ key: PAGE_KEY, lang: context.locale }),
