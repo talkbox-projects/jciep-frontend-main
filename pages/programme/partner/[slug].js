@@ -23,6 +23,7 @@ import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
 import wordExtractor from "../../../utils/wordExtractor";
 import { AiOutlinePlus } from "react-icons/ai";
+import Container from "../../../components/Container";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -330,58 +331,37 @@ const Partner = ({ page }) => {
           </SimpleGrid>
         </HStack>
 
-        <Flex
-          wrap="wrap"
-          pt={["16px", "16px", "30px"]}
-          pb={["16px", "16px", "24px"]}
-          pl={["16px", "30px"]}
-          pr={["16px", "26px"]}
-          bg="#fff"
-          mb={["90px"]}
-          mx={["0", "0", "56"]}
-          borderRadius="20px"
-        >
-          <Box bg="white" w={["100%", "100%", "50%"]}>
-            <Box w="80%">
+        <Container>
+          <HStack w="100%" align="top">
+            <VStack align="start" flex={1} minW={0} w="100%">
               <Image w="310px" src={partner?.contact?.logo} />
-            </Box>
-            <Text w="80%" pt="16px">
-              {partner?.contact?.label}
-            </Text>
-          </Box>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignContent="flex-start"
-            w={["100%", "100%", "50%"]}
-            mt={["24px", "24px", "0"]}
-          >
-            <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">
-                {wordExtractor(page?.content?.wordings, "addressLabel")}
-              </Text>
-              <Text color="#666666">{partner?.contact?.address}</Text>
-            </Box>
-            <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">
-                {wordExtractor(page?.content?.wordings, "emailLabel")}
-              </Text>
-              <Text color="#666666">{partner?.contact?.email}</Text>
-            </Box>
-            <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">
-                {wordExtractor(page?.content?.wordings, "phoneLabel")}
-              </Text>
-              <Text color="#666666">{partner?.contact?.phone}</Text>
-            </Box>
-            <Box display="flex" justifyContent="flex-start" pb="16px">
-              <Text w="60px" fontWeight="bold" color="#666666">
-                {wordExtractor(page?.content?.wordings, "faxLabel")}
-              </Text>
-              <Text color="#666666">{partner?.contact?.fax}</Text>
-            </Box>
-          </Box>
-        </Flex>
+              <Text>{partner?.contact?.label}</Text>
+            </VStack>
+            <VStack w="40%" align="stretch">
+              {(partner?.contact?.fields ?? []).map(({ id, label, data }) => (
+                <HStack align="start" w="100%" key={id}>
+                  <Text
+                    w={24}
+                    lineHeight={1.5}
+                    fontWeight="bold"
+                    color="#666666"
+                  >
+                    {label}
+                  </Text>
+                  <Text
+                    flex={1}
+                    minW={0}
+                    lineHeight={1.5}
+                    w={"100%"}
+                    color="#666666"
+                  >
+                    {data}
+                  </Text>
+                </HStack>
+              ))}
+            </VStack>
+          </HStack>
+        </Container>
       </Box>
     </VStack>
   );

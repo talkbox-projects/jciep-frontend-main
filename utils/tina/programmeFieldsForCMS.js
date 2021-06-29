@@ -391,30 +391,30 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
+
               {
-                name: "label",
-                label: "標籤 Label",
-                component: "text",
-              },
-              {
-                name: "address",
-                label: "地址 Address",
-                component: "text",
-              },
-              {
-                name: "email",
-                label: "電郵 Email",
-                component: "text",
-              },
-              {
-                name: "phone",
-                label: "電話 Phone",
-                component: "text",
-              },
-              {
-                name: "fax",
-                label: "傳真 Fax",
-                component: "text",
+                name: "fields",
+                label: "欄位 Fields",
+                component: "group-list",
+                itemProps: ({ id: key, label }) => ({
+                  key,
+                  label,
+                }),
+                defaultItem: () => ({
+                  id: Math.random().toString(36).substr(2, 9),
+                }),
+                fields: [
+                  {
+                    name: "label",
+                    label: "標籤 Label",
+                    component: "text",
+                  },
+                  {
+                    name: "data",
+                    label: "內容 data",
+                    component: "text",
+                  },
+                ],
               },
             ],
           },
