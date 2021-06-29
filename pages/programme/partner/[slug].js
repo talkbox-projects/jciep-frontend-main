@@ -5,12 +5,24 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import programmeFieldsForCMS from "../../../utils/tina/programmeFieldsForCMS";
-import { Box, Text, Image, chakra, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Image,
+  chakra,
+  Heading,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  Icon,
+} from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
 import wordExtractor from "../../../utils/wordExtractor";
+import { AiOutlinePlus } from "react-icons/ai";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -212,28 +224,38 @@ const Partner = ({ page }) => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  mb="10px"
-                  zIndex="10000"
-                  w={["80%", "65%", "55%", "45%"]}
-                  pt="36px"
-                >
+                <Accordion defaultIndex={[0]} as={VStack} align="stretch">
                   {(partner?.serviceHighlights[key]?.sections ?? []).map(
                     ({ title, content }, index) => {
                       return (
-                        <Accordian
-                          textAlign="center"
-                          title={title}
-                          boldTitle={true}
-                          description={content}
-                          multi={true}
-                          key={index}
-                          bgColor="#FFFFFF"
-                        />
+                        <AccordionItem borderRadius={16} key={index} bg="white">
+                          <AccordionButton
+                            w="100%"
+                            textAlign="center"
+                            lineHeight={2}
+                            fontWeight="bold"
+                            fontSize="md"
+                          >
+                            <HStack w="100%">
+                              <Text
+                                flex={1}
+                                minW={0}
+                                w="100%"
+                                textAlign="center"
+                              >
+                                {title}
+                              </Text>
+                              <Icon as={AiOutlinePlus} fontSize="2xl" />
+                            </HStack>
+                          </AccordionButton>
+                          <AccordionPanel p={4}>
+                            <MultiTextRenderer data={content} />
+                          </AccordionPanel>
+                        </AccordionItem>
                       );
                     }
                   )}
-                </Box>
+                </Accordion>
               </>
             );
           })}
