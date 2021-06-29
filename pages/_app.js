@@ -1,7 +1,6 @@
 import { ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
 import { withTina } from "tinacms";
 import Header from "../components/Header";
-import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import { NextSeo } from "next-seo";
 import MongooseMediaStore from "../media/store";
@@ -58,7 +57,6 @@ const App = ({ Component, pageProps }) => {
         <NextSeo title="賽馬會共融． 知行計劃" />
         <VStack w="100vw" align="stretch" spacing={0}>
           <Header {...pageProps}></Header>
-          <Navigation {...pageProps}></Navigation>
           <Component {...pageProps} />
           <Footer {...pageProps}></Footer>
         </VStack>

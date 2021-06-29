@@ -9,4 +9,4 @@ const Container = ({ children, ...props }) => {
   );
 };
 
-export default styled(Container);
+export default Container;
