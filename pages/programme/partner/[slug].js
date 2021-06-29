@@ -16,13 +16,15 @@ import {
   AccordionButton,
   AccordionPanel,
   Icon,
+  Tooltip,
+  Divider,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
 import wordExtractor from "../../../utils/wordExtractor";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
 import Container from "../../../components/Container";
 const PAGE_KEY = "programme";
 
@@ -249,7 +251,11 @@ const Partner = ({ page }) => {
                               <Icon as={AiOutlinePlus} fontSize="2xl" />
                             </HStack>
                           </AccordionButton>
-                          <AccordionPanel p={4}>
+                          <AccordionPanel
+                            borderTopWidth={2}
+                            borderTopColor="#eee"
+                            p={4}
+                          >
                             <MultiTextRenderer data={content} />
                           </AccordionPanel>
                         </AccordionItem>
@@ -314,7 +320,7 @@ const Partner = ({ page }) => {
             {(partner?.serviceTargets ?? []).map(
               ({ label, description, image }, index) => {
                 return (
-                  <VStack>
+                  <VStack key={index}>
                     <Image w="150px" src={image} />
                     <Text
                       textAlign="center"
@@ -323,6 +329,13 @@ const Partner = ({ page }) => {
                       fontWeight="semibold"
                     >
                       {label}
+                      {description && (
+                        <Tooltip hasArrow label={description}>
+                          <Text d="inline">
+                            <Icon as={AiOutlineInfoCircle}></Icon>
+                          </Text>
+                        </Tooltip>
+                      )}
                     </Text>
                   </VStack>
                 );

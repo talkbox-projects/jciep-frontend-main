@@ -2,7 +2,19 @@ import { Box, VStack, Grid, GridItem, SimpleGrid } from "@chakra-ui/layout";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
-import { chakra, Heading, Text, Image } from "@chakra-ui/react";
+import {
+  HStack,
+  chakra,
+  Heading,
+  Text,
+  Image,
+  Icon,
+  Accordion,
+  Button,
+  AccordionItem,
+  AccordionPanel,
+  AccordionButton,
+} from "@chakra-ui/react";
 import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import metaTextTemplates from "../../utils/tina/metaTextTemplates";
@@ -10,6 +22,7 @@ import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import Accordian from "../../components/Acordian";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const PAGE_KEY = "programme";
 
@@ -318,7 +331,7 @@ const Programme = ({ page }) => {
             </chakra.span>
           </Box>
         </VStack>
-        <Box px={["8", "12", "24", "48"]}>
+        <Container>
           <SimpleGrid
             columns={[1, 1, 2, 2]}
             gap="36px"
@@ -346,27 +359,58 @@ const Programme = ({ page }) => {
                       >
                         {categoryName}
                       </Heading>
-                      {(items ?? []).map((d, i) => {
-                        return (
-                          <Accordian
-                            multi={true}
-                            boldTitle={true}
-                            textAlign="left"
-                            bgColor="#FAFAFA"
-                            key={i}
-                            title={d.title}
-                            description={d.description}
-                            link={d.links}
-                          />
-                        );
-                      })}
+                      <Accordion w="100%" pt={8} as={VStack} align="stretch">
+                        {(items ?? []).map(
+                          ({ id, title, description, links }) => {
+                            return (
+                              <AccordionItem key={id} border={0} bg="gray.50">
+                                <AccordionButton>
+                                  <HStack w="100%">
+                                    <Text
+                                      flex={1}
+                                      minW={0}
+                                      w="100%"
+                                      lineHeight={2}
+                                      fontWeight="bold"
+                                    >
+                                      {title}
+                                    </Text>
+                                    <Icon as={AiOutlinePlus} fontSize="2xl" />
+                                  </HStack>
+                                </AccordionButton>
+                                <AccordionPanel px={8} color="gray.200">
+                                  <MultiTextRenderer data={description} />
+                                  <VStack spacing={1} mt={8} align="start">
+                                    {(links ?? []).map(({ id, label, url }) => {
+                                      return (
+                                        <NextLink
+                                          key={id}
+                                          href="url"
+                                          target="blank"
+                                        >
+                                          <Button
+                                            variant="link"
+                                            color="#007878"
+                                          >
+                                            {label}
+                                          </Button>
+                                        </NextLink>
+                                      );
+                                    })}
+                                  </VStack>
+                                </AccordionPanel>
+                              </AccordionItem>
+                            );
+                          }
+                        )}
+                      </Accordion>
                     </VStack>{" "}
                   </GridItem>
                 );
               }
             )}
           </SimpleGrid>
-        </Box>
+        </Container>
         <Image
           pos="absolute"
           src={page?.content?.referenceSection?.bgStyle?.bgGradient1}
