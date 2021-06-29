@@ -6,6 +6,7 @@ import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
+import Container from "../../components/Container";
 
 const PAGE_KEY = "pwd";
 

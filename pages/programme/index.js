@@ -13,6 +13,8 @@ import MultiTextRenderer from "./../../components/MultiTextRenderer";
 
 const PAGE_KEY = "programme";
 
+const Iframe = chakra("iframe");
+
 export const getServerSideProps = async (context) => {
   return {
     props: {
@@ -85,50 +87,48 @@ const Programme = ({ page }) => {
       </Box>
 
       {/* Vision Section */}
-      <Box bg={page?.content?.visionSection?.bgColor}>
-        <Container>
-          <VStack align="center" spacing={0} py={16}>
-            <Box mx={["20px", "30px"]}>
-              <chakra.span
-                fontSize={["22px", "30px", "36px"]}
-                textAlign="center"
-                fontWeight="semibold"
-                pos="relative"
-                lineHeight={2}
-                backgroundImage="linear-gradient(#fff, #fff)"
-                backgroundRepeat="no-repeat"
-                backgroundPosition="0 0.7em"
-                pl="15px"
-                pr="15px"
-                pb="10px"
-              >
-                {page?.content?.visionSection?.title}
-              </chakra.span>
-            </Box>
-
-            <Box pt={8}>
-              <MultiTextRenderer
-                data={page?.content?.visionSection?.detail}
-                fontSize={["lg", "xl", "xl"]}
-                textAlign="center"
-                text
-              />
-            </Box>
-
+      <Box bg={page?.content?.visionSection?.bgColor} w="100%">
+        <Container py={24}>
+          <VStack align="center" w="100%">
+            <Text
+              fontSize="4xl"
+              textAlign="center"
+              fontWeight="bold"
+              backgroundImage="linear-gradient(#fff, #fff)"
+              backgroundRepeat="no-repeat"
+              backgroundPosition="0 0.7em"
+            >
+              {page?.content?.visionSection?.title}
+            </Text>
             {(page?.content?.visionSection?.sections ?? []).map(
               ({ title, description, id }, index) => {
                 return (
                   <VStack pt={16} key={id}>
-                    <Box
-                      width="6.15px"
-                      height="27.69px"
-                      borderRadius="5px"
-                      pos="absolute"
-                      left={["-6", "-6", "-12"]}
-                      bottom="-3"
-                      background="#FFFFFF"
-                      transform="rotate(-30deg)"
-                    />
+                    <Box position="relative" mx={["47px", "47px", "0px"]}>
+                      <Text fontWeight="bold" fontSize="xl" textAlign="center">
+                        {page?.content?.partnerSection?.planSection?.title}
+                      </Text>
+                      <Box
+                        width="6.15px"
+                        height="27.69px"
+                        borderRadius="5px"
+                        pos="absolute"
+                        right={["-6", "-6", "-12"]}
+                        bottom="-3"
+                        background="#fff"
+                        transform="rotate(30deg)"
+                      />
+                      <Box
+                        width="6.15px"
+                        height="27.69px"
+                        borderRadius="5px"
+                        pos="absolute"
+                        left={["-6", "-6", "-12"]}
+                        bottom="-3"
+                        background="#fff"
+                        transform="rotate(-30deg)"
+                      />
+                    </Box>
                     <Box pt={8} px="16px">
                       <MultiTextRenderer
                         fontSize={["lg", "xl", "xl"]}
@@ -141,6 +141,33 @@ const Programme = ({ page }) => {
                 );
               }
             )}
+
+            {page?.content?.visionSection?.videoLink && (
+              <Iframe
+                pt={16}
+                w={800}
+                h={480}
+                src={page?.content?.visionSection?.videoLink}
+                title="PWD Video"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            )}
+          </VStack>
+        </Container>
+      </Box>
+      <Box>
+        <Container>
+          <VStack align="center" spacing={0} py={16}>
+            <Box pt={8}>
+              <MultiTextRenderer
+                data={page?.content?.visionSection?.detail}
+                fontSize={["lg", "xl", "xl"]}
+                textAlign="center"
+                text
+              />
+            </Box>
           </VStack>
         </Container>
       </Box>

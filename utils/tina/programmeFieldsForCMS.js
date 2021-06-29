@@ -80,6 +80,11 @@ export default [
           },
         ],
       },
+      {
+        name: "videoLink",
+        label: "YouTube Link",
+        component: "text",
+      },
     ],
   },
   {
