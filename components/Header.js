@@ -373,6 +373,7 @@ const Header = ({ navigation, header }) => {
             <DrawerBody>
               <VStack minH="100%" align="stretch">
                 <Accordion
+                  allowToggle={true}
                   defaultIndex={[0, 1, 2, 3, 4, 5, 6, 7]}
                   flex={1}
                   minH={0}
@@ -394,10 +395,14 @@ const Header = ({ navigation, header }) => {
                               appearance="none"
                               bg="transparent"
                               textAlign="left"
+                              _hover={{ bg: "transparent" }}
                               _focus={{ outline: "none" }}
                               h="100%"
                             >
                               <Button
+                                variant="unstyled"
+                                _hover={{ bg: "transparent" }}
+                                _focus={{ outline: "none" }}
                                 fontSize="2xl"
                                 p={0}
                                 bg="transparent"
