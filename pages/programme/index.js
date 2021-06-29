@@ -372,6 +372,7 @@ const Programme = ({ page }) => {
                                       w="100%"
                                       lineHeight={2}
                                       fontWeight="bold"
+                                      textAlign="left"
                                     >
                                       {title}
                                     </Text>
