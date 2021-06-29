@@ -331,13 +331,21 @@ const Partner = ({ page }) => {
           </SimpleGrid>
         </HStack>
 
-        <Container>
-          <HStack w="100%" align="top">
-            <VStack align="start" flex={1} minW={0} w="100%">
+        <Container maxW={1200} mb={8}>
+          <SimpleGrid
+            columns={[1, 1, 2, 2]}
+            spacing={8}
+            dir={["column", "column", "row", "row"]}
+            bg="white"
+            p={8}
+            w="100%"
+            align="top"
+          >
+            <VStack as={GridItem} align="start">
               <Image w="310px" src={partner?.contact?.logo} />
               <Text>{partner?.contact?.label}</Text>
             </VStack>
-            <VStack w="40%" align="stretch">
+            <VStack as={GridItem} align="stretch">
               {(partner?.contact?.fields ?? []).map(({ id, label, data }) => (
                 <HStack align="start" w="100%" key={id}>
                   <Text
@@ -360,7 +368,7 @@ const Partner = ({ page }) => {
                 </HStack>
               ))}
             </VStack>
-          </HStack>
+          </SimpleGrid>
         </Container>
       </Box>
     </VStack>
