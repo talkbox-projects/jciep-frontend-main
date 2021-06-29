@@ -10,6 +10,10 @@ import {
   Button,
   AspectRatio,
   Link,
+  SimpleGrid,
+  GridItem,
+  HStack,
+  Icon,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -19,6 +23,8 @@ import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import React from "react";
+import Container from "../../components/Container";
+import { AiFillBulb, AiOutlineBulb } from "react-icons/ai";
 
 const PAGE_KEY = "pwd";
 
@@ -383,7 +389,7 @@ const PwdDetail = ({ page }) => {
           {wordExtractor(page?.content?.wordings, "jobTypeSectionDescription")}
         </Text>
 
-        <Box mt={["24px", "24px", "48px"]}>
+        <Container mt={["24px", "24px", "48px"]} pb={48}>
           <Box display="flex" justifyContent="center">
             {(pwd?.careerSection?.sections ?? []).map((section, i) => {
               const active = activeJob ? activeJob === section.id : i === 0;
@@ -411,36 +417,19 @@ const PwdDetail = ({ page }) => {
             })}
           </Box>
 
-          <Grid
-            templateColumns={[
-              "repeat(1, 288px)",
-              "repeat(1, 288px)",
-              "repeat(2, 320px)",
-            ]}
-            gap={["16px", "16px", "48px"]}
-          >
-            {activeJobItems.map((item, i) => (
-              <Box
-                key={i}
-                bg="#fff"
-                borderRadius="24px"
-                border="1px solid #fff"
-                zIndex={3}
-              >
-                <Image src={item.image} />
-                <Box
-                  h={["76px", "76px", "92px"]}
-                  verticalAlign="center"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Text>{item.caption}</Text>
-                </Box>
-              </Box>
+          <SimpleGrid columns={[1, 2, 2, 2]} spacing={16} align="start">
+            {activeJobItems.map((item, index) => (
+              <GridItem key={index} w="100%">
+                <HStack align="start" spacing={4} w="100%">
+                  <Icon fontSize="2xl" as={AiOutlineBulb} color="white" />
+                  <Text fontSize="xl" flex={1} minW={0} w="100%">
+                    {item.caption}
+                  </Text>
+                </HStack>
+              </GridItem>
             ))}
-          </Grid>
-        </Box>
+          </SimpleGrid>
+        </Container>
 
         <Box>
           <Image

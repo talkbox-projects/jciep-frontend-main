@@ -3,6 +3,21 @@ import metaTextTemplates from "./metaTextTemplates";
 export default [
   {
     name: "banner",
+    label: "職業資料 Job Details",
+    component: "group",
+    fields: [
+      {
+        label: "項目圖標 Bullet Point Icon",
+        name: "bulletIcon",
+        component: "image",
+        uploadDir: () => "/pwd",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+    ],
+  },
+  {
+    name: "banner",
     label: "頁面橫幅 Hero Banner",
     component: "group",
     fields: [
@@ -121,7 +136,7 @@ export default [
             parse: ({ previewSrc }) => previewSrc,
             previewSrc: (src) => src,
           },
-        ]
+        ],
       },
       {
         name: "pwds",
@@ -135,7 +150,6 @@ export default [
           id: Math.random().toString(36).substr(2, 9),
         }),
         fields: [
-          
           {
             name: "slug",
             label: "後綴路由 Slug for this partner",
@@ -188,7 +202,7 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
-            ]
+            ],
           },
 
           {
@@ -236,9 +250,9 @@ export default [
                         component: "blocks",
                         templates: metaTextTemplates,
                       },
-                    ]
-                  }
-                ]
+                    ],
+                  },
+                ],
               },
             ],
           },
@@ -276,7 +290,7 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
-            ]
+            ],
           },
 
           {
@@ -310,7 +324,7 @@ export default [
                     name: "color",
                     label: "Color of Trait(Yellow/White)",
                     component: "color",
-                  }
+                  },
                 ],
               },
               {
@@ -578,7 +592,7 @@ export default [
                 uploadDir: () => "/pwd",
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
-              }
+              },
             ],
           },
           {
@@ -601,12 +615,11 @@ export default [
                 uploadDir: () => "/pwd",
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
-              }
-            ]
-          }
+              },
+            ],
+          },
         ],
-      }
-    ]
-    
+      },
+    ],
   },
 ];
