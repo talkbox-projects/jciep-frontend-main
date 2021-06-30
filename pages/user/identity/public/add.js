@@ -70,7 +70,7 @@ const IdentityPublicAdd = ({ page }) => {
         console.log(industry);
         console.log(terms);
 
-        router.push("/" + page.lang + "/user/organization/ngo/add");
+        router.push("/user/identity/public/1/success");
       } catch (e) {
         console.log(e);
       }

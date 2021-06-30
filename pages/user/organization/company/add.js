@@ -60,7 +60,7 @@ const OrganizationCompanyAdd = ({ page }) => {
         // console.log(contactNumber)
         // console.log(terms)
 
-        router.push("/" + page.lang + "/user/organization/company/1/pending");
+        router.push("/user/organization/company/1/pending");
       } catch (e) {
         console.log(e);
       }

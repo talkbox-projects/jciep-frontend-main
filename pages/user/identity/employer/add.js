@@ -60,7 +60,7 @@ const IdentityEmployerAdd = ({ page }) => {
         console.log(contactNumber);
         console.log(terms);
 
-        router.push("/" + page.lang + "/user/organization/company/add");
+        router.push( "/user/organization/company/add");
       } catch (e) {
         console.log(e);
       }

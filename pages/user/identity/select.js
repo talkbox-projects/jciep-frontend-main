@@ -36,8 +36,9 @@ export const getServerSideProps = async (context) => {
 };
 
 const IdentitySelect = ({ page }) => {
+  
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
-
+  
   const onRoleSelect = (e, role) => {
     let elements = document.getElementsByClassName("box");
     resetSelectedRole(elements, elements.length);

@@ -60,7 +60,7 @@ const IdentityStaffAdd = ({ page }) => {
         console.log(contactNumber);
         console.log(terms);
 
-        router.push("/" + page.lang + "/user/organization/ngo/add");
+        router.push("/user/organization/ngo/add");
       } catch (e) {
         console.log(e);
       }

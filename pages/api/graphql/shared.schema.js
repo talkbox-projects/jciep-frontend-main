@@ -30,6 +30,20 @@ export default gql`
     fullTime
     partTime
   }
+
+  enum PwdType {
+    hearingImpairment
+    visualImpairment
+    speechImpairment
+    physicalImpairment
+    autism
+    mentalIllnessMoodDisorder
+    intellectualDisability
+    visceralDisabilityPersonswithChronicDiseases
+    specificLearningDifficulties
+    attentionDeficitHyperactivityDisorder
+  }
+  
   enum Industry {
     designArt
     graphicDesign

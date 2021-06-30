@@ -74,7 +74,7 @@ const IdentityPwdAdd = ({ page }) => {
         console.log(industry);
         console.log(terms);
 
-        router.push("/" + page.lang + "/user/identity/pwd/1/success");
+        router.push("/user/identity/pwd/1/success");
       } catch (e) {
         console.log(e);
       }
