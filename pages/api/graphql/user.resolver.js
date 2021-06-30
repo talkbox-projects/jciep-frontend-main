@@ -1,6 +1,10 @@
 import { EmailVerify, PhoneVerify, User } from "./user.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../services/email";
+import {sendSms} from "../services/phone";
+import {genders, employementModes, identityTypes, districts, pwdType, industry } from './constants/enum'
+
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
@@ -42,7 +46,13 @@ export default {
        */
       try {
         const emailVerify = await EmailVerify.create({ email });
-        console.log(emailVerify)
+        let host = process.env.HOST_URL ? process.env.HOST_URL : 'http://localhost:3000'
+        await sendEmail({
+          To: email,
+          Subject: 'Email Verification',
+          Text: `Please verify your email by clicking the link ${host}/user/verify/${emailVerify.token}`,
+        })
+        return true;
         return true;
       } catch (error) {
         console.error(error);
@@ -101,9 +111,9 @@ export default {
             },
             { upsert: true, new: true }
           );
-          console.log(user)
           await emailVerify.delete();
           const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          
           return { token, user };
         }
       } else if (input?.email && input?.password) {
@@ -137,7 +147,9 @@ export default {
 
     UserGet: async (_parent, { token }) => {
       try {
-        return jwt.decode(token, "shhhhh");
+        let user = jwt.decode(token, "shhhhh");
+        return await User.findById(user._id)
+        
       } catch (error) {
         return null;
       }

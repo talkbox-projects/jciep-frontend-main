@@ -64,6 +64,7 @@ const LoginModal = () => {
           UserLogin(input: $input) {
             token
             user {
+              id
               email
               identities {
                 id

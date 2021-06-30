@@ -65,7 +65,7 @@ const Home = ({ page }) => {
       {/* First Section */}
       <Box h={["100vh"]} position="relative" overflow="hidden">
         <AspectRatio h="100%" ratio={5 / 3}>
-          <Video h="100%" src="/banner_video.mp4" autoplay="true" loop></Video>
+          <Video h="100%" src="/banner_video.mp4" autoPlay="true" loop></Video>
         </AspectRatio>
         <VStack
           zIndex={10}

@@ -18,6 +18,7 @@ export default gql`
   }
 
   type User {
+    id: ID
     phone: String
     email: String
     facebookId: String
