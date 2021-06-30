@@ -25,7 +25,7 @@ const PAGE_KEY = "identity_public_add";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -42,8 +42,8 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityPublicAdd = ({page}) => {
-  const router = useRouter()
+const IdentityPublicAdd = ({ page }) => {
+  const router = useRouter();
   const {
     handleSubmit,
     setError,
@@ -51,25 +51,31 @@ const IdentityPublicAdd = ({page}) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const onFormSubmit = useCallback(
+    async ({
+      chinese_name,
+      english_name,
+      date_of_birth,
+      gender,
+      resident_district,
+      industry,
+      terms,
+    }) => {
+      try {
+        console.log(chinese_name);
+        console.log(english_name);
+        console.log(date_of_birth);
+        console.log(gender);
+        console.log(resident_district);
+        console.log(industry);
+        console.log(terms);
 
-  const onFormSubmit = useCallback(async ({ chinese_name, english_name, date_of_birth , gender, resident_district,  industry , terms  }) => {
-    try {
-      console.log(chinese_name)
-      console.log(english_name)
-      console.log(date_of_birth)
-      console.log(gender)
-      console.log(resident_district)
-      console.log(industry)
-      console.log(terms)
-
-      router.push("/" + page.lang + "/user/organization/ngo/add")
-
-    } catch (e) {
-      console.log(e)
+        router.push("/" + page.lang + "/user/organization/ngo/add");
+      } catch (e) {
+        console.log(e);
+      }
     }
-  });
-
-
+  );
 
   return (
     <VStack py={36}>
@@ -77,11 +83,7 @@ const IdentityPublicAdd = ({page}) => {
       <Text fontSize="30px" marginTop="5px">
         {page?.content?.step?.subTitle}
       </Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="40px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="40px !important">
         <Box
           maxWidth={800}
           width="100%"
@@ -93,90 +95,102 @@ const IdentityPublicAdd = ({page}) => {
             {page?.content?.heading?.description}
           </Text>
           <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
-
             <SimpleGrid pt={16} columns={[1, 2, 2, 2]} spacing={4} width="100%">
-              <GridItem >
+              <GridItem>
                 <FormControl>
-            
-                  <FormLabel>
-                    {page?.content?.form?.chineseName}
-                  </FormLabel>
-                  <Input type="text" placeholder="" {...register("chinese_name")} />
-                  <FormHelperText>{errors?.chinese_name?.message}</FormHelperText>
-
+                  <FormLabel>{page?.content?.form?.chineseName}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("chinese_name")}
+                  />
+                  <FormHelperText>
+                    {errors?.chinese_name?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
-                  <FormLabel>
-                  {page?.content?.form?.englishName}
-                  </FormLabel>
-                  <Input type="text" placeholder="" {...register("english_name")} />
-                  <FormHelperText>{errors?.english_name?.message}</FormHelperText>
-
+                  <FormLabel>{page?.content?.form?.englishName}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("english_name")}
+                  />
+                  <FormHelperText>
+                    {errors?.english_name?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.dob}</FormLabel>
-                  <Input type="date" placeholder="" {...register("date_of_birth")} />
-                  <FormHelperText>{errors?.date_of_birth?.message}</FormHelperText>
-
+                  <Input
+                    type="date"
+                    placeholder=""
+                    {...register("date_of_birth")}
+                  />
+                  <FormHelperText>
+                    {errors?.date_of_birth?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.gender?.label}</FormLabel>
-                  <Select  {...register("gender")} >
+                  <Select {...register("gender")}>
                     {page?.content?.form?.gender?.options?.map((option) => {
-                      return <option value={option.value}>{option.label}</option>
-                    })
-                    }
+                      return (
+                        <option value={option.value}>{option.label}</option>
+                      );
+                    })}
                   </Select>
                   <FormHelperText>{errors?.gender?.message}</FormHelperText>
-
                 </FormControl>
               </GridItem>
 
-              <GridItem >
+              <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.residentRestrict?.label}</FormLabel>
-                  <Select  {...register("resident_district")} >
-                    {page?.content?.form?.residentRestrict?.options?.map((option) => {
-                      return <option value={option.value}>{option.label}</option>
-                    })
-                    }
+                  <FormLabel>
+                    {page?.content?.form?.residentRestrict?.label}
+                  </FormLabel>
+                  <Select {...register("resident_district")}>
+                    {page?.content?.form?.residentRestrict?.options?.map(
+                      (option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
+                      }
+                    )}
                   </Select>
-                  <FormHelperText>{errors?.resident_district?.message}</FormHelperText>
+                  <FormHelperText>
+                    {errors?.resident_district?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
 
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.industry?.label}</FormLabel>
-                  <Select  {...register("industry")} >
-                     {page?.content?.form?.industry?.options?.map((option) => {
-                        return <option value={option.value}>{option.label}</option>
-                      })
-                      }
+                  <Select {...register("industry")}>
+                    {page?.content?.form?.industry?.options?.map((option) => {
+                      return (
+                        <option value={option.value}>{option.label}</option>
+                      );
+                    })}
                   </Select>
                   <FormHelperText>{errors?.industry?.message}</FormHelperText>
-
                 </FormControl>
               </GridItem>
-
             </SimpleGrid>
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms")} >
-              {page?.content?.form?.terms}
+              <Checkbox colorScheme="green" {...register("terms")}>
+                {page?.content?.form?.terms}
               </Checkbox>
               <FormHelperText>{errors?.terms?.message}</FormHelperText>
-
             </FormControl>
 
-            <FormControl
-              textAlign="center"
-            >
+            <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"
                 borderRadius="22px"
@@ -184,19 +198,18 @@ const IdentityPublicAdd = ({page}) => {
                 width="117.93px"
                 type="submit"
               >
-               {page?.content?.form?.continue}
+                {page?.content?.form?.continue}
               </Button>
             </FormControl>
           </VStack>
-
         </Box>
       </Box>
     </VStack>
   );
 };
 
-export default withPageCMS(IdentityPublicAdd, { 
-  key: PAGE_KEY ,
+export default withPageCMS(IdentityPublicAdd, {
+  key: PAGE_KEY,
   fields: [
     {
       name: "step",
@@ -225,7 +238,6 @@ export default withPageCMS(IdentityPublicAdd, {
           label: "描述 Description",
           component: "text",
         },
-        
       ],
     },
     {
@@ -270,7 +282,6 @@ export default withPageCMS(IdentityPublicAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -281,14 +292,13 @@ export default withPageCMS(IdentityPublicAdd, {
                   label: "價值 Value",
                   component: "text",
                 },
-
               ],
             },
           ],
         },
         {
           name: "residentRestrict",
-          label: "居住區 Resident District " ,
+          label: "居住區 Resident District ",
           component: "group",
           fields: [
             {
@@ -308,7 +318,6 @@ export default withPageCMS(IdentityPublicAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -345,7 +354,6 @@ export default withPageCMS(IdentityPublicAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -372,6 +380,5 @@ export default withPageCMS(IdentityPublicAdd, {
         },
       ],
     },
-  ]
-
+  ],
 });

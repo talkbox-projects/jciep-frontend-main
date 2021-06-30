@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
 import { withTina } from "tinacms";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -57,7 +57,9 @@ const App = ({ Component, pageProps }) => {
         <NextSeo title="賽馬會共融． 知行計劃" />
         <VStack w="100vw" align="stretch" spacing={0}>
           <Header {...pageProps}></Header>
-          <Component {...pageProps} />
+          <Box mt={[-16, -16, -12, -12]}>
+            <Component {...pageProps} />
+          </Box>
           <Footer {...pageProps}></Footer>
         </VStack>
       </ChakraProvider>

@@ -9,7 +9,7 @@ const PAGE_KEY = "identity_pwd_add_success";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -25,15 +25,11 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-const IdentityPwdAddSuccess = ({page}) => {
+const IdentityPwdAddSuccess = ({ page }) => {
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="10px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="10px !important">
         <Box
           maxWidth={600}
           width="100%"
@@ -50,56 +46,47 @@ const IdentityPwdAddSuccess = ({page}) => {
             width="150px"
             marginTop="30px !important"
             margin="auto"
-            src={page?.content?.pwdSuccess?.image} />
+            src={page?.content?.pwdSuccess?.image}
+          />
 
-            <Text marginTop="30px">
-              {page?.content?.pwdSuccess?.description}
-            </Text>
+          <Text marginTop="30px">{page?.content?.pwdSuccess?.description}</Text>
 
-            <Box 
-              width="100%" 
-              textAlign="center"
-            >
-              <Link href="/">
-                <Button
+          <Box width="100%" textAlign="center">
+            <Link href="/">
+              <Button
                 color="#1E1E1E"
                 boxSizing="border-box"
                 height="46px"
-                width= "114px"
+                width="114px"
                 border="2px solid #C6C6C6"
                 borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"
+              >
+                {page?.content?.pwdSuccess?.button}
+              </Button>
+            </Link>
+          </Box>
 
-
-                >
-                  {page?.content?.pwdSuccess?.button}
-                </Button>
-              </Link>
-            </Box>
-            
-            <Text
-              marginTop="35px"
-              fontWeight={600}
-              textAlign="center"
-              fontSize="16px"
-            >
-              {page?.content?.footer?.email}
-            </Text>
-            <Text
-              marginTop="30px"
-              textAlign="center"
-            >
-              {page?.content?.footer?.drop}
-            </Text>
+          <Text
+            marginTop="35px"
+            fontWeight={600}
+            textAlign="center"
+            fontSize="16px"
+          >
+            {page?.content?.footer?.email}
+          </Text>
+          <Text marginTop="30px" textAlign="center">
+            {page?.content?.footer?.drop}
+          </Text>
         </Box>
       </Box>
     </VStack>
   );
 };
 
-export default withPageCMS(IdentityPwdAddSuccess, { 
+export default withPageCMS(IdentityPwdAddSuccess, {
   key: PAGE_KEY,
   fields: [
     {
@@ -111,7 +98,7 @@ export default withPageCMS(IdentityPwdAddSuccess, {
           name: "title",
           label: "主標題 Title",
           component: "text",
-        }
+        },
       ],
     },
     {
@@ -149,7 +136,6 @@ export default withPageCMS(IdentityPwdAddSuccess, {
           label: "文本 button text",
           component: "text",
         },
-
       ],
     },
     {
@@ -169,5 +155,5 @@ export default withPageCMS(IdentityPwdAddSuccess, {
         },
       ],
     },
-  ]
+  ],
 });

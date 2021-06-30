@@ -7,7 +7,7 @@ const PAGE_KEY = "jobOpportunities";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

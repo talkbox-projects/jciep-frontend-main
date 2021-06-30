@@ -1,4 +1,13 @@
-import { Box, Button, Text, VStack, Heading, SimpleGrid, GridItem, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  VStack,
+  Heading,
+  SimpleGrid,
+  GridItem,
+  Image,
+} from "@chakra-ui/react";
 import { getConfiguration } from "../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
@@ -9,7 +18,7 @@ const PAGE_KEY = "identity_select";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -27,22 +36,21 @@ export const getServerSideProps = async (context) => {
 };
 
 const IdentitySelect = ({ page }) => {
-
-  const [selectedRole, setSelectedRole] = useState('/user/identity/pwd/add')
+  const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
 
   const onRoleSelect = (e, role) => {
-    let elements = document.getElementsByClassName('box')
-    resetSelectedRole(elements, elements.length)
+    let elements = document.getElementsByClassName("box");
+    resetSelectedRole(elements, elements.length);
 
     e.currentTarget.style.backgroundColor = "#F6D644";
-    setSelectedRole(role)
-  }
+    setSelectedRole(role);
+  };
 
   const resetSelectedRole = (elements, value) => {
     for (let i = 0; i < value; i++) {
-      elements[i].style.backgroundColor = '#ffffff'
+      elements[i].style.backgroundColor = "#ffffff";
     }
-  }
+  };
 
   return (
     <VStack py={36}>
@@ -50,11 +58,7 @@ const IdentitySelect = ({ page }) => {
       <Text fontSize="30px" marginTop="5px">
         {page?.content?.step?.subTitle}
       </Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="40px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="40px !important">
         <Box
           maxWidth={1100}
           width="100%"
@@ -69,7 +73,7 @@ const IdentitySelect = ({ page }) => {
             {page?.content?.heading?.title}
           </Heading>
           <SimpleGrid pt={16} columns={[1, 1, 2, 3]} spacing={8}>
-            <GridItem >
+            <GridItem>
               <Box
                 h="300"
                 textAlign="center"
@@ -77,23 +81,22 @@ const IdentitySelect = ({ page }) => {
                 className="box"
                 borderRadius="20px"
                 backgroundColor="#F6D644"
-                onClick={(e) => { onRoleSelect(e, "/user/identity/pwd/add") }}
+                onClick={(e) => {
+                  onRoleSelect(e, "/user/identity/pwd/add");
+                }}
               >
                 <Image
                   height="150px"
                   width="150px"
                   margin="auto"
-                  src={page?.content?.pwd?.image} />
-                <Text
-                  marginTop="20px !important"
-                  width="190px"
-                  margin="auto"
-                >
+                  src={page?.content?.pwd?.image}
+                />
+                <Text marginTop="20px !important" width="190px" margin="auto">
                   {page?.content?.pwd?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem >
+            <GridItem>
               <Box
                 h="300"
                 textAlign="center"
@@ -101,23 +104,22 @@ const IdentitySelect = ({ page }) => {
                 className="box"
                 borderRadius="20px"
                 backgroundColor="#FFFFFF"
-                onClick={(e) => { onRoleSelect(e, "/user/identity/employer/add") }}
+                onClick={(e) => {
+                  onRoleSelect(e, "/user/identity/employer/add");
+                }}
               >
                 <Image
                   height="150px"
                   width="150px"
                   margin="auto"
-                  src={page?.content?.employeer?.image} />
-                <Text
-                  marginTop="20px !important"
-                  width="190px"
-                  margin="auto"
-                >
+                  src={page?.content?.employeer?.image}
+                />
+                <Text marginTop="20px !important" width="190px" margin="auto">
                   {page?.content?.employeer?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem >
+            <GridItem>
               <Box
                 h="300"
                 textAlign="center"
@@ -125,23 +127,22 @@ const IdentitySelect = ({ page }) => {
                 className="box"
                 borderRadius="20px"
                 backgroundColor="#FFFFFF"
-                onClick={(e) => { onRoleSelect(e, "/user/identity/staff/add") }}
+                onClick={(e) => {
+                  onRoleSelect(e, "/user/identity/staff/add");
+                }}
               >
                 <Image
                   height="150px"
                   width="150px"
                   margin="auto"
-                  src={page?.content?.ngo?.image} />
-                <Text
-                  marginTop="20px !important"
-                  width="190px"
-                  margin="auto"
-                >
+                  src={page?.content?.ngo?.image}
+                />
+                <Text marginTop="20px !important" width="190px" margin="auto">
                   {page?.content?.ngo?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem >
+            <GridItem>
               <Box
                 h="300"
                 textAlign="center"
@@ -150,27 +151,23 @@ const IdentitySelect = ({ page }) => {
                 className="box"
                 backgroundColor="#FFFFFF"
                 borderRadius="20px"
-                onClick={(e) => { onRoleSelect(e, "/user/identity/public/add") }}
+                onClick={(e) => {
+                  onRoleSelect(e, "/user/identity/public/add");
+                }}
               >
                 <Image
                   height="150px"
                   width="150px"
                   margin="auto"
-                  src={page?.content?.public?.image} />
-                <Text
-                  marginTop="20px !important"
-                  width="190px"
-                  margin="auto"
-                >
+                  src={page?.content?.public?.image}
+                />
+                <Text marginTop="20px !important" width="190px" margin="auto">
                   {page?.content?.public?.title}
                 </Text>
               </Box>
             </GridItem>
           </SimpleGrid>
-          <Box
-            textAlign="center"
-            marginTop="30px"
-          >
+          <Box textAlign="center" marginTop="30px">
             <Link href={selectedRole}>
               <Button
                 backgroundColor="#F6D644"
@@ -181,18 +178,10 @@ const IdentitySelect = ({ page }) => {
                 {page?.content?.footer?.button}
               </Button>
             </Link>
-            <Text
-              marginTop="35px"
-              fontWeight={600}
-              fontSize="16px"
-            >
+            <Text marginTop="35px" fontWeight={600} fontSize="16px">
               {page?.content?.footer?.email}
             </Text>
-            <Text
-              marginTop="30px"
-            >
-              {page?.content?.footer?.drop}
-            </Text>
+            <Text marginTop="30px">{page?.content?.footer?.drop}</Text>
           </Box>
         </Box>
       </Box>
@@ -200,145 +189,139 @@ const IdentitySelect = ({ page }) => {
   );
 };
 
-export default withPageCMS(IdentitySelect,
-  {
-    key: PAGE_KEY,
-    fields: [
-      {
-        name: "step",
-        label: "標題 step",
-        component: "group",
-        fields: [
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-          {
-            name: "subTitle",
-            label: "副標題 Sub title",
-            component: "text",
-          },
-
-        ],
-      },
-      {
-        name: "heading",
-        label: "標題 Heading",
-        component: "group",
-        fields: [
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-
-        ],
-      },
-      {
-        name: "pwd",
-        label: "殘疾人士 PWD",
-        component: "group",
-        fields: [
-          {
-            label: "身份 Image",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/identity",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-
-        ],
-      },
-      {
-        name: "employeer",
-        label: "雇主 Employeer",
-        component: "group",
-        fields: [
-          {
-            label: "身份 Image",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/identity",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-        ],
-      },
-      {
-        name: "ngo",
-        label: "非政府組織 NGO",
-        component: "group",
-        fields: [
-          {
-            label: "身份 Image",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/identity",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-        ],
-      },
-      {
-        name: "public",
-        label: "上市 Public",
-        component: "group",
-        fields: [
-          {
-            label: "身份 Image",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/identity",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "主標題 Title",
-            component: "text",
-          },
-        ],
-      },
-      {
-        name: "footer",
-        label: "頁腳 Footer",
-        component: "group",
-        fields: [
-          {
-            name: "button",
-            label: "主標題 Title",
-            component: "text",
-          },
-          {
-            name: "email",
-            label: "電子郵件 Email",
-            component: "text",
-          },
-          {
-            name: "drop",
-            label: "降低 Drop",
-            component: "text",
-          },
-        ],
-      },
-    ]
-  }
-);
-
+export default withPageCMS(IdentitySelect, {
+  key: PAGE_KEY,
+  fields: [
+    {
+      name: "step",
+      label: "標題 step",
+      component: "group",
+      fields: [
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+        {
+          name: "subTitle",
+          label: "副標題 Sub title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "heading",
+      label: "標題 Heading",
+      component: "group",
+      fields: [
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "pwd",
+      label: "殘疾人士 PWD",
+      component: "group",
+      fields: [
+        {
+          label: "身份 Image",
+          name: "image",
+          component: "image",
+          uploadDir: () => "/identity",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "employeer",
+      label: "雇主 Employeer",
+      component: "group",
+      fields: [
+        {
+          label: "身份 Image",
+          name: "image",
+          component: "image",
+          uploadDir: () => "/identity",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "ngo",
+      label: "非政府組織 NGO",
+      component: "group",
+      fields: [
+        {
+          label: "身份 Image",
+          name: "image",
+          component: "image",
+          uploadDir: () => "/identity",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "public",
+      label: "上市 Public",
+      component: "group",
+      fields: [
+        {
+          label: "身份 Image",
+          name: "image",
+          component: "image",
+          uploadDir: () => "/identity",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+      ],
+    },
+    {
+      name: "footer",
+      label: "頁腳 Footer",
+      component: "group",
+      fields: [
+        {
+          name: "button",
+          label: "主標題 Title",
+          component: "text",
+        },
+        {
+          name: "email",
+          label: "電子郵件 Email",
+          component: "text",
+        },
+        {
+          name: "drop",
+          label: "降低 Drop",
+          component: "text",
+        },
+      ],
+    },
+  ],
+});

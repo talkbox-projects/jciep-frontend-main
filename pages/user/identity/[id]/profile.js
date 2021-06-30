@@ -8,7 +8,7 @@ const PAGE_KEY = "identity_id_profile";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: await getPage({ key: PAGE_KEY, lang: context.locale }) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

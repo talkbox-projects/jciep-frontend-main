@@ -9,7 +9,7 @@ const PAGE_KEY = "organization_company_pending";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -25,18 +25,11 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-const OrganizationCompanyPending = ({page}) => {
-
-
-  
+const OrganizationCompanyPending = ({ page }) => {
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="10px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="10px !important">
         <Box
           maxWidth={600}
           width="100%"
@@ -53,56 +46,49 @@ const OrganizationCompanyPending = ({page}) => {
             width="150px"
             marginTop="30px !important"
             margin="auto"
-            src={page?.content?.companySuccess?.image} />
+            src={page?.content?.companySuccess?.image}
+          />
 
-            <Text marginTop="30px">
-              {page?.content?.companySuccess?.description}
-            </Text>
+          <Text marginTop="30px">
+            {page?.content?.companySuccess?.description}
+          </Text>
 
-            <Box 
-              width="100%" 
-              textAlign="center"
-            >
-              <Link href="/">
-                <Button
+          <Box width="100%" textAlign="center">
+            <Link href="/">
+              <Button
                 color="#1E1E1E"
                 boxSizing="border-box"
                 height="46px"
-                width= "114px"
+                width="114px"
                 border="2px solid #C6C6C6"
                 borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"
+              >
+                {page?.content?.companySuccess?.button}
+              </Button>
+            </Link>
+          </Box>
 
-
-                >
-                  {page?.content?.companySuccess?.button}
-                </Button>
-              </Link>
-            </Box>
-            
-            <Text
-              marginTop="35px"
-              fontWeight={600}
-              textAlign="center"
-              fontSize="16px"
-            >
-              {page?.content?.footer?.email}
-            </Text>
-            <Text
-              marginTop="30px"
-              textAlign="center"
-            >
-              {page?.content?.footer?.drop}
-            </Text>
+          <Text
+            marginTop="35px"
+            fontWeight={600}
+            textAlign="center"
+            fontSize="16px"
+          >
+            {page?.content?.footer?.email}
+          </Text>
+          <Text marginTop="30px" textAlign="center">
+            {page?.content?.footer?.drop}
+          </Text>
         </Box>
       </Box>
     </VStack>
   );
 };
 
-export default withPageCMS(OrganizationCompanyPending, { 
+export default withPageCMS(OrganizationCompanyPending, {
   key: PAGE_KEY,
   fields: [
     {
@@ -114,7 +100,7 @@ export default withPageCMS(OrganizationCompanyPending, {
           name: "title",
           label: "主標題 Title",
           component: "text",
-        }
+        },
       ],
     },
     {
@@ -152,7 +138,6 @@ export default withPageCMS(OrganizationCompanyPending, {
           label: "文本 button text",
           component: "text",
         },
-
       ],
     },
     {
@@ -172,5 +157,5 @@ export default withPageCMS(OrganizationCompanyPending, {
         },
       ],
     },
-  ]
+  ],
 });

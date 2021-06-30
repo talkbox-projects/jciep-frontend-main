@@ -11,7 +11,7 @@ import {
   FormLabel,
   Textarea,
 } from "@chakra-ui/react";
-import { useCallback} from "react";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
@@ -25,7 +25,7 @@ const PAGE_KEY = "organization_ngo_add";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -41,9 +41,8 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-const OrganizationNgoAdd = ({page}) => {
-
-  const router = useRouter()
+const OrganizationNgoAdd = ({ page }) => {
+  const router = useRouter();
   const {
     handleSubmit,
     setError,
@@ -51,20 +50,25 @@ const OrganizationNgoAdd = ({page}) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const onFormSubmit = useCallback(
+    async ({
+      chineseOrganizationName,
+      englishOrganizationName,
+      ngoWebsite,
+      ngoDescription,
+    }) => {
+      try {
+        console.log(chineseOrganizationName);
+        console.log(englishOrganizationName);
+        console.log(ngoWebsite);
+        console.log(ngoDescription);
 
-  const onFormSubmit = useCallback(async ({ chineseOrganizationName, englishOrganizationName, ngoWebsite, ngoDescription  }) => {
-    try {
-      console.log(chineseOrganizationName)
-      console.log(englishOrganizationName)
-      console.log(ngoWebsite)
-      console.log(ngoDescription)
-
-      router.push( "/" +page.lang + "/user/organization/ngo/1/pending")
-    } catch (e) {
-      console.log(e)
+        router.push("/" + page.lang + "/user/organization/ngo/1/pending");
+      } catch (e) {
+        console.log(e);
+      }
     }
-  });
-
+  );
 
   return (
     <VStack py={36}>
@@ -72,11 +76,7 @@ const OrganizationNgoAdd = ({page}) => {
       <Text fontSize="30px" marginTop="5px">
         {page?.content?.step?.subTitle}
       </Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="30px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="30px !important">
         <Box
           maxWidth={800}
           width="100%"
@@ -85,50 +85,61 @@ const OrganizationNgoAdd = ({page}) => {
           padding="25px"
         >
           <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
-            <SimpleGrid  columns={[1, 2, 2, 2]} spacing={4} width="100%">
-              <GridItem >
+            <SimpleGrid columns={[1, 2, 2, 2]} spacing={4} width="100%">
+              <GridItem>
                 <FormControl>
                   <FormLabel>
                     {page?.content?.form?.chineseOrganizationName}
                   </FormLabel>
-                  <Input type="text" placeholder="" {...register("chineseOrganizationName")} />
-                  <FormHelperText>{errors?.chineseOrganizationName?.message}</FormHelperText>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("chineseOrganizationName")}
+                  />
+                  <FormHelperText>
+                    {errors?.chineseOrganizationName?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>
-                  {page?.content?.form?.englishOrganizationName}
+                    {page?.content?.form?.englishOrganizationName}
                   </FormLabel>
-                  <Input type="text" placeholder="" {...register("englishOrganizationName")} />
-                  <FormHelperText>{errors?.englishOrganizationName?.message}</FormHelperText>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("englishOrganizationName")}
+                  />
+                  <FormHelperText>
+                    {errors?.englishOrganizationName?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              
-              <GridItem >
+
+              <GridItem>
                 <FormControl>
-                  <FormLabel>
-                  {page?.content?.form?.ngoWebsite}
-                  </FormLabel>
-                  <Input type="text" placeholder="" {...register("ngoWebsite")} />
+                  <FormLabel>{page?.content?.form?.ngoWebsite}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("ngoWebsite")}
+                  />
                   <FormHelperText>{errors?.ngoWebsite?.message}</FormHelperText>
                 </FormControl>
               </GridItem>
-             
             </SimpleGrid>
 
             <FormControl marginTop="20px !important">
-            <FormLabel>
-                  {page?.content?.form?.ngoDescription}
-                  </FormLabel>
-              <Textarea placeholder="" {...register("ngoDescription")}></Textarea>
+              <FormLabel>{page?.content?.form?.ngoDescription}</FormLabel>
+              <Textarea
+                placeholder=""
+                {...register("ngoDescription")}
+              ></Textarea>
               <FormHelperText>{errors?.ngoDescription?.message}</FormHelperText>
             </FormControl>
 
-
-            <FormControl
-              textAlign="center"
-            >
+            <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"
                 borderRadius="22px"
@@ -136,18 +147,17 @@ const OrganizationNgoAdd = ({page}) => {
                 width="117.93px"
                 type="submit"
               >
-               {page?.content?.form?.continue}
+                {page?.content?.form?.continue}
               </Button>
             </FormControl>
           </VStack>
-
         </Box>
       </Box>
     </VStack>
   );
 };
 
-export default withPageCMS(OrganizationNgoAdd, { 
+export default withPageCMS(OrganizationNgoAdd, {
   key: PAGE_KEY,
   fields: [
     {
@@ -199,5 +209,5 @@ export default withPageCMS(OrganizationNgoAdd, {
         },
       ],
     },
-  ]
+  ],
 });

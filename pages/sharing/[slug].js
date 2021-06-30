@@ -30,7 +30,7 @@ export const getServerSideProps = async (context) => {
         idOrSlug: context.params.slug,
         lang: context.locale,
       }),
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

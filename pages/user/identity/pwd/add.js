@@ -20,13 +20,12 @@ import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 
-
 const PAGE_KEY = "identity_pwd_add";
 
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -44,8 +43,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const IdentityPwdAdd = ({ page }) => {
-
-  const router = useRouter()
+  const router = useRouter();
   const {
     handleSubmit,
     setError,
@@ -53,26 +51,35 @@ const IdentityPwdAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const onFormSubmit = useCallback(
+    async ({
+      chinese_name,
+      english_name,
+      date_of_birth,
+      gender,
+      resident_district,
+      person_types,
+      interested_employee,
+      industry,
+      terms,
+    }) => {
+      try {
+        console.log(chinese_name);
+        console.log(english_name);
+        console.log(date_of_birth);
+        console.log(gender);
+        console.log(resident_district);
+        console.log(person_types);
+        console.log(interested_employee);
+        console.log(industry);
+        console.log(terms);
 
-  const onFormSubmit = useCallback(async ({ chinese_name, english_name, date_of_birth , gender, resident_district, person_types, interested_employee,  industry , terms  }) => {
-    try {
-      console.log(chinese_name)
-      console.log(english_name)
-      console.log(date_of_birth)
-      console.log(gender)
-      console.log(resident_district)
-      console.log(person_types)
-      console.log(interested_employee)
-      console.log(industry)
-      console.log(terms)
-
-      router.push("/" + page.lang + "/user/identity/pwd/1/success")
-
-    } catch (e) {
-      console.log(e)
+        router.push("/" + page.lang + "/user/identity/pwd/1/success");
+      } catch (e) {
+        console.log(e);
+      }
     }
-  });
-
+  );
 
   return (
     <VStack py={36}>
@@ -80,11 +87,7 @@ const IdentityPwdAdd = ({ page }) => {
       <Text fontSize="30px" marginTop="5px">
         {page?.content?.step?.subTitle}
       </Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="40px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="40px !important">
         <Box
           maxWidth={800}
           width="100%"
@@ -96,120 +99,142 @@ const IdentityPwdAdd = ({ page }) => {
             {page?.content?.heading?.description}
           </Text>
           <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
-
             <SimpleGrid pt={16} columns={[1, 2, 2, 2]} spacing={4} width="100%">
-              <GridItem >
+              <GridItem>
                 <FormControl>
-            
-                  <FormLabel>
-                    {page?.content?.form?.chineseName}
-                  </FormLabel>
-                  <Input type="text" placeholder="" {...register("chinese_name")} />
-                  <FormHelperText>{errors?.chinese_name?.message}</FormHelperText>
-
+                  <FormLabel>{page?.content?.form?.chineseName}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("chinese_name")}
+                  />
+                  <FormHelperText>
+                    {errors?.chinese_name?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
-                  <FormLabel>
-                  {page?.content?.form?.englishName}
-                  </FormLabel>
-                  <Input type="text" placeholder="" {...register("english_name")} />
-                  <FormHelperText>{errors?.english_name?.message}</FormHelperText>
-
+                  <FormLabel>{page?.content?.form?.englishName}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("english_name")}
+                  />
+                  <FormHelperText>
+                    {errors?.english_name?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.dob}</FormLabel>
-                  <Input type="date" placeholder="" {...register("date_of_birth")} />
-                  <FormHelperText>{errors?.date_of_birth?.message}</FormHelperText>
-
+                  <Input
+                    type="date"
+                    placeholder=""
+                    {...register("date_of_birth")}
+                  />
+                  <FormHelperText>
+                    {errors?.date_of_birth?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
-              <GridItem >
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.gender?.label}</FormLabel>
-                  <Select  {...register("gender")} >
+                  <Select {...register("gender")}>
                     {page?.content?.form?.gender?.options?.map((option) => {
-                      return <option value={option.value}>{option.label}</option>
-                    })
-                    }
+                      return (
+                        <option value={option.value}>{option.label}</option>
+                      );
+                    })}
                   </Select>
                   <FormHelperText>{errors?.gender?.message}</FormHelperText>
-
                 </FormControl>
               </GridItem>
 
-              <GridItem >
+              <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.residentRestrict?.label}</FormLabel>
-                  <Select  {...register("resident_district")} >
-                    {page?.content?.form?.residentRestrict?.options?.map((option) => {
-                      return <option value={option.value}>{option.label}</option>
-                    })
-                    }
-                  </Select>
-                  <FormHelperText>{errors?.resident_district?.message}</FormHelperText>
-
-                </FormControl>
-              </GridItem>
-
-
-              <GridItem >
-                <FormControl>
-                  <FormLabel>{page?.content?.form?.personTypes?.label}</FormLabel>
-                  <Select  {...register("person_types")} >
-                      {page?.content?.form?.residentRestrict?.options?.map((option) => {
-                        return <option value={option.value}>{option.label}</option>
-                      })
+                  <FormLabel>
+                    {page?.content?.form?.residentRestrict?.label}
+                  </FormLabel>
+                  <Select {...register("resident_district")}>
+                    {page?.content?.form?.residentRestrict?.options?.map(
+                      (option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
                       }
+                    )}
                   </Select>
-                  <FormHelperText>{errors?.person_types?.message}</FormHelperText>
-
+                  <FormHelperText>
+                    {errors?.resident_district?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
 
-              <GridItem >
+              <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.employeerMode?.label}</FormLabel>
-                  <Select  {...register("interested_employee")} >
-                    {page?.content?.form?.employeerMode?.options?.map((option) => {
-                        return <option value={option.value}>{option.label}</option>
-                      })
+                  <FormLabel>
+                    {page?.content?.form?.personTypes?.label}
+                  </FormLabel>
+                  <Select {...register("person_types")}>
+                    {page?.content?.form?.residentRestrict?.options?.map(
+                      (option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
                       }
+                    )}
                   </Select>
-                  <FormHelperText>{errors?.interested_employee?.message}</FormHelperText>
-
+                  <FormHelperText>
+                    {errors?.person_types?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
 
-              <GridItem >
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.employeerMode?.label}
+                  </FormLabel>
+                  <Select {...register("interested_employee")}>
+                    {page?.content?.form?.employeerMode?.options?.map(
+                      (option) => {
+                        return (
+                          <option value={option.value}>{option.label}</option>
+                        );
+                      }
+                    )}
+                  </Select>
+                  <FormHelperText>
+                    {errors?.interested_employee?.message}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.industry?.label}</FormLabel>
-                  <Select  {...register("industry")} >
-                     {page?.content?.form?.industry?.options?.map((option) => {
-                        return <option value={option.value}>{option.label}</option>
-                      })
-                      }
+                  <Select {...register("industry")}>
+                    {page?.content?.form?.industry?.options?.map((option) => {
+                      return (
+                        <option value={option.value}>{option.label}</option>
+                      );
+                    })}
                   </Select>
                   <FormHelperText>{errors?.industry?.message}</FormHelperText>
-
                 </FormControl>
               </GridItem>
-
             </SimpleGrid>
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms")} >
-              {page?.content?.form?.terms}
+              <Checkbox colorScheme="green" {...register("terms")}>
+                {page?.content?.form?.terms}
               </Checkbox>
               <FormHelperText>{errors?.terms?.message}</FormHelperText>
-
             </FormControl>
 
-            <FormControl
-              textAlign="center"
-            >
+            <FormControl textAlign="center">
               {/* <Button
                 color="black"
                 fontWeight="bold"
@@ -229,11 +254,10 @@ const IdentityPwdAdd = ({ page }) => {
                 width="117.93px"
                 type="submit"
               >
-               {page?.content?.form?.continue}
+                {page?.content?.form?.continue}
               </Button>
             </FormControl>
           </VStack>
-
         </Box>
       </Box>
     </VStack>
@@ -270,7 +294,6 @@ export default withPageCMS(IdentityPwdAdd, {
           label: "描述 Description",
           component: "text",
         },
-        
       ],
     },
     {
@@ -315,7 +338,6 @@ export default withPageCMS(IdentityPwdAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -326,14 +348,13 @@ export default withPageCMS(IdentityPwdAdd, {
                   label: "價值 Value",
                   component: "text",
                 },
-
               ],
             },
           ],
         },
         {
           name: "residentRestrict",
-          label: "居住區 Resident District Label" ,
+          label: "居住區 Resident District Label",
           component: "group",
           fields: [
             {
@@ -353,7 +374,6 @@ export default withPageCMS(IdentityPwdAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -364,7 +384,6 @@ export default withPageCMS(IdentityPwdAdd, {
                   label: "價值 Value",
                   component: "text",
                 },
-
               ],
             },
           ],
@@ -391,7 +410,6 @@ export default withPageCMS(IdentityPwdAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -402,7 +420,6 @@ export default withPageCMS(IdentityPwdAdd, {
                   label: "價值 Value",
                   component: "text",
                 },
-
               ],
             },
           ],
@@ -429,7 +446,6 @@ export default withPageCMS(IdentityPwdAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -440,7 +456,6 @@ export default withPageCMS(IdentityPwdAdd, {
                   label: "價值 Value",
                   component: "text",
                 },
-
               ],
             },
           ],
@@ -467,7 +482,6 @@ export default withPageCMS(IdentityPwdAdd, {
                 id: Math.random().toString(36).substr(2, 9),
               }),
               fields: [
-
                 {
                   name: "label",
                   label: "標籤 Label",
@@ -494,5 +508,5 @@ export default withPageCMS(IdentityPwdAdd, {
         },
       ],
     },
-  ]
+  ],
 });

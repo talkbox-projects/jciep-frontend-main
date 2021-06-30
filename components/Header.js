@@ -57,7 +57,6 @@ const Header = ({ navigation, header }) => {
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
 
-  const [isLargetThan960] = useMediaQuery("(min-width: 960px)");
   const tabIndex = useMemo(() => {
     const kv = {
       0: /^(\/home)/g,
@@ -123,7 +122,7 @@ const Header = ({ navigation, header }) => {
         position="fixed"
         top={0}
         w="100%"
-        zIndex={200}
+        zIndex={100}
         h={12}
       >
         <Container>
@@ -300,7 +299,7 @@ const Header = ({ navigation, header }) => {
                       </PopoverTrigger>
                       <PopoverContent w="fit-content">
                         <PopoverBody as={VStack} spacing={4} fontSize="md">
-                          {submenu.map(({ label, path }) => (
+                          {submenu.map(({ id, label, path }) => (
                             <NextLink key={id} href={path}>
                               <Button
                                 h="100%"
@@ -321,7 +320,7 @@ const Header = ({ navigation, header }) => {
                       </PopoverContent>
                     </Popover>
                   ) : (
-                    <NextLink href={path}>
+                    <NextLink key={id} href={path}>
                       <Button
                         h="100%"
                         variant="unstyled"
@@ -350,7 +349,14 @@ const Header = ({ navigation, header }) => {
       <RegisterModal />
       <OtpVerifyModal />
       <EmailVerifySentModal />
-      <Box d={["block", "block", "none", "none"]}>
+      <Box
+        position="fixed"
+        zIndex={100}
+        top={0}
+        w="100%"
+        bg="white"
+        d={["block", "block", "none", "none"]}
+      >
         <HStack align="center" h={16} p={3}>
           <Image h="100%" src={navigation?.logo} />
           <Box minW={0} w="100%" flex={1} />
@@ -426,8 +432,8 @@ const Header = ({ navigation, header }) => {
                                 w="100%"
                                 spacing={2}
                               >
-                                {submenu.map(({ label, path }) => (
-                                  <NextLink key={id} href={path}>
+                                {submenu.map(({ id: _id, label, path }) => (
+                                  <NextLink key={_id} href={path}>
                                     <Button
                                       fontSize="xl"
                                       h="100%"
@@ -446,7 +452,7 @@ const Header = ({ navigation, header }) => {
                             </AccordionPanel>
                           </AccordionItem>
                         ) : (
-                          <NextLink href={path}>
+                          <NextLink key={id} href={path}>
                             <Button
                               fontSize="2xl"
                               textAlign="left"

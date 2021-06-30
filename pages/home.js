@@ -15,6 +15,8 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  AspectRatio,
+  IconButton,
 } from "@chakra-ui/react";
 import Container from "../components/Container";
 import { getConfiguration } from "../utils/configuration/getConfiguration";
@@ -22,13 +24,18 @@ import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useCallback, useState } from "react";
+import DividerSimple from "../components/DividerSimple";
+import MultiTextRenderer from "../components/MultiTextRenderer";
+import HighlightHeadline from "../components/HighlightHeadline";
+import ApostropheHeadline from "../components/ApostropheHeadline";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -45,14 +52,6 @@ export const getServerSideProps = async (context) => {
 
 const Video = chakra("video");
 
-const useCounter = (start, length, initial = start) => {
-  const [index, setIndex] = useState(initial);
-
-  const inc = useCallback(() => setIndex((i) => (i + 1) % length), []);
-  const dec = useCallback(() => setIndex((i) => (i + 1) % length), []);
-  return [index, inc, dec];
-};
-
 const Home = ({ page }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0}>
@@ -64,23 +63,12 @@ const Home = ({ page }) => {
       )}
 
       {/* First Section */}
-      <Box
-        h="50vw"
-        minH="70vh"
-        position="relative"
-        overflow="hidden"
-        backgroundImage={`url(${page?.content?.banner?.image})`}
-        backgroundSize="cover"
-        backgroundPosition="center center"
-      >
-        {/* <Video
-          loop
-          w="100%"
-          autoPlay
-          src="http://techslides.com/demos/sample-videos/small.mp4"
-        ></Video> */}
+      <Box h={["100vh"]} position="relative" overflow="hidden">
+        <AspectRatio h="100%" ratio={5 / 3}>
+          <Video h="100%" src="/banner_video.mp4" autoplay="true" loop></Video>
+        </AspectRatio>
         <VStack
-          // zIndex={10}
+          zIndex={10}
           align="stretch"
           position="absolute"
           bottom={0}
@@ -89,51 +77,40 @@ const Home = ({ page }) => {
           backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.8))"
         >
           <Container>
-            <Box pb={16}>
-              <Heading as="h1" color="white">
-                {page?.content?.banner?.title}
+            <VStack pb={16}>
+              <Heading color="white" fontSize={["4xl", "4xl", "6xl"]}>
+                <MultiTextRenderer data={page?.content?.banner?.title} />
               </Heading>
-              <Text whiteSpace="pre-wrap" color="white" fontSize="xl" mt={8}>
+              <Text
+                maxW={480}
+                w="100%"
+                whiteSpace="pre-wrap"
+                color="white"
+                fontSize="2xl"
+                pt={[8, 8, 12, 12]}
+              >
                 {page?.content?.banner?.description}
               </Text>
-            </Box>
+            </VStack>
           </Container>
-          <Box>
-            <svg viewBox="0 0 1367 118">
-              <path
-                id="border-yelo"
-                d="M-89.57,13.3S42.93,121.87,209,121.87c109.69,0,171.75-11.82,299.71-40.29C653.81,49.29,790.55,1,937.84,1c110.53,0,351.82,92.9,433.81,92.9,113.73,0,145.78-15.67,145.78-15.67v71.23h-1607Z"
-                fill="#f6d644"
-                fillRule="evenodd"
-              />
-              <path
-                id="border-blu"
-                d="M1393.43,24.86S1324,80.79,1021.31,80.79c-236.59,0-266.11-61.87-433.82-61.87-130.63,0-259.57,91.81-429.83,91.81C61.48,110.73,5.43,58.21,5.43,58.21v92.23h1388Z"
-                fill="#00bfba"
-                fillRule="evenodd"
-              />
-              <path
-                id="border-whtie"
-                d="M-2.57,11.9s113,96.18,254.7,96.18c93.58,0,146.52-10.47,255.69-35.7C631.64,43.78,748.29,1,874,1c94.31,0,300.16,82.3,370.11,82.3,97,0,124.37-13.88,124.37-13.88v348H-2.57Z"
-                fill="#efefef"
-                fillRule="evenodd"
-              />
-            </svg>
-          </Box>
+          <DividerSimple nextColor="#fafafa"></DividerSimple>
         </VStack>
       </Box>
 
       {/* Second Section */}
-      <Box bg="#efefef">
+      <Box minH={["110vh", "110vh", "100vh"]} bg="#fafafa">
         <Container>
-          <VStack align="center" py={16}>
-            <Heading as="h4">
-              {page?.content?.animation?.startFrame?.headline}
-            </Heading>
-            <Text
+          <VStack align="center" py={"15vh"}>
+            <Box fontSize={["2xl", "2xl", "4xl", "4xl"]}>
+              <HighlightHeadline>
+                {page?.content?.animation?.startFrame?.headline}
+              </HighlightHeadline>
+            </Box>
+
+            <Box
               pt={16}
               textAlign="center"
-              fontSize={["xl", "3xl", "5xl", "5xl"]}
+              fontSize={["4xl", "4xl", "5xl", "5xl"]}
             >
               {(page?.content?.animation?.startFrame?.title ?? []).map(
                 ({ _template, content, textcolor, bold }, index) => {
@@ -155,17 +132,15 @@ const Home = ({ page }) => {
                   }
                 }
               )}
-            </Text>
+            </Box>
             <SimpleGrid pt={16} columns={[2, 2, 2, 4]} spacing={8}>
               {(page?.content?.animation?.startFrame?.roles ?? []).map(
                 ({ icon, name, caption }, index) => {
                   return (
                     <GridItem key={index}>
-                      <VStack>
+                      <VStack fontSize={["xl"]}>
                         <Image w={100} src={icon}></Image>
-                        <Text fontSize={["lg"]} fontWeight="bold">
-                          {name}
-                        </Text>
+                        <Text fontWeight="bold">{name}</Text>
                         <Text textAlign="center">{caption}</Text>
                       </VStack>
                     </GridItem>
@@ -178,22 +153,24 @@ const Home = ({ page }) => {
       </Box>
 
       {/* Third Section */}
-      <Box bg="#fff">
+      <Box bg="#fff" minH="100vh">
         <Container>
-          <VStack align="center" py={32}>
+          <VStack align="center" py={"20vh"}>
             <Image
-              maxW="480"
+              maxW="768"
               w="80%"
               src={page?.content?.animation?.endFrame?.image}
             ></Image>
-            <Heading pt={8} as="h4" fontSize={["2xl", "3xl", "4xl"]}>
-              {page?.content?.animation?.endFrame?.title}
-            </Heading>
+            <Box pt={"12vh"} as="h4" fontSize={["2xl", "4xl", "6xl"]}>
+              <HighlightHeadline>
+                {page?.content?.animation?.endFrame?.title}
+              </HighlightHeadline>
+            </Box>
             <Text
               w="80%"
-              pt={8}
+              pt={"8vh"}
               textAlign="center"
-              fontSize={["md", "lg", "2xl"]}
+              fontSize={["2xl", "2xl", "3xl"]}
             >
               {(page?.content?.animation?.endFrame?.caption ?? []).map(
                 ({ _template, content, textcolor, bold }, index) => {
@@ -222,16 +199,16 @@ const Home = ({ page }) => {
 
       {/* Fourth Section */}
 
-      <Box bg="#F6D644" position="relative">
+      <Box bg="#F6D644" minH="100vh" position="relative">
         <Container>
           <Box py={32}>
             <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
               {(page?.content?.transitionBanner?.slides ?? []).map(
                 ({ caption, image }, index) => (
                   <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: 12 }}>
-                    <Text h={8} mb={4} fontSize="xl">
+                    <Box h={8} mb={8} fontSize={["xl", "xl", "2xl"]}>
                       {caption}
-                    </Text>
+                    </Box>
                     <Box
                       borderWidth={4}
                       borderColor="white"
@@ -249,7 +226,7 @@ const Home = ({ page }) => {
             </SimpleGrid>
           </Box>
         </Container>
-        <Box>
+        <Box position="absolute" w="100%" bottom={0} left={0}>
           <svg viewBox="0 0 1367 118">
             <path
               id="border-yelo"
@@ -275,7 +252,7 @@ const Home = ({ page }) => {
 
       {/* Fifth Section */}
 
-      <Box bg="#00BFBA" position="relative">
+      <Box bg="#00BFBA" h="100vh" position="relative">
         <Carousel
           showArrows={true}
           showIndicators={false}
@@ -284,6 +261,45 @@ const Home = ({ page }) => {
           interval={3000}
           showStatus={false}
           showThumbs={false}
+          renderArrowPrev={(clickHandler, hasPrev, label) => {
+            return hasPrev ? (
+              <HStack
+                px={3}
+                position="absolute"
+                h="100vh"
+                align="center"
+                left={[2, 2, 2, 2, 8, "10vw"]}
+              >
+                <IconButton
+                  cursor="pointer"
+                  onClick={clickHandler}
+                  variant="unstyled"
+                  round={true}
+                  as={FaArrowLeft}
+                />
+              </HStack>
+            ) : null;
+          }}
+          renderArrowNext={(clickHandler, hasNext, label) => {
+            return hasNext ? (
+              <HStack
+                px={3}
+                top={0}
+                right={[2, 2, 2, 2, 8, "10vw"]}
+                position="absolute"
+                h="100vh"
+                align="center"
+              >
+                <IconButton
+                  cursor="pointer"
+                  onClick={clickHandler}
+                  variant="unstyled"
+                  round={true}
+                  as={FaArrowRight}
+                />
+              </HStack>
+            ) : null;
+          }}
         >
           {(page?.content?.sharing?.slides ?? []).map(
             ({ image, category, persona, title, excerpt }, index) => (
@@ -292,16 +308,17 @@ const Home = ({ page }) => {
                   align="center"
                   justifyContent="center"
                   spacing={[6, 8, 10, 16]}
-                  h={800}
-                  direction={["column", "column", "row"]}
+                  px="50px"
+                  h="100vh"
+                  direction={["column", "column", "column", "row"]}
                 >
-                  <Box w={["100%", "50%", "40%"]}>
+                  <Box w={["100%", "60%", "50%", "50%", "40%"]}>
                     <Image src={image} />
                   </Box>
                   <VStack
                     px={8}
                     align="start"
-                    flex={1}
+                    flex={[0, 0, 0, 1]}
                     minW={0}
                     textAlign="left"
                   >
@@ -319,13 +336,13 @@ const Home = ({ page }) => {
                       d="block"
                       pb={4}
                       lineHeight="xl"
-                      fontSize={["lg", "xl", "xl", "2xl"]}
+                      fontSize={["2xl", "2xl", "2xl", "2xl"]}
                     >
                       {persona}
                     </Text>
                     <Heading
                       lineHeight="xl"
-                      fontSize={["xl", "2xl", "2xl", "4xl"]}
+                      fontSize={["4xl", "4xl", "4xl", "4xl"]}
                       whiteSpace="pre-wrap"
                       bgColor="white"
                     >
@@ -349,7 +366,7 @@ const Home = ({ page }) => {
       </Box>
 
       {/* role introduction */}
-      <Grid bg="#fafafa" gridTemplateColumns="auto" w="100%">
+      <Grid bg="#fafafa" gridTemplateColumns="auto" minH="100vh" w="100%">
         <Box
           gridArea="1/1/2/2"
           bgImage={`url(${page?.content?.roleIntroduction?.topLeftImage})`}
@@ -362,9 +379,9 @@ const Home = ({ page }) => {
           bgRepeat="no-repeat"
           bgPosition="bottom right"
         ></Box>
-        <Box py={16} gridArea="1/1/2/2">
+        <Box py="20vh" px={[4, 4, 8, 8]} gridArea="1/1/2/2">
           <Container>
-            <Heading mb={1} fontSize={["xl", "2xl", "3xl"]}>
+            <Heading mb={1} fontSize={["2xl", "3xl", "4xl"]}>
               {page?.content?.roleIntroduction?.tagline}
             </Heading>
             <Tabs>
@@ -372,11 +389,14 @@ const Home = ({ page }) => {
                 {(page?.content?.roleIntroduction?.roles ?? []).map(
                   ({ id, title }) => (
                     <Tab
-                      fontSize={["2xl", "3xl", "4xl"]}
+                      fontSize={["3xl", "4xl", "5xl"]}
                       fontWeight="bold"
                       px={0}
                       _focus={{ outline: "none" }}
-                      _selected={{ color: "black", borderBottomColor: "red" }}
+                      _selected={{
+                        color: "black",
+                        borderBottomColor: "#FD5F53",
+                      }}
                       borderBottomWidth={3}
                       key={id}
                     >
@@ -411,10 +431,16 @@ const Home = ({ page }) => {
                           }
                         )}
                       </Text>
-                      <SimpleGrid
-                        columns={[1, 1, 3, 3]}
+                      <Grid
+                        templateColumns={[
+                          "repeat(1, 1fr)",
+                          "repeat(1, 1fr)",
+                          "repeat(2, 1fr)",
+                          "repeat(4, 1fr)",
+                        ]}
                         mt={8}
-                        spacing={[2, 2, 2, 12]}
+                        spacing={4}
+                        gap={[4, 4, 4, 4]}
                       >
                         {(features ?? []).map(
                           ({ id, icon, title, caption, remark }) => (
@@ -431,25 +457,26 @@ const Home = ({ page }) => {
                               opacity={0.5}
                               key={id}
                               px={8}
-                              py={12}
+                              pt={12}
+                              pb={8}
                               align="center"
                               textAlign="center"
                             >
                               <Image w={16} src={icon}></Image>
-                              <Text fontSize="xl" fontWeight="bold">
+                              <Text fontSize={"2xl"} fontWeight="bold">
                                 {title}
                               </Text>
-                              <Text fontSize="sm" fontWeight="bold">
+                              <Text fontSize="lg" fontWeight="semibold">
                                 {caption}
                               </Text>
                               <Box flex={1} minH={8} h="100%" />
-                              <Text fontSize="sm" color="gray.400">
+                              <Text fontSize="md" color="gray.500">
                                 {remark}
                               </Text>
                             </GridItem>
                           )
                         )}
-                      </SimpleGrid>
+                      </Grid>
                     </TabPanel>
                   )
                 )}
@@ -460,44 +487,50 @@ const Home = ({ page }) => {
       </Grid>
 
       <Box
+        minH="50vh"
         py={32}
         bgColor="#F6D644"
         bgImage={`url(${page?.content?.quote?.background})`}
         bgSize="cover"
       >
         <Container>
-          <VStack align="stretch" maxW={960} mx="auto">
-            <Text alignSelf="flex-start" fontSize={["lg"]}>
-              {page?.content?.quote?.audience}
-            </Text>
-            <Text fontSize={["2xl", "3xl", "4xl"]}>
-              {(page?.content?.quote?.words ?? []).map(
-                ({ _template, content, textcolor, bold }, index) => {
-                  switch (_template) {
-                    case "textBlock":
-                      return (
-                        <Text
-                          d="inline"
-                          key={index}
-                          textColor={textcolor}
-                          {...(bold && { fontWeight: "bold" })}
-                        >
-                          {content}
-                        </Text>
-                      );
-                    case "lineBreakBlock":
-                      return <br key={index} />;
-                    default:
-                  }
-                }
-              )}
-            </Text>
-            <Box alignSelf="flex-end">
-              <Text fontSize={["2xl", "3xl", "4xl"]}>
-                {page?.content?.quote?.reference}
+          <Box>
+            <VStack align="center" maxW={768} mx="auto" spacing={4}>
+              <Text alignSelf="flex-start" w="100%" fontSize={["lg"]}>
+                {page?.content?.quote?.audience}
               </Text>
-            </Box>
-          </VStack>
+              <Box textAlign="center" px={8} pt={8}>
+                <ApostropheHeadline>
+                  {(page?.content?.quote?.words ?? []).map(
+                    ({ _template, content, textcolor, bold }, index) => {
+                      switch (_template) {
+                        case "textBlock":
+                          return (
+                            <Text
+                              fontSize="3xl"
+                              d="inline"
+                              key={index}
+                              textColor={textcolor}
+                              {...(bold && { fontWeight: "bold" })}
+                            >
+                              {content}
+                            </Text>
+                          );
+                        case "lineBreakBlock":
+                          return <br key={index} />;
+                        default:
+                      }
+                    }
+                  )}
+                </ApostropheHeadline>
+              </Box>
+              <Box alignSelf="flex-end">
+                <Text fontSize={["2xl", "3xl", "3xl"]} px={[2, 16, 16]}>
+                  {page?.content?.quote?.reference}
+                </Text>
+              </Box>
+            </VStack>
+          </Box>
         </Container>
       </Box>
     </VStack>
@@ -523,7 +556,8 @@ export default withPageCMS(Home, {
         {
           name: "title",
           label: "主標題 Title",
-          component: "text",
+          component: "blocks",
+          templates: metaTextTemplates,
         },
         {
           name: "description",

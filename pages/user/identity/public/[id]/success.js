@@ -9,7 +9,7 @@ const PAGE_KEY = "identity_public_add_success";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -25,16 +25,11 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-const IdentityPublicAddSuccess = ({page}) => {
+const IdentityPublicAddSuccess = ({ page }) => {
   return (
     <VStack py={36}>
-      
       <Text>{page?.content?.step?.title}</Text>
-      <Box
-        justifyContent="center"
-        width="100%"
-        marginTop="10px !important"
-      >
+      <Box justifyContent="center" width="100%" marginTop="10px !important">
         <Box
           maxWidth={600}
           width="100%"
@@ -51,55 +46,49 @@ const IdentityPublicAddSuccess = ({page}) => {
             width="150px"
             marginTop="30px !important"
             margin="auto"
-            src={page?.content?.publicSuccess?.image} />
+            src={page?.content?.publicSuccess?.image}
+          />
 
-            <Text marginTop="30px">
-              {page?.content?.publicSuccess?.description}
-            </Text>
+          <Text marginTop="30px">
+            {page?.content?.publicSuccess?.description}
+          </Text>
 
-            <Box 
-              width="100%" 
-              textAlign="center"
-            >
-              <Link href="/">
-                <Button
+          <Box width="100%" textAlign="center">
+            <Link href="/">
+              <Button
                 color="#1E1E1E"
                 boxSizing="border-box"
                 height="46px"
-                width= "114px"
+                width="114px"
                 border="2px solid #C6C6C6"
                 borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"
+              >
+                {page?.content?.publicSuccess?.button}
+              </Button>
+            </Link>
+          </Box>
 
-                >
-                  {page?.content?.publicSuccess?.button}
-                </Button>
-              </Link>
-            </Box>
-            
-            <Text
-              marginTop="35px"
-              fontWeight={600}
-              textAlign="center"
-              fontSize="16px"
-            >
-              {page?.content?.footer?.email}
-            </Text>
-            <Text
-              marginTop="30px"
-              textAlign="center"
-            >
-              {page?.content?.footer?.drop}
-            </Text>
+          <Text
+            marginTop="35px"
+            fontWeight={600}
+            textAlign="center"
+            fontSize="16px"
+          >
+            {page?.content?.footer?.email}
+          </Text>
+          <Text marginTop="30px" textAlign="center">
+            {page?.content?.footer?.drop}
+          </Text>
         </Box>
       </Box>
     </VStack>
   );
 };
 
-export default withPageCMS(IdentityPublicAddSuccess, { 
+export default withPageCMS(IdentityPublicAddSuccess, {
   key: PAGE_KEY,
   fields: [
     {
@@ -111,7 +100,7 @@ export default withPageCMS(IdentityPublicAddSuccess, {
           name: "title",
           label: "主標題 Title",
           component: "text",
-        }
+        },
       ],
     },
     {
@@ -149,7 +138,6 @@ export default withPageCMS(IdentityPublicAddSuccess, {
           label: "文本 button text",
           component: "text",
         },
-
       ],
     },
     {
@@ -169,5 +157,5 @@ export default withPageCMS(IdentityPublicAddSuccess, {
         },
       ],
     },
-  ]
+  ],
 });

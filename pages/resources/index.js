@@ -31,7 +31,7 @@ const PAGE_KEY = "resources";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -87,7 +87,10 @@ const Resources = ({ page }) => {
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {page?.content?.seo?.title && (
-        <NextSeo title={page?.content?.seo?.title} description={page?.content?.seo?.description}></NextSeo>
+        <NextSeo
+          title={page?.content?.seo?.title}
+          description={page?.content?.seo?.description}
+        ></NextSeo>
       )}
       {/* Banner Section */}
       <Box
@@ -99,10 +102,14 @@ const Resources = ({ page }) => {
         backgroundSize="cover"
         backgroundPosition="center center"
         zIndex="0"
-        display= "flex"
+        display="flex"
         alignItems="center"
       >
-        <Box ml={{base: "1rem", lg: "13.3rem"}} mb={{ base: "15px", lg: "0" }} width="90%">
+        <Box
+          ml={{ base: "1rem", lg: "13.3rem" }}
+          mb={{ base: "15px", lg: "0" }}
+          width="90%"
+        >
           <Text
             w="max"
             fontWeight={["normal", "normal", "semibold"]}
@@ -145,13 +152,52 @@ const Resources = ({ page }) => {
           </Box>
         </VStack>
 
-        {(page?.content?.dialogue?.left?.dialogue ?? []).map(({ message }, index) => {
-          if (index == 0) {
-            return (
-              <Flex>
+        {(page?.content?.dialogue?.left?.dialogue ?? []).map(
+          ({ message }, index) => {
+            if (index == 0) {
+              return (
+                <Flex>
+                  <Box
+                    mt={["24px", "24px", "68px"]}
+                    ml={["16px", "16px", "16px", "325px"]}
+                    w={["75%", "75%", "65%", "max"]}
+                    borderRadius={["10px", "10px", "10px", "20px"]}
+                    bg="white"
+                    pos="relative"
+                  >
+                    <MultiTextRenderer
+                      key={index}
+                      parentStyles={{ padding: "5px", paddingLeft: "10px" }}
+                      data={message}
+                      fontSize={["14px", "14px", "16px", "20px"]}
+                      textAlign={["left", "left", "left", "center"]}
+                    />
+                    <Box
+                      w="0px"
+                      height="0px"
+                      borderRight="5px solid transparent"
+                      borderLeft="5px solid transparent"
+                      borderTop="12px solid #FFFFFF"
+                      transform="scaleY(-1) rotate(150deg)"
+                      pos="absolute"
+                      left="0"
+                      bottom="-6px"
+                    ></Box>
+                  </Box>
+                  <Image
+                    mt={["24px", "24px", "68px"]}
+                    ml={["10px", "10px", "26px", "26px"]}
+                    w={["20px", "20px", "20px", "40px"]}
+                    h={["16px", "16px", "16px", "32px"]}
+                    src={page?.content?.dialogue?.leftQuoteImage}
+                  />
+                </Flex>
+              );
+            } else {
+              return (
                 <Box
-                  mt={["24px", "24px", "68px"]}
-                  ml={["16px", "16px", "16px", "325px"]}
+                  mt={["16px", "16px", "18px"]}
+                  ml={["16px", "16px", "", "218px"]}
                   w={["75%", "75%", "65%", "max"]}
                   borderRadius={["10px", "10px", "10px", "20px"]}
                   bg="white"
@@ -159,8 +205,8 @@ const Resources = ({ page }) => {
                 >
                   <MultiTextRenderer
                     key={index}
-                    parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                     data={message}
+                    parentStyles={{ padding: "5px", paddingLeft: "10px" }}
                     fontSize={["14px", "14px", "16px", "20px"]}
                     textAlign={["left", "left", "left", "center"]}
                   />
@@ -176,47 +222,10 @@ const Resources = ({ page }) => {
                     bottom="-6px"
                   ></Box>
                 </Box>
-                <Image
-                  mt={["24px", "24px", "68px"]}
-                  ml={["10px", "10px", "26px", "26px"]}
-                  w={["20px", "20px", "20px", "40px"]}
-                  h={["16px", "16px", "16px", "32px"]}
-                  src={page?.content?.dialogue?.leftQuoteImage}
-                />
-              </Flex>
-            );
-          } else {
-            return (
-              <Box
-                mt={["16px", "16px", "18px"]}
-                ml={["16px", "16px", "", "218px"]}
-                w={["75%", "75%", "65%", "max"]}
-                borderRadius={["10px", "10px", "10px", "20px"]}
-                bg="white"
-                pos="relative"
-              >
-                <MultiTextRenderer
-                  key={index}
-                  data={message}
-                  parentStyles={{ padding: "5px", paddingLeft: "10px" }}
-                  fontSize={["14px", "14px", "16px", "20px"]}
-                  textAlign={["left", "left", "left", "center"]}
-                />
-                <Box
-                  w="0px"
-                  height="0px"
-                  borderRight="5px solid transparent"
-                  borderLeft="5px solid transparent"
-                  borderTop="12px solid #FFFFFF"
-                  transform="scaleY(-1) rotate(150deg)"
-                  pos="absolute"
-                  left="0"
-                  bottom="-6px"
-                ></Box>
-              </Box>
-            );
+              );
+            }
           }
-        })}
+        )}
         <Text
           pb={["30%", "15%", "15%", "0"]}
           ml={["16px", "16px", "", "211px"]}
@@ -252,72 +261,90 @@ const Resources = ({ page }) => {
             right={{ lg: "0" }}
             w="100%"
           >
-            <VStack w="100%" justifyContent="right" alignItems="right" pt={["0", "0", "19px"]}>
-              {(page?.content?.dialogue?.right?.dialogue ?? []).map(({ message }, index) => {
-                if (index == 0) {
-                  return (
-                    <Flex justifyContent="flex-end" w="100%" pl="25%" >
-                      <Image
-                        mt={["24px", "24px", "24px", "68px"]}
-                        mr={["8px", "8px", "8px", "32px"]}
-                        w={["20px", "20px", "20px", "40px"]}
-                        h={["16px", "16px", "16px", "32px"]}
-                        transform="rotate(180deg)"
-                        src={page?.content?.dialogue?.leftQuoteImage}
-                      />
-                      <Box
-                        mt={["24px", "24px", "24px", "68px"]}
-                        mr={["16px", "16px", "16px", "230px"]}
-                        w={["75%", "75%", "65%", "max"]}
-                        borderRadius={["10px", "10px", "10px", "20px"]}
-                        bg="white"
-                        pos="relative"
-                      >
-                        <MultiTextRenderer
-                          key={index}
-                          parentStyles={{ padding: "5px", paddingLeft: "10px" }}
-                          data={message}
-                          fontSize={["14px", "14px", "16px", "20px"]}
-                          textAlign={["left", "left", "left", "center"]}
+            <VStack
+              w="100%"
+              justifyContent="right"
+              alignItems="right"
+              pt={["0", "0", "19px"]}
+            >
+              {(page?.content?.dialogue?.right?.dialogue ?? []).map(
+                ({ message }, index) => {
+                  if (index == 0) {
+                    return (
+                      <Flex justifyContent="flex-end" w="100%" pl="25%">
+                        <Image
+                          mt={["24px", "24px", "24px", "68px"]}
+                          mr={["8px", "8px", "8px", "32px"]}
+                          w={["20px", "20px", "20px", "40px"]}
+                          h={["16px", "16px", "16px", "32px"]}
+                          transform="rotate(180deg)"
+                          src={page?.content?.dialogue?.leftQuoteImage}
                         />
                         <Box
-                          w="0px"
-                          height="0px"
-                          borderRight="5px solid transparent"
-                          borderLeft="5px solid transparent"
-                          borderTop="12px solid #FFFFFF"
-                          transform="scaleY(-1) rotate(-150deg)"
-                          pos="absolute"
-                          right="0"
-                          bottom="-6px"
-                        ></Box>
-                      </Box>
-                    </Flex>
-                  );
-                } else {
-                  return (
-                    <Flex justifyContent="flex-end" w="100%" pl="25%" >
-                      <Box
-                        mt={["16px", "16px", "18px"]}
-                        mr={["16px", "16px", "", "207px"]}
-                        w={["75%", "75%", "65%", "max"]}
-                        borderRadius={["10px", "10px", "10px", "20px"]}
-                        bg="white"
-                        pos="relative"
-                      >
-                        <MultiTextRenderer
-                          key={index}
-                          parentStyles={{ padding: "5px", paddingLeft: "10px" }}
-                          data={message}
-                          fontSize={["14px", "14px", "16px", "20px"]}
-                          textAlign={["left", "left", "left", "center"]}
-                        />
-                        <Image src={page?.content?.dialogue?.rightTooltip} pos="absolute" bottom="-2" right="0" />
-                      </Box>
-                    </Flex>
-                  );
+                          mt={["24px", "24px", "24px", "68px"]}
+                          mr={["16px", "16px", "16px", "230px"]}
+                          w={["75%", "75%", "65%", "max"]}
+                          borderRadius={["10px", "10px", "10px", "20px"]}
+                          bg="white"
+                          pos="relative"
+                        >
+                          <MultiTextRenderer
+                            key={index}
+                            parentStyles={{
+                              padding: "5px",
+                              paddingLeft: "10px",
+                            }}
+                            data={message}
+                            fontSize={["14px", "14px", "16px", "20px"]}
+                            textAlign={["left", "left", "left", "center"]}
+                          />
+                          <Box
+                            w="0px"
+                            height="0px"
+                            borderRight="5px solid transparent"
+                            borderLeft="5px solid transparent"
+                            borderTop="12px solid #FFFFFF"
+                            transform="scaleY(-1) rotate(-150deg)"
+                            pos="absolute"
+                            right="0"
+                            bottom="-6px"
+                          ></Box>
+                        </Box>
+                      </Flex>
+                    );
+                  } else {
+                    return (
+                      <Flex justifyContent="flex-end" w="100%" pl="25%">
+                        <Box
+                          mt={["16px", "16px", "18px"]}
+                          mr={["16px", "16px", "", "207px"]}
+                          w={["75%", "75%", "65%", "max"]}
+                          borderRadius={["10px", "10px", "10px", "20px"]}
+                          bg="white"
+                          pos="relative"
+                        >
+                          <MultiTextRenderer
+                            key={index}
+                            parentStyles={{
+                              padding: "5px",
+                              paddingLeft: "10px",
+                            }}
+                            data={message}
+                            fontSize={["14px", "14px", "16px", "20px"]}
+                            textAlign={["left", "left", "left", "center"]}
+                          />
+                          <Image
+                            src={page?.content?.dialogue?.rightTooltip}
+                            pos="absolute"
+                            bottom="-2"
+                            right="0"
+                          />
+                        </Box>
+                      </Flex>
+                    );
+                  }
                 }
-              })}
+              )}
               <VStack justifyContent="right" alignItems="right" w="100%">
                 <Text
                   textAlign="right"
@@ -328,7 +355,12 @@ const Resources = ({ page }) => {
                   {page?.content?.dialogue?.right?.role}
                 </Text>
               </VStack>
-              <HStack pos={["unset", "unset", "unset", "relative"]} justifyContent="flex-end" w="100%" zIndex="-1">
+              <HStack
+                pos={["unset", "unset", "unset", "relative"]}
+                justifyContent="flex-end"
+                w="100%"
+                zIndex="-1"
+              >
                 <Box
                   w="100%"
                   pt="6%"
@@ -336,8 +368,18 @@ const Resources = ({ page }) => {
                   pos={["absolute", "absolute", "absoulte", "unset"]}
                 >
                   <VStack w="100%">
-                    <Box textAlign="center" position="relative" mb="34px" w="max" mx={["47px", "47px", "47px", "0px"]}>
-                      <Text fontSize={["16", "16", "16", "24"]} textAlign="center" fontWeight="bold">
+                    <Box
+                      textAlign="center"
+                      position="relative"
+                      mb="34px"
+                      w="max"
+                      mx={["47px", "47px", "47px", "0px"]}
+                    >
+                      <Text
+                        fontSize={["16", "16", "16", "24"]}
+                        textAlign="center"
+                        fontWeight="bold"
+                      >
                         {page?.content?.howSection["title 標題"]}
                       </Text>
                       <Box
@@ -399,7 +441,11 @@ const Resources = ({ page }) => {
           display={["block", "block", "block", "none"]}
         >
           <Box position="relative" mb="34px" mx="10%">
-            <Text fontSize={["16", "16", "16", "24"]} textAlign="center" fontWeight="bold">
+            <Text
+              fontSize={["16", "16", "16", "24"]}
+              textAlign="center"
+              fontWeight="bold"
+            >
               {page?.content?.howSection["title 標題"]}
             </Text>
             <Box
@@ -451,7 +497,14 @@ const Resources = ({ page }) => {
 
       {/* resource Section */}
       <Box w="100%" bg="#FAFAFA" pos="relative">
-        <VStack alignItems="start" w="100%" pt={["36px", "36px", "109px"]} maxW={{lg: "83%", md: "90%" }} pl={{ base: "16px", md: "0" }} mx="auto">
+        <VStack
+          alignItems="start"
+          w="100%"
+          pt={["36px", "36px", "109px"]}
+          maxW={{ lg: "83%", md: "90%" }}
+          pl={{ base: "16px", md: "0" }}
+          mx="auto"
+        >
           <VStack alignItems="start" w="100%">
             <Heading fontSize={["24px", "24px", "36px", "54px"]}>
               {page?.content?.resourceSection["title 標題"]}
@@ -465,7 +518,13 @@ const Resources = ({ page }) => {
           overflow="hidden"
           pos="relative"
         >
-          <Carousel responsive={responsiveCarousel} swipeable={false} draggable={false} showDots={false} customButtonGroup={<ButtonGroup />}>
+          <Carousel
+            responsive={responsiveCarousel}
+            swipeable={false}
+            draggable={false}
+            showDots={false}
+            customButtonGroup={<ButtonGroup />}
+          >
             {(page?.content?.resourceSection?.resources ?? []).map(
               (
                 {
@@ -505,9 +564,23 @@ const Resources = ({ page }) => {
             )}
           </Carousel>
         </Box>
-        <VStack w="100%" pt="49px" spacing="24px" justifyContent="center" display={["block", "block", "none", "none"]}>
-          <VStack spacing="16px" w="100%" justifyContent="center" alignItems="center">
-            {(page?.content?.resourceSection?.resources.slice(0, showItems) ?? []).map(
+        <VStack
+          w="100%"
+          pt="49px"
+          spacing="24px"
+          justifyContent="center"
+          display={["block", "block", "none", "none"]}
+        >
+          <VStack
+            spacing="16px"
+            w="100%"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {(
+              page?.content?.resourceSection?.resources.slice(0, showItems) ??
+              []
+            ).map(
               (
                 {
                   name,
@@ -548,7 +621,9 @@ const Resources = ({ page }) => {
               color="black"
               borderRadius="22px"
               onClick={() => setShowItems(showItems + 1)}
-              hidden={showItems >= page?.content?.resourceSection?.resources.length}
+              hidden={
+                showItems >= page?.content?.resourceSection?.resources.length
+              }
               bg="transparent"
               pb="5px"
               border="2px solid #1E1E1E"
@@ -566,7 +641,13 @@ const Resources = ({ page }) => {
           pt={["", "", "50px"]}
           background="#FAFAFA"
         >
-          <Box display="flex" pos="relative" maxW={{lg: "83%", md: "90%" }} px={{ base: "16px", md: "0" }} mx="auto">
+          <Box
+            display="flex"
+            pos="relative"
+            maxW={{ lg: "83%", md: "90%" }}
+            px={{ base: "16px", md: "0" }}
+            mx="auto"
+          >
             <Box mt={["110px", "110px", "80px"]}>
               <Text fontSize={["24px", "24px", "54px"]} fontWeight="bold">
                 {wordExtractor(page?.content?.wordings, "equip")}
@@ -582,7 +663,7 @@ const Resources = ({ page }) => {
             mt="24px"
             position="relative"
             zIndex="1"
-            maxW={{lg: "83%", md: "90%" }}
+            maxW={{ lg: "83%", md: "90%" }}
             px={{ base: "16px", md: "0" }}
             mx="auto"
           >
@@ -606,25 +687,32 @@ const Resources = ({ page }) => {
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
                     <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.left?.links ?? []).map(({ label, url }, index) => {
-                        return (
-                          <ListItem
-                            display="flex"
-                            _before={{
-                              content: '"."',
-                              color: "black",
-                              pr: "6px",
-                              fontWeight: "bold",
-                              fontSize: "20px",
-                            }}
-                            fontSize="16px"
-                          >
-                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
-                              {label}
-                            </Link>
-                          </ListItem>
-                        );
-                      })}
+                      {(page?.content?.equipSection?.left?.links ?? []).map(
+                        ({ label, url }, index) => {
+                          return (
+                            <ListItem
+                              display="flex"
+                              _before={{
+                                content: '"."',
+                                color: "black",
+                                pr: "6px",
+                                fontWeight: "bold",
+                                fontSize: "20px",
+                              }}
+                              fontSize="16px"
+                            >
+                              <Link
+                                pt="8px"
+                                isExternal
+                                textDecoration="underline"
+                                href={url}
+                              >
+                                {label}
+                              </Link>
+                            </ListItem>
+                          );
+                        }
+                      )}
                     </UnorderedList>
                   </Box>
                 )}
@@ -650,25 +738,32 @@ const Resources = ({ page }) => {
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
                     <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.topRight?.links ?? []).map(({ label, url }, index) => {
-                        return (
-                          <ListItem
-                            display="flex"
-                            _before={{
-                              content: '"."',
-                              color: "black",
-                              pr: "6px",
-                              fontWeight: "bold",
-                              fontSize: "20px",
-                            }}
-                            fontSize="16px"
-                          >
-                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
-                              {label}
-                            </Link>
-                          </ListItem>
-                        );
-                      })}
+                      {(page?.content?.equipSection?.topRight?.links ?? []).map(
+                        ({ label, url }, index) => {
+                          return (
+                            <ListItem
+                              display="flex"
+                              _before={{
+                                content: '"."',
+                                color: "black",
+                                pr: "6px",
+                                fontWeight: "bold",
+                                fontSize: "20px",
+                              }}
+                              fontSize="16px"
+                            >
+                              <Link
+                                pt="8px"
+                                isExternal
+                                textDecoration="underline"
+                                href={url}
+                              >
+                                {label}
+                              </Link>
+                            </ListItem>
+                          );
+                        }
+                      )}
                     </UnorderedList>
                   </Box>
                 )}
@@ -694,7 +789,9 @@ const Resources = ({ page }) => {
                       {wordExtractor(page?.content?.wordings, "relatedLinks")}
                     </Text>
                     <UnorderedList>
-                      {(page?.content?.equipSection?.bottomRight?.links ?? []).map(({ label, url }, index) => {
+                      {(
+                        page?.content?.equipSection?.bottomRight?.links ?? []
+                      ).map(({ label, url }, index) => {
                         return (
                           <ListItem
                             display="flex"
@@ -708,7 +805,12 @@ const Resources = ({ page }) => {
                             fontSize="16px"
                           >
                             {" "}
-                            <Link pt="8px" isExternal textDecoration="underline" href={url}>
+                            <Link
+                              pt="8px"
+                              isExternal
+                              textDecoration="underline"
+                              href={url}
+                            >
                               {label}
                             </Link>
                           </ListItem>
@@ -740,9 +842,18 @@ const Resources = ({ page }) => {
         zIndex="0"
         overflow="hidden"
       >
-        <Heading fontSize={["24px", "24px", "36px"]}>{page?.content?.jobOpportunitySection?.title}</Heading>
+        <Heading fontSize={["24px", "24px", "36px"]}>
+          {page?.content?.jobOpportunitySection?.title}
+        </Heading>
 
-        <Text textAlign="center" pt="24px" fontSize="16px" px={["16px", "16px", "0px"]} mx="auto" maxW={{lg: "83%", md: "90%" }}>
+        <Text
+          textAlign="center"
+          pt="24px"
+          fontSize="16px"
+          px={["16px", "16px", "0px"]}
+          mx="auto"
+          maxW={{ lg: "83%", md: "90%" }}
+        >
           {page?.content?.jobOpportunitySection?.description}
         </Text>
         <Flex
@@ -751,27 +862,29 @@ const Resources = ({ page }) => {
           flexDirection={["column", "column", "row", "row"]}
           mt={["36px", "36px", "68px"]}
         >
-          {(page?.content?.jobOpportunitySection?.buttons ?? []).map(({ label, link }, index) => {
-            return (
-              <Button
-                zIndex="100"
-                borderRadius="22px"
-                color="#1E1E1E"
-                bg="transparent"
-                key={index}
-                fontWeight={["normal", "semibold"]}
-                border="2px solid #1E1E1E"
-                _hover={{ bg: "#FFFFFF", borderColor: "#FFFFFF" }}
-                fontSize="23px"
-              >
-                {label}
-              </Button>
-            );
-          })}
+          {(page?.content?.jobOpportunitySection?.buttons ?? []).map(
+            ({ label, link }, index) => {
+              return (
+                <Button
+                  zIndex="100"
+                  borderRadius="22px"
+                  color="#1E1E1E"
+                  bg="transparent"
+                  key={index}
+                  fontWeight={["normal", "semibold"]}
+                  border="2px solid #1E1E1E"
+                  _hover={{ bg: "#FFFFFF", borderColor: "#FFFFFF" }}
+                  fontSize="23px"
+                >
+                  {label}
+                </Button>
+              );
+            }
+          )}
         </Flex>
         <Image
           right="15%"
-          top= "0"
+          top="0"
           src={page?.content?.jobOpportunitySection?.image}
           pos="absolute"
           bottom="0"

@@ -23,7 +23,7 @@ const PAGE_KEY = "sharing";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -619,6 +619,8 @@ const Sharing = ({ page, setting, lang }) => {
                     onClick={() => handleFilter(category.key)}
                   >
                     <Image
+                      color="#000"
+                      bgCOlor="#000"
                       pr="12px"
                       w="auto"
                       maxH="20px"

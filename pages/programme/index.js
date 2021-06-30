@@ -33,6 +33,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page:
         (await getPage({ key: PAGE_KEY, lang: context.locale })) ??
+        {} ??
         (await getPage({ key: PAGE_KEY, lang: "zh" })),
       wordings: await getConfiguration({
         key: "wordings",
@@ -113,6 +114,9 @@ const Programme = ({ page }) => {
             >
               {page?.content?.visionSection?.title}
             </Text>
+            <Box fontSize={["lg", "xl", "xl"]} textAlign="center" text>
+              <MultiTextRenderer data={page?.content?.visionSection?.detail} />
+            </Box>
             {(page?.content?.visionSection?.sections ?? []).map(
               ({ title, description, id }, index) => {
                 return (
@@ -157,9 +161,10 @@ const Programme = ({ page }) => {
 
             {page?.content?.visionSection?.videoLink && (
               <Iframe
+                p={2}
                 pt={16}
-                w={800}
-                h={480}
+                w={[320, 480, 800]}
+                h={[192, 288, 480]}
                 src={page?.content?.visionSection?.videoLink}
                 title="PWD Video"
                 frameborder="0"
@@ -167,20 +172,6 @@ const Programme = ({ page }) => {
                 allowfullscreen
               />
             )}
-          </VStack>
-        </Container>
-      </Box>
-      <Box>
-        <Container>
-          <VStack align="center" spacing={0} py={16}>
-            <Box pt={8}>
-              <MultiTextRenderer
-                data={page?.content?.visionSection?.detail}
-                fontSize={["lg", "xl", "xl"]}
-                textAlign="center"
-                text
-              />
-            </Box>
           </VStack>
         </Container>
       </Box>
@@ -379,7 +370,7 @@ const Programme = ({ page }) => {
                                     <Icon as={AiOutlinePlus} fontSize="2xl" />
                                   </HStack>
                                 </AccordionButton>
-                                <AccordionPanel px={8} color="gray.200">
+                                <AccordionPanel px={4} color="gray.200">
                                   <MultiTextRenderer data={description} />
                                   <VStack spacing={1} mt={8} align="start">
                                     {(links ?? []).map(({ id, label, url }) => {

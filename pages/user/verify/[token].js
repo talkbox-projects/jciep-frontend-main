@@ -26,7 +26,7 @@ const PAGE_KEY = "verify_email";
 export const getServerSideProps = async (context) => {
   return {
     props: {
-      page: await getPage({ key: PAGE_KEY, lang: context.locale }),
+      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -73,8 +73,6 @@ const VerifyToken = () => {
         }
       `;
 
-      
-
       const data = await getGraphQLClient().request(mutation, {
         input: {
           emailVerificationToken,
@@ -82,14 +80,16 @@ const VerifyToken = () => {
         },
       });
 
-      console.log(data)
-      setCredential({token : data?.UserLogin?.token,  user: data?.UserLogin?.user})
+      console.log(data);
+      setCredential({
+        token: data?.UserLogin?.token,
+        user: data?.UserLogin?.user,
+      });
       // setLogin(data?.UserLogin?.user);
       setIdentityId(data?.UserLogin?.user?.identities?.[0] ?? null);
       router.push("/user/identity/select");
-
     } catch (e) {
-      console.log(e)
+      console.log(e);
       setError("password_confirm", {
         message: getWording("emailVerify.user_create_error_message"),
       });
