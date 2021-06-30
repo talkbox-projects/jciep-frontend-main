@@ -44,7 +44,7 @@ const Footer = ({ footer }) => {
               );
             })}
           </VStack>
-          <Divider />
+          <Divider pt={8} />
           <Stack
             pt={8}
             spacing={8}
