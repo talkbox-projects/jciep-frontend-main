@@ -58,9 +58,9 @@ const withPostCMS =
             defaultValue: "",
             options: [
               { value: "notSpecified", label: "無 N/A" },
-              ...categories.map(({ key, label: { en, zh } }) => ({
+              ...categories.map(({ key, label }) => ({
                 value: key,
-                label: `${en} ${zh}`,
+                label: label,
               })),
             ],
           },

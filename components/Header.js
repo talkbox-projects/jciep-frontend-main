@@ -595,7 +595,7 @@ export default withConfigurationCMS(
         label: "分類 Categories",
         itemProps: ({ id: key, label }) => ({
           key,
-          label: label?.zh || label?.en ? `${label?.zh} ${label?.en}` : "",
+          label: label,
         }),
         defaultItem: () => ({
           id: Math.random().toString(36).substr(2, 9),
@@ -608,20 +608,8 @@ export default withConfigurationCMS(
           },
           {
             name: "label",
-            component: "group",
+            component: "text",
             label: "分類名稱 Category Label",
-            fields: [
-              {
-                name: "en",
-                component: "text",
-                label: "英文 English",
-              },
-              {
-                name: "zh",
-                component: "text",
-                label: "繁體中文 Traditional Chinese",
-              },
-            ],
           },
           {
             name: "color",

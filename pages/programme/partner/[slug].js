@@ -57,8 +57,6 @@ const Partner = ({ page }) => {
 
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
-      {/* Banner Section */}
-
       {/* First Section */}
       <Box
         h="50vw"

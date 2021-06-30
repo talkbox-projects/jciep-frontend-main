@@ -17,6 +17,9 @@ import {
   getHottestPosts,
   getFilteredPosts,
 } from "../../utils/post/getPost";
+import DividerSimple from "../../components/DividerSimple";
+import HighlightHeadline from "../../components/HighlightHeadline";
+import Container from "../../components/Container";
 
 const PAGE_KEY = "sharing";
 
@@ -183,7 +186,7 @@ const Sharing = ({ page, setting, lang }) => {
   );
 
   return (
-    <VStack w="100%" align="stretch" spacing={0} alignItems="center">
+    <VStack w="100%" align="stretch" spacing={0}>
       {page?.content?.seo?.title && (
         <NextSeo
           title={page?.content?.seo?.title}
@@ -191,6 +194,23 @@ const Sharing = ({ page, setting, lang }) => {
         ></NextSeo>
       )}
       {/* Featured Article Section */}
+      <Box h="70vw" overflow="hidden" bgColor="#F6D644">
+        <VStack align="stretch" pt={48} w="100%">
+          <Container pb={16}>
+            <VStack align="start" w="100%">
+              <Box px={[4, 8, 8, 16]}>
+                <Text fontWeight={900} fontSize={["3xl", "4xl", "4xl", "5xl"]}>
+                  <HighlightHeadline bgColor="white">
+                    {page?.content?.title}
+                  </HighlightHeadline>
+                </Text>
+              </Box>
+            </VStack>
+          </Container>
+          <DividerSimple></DividerSimple>
+        </VStack>
+      </Box>
+
       <Box
         minH="calc(50vw - 40px)"
         w="100%"

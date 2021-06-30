@@ -3,6 +3,7 @@ import { Box, HStack, Text } from "@chakra-ui/react";
 const HighlightHeadline = ({ bgColor = "#F6D644", children }) => {
   return (
     <Text
+      px={2}
       textAlign="center"
       fontWeight="bold"
       pos="relative"
