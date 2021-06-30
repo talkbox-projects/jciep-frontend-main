@@ -12,7 +12,7 @@ export default gql`
     pendingApproval
     approved
     rejected
-    resubmitRequied
+    resubmitRequired
   }
 
   type Member {
@@ -49,6 +49,7 @@ export default gql`
   type Organization {
     id: ID!
     organizationType: OrganizationType
+    status: OrganizationStatus!
 
     chineseCompanyName: String
     englishCompanyName: String

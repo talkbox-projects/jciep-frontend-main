@@ -1,7 +1,16 @@
-import { HStack } from "@chakra-ui/layout";
-import { Box, Image, Link, Stack, VStack } from "@chakra-ui/react";
+import { Divider, HStack, Text } from "@chakra-ui/layout";
+import {
+  Box,
+  Button,
+  Image,
+  Link,
+  SimpleGrid,
+  Stack,
+  VStack,
+} from "@chakra-ui/react";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
+import NextLink from "next/link";
 
 const Footer = ({ footer }) => {
   return (
@@ -13,14 +22,14 @@ const Footer = ({ footer }) => {
               return (
                 <Stack
                   spacing={4}
-                  align="center"
+                  align={["start", "start", "center"]}
                   direction={["column", "column", "row", "row"]}
                   key={id}
                 >
                   <Box w="150px" color="gray.500">
                     {title}
                   </Box>
-                  <HStack spacing={8} maxH={12} align="center">
+                  <HStack wrap="wrap" spacing={8} maxH={12} align="center">
                     {(partners ?? []).map(
                       ({ id: _id, label, url, logo = "" }) => {
                         return (
@@ -35,8 +44,69 @@ const Footer = ({ footer }) => {
               );
             })}
           </VStack>
+          <Divider />
+          <Stack
+            pt={8}
+            spacing={8}
+            align={"start"}
+            direction={["column", "column", "row", "row"]}
+            spacing={8}
+          >
+            <Box>
+              <Image maxW={150} src={footer?.logo} />
+            </Box>
+
+            <SimpleGrid
+              flex={1}
+              minW={0}
+              w="100%"
+              columns={[2, 2, 3, 5, 5]}
+              gap={12}
+            >
+              {(footer?.sitemap ?? []).map(({ id, links = [], title, url }) => (
+                <VStack key={id} align="start">
+                  <NextLink href={url}>
+                    <Button
+                      textAlign="left"
+                      variant="link"
+                      color="black"
+                      fontWeight="bold"
+                      fontSize={["xl", "xl", "lg"]}
+                    >
+                      {title}
+                    </Button>
+                  </NextLink>
+                  {(links ?? []).map(({ id: _id, url = "", label = "" }) => {
+                    return (
+                      <NextLink id={_id} href={url}>
+                        <Button
+                          fontSize={["xl", "xl", "lg"]}
+                          textAlign="left"
+                          variant="link"
+                          fontWeight="normal"
+                          color="black"
+                        >
+                          {label}
+                        </Button>
+                      </NextLink>
+                    );
+                  })}
+                </VStack>
+              ))}
+            </SimpleGrid>
+          </Stack>
+
+          <HStack pt={16} alignSelf="center">
+            {footer?.links?.map(({ id, label, url = "" }) => {
+              return (
+                <Link key={id} href={url} target="blank">
+                  {label}
+                </Link>
+              );
+            })}
+          </HStack>
+          <Text alignSelf="center">{footer?.copyright}</Text>
         </VStack>
-        {JSON.stringify({ footer })}
       </Container>
     </Box>
   );
