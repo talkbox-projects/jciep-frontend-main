@@ -20,6 +20,10 @@ import { getConfiguration } from "../../../../utils/configuration/getConfigurati
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import Link from "next/link";
+import { useAppContext } from "../../../../store/AppStore";
+import { gql } from "graphql-request";
+import { getGraphQLClient } from "../../../../utils/apollo";
+
 
 const PAGE_KEY = "employer_identity_add";
 
@@ -45,6 +49,8 @@ export const getServerSideProps = async (context) => {
 
 const IdentityEmployerAdd = ({ page }) => {
   const router = useRouter();
+  const { user } = useAppContext();
+
   const {
     handleSubmit,
     setError,
@@ -52,15 +58,76 @@ const IdentityEmployerAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const validate = (contactPersonName, contactEmailAdress, contactNumber, terms) => {
+    if(contactPersonName.trim() === '') {
+      setError("contactPersonName", {
+        type: "manual",
+        message: "輸入有效的聯繫人姓名 Enter valid contact person name! ",
+      });
+      return true
+    } else if (contactEmailAdress.trim() === '') {
+      setError("contactEmailAdress", {
+        type: "manual",
+        message: "輸入有效的聯繫電子郵件地址 Enter valid contact email address! ",
+      });
+      return true
+    } else if (contactNumber.trim() === '') {
+      setError("contactNumber", {
+        type: "manual",
+        message: "輸入有效的聯繫電話 Enter valid contact Num! ",
+      });
+      return true
+    } else if (terms === false) {
+      setError("terms", {
+        type: "manual",
+        message: "請接受條款和條件 Please accept T&C! ",
+      });
+      return true
+    } else {
+      return false
+    }
+   
+  }
   const onFormSubmit = useCallback(
     async ({ contactPersonName, contactEmailAdress, contactNumber, terms }) => {
       try {
+        
+
+        if(validate(contactPersonName, contactEmailAdress, contactNumber, terms)) {
+          return true
+        }
+
         console.log(contactPersonName);
         console.log(contactEmailAdress);
         console.log(contactNumber);
         console.log(terms);
+        
+        const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
+          }
+        }
+      `;
+  
+      let data =await getGraphQLClient().request(mutation, {
+        input: {
+          userId: user.id,
+          identity: 'employer',
+          chineseName: contactPersonName,
+          englishName: contactPersonName,
+          tncAccept: terms,
+          email: contactEmailAdress,
+          phone: contactNumber 
+        },
+      });    
+  
+      if(data) {
+        router.push("/user/organization/company/add")
+      }
+    
 
-        router.push( "/user/organization/company/add");
+        // router.push( "/user/organization/company/add");
       } catch (e) {
         console.log(e);
       }
@@ -142,6 +209,7 @@ const IdentityEmployerAdd = ({ page }) => {
                 height="44px"
                 width="117.93px"
                 type="submit"
+                isLoading={isSubmitting}
               >
                 {page?.content?.form?.continue}
               </Button>

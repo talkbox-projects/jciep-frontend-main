@@ -19,6 +19,10 @@ import { getConfiguration } from "../../../../utils/configuration/getConfigurati
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
+import { useAppContext } from "../../../../store/AppStore";
+import { gql } from "graphql-request";
+import { getGraphQLClient } from "../../../../utils/apollo";
+
 
 const PAGE_KEY = "identity_public_add";
 
@@ -44,12 +48,65 @@ export const getServerSideProps = async (context) => {
 
 const IdentityPublicAdd = ({ page }) => {
   const router = useRouter();
+  const { user } = useAppContext();
+
   const {
     handleSubmit,
     setError,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
+
+
+  const validate = (chineseName, englishName, dateofBirth, gender, residentDistrict, personTypes, interestedEmployee, industry, terms) => {
+    if(chineseName.trim() === '') {
+      setError("chinese_name", {
+        type: "manual",
+        message: "輸入有效的中文名稱 Enter valid chinese name! ",
+      });
+      return true
+    } else if (englishName.trim() === '') {
+      setError("english_name", {
+        type: "manual",
+        message: "輸入有效的英文名稱 Enter valid english name! ",
+      });
+      return true
+    } else if (dateofBirth === '') {
+      setError("date_of_birth", {
+        type: "manual",
+        message: "輸入有效的出生日期 Enter valid date of birth! ",
+      });
+      return true
+    } else if (gender === "none") {
+      setError("gender", {
+        type: "manual",
+        message: "請選擇性別！please select a gender! ",
+      });
+      return true
+    } else if (residentDistrict=== "none") {
+      setError("resident_district", {
+        type: "manual",
+        message: "請選擇居住區 Please select a resident district! ",
+      });
+      return true
+    } else if (industry === "none") {
+      setError("industry", {
+        type: "manual",
+        message: "請選擇行業 Please select industry! ",
+      });
+      return true
+    } else if (terms === false) {
+      setError("terms", {
+        type: "manual",
+        message: "請接受條款和條件 Please accept T&C! ",
+      });
+      return true
+    } else {
+      return false
+    }
+   
+  }
+
 
   const onFormSubmit = useCallback(
     async ({
@@ -62,6 +119,10 @@ const IdentityPublicAdd = ({ page }) => {
       terms,
     }) => {
       try {
+
+        if(validate(chinese_name, english_name, date_of_birth, gender,  resident_district, industry, terms)) {
+          return 
+        }
         console.log(chinese_name);
         console.log(english_name);
         console.log(date_of_birth);
@@ -70,7 +131,34 @@ const IdentityPublicAdd = ({ page }) => {
         console.log(industry);
         console.log(terms);
 
-        router.push("/user/identity/public/1/success");
+        const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
+          }
+        }
+      `;
+  
+      let data =await getGraphQLClient().request(mutation, {
+        input: {
+          userId: user.id,
+          identity: 'public',
+          chineseName: chinese_name,
+          englishName: english_name,
+          dob: date_of_birth,
+          gender,
+          district: resident_district,
+          industry,
+          tncAccept: terms,
+          email: user.email ? user.email : '',
+          phone: user.phone ?user.phone : '' 
+        },
+      });
+  
+      if(data && data.IdentityCreate) {
+        router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+      }
+
       } catch (e) {
         console.log(e);
       }
@@ -141,7 +229,7 @@ const IdentityPublicAdd = ({ page }) => {
                   <Select {...register("gender")}>
                     {page?.content?.form?.gender?.options?.map((option) => {
                       return (
-                        <option value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>{option.label}</option>
                       );
                     })}
                   </Select>
@@ -158,7 +246,7 @@ const IdentityPublicAdd = ({ page }) => {
                     {page?.content?.form?.residentRestrict?.options?.map(
                       (option) => {
                         return (
-                          <option value={option.value}>{option.label}</option>
+                          <option key={option.id} value={option.value}>{option.label}</option>
                         );
                       }
                     )}
@@ -175,7 +263,7 @@ const IdentityPublicAdd = ({ page }) => {
                   <Select {...register("industry")}>
                     {page?.content?.form?.industry?.options?.map((option) => {
                       return (
-                        <option value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>{option.label}</option>
                       );
                     })}
                   </Select>
@@ -197,6 +285,7 @@ const IdentityPublicAdd = ({ page }) => {
                 height="44px"
                 width="117.93px"
                 type="submit"
+                isLoading={isSubmitting}
               >
                 {page?.content?.form?.continue}
               </Button>

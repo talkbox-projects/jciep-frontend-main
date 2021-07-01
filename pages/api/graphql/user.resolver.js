@@ -199,38 +199,44 @@ export default {
 
        console.log(input)
 
-      let identity = await new Identity({
-        userId : input.userId,
-        type: input.identity,
-        chineseName: input.chineseName,
-        englishName: input.englishName,
-        dob: input.dob, 
-        pwdType: input.pwdType,
-        gender:  input.gender ? input.gender : undefined ,
-        district: input.district ?  input.district : undefined,
-        employementMode: input.interestedEmploymentMode ?  input.interestedEmploymentMode : undefined,
-        industry: input.industry ? input.industry : undefined,
-        tncAccept:  input.tncAccept,        
-        email:  input.email,
-        phone:  input.phone  
-      })
-      .save()
+      let identityExists = await Identity.findOne({userId: input.userId, type: input.identity})
 
-      console.log(identity)
-      let user = await User.findById(input.userId);
-      let identities = user.identities;
-      console.log(identities)
-      identities.push(identity._id)
-      
-      let updatedUser = await User.findByIdAndUpdate(input.userId, {
-        identities: identities
-      })
-
-      console.log(updatedUser)
-
-      return {
-        id: identity._id
+      if(identityExists) {
+        throw new Error("Identity Already exists!");
+      } else {
+        let identity = await new Identity({
+          userId : input.userId,
+          type: input.identity,
+          chineseName: input.chineseName,
+          englishName: input.englishName,
+          dob: input.dob, 
+          pwdType: input.pwdType,
+          gender:  input.gender ? input.gender : undefined ,
+          district: input.district ?  input.district : undefined,
+          employementMode: input.interestedEmploymentMode ?  input.interestedEmploymentMode : undefined,
+          industry: input.industry ? input.industry : undefined,
+          tncAccept:  input.tncAccept,        
+          email:  input.email,
+          phone:  input.phone  
+        })
+        .save()
+  
+        let user = await User.findById(input.userId);
+        let identities = user.identities;
+        console.log(identities)
+        identities.push(identity._id)
+        
+        let updatedUser = await User.findByIdAndUpdate(input.userId, {
+          identities: identities
+        })
+  
+  
+        return {
+          id: identity._id
+        }
       }
+
+      
     },
 
     IdentityUpdate: () => {
