@@ -316,11 +316,11 @@ const PostDetail = ({ post, setting, page }) => {
       </Box>
 
       {nextPost && (
-        <chakra.a target="_blank" href={`/sharing/${nextPost?.slug}`}>
-          <Box w="100%" cursor="pointer">
+        <Box w="100%" cursor="pointer">
+          <chakra.a target="_blank" href={`/sharing/${nextPost?.slug}`}>
             <PostHeader categories={categories} post={nextPost} />
-          </Box>
-        </chakra.a>
+          </chakra.a>
+        </Box>
       )}
     </VStack>
   );
