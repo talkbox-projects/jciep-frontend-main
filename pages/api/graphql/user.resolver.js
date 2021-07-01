@@ -1,9 +1,11 @@
-import { EmailVerify, PhoneVerify, User } from "./user.model";
+import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import {sendSms} from "../services/phone";
-import {genders, employementModes, identityTypes, districts, pwdType, industry } from './constants/enum'
+
+
+
 
 export default {
   Query: {
@@ -53,7 +55,6 @@ export default {
           Text: `Please verify your email by clicking the link ${host}/user/verify/${emailVerify.token}`,
         })
         return true;
-        return true;
       } catch (error) {
         console.error(error);
         return false;
@@ -96,60 +97,71 @@ export default {
 
        */
 
-      if (input?.emailVerificationToken) {
-        const emailVerify = await EmailVerify.findOne({
-          token: input?.emailVerificationToken,
-        });
-        if (!emailVerify?.email) {
-          throw new Error("Invalid Token");
-        } else {
-          const user = await User.findOneAndUpdate(
-            { email: emailVerify?.email },
-            {
-              email: emailVerify?.email,
-              password: await User.generateHash(input?.password),
-            },
-            { upsert: true, new: true }
-          );
-          await emailVerify.delete();
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          
-          return { token, user };
+      try {
+        if (input?.emailVerificationToken) {
+          const emailVerify = await EmailVerify.findOne({
+            token: input?.emailVerificationToken,
+          });
+          if (!emailVerify?.email) {
+            throw new Error("Invalid Token");
+          } else {
+            const user = await User.findOneAndUpdate(
+              { email: emailVerify?.email },
+              {
+                email: emailVerify?.email,
+                password: await User.generateHash(input?.password),
+              },
+              { upsert: true, new: true }
+            ).populate('identities');
+            await emailVerify.delete();
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+
+            console.log(user)
+            return { token, user };
+          }
+        } else if (input?.email && input?.password) {
+          const user = await User.findOne({ email: input?.email.trim() }).populate('identities');
+          if (await user?.comparePassword(input?.password)) {
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            
+
+            return { token, user };
+          } else {
+            throw new Error("Wrong Email and Password!");
+          }
+        } else if (input?.phone) {
+          const phoneVerify = await PhoneVerify.findOne({
+            phone: input?.phone,
+            otp: input?.otp,
+          });
+          if (!phoneVerify) {
+            throw new Error("Invalid OTP");
+          } else {
+            await phoneVerify.delete();
+            const user = await User.findOneAndUpdate(
+              { phone: phoneVerify?.phone },
+              { phone: phoneVerify?.phone },
+              { upsert: true, new: true }
+            ).populate('identities');
+            
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+
+            return { token, user };
+          }
         }
-      } else if (input?.email && input?.password) {
-        const user = await User.findOne({ email: input?.email.trim() });
-        if (await user?.comparePassword(input?.password)) {
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          return { token, user };
-        } else {
-          throw new Error("Wrong Email and Password!");
-        }
-      } else if (input?.phone) {
-        const phoneVerify = await PhoneVerify.findOne({
-          phone: input?.phone,
-          otp: input?.otp,
-        });
-        if (!phoneVerify) {
-          throw new Error("Invalid OTP");
-        } else {
-          await phoneVerify.delete();
-          const user = await User.findOneAndUpdate(
-            { phone: phoneVerify?.phone },
-            { phone: phoneVerify?.phone },
-            { upsert: true, new: true }
-          );
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          return { token, user };
-        }
+        return null;
+      } catch (err) {
+        console.log(err)
       }
-      return null;
+      
     },
 
     UserGet: async (_parent, { token }) => {
       try {
         let user = jwt.decode(token, "shhhhh");
-        return await User.findById(user._id)
+        user = await User.findById(user._id).populate('identities');
         
+        return user
       } catch (error) {
         return null;
       }
@@ -178,15 +190,50 @@ export default {
        */
     },
 
-    IdentityCreate: () => {
+    IdentityCreate: async (_parent, {input}) => {
       /**
        * Admin can create an identity for any user
        * Staff and Employer can create identity for the users that are members under his/her organization with role = pwd
        * Pwd/Public can create identity for his own account.
        */
+
+       console.log(input)
+
+      let identity = await new Identity({
+        userId : input.userId,
+        type: input.identity,
+        chineseName: input.chineseName,
+        englishName: input.englishName,
+        dob: input.dob, 
+        pwdType: input.pwdType,
+        gender:  input.gender ? input.gender : undefined ,
+        district: input.district ?  input.district : undefined,
+        employementMode: input.interestedEmploymentMode ?  input.interestedEmploymentMode : undefined,
+        industry: input.industry ? input.industry : undefined,
+        tncAccept:  input.tncAccept,        
+        email:  input.email,
+        phone:  input.phone  
+      })
+      .save()
+
+      console.log(identity)
+      let user = await User.findById(input.userId);
+      let identities = user.identities;
+      console.log(identities)
+      identities.push(identity._id)
+      
+      let updatedUser = await User.findByIdAndUpdate(input.userId, {
+        identities: identities
+      })
+
+      console.log(updatedUser)
+
+      return {
+        id: identity._id
+      }
     },
 
-    IdentityCreate: () => {
+    IdentityUpdate: () => {
       /**
        * Admin can update an identity for any user
        * Staff and Employer can update identity under his/her organization

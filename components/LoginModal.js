@@ -82,6 +82,7 @@ const LoginModal = () => {
       };
 
       const data = await getGraphQLClient().request(mutation, variables);
+      console.log(data)
       setCredential(data?.UserLogin);
       loginModalDisclosure.onClose();
     } catch (e) {

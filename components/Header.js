@@ -107,6 +107,7 @@ const Header = ({ navigation, header }) => {
         console.log(data)
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
+        console.log(e)
         removeCredential();
       }
     })();

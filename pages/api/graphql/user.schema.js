@@ -78,7 +78,7 @@ export default gql`
   }
 
   type Identity {
-    id: ID!
+    id: ID
     type: IdentityType!
     chineseName: String!
     englishName: String!

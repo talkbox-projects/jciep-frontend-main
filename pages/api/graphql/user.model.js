@@ -1,5 +1,5 @@
 import { model, models, Schema } from "mongoose";
-import { districts, genders, identityTypes } from "./constants/enum";
+import { districts, genders, identityTypes , employementModes, industry, pwdType} from "./constants/enum";
 import bcrypt from "bcrypt";
 import { uuidv4 } from "../../../utils/uuid";
 
@@ -66,23 +66,104 @@ userSchema.methods.comparePassword = async function (password) {
 };
 
 const identitySchema = Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   type: {
     type: String,
-    enum: Object.values(identityTypes),
+    enum: Object.keys(identityTypes),
     required: true,
   },
   chineseName: String,
   englishName: String,
+  email: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
   dob: Date,
   gender: {
     type: String,
-    enum: Object.values(genders),
-    required: true,
+    enum: Object.keys(genders),
   },
   district: {
     type: String,
-    enum: Object.values(districts),
+    enum: Object.keys(districts),
   },
+  employementMode: {
+    type: String,
+    enum: Object.keys(employementModes)
+  },
+  pwdType: {
+    type: String,
+    enum: Object.keys(pwdType)
+  },
+  interestedIndustry: [
+    {
+      type: String,
+      enum: Object.keys(industry)
+    }
+  ],
+  industry: {
+    type: String,
+    enum: Object.keys(industry)
+  },
+  biography: {
+    type: Object
+  },
+  portfolio: [
+    {
+      input: Object,
+      title: String,  
+      description: String
+    }
+  ],
+  writtenLanguage: [
+    {
+      type: String
+    }
+  ],
+  oralLanguage: [
+    {
+      type: String
+    }
+  ],
+  hobby: {
+    type: String
+  },
+  education: [
+    {
+      school: String,
+      degree: Object,
+      fieldOfStudy: String,
+      startDatetime: Date,
+      endDatetime: Date,
+      present: Boolean
+    }
+  ],
+  employment: [
+    {
+      employmentType: Object,
+      CompanyName: String,
+      Industry: Object,
+      startDatetime: Date,
+      endDatetime: Date,
+      present: Boolean
+    }
+  ],
+  activity: [
+    {
+      name: String,
+      description: String,
+      startDatetime: Date,
+      endDatetime: Date
+    }
+  ],
+  tncAccept: {
+    type: Boolean
+  }
 });
 
 export const Identity = models["Identity"] ?? model("Identity", identitySchema);
