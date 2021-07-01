@@ -165,15 +165,15 @@ const Sharing = ({ page, setting, lang }) => {
         <Box
           bgColor="#F6D644"
           d={["none", "none", "block"]}
-          minH={324}
+          minH={240}
           position="relative"
           zIndex={10}
           w="100%"
-          pb="100px"
+          pb={12}
         >
           <VStack
             align="stretch"
-            pt={48}
+            pt={36}
             w="100%"
             d={["none", "none", "block"]}
           >
@@ -192,12 +192,15 @@ const Sharing = ({ page, setting, lang }) => {
               </VStack>
             </Container>
           </VStack>
-          <Container position="relative" zIndex={400} w="100%">
+          <Container position="relative" zIndex={500} w="100%">
             <Stack
               direction={["column", "column", "row"]}
               spacing={8}
               w="100%"
               align="start"
+              onClick={() => {
+                router.push(`/sharing/${featuredArticle?.slug}`);
+              }}
             >
               <AspectRatio
                 w={"40%"}

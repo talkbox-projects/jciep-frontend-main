@@ -59,8 +59,8 @@ const PostHeader = ({ categories, post }) => {
     return (categories ?? []).find((c) => c.key === key);
   };
   return (
-    <>
-      <Box pb={32} w="100%" position="relative">
+    <Box w="100%">
+      <Box d={["none", "none", "block"]} pb={32} w="100%" position="relative">
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}
@@ -77,6 +77,14 @@ const PostHeader = ({ categories, post }) => {
         </Box>
         <Box bgColor="#f6d644" minH="50vh"></Box>
         <Box bgColor="#f6d644">
+          <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
+        </Box>
+      </Box>
+      <Box mt={16} d={["block", "block", "none"]} position="relative">
+        <AspectRatio w="100%" ratio={4 / 3}>
+          <Image src={post.coverImage} />
+        </AspectRatio>
+        <Box w="100%" position="absolute" bottom={0}>
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
       </Box>
@@ -108,7 +116,7 @@ const PostHeader = ({ categories, post }) => {
           </Heading>
         </VStack>
       </Container>
-    </>
+    </Box>
   );
 };
 
@@ -180,16 +188,18 @@ const PostDetail = ({ post, setting, page }) => {
                 <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
                   {title}
                 </Text>
-                <Text fontSize="md" noOfLines={3} color="#1E1E1E">
-                  {excerpt}
-                </Text>
+                {excerpt && (
+                  <Text fontSize="md" noOfLines={3} color="#1E1E1E">
+                    {excerpt}
+                  </Text>
+                )}
                 <br />
                 <Divider />
               </VStack>
             );
           })}
         </VStack>
-        <VStack align="stretch" textAlign="left" spacing={4}>
+        <VStack align="stretch" textAlign="left" spacing={2}>
           <Text
             bgColor="gray.50"
             borderLeftWidth={3}
@@ -289,7 +299,7 @@ const PostDetail = ({ post, setting, page }) => {
               </Text>
               {(post?.references ?? []).map(({ label, url = "#" }, index) => {
                 return (
-                  <NextLink href={url} target="blank" key={index}>
+                  <chakra.a href={url} target="_blank" key={index}>
                     <Button
                       rightIcon={<ImShare />}
                       fontWeight="normal"
@@ -299,7 +309,7 @@ const PostDetail = ({ post, setting, page }) => {
                     >
                       {label}
                     </Button>
-                  </NextLink>
+                  </chakra.a>
                 );
               })}
             </VStack>
@@ -317,7 +327,7 @@ const PostDetail = ({ post, setting, page }) => {
 
       {nextPost && (
         <Box w="100%" cursor="pointer">
-          <chakra.a target="_blank" href={`/sharing/${nextPost?.slug}`}>
+          <chakra.a href={`/sharing/${nextPost?.slug}`}>
             <PostHeader categories={categories} post={nextPost} />
           </chakra.a>
         </Box>
