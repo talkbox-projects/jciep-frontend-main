@@ -30,36 +30,6 @@ export const getPost = async ({ idOrSlug, lang }) => {
   return post;
 };
 
-export const getLatestPosts = async ({ page, limit }) => {
-  console.log("sending data", page, limit);
-  const query = gql`
-    query PostGetLatest($offset: Int!, $limit: Int!) {
-      PostGetLatest(offset: $offset, limit: $limit) {
-        totalRecords
-        data {
-          id
-          slug
-          lang
-          title
-          excerpt
-          category
-          tags
-          publishDate
-          coverImage
-        }
-      }
-    }
-  `;
-
-  const variables = {
-    offset: page,
-    limit
-  };
-
-  const { PostGetLatest: posts } = await getGraphQLClient().request(query, variables);
-  return posts;
-};
-
 export const getHottestPosts = async ({ limit }) => {
   console.log("sending data", limit);
   const query = gql`
@@ -79,18 +49,26 @@ export const getHottestPosts = async ({ limit }) => {
   `;
 
   const variables = {
-    limit
+    limit,
   };
 
-  const { PostGetHotest: posts } = await getGraphQLClient().request(query, variables);
+  const { PostGetHotest: posts } = await getGraphQLClient().request(
+    query,
+    variables
+  );
   return posts;
 };
 
-export const getFilteredPosts = async ({ lang, limit, offset, category }) => {
+export const getFilteredPosts = async ({ lang, limit, page, category }) => {
   console.log("sending data", limit);
   const query = gql`
-    query PostSearch($limit: Int!, $lang: Language!, $offset: Int!, $category: String) {
-      PostSearch(limit: $limit, lang: $lang, offset: $offset, category: $category) {
+    query PostSearch(
+      $limit: Int!
+      $lang: Language
+      $page: Int!
+      $category: String
+    ) {
+      PostSearch(limit: $limit, lang: $lang, page: $page, category: $category) {
         totalRecords
         data {
           id
@@ -110,11 +88,14 @@ export const getFilteredPosts = async ({ lang, limit, offset, category }) => {
   const variables = {
     limit,
     lang,
-    offset,
+    page,
     category,
   };
 
-  const { PostSearch: posts } = await getGraphQLClient().request(query, variables);
+  const { PostSearch: posts } = await getGraphQLClient().request(
+    query,
+    variables
+  );
   return posts;
 };
 
@@ -139,9 +120,12 @@ export const getRelatedPosts = async ({ limit = 3, category, id }) => {
   const variables = {
     limit,
     category,
-    id
+    id,
   };
 
-  const { PostGetRelated: posts } = await getGraphQLClient().request(query, variables);
+  const { PostGetRelated: posts } = await getGraphQLClient().request(
+    query,
+    variables
+  );
   return posts;
 };

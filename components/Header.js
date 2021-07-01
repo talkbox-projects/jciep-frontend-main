@@ -128,10 +128,6 @@ const Header = ({ navigation, header }) => {
         <Container>
           <HStack py={2} fontSize="sm" alignItems="center">
             <Box flex={1} minW={0} w="100%" />
-            <Text>{user ? user.email ?? user.phone : "guest"}</Text>
-            <Link href="/web-accessibility" fontSize="sm">
-              {getWording("header.font_size_level_label")}
-            </Link>
             <Select
               border="none"
               size="sm"
@@ -269,77 +265,84 @@ const Header = ({ navigation, header }) => {
           >
             <Image p={2} h="100%" src={navigation?.logo} />
             <Box flex={1} minW={0} w="100%" />
-            <HStack justifyContent="stretch" h="100%" border={0}>
+            <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
-                ({ id, submenu = [], label, path = "/" }, index) =>
-                  submenu?.length > 0 ? (
-                    <Popover key={id} trigger="hover" gutter={20}>
-                      <PopoverTrigger>
-                        <Box h="100%">
-                          <NextLink href={path}>
-                            <Button
-                              h="100%"
-                              variant="unstyled"
-                              borderRadius={0}
-                              px={2}
-                              _focus={{ outline: "none" }}
-                              fontWeight="normal"
-                              borderColor="transparent"
-                              {...(Number(tabIndex) === index && {
-                                borderColor: "green",
-                                fontWeight: "bold",
-                              })}
-                              appearance="none"
-                              borderBottomWidth={3}
-                            >
-                              {label}
-                            </Button>
-                          </NextLink>
-                        </Box>
-                      </PopoverTrigger>
-                      <PopoverContent w="fit-content">
-                        <PopoverBody as={VStack} spacing={4} fontSize="md">
-                          {submenu.map(({ id, label, path }) => (
-                            <NextLink key={id} href={path}>
-                              <Button
-                                h="100%"
-                                variant="unstyled"
-                                borderRadius={0}
-                                px={10}
-                                minW={200}
-                                _focus={{ outline: "none" }}
-                                fontWeight="normal"
-                                borderColor="transparent"
-                                appearance="none"
-                              >
-                                {label}
-                              </Button>
-                            </NextLink>
-                          ))}
-                        </PopoverBody>
-                      </PopoverContent>
-                    </Popover>
-                  ) : (
-                    <NextLink key={id} href={path}>
-                      <Button
-                        h="100%"
-                        variant="unstyled"
-                        borderRadius={0}
-                        px={2}
-                        _focus={{ outline: "none" }}
-                        fontWeight="normal"
-                        borderColor="transparent"
-                        {...(Number(tabIndex) === index && {
-                          borderColor: "green",
-                          fontWeight: "bold",
-                        })}
-                        appearance="none"
-                        borderBottomWidth={3}
-                      >
-                        {label}
-                      </Button>
-                    </NextLink>
-                  )
+                ({ id, submenu = [], label, path = "/" }, index, arr) => (
+                  <HStack
+                    key={id}
+                    h="100%"
+                    borderColor="transparent"
+                    borderBottomWidth={4}
+                    {...(Number(tabIndex) === index && {
+                      borderColor: "#00BFBA",
+                      fontWeight: "bold",
+                    })}
+                    align="center"
+                  >
+                    <Box
+                      {...(arr.length - 1 > index && {
+                        borderRightWidth: 1,
+                        borderRightColor: "#eee",
+                      })}
+                      px={2}
+                    >
+                      {submenu?.length > 0 ? (
+                        <Popover trigger="hover" gutter={20}>
+                          <PopoverTrigger>
+                            <Box h="100%">
+                              <NextLink href={path}>
+                                <Button
+                                  h="100%"
+                                  variant="unstyled"
+                                  borderRadius={0}
+                                  _focus={{ outline: "none" }}
+                                  fontWeight="normal"
+                                  appearance="none"
+                                >
+                                  {label}
+                                </Button>
+                              </NextLink>
+                            </Box>
+                          </PopoverTrigger>
+                          <PopoverContent w="fit-content">
+                            <PopoverBody as={VStack} spacing={4} fontSize="md">
+                              {submenu.map(({ id, label, path }) => (
+                                <NextLink key={id} href={path}>
+                                  <Button
+                                    h="100%"
+                                    variant="unstyled"
+                                    borderRadius={0}
+                                    px={10}
+                                    minW={200}
+                                    _focus={{ outline: "none" }}
+                                    fontWeight="normal"
+                                    borderColor="transparent"
+                                    appearance="none"
+                                  >
+                                    {label}
+                                  </Button>
+                                </NextLink>
+                              ))}
+                            </PopoverBody>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <NextLink href={path}>
+                          <Button
+                            h="100%"
+                            variant="unstyled"
+                            borderRadius={0}
+                            _focus={{ outline: "none" }}
+                            fontWeight="normal"
+                            appearance="none"
+                          >
+                            {label}
+                          </Button>
+                        </NextLink>
+                      )}
+                    </Box>
+                  </HStack>
+                )
               )}
             </HStack>
           </HStack>
@@ -612,14 +615,14 @@ export default withConfigurationCMS(
             label: "分類名稱 Category Label",
           },
           {
-            name: "color",
+            name: "bgColor",
             component: "color",
-            label: "顏色 Color",
+            label: "背景顏色 Background Color",
           },
           {
             name: "textColor",
             component: "color",
-            label: "顏色 Color",
+            label: "文字顏色 Foreground Color",
           },
           {
             label: "圖示 Icon",

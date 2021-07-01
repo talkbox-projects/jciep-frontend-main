@@ -4,7 +4,7 @@ const Container = ({ children, ...props }) => {
   return (
     <Box
       px={(0.5, 0.5, 1, 2)}
-      maxWidth={"1200px"}
+      maxWidth={[576, 640, 768, 1024, 1024]}
       w="100%"
       mx="auto"
       {...props}

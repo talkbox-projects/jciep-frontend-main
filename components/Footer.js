@@ -7,6 +7,8 @@ import {
   SimpleGrid,
   Stack,
   VStack,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
@@ -29,17 +31,24 @@ const Footer = ({ footer }) => {
                   <Box w="150px" color="gray.500">
                     {title}
                   </Box>
-                  <HStack wrap="wrap" spacing={8} maxH={12} align="center">
+                  <Wrap spacing={8} maxH={12} align="center">
                     {(partners ?? []).map(
                       ({ id: _id, label, url, logo = "" }) => {
                         return (
-                          <Link href={url} key={_id}>
-                            <Image alt={label} maxH={12} h="100%" src={logo} />
-                          </Link>
+                          <WrapItem>
+                            <Link href={url} key={_id}>
+                              <Image
+                                alt={label}
+                                maxH={12}
+                                h="100%"
+                                src={logo}
+                              />
+                            </Link>
+                          </WrapItem>
                         );
                       }
                     )}
-                  </HStack>
+                  </Wrap>
                 </Stack>
               );
             })}

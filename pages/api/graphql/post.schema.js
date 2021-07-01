@@ -69,11 +69,11 @@ export default gql`
 
   type Query {
     PostSearch(
-      lang: Language!
+      lang: Language
       status: [PostStatus]
       category: String
       limit: Int!
-      offset: Int!
+      page: Int!
     ): FilteredPosts
 
     PostGet(idOrSlug: String!, lang: Language!): Post
@@ -81,9 +81,6 @@ export default gql`
     PostGetRelated(id: ID!, category: String, limit: Int!): [Post]
     "熱門文章 limit default = 3"
     PostGetHotest(limit: Int!): [Post]
-
-    "最新文章 Latest Article with pagination"
-    PostGetLatest(offset: Int!, limit: Int!): FilteredPosts
   }
 
   type Mutation {

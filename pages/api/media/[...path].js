@@ -21,7 +21,7 @@ const handler = async (req, res) => {
     res.setHeader("Content-Type", file.contentType);
     bucket.openDownloadStream(file._id).pipe(res);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(404).send("Internal Server Error!");
   }
 };

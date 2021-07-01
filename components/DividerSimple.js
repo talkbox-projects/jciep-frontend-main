@@ -4,10 +4,11 @@ const DividerSimple = ({
   primaryColor = "#f6d644",
   secondaryColor = "#00bfba",
   nextColor = "#fafafa",
+  flip = false,
 }) => {
   return (
     <Box>
-      <svg viewBox="0 0 1367 118">
+      <svg {...(flip && { transform: "scale(-1,1)" })} viewBox="0 0 1367 118">
         <path
           d="M-89.57,13.3S42.93,121.87,209,121.87c109.69,0,171.75-11.82,299.71-40.29C653.81,49.29,790.55,1,937.84,1c110.53,0,351.82,92.9,433.81,92.9,113.73,0,145.78-15.67,145.78-15.67v71.23h-1607Z"
           fill={primaryColor}

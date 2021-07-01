@@ -1,7 +1,19 @@
-import { chakra, Image, Skeleton, useBreakpointValue } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  chakra,
+  GridItem,
+  HStack,
+  Icon,
+  Image,
+  SimpleGrid,
+  Skeleton,
+  useBreakpointValue,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { Text, VStack, Box, Grid, Stack, Flex } from "@chakra-ui/layout";
 import InfiniteScroll from "react-infinite-scroll-component";
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
@@ -9,10 +21,9 @@ import { getPage } from "../../utils/page/getPage";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import withPageCMS from "../../utils/page/withPageCMS";
-import withPostCMS from "../../utils/post/withPostCMS";
+import { VscQuote } from "react-icons/vsc";
 import withPostCreatorCMS from "../../utils/post/withPostCreatorCMS";
 import {
-  getLatestPosts,
   getPost,
   getHottestPosts,
   getFilteredPosts,
@@ -43,71 +54,81 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
+  const {
+    label = "Unknown Category",
+    image: icon,
+    bgColor = "#00BAB4",
+    textColor = "white",
+  } = category ?? {};
+
+  switch (size) {
+    case "lg":
+      return (
+        <HStack
+          py={2}
+          px={4}
+          bgColor={bgColor}
+          borderRadius={24}
+          textColor={textColor}
+        >
+          {withIcon && <Image src={icon} />}
+          <Text fontWeight="bold" fontSize={size}>
+            {label}
+          </Text>
+        </HStack>
+      );
+    case "sm":
+      return (
+        <HStack
+          py={0.5}
+          px={2}
+          bgColor={bgColor}
+          borderRadius={20}
+          textColor={textColor}
+        >
+          {withIcon && <Image src={icon} />}
+          <Text fontSize={size}>{label}</Text>
+        </HStack>
+      );
+  }
+};
+
 const Sharing = ({ page, setting, lang }) => {
   const categories = setting?.value?.categories;
+
   const [latestPosts, setLatestPosts] = React.useState([]);
-  const [latestPostsPage, setLatestPostsPage] = React.useState(1);
-  const [totalLatest, setTotalLatest] = React.useState(0);
+  const pageRef = useRef(1);
+  const totalRef = useRef(0);
   const [featuredArticle, setFeaturedArticle] = React.useState({});
   const skeletonValue = useBreakpointValue({ base: [1], md: [1, 2] });
   const [hottestPosts, setHottestPosts] = React.useState([]);
-  const [activeFilter, setActiveFilter] = React.useState("");
-  const [prevDataEmpty, setPrevDataEmpty] = React.useState(false);
 
   const router = useRouter();
 
   const getCategoryData = (key) => {
-    if (!key) {
-      return {};
-    }
-    const category = (categories ?? []).find((c) => c.key === key);
-    if (category) {
-      const data = {};
-      data.label = lang === "en" ? category.label.en : category.label.zh;
-      data.icon = category.image;
-      data.bgColor = category.color;
-      data.textColor = category.textColor;
-      return data;
-    }
-    return {};
+    return (categories ?? []).find((c) => c.key === key);
   };
 
-  React.useEffect(() => {
-    fetchData();
-    fetchHottestPosts();
-  }, []);
-
-  React.useEffect(() => {
-    if (page?.content?.featured) {
-      fetchFeaturedArticle(page?.content?.featured);
-    }
-  }, [page?.content]);
-
-  React.useEffect(() => {
-    if (
-      activeFilter &&
-      latestPosts.length < 1 &&
-      totalLatest !== null &&
-      !prevDataEmpty
-    ) {
-      fetchFilteredPosts();
-    }
-  }, [activeFilter, latestPosts, totalLatest]);
-
-  const fetchData = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
-      const { data, totalRecords } = await getLatestPosts({
-        page: latestPostsPage,
+      const { data, totalRecords } = await getFilteredPosts({
+        page: pageRef.current,
+        category: router.query.category ?? undefined,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
       });
-      console.log("!!!!! Page, data:::::", latestPostsPage, totalLatest, data);
-      setTotalLatest(totalRecords);
-      setLatestPosts([...latestPosts, ...data]);
-      setLatestPostsPage(latestPostsPage + 1);
+      totalRef.current = totalRecords;
+      pageRef.current++;
+      console.log(data);
+      setLatestPosts((latestPosts) => [...latestPosts, ...data]);
     } catch (err) {
       console.log("***** error", err);
     }
-  };
+  }, [router.query.category]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const fetchHottestPosts = async () => {
     try {
@@ -128,29 +149,14 @@ const Sharing = ({ page, setting, lang }) => {
     setFeaturedArticle(post);
   };
 
-  const fetchFilteredPosts = async () => {
-    const { data, totalRecords } = await getFilteredPosts({
-      lang,
-      category: activeFilter,
-      offset: 1,
-      limit: page?.content?.latestSection?.numOfPostsPerPage,
-    });
-    // console.log("***** data fil", data, totalRecords)
-    if (totalRecords === null) {
-      setPrevDataEmpty(true);
+  React.useEffect(() => {
+    if (page?.content?.featured) {
+      fetchFeaturedArticle(page?.content?.featured);
     }
-    setTotalLatest(totalRecords === null ? 0 : totalRecords);
-    setLatestPosts([...latestPosts, ...data]);
-    setLatestPostsPage(latestPostsPage + 1);
-  };
+    fetchHottestPosts();
+  }, []);
 
-  const handleFilter = (filter) => {
-    setPrevDataEmpty(false);
-    setLatestPosts([]);
-    setLatestPostsPage(1);
-    setActiveFilter(filter);
-    window.scrollTo(0, window.screen.availHeight);
-  };
+  const featuredArticleCategory = getCategoryData(featuredArticle.category);
 
   const SkeletonPlaceholder = () => (
     <Grid
@@ -194,371 +200,224 @@ const Sharing = ({ page, setting, lang }) => {
         ></NextSeo>
       )}
       {/* Featured Article Section */}
-      <Box h="70vw" overflow="hidden" bgColor="#F6D644">
-        <VStack align="stretch" pt={48} w="100%">
-          <Container pb={16}>
-            <VStack align="start" w="100%">
-              <Box px={[4, 8, 8, 16]}>
-                <Text fontWeight={900} fontSize={["3xl", "4xl", "4xl", "5xl"]}>
-                  <HighlightHeadline bgColor="white">
-                    {page?.content?.title}
-                  </HighlightHeadline>
-                </Text>
-              </Box>
-            </VStack>
-          </Container>
-          <DividerSimple></DividerSimple>
-        </VStack>
-      </Box>
-
-      <Box
-        minH="calc(50vw - 40px)"
-        w="100%"
-        position="relative"
-        background={page?.content?.bannerColor}
-        pt={{ base: "0", lg: "159px" }}
-        px={{ base: "0", lg: "203px" }}
-        pb={{ base: "164px", lg: "120px" }}
-      >
-        <Box maxW="1200px" mx="auto">
-          <chakra.span pos="relative" display={{ base: "none", lg: "block" }}>
-            <chakra.span
-              backgroundImage="linear-gradient(#fff, #fff)"
-              textAlign="left"
-              ml="43"
-              fontSize={["0", "0", "36px"]}
-              lineHeight={2}
-              backgroundRepeat="no-repeat"
-              backgroundPosition="0 0.5em"
-              zIndex="2"
-              pos="relative"
-              px="15px"
-              pb="6px"
-            >
-              {page?.content?.title}
-            </chakra.span>
-          </chakra.span>
-          {featuredArticle && (
-            <Box
-              mt={{ base: "0", lg: "24px" }}
-              display="flex"
-              flexDirection={{ base: "column", lg: "row" }}
-              cursor="pointer"
-              onClick={() => router.push(`/sharing/${featuredArticle.slug}`)}
-            >
-              <Image
-                h={{ base: "auto", lg: "330px" }}
-                w={{ base: "100%", lg: "429px" }}
-                src={featuredArticle.coverImage}
-                mr={{ base: "0", lg: "34px" }}
-                zIndex={{ base: 0, lg: 1 }}
-              />
-              <Box
-                display="flex"
-                flexDir="column"
-                position={{ base: "absolute", lg: "relative" }}
-                bottom={{ base: "10px", lg: "unset" }}
-                boxShadow={{
-                  base: "12px 12px 24px 0px rgba(30,30,30,0.1)",
-                  lg: "none",
-                }}
-              >
-                <Image
-                  src={getCategoryData(featuredArticle.category).icon}
-                  mb="16px"
-                  w="48px"
-                  h="40px"
-                  ml={{ base: "16px", lg: "unset" }}
-                />
-                <Box
-                  background={{ base: "#fff", lg: "none" }}
-                  borderRadius={{ base: "10px", lg: "0px" }}
-                  mx={{ base: "16px", lg: "0px" }}
-                  zIndex={{ base: 1, lg: "unset" }}
-                  p={{ base: "16px", lg: "unset" }}
-                >
-                  <Box mb="8px">
-                    <Box
-                      fontSize="12px"
-                      color={
-                        getCategoryData(featuredArticle.category).textColor
-                      }
-                      background={
-                        getCategoryData(featuredArticle.category).bgColor
-                      }
-                      borderRadius="19px"
-                      px="9px"
-                      mr="9px"
-                      display="inline"
-                    >
-                      {getCategoryData(featuredArticle.category).label}
-                    </Box>
-                    <Text fontSize="12px" display="inline-block">
-                      {moment(featuredArticle.publishDate).format(
-                        "D MMM, hh:mm"
-                      )}
-                    </Text>
-                  </Box>
+      <Box>
+        <Box
+          bgColor="#F6D644"
+          d={["none", "none", "block"]}
+          minH={324}
+          position="relative"
+          zIndex={10}
+          w="100%"
+          pb="100px"
+        >
+          <VStack
+            align="stretch"
+            pt={48}
+            w="100%"
+            d={["none", "none", "block"]}
+          >
+            <Container pb={8}>
+              <VStack align="start" w="100%">
+                <Box px={[4, 8, 8, 16]}>
                   <Text
-                    fontSize={{ base: "24px", lg: "48px" }}
-                    fontWeight="bold"
-                    mb={{ base: "16px", lg: "8px" }}
+                    fontWeight={900}
+                    fontSize={["3xl", "4xl", "4xl", "5xl"]}
                   >
-                    {featuredArticle.title}
-                  </Text>
-                  <Text
-                    fontSize={{ base: "14px", lg: "16px" }}
-                    maxH={{ base: "60px", lg: "50px" }}
-                    overflow="hidden"
-                    position="relative"
-                    mb={{ lg: "49px", base: "unset" }}
-                  >
-                    {featuredArticle.excerpt}
-                    <Box
-                      textAlign="right"
-                      position="absolute"
-                      bottom="0"
-                      right="5px"
-                      background={{
-                        base: "#fff",
-                        lg: page?.content?.bannerColor,
-                      }}
-                    >
-                      ...{" "}
-                      <chakra.span
-                        color="#007878"
-                        fontSize="16px"
-                        fontWeight="bold"
-                      >
-                        More
-                      </chakra.span>
-                    </Box>
+                    <HighlightHeadline bgColor="white">
+                      {page?.content?.title}
+                    </HighlightHeadline>
                   </Text>
                 </Box>
-              </Box>
-            </Box>
-          )}
-          <Image
+              </VStack>
+            </Container>
+          </VStack>
+          <Container position="relative" zIndex={400} w="100%">
+            <Stack
+              direction={["column", "column", "row"]}
+              spacing={8}
+              w="100%"
+              align="start"
+            >
+              <AspectRatio
+                w={"40%"}
+                ratio={4 / 3}
+                borderWidth={3}
+                borderRadius={24}
+                borderColor="white"
+              >
+                <Image src={featuredArticle.coverImage} />
+              </AspectRatio>
+              <VStack flex={1} minW={0} w="100%" align="start">
+                <Icon
+                  as={VscQuote}
+                  fontSize={56}
+                  color="white"
+                  fontWeight="bold"
+                />
+                <Wrap>
+                  <CategoryTag
+                    size="sm"
+                    category={featuredArticleCategory}
+                    withIcon={false}
+                  />
+                  <Text fontSize="sm">
+                    {moment(featuredArticle.publishDate).format("D MMM, hh:mm")}
+                  </Text>
+                </Wrap>
+                <Box borderRadius={16} pt={1} px={2} color={1} pb={16}>
+                  <Text fontSize={("2xl", "4xl", "4xl")} fontWeight="bold">
+                    {featuredArticle.title}
+                  </Text>
+                  <Text>{featuredArticle.excerpt}</Text>
+                </Box>
+              </VStack>
+            </Stack>
+          </Container>
+
+          <Box
+            {...(featuredArticle && {
+              position: "absolute",
+              left: 0,
+              w: "100%",
+              bottom: 0,
+              zIndex: 300,
+            })}
+          >
+            <DividerSimple flip={true}></DividerSimple>
+          </Box>
+        </Box>
+        <Box position="relative" d={["block", "block", "none"]} pb={16}>
+          <AspectRatio w={"100%"} ratio={4 / 3}>
+            <Image src={featuredArticle.coverImage} />
+          </AspectRatio>
+          <DividerSimple flip={true}></DividerSimple>
+          <VStack
+            spacing={8}
+            align="start"
+            px={[2, 4]}
+            bottom={0}
             position="absolute"
-            left="0"
-            bottom="0"
-            src={page?.content?.bottomBorderFeatured}
-            width="100%"
-            fit="contain"
-          />
+            zIndex={300}
+          >
+            <Icon as={VscQuote} fontSize={56} color="white" fontWeight="bold" />
+            <VStack
+              bg="white"
+              borderRadius={16}
+              p={4}
+              flex={1}
+              minW={0}
+              w="100%"
+              align="start"
+            >
+              <Wrap>
+                <CategoryTag
+                  size="sm"
+                  category={featuredArticleCategory}
+                  withIcon={false}
+                />
+                <Text fontSize="sm">
+                  {moment(featuredArticle.publishDate).format("D MMM, hh:mm")}
+                </Text>
+              </Wrap>
+              <Box borderRadius={16} pt={1} px={2} color={1}>
+                <Text fontSize={"xl"} fontWeight="bold">
+                  {featuredArticle.title}
+                </Text>
+                <Text>{featuredArticle.excerpt}</Text>
+              </Box>
+            </VStack>
+          </VStack>
         </Box>
       </Box>
 
       {/* Posts Section */}
-      <Box
-        mt={{ base: "38px", lg: "17px" }}
-        px={{ base: "16px" }}
-        maxW="1200px"
-      >
-        <Box mx="auto" maxW="1200px">
-          <Grid
-            templateColumns={{ base: "1fr", lg: "1fr 340px" }}
-            gridGap="22px"
-          >
-            {/* Latest Articles with scroll */}
-            <Box order={{ base: 2, lg: 1 }}>
-              <Box
-                mt="10px"
-                textAlign="center"
-                fontWeight="bold"
-                fontSize="24"
-                pb="36px"
-              >
-                <Text position="relative" display="inline-block">
-                  {page?.content?.latestSection?.title}
-                  <Box
-                    width="6.15px"
-                    height="27.69px"
-                    borderRadius="5px"
-                    pos="absolute"
-                    right={["-6", "-6", "-12"]}
-                    bottom="-3"
-                    background="#EFEFEF"
-                    transform="rotate(30deg)"
-                  />
-                  <Box
-                    width="6.15px"
-                    height="27.69px"
-                    borderRadius="5px"
-                    pos="absolute"
-                    left={["-6", "-6", "-12"]}
-                    bottom="-3"
-                    background="#EFEFEF"
-                    transform="rotate(-30deg)"
-                  />
-                </Text>
-              </Box>
-              <InfiniteScroll
-                dataLength={latestPosts.length}
-                next={!activeFilter ? fetchData : fetchFilteredPosts}
-                hasMore={latestPosts.length < totalLatest}
-                loader={<SkeletonPlaceholder />}
-                endMessage={<Box w="100%" h="40px" />}
-                // below props only if you need pull down functionality
-                // refreshFunction={this.refresh}
-                // pullDownToRefresh
-                // pullDownToRefreshThreshold={50}
-                // pullDownToRefreshContent={
-                //   <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-                // }
-                // releaseToRefreshContent={
-                //   <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-                // }
-              >
-                <Grid
-                  templateColumns={{
-                    base: "repeat(1, 292px)",
-                    md: "repeat(2, 276px)",
-                    lg: "repeat(2, 276px)",
-                  }}
-                  justifyContent={{ base: "center", lg: "space-between" }}
-                  rowGap={{ base: "36px", lg: "48px" }}
-                  columnGap="16px"
-                >
-                  {latestPosts.map((post, i) => (
-                    <Stack
-                      key={i}
-                      cursor="pointer"
-                      onClick={() => router.push(`/sharing/${post.slug}`)}
-                    >
-                      <Image
-                        objectFit="cover"
-                        src={post.coverImage}
-                        borderRadius="16px"
-                        background="#fff"
-                        w={{ base: "292px", md: "100%", lg: "276px" }}
-                        h={{ base: "220px", lg: "208px" }}
-                        mb="6px"
-                      />
-                      <Box>
-                        <Flex>
-                          <Box
-                            fontSize="12px"
-                            color={getCategoryData(post.category).textColor}
-                            background={getCategoryData(post.category).bgColor}
-                            borderRadius="19px"
-                            px="9px"
-                            mr="9px"
-                            display="inline"
-                          >
-                            {getCategoryData(post.category).label}
-                          </Box>
-                          <Text fontSize="12px" display="inline-block">
-                            {moment(post.publishDate).format("D MMM, hh:mm")}
-                          </Text>
-                        </Flex>
-                        <Text
-                          fontSize={{ base: "20px", lg: "24px" }}
-                          fontWeight="bold"
-                          mb="5px"
-                          mt="5px"
-                        >
-                          {post.title}
-                        </Text>
-                        <Text
-                          fontSize={{ base: "16px", lg: "16px" }}
-                          h="70px"
-                          overflow="hidden"
-                          position="relative"
-                        >
-                          {post.excerpt}
-                          <Box
-                            textAlign="right"
-                            position="absolute"
-                            bottom="0"
-                            right="5px"
-                            background="#fff"
-                          >
-                            ...{" "}
-                            <chakra.span
-                              color="#007878"
-                              fontSize="16px"
-                              fontWeight="bold"
-                            >
-                              More
-                            </chakra.span>
-                          </Box>
-                        </Text>
-                      </Box>
-                    </Stack>
-                  ))}
-                </Grid>
-              </InfiniteScroll>
+      <Container alignSelf="center">
+        <Stack
+          direction={["column-reverse", "column-reverse", "row"]}
+          spacing={4}
+          align="start"
+          w="100%"
+        >
+          {/* Latest Articles with scroll */}
+          <Box flex={1} w={"100%"} minW={0}>
+            <Box
+              d={["none", "block"]}
+              mt="10px"
+              textAlign="center"
+              fontWeight="bold"
+              fontSize="24"
+              pb="36px"
+            >
+              <Text position="relative" display="inline-block">
+                {page?.content?.latestSection?.title}
+                <Box
+                  width="6.15px"
+                  height="27.69px"
+                  borderRadius="5px"
+                  pos="absolute"
+                  right={["-6", "-6", "-12"]}
+                  bottom="-3"
+                  background="#EFEFEF"
+                  transform="rotate(30deg)"
+                />
+                <Box
+                  width="6.15px"
+                  height="27.69px"
+                  borderRadius="5px"
+                  pos="absolute"
+                  left={["-6", "-6", "-12"]}
+                  bottom="-3"
+                  background="#EFEFEF"
+                  transform="rotate(-30deg)"
+                />
+              </Text>
             </Box>
-
-            {/* Right Section of Grid */}
-            <Box order={{ base: 1, lg: 2 }} mt={{ base: "36px", lg: "unset" }}>
-              <Box textAlign="left" fontSize="36px" pb="15px">
-                <Text pos="relative" display="inline-block" pl="8px">
-                  <Box zIndex={1} pos="relative">
-                    {page?.content?.hotestSection?.title}
-                  </Box>
-                  <Box
-                    w="112px"
-                    height="33px"
-                    borderRadius="16.5px"
-                    background="#EFEFEF"
-                    pos="absolute"
-                    left="0"
-                    bottom="-3px"
-                  ></Box>
-                  <Box
-                    w="0px"
-                    height="0px"
-                    borderRight="5px solid transparent"
-                    borderLeft="5px solid transparent"
-                    borderTop="12px solid #EFEFEF"
-                    transform="scaleY(-1) rotate(150deg)"
-                    pos="absolute"
-                    left="0"
-                    bottom="-11px"
-                  ></Box>
-                </Text>
-              </Box>
-
-              <Flex direction="column">
-                {hottestPosts.map((post, i) => (
-                  <Grid
-                    templateColumns="45px 1fr"
-                    justifyContent={{ base: "center", lg: "unset" }}
-                    columnGap="8px"
+            <InfiniteScroll
+              dataLength={latestPosts.length}
+              next={fetchPosts}
+              hasMore={latestPosts.length < totalRef.current}
+              loader={<SkeletonPlaceholder />}
+              endMessage={<Box w="100%" h="40px" />}
+            >
+              <SimpleGrid columns={[1, 2]} spacing={10}>
+                {latestPosts.map((post, i) => (
+                  <Stack
+                    as={GridItem}
                     key={i}
-                    pt="11px"
-                    borderTop="1px solid #EFEFEF"
-                    mb="16px"
+                    align="stretch"
+                    cursor="pointer"
+                    onClick={() => router.push(`/sharing/${post.slug}`)}
                   >
-                    <Text fontSize="36px" textAlign="left" color="#EFEFEF">{`0${
-                      i + 1
-                    }`}</Text>
-                    <Box
-                      key={i}
-                      cursor="pointer"
-                      onClick={() => router.push(`/sharing/${post.slug}`)}
-                    >
+                    <AspectRatio ratio={4 / 3}>
+                      <Box
+                        bgImage={`url(${post.coverImage})`}
+                        bgPos="center center"
+                        bgSize="cover"
+                        borderRadius={16}
+                        borderColor="white"
+                        borderWidth={3}
+                      ></Box>
+                    </AspectRatio>
+                    <Box>
                       <Flex>
                         <Box
                           fontSize="12px"
-                          color={getCategoryData(post.category).textColor}
-                          background={getCategoryData(post.category).bgColor}
+                          color={getCategoryData(post.category)?.textColor}
+                          background={getCategoryData(post.category)?.bgColor}
                           borderRadius="19px"
                           px="9px"
                           mr="9px"
                           display="inline"
                         >
-                          {getCategoryData(post.category).label}
+                          {getCategoryData(post.category)?.label}
                         </Box>
                         <Text fontSize="12px" display="inline-block">
                           {moment(post.publishDate).format("D MMM, hh:mm")}
                         </Text>
                       </Flex>
                       <Text
-                        fontSize="16px"
-                        fontWeight={{ base: "unset", lg: "bold" }}
+                        fontSize={{ base: "20px", lg: "24px" }}
+                        fontWeight="bold"
                         mb="5px"
                         mt="5px"
                       >
@@ -566,7 +425,7 @@ const Sharing = ({ page, setting, lang }) => {
                       </Text>
                       <Text
                         fontSize={{ base: "16px", lg: "16px" }}
-                        h="46px"
+                        h="70px"
                         overflow="hidden"
                         position="relative"
                       >
@@ -580,7 +439,7 @@ const Sharing = ({ page, setting, lang }) => {
                         >
                           ...{" "}
                           <chakra.span
-                            color="#197350"
+                            color="#007878"
                             fontSize="16px"
                             fontWeight="bold"
                           >
@@ -589,11 +448,116 @@ const Sharing = ({ page, setting, lang }) => {
                         </Box>
                       </Text>
                     </Box>
-                  </Grid>
+                  </Stack>
                 ))}
-              </Flex>
+              </SimpleGrid>
+            </InfiniteScroll>
+          </Box>
 
-              <Box mt="170px" display={{ base: "none", lg: "block" }}>
+          {/* Right Section of Grid */}
+          <Box w={["100%", "100%", "33%"]}>
+            <Box textAlign="left" fontSize="36px" pb="15px">
+              <Text pos="relative" display="inline-block" pl="8px">
+                <Box zIndex={1} pos="relative">
+                  {page?.content?.hotestSection?.title}
+                </Box>
+                <Box
+                  w="112px"
+                  height="33px"
+                  borderRadius="16.5px"
+                  background="#EFEFEF"
+                  pos="absolute"
+                  left="0"
+                  bottom="-3px"
+                ></Box>
+                <Box
+                  w="0px"
+                  height="0px"
+                  borderRight="5px solid transparent"
+                  borderLeft="5px solid transparent"
+                  borderTop="12px solid #EFEFEF"
+                  transform="scaleY(-1) rotate(150deg)"
+                  pos="absolute"
+                  left="0"
+                  bottom="-11px"
+                ></Box>
+              </Text>
+            </Box>
+
+            <Flex direction="column">
+              {hottestPosts.map((post, i) => (
+                <Grid
+                  templateColumns="45px 1fr"
+                  justifyContent={{ base: "center", lg: "unset" }}
+                  columnGap="8px"
+                  key={i}
+                  pt="11px"
+                  borderTop="1px solid #EFEFEF"
+                  mb="16px"
+                >
+                  <Text fontSize="36px" textAlign="left" color="#EFEFEF">{`0${
+                    i + 1
+                  }`}</Text>
+                  <Box
+                    key={i}
+                    cursor="pointer"
+                    onClick={() => router.push(`/sharing/${post.slug}`)}
+                  >
+                    <Flex>
+                      <Box
+                        fontSize="12px"
+                        color={getCategoryData(post.category)?.textColor}
+                        background={getCategoryData(post.category)?.bgColor}
+                        borderRadius="19px"
+                        px="9px"
+                        mr="9px"
+                        display="inline"
+                      >
+                        {getCategoryData(post.category)?.label}
+                      </Box>
+                      <Text fontSize="12px" display="inline-block">
+                        {moment(post.publishDate).format("D MMM, hh:mm")}
+                      </Text>
+                    </Flex>
+                    <Text
+                      fontSize="16px"
+                      fontWeight={{ base: "unset", lg: "bold" }}
+                      mb="5px"
+                      mt="5px"
+                    >
+                      {post.title}
+                    </Text>
+                    <Text
+                      fontSize={{ base: "16px", lg: "16px" }}
+                      h="46px"
+                      overflow="hidden"
+                      position="relative"
+                    >
+                      {post.excerpt}
+                      <Box
+                        textAlign="right"
+                        position="absolute"
+                        bottom="0"
+                        right="5px"
+                        background="#fff"
+                      >
+                        ...{" "}
+                        <chakra.span
+                          color="#197350"
+                          fontSize="16px"
+                          fontWeight="bold"
+                        >
+                          More
+                        </chakra.span>
+                      </Box>
+                    </Text>
+                  </Box>
+                </Grid>
+              ))}
+            </Flex>
+
+            <Box d={["none", "none", "block"]}>
+              <Box mt="170px" mb={4}>
                 <Box textAlign="left" fontSize="36px">
                   <Text pos="relative" display="inline-block" pl="8px">
                     <Box zIndex={1} pos="relative">
@@ -622,42 +586,26 @@ const Sharing = ({ page, setting, lang }) => {
                   </Text>
                 </Box>
               </Box>
-              <Flex flexWrap="wrap" display={{ base: "none", lg: "flex" }}>
+              <Wrap spacing={2}>
                 {(categories ?? []).map((category, i) => (
-                  <Box
-                    key={i}
-                    display="flex"
-                    fontSize="16px"
-                    color={category.textColor}
-                    background={category.color}
-                    borderRadius="20px"
-                    px="16px"
-                    py="9px"
-                    mr="16px"
-                    mt="16px"
+                  <WrapItem
+                    key={category.key}
+                    onClick={() => {
+                      router.push({
+                        pathname: "/sharing",
+                        query: { category: category.key },
+                      });
+                    }}
                     cursor="pointer"
-                    onClick={() => handleFilter(category.key)}
                   >
-                    <Image
-                      color="#000"
-                      bgCOlor="#000"
-                      pr="12px"
-                      w="auto"
-                      maxH="20px"
-                      src={category.image}
-                    />
-                    <chakra.span>
-                      {lang === "en" ? category.label.en : category.label.zh}
-                    </chakra.span>
-                  </Box>
+                    <CategoryTag category={category} />
+                  </WrapItem>
                 ))}
-              </Flex>
+              </Wrap>
             </Box>
-          </Grid>
-        </Box>
-      </Box>
-      {/* <Text>{JSON.stringify(page)}</Text> */}
-      {/* <Text>{JSON.stringify(categories)}</Text> */}
+          </Box>
+        </Stack>
+      </Container>
     </VStack>
   );
 };
