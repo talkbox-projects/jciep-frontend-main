@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { NextSeo } from "next-seo";
 import MongooseMediaStore from "../media/store";
-import { MarkdownFieldPlugin } from "react-tinacms-editor";
+import { HtmlFieldPlugin } from "react-tinacms-editor";
 import { AppProvider } from "../store/AppStore";
 
 // import "../global.css";
@@ -69,7 +69,7 @@ const App = ({ Component, pageProps }) => {
 
 export default withTina(App, {
   media: new MongooseMediaStore(),
-  plugins: [MarkdownFieldPlugin],
+  plugins: [HtmlFieldPlugin],
   enabled: true,
   sidebar: true,
 });

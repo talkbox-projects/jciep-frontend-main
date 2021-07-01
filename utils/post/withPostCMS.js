@@ -95,7 +95,7 @@ const withPostCMS =
                   content: "",
                 },
                 fields: [
-                  { name: "content", label: "Content", component: "markdown" },
+                  { name: "content", label: "Content", component: "html" },
                 ],
               },
               "image-block": {

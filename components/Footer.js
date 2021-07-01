@@ -31,11 +31,11 @@ const Footer = ({ footer }) => {
                   <Box w="150px" color="gray.500">
                     {title}
                   </Box>
-                  <Wrap spacing={8} maxH={12} align="center">
+                  <Wrap spacing={8} align="center">
                     {(partners ?? []).map(
                       ({ id: _id, label, url, logo = "" }) => {
                         return (
-                          <WrapItem>
+                          <WrapItem maxH={12}>
                             <Link href={url} key={_id}>
                               <Image
                                 alt={label}

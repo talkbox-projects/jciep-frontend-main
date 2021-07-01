@@ -31,6 +31,7 @@ import {
 import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Container from "../../components/Container";
+import CategoryTag from "../../components/CategoryTag";
 
 const PAGE_KEY = "sharing";
 
@@ -52,46 +53,6 @@ export const getServerSideProps = async (context) => {
       lang: context.locale,
     },
   };
-};
-
-const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
-  const {
-    label = "Unknown Category",
-    image: icon,
-    bgColor = "#00BAB4",
-    textColor = "white",
-  } = category ?? {};
-
-  switch (size) {
-    case "lg":
-      return (
-        <HStack
-          py={2}
-          px={4}
-          bgColor={bgColor}
-          borderRadius={24}
-          textColor={textColor}
-        >
-          {withIcon && <Image src={icon} />}
-          <Text fontWeight="bold" fontSize={size}>
-            {label}
-          </Text>
-        </HStack>
-      );
-    case "sm":
-      return (
-        <HStack
-          py={0.5}
-          px={2}
-          bgColor={bgColor}
-          borderRadius={20}
-          textColor={textColor}
-        >
-          {withIcon && <Image src={icon} />}
-          <Text fontSize={size}>{label}</Text>
-        </HStack>
-      );
-  }
 };
 
 const Sharing = ({ page, setting, lang }) => {
@@ -244,6 +205,7 @@ const Sharing = ({ page, setting, lang }) => {
                 borderWidth={3}
                 borderRadius={24}
                 borderColor="white"
+                overflow="hidden"
               >
                 <Image src={featuredArticle.coverImage} />
               </AspectRatio>
@@ -303,6 +265,7 @@ const Sharing = ({ page, setting, lang }) => {
             <VStack
               bg="white"
               borderRadius={16}
+              boxShadow="md"
               p={4}
               flex={1}
               minW={0}
@@ -331,7 +294,7 @@ const Sharing = ({ page, setting, lang }) => {
       </Box>
 
       {/* Posts Section */}
-      <Container alignSelf="center">
+      <Container alignSelf="center" pt={16}>
         <Stack
           direction={["column-reverse", "column-reverse", "row"]}
           spacing={4}
