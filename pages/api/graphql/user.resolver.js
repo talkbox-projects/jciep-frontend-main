@@ -36,7 +36,17 @@ export default {
        */
       try {
         const phoneVerify = await PhoneVerify.create({ phone });
-        return true;
+        console.log(phoneVerify)
+        let result = await sendSms({
+          Body: `Otp for phone verification is ${phoneVerify.otp}`,
+          To: phoneVerify.phone
+        })
+        if (result.sid) {
+          return true;
+        } else {
+          return false
+        }
+
       } catch (error) {
         console.error(error);
         return false;

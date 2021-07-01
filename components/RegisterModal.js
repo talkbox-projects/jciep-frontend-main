@@ -56,10 +56,17 @@ const RegisterModal = () => {
           UserPhoneVerify(phone: $phone)
         }
       `;
-      await getGraphQLClient().request(mutation, { phone });
-      otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
-      registerModalDisclosure.onClose();
-      e.preventDefault()
+      let result = await getGraphQLClient().request(mutation, { phone });
+      if (result.UserPhoneVerify) {
+        otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
+        registerModalDisclosure.onClose();
+        e.preventDefault()
+      } else {
+        setError("phone", {
+          message: getWording("register.register_error_message"),
+        });
+      }
+      
 
     } catch (e) {
       setError("email", {
