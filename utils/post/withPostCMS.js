@@ -137,6 +137,32 @@ const withPostCMS =
             },
           },
           {
+            name: "featureDisplay",
+            component: "toggle",
+            label: "顯示於首頁",
+          },
+          {
+            name: "content.feature",
+            component: "group",
+            description: "Group",
+            label: "首頁顯示 Show in Home",
+            fields: [
+              {
+                name: "image",
+                label: "首頁圖片  Image",
+                component: "image",
+                uploadDir: () => "/sharing/images",
+                parse: ({ previewSrc }) => previewSrc,
+                previewSrc: (src) => src,
+              },
+              {
+                name: "persona",
+                label: "人物/機構 Person/Organization",
+                component: "text",
+              },
+            ],
+          },
+          {
             name: "tags",
             label: "標籤 Tags",
             component: "list",
@@ -186,6 +212,7 @@ const withPostCMS =
                   url
                 }
                 category
+                featureDisplay
                 content
               }
             }

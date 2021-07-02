@@ -36,12 +36,15 @@ const postSchema = Schema({
       url: String,
     },
   ],
+  featureDisplay: {
+    type: Boolean,
+  },
   content: {
     type: Schema.Types.Mixed,
   },
   viewCount: {
     type: Schema.Types.Number,
-    index: true
+    index: true,
   },
 });
 

@@ -5,11 +5,12 @@ export default {
   Query: {
     PostSearch: async (
       _parent,
-      { lang, status = [], limit, page, category }
+      { lang, status = [], limit, page, category, featureDisplay }
     ) => {
       const articlesData = await PostModel.aggregate([
         {
           $match: {
+            ...(featureDisplay && { featureDisplay }),
             ...(lang && { lang }),
             ...(status?.length && { status: { $in: [status] } }),
             ...(category?.length && { category: { $in: [category] } }),
