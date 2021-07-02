@@ -24,10 +24,16 @@ import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
 import Accordian from "./../../../components/Acordian";
 import wordExtractor from "../../../utils/wordExtractor";
-import { AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiOutlineInfoCircle,
+  AiOutlineMinus,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import Container from "../../../components/Container";
 import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
+import DividerTriple from "../../../components/DividerTriple";
+import DividerA from "../../../components/DividerA";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -60,7 +66,7 @@ const Partner = ({ page }) => {
       {/* First Section */}
       <Box
         h="50vw"
-        minH="70vh"
+        minH={["40vh", "70vh"]}
         position="relative"
         overflow="hidden"
         backgroundImage={`url(${partner?.image})`}
@@ -74,7 +80,7 @@ const Partner = ({ page }) => {
           bottom={0}
           w="100%"
           textAlign="center"
-          backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.8))"
+          // backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.8))"
         >
           <Container>
             <Box pb={16}>
@@ -83,21 +89,21 @@ const Partner = ({ page }) => {
                   <Text
                     fontWeight={900}
                     bgColor="#F6D644"
-                    fontSize={["12px", "16px", "24px", "56px"]}
+                    fontSize={["24px", "56px"]}
                     children={partner?.agencyName}
                   />
                 </Box>
                 <Box>
                   <Text
                     bgColor="#F6D644"
-                    fontSize={["12px", "16px", "24px", "56px"]}
+                    fontSize={["24px", "56px"]}
                     children={partner?.projectName}
                   />
                 </Box>
               </VStack>
             </Box>
           </Container>
-          <DividerSimple></DividerSimple>
+          <DividerSimple />
         </VStack>
       </Box>
 
@@ -111,7 +117,7 @@ const Partner = ({ page }) => {
         backgroundPosition="left bottom"
       >
         <Container
-          zIndex={200}
+          // zIndex={200}
           position="relative"
           pt={24}
           pb={[64, 64, 64, 24]}
@@ -161,25 +167,11 @@ const Partner = ({ page }) => {
             </SimpleGrid>
           </VStack>
         </Container>
-        <Box>
-          <svg viewBox="0 0 1366 120">
-            <path
-              d="M-45,12.71s163.17,104,367.65,104c135.09,0,211.51-11.31,369.09-38.58C870.46,47.17,1038.84.92,1220.23.92c136.13,0,433.27,89,534.25,89,140,0,179.52-15,179.52-15v68.2H-45Z"
-              fill="#f6d644"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M1004,55.47s-63.47,53-340,53c-216.13,0-243.1-58.62-396.31-58.62-119.34,0-237.13,87-392.67,87C-212.79,136.83-264,87.07-264,87.07v87.39H1004Z"
-              fill="#fff"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M-3,42.63S113.67,117.4,259.87,117.4c96.59,0,151.23-8.13,263.9-27.74C651.56,67.42,772,34.15,901.65,34.15c97.34,0,309.79,64,382,64,100.13,0,128.35-10.8,128.35-10.8v91.74H-3Z"
-              fill="#00BFBA"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </Box>
+        <DividerA
+          primaryColor="#f6d644"
+          secondaryColor="#fff"
+          nextColor="#00BFBA"
+        />
         <Image
           position="absolute"
           bottom={0}
@@ -195,7 +187,7 @@ const Partner = ({ page }) => {
         bg={page?.content?.partnerSection?.serviceSection?.bgColor}
       >
         <Container
-          zIndex={200}
+          zIndex={10}
           position="relative"
           pt={24}
           pb={[64, 64, 64, 24]}
@@ -220,32 +212,44 @@ const Partner = ({ page }) => {
                                 key={index}
                                 bg="white"
                               >
-                                <AccordionButton
-                                  w="100%"
-                                  textAlign="center"
-                                  fontWeight="bold"
-                                  fontSize="md"
-                                >
-                                  <HStack w="100%" py={2}>
-                                    <Text
-                                      flex={1}
-                                      minW={0}
+                                {({ isExpanded }) => (
+                                  <>
+                                    <AccordionButton
                                       w="100%"
                                       textAlign="center"
+                                      fontWeight="bold"
+                                      fontSize="md"
                                     >
-                                      {title}
-                                    </Text>
-                                    <Icon as={AiOutlinePlus} fontSize="2xl" />
-                                  </HStack>
-                                </AccordionButton>
-                                <AccordionPanel
-                                  fontSize="lg"
-                                  borderTopWidth={2}
-                                  borderTopColor="#eee"
-                                  p={4}
-                                >
-                                  <MultiTextRenderer data={content} />
-                                </AccordionPanel>
+                                      <HStack w="100%" py={2}>
+                                        <Text
+                                          flex={1}
+                                          minW={0}
+                                          w="100%"
+                                          textAlign="center"
+                                          fontSize="xl"
+                                        >
+                                          {title}
+                                        </Text>
+                                        <Icon
+                                          as={
+                                            isExpanded
+                                              ? AiOutlineMinus
+                                              : AiOutlinePlus
+                                          }
+                                          fontSize="2xl"
+                                        />
+                                      </HStack>
+                                    </AccordionButton>
+                                    <AccordionPanel
+                                      fontSize="lg"
+                                      borderTopWidth={2}
+                                      borderTopColor="#eee"
+                                      p={4}
+                                    >
+                                      <MultiTextRenderer data={content} />
+                                    </AccordionPanel>
+                                  </>
+                                )}
                               </AccordionItem>
                             );
                           }
@@ -264,7 +268,7 @@ const Partner = ({ page }) => {
           w={"308px"}
           left={"10%"}
           src={page?.content?.partnerSection?.serviceSection?.bgImageLeft}
-          zIndex="1"
+          zIndex="3"
         />
         <Image
           position="absolute"
@@ -274,24 +278,12 @@ const Partner = ({ page }) => {
           src={page?.content?.partnerSection?.serviceSection?.bgImageRight}
           zIndex="1"
         />
-        <Box>
-          <svg viewBox="0 0 1366 120">
-            <path
-              d="M-45,12.71s163.17,104,367.65,104c135.09,0,211.51-11.31,369.09-38.58C870.46,47.17,1038.84.92,1220.23.92c136.13,0,433.27,89,534.25,89,140,0,179.52-15,179.52-15v68.2H-45Z"
-              fill="#f6d644"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M1004,55.47s-63.47,53-340,53c-216.13,0-243.1-58.62-396.31-58.62-119.34,0-237.13,87-392.67,87C-212.79,136.83-264,87.07-264,87.07v87.39H1004Z"
-              fill="#fff"
-              fill-rule="evenodd"
-            />
-            <path
-              d="M-3,42.63S113.67,117.4,259.87,117.4c96.59,0,151.23-8.13,263.9-27.74C651.56,67.42,772,34.15,901.65,34.15c97.34,0,309.79,64,382,64,100.13,0,128.35-10.8,128.35-10.8v91.74H-3Z"
-              fill="#fafafa"
-              fill-rule="evenodd"
-            />
-          </svg>
+        <Box pos="relative" zIndex={2}>
+          <DividerA
+            primaryColor="rgb(246,214,68)"
+            secondaryColor="rgb(254,181,52)"
+            nextColor="rgb(250,250,250)"
+          />
         </Box>
       </Box>
 

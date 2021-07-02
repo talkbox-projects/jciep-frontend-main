@@ -15,22 +15,9 @@ export default [
         previewSrc: (src) => src,
       },
       {
-        label: "图片底部 Image Bottom",
-        name: "bgImageBottom",
-        component: "image",
-        uploadDir: () => "/programme",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-      {
         name: "title 標題",
         label: "Title",
         component: "text",
-      },
-      {
-        name: "titleBgColor",
-        label: "背景颜色 Background Color",
-        component: "color",
       },
     ],
   },
@@ -43,11 +30,6 @@ export default [
         name: "title",
         label: "標題 Title",
         component: "text",
-      },
-      {
-        name: "bgColor",
-        label: "背景颜色 Background Color",
-        component: "color",
       },
       {
         name: "detail",
@@ -82,7 +64,7 @@ export default [
       },
       {
         name: "videoLink",
-        label: "YouTube Link",
+        label: "Video Link",
         component: "text",
       },
     ],
@@ -127,87 +109,10 @@ export default [
         previewSrc: (src) => src,
       },
       {
-        label: "图片底部 Image Bottom",
-        name: "bgImageBottom",
-        component: "image",
-        uploadDir: () => "/programme",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-      {
-        name: "slugBannerSection",
-        label: "頁面橫幅區塊 Slug Banner Setion",
-        component: "group",
-        fields: [
-          {
-            label: "图片底部 Image Bottom",
-            name: "bgImageBottom",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "titleBgColor",
-            label: "背景颜色 Background Color",
-            component: "color",
-          },
-        ],
-      },
-      {
-        name: "planSection",
-        label: "頁面橫幅區塊 Plan Banner Section",
-        component: "group",
-        fields: [
-          {
-            label: "Hero Image 圖片",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            label: "图片底部 Image Bottom",
-            name: "bgImageBottom",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            label: "图片底部 Project Objective Icon",
-            name: "objectiveIcon",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "Title 標題",
-            component: "text",
-          },
-        ],
-      },
-      {
         name: "serviceSection",
-        label: "頁面橫幅區塊 Service Section",
+        label: "合作伙伴圖片區塊 Service Section",
         component: "group",
         fields: [
-          {
-            name: "bgColor",
-            label: "背景颜色 Background Color",
-            component: "color",
-          },
-          {
-            label: "图片底部 Image Bottom",
-            name: "bgImageBottom",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
           {
             label: "左图 Image Left",
             name: "bgImageLeft",
@@ -223,33 +128,6 @@ export default [
             uploadDir: () => "/programme",
             parse: ({ previewSrc }) => previewSrc,
             previewSrc: (src) => src,
-          },
-          {
-            name: "title",
-            label: "Title 標題",
-            component: "text",
-          },
-        ],
-      },
-      {
-        name: "serviceTarget",
-        label: "頁面橫幅區塊 Service Target Section",
-        component: "group",
-        fields: [
-          {
-            name: "bgColor",
-            label: "背景颜色 Background Color",
-            component: "color",
-          },
-          {
-            name: "title",
-            label: "Title 標題",
-            component: "text",
-          },
-          {
-            name: "titleColor",
-            label: "背景颜色 Title Color",
-            component: "color",
           },
         ],
       },
@@ -433,41 +311,14 @@ export default [
         label: "標題 Title",
         component: "text",
       },
-
-      {
-        name: "titleBgColor",
-        label: "背景颜色 Title Background Color",
-        component: "color",
-      },
       {
         name: "bgStyle",
         label: "背景样式 Background style",
         component: "group",
         fields: [
           {
-            name: "bgColor",
-            label: "背景颜色 Background Color",
-            component: "color",
-          },
-          {
             name: "bgGradient1",
             label: "背景渐变 1 Background Gradient 1",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "bottomBorder",
-            label: "底部边框 Bottom Border",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "bottomImage",
-            label: "底部图像 Bottom Image",
             component: "image",
             uploadDir: () => "/programme",
             parse: ({ previewSrc }) => previewSrc,

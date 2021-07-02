@@ -25,6 +25,10 @@ import wordExtractor from "../../utils/wordExtractor";
 import React from "react";
 import Container from "../../components/Container";
 import { AiFillBulb, AiOutlineBulb } from "react-icons/ai";
+import DividerA from "../../components/DividerA";
+import DividerTriple from "../../components/DividerTriple";
+import ApostropheHeadline from "../../components/ApostropheHeadline";
+import HighlightHeadline from "../../components/HighlightHeadline";
 
 const PAGE_KEY = "pwd";
 
@@ -130,13 +134,13 @@ const PwdDetail = ({ page }) => {
           height="86%"
           src={pwd?.descriptionStyles?.bgGradient}
         />
-        <Image
-          pos="absolute"
-          bottom="0"
-          src={pwd?.descriptionStyles?.bottomBorder}
-          width="100%"
-          fit="contain"
-        />
+        <Box pos="absolute" bottom="0" w="100%">
+          <DividerA
+            primaryColor="rgb(246,214,68)"
+            secondaryColor="white"
+            nextColor="rgb(0, 191,186)"
+          />
+        </Box>
       </Box>
 
       {/* Q&A Section */}
@@ -156,32 +160,12 @@ const PwdDetail = ({ page }) => {
             display="flex"
             flexDirection="column"
             alignItems="center"
-            pb="16px"
+            pb={8}
           >
-            <Box pos="relative">
-              <Text fontSize={["24", "24", "36"]}>
+            <Box pos="relative" maxW="80%">
+              <ApostropheHeadline>
                 {qnGroup.accordionGroup?.title}
-              </Text>
-              <Box
-                width="6.15px"
-                height="27.69px"
-                borderRadius="5px"
-                pos="absolute"
-                right={["-6", "-6", "-12"]}
-                bottom="0"
-                background="#fff"
-                transform="rotate(30deg)"
-              />
-              <Box
-                width="6.15px"
-                height="27.69px"
-                borderRadius="5px"
-                pos="absolute"
-                left={["-6", "-6", "-12"]}
-                bottom="0"
-                background="#fff"
-                transform="rotate(-30deg)"
-              />
+              </ApostropheHeadline>
             </Box>
             <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
               {(qnGroup.accordionGroup?.accordions ?? []).map((qna, index) => (
@@ -230,35 +214,21 @@ const PwdDetail = ({ page }) => {
           w={["37%", "37%", "19%"]}
           zIndex="0"
         />
-        <Box>
-          <Image
-            src={pwd?.qnaStyles?.imageBottom}
-            pos="absolute"
-            right={["9%", "10%", "16%"]}
-            bottom={["30px", "38px", "94px"]}
-            h={["128px", "128px", "168px"]}
-            w={["96px", "96px", "auto"]}
-            zIndex="1"
-          />
-          <Box
-            width={["118px", "118px", "230px"]}
-            height={["118px", "118px", "230px"]}
-            background="#08A3A3"
-            borderRadius="50%"
-            position="absolute"
-            right={["8%", "9%", "14%"]}
-            bottom={["30px", "38px", "94px"]}
-            zIndex="0"
+        <Image
+          src={pwd?.qnaStyles?.imageBottom}
+          pos="absolute"
+          right={["9%", "10%", "16%"]}
+          bottom={["30px", "38px", "94px"]}
+          w={["37%", "37%", "19%"]}
+          zIndex="0"
+        />
+        <Box pos="absolute" bottom="0" w="100%">
+          <DividerA
+            primaryColor="rgb(246,214,68)"
+            secondaryColor="rgb(254,181,52)"
+            nextColor="rgb(250,250,250)"
           />
         </Box>
-        <Image
-          pos="absolute"
-          bottom="0"
-          src={pwd?.qnaStyles?.bottomBorder}
-          width="100%"
-          fit="contain"
-          zIndex={2}
-        />
       </Box>
 
       {/* Traits Section */}
@@ -270,13 +240,10 @@ const PwdDetail = ({ page }) => {
         <Box display="flex" pos="relative">
           <Box mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
-              {wordExtractor(page?.content?.wordings, "traitSectionTitle")}
+              {pwd?.traitSection?.title}
             </Text>
             <Text fontSize="16px" position="relative" zIndex="1">
-              {wordExtractor(
-                page?.content?.wordings,
-                "traitSectionDescription"
-              )}
+              {pwd?.traitSection?.description}
             </Text>
           </Box>
           <Image
@@ -288,15 +255,6 @@ const PwdDetail = ({ page }) => {
             right="41px"
             zIndex="0"
           />
-          <chakra.span
-            pos="absolute"
-            fontSize={["33px", "33px", "56"]}
-            fontWeight="bold"
-            top={["56px", "56px", "65px"]}
-            right={["86px", "86px", "146px"]}
-          >
-            ?
-          </chakra.span>
           <Image
             src={pwd?.traitSection?.svgObject}
             w={["91px", "91px", "190px"]}
@@ -314,7 +272,7 @@ const PwdDetail = ({ page }) => {
           ]}
           gap="24px"
           justifyContent="center"
-          mt="26px"
+          mt={16}
           position="relative"
           zIndex="1"
         >
@@ -329,12 +287,14 @@ const PwdDetail = ({ page }) => {
               justifyContent="flex-end"
               display="flex"
               flexDirection="column"
-              _hover={{
-                boxShadow: "12px 12px 24px 0px #1E1E1E10",
-                cursor: "pointer",
-              }}
+              transition="all 0.2s"
+              cursor="default"
+              // _hover={{
+              //   boxShadow: "lg",
+              //   cursor: "pointer",
+              // }}
             >
-              <Text fontSize="14px">{trait.captionTop}</Text>
+              <Text fontSize="lg">{trait.captionTop}</Text>
               <Text fontSize={["24px", "24px", "36px"]} fontWeight="bold">
                 {trait.text}
               </Text>
@@ -361,33 +321,9 @@ const PwdDetail = ({ page }) => {
         overflow="hidden"
       >
         <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>
-            {wordExtractor(page?.content?.wordings, "jobTypeSectionTitle")}
-          </Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#fff"
-            transform="rotate(-30deg)"
-          />
+          <ApostropheHeadline>{pwd?.careerSection?.title}</ApostropheHeadline>
         </Box>
-        <Text fontSize={["14", "14", "16"]}>
-          {wordExtractor(page?.content?.wordings, "jobTypeSectionDescription")}
-        </Text>
+        <Text fontSize={["xl"]}>{pwd?.careerSection?.description}</Text>
 
         <Container mt={["24px", "24px", "48px"]} pb={48}>
           <Box display="flex" justifyContent="center">
@@ -397,7 +333,8 @@ const PwdDetail = ({ page }) => {
                 <Button
                   bg={active ? "#000" : "transparent"}
                   color={active ? "#fff" : "#000"}
-                  borderColor={active ? "#fff" : "#000"}
+                  borderColor={active ? "#000" : "#000"}
+                  borderWidth={2}
                   variant="outline"
                   key={i}
                   onClick={() =>
@@ -408,6 +345,7 @@ const PwdDetail = ({ page }) => {
                   }
                   borderRadius={19}
                   _hover={{ color: "#fff", background: "#00000030" }}
+                  _active={{ color: "#fff", background: "#00000080" }}
                   mr={i === 0 ? "16px" : "0px"}
                   mb={["24px", "24px", "48px"]}
                 >
@@ -433,46 +371,31 @@ const PwdDetail = ({ page }) => {
 
         <Box>
           <Image
-            src={pwd?.careerSection?.personLeftPolygon}
-            pos="absolute"
-            left="10%"
-            bottom="0"
-            w={["133px", "133px", "276px"]}
-          />
-          <Image
             src={pwd?.careerSection?.personLeft}
             pos="absolute"
-            left="10%"
-            bottom="0"
-            w={["80px", "80px", "165px"]}
+            left="5%"
+            bottom={["-10%", "-10%", "-20%", "-25%"]}
+            w={["133px", "133px", "276px"]}
           />
         </Box>
 
         <Box>
           <Image
-            src={pwd?.careerSection?.personRightPolygon}
-            pos="absolute"
-            right="1%"
-            bottom={["-87px", "-87px", "-183px"]}
-            w={["174px", "174px", "366px"]}
-          />
-          <Image
             src={pwd?.careerSection?.personRight}
             pos="absolute"
-            right="10%"
-            bottom="0"
-            w={["93px", "93px", "195px"]}
+            right="5%"
+            bottom={["-5%", "-5%", "-10%"]}
+            w={["174px", "174px", "366px"]}
           />
         </Box>
 
-        <Image
-          pos="absolute"
-          bottom="-1px"
-          src={pwd?.careerSection?.borderBottom}
-          width="100%"
-          fit="contain"
-          zIndex={2}
-        />
+        <Box pos="absolute" bottom={0} w="100%">
+          <DividerTriple
+            primaryColor="rgb(246,214,68)"
+            secondaryColor="transparent"
+            nextColor="rgb(246,214,68)"
+          />
+        </Box>
       </Box>
 
       {/* Videos & Reference Section */}
@@ -487,21 +410,9 @@ const PwdDetail = ({ page }) => {
         overflow="hidden"
       >
         <Box mx="46px">
-          <chakra.span
-            textAlign="center"
-            lineHeight={2}
-            fontWeight="bold"
-            fontSize={["24px", "24px", "36px"]}
-            zIndex="1"
-            pos="relative"
-            backgroundImage="linear-gradient(#fff, #fff)"
-            backgroundRepeat="no-repeat"
-            backgroundPosition="0 0.5em"
-            pl="5px"
-            pb="16px"
-          >
-            {wordExtractor(page?.content?.wordings, "videosTitle")}
-          </chakra.span>
+          <HighlightHeadline bgColor="white">
+            {pwd?.videoSection?.title}
+          </HighlightHeadline>
         </Box>
 
         <Box
@@ -510,29 +421,9 @@ const PwdDetail = ({ page }) => {
           mb={["20px", "20px", "27px"]}
           px={["46px"]}
         >
-          <Text fontSize={["16", "16", "24"]} textAlign="center">
+          <ApostropheHeadline fontSize={["xl", "2xl"]}>
             {pwd?.videoSection?.description}
-          </Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["26px", "26px", "18.94px"]}
-            bottom={["0", "0", "-10px"]}
-            background="#fff"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["26px", "26px", "10.94px"]}
-            bottom={["0", "0", "-10px"]}
-            background="#fff"
-            transform="rotate(-30deg)"
-          />
+          </ApostropheHeadline>
         </Box>
 
         <Box
@@ -547,14 +438,14 @@ const PwdDetail = ({ page }) => {
             pos="absolute"
             left="16%"
             top="0"
-            w={["0", "0", "184px"]}
+            w={["0", "0", "0", "184px"]}
           />
           <Image
             src={pwd?.videoSection?.rightImage}
             pos="absolute"
             right="18%"
             bottom="0"
-            w={["0", "0", "145px"]}
+            w={["0", "0", "0", "145px"]}
           />
           {pwd?.videoSection?.videos.map((video) => (
             <AspectRatio
@@ -627,14 +518,13 @@ const PwdDetail = ({ page }) => {
           height="100%"
           src={pwd?.referenceSection?.gradient}
         />
-        <Image
-          pos="absolute"
-          bottom="-1px"
-          src={pwd?.referenceSection?.borderBottom}
-          width="100%"
-          fit="contain"
-          zIndex={1}
-        />
+        <Box pos="absolute" bottom={0} width="100%">
+          <DividerTriple
+            primaryColor="rgb(0,191,186)"
+            secondaryColor="rgb(217,217,217)"
+            nextColor="white"
+          />
+        </Box>
       </Box>
 
       {/* Last Section */}
@@ -646,31 +536,12 @@ const PwdDetail = ({ page }) => {
         flexDirection="column"
         alignItems="center"
         overflow="hidden"
+        position="relative"
       >
         <Box pos="relative">
-          <Text fontSize={["24", "24", "36"]}>
-            {wordExtractor(page?.content?.wordings, "otherPwdSectionType")}
-          </Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#F6D644"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="0"
-            background="#F6D644"
-            transform="rotate(-30deg)"
-          />
+          <ApostropheHeadline fontSize={["xl", "2xl"]} color="rgb(246,214,68)">
+            {pwd?.othersSection?.title}
+          </ApostropheHeadline>
         </Box>
         <Grid
           templateColumns={[
@@ -686,6 +557,7 @@ const PwdDetail = ({ page }) => {
         >
           {(remainingPwds ?? []).map((data) => (
             <Box
+              transition="all 0.2s"
               w="100%"
               h={["132px", "132px", "122px"]}
               bg="#FAFAFA"
@@ -710,20 +582,19 @@ const PwdDetail = ({ page }) => {
         </Grid>
         <Image
           pos="absolute"
-          left={["9%", "9%", "19%"]}
+          right={["9%", "9%", "19%"]}
           bottom="0"
           h={["146px", "146px", "350px"]}
           src={pwd?.othersSection?.bottomImage}
           zIndex="1"
         />
-        <Image
-          pos="absolute"
-          bottom="-1px"
-          src={pwd?.othersSection?.borderBottom}
-          width="100%"
-          fit="contain"
-          zIndex={0}
-        />
+        <Box pos="absolute" bottom="0" width="100%">
+          <DividerA
+            primaryColor="rgb(0,191,186)"
+            secondaryColor="rgb(254,181,52)"
+            nextColor="white"
+          />
+        </Box>
       </Box>
     </VStack>
   );

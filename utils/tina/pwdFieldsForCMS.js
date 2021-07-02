@@ -3,24 +3,14 @@ import metaTextTemplates from "./metaTextTemplates";
 export default [
   {
     name: "banner",
-    label: "職業資料 Job Details",
-    component: "group",
-    fields: [
-      {
-        label: "項目圖標 Bullet Point Icon",
-        name: "bulletIcon",
-        component: "image",
-        uploadDir: () => "/pwd",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-    ],
-  },
-  {
-    name: "banner",
     label: "頁面橫幅 Hero Banner",
     component: "group",
     fields: [
+      {
+        name: "bgColor",
+        label: "背景颜色 Background Color",
+        component: "color",
+      },
       {
         label: "图像主 Image Main",
         name: "bgImageMain",
@@ -112,22 +102,22 @@ export default [
             parse: ({ previewSrc }) => previewSrc,
             previewSrc: (src) => src,
           },
-          {
-            name: "bgGradient2",
-            label: "背景渐变 2 Background Gradient 2",
-            component: "image",
-            uploadDir: () => "/pwd",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "bottomBorder",
-            label: "底部边框 Bottom Border",
-            component: "image",
-            uploadDir: () => "/pwd",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
+          // {
+          //   name: "bgGradient2",
+          //   label: "背景渐变 2 Background Gradient 2",
+          //   component: "image",
+          //   uploadDir: () => "/pwd",
+          //   parse: ({ previewSrc }) => previewSrc,
+          //   previewSrc: (src) => src,
+          // },
+          // {
+          //   name: "bottomBorder",
+          //   label: "底部边框 Bottom Border",
+          //   component: "image",
+          //   uploadDir: () => "/pwd",
+          //   parse: ({ previewSrc }) => previewSrc,
+          //   previewSrc: (src) => src,
+          // },
           {
             name: "bottomImage",
             label: "底部图像 Bottom Image",
@@ -137,6 +127,11 @@ export default [
             previewSrc: (src) => src,
           },
         ],
+      },
+      {
+        name: "title",
+        label: "標題 Title",
+        component: "text",
       },
       {
         name: "pwds",
@@ -189,14 +184,6 @@ export default [
               {
                 name: "bgGradient",
                 label: "背景渐变 Background Gradient",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
-                name: "bottomBorder",
-                label: "底部边框 Bottom Border",
                 component: "image",
                 uploadDir: () => "/pwd",
                 parse: ({ previewSrc }) => previewSrc,
@@ -267,7 +254,7 @@ export default [
                 component: "color",
               },
               {
-                name: "`imageTop`",
+                name: "imageTop",
                 label: "图片顶部 Image Top",
                 component: "image",
                 uploadDir: () => "/pwd",
@@ -282,14 +269,6 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
-              {
-                name: "bottomBorder",
-                label: "底部边框 Bottom Border",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
             ],
           },
 
@@ -298,6 +277,16 @@ export default [
             label: "特質區段 Trait Section",
             component: "group",
             fields: [
+              {
+                name: "title",
+                label: "標題 Title",
+                component: "text",
+              },
+              {
+                name: "description",
+                label: "描述 description",
+                component: "text",
+              },
               {
                 name: "traits",
                 label: "特點 Traits",
@@ -375,6 +364,16 @@ export default [
             component: "group",
             fields: [
               {
+                name: "title",
+                label: "標題 Title",
+                component: "text",
+              },
+              {
+                name: "description",
+                label: "描述 description",
+                component: "text",
+              },
+              {
                 name: "sections",
                 label: "職業類型 Job Type Sections",
                 component: "group-list",
@@ -422,14 +421,6 @@ export default [
                 ],
               },
               {
-                name: "borderBottom",
-                label: "Border Bottom",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
                 name: "bgColor",
                 label: "背景颜色 Background Color",
                 component: "color",
@@ -443,24 +434,8 @@ export default [
                 previewSrc: (src) => src,
               },
               {
-                name: "personLeftPolygon",
-                label: "Person Left Polygon Image",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
                 name: "personRight",
                 label: "Person Right Image",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
-                name: "personRightPolygon",
-                label: "Person Right Polygon Image",
                 component: "image",
                 uploadDir: () => "/pwd",
                 parse: ({ previewSrc }) => previewSrc,
@@ -473,6 +448,11 @@ export default [
             label: "影片區段 VideoSection",
             component: "group",
             fields: [
+              {
+                name: "title",
+                label: "標題 Title",
+                component: "text",
+              },
               {
                 name: "description",
                 label: "描述 description",
@@ -506,14 +486,6 @@ export default [
               {
                 name: "rightImage",
                 label: "Right Image",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
-                name: "gradient",
-                label: "Background Gradient",
                 component: "image",
                 uploadDir: () => "/pwd",
                 parse: ({ previewSrc }) => previewSrc,
@@ -578,14 +550,6 @@ export default [
                 previewSrc: (src) => src,
               },
               {
-                name: "borderBottom",
-                label: "Border Bottom Image",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
-              {
                 name: "gradient",
                 label: "Background Gradient",
                 component: "image",
@@ -601,12 +565,9 @@ export default [
             component: "group",
             fields: [
               {
-                name: "borderBottom",
-                label: "Border Bottom Image",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
+                name: "title",
+                label: "標題 Title",
+                component: "text",
               },
               {
                 name: "bottomImage",
