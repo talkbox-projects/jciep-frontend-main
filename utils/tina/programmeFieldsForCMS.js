@@ -109,6 +109,29 @@ export default [
         previewSrc: (src) => src,
       },
       {
+        name: "serviceSection",
+        label: "合作伙伴圖片區塊 Service Section",
+        component: "group",
+        fields: [
+          {
+            label: "左图 Image Left",
+            name: "bgImageLeft",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+          {
+            label: "右图 Image Right",
+            name: "bgImageRight",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
+      },
+      {
         name: "partners",
         label: "合作伙伴 Partners",
         component: "group-list",

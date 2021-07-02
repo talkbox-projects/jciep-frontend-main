@@ -12,7 +12,12 @@ const ApostropheHeadline = ({ color = "#ffffff", children }) => {
           transform="rotate(-30deg)"
         />
       </Box>
-      <Text pb={4} fontWeight="bold" textAlign="center">
+      <Text
+        pb={4}
+        fontSize={["3xl", "4xl"]}
+        fontWeight="bold"
+        textAlign="center"
+      >
         {children}
       </Text>
       <Box>

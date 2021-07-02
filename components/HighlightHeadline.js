@@ -11,6 +11,7 @@ const HighlightHeadline = ({ bgColor = "#F6D644", children }) => {
       backgroundImage={`linear-gradient(${bgColor}, ${bgColor})`}
       backgroundRepeat="no-repeat"
       backgroundPosition="0 0.8em"
+      fontSize={["3xl", "4xl"]}
     >
       {children}
     </Text>

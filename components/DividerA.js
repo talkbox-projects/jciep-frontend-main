@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 
-const DividerTriple = ({
+const DividerA = ({
   primaryColor = "#00BFBA",
   secondaryColor = "#FFFFFF",
   nextColor = "#F6D644",
@@ -40,4 +40,4 @@ const DividerTriple = ({
   );
 };
 
-export default DividerTriple;
+export default DividerA;

@@ -24,7 +24,7 @@ import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import Accordian from "../../components/Acordian";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 
@@ -229,7 +229,7 @@ const Programme = ({ page }) => {
             <Wrap
               mt={8}
               spacing={[6, 12]}
-              px={[8, 24]}
+              px={[8, 12]}
               justify="center"
               align="center"
             >
@@ -363,53 +363,60 @@ const Programme = ({ page }) => {
                       >
                         {categoryName}
                       </Heading>
-                      <Accordion
-                        w="100%"
-                        pt={8}
-                        as={VStack}
-                        align="stretch"
-                        allowMultiple
-                      >
+                      <Accordion w="100%" pt={8} as={VStack} align="stretch">
                         {(items ?? []).map(
                           ({ id, title, description, links }) => {
                             return (
                               <AccordionItem key={id} border={0} bg="gray.50">
-                                <AccordionButton>
-                                  <HStack w="100%">
-                                    <Text
-                                      flex={1}
-                                      minW={0}
-                                      w="100%"
-                                      lineHeight={2}
-                                      fontWeight="bold"
-                                      textAlign="left"
-                                    >
-                                      {title}
-                                    </Text>
-                                    <Icon as={AiOutlinePlus} fontSize="2xl" />
-                                  </HStack>
-                                </AccordionButton>
-                                <AccordionPanel px={4} color="gray.200">
-                                  <MultiTextRenderer data={description} />
-                                  <VStack spacing={1} mt={8} align="start">
-                                    {(links ?? []).map(({ id, label, url }) => {
-                                      return (
-                                        <NextLink
-                                          key={id}
-                                          href="url"
-                                          target="blank"
+                                {({ isExpanded }) => (
+                                  <>
+                                    <AccordionButton>
+                                      <HStack w="100%">
+                                        <Text
+                                          flex={1}
+                                          minW={0}
+                                          w="100%"
+                                          lineHeight={2}
+                                          fontWeight="bold"
+                                          textAlign="left"
                                         >
-                                          <Button
-                                            variant="link"
-                                            color="#007878"
-                                          >
-                                            {label}
-                                          </Button>
-                                        </NextLink>
-                                      );
-                                    })}
-                                  </VStack>
-                                </AccordionPanel>
+                                          {title}
+                                        </Text>
+                                        <Icon
+                                          as={
+                                            isExpanded
+                                              ? AiOutlineMinus
+                                              : AiOutlinePlus
+                                          }
+                                          fontSize="2xl"
+                                        />
+                                      </HStack>
+                                    </AccordionButton>
+                                    <AccordionPanel px={4} color="gray.200">
+                                      <MultiTextRenderer data={description} />
+                                      <VStack spacing={1} mt={8} align="start">
+                                        {(links ?? []).map(
+                                          ({ id, label, url }) => {
+                                            return (
+                                              <NextLink
+                                                key={id}
+                                                href="url"
+                                                target="blank"
+                                              >
+                                                <Button
+                                                  variant="link"
+                                                  color="#007878"
+                                                >
+                                                  {label}
+                                                </Button>
+                                              </NextLink>
+                                            );
+                                          }
+                                        )}
+                                      </VStack>
+                                    </AccordionPanel>
+                                  </>
+                                )}
                               </AccordionItem>
                             );
                           }
