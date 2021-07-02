@@ -78,16 +78,19 @@ const Sharing = ({ page, setting, lang }) => {
         category: router.query.category ?? undefined,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
       });
+      setLatestPosts((latestPosts) =>
+        pageRef.current > 1 ? [...latestPosts, ...data] : data
+      );
       totalRef.current = totalRecords;
       pageRef.current++;
-      console.log(data);
-      setLatestPosts((latestPosts) => [...latestPosts, ...data]);
     } catch (err) {
       console.log("***** error", err);
     }
-  }, [router.query.category]);
+  }, [router.query]);
 
   useEffect(() => {
+    totalRef.current = 0;
+    pageRef.current = 1;
     fetchPosts();
   }, [fetchPosts]);
 
@@ -226,7 +229,7 @@ const Sharing = ({ page, setting, lang }) => {
                     withIcon={false}
                   />
                   <Text fontSize="sm">
-                    {moment(featuredArticle.publishDate).format("D MMM, hh:mm")}
+                    {moment(featuredArticle.publishDate).format("D MMM, HH:mm")}
                   </Text>
                 </Wrap>
                 <Box borderRadius={16} pt={1} px={2} color={1} pb={16}>
