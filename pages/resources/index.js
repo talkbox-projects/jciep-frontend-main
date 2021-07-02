@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
+import Slider from "react-slick";
 import {
-  chakra,
+  Divider,
+  Icon,
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+  AccordionButton,
   Heading,
   Text,
   Image,
@@ -16,6 +22,7 @@ import {
   Button,
   Grid,
   GridItem,
+  IconButton,
   Link,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
@@ -29,6 +36,8 @@ import Container from "../../components/Container";
 import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
+import { FaArrowLeft, FaArrowRight, FaShareSquare } from "react-icons/fa";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const PAGE_KEY = "resources";
 
@@ -85,8 +94,79 @@ const responsiveCarousel = {
   },
 };
 
+const ResourceCard = ({ resource, page }) => {
+  return (
+    <Box
+      w="320px"
+      p={4}
+      boxShadow="lg"
+      bg="white"
+      h="100%"
+      borderRadius={12}
+      borderTopWidth={4}
+      borderColor={"#00B6B4"}
+      transitionProperty="height"
+      transitionDuration="0.3s"
+      transitionTimingFunction="ease-in-out"
+      pt={16}
+    >
+      <Link href={resource?.name?.link}>
+        <Text fontSize="xl" fontWeight="bold">
+          {resource?.name?.text}
+          <Icon pl={1} fontSize="md" as={FaShareSquare} />
+        </Text>
+        {resource?.name?.description && (
+          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
+            <Icon as={AiOutlineInfoCircle} />
+          </Tooltip>
+        )}
+      </Link>
+      <Divider />
+      {JSON.stringify(resource)}
+      <Button onClick={() => setExpanded((v) => !v)}>SHow More</Button>
+      <Accordion>
+        <AccordionItem>
+          <AccordionButton as={Button} variant="link">
+            Show More
+          </AccordionButton>
+          <AccordionPanel>
+            <Box>
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+              fda
+              <br />
+            </Box>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    </Box>
+  );
+};
+
 const Resources = ({ page }) => {
   const [showItems, setShowItems] = useState(3);
+  const sliderRef = useRef(null);
+  const settings = {
+    ref: (c) => (sliderRef.current = c),
+    dots: false,
+    speed: 500,
+    slidesToScroll: 1,
+    variableWidth: true,
+  };
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
@@ -308,38 +388,20 @@ const Resources = ({ page }) => {
         <DividerSimple nextColor="#FAFAFA" />
       </Box>
       {/* resource Section */}
-      <Box w="100%" bg="#FAFAFA" pos="relative">
-        <VStack
-          alignItems="start"
-          w="100%"
-          pt={["36px", "36px", "109px"]}
-          maxW={{ lg: "83%", md: "90%" }}
-          pl={{ base: "16px", md: "0" }}
-          mx="auto"
-        >
-          <VStack alignItems="start" w="100%">
-            <Heading fontSize={["24px", "24px", "36px", "54px"]}>
-              {page?.content?.resourceSection["title 標題"]}
-            </Heading>
-          </VStack>
-        </VStack>
 
-        <Box
-          display={["none", "none", "block", "block"]}
-          pt="110px"
-          overflow="hidden"
-          pos="relative"
-        >
-          <Carousel
-            responsive={responsiveCarousel}
-            swipeable={false}
-            draggable={false}
-            showDots={false}
-            customButtonGroup={<ButtonGroup />}
-          >
+      <Box bg="#fafafa">
+        <Container>
+          <Text my={16} fontSize={"6xl"} fontWeight="bold">
+            {page?.content?.resourceSection["title 標題"]}
+          </Text>
+        </Container>
+
+        <Box p={4} pos="relative" w="100vw">
+          <Slider {...settings}>
+            <Box minW="320px" h="100%"></Box>
             {(page?.content?.resourceSection?.resources ?? []).map(
-              (
-                {
+              (resource, index) => {
+                const {
                   name,
                   category,
                   organization,
@@ -352,98 +414,91 @@ const Resources = ({ page }) => {
                   topColor,
                   contact,
                   reminder,
-                },
-                index
-              ) => (
-                <Stack align="center" justifyContent="center" key={index}>
-                  <Card
-                    name={name}
-                    topColor={topColor}
-                    organization={organization}
-                    category={wordExtractor(page?.content?.wordings, category)}
-                    serviceTarget={serviceTarget}
-                    services={services}
-                    internship={internship}
-                    probationOrReferral={probationOrReferral}
-                    subsidy={subsidy}
-                    remark={remark}
-                    contact={contact}
-                    reminder={reminder}
-                    page={page}
-                  />
-                </Stack>
-              )
-            )}
-          </Carousel>
-        </Box>
-        <VStack
-          w="100%"
-          pt="49px"
-          spacing="24px"
-          justifyContent="center"
-          display={["block", "block", "none", "none"]}
-        >
-          <VStack
-            spacing="16px"
-            w="100%"
-            justifyContent="center"
-            alignItems="center"
-          >
-            {(
-              page?.content?.resourceSection?.resources.slice(0, showItems) ??
-              []
-            ).map(
-              (
-                {
-                  name,
-                  category,
-                  organization,
-                  serviceTarget,
-                  services,
-                  internship,
-                  probationOrReferral,
-                  subsidy,
-                  remark,
-                  topColor,
-                  contact,
-                  reminder,
-                },
-                index
-              ) => (
-                <Card
-                  name={name}
-                  topColor={topColor}
-                  organization={organization}
-                  category={category}
-                  serviceTarget={serviceTarget}
-                  services={services}
-                  internship={internship}
-                  probationOrReferral={probationOrReferral}
-                  subsidy={subsidy}
-                  remark={remark}
-                  contact={contact}
-                  reminder={reminder}
-                  page={page}
-                />
-              )
-            )}
-          </VStack>
-          <VStack>
-            <Button
-              color="black"
-              borderRadius="22px"
-              onClick={() => setShowItems(showItems + 1)}
-              hidden={
-                showItems >= page?.content?.resourceSection?.resources.length
+                } = resource;
+                return (
+                  <Box key={index} px={2} h="100%" minW={"320px"}>
+                    <Card
+                      name={name}
+                      topColor={topColor}
+                      organization={organization}
+                      category={wordExtractor(
+                        page?.content?.wordings,
+                        category
+                      )}
+                      serviceTarget={serviceTarget}
+                      services={services}
+                      internship={internship}
+                      probationOrReferral={probationOrReferral}
+                      subsidy={subsidy}
+                      remark={remark}
+                      contact={contact}
+                      reminder={reminder}
+                      page={page}
+                    />
+                  </Box>
+                );
               }
-              bg="transparent"
-              pb="5px"
-              border="2px solid #1E1E1E"
+            )}
+          </Slider>
+          <HStack
+            pos="absolute"
+            zIndex={1}
+            left={0}
+            top={0}
+            h="100%"
+            align="center"
+            p={12}
+          >
+            <Box
+              _hover={{
+                color: "white",
+                bg: "black",
+              }}
+              boxShadow="lg"
+              bg="white"
+              p={4}
+              borderRadius="50%"
             >
-              {wordExtractor(page?.content?.wordings, "showMore")}
-            </Button>
-          </VStack>
-        </VStack>
+              <IconButton
+                cursor="pointer"
+                onClick={() => sliderRef.current.slickPrev()}
+                variant="unstyled"
+                as={FaArrowLeft}
+                size="md"
+              />
+            </Box>
+          </HStack>
+          <HStack
+            pos="absolute"
+            zIndex={1}
+            top={0}
+            right={0}
+            h="100%"
+            align="center"
+            p={12}
+          >
+            <Box
+              _hover={{
+                color: "white",
+                bg: "black",
+              }}
+              boxShadow="lg"
+              bg="white"
+              p={4}
+              borderRadius="50%"
+            >
+              <IconButton
+                cursor="pointer"
+                borderRadius="50%"
+                onClick={() => sliderRef.current.slickNext()}
+                variant="unstyled"
+                round={true}
+                size="md"
+                as={FaArrowRight}
+              />
+            </Box>
+          </HStack>
+        </Box>
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">

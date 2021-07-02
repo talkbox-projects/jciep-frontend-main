@@ -7,7 +7,8 @@ import MongooseMediaStore from "../media/store";
 import { HtmlFieldPlugin } from "react-tinacms-editor";
 import { AppProvider } from "../store/AppStore";
 
-// import "../global.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const theme = extendTheme({
   colors: {

@@ -2,6 +2,7 @@ import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import {
   SimpleGrid,
   Grid,
@@ -58,6 +59,7 @@ const Video = chakra("video");
 
 const Home = ({ setting, page }) => {
   const [posts, setPosts] = useState([]);
+  const router = useRouter();
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
