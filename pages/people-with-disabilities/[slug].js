@@ -119,17 +119,20 @@ const PwdDetail = ({ page }) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
+          zIndex={2}
         >
-          <Image src={pwd?.icon} height={["64", "64", "88"]} />
+          <Image src={pwd?.icon} height={[16, 16, 88]} />
         </Box>
-        <Text fontWeight="bold" fontSize={["24", "24", "56"]}>
+        <Text zIndex={2} fontWeight="bold" fontSize={["24", "24", "56"]}>
           {pwd?.name}
         </Text>
-        <MultiTextRenderer
-          textAlign="center"
-          fontSize={["16", "16", "24", "24"]}
-          data={pwd?.description}
-        />
+        <Box zIndex={2}>
+          <MultiTextRenderer
+            textAlign="center"
+            fontSize={["16", "16", "24", "24"]}
+            data={pwd?.description}
+          />
+        </Box>
         <Image
           pos="absolute"
           bottom="0"
@@ -252,11 +255,11 @@ const PwdDetail = ({ page }) => {
         background={pwd?.traitSection?.bgColor}
       >
         <Box display="flex" pos="relative">
-          <Box mt={["110px", "110px", "80px"]}>
+          <Box zIndex={2} mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {pwd?.traitSection?.title}
             </Text>
-            <Text fontSize="16px" position="relative" zIndex="1">
+            <Text zIndex={2} fontSize="16px" position="relative" zIndex="1">
               {pwd?.traitSection?.description}
             </Text>
           </Box>
