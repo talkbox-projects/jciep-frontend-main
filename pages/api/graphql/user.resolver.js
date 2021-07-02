@@ -212,7 +212,9 @@ export default {
       let identityExists = await Identity.findOne({userId: input.userId, type: input.identity})
 
       if(identityExists) {
-        throw new Error("Identity Already exists!");
+        return {
+          id: identityExists._id
+        }
       } else {
         let identity = await new Identity({
           userId : input.userId,

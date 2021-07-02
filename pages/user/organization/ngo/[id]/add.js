@@ -10,15 +10,18 @@ import {
   FormHelperText,
   FormLabel,
   Textarea,
+  Checkbox
 } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import Link from "next/link";
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
-import { getPage } from "../../../../utils/page/getPage";
-import withPageCMS from "../../../../utils/page/withPageCMS";
+import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
+import { getPage } from "../../../../../utils/page/getPage";
+import withPageCMS from "../../../../../utils/page/withPageCMS";
+import { gql } from "graphql-request";
+import { getGraphQLClient } from "../../../../../utils/apollo";
 
 const PAGE_KEY = "organization_ngo_add";
 
@@ -41,8 +44,12 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
+
+
 const OrganizationNgoAdd = ({ page }) => {
   const router = useRouter();
+  const {id} = router.query;
+
   const {
     handleSubmit,
     setError,
@@ -50,20 +57,79 @@ const OrganizationNgoAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const validate = (chineseOrganizationName, englishOrganizationName, contactNumberngoWebsite, ngoDescription, terms) => {
+    if(chineseOrganizationName.trim() === '') {
+      setError("chineseOrganizationName", {
+        type: "manual",
+        message: "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
+      });
+      return true
+    } else if (englishOrganizationName.trim() === '') {
+      setError("englishOrganizationName", {
+        type: "manual",
+        message: "輸入有效的英文組織名稱 Enter valid english organization name! ",
+      });
+      return true
+    } else if (contactNumberngoWebsite.trim() === '') {
+      setError("contactNumberngoWebsite", {
+        type: "manual",
+        message: "輸入有效網站 Enter valid website! ",
+      });
+      return true
+    } else if (ngoDescription.trim() === '') {
+      setError("ngoDescription", {
+        type: "manual",
+        message: "輸入有效說明 Enter valid Description! ",
+      });
+      return true
+    }  else if (terms === false) {
+      setError("terms", {
+        type: "manual",
+        message: "請接受條款和條件 Please accept T&C! ",
+      });
+      return true
+    } else {
+      return false
+    }
+  }
+
   const onFormSubmit = useCallback(
     async ({
       chineseOrganizationName,
       englishOrganizationName,
       ngoWebsite,
       ngoDescription,
+      terms
     }) => {
       try {
-        console.log(chineseOrganizationName);
-        console.log(englishOrganizationName);
-        console.log(ngoWebsite);
-        console.log(ngoDescription);
 
-        router.push("/" + page.lang + "/user/organization/ngo/1/pending");
+        if(validate(chineseOrganizationName, englishOrganizationName, ngoWebsite,  ngoDescription, terms)) {
+          return true
+        }
+
+        const mutation = gql`
+        mutation OrganizationSubmissionCreate($input: OrganizationSubmissionCreateInput!) {
+          OrganizationSubmissionCreate(input: $input) {
+            id
+          }
+        }
+      `;
+  
+      let data =await getGraphQLClient().request(mutation, {
+        input: {
+          organizationType: 'ngo',
+          chineseCompanyName: chineseOrganizationName,
+          englishCompanyName: englishOrganizationName,
+          website: ngoWebsite,
+          tncAccept: terms,
+          identityId: id,
+        },
+      });    
+  
+      if(data && data.OrganizationSubmissionCreate) {
+        router.push(`/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`);
+      }
+   
       } catch (e) {
         console.log(e);
       }
@@ -139,6 +205,13 @@ const OrganizationNgoAdd = ({ page }) => {
               <FormHelperText>{errors?.ngoDescription?.message}</FormHelperText>
             </FormControl>
 
+            <FormControl marginTop="20px !important">
+              <Checkbox colorScheme="green" {...register("terms")}>
+                {page?.content?.form?.terms}
+              </Checkbox>
+              <FormHelperText>{errors?.terms?.message}</FormHelperText>
+            </FormControl>
+
             <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"
@@ -146,6 +219,7 @@ const OrganizationNgoAdd = ({ page }) => {
                 height="44px"
                 width="117.93px"
                 type="submit"
+                isLoading={isSubmitting}
               >
                 {page?.content?.form?.continue}
               </Button>
@@ -200,6 +274,11 @@ export default withPageCMS(OrganizationNgoAdd, {
         {
           name: "ngoDescription",
           label: "公司描述標籤 NGO/ Organization/ School Description Label",
+          component: "text",
+        },
+        {
+          name: "terms",
+          label: "條款和條件 T&C Label",
           component: "text",
         },
         {

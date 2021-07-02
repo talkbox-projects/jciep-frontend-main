@@ -1,3 +1,14 @@
+import { Organization , OrganizationSubmission} from "./organization.model";
+
+Organization.find().then(data => {
+  console.log(data)
+})
+
+
+OrganizationSubmission.find().then(data => {
+  console.log(data)
+})
+
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, params) => {},
@@ -32,6 +43,68 @@ export default {
        *    create an organization submission with the id of newly-created organization.
        * status = pendingApproval
        */
+
+      let organization = new Promise(async (resolve, reject) => {
+        if(params.input.organizationId) {
+          let organization = await Organization.findById(params.input.organizationId)
+
+          if (!organization) {
+            throw new Error("Organiazation not exists!");
+          }
+
+          resolve(organization)
+        } else {
+
+          resolve(await new Organization({
+            organizationType: params.input.organizationType,
+            remark: params?.input?.remark,
+            status: "pendingApproval",
+            chineseCompanyName: params?.input.chineseCompanyName,
+            englishCompanyName: params?.input.englishCompanyName,
+            website: params?.input.website,
+            businessRegistration: [],
+            industry: params?.input?.industry,
+            description: params?.input?.description,
+            submission: [],
+            district: params?.input?.district,
+            companyBenefit: params?.input?.companyBenefit,
+            logo: [],
+            tncAccept: params?.input?.tncAccept
+          }))
+  
+        }
+      })
+
+      organization = await organization
+
+      if(organization) {
+
+        let organizationSubmission = await  new OrganizationSubmission({
+            organizationType: organization.organizationType,
+            organization: organization._id,
+            remark: organization.remark,
+            status: "pendingApproval",
+            chineseCompanyName: organization.chineseCompanyName,
+            englishCompanyName: organization.englishCompanyName,
+            website: organization.website,
+            businessRegistration: organization.businessRegistration,
+            industry: organization?.industry,
+            description: organization?.description,
+            district: organization?.district,
+            companyBenefit: organization?.companyBenefit,
+            logo: organization.logo,
+            tncAccept: organization?.tncAccept,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
+          
+          await organizationSubmission.save()        
+          organization.submission.push(organizationSubmission._id) 
+          organization.status = "pendingApproval"
+          await organization.save()
+
+          return await OrganizationSubmission.findById(organizationSubmission._id).populate("organization")  
+      }
     },
 
     OrganizationSubmissionUpdate: async (_parent, params) => {

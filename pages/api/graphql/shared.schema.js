@@ -45,7 +45,7 @@ export default gql`
   }
   
   enum Industry {
-    graphicDesig
+    graphicDesign
     illustrationDrawing
     animationDesign
     webDesign

@@ -63,7 +63,6 @@ export default gql`
 
     biography: JsonContent
     portfolio: [Media]
-
     member: [Member]
     submission: [OrganizationSubmission]
     tncAccept: Boolean
@@ -75,7 +74,7 @@ export default gql`
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: FileInput
+    businessRegistration: [FileInput]
     industry: Industry
     description: String
     district: District
@@ -83,6 +82,7 @@ export default gql`
     logo: FileInput
     identityId: ID!
     organizationId: ID
+    tncAccept: Boolean
   }
 
   input OrganizationSubmissionUpdateInput {
@@ -93,7 +93,7 @@ export default gql`
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: FileInput
+    businessRegistration: [FileInput]
     industry: Industry
     description: String
     district: District
@@ -136,6 +136,8 @@ export default gql`
   }
 
   type Mutation {
+
+
     OrganizationSubmissionCreate(
       input: OrganizationSubmissionCreateInput
     ): OrganizationSubmission
