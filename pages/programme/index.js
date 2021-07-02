@@ -14,6 +14,8 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionButton,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -23,6 +25,8 @@ import Accordian from "../../components/Acordian";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
 import { AiOutlinePlus } from "react-icons/ai";
+import DividerA from "../../components/DividerA";
+import DividerTriple from "../../components/DividerTriple";
 
 const PAGE_KEY = "programme";
 
@@ -51,7 +55,13 @@ export const getServerSideProps = async (context) => {
 
 const Programme = ({ page }) => {
   return (
-    <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
+    <VStack
+      mt={["64px", 0]}
+      overflowY="visible"
+      w="100%"
+      spacing={0}
+      align="stretch"
+    >
       {page?.content?.seo?.title && (
         <NextSeo
           title={page?.content?.seo?.title}
@@ -76,14 +86,17 @@ const Programme = ({ page }) => {
         <Box
           position="absolute"
           maxW="80%"
-          left={["25%", "25%", "18%"]}
+          left={0}
+          mx={8}
+          // left={["25%", "25%", "18%"]}
           bottom={["30%", "40%", "40%"]}
         >
           <Text
+            p={1}
             w="max"
             maxW="80%"
             fontWeight="semibold"
-            fontSize={["12px", "16px", "24px", "56px"]}
+            fontSize={["24px", "56px"]}
             bg={page?.content?.heroBannerSection?.titleBgColor}
             color="black"
             display="inline"
@@ -91,13 +104,13 @@ const Programme = ({ page }) => {
             {page?.content?.heroBannerSection["title 標題"]}
           </Text>
         </Box>
-        <Image
-          position="absolute"
-          bottom="-1px"
-          src={page?.content?.heroBannerSection?.bgImageBottom}
-          width="100%"
-          fit="contain"
-        />
+        <Box position="absolute" bottom="-1px" w="100%">
+          <DividerTriple
+            primaryColor="#00BFBA"
+            secondaryColor="white"
+            nextColor="#F6D644"
+          />
+        </Box>
       </Box>
 
       {/* Vision Section */}
@@ -105,7 +118,7 @@ const Programme = ({ page }) => {
         <Container py={24}>
           <VStack align="center" w="100%">
             <Text
-              fontSize="4xl"
+              fontSize={["3xl", "3xl", "4xl", "4xl"]}
               textAlign="center"
               fontWeight="bold"
               backgroundImage="linear-gradient(#fff, #fff)"
@@ -122,8 +135,8 @@ const Programme = ({ page }) => {
                 return (
                   <VStack pt={16} key={id}>
                     <Box position="relative" mx={["47px", "47px", "0px"]}>
-                      <Text fontWeight="bold" fontSize="xl" textAlign="center">
-                        {page?.content?.partnerSection?.planSection?.title}
+                      <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                        {title}
                       </Text>
                       <Box
                         width="6.15px"
@@ -180,20 +193,20 @@ const Programme = ({ page }) => {
       <Box bg="#FAFAFA">
         <Box
           backgroundImage={`url(${page?.content?.partnerSection?.bgImageMain})`}
-          backgroundSize="contain"
+          backgroundSize={["300%", "contain"]}
           backgroundRepeat="no-repeat"
           w="100%"
           position="relative"
         >
           <Container>
             <VStack
-              spacing={0}
+              spacing={[4, 2]}
               pt={["36px", "36px", "53px"]}
               textAlign="center"
             >
               <Box>
                 <chakra.span
-                  fontSize={["22px", "30px", "36px"]}
+                  fontSize={["3xl"]}
                   textAlign="center"
                   fontWeight="semibold"
                   pos="relative"
@@ -213,50 +226,51 @@ const Programme = ({ page }) => {
                 {page?.content?.partnerSection?.description}
               </Text>
             </VStack>
-            <SimpleGrid
-              justifyContent="center"
-              alignItems="center"
-              alignContent="center"
-              columns={[1, 1, 2, 3]}
+            <Wrap
               mt={8}
-              spacing={24}
+              spacing={[6, 12]}
+              px={[8, 24]}
+              justify="center"
+              align="center"
             >
               {(page?.content?.partnerSection?.partners ?? []).map(
                 ({ id, agencyName, projectName, contact, slug }) => (
                   <NextLink href={`/programme/partner/${slug}`}>
-                    <VStack>
-                      <GridItem
-                        as={VStack}
-                        borderWidth={1}
-                        bg="#FAFAFA"
-                        w={["80%", "80%", "100%"]}
-                        _hover={{
-                          boxShadow: "lg",
-                          bg: "white",
-                          opacity: 1,
-                        }}
-                        cursor="pointer"
-                        borderRadius={16}
-                        key={id}
-                        py={5}
-                        px={5}
-                        h={["250px", "320px"]}
-                        textAlign="left"
-                        align="left"
-                        zIndex="10"
-                      >
-                        <Text fontWeight="bold" fontSize="xl">
-                          {agencyName}
-                        </Text>
-                        <Text fontSize="lg">{projectName}</Text>
-                        <Box flex={1} minH="max-content" h="100%" />
-                        <Image w={["75%"]} src={contact?.logo}></Image>
-                      </GridItem>
-                    </VStack>
+                    <WrapItem
+                      as={VStack}
+                      w={["100%", "25%"]}
+                      transition="all 0.2s"
+                      borderWidth={[0, 2]}
+                      borderColor="#C6C6C6"
+                      boxShadow={["lg", "none"]}
+                      bg={["white", "#FAFAFA"]}
+                      _hover={{
+                        borderColor: "transparent",
+                        boxShadow: "lg",
+                        bg: "white",
+                        opacity: 1,
+                      }}
+                      cursor="pointer"
+                      borderRadius={16}
+                      key={id}
+                      py={5}
+                      px={5}
+                      h={["250px", "320px"]}
+                      textAlign="left"
+                      align="left"
+                      zIndex="10"
+                    >
+                      <Text fontWeight="bold" fontSize="2xl">
+                        {agencyName}
+                      </Text>
+                      <Text fontSize="lg">{projectName}</Text>
+                      <Box flex={1} minH="max-content" h="100%" />
+                      <Image w={["75%"]} src={contact?.logo}></Image>
+                    </WrapItem>
                   </NextLink>
                 )
               )}
-            </SimpleGrid>
+            </Wrap>
           </Container>
 
           <Image
@@ -282,15 +296,13 @@ const Programme = ({ page }) => {
               src={page?.content?.partnerSection?.bgImageRight}
               zIndex="1"
             />
-            <Image
-              pos="absolute"
-              right="0px"
-              bottom="0"
-              width="100%"
-              objectFit="contain"
-              src={page?.content?.partnerSection?.bgImageBottom}
-              zIndex="0"
-            />
+            <Box position="absolute" bottom="0" w="100%">
+              <DividerA
+                primaryColor="#F6D644"
+                secondaryColor="#00BFBA"
+                nextColor="white"
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -322,7 +334,7 @@ const Programme = ({ page }) => {
             </chakra.span>
           </Box>
         </VStack>
-        <Container>
+        <Container zIndex={2} position="relative">
           <SimpleGrid
             columns={[1, 1, 2, 2]}
             gap="36px"
@@ -344,13 +356,20 @@ const Programme = ({ page }) => {
                         src={icon}
                       />
                       <Heading
+                        pt={4}
                         as="h4"
                         fontSize={["20px", "24px", ""]}
                         fontWeight="normal"
                       >
                         {categoryName}
                       </Heading>
-                      <Accordion w="100%" pt={8} as={VStack} align="stretch">
+                      <Accordion
+                        w="100%"
+                        pt={8}
+                        as={VStack}
+                        align="stretch"
+                        allowMultiple
+                      >
                         {(items ?? []).map(
                           ({ id, title, description, links }) => {
                             return (
@@ -408,18 +427,25 @@ const Programme = ({ page }) => {
           src={page?.content?.referenceSection?.bgStyle?.bgGradient1}
           bottom={0}
           right={0}
+          zIndex="0"
         />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
           <Image
             pos="absolute"
             right={["22px", "35px", "81px"]}
-            bottom="-10px"
-            h="100%"
-            width={["66%", "54%", "52%"]}
+            bottom="0"
+            width={["90%", "52%"]}
             src={page?.content?.referenceSection?.bgStyle?.bottomImage}
             zIndex="1"
           />
-          <Image
+          <Box position="absolute" bottom="0" w="100%">
+            <DividerTriple
+              primaryColor="#00BFBA"
+              secondaryColor="#F6D644"
+              nextColor="white"
+            />
+          </Box>
+          {/* <Image
             pos="absolute"
             right="0px"
             bottom="0"
@@ -427,7 +453,7 @@ const Programme = ({ page }) => {
             objectFit="contain"
             src={page?.content?.referenceSection?.bgStyle?.bottomBorder}
             zIndex="0"
-          />
+          /> */}
         </Box>
       </Box>
     </VStack>
