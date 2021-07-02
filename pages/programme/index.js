@@ -16,6 +16,7 @@ import {
   AccordionButton,
   Wrap,
   WrapItem,
+  Link,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -238,7 +239,7 @@ const Programme = ({ page }) => {
                   <NextLink href={`/programme/partner/${slug}`}>
                     <WrapItem
                       as={VStack}
-                      w={["100%", "25%"]}
+                      w={["100%", "100%", "40%", "25%"]}
                       transition="all 0.2s"
                       borderWidth={[0, 0, 0, 2]}
                       borderColor="#C6C6C6"
@@ -398,18 +399,15 @@ const Programme = ({ page }) => {
                                         {(links ?? []).map(
                                           ({ id, label, url }) => {
                                             return (
-                                              <NextLink
+                                              <Link
+                                                isExternal
                                                 key={id}
-                                                href="url"
-                                                target="blank"
+                                                href={url}
+                                                fontWeight="bold"
+                                                color="#007878"
                                               >
-                                                <Button
-                                                  variant="link"
-                                                  color="#007878"
-                                                >
-                                                  {label}
-                                                </Button>
-                                              </NextLink>
+                                                {label}
+                                              </Link>
                                             );
                                           }
                                         )}
