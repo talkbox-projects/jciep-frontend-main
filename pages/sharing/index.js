@@ -229,7 +229,9 @@ const Sharing = ({ page, setting, lang }) => {
                     withIcon={false}
                   />
                   <Text fontSize="sm">
-                    {moment(featuredArticle.publishDate).format("D MMM, HH:mm")}
+                    {moment(featuredArticle.publishDate).format(
+                      "D MMM, hh:mm a"
+                    )}
                   </Text>
                 </Wrap>
                 <Box borderRadius={16} pt={1} px={2} color={1} pb={16}>
@@ -254,7 +256,15 @@ const Sharing = ({ page, setting, lang }) => {
             <DividerSimple flip={true}></DividerSimple>
           </Box>
         </Box>
-        <Box position="relative" d={["block", "block", "none"]} pb={16}>
+        <Box
+          cursor="pointer"
+          onClick={() => {
+            router.push(`/sharing/${featuredArticle?.slug}`);
+          }}
+          position="relative"
+          d={["block", "block", "none"]}
+          pb={16}
+        >
           <AspectRatio w={"100%"} ratio={4 / 3}>
             <Image src={featuredArticle.coverImage} />
           </AspectRatio>
@@ -285,7 +295,7 @@ const Sharing = ({ page, setting, lang }) => {
                   withIcon={false}
                 />
                 <Text fontSize="sm">
-                  {moment(featuredArticle.publishDate).format("D MMM, hh:mm")}
+                  {moment(featuredArticle.publishDate).format("D MMM, hh:mm a")}
                 </Text>
               </Wrap>
               <Box borderRadius={16} pt={1} px={2} color={1}>
@@ -381,7 +391,7 @@ const Sharing = ({ page, setting, lang }) => {
                           {getCategoryData(post.category)?.label}
                         </Box>
                         <Text fontSize="12px" display="inline-block">
-                          {moment(post.publishDate).format("D MMM, hh:mm")}
+                          {moment(post.publishDate).format("D MMM, hh:mm a")}
                         </Text>
                       </Flex>
                       <Text
@@ -485,7 +495,7 @@ const Sharing = ({ page, setting, lang }) => {
                         {getCategoryData(post.category)?.label}
                       </Box>
                       <Text fontSize="12px" display="inline-block">
-                        {moment(post.publishDate).format("D MMM, hh:mm")}
+                        {moment(post.publishDate).format("D MMM, hh:mm a")}
                       </Text>
                     </Flex>
                     <Text
@@ -525,8 +535,8 @@ const Sharing = ({ page, setting, lang }) => {
               ))}
             </Flex>
 
-            <Box d={["none", "none", "block"]}>
-              <Box mt="170px" mb={4}>
+            <Box d={"block"}>
+              <Box mt="70px" mb={4}>
                 <Box textAlign="left" fontSize="36px">
                   <Text pos="relative" display="inline-block" pl="8px">
                     <Box zIndex={1} pos="relative">

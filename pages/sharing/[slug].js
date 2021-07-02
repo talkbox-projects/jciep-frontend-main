@@ -75,7 +75,7 @@ const PostHeader = ({ categories, post }) => {
             <Image src={post.coverImage} />
           </AspectRatio>
         </Box>
-        <Box bgColor="#f6d644" minH="50vh"></Box>
+        <Box bgColor="#f6d644" minH="320px"></Box>
         <Box bgColor="#f6d644">
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
@@ -104,7 +104,7 @@ const PostHeader = ({ categories, post }) => {
               withIcon={false}
             />
             <Text fontSize="sm">
-              {moment(post?.publishDate).format("D MMM, hh:mm")}
+              {moment(post?.publishDate).format("D MMM, hh:mm a")}
             </Text>
           </Wrap>
           <Heading

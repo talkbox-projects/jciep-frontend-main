@@ -100,7 +100,7 @@ const Card = ({
       <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
         <VStack borderRadius="10px" alignItems="start" px="16px" w="100%">
           <VStack w="100%" minH="520px" alignItems="start">
-            <Text pt="40px" fontSize="12px" h="58px" color={topColor}>
+            <Text pt="40px" h="58px" color={topColor}>
               {wordExtractor(
                 page?.content?.wordings,
                 "resource_group_" + category
@@ -291,20 +291,28 @@ const Card = ({
                     page?.content?.resourceSection?.resourceListIcons?.contact
                   }
                 />
-                <Text whiteSpace="pre-line" color="#1E1E1E" fontSize="16px">
-                  {contact?.text}
+                <Text color="#1E1E1E" fontSize="16px">
+                  {wordExtractor(page?.content?.wordings, "contactHeading")}
                 </Text>
               </HStack>
+              <Text
+                pl="27px"
+                whiteSpace="pre-line"
+                color="#1E1E1E"
+                fontSize="16px"
+              >
+                {contact?.text}
+              </Text>
               <VStack pl="27px" alignItems="start">
                 <Text color="#1E1E1E" fontSize="12px">
                   {contact?.description}
                 </Text>
-                <Text pt="24px" color="#1E1E1E" fontSize="12px">
-                  {contact?.linkName}
-                  <Link href={contact?.url}>
+                <chakra.a href={contact?.url} target="_blank">
+                  <Text pt="24px" color="#1E1E1E" fontSize="12px">
+                    {contact?.linkName}
                     <Icon pl={1} size="sm" as={FaShareSquare} />
-                  </Link>
-                </Text>
+                  </Text>
+                </chakra.a>
               </VStack>
               <HStack pt="32px" spacing="5px">
                 <Image
@@ -320,7 +328,12 @@ const Card = ({
                 </Text>
               </HStack>
 
-              <Text pl="27px" color="#1E1E1E" fontSize="12px">
+              <Text
+                pl="27px"
+                whiteSpace="pre-line"
+                color="#1E1E1E"
+                fontSize="12px"
+              >
                 {remark}
               </Text>
             </MotionBox>

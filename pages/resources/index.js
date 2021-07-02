@@ -68,6 +68,7 @@ const Resources = ({ page }) => {
     speed: 500,
     slidesToScroll: 1,
     variableWidth: true,
+    infinite: false,
   };
 
   return (
@@ -317,15 +318,12 @@ const Resources = ({ page }) => {
                   reminder,
                 } = resource;
                 return (
-                  <Box key={index} px={1} h="100%" maxW={"336px"}>
+                  <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
                     <Card
                       name={name}
                       topColor={topColor}
                       organization={organization}
-                      category={wordExtractor(
-                        page?.content?.wordings,
-                        category
-                      )}
+                      category={category}
                       serviceTarget={serviceTarget}
                       services={services}
                       internship={internship}
@@ -431,7 +429,7 @@ const Resources = ({ page }) => {
                     name={name}
                     topColor={topColor}
                     organization={organization}
-                    category={wordExtractor(page?.content?.wordings, category)}
+                    category={category}
                     serviceTarget={serviceTarget}
                     services={services}
                     internship={internship}
