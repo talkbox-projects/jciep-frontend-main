@@ -1,6 +1,10 @@
 import { Box, HStack, Text } from "@chakra-ui/react";
 
-const ApostropheHeadline = ({ color = "#ffffff", children }) => {
+const ApostropheHeadline = ({
+  color = "#ffffff",
+  fontSize = ["2xl", "4xl"],
+  children,
+}) => {
   return (
     <HStack align="flex-end" spacing={8}>
       <Box>
@@ -12,12 +16,7 @@ const ApostropheHeadline = ({ color = "#ffffff", children }) => {
           transform="rotate(-30deg)"
         />
       </Box>
-      <Text
-        pb={4}
-        fontSize={["3xl", "4xl"]}
-        fontWeight="bold"
-        textAlign="center"
-      >
+      <Text pb={4} fontSize={fontSize} fontWeight="bold" textAlign="center">
         {children}
       </Text>
       <Box>

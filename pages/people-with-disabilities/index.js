@@ -7,6 +7,9 @@ import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import Container from "../../components/Container";
+import DividerA from "../../components/DividerA";
+import ApostropheHeadline from "../../components/ApostropheHeadline";
+import HighlightHeadline from "../../components/HighlightHeadline";
 
 const PAGE_KEY = "pwd";
 
@@ -31,23 +34,15 @@ export const getServerSideProps = async (context) => {
 const PwdMain = ({ page }) => {
   const router = useRouter();
 
-  const pwdTitle = () => {
-    const titleElem = (page?.content?.wordings ?? []).filter(
-      (data) => data.key === "pwdSectionTitle"
-    );
-    if (titleElem && titleElem[0]) {
-      return titleElem[0].value;
-    }
-  };
-
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       <Box
-        h="calc(50vw - 40px)"
-        minH="70vh"
+        // h="calc(50vw - 40px)"
+        minH={["50vh", "70vh"]}
         w="100%"
         position="relative"
         overflowY="visible"
+        backgroundColor={page?.content?.banner?.bgColor}
         backgroundImage={`url(${page?.content?.banner?.bgImageMain})`}
         backgroundSize="cover"
         backgroundPosition="center center"
@@ -58,7 +53,7 @@ const PwdMain = ({ page }) => {
         display="flex"
         justifyContent="center"
       >
-        <Box mb="43px" position="relative">
+        <Box mb="43px" position="relative" zIndex={10}>
           <Text textAlign="center" fontSize={["16", "16", "24", "24"]}>
             {page?.content?.banner?.reference}
           </Text>
@@ -82,9 +77,9 @@ const PwdMain = ({ page }) => {
         <Image
           position="absolute"
           bottom="-74px"
-          left="149"
+          left={["0", "0", "0", "0", "149"]}
           src={page?.content?.banner?.bgImageLeft}
-          h={["0%", "0%", "388px"]}
+          h={["0%", "0%", "300px", "388px"]}
           w="auto"
           maxW="334"
           zIndex="1"
@@ -92,9 +87,9 @@ const PwdMain = ({ page }) => {
         <Image
           position="absolute"
           bottom="-27px"
-          right={["20px", "20px", "100", "100"]}
+          right={["20px", "20px", "0", "0", "100"]}
           src={page?.content?.banner?.bgImageRight}
-          h={["142px", "142px", "306px"]}
+          h={["142px", "142px", "200px", "200px", "306px"]}
           w="auto"
           maxW="551"
           zIndex="1"
@@ -120,34 +115,10 @@ const PwdMain = ({ page }) => {
         alignItems="center"
         zIndex="-2"
       >
-        <Box position="relative" mb="34px" mx={["47px", "47px", "0px"]}>
-          <Text
-            fontSize={["16", "16", "24"]}
-            textAlign="center"
-            fontWeight="bold"
-          >
+        <Box position="relative" mb="34px" mx={["47px", "47px", "5%"]}>
+          <ApostropheHeadline fontSize={["xl", "4xl"]}>
             {page?.content?.excerpt?.tagline}
-          </Text>
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            right={["-6", "-6", "-12"]}
-            bottom="-3"
-            background="#fff"
-            transform="rotate(30deg)"
-          />
-          <Box
-            width="6.15px"
-            height="27.69px"
-            borderRadius="5px"
-            pos="absolute"
-            left={["-6", "-6", "-12"]}
-            bottom="-3"
-            background="#fff"
-            transform="rotate(-30deg)"
-          />
+          </ApostropheHeadline>
         </Box>
 
         <Box
@@ -178,30 +149,23 @@ const PwdMain = ({ page }) => {
           textAlign="center"
           pos="relative"
           fontSize={["24", "30", "36"]}
-          w={["80%", "80%", "auto"]}
+          w={["fit-content"]}
           mx={["50", "auto"]}
         >
-          <chakra.span pos="relative">
-            <chakra.span
-              backgroundImage="linear-gradient(#fff, #fff)"
-              lineHeight={2}
-              backgroundRepeat="no-repeat"
-              backgroundPosition="0 0.5em"
-              zIndex="2"
-              pos="relative"
-              pl="15px"
-              pb="6px"
-              fontWeight="bold"
-            >
-              {pwdTitle()}
-            </chakra.span>
-          </chakra.span>
+          <Box pos="relative">
+            <HighlightHeadline bgColor="#fff">
+              {page?.content?.pwdList?.title}
+            </HighlightHeadline>
+          </Box>
         </Box>
 
         <Grid
+          pos="relative"
+          zIndex="10"
           templateColumns={[
             "repeat(2, 136px)",
             "repeat(2, 136px)",
+            "repeat(2, 296px)",
             "repeat(3, 296px)",
           ]}
           gap={["16px", "16px", "24px"]}
@@ -212,12 +176,14 @@ const PwdMain = ({ page }) => {
             <Box
               w="100%"
               h={["132px", "132px", "122px"]}
-              bg="rgba(255, 255, 255, 0.3)"
+              transition="all 0.2s"
+              bg={["#fff", "#fff", "#fff", "rgba(255, 255, 255, 0.3)"]}
+              boxShadow={["lg", "lg", "lg", "none"]}
               borderRadius="10px"
               cursor="pointer"
               _hover={{
                 background: "#fff",
-                boxShadow: "12px 12px 24px 0px rgba(30,30,30,0.1)",
+                boxShadow: "lg",
               }}
               display="flex"
               flexDirection="column"
@@ -250,22 +216,20 @@ const PwdMain = ({ page }) => {
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
           <Image
             pos="absolute"
-            right={["22px", "35px", "81px"]}
+            right={["22px", "35px", "35px", "81px"]}
             bottom="0"
-            h={["124px", "135px", "380px"]}
-            width={["248px", "270px", "749px"]}
+            h={["124px", "135px", "300px", "380px"]}
+            width={["248px", "270px", "600px", "749px"]}
             src={page?.content?.pwdList?.bgStyle?.bottomImage}
             zIndex="1"
           />
-          <Image
-            pos="absolute"
-            right="0px"
-            bottom="0"
-            width="100%"
-            objectFit="contain"
-            src={page?.content?.pwdList?.bgStyle?.bottomBorder}
-            zIndex="0"
-          />
+          <Box pos="absolute" bottom="0" w="100%">
+            <DividerA
+              primaryColor="rgb(0,191,186)"
+              secondaryColor="rgb(198,198,198)"
+              nextColor="#fff"
+            />
+          </Box>
         </Box>
       </Box>
     </VStack>

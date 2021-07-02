@@ -240,10 +240,10 @@ const Programme = ({ page }) => {
                       as={VStack}
                       w={["100%", "25%"]}
                       transition="all 0.2s"
-                      borderWidth={[0, 2]}
+                      borderWidth={[0, 0, 0, 2]}
                       borderColor="#C6C6C6"
-                      boxShadow={["lg", "none"]}
-                      bg={["white", "#FAFAFA"]}
+                      boxShadow={["lg", "lg", "lg", "none"]}
+                      bg={["white", "white", "white", "#FAFAFA"]}
                       _hover={{
                         borderColor: "transparent",
                         boxShadow: "lg",

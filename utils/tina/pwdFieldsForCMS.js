@@ -3,24 +3,14 @@ import metaTextTemplates from "./metaTextTemplates";
 export default [
   {
     name: "banner",
-    label: "職業資料 Job Details",
-    component: "group",
-    fields: [
-      {
-        label: "項目圖標 Bullet Point Icon",
-        name: "bulletIcon",
-        component: "image",
-        uploadDir: () => "/pwd",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
-      },
-    ],
-  },
-  {
-    name: "banner",
     label: "頁面橫幅 Hero Banner",
     component: "group",
     fields: [
+      {
+        name: "bgColor",
+        label: "背景颜色 Background Color",
+        component: "color",
+      },
       {
         label: "图像主 Image Main",
         name: "bgImageMain",
@@ -112,22 +102,22 @@ export default [
             parse: ({ previewSrc }) => previewSrc,
             previewSrc: (src) => src,
           },
-          {
-            name: "bgGradient2",
-            label: "背景渐变 2 Background Gradient 2",
-            component: "image",
-            uploadDir: () => "/pwd",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
-          {
-            name: "bottomBorder",
-            label: "底部边框 Bottom Border",
-            component: "image",
-            uploadDir: () => "/pwd",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
-          },
+          // {
+          //   name: "bgGradient2",
+          //   label: "背景渐变 2 Background Gradient 2",
+          //   component: "image",
+          //   uploadDir: () => "/pwd",
+          //   parse: ({ previewSrc }) => previewSrc,
+          //   previewSrc: (src) => src,
+          // },
+          // {
+          //   name: "bottomBorder",
+          //   label: "底部边框 Bottom Border",
+          //   component: "image",
+          //   uploadDir: () => "/pwd",
+          //   parse: ({ previewSrc }) => previewSrc,
+          //   previewSrc: (src) => src,
+          // },
           {
             name: "bottomImage",
             label: "底部图像 Bottom Image",
@@ -137,6 +127,11 @@ export default [
             previewSrc: (src) => src,
           },
         ],
+      },
+      {
+        name: "title",
+        label: "標題 Title",
+        component: "text",
       },
       {
         name: "pwds",
