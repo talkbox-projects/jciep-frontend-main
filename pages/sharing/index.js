@@ -253,7 +253,7 @@ const Sharing = ({ page, setting, lang }) => {
               zIndex: 300,
             })}
           >
-            <DividerSimple flip={true}></DividerSimple>
+            <DividerSimple flip={true} nextColor="white"></DividerSimple>
           </Box>
         </Box>
         <Box

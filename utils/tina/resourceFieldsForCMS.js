@@ -440,6 +440,7 @@ export default [
                 component: "select",
                 options: [
                   { value: "assessment", label: "工作/就業評估" },
+                  { value: "counseling", label: "工作/就業輔導" },
                   { value: "matching", label: "工作配對" },
                   { value: "followUp", label: "就業後跟進" },
                   { value: "training", label: "職業訓練/就業培訓" },
