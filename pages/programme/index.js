@@ -28,6 +28,7 @@ import MultiTextRenderer from "./../../components/MultiTextRenderer";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
+import HighlightHeadline from "../../components/HighlightHeadline";
 
 const PAGE_KEY = "programme";
 
@@ -72,46 +73,50 @@ const Programme = ({ page }) => {
 
       {/* Banner Section */}
       <Box
-        h="calc(50vw - 40px)"
-        w="100%"
+        h="40vh"
+        minH={["40vh", "70vh"]}
+        w="100vw"
         position="relative"
         overflowY="visible"
         backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
         backgroundSize="cover"
-        backgroundPosition={["", "", "center"]}
+        backgroundPosition={["center"]}
         display="flex"
         flexDirection="column"
         alignItems="center"
         zIndex="-1"
       >
-        <Box
+        <VStack
+          align="stretch"
           position="absolute"
-          maxW="80%"
-          left={0}
-          mx={8}
-          // left={["25%", "25%", "18%"]}
-          bottom={["30%", "40%", "40%"]}
+          bottom={0}
+          textAlign="center"
+          w="100%"
         >
-          <Text
-            p={1}
-            w="max"
-            maxW="80%"
-            fontWeight="semibold"
-            fontSize={["24px", "56px"]}
-            bg={page?.content?.heroBannerSection?.titleBgColor}
-            color="black"
-            display="inline"
-          >
-            {page?.content?.heroBannerSection["title 標題"]}
-          </Text>
-        </Box>
-        <Box position="absolute" bottom="-1px" w="100%">
+          <Container>
+            <Box position="relative" zIndex={2} pb={16}>
+              <VStack mx={8} align="start" spacing={0}>
+                <Text
+                  p={1}
+                  w="max"
+                  maxW="80%"
+                  fontWeight="semibold"
+                  fontSize={["24px", "24px", "36px", "56px"]}
+                  bg={page?.content?.heroBannerSection?.titleBgColor}
+                  color="black"
+                  display="inline"
+                >
+                  {page?.content?.heroBannerSection["title 標題"]}
+                </Text>
+              </VStack>
+            </Box>
+          </Container>
           <DividerTriple
             primaryColor="#00BFBA"
             secondaryColor="white"
             nextColor="#F6D644"
           />
-        </Box>
+        </VStack>
       </Box>
 
       {/* Vision Section */}
@@ -177,8 +182,8 @@ const Programme = ({ page }) => {
               <Iframe
                 p={2}
                 pt={16}
-                w={[320, 480, 800]}
-                h={[192, 288, 480]}
+                w="100%"
+                h={["320px", "320px", "480px", "720px"]}
                 src={page?.content?.visionSection?.videoLink}
                 title="PWD Video"
                 frameborder="0"
@@ -206,21 +211,9 @@ const Programme = ({ page }) => {
               textAlign="center"
             >
               <Box>
-                <chakra.span
-                  fontSize={["3xl"]}
-                  textAlign="center"
-                  fontWeight="semibold"
-                  pos="relative"
-                  lineHeight={2}
-                  backgroundImage="linear-gradient(#F6D644, #F6D644)"
-                  backgroundRepeat="no-repeat"
-                  backgroundPosition="0 0.7em"
-                  pl="15px"
-                  pr="15px"
-                  pb="10px"
-                >
+                <HighlightHeadline>
                   {page?.content?.partnerSection?.title}
-                </chakra.span>
+                </HighlightHeadline>
               </Box>
 
               <Text zIndex="2">
@@ -318,21 +311,9 @@ const Programme = ({ page }) => {
       >
         <VStack>
           <Box px="16px">
-            <chakra.span
-              fontSize={["22px", "30px", "36px"]}
-              textAlign="center"
-              fontWeight="semibold"
-              pos="relative"
-              lineHeight={2}
-              backgroundImage="linear-gradient(#F6D644, #F6D644)"
-              backgroundRepeat="no-repeat"
-              backgroundPosition="0 0.7em"
-              pl="15px"
-              pr="15px"
-              pb="10px"
-            >
+            <HighlightHeadline>
               {page?.content?.referenceSection?.title}
-            </chakra.span>
+            </HighlightHeadline>
           </Box>
         </VStack>
         <Container zIndex={2} position="relative">

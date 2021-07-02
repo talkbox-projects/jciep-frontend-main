@@ -204,7 +204,7 @@ const PwdDetail = ({ page }) => {
                             </AccordionButton>
                           </h2>
                           {isExpanded && (
-                            <Divider m="auto" w="95%" color="gray.300" />
+                            <Divider m="auto" w="95%" color="#eee" />
                           )}
                           <AccordionPanel pt={4} pb={8}>
                             <MultiTextRenderer

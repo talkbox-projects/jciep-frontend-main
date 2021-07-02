@@ -105,7 +105,7 @@ const Partner = ({ page }) => {
         >
           <Container>
             <Box pb={16}>
-              <VStack align="start" spacing={0}>
+              <VStack mx={8} align="start" spacing={0}>
                 <Box>
                   <Text
                     fontWeight={900}
@@ -141,7 +141,7 @@ const Partner = ({ page }) => {
           // zIndex={200}
           position="relative"
           pt={24}
-          pb={[64, 64, 64, 24]}
+          pb={[16, 16, 16, 24]}
         >
           <VStack spacing={8}>
             <ApostropheHeadline color="#F6D644">
@@ -266,12 +266,10 @@ const Partner = ({ page }) => {
                                         />
                                       </HStack>
                                     </AccordionButton>
-                                    <AccordionPanel
-                                      fontSize="lg"
-                                      borderTopWidth={2}
-                                      borderTopColor="#eee"
-                                      p={4}
-                                    >
+                                    {isExpanded && (
+                                      <Divider m="auto" w="95%" color="#eee" />
+                                    )}
+                                    <AccordionPanel fontSize="lg" py={4} px={8}>
                                       <MultiTextRenderer data={content} />
                                     </AccordionPanel>
                                   </>
