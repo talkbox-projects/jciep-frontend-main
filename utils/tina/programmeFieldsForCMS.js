@@ -289,6 +289,21 @@ export default [
         component: "text",
       },
       {
+        name: "bgStyle",
+        label: "背景样式 Background style",
+        component: "group",
+        fields: [
+          {
+            name: "bgGradient1",
+            label: "背景渐变 1 Background Gradient 1",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
+      },
+      {
         name: "references",
         label: "資源 References",
         component: "group-list",

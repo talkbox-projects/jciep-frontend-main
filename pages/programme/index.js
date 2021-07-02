@@ -445,15 +445,6 @@ const Programme = ({ page }) => {
               nextColor="white"
             />
           </Box>
-          {/* <Image
-            pos="absolute"
-            right="0px"
-            bottom="0"
-            width="100%"
-            objectFit="contain"
-            src={page?.content?.referenceSection?.bgStyle?.bottomBorder}
-            zIndex="0"
-          /> */}
         </Box>
       </Box>
     </VStack>
