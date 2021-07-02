@@ -369,7 +369,7 @@ const Sharing = ({ page, setting, lang }) => {
                   >
                     <AspectRatio ratio={4 / 3}>
                       <Box
-                        bgImage={`url(${post.coverImage})`}
+                        bgImage={`url('${post.coverImage}')`}
                         bgPos="center center"
                         bgSize="cover"
                         borderRadius={16}
