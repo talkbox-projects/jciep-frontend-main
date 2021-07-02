@@ -59,104 +59,6 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const responsiveCarousel = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 7,
-  },
-  xxLargeDesktop: {
-    breakpoint: { max: 3000, min: 2500 },
-    items: 6,
-  },
-  xLargeDesktop: {
-    breakpoint: { max: 2500, min: 2000 },
-    items: 5,
-  },
-  largeDesktop: {
-    breakpoint: { max: 2000, min: 1600 },
-    items: 4,
-  },
-  desktop: {
-    breakpoint: { max: 1600, min: 1272 },
-    items: 3.5,
-  },
-  mdDesktop: {
-    breakpoint: { max: 1271, min: 900 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 899, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 463, min: 0 },
-    items: 0,
-  },
-};
-
-const ResourceCard = ({ resource, page }) => {
-  return (
-    <Box
-      w="320px"
-      p={4}
-      boxShadow="lg"
-      bg="white"
-      h="100%"
-      borderRadius={12}
-      borderTopWidth={4}
-      borderColor={"#00B6B4"}
-      transitionProperty="height"
-      transitionDuration="0.3s"
-      transitionTimingFunction="ease-in-out"
-      pt={16}
-    >
-      <Link href={resource?.name?.link}>
-        <Text fontSize="xl" fontWeight="bold">
-          {resource?.name?.text}
-          <Icon pl={1} fontSize="md" as={FaShareSquare} />
-        </Text>
-        {resource?.name?.description && (
-          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
-            <Icon as={AiOutlineInfoCircle} />
-          </Tooltip>
-        )}
-      </Link>
-      <Divider />
-      {JSON.stringify(resource)}
-      <Button onClick={() => setExpanded((v) => !v)}>SHow More</Button>
-      <Accordion>
-        <AccordionItem>
-          <AccordionButton as={Button} variant="link">
-            Show More
-          </AccordionButton>
-          <AccordionPanel>
-            <Box>
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-              fda
-              <br />
-            </Box>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </Box>
-  );
-};
-
 const Resources = ({ page }) => {
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
@@ -396,9 +298,8 @@ const Resources = ({ page }) => {
           </Text>
         </Container>
 
-        <Box p={4} pos="relative" w="100vw">
+        <Box d={["none", "none", "block"]} p={4} pos="relative" w="100vw">
           <Slider {...settings}>
-            <Box minW="320px" h="100%"></Box>
             {(page?.content?.resourceSection?.resources ?? []).map(
               (resource, index) => {
                 const {
@@ -416,7 +317,7 @@ const Resources = ({ page }) => {
                   reminder,
                 } = resource;
                 return (
-                  <Box key={index} px={2} h="100%" minW={"320px"}>
+                  <Box key={index} px={1} h="100%" maxW={"336px"}>
                     <Card
                       name={name}
                       topColor={topColor}
@@ -499,6 +400,75 @@ const Resources = ({ page }) => {
             </Box>
           </HStack>
         </Box>
+        <VStack
+          w="100%"
+          px={[2, 4]}
+          justifyContent="center"
+          d={["block", "block", "none"]}
+        >
+          <Box>
+            {(
+              page?.content?.resourceSection?.resources?.slice(0, showItems) ??
+              []
+            ).map((resource, index) => {
+              const {
+                name,
+                category,
+                organization,
+                serviceTarget,
+                services,
+                internship,
+                probationOrReferral,
+                subsidy,
+                remark,
+                topColor,
+                contact,
+                reminder,
+              } = resource;
+              return (
+                <VStack key={index} px={2} alignItems="stretch">
+                  <Card
+                    name={name}
+                    topColor={topColor}
+                    organization={organization}
+                    category={wordExtractor(page?.content?.wordings, category)}
+                    serviceTarget={serviceTarget}
+                    services={services}
+                    internship={internship}
+                    probationOrReferral={probationOrReferral}
+                    subsidy={subsidy}
+                    remark={remark}
+                    contact={contact}
+                    reminder={reminder}
+                    page={page}
+                  />
+                </VStack>
+              );
+            })}
+            <VStack mt={6} w="100%" align="center">
+              <Button
+                variant="outline"
+                borderColor="black"
+                borderWidth={2}
+                p={3}
+                size="xl"
+                borderRadius="2em"
+                onClick={() =>
+                  setShowItems((i) =>
+                    Math.min(
+                      i + 3,
+                      page?.content?.resourceSection?.resources?.length
+                    )
+                  )
+                }
+                outline="none"
+                appearance="none"
+              >
+                {wordExtractor(page?.content?.wordings, "showMore")}
+              </Button>
+            </VStack>
+          </Box>
+        </VStack>
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
@@ -635,6 +605,7 @@ const Resources = ({ page }) => {
                 )}
               </Box>
             </GridItem>
+            {/* temp hidden */}
             <GridItem colSpan={[6, 6, 3, 3]} d="none">
               <Box
                 background="#FFFFFF"

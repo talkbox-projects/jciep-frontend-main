@@ -91,7 +91,6 @@ const Card = ({
   const [show, setShow] = useState(false);
   return (
     <Box
-      w={["90%", "303px", "303px", "350px"]}
       borderTop={`8px solid ${topColor ? topColor : "#4E7F8E"}`}
       boxShadow="12px 12px 24px 0px rgba(30,30,30,0.1)"
       borderRadius="10px"
