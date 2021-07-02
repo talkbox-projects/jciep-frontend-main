@@ -4,6 +4,7 @@ import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import {
+  Icon,
   SimpleGrid,
   Grid,
   chakra,
@@ -33,6 +34,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
 import CategoryTag from "../components/CategoryTag";
+import { VscQuote } from "react-icons/vsc";
 
 const PAGE_KEY = "home";
 
@@ -183,7 +185,7 @@ const Home = ({ setting, page }) => {
       </Box>
 
       {/* Third Section */}
-      <Box bg="#fff" minH="100vh">
+      <Box bg="#fff">
         <Container>
           <VStack align="center" py={"20vh"}>
             <Image
@@ -229,15 +231,21 @@ const Home = ({ setting, page }) => {
 
       {/* Fourth Section */}
 
-      <Box bg="#F6D644" minH="100vh" position="relative">
+      <Box bg="#F6D644" position="relative">
         <Container>
           <Box py={32}>
             <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
               {(page?.content?.transitionBanner?.slides ?? []).map(
                 ({ caption, image }, index) => (
                   <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: 12 }}>
-                    <Box h={8} mb={8} fontSize={["xl", "xl", "2xl"]}>
-                      {caption}
+                    <Box textAlign="center">
+                      {caption && (
+                        <Box h={8} mb={8}>
+                          <ApostropheHeadline fontSize={"xl"}>
+                            {caption}
+                          </ApostropheHeadline>
+                        </Box>
+                      )}
                     </Box>
                     <Box
                       borderWidth={4}
@@ -361,15 +369,23 @@ const Home = ({ setting, page }) => {
                   minW={0}
                   textAlign="left"
                 >
-                  <Box
-                    bgColor="#00F5E7"
-                    borderRadius={24}
-                    fontSize="lg"
-                    px={4}
-                    py={0.5}
-                  >
-                    {getCategoryData(post?.category)?.label}
-                  </Box>
+                  <HStack>
+                    <Icon
+                      as={VscQuote}
+                      fontSize={36}
+                      color="white"
+                      fontWeight="bold"
+                    />
+                    <Box
+                      bgColor="#00F5E7"
+                      borderRadius={24}
+                      fontSize="xl"
+                      px={4}
+                      py={0.5}
+                    >
+                      <Text>{getCategoryData(post?.category)?.label}</Text>
+                    </Box>
+                  </HStack>
                   <Text
                     fontWeight="bold"
                     d="block"
@@ -525,16 +541,16 @@ const Home = ({ setting, page }) => {
       </Grid>
 
       <Box
-        minH="50vh"
-        py={32}
+        py={24}
         bgColor="#F6D644"
         bgImage={`url(${page?.content?.quote?.background})`}
         bgSize="cover"
+        bgPos="bottom center"
       >
         <Container>
           <Box>
-            <VStack align="center" maxW={768} mx="auto" spacing={4}>
-              <Text alignSelf="flex-start" w="100%" fontSize={["lg"]}>
+            <VStack align="center" maxW={720} mx="auto" spacing={4}>
+              <Text pl={16} alignSelf="flex-start" w="100%" fontSize={["lg"]}>
                 {page?.content?.quote?.audience}
               </Text>
               <Box textAlign="center" px={8} pt={8}>
@@ -545,7 +561,7 @@ const Home = ({ setting, page }) => {
                         case "textBlock":
                           return (
                             <Text
-                              fontSize="3xl"
+                              fontSize="2xl"
                               d="inline"
                               key={index}
                               textColor={textcolor}
