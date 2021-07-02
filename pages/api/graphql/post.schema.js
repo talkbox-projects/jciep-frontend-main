@@ -25,6 +25,7 @@ export default gql`
     tags: [String]
     references: [PostReference]
     status: PostStatus!
+    featureDisplay: Boolean
     content: JsonContent
     viewCount: Int!
   }
@@ -42,6 +43,7 @@ export default gql`
     excerpt: String
     coverImage: String
     category: String
+    featureDisplay: Boolean
     content: JsonContent
     tags: [String]
     references: [PostReferenceInput]
@@ -56,6 +58,7 @@ export default gql`
     excerpt: String
     coverImage: String
     category: String
+    featureDisplay: Boolean
     content: JsonContent
     status: PostStatus
     tags: [String]
@@ -71,6 +74,7 @@ export default gql`
     PostSearch(
       lang: Language
       status: [PostStatus]
+      featureDisplay: Boolean
       category: String
       limit: Int!
       page: Int!

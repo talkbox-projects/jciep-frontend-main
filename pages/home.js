@@ -2,6 +2,7 @@ import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import {
   SimpleGrid,
   Grid,
@@ -29,6 +30,9 @@ import MultiTextRenderer from "../components/MultiTextRenderer";
 import HighlightHeadline from "../components/HighlightHeadline";
 import ApostropheHeadline from "../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { getFilteredPosts } from "../utils/post/getPost";
+import { useEffect } from "react";
+import CategoryTag from "../components/CategoryTag";
 
 const PAGE_KEY = "home";
 
@@ -40,6 +44,7 @@ export const getServerSideProps = async (context) => {
         key: "wordings",
         lang: context.locale,
       }),
+      setting: await getConfiguration({ key: "setting", lang: context.locale }),
       header: await getConfiguration({ key: "header", lang: context.locale }),
       footer: await getConfiguration({ key: "footer", lang: context.locale }),
       navigation: await getConfiguration({
@@ -52,7 +57,32 @@ export const getServerSideProps = async (context) => {
 
 const Video = chakra("video");
 
-const Home = ({ page }) => {
+const Home = ({ setting, page }) => {
+  const [posts, setPosts] = useState([]);
+  const router = useRouter();
+
+  const categories = setting?.value?.categories;
+  const getCategoryData = (key) => {
+    return (categories ?? []).find((c) => c.key === key);
+  };
+
+  const fetchFeaturePosts = useCallback(async () => {
+    try {
+      const { data } = await getFilteredPosts({
+        page: 1,
+        featureDisplay: true,
+        limit: 20,
+      });
+      setPosts(data);
+    } catch (err) {
+      console.log("***** error", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFeaturePosts();
+  }, [fetchFeaturePosts]);
+
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       {page?.content?.seo?.title && (
@@ -267,6 +297,7 @@ const Home = ({ page }) => {
                 px={3}
                 position="absolute"
                 h="100vh"
+                zIndex={25}
                 align="center"
                 left={[2, 2, 2, 2, 8, "10vw"]}
               >
@@ -301,67 +332,74 @@ const Home = ({ page }) => {
             ) : null;
           }}
         >
-          {(page?.content?.sharing?.slides ?? []).map(
-            ({ image, category, persona, title, excerpt }, index) => (
-              <Container key={index}>
-                <Stack
-                  align="center"
-                  justifyContent="center"
-                  spacing={[6, 8, 10, 16]}
-                  px="50px"
-                  h="100vh"
-                  direction={["column", "column", "column", "row"]}
-                >
-                  <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                    <Image src={image} />
-                  </Box>
-                  <VStack
-                    px={8}
-                    align="start"
-                    flex={[0, 0, 0, 1]}
-                    minW={0}
-                    textAlign="left"
+          {(posts ?? []).map((post, index) => (
+            <Container key={index}>
+              <Stack
+                align="center"
+                justifyContent="center"
+                spacing={[6, 8, 10, 16]}
+                px="50px"
+                h="100vh"
+                direction={["column", "column", "column", "row"]}
+                onClick={() => router.push(`/sharing/${post?.slug}`)}
+              >
+                <Box w={["100%", "60%", "50%", "50%", "40%"]}>
+                  <AspectRatio
+                    overflow="hidden"
+                    borderRadius={16}
+                    borderWWidth={4}
+                    borderColor="white"
+                    ratio={1}
                   >
-                    <Box
-                      bgColor="#00F5E7"
-                      borderRadius={24}
-                      fontSize="lg"
-                      px={4}
-                      py={0.5}
-                    >
-                      {category}
-                    </Box>
-                    <Text
-                      fontWeight="bold"
-                      d="block"
-                      pb={4}
-                      lineHeight="xl"
-                      fontSize={["2xl", "2xl", "2xl", "2xl"]}
-                    >
-                      {persona}
-                    </Text>
-                    <Heading
-                      lineHeight="xl"
-                      fontSize={["4xl", "4xl", "4xl", "4xl"]}
-                      whiteSpace="pre-wrap"
-                      bgColor="white"
-                    >
-                      {title}
-                    </Heading>
-                    <Text
-                      d="block"
-                      pt={4}
-                      whiteSpace="pre-wrap"
-                      fontSize="2xl"
-                      borderRadius={4}
-                    >
-                      {excerpt}
-                    </Text>
-                  </VStack>
-                </Stack>
-              </Container>
-            )
-          )}
+                    <Image src={post?.coverImage} />
+                  </AspectRatio>
+                </Box>
+                <VStack
+                  px={8}
+                  align="start"
+                  flex={[0, 0, 0, 1]}
+                  minW={0}
+                  textAlign="left"
+                >
+                  <Box
+                    bgColor="#00F5E7"
+                    borderRadius={24}
+                    fontSize="lg"
+                    px={4}
+                    py={0.5}
+                  >
+                    {getCategoryData(post?.category)?.label}
+                  </Box>
+                  <Text
+                    fontWeight="bold"
+                    d="block"
+                    pb={4}
+                    lineHeight="xl"
+                    fontSize={["2xl", "2xl", "2xl", "2xl"]}
+                  >
+                    {post?.content?.feature?.persona}
+                  </Text>
+                  <Heading
+                    lineHeight="xl"
+                    fontSize={["4xl", "4xl", "4xl", "4xl"]}
+                    whiteSpace="pre-wrap"
+                    bgColor="white"
+                  >
+                    {post?.title}
+                  </Heading>
+                  <Text
+                    d="block"
+                    pt={4}
+                    whiteSpace="pre-wrap"
+                    fontSize="2xl"
+                    borderRadius={4}
+                  >
+                    {post?.excerpt}
+                  </Text>
+                </VStack>
+              </Stack>
+            </Container>
+          ))}
         </Carousel>
       </Box>
 
@@ -436,7 +474,7 @@ const Home = ({ page }) => {
                           "repeat(1, 1fr)",
                           "repeat(1, 1fr)",
                           "repeat(2, 1fr)",
-                          "repeat(4, 1fr)",
+                          "repeat(3, 1fr)",
                         ]}
                         mt={8}
                         spacing={4}
@@ -710,6 +748,11 @@ export default withPageCMS(Home, {
               uploadDir: () => "/home/sharing",
               parse: ({ previewSrc }) => previewSrc,
               previewSrc: (src) => src,
+            },
+            {
+              name: "persona",
+              label: "人物/機構 Person/Organization",
+              component: "text",
             },
             {
               name: "category",

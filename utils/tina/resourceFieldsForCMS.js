@@ -18,6 +18,24 @@ const textLinkWithTooltip = [
   },
 ];
 
+const textareaLinkWithTooltip = [
+  {
+    name: "text",
+    component: "textarea",
+    label: "文字 Text",
+  },
+  {
+    name: "link",
+    component: "text",
+    label: "鏈結 Link",
+  },
+  {
+    name: "description",
+    component: "text",
+    label: "描述 Tooltip description",
+  },
+];
+
 const booleanWithTooltip = [
   {
     name: "value",
@@ -31,10 +49,10 @@ const booleanWithTooltip = [
   },
 ];
 
-const textWithTooltip = [
+const textareaWithTooltip = [
   {
     name: "text",
-    component: "text",
+    component: "textarea",
     label: "文字 Text",
   },
   {
@@ -368,13 +386,13 @@ export default [
             name: "organization",
             label: "負責機構名稱 Organisation",
             component: "group",
-            fields: textLinkWithTooltip,
+            fields: textareaLinkWithTooltip,
           },
           {
             name: "serviceTarget",
             label: "服務對象 ServiceTarget",
             component: "group",
-            fields: textWithTooltip,
+            fields: textareaWithTooltip,
           },
           {
             name: "contact",
@@ -383,7 +401,7 @@ export default [
             fields: [
               {
                 name: "text",
-                component: "text",
+                component: "textarea",
                 label: " Name",
               },
               {

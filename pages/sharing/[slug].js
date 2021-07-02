@@ -200,17 +200,19 @@ const PostDetail = ({ post, setting, page }) => {
           })}
         </VStack>
         <VStack align="stretch" textAlign="left" spacing={2}>
-          <Text
-            bgColor="gray.50"
-            borderLeftWidth={3}
-            borderLeftColor="gray.500"
-            p={2.5}
-            fontWeight="normal"
-            color="#1e1e1e"
-          >
-            {post?.excerpt}
-          </Text>
-          <VStack align="stretchs" spacing={4}>
+          {post?.excerpt && (
+            <Text
+              bgColor="gray.50"
+              borderLeftWidth={3}
+              borderLeftColor="gray.500"
+              p={2.5}
+              fontWeight="normal"
+              color="#1e1e1e"
+            >
+              {post?.excerpt}
+            </Text>
+          )}
+          <VStack align="stretch" spacing={4}>
             {(post?.content?.blocks ?? []).map(
               ({ _template, content, caption, image, link }, index) => {
                 switch (_template) {

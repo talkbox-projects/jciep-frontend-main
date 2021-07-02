@@ -10,6 +10,7 @@ export const getPost = async ({ idOrSlug, lang }) => {
         lang
         title
         excerpt
+        featureDisplay
         content
         category
         tags
@@ -31,7 +32,6 @@ export const getPost = async ({ idOrSlug, lang }) => {
 };
 
 export const getHottestPosts = async ({ limit }) => {
-  console.log("sending data", limit);
   const query = gql`
     query PostGetHotest($limit: Int!) {
       PostGetHotest(limit: $limit) {
@@ -59,16 +59,28 @@ export const getHottestPosts = async ({ limit }) => {
   return posts;
 };
 
-export const getFilteredPosts = async ({ lang, limit, page, category }) => {
-  console.log("sending data", limit);
+export const getFilteredPosts = async ({
+  lang,
+  limit,
+  featureDisplay = false,
+  page,
+  category,
+}) => {
   const query = gql`
     query PostSearch(
       $limit: Int!
       $lang: Language
+      $featureDisplay: Boolean
       $page: Int!
       $category: String
     ) {
-      PostSearch(limit: $limit, lang: $lang, page: $page, category: $category) {
+      PostSearch(
+        limit: $limit
+        lang: $lang
+        featureDisplay: $featureDisplay
+        page: $page
+        category: $category
+      ) {
         totalRecords
         data {
           id
@@ -90,6 +102,7 @@ export const getFilteredPosts = async ({ lang, limit, page, category }) => {
     lang,
     page,
     category,
+    featureDisplay,
   };
 
   const { PostSearch: posts } = await getGraphQLClient().request(
