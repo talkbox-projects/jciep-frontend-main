@@ -333,9 +333,11 @@ const PwdDetail = ({ page }) => {
         <Box pos="relative">
           <ApostropheHeadline>{pwd?.careerSection?.title}</ApostropheHeadline>
         </Box>
-        <Text fontSize={["xl"]}>{pwd?.careerSection?.description}</Text>
+        <Text mt={8} fontSize={["xl"]}>
+          {pwd?.careerSection?.description}
+        </Text>
 
-        <Container mt={["24px", "24px", "48px"]} pb={48}>
+        <Container mt={["24px", "24px", "48px"]} pb={24}>
           <Box display="flex" justifyContent="center">
             {(pwd?.careerSection?.sections ?? []).map((section, i) => {
               const active = activeJob ? activeJob === section.id : i === 0;
