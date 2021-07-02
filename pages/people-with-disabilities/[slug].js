@@ -421,7 +421,7 @@ const PwdDetail = ({ page }) => {
         pos="relative"
         overflow="hidden"
       >
-        <Box mx="46px">
+        <Box mx="46px" zIndex={2}>
           <HighlightHeadline bgColor="white">
             {pwd?.videoSection?.title}
           </HighlightHeadline>
@@ -432,6 +432,7 @@ const PwdDetail = ({ page }) => {
           mt={["45px", "45px", "59px"]}
           mb={["20px", "20px", "27px"]}
           px={["46px"]}
+          zIndex={2}
         >
           <ApostropheHeadline fontSize={["xl", "2xl"]}>
             {pwd?.videoSection?.description}
@@ -444,6 +445,7 @@ const PwdDetail = ({ page }) => {
           pos="relative"
           mb={["36px", "36px", "105px"]}
           px="24px"
+          zIndex={2}
         >
           <Image
             src={pwd?.videoSection?.leftImage}
@@ -480,7 +482,12 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Wrap spacing={["36px", "36px", "66px"]} px="16px" justify="center">
+        <Wrap
+          spacing={["36px", "36px", "66px"]}
+          px="16px"
+          justify="center"
+          zIndex={2}
+        >
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <WrapItem key={index}>
               <Box w="100%" display="flex" flexDirection="column">
@@ -520,6 +527,7 @@ const PwdDetail = ({ page }) => {
           right="0"
           height="100%"
           src={pwd?.referenceSection?.gradient}
+          zIndex={0}
         />
         <Box pos="absolute" bottom={0} width="100%">
           <DividerTriple

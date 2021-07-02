@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import DividerSimple from "../../../components/DividerSimple";
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../../utils/configuration/getConfiguration";
@@ -18,6 +18,7 @@ import {
   Icon,
   Tooltip,
   Divider,
+  IconButton,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
@@ -34,6 +35,8 @@ import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
 import DividerTriple from "../../../components/DividerTriple";
 import DividerA from "../../../components/DividerA";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Slider from "react-slick";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -61,26 +64,44 @@ const Partner = ({ page }) => {
     (x) => x.slug === slug
   );
 
+  const sliderRef = useRef(null);
+  const settings = {
+    ref: (c) => (sliderRef.current = c),
+    autoplay: true,
+    dots: false,
+    speed: 500,
+    slidesToShow: 1,
+  };
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {/* First Section */}
       <Box
-        h="50vw"
+        pos="relative"
+        w="100vw"
+        h="40vw"
         minH={["40vh", "70vh"]}
         position="relative"
         overflow="hidden"
-        backgroundImage={`url(${partner?.image})`}
-        backgroundSize="cover"
-        backgroundPosition="center center"
       >
+        <Slider {...settings}>
+          {(partner?.sliderImage ?? []).map(({ image }, index) => {
+            return (
+              <Image
+                minH={["40vh", "70vh"]}
+                key={index}
+                src={image}
+                objectFit="cover"
+                objectPosition="center center"
+              />
+            );
+          })}
+        </Slider>
         <VStack
-          // zIndex={10}
           align="stretch"
           position="absolute"
           bottom={0}
-          w="100%"
           textAlign="center"
-          // backgroundImage="linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.8))"
+          w="100%"
         >
           <Container>
             <Box pb={16}>

@@ -150,14 +150,38 @@ export default [
             description:
               "The partner detail route would be /programme/partner/{slug}",
           },
+          // {
+          //   label: "Hero Image 圖片",
+          //   name: "image",
+          //   component: "image",
+          //   uploadDir: () => "/programme",
+          //   parse: ({ previewSrc }) => previewSrc,
+          //   previewSrc: (src) => src,
+          // },
+
           {
-            label: "Hero Image 圖片",
-            name: "image",
-            component: "image",
-            uploadDir: () => "/programme",
-            parse: ({ previewSrc }) => previewSrc,
-            previewSrc: (src) => src,
+            label: "Slider Image 圖片",
+            name: "sliderImage",
+            component: "group-list",
+            itemProps: ({ id: key, name: label }) => ({
+              key,
+              label,
+            }),
+            defaultItem: () => ({
+              id: Math.random().toString(36).substr(2, 9),
+            }),
+            fields: [
+              {
+                label: "Image 圖片",
+                name: "image",
+                component: "image",
+                uploadDir: () => "/programme",
+                parse: ({ previewSrc }) => previewSrc,
+                previewSrc: (src) => src,
+              },
+            ],
           },
+
           {
             name: "agencyName",
             label: "機構名稱 Agency Name",
