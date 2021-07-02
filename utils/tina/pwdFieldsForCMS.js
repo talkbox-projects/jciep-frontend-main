@@ -348,14 +348,6 @@ export default [
                 label: "背景颜色 Background Color",
                 component: "color",
               },
-              {
-                name: "svgObject",
-                label: "SVG Object",
-                component: "image",
-                uploadDir: () => "/pwd",
-                parse: ({ previewSrc }) => previewSrc,
-                previewSrc: (src) => src,
-              },
             ],
           },
           {
@@ -402,14 +394,14 @@ export default [
                       id: Math.random().toString(36).substr(2, 9),
                     }),
                     fields: [
-                      {
-                        label: "圖片 Image",
-                        name: "image",
-                        component: "image",
-                        uploadDir: () => "/pwd",
-                        parse: ({ previewSrc }) => previewSrc,
-                        previewSrc: (src) => src,
-                      },
+                      // {
+                      //   label: "圖片 Image",
+                      //   name: "image",
+                      //   component: "image",
+                      //   uploadDir: () => "/pwd",
+                      //   parse: ({ previewSrc }) => previewSrc,
+                      //   previewSrc: (src) => src,
+                      // },
                       {
                         name: "caption",
                         label: "描述 Caption",
@@ -417,6 +409,25 @@ export default [
                         component: "text",
                       },
                     ],
+                  },
+                ],
+              },
+              {
+                name: "extraInfo",
+                label: "額外資料 Extra Information",
+                component: "group-list",
+                itemProps: ({ id: key, text: label }) => ({
+                  key,
+                  label,
+                }),
+                defaultItem: () => ({
+                  id: Math.random().toString(36).substr(2, 9),
+                }),
+                fields: [
+                  {
+                    name: "text",
+                    label: "文字 Text",
+                    component: "text",
                   },
                 ],
               },

@@ -364,7 +364,13 @@ const Programme = ({ page }) => {
                       >
                         {categoryName}
                       </Heading>
-                      <Accordion w="100%" pt={8} as={VStack} align="stretch">
+                      <Accordion
+                        allowToggle
+                        w="100%"
+                        pt={8}
+                        as={VStack}
+                        align="stretch"
+                      >
                         {(items ?? []).map(
                           ({ id, title, description, links }) => {
                             return (
