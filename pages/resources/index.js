@@ -25,6 +25,10 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import Card from "../../components/CarouselCard";
 import ButtonGroup from "../../components/CarouselButtons";
+import Container from "../../components/Container";
+import DividerSimple from "../../components/DividerSimple";
+import HighlightHeadline from "../../components/HighlightHeadline";
+import ApostropheHeadline from "../../components/ApostropheHeadline";
 
 const PAGE_KEY = "resources";
 
@@ -93,196 +97,49 @@ const Resources = ({ page }) => {
         ></NextSeo>
       )}
       {/* Banner Section */}
+      <Text>fdsa</Text>
       <Box
-        h={["calc(50vw - 45px)", "calc(50vw - 45px)", "calc(50vw - 220px)"]}
-        w="100%"
-        position="relative"
-        overflowY="visible"
-        backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
-        backgroundSize="cover"
-        backgroundPosition="center center"
-        zIndex="0"
-        display="flex"
-        alignItems="center"
+        bgImg={`url(${page?.content?.heroBannerSection?.image})`}
+        bgSize="cover"
+        bgPos="center center"
       >
-        <Box
-          ml={{ base: "1rem", lg: "13.3rem" }}
-          mb={{ base: "15px", lg: "0" }}
-          width="90%"
-        >
+        <Container>
           <Text
-            w="max"
-            fontWeight={["normal", "normal", "semibold"]}
-            fontSize={["24px", "24px", "36px", "54px"]}
+            d="inline-block"
+            mt={48}
+            px={2}
+            mb={36}
+            fontWeight="bold"
+            fontSize={["3xl", "5xl", "6xl"]}
             bg="#F6D644"
-            color="black"
-            display="inline"
           >
             {page?.content?.heroBannerSection["title 標題"]}
           </Text>
+        </Container>
+        <Box>
+          <DividerSimple nextColor="#F6D644" />
         </Box>
-        <Image
-          position="absolute"
-          bottom="-1px"
-          src={page?.content?.heroBannerSection?.bgImageBottom}
-          width="100%"
-          fit="contain"
-          zIndex="-1"
-        />
       </Box>
       {/* Dialogue Section */}
-      <Box pb="15%" pos="relative" bg="#F6D644">
-        <VStack align="center" spacing={0} pt="23px">
-          <Box mx={["20px", "30px"]}>
-            <chakra.span
-              fontSize={["22px", "30px", "36px"]}
-              textAlign="center"
-              fontWeight={["normal", "normal", "bold", "bold"]}
-              pos="relative"
-              lineHeight={2}
-              backgroundImage="linear-gradient(#fff, #fff)"
-              backgroundRepeat="no-repeat"
-              backgroundPosition="0 0.7em"
-              pl="15px"
-              pr="15px"
-              pb="10px"
-            >
-              {page?.content?.dialogue?.tagline}
-            </chakra.span>
-          </Box>
-        </VStack>
+      <Box bg="#F6D644">
+        <Container pos="relative">
+          <VStack align="stretch" spacing={0} pt={16}>
+            <Box alignSelf="center" fontSize={["2xl", "4xl"]}>
+              <HighlightHeadline bgColor="#fff">
+                {page?.content?.dialogue?.tagline}
+              </HighlightHeadline>
+            </Box>
 
-        {(page?.content?.dialogue?.left?.dialogue ?? []).map(
-          ({ message }, index) => {
-            if (index == 0) {
-              return (
-                <Flex>
-                  <Box
-                    mt={["24px", "24px", "68px"]}
-                    ml={["16px", "16px", "16px", "325px"]}
-                    w={["75%", "75%", "65%", "max"]}
-                    borderRadius={["10px", "10px", "10px", "20px"]}
-                    bg="white"
-                    pos="relative"
-                  >
-                    <MultiTextRenderer
-                      key={index}
-                      parentStyles={{ padding: "5px", paddingLeft: "10px" }}
-                      data={message}
-                      fontSize={["14px", "14px", "16px", "20px"]}
-                      textAlign={["left", "left", "left", "center"]}
-                    />
-                    <Box
-                      w="0px"
-                      height="0px"
-                      borderRight="5px solid transparent"
-                      borderLeft="5px solid transparent"
-                      borderTop="12px solid #FFFFFF"
-                      transform="scaleY(-1) rotate(150deg)"
-                      pos="absolute"
-                      left="0"
-                      bottom="-6px"
-                    ></Box>
-                  </Box>
-                  <Image
-                    mt={["24px", "24px", "68px"]}
-                    ml={["10px", "10px", "26px", "26px"]}
-                    w={["20px", "20px", "20px", "40px"]}
-                    h={["16px", "16px", "16px", "32px"]}
-                    src={page?.content?.dialogue?.leftQuoteImage}
-                  />
-                </Flex>
-              );
-            } else {
-              return (
-                <Box
-                  mt={["16px", "16px", "18px"]}
-                  ml={["16px", "16px", "", "218px"]}
-                  w={["75%", "75%", "65%", "max"]}
-                  borderRadius={["10px", "10px", "10px", "20px"]}
-                  bg="white"
-                  pos="relative"
-                >
-                  <MultiTextRenderer
-                    key={index}
-                    data={message}
-                    parentStyles={{ padding: "5px", paddingLeft: "10px" }}
-                    fontSize={["14px", "14px", "16px", "20px"]}
-                    textAlign={["left", "left", "left", "center"]}
-                  />
-                  <Box
-                    w="0px"
-                    height="0px"
-                    borderRight="5px solid transparent"
-                    borderLeft="5px solid transparent"
-                    borderTop="12px solid #FFFFFF"
-                    transform="scaleY(-1) rotate(150deg)"
-                    pos="absolute"
-                    left="0"
-                    bottom="-6px"
-                  ></Box>
-                </Box>
-              );
-            }
-          }
-        )}
-        <Text
-          pb={["30%", "15%", "15%", "0"]}
-          ml={["16px", "16px", "", "211px"]}
-          mt={["12px", "12px", "8px"]}
-          fontSize="16px"
-        >
-          {page?.content?.dialogue?.left?.role}
-        </Text>
-        <Image
-          pos="absolute"
-          left={["16px", "16px", "32px", "110px"]}
-          bottom={["0px", "0px", "20px", "40px"]}
-          w={["80px", "80px", "100px", "122px"]}
-          h={["127px", "127px", "194px", "194px"]}
-          src={page?.content?.dialogue?.left?.left}
-          zIndex="0"
-        />
-        <Image
-          pos="absolute"
-          right="0px"
-          bottom="0"
-          width="100%"
-          src={page?.content?.dialogue?.bottomImage}
-          zIndex="0"
-        />
-      </Box>
-
-      {/* Conversation Section */}
-      <Box pb={["", "", "", "5%"]} w="100%" pos="relative" bg="#FEB534">
-        <Box pos="relative" zIndex="100" pb={["5%", "5%", "5%", "6%"]}>
-          <Box
-            pos={["relative", "relative", "relative"]}
-            right={{ lg: "0" }}
-            w="100%"
-          >
-            <VStack
-              w="100%"
-              justifyContent="right"
-              alignItems="right"
-              pt={["0", "0", "19px"]}
-            >
-              {(page?.content?.dialogue?.right?.dialogue ?? []).map(
+            <VStack pt={16} align="start" position="relative" spacing={4}>
+              {(page?.content?.dialogue?.left?.dialogue ?? []).map(
                 ({ message }, index) => {
                   if (index == 0) {
                     return (
-                      <Flex justifyContent="flex-end" w="100%" pl="25%">
-                        <Image
-                          mt={["24px", "24px", "24px", "68px"]}
-                          mr={["8px", "8px", "8px", "32px"]}
-                          w={["20px", "20px", "20px", "40px"]}
-                          h={["16px", "16px", "16px", "32px"]}
-                          transform="rotate(180deg)"
-                          src={page?.content?.dialogue?.leftQuoteImage}
-                        />
+                      <HStack position="relative">
                         <Box
-                          mt={["24px", "24px", "24px", "68px"]}
-                          mr={["16px", "16px", "16px", "230px"]}
+                          ml={[0, 0, 0, 16]}
+                          py={1}
+                          px={2}
                           w={["75%", "75%", "65%", "max"]}
                           borderRadius={["10px", "10px", "10px", "20px"]}
                           bg="white"
@@ -295,8 +152,7 @@ const Resources = ({ page }) => {
                               paddingLeft: "10px",
                             }}
                             data={message}
-                            fontSize={["14px", "14px", "16px", "20px"]}
-                            textAlign={["left", "left", "left", "center"]}
+                            fontSize={["lg", "xl", "2xl"]}
                           />
                           <Box
                             w="0px"
@@ -304,197 +160,153 @@ const Resources = ({ page }) => {
                             borderRight="5px solid transparent"
                             borderLeft="5px solid transparent"
                             borderTop="12px solid #FFFFFF"
-                            transform="scaleY(-1) rotate(-150deg)"
+                            transform="scaleY(-1) rotate(150deg)"
                             pos="absolute"
-                            right="0"
+                            left="0"
                             bottom="-6px"
                           ></Box>
                         </Box>
-                      </Flex>
+                        <Image
+                          h="120%"
+                          src={page?.content?.dialogue?.leftQuoteImage}
+                        />
+                      </HStack>
                     );
                   } else {
                     return (
-                      <Flex justifyContent="flex-end" w="100%" pl="25%">
+                      <Box
+                        py={1}
+                        px={2}
+                        w={["75%", "75%", "65%", "max"]}
+                        borderRadius={["10px", "10px", "10px", "20px"]}
+                        bg="white"
+                        pos="relative"
+                      >
+                        <MultiTextRenderer
+                          key={index}
+                          data={message}
+                          parentStyles={{
+                            padding: "5px",
+                            paddingLeft: "10px",
+                          }}
+                          fontSize={["lg", "xl", "2xl"]}
+                        />
                         <Box
-                          mt={["16px", "16px", "18px"]}
-                          mr={["16px", "16px", "", "207px"]}
-                          w={["75%", "75%", "65%", "max"]}
-                          borderRadius={["10px", "10px", "10px", "20px"]}
-                          bg="white"
-                          pos="relative"
-                        >
-                          <MultiTextRenderer
-                            key={index}
-                            parentStyles={{
-                              padding: "5px",
-                              paddingLeft: "10px",
-                            }}
-                            data={message}
-                            fontSize={["14px", "14px", "16px", "20px"]}
-                            textAlign={["left", "left", "left", "center"]}
-                          />
-                          <Image
-                            src={page?.content?.dialogue?.rightTooltip}
-                            pos="absolute"
-                            bottom="-2"
-                            right="0"
-                          />
-                        </Box>
-                      </Flex>
+                          w="0px"
+                          height="0px"
+                          borderRight="5px solid transparent"
+                          borderLeft="5px solid transparent"
+                          borderTop="12px solid #FFFFFF"
+                          transform="scaleY(-1) rotate(150deg)"
+                          pos="absolute"
+                          left="0"
+                          bottom="-6px"
+                        ></Box>
+                      </Box>
                     );
                   }
                 }
               )}
-              <VStack justifyContent="right" alignItems="right" w="100%">
-                <Text
-                  textAlign="right"
-                  mr={["16px", "16px", "24px", "207px"]}
-                  mt={["12px", "12px", "8px"]}
-                  fontSize="16px"
-                >
-                  {page?.content?.dialogue?.right?.role}
-                </Text>
-              </VStack>
-              <HStack
-                pos={["unset", "unset", "unset", "relative"]}
-                justifyContent="flex-end"
-                w="100%"
-                zIndex="-1"
-              >
-                <Box
-                  w="100%"
-                  pt="6%"
-                  display={["none", "none", "none", "block"]}
-                  pos={["absolute", "absolute", "absoulte", "unset"]}
-                >
-                  <VStack w="100%">
-                    <Box
-                      textAlign="center"
-                      position="relative"
-                      mb="34px"
-                      w="max"
-                      mx={["47px", "47px", "47px", "0px"]}
-                    >
-                      <Text
-                        fontSize={["16", "16", "16", "24"]}
-                        textAlign="center"
-                        fontWeight="bold"
-                      >
-                        {page?.content?.howSection["title 標題"]}
-                      </Text>
-                      <Box
-                        width="6.15px"
-                        height="27.69px"
-                        borderRadius="5px"
-                        pos="absolute"
-                        right={["-6", "-6", "-6", "-12"]}
-                        bottom="-3"
-                        background="#fff"
-                        transform="rotate(30deg)"
-                      />
-                      <Box
-                        width="6.15px"
-                        height="27.69px"
-                        borderRadius="5px"
-                        pos="absolute"
-                        left={["-6", "-6", "-6", "-12"]}
-                        bottom="-3"
-                        background="#fff"
-                        transform="rotate(-30deg)"
-                      />
-                    </Box>
-
-                    <Box
-                      padding={["16px", "16px", "16px ", "42px"]}
-                      mx={["16px", "16px", "16px", "0px"]}
-                      mt={["17px", "17px", "17px", "24.31px"]}
-                      maxW="52%"
-                      background="#fff"
-                      borderRadius="22px"
-                    >
-                      <MultiTextRenderer
-                        textAlign="center"
-                        fontSize={["16", "16", "24"]}
-                        data={page?.content?.howSection?.content}
-                      />
-                    </Box>
-                  </VStack>
-                </Box>
+              <Text mt={3} fontSize="lg" ml={-6}>
+                {page?.content?.dialogue?.left?.role}
+              </Text>
+              <Box mr={["", "", "", "", "-275px !important"]}>
                 <Image
-                  pos={["unset", "unset", "unset", "absolute"]}
-                  top="-80px"
-                  right="40px"
-                  w={["152px", "152px", "195px", "255px"]}
-                  h={["206px", "206px", "286px", "346px"]}
-                  src={page?.content?.dialogue?.right?.rightImage}
+                  h={["127px", "127px", "194px", "194px"]}
+                  src={page?.content?.dialogue?.left?.left}
+                  zIndex="0"
                 />
-              </HStack>
+              </Box>
             </VStack>
-          </Box>
-        </Box>
-        <VStack
-          pb="20%"
-          alignItems="center"
-          w="100%"
-          px="16px"
-          justifyContent="center"
-          display={["block", "block", "block", "none"]}
-        >
-          <Box position="relative" mb="34px" mx="10%">
-            <Text
-              fontSize={["16", "16", "16", "24"]}
-              textAlign="center"
-              fontWeight="bold"
-            >
-              {page?.content?.howSection["title 標題"]}
-            </Text>
-            <Box
-              width="6.15px"
-              height="27.69px"
-              borderRadius="5px"
-              pos="absolute"
-              right={["6", "12", "48", "-12"]}
-              bottom="-3"
-              background="#fff"
-              transform="rotate(30deg)"
-            />
-            <Box
-              width="6.15px"
-              height="27.69px"
-              borderRadius="5px"
-              pos="absolute"
-              left={["6", "12", "48", "-12"]}
-              bottom="-3"
-              background="#fff"
-              transform="rotate(-30deg)"
-            />
-          </Box>
-
-          <Box
-            padding={["16px", "16px", "16px", " 42px"]}
-            mx={["16px", "16px", "16px !important", "0px"]}
-            mt={["17px", "17px", "17px", "24.31px"]}
-            background="#fff"
-            borderRadius="22px"
-          >
-            <MultiTextRenderer
-              textAlign="center"
-              fontSize={["16", "16", "24"]}
-              data={page?.content?.howSection?.content}
-            />
-          </Box>
-        </VStack>
-        <Image
-          pos="absolute"
-          right="0px"
-          bottom="0"
-          width="100%"
-          objectFit="contain"
-          src={page?.content?.howSection?.bottomImage}
-          zIndex="0"
-        />
+          </VStack>
+        </Container>
       </Box>
-
+      <Box bg="#FEB534" pb={48}>
+        <Container mt={"-150px"} pos="relative">
+          <VStack alignItems="flex-end" position="relative" spacing={4}>
+            {(page?.content?.dialogue?.right?.dialogue ?? []).map(
+              ({ message }, index) => {
+                if (index == 0) {
+                  return (
+                    <HStack justifyContent="flex-end" position="relative">
+                      <Image
+                        h="120%"
+                        src={page?.content?.dialogue?.rightQuoteImage}
+                      />
+                      <Box
+                        ml={[0, 0, 0, 16]}
+                        py={1}
+                        px={2}
+                        w={["75%", "75%", "65%", "max"]}
+                        borderRadius={["10px", "10px", "10px", "20px"]}
+                        bg="white"
+                        pos="relative"
+                      >
+                        <MultiTextRenderer
+                          key={index}
+                          parentStyles={{
+                            padding: "5px",
+                            paddingLeft: "10px",
+                          }}
+                          data={message}
+                          fontSize={["lg", "xl", "2xl"]}
+                        />
+                        <Box
+                          w="0px"
+                          height="0px"
+                          borderRight="5px solid transparent"
+                          borderLeft="5px solid transparent"
+                          borderTop="12px solid #FFFFFF"
+                          transform="scaleY(-1) rotate(-150deg)"
+                          pos="absolute"
+                          right={0}
+                          bottom="-6px"
+                        ></Box>
+                      </Box>
+                    </HStack>
+                  );
+                }
+              }
+            )}
+            <Text mt={3} fontSize="lg" mr={-6}>
+              {page?.content?.dialogue?.right?.role}
+            </Text>
+            <Box mr={["", "", "", "", "-125px !important"]}>
+              <Image
+                w={["152px", "152px", "152px", "255px", "255px"]}
+                src={page?.content?.dialogue?.right?.rightImage}
+              />
+            </Box>
+          </VStack>
+        </Container>
+        <Container mt={["", "", "", "", "-200px"]}>
+          <VStack>
+            <Box fontSize="2xl">
+              <ApostropheHeadline color="#FFF">
+                {page?.content?.howSection["title 標題"]}
+              </ApostropheHeadline>
+            </Box>
+            <Box
+              maxW={["80%", "80%", "80%", 700]}
+              w="100%"
+              pb={8}
+              borderRadius={16}
+              py={4}
+              px={6}
+              bg="white"
+            >
+              <MultiTextRenderer
+                textAlign="center"
+                fontSize={["lg", "lg", "xl", "2xl"]}
+                data={page?.content?.howSection?.content}
+              />
+            </Box>
+          </VStack>
+        </Container>
+      </Box>
+      <Box bg="#FEB534">
+        <DividerSimple nextColor="#FAFAFA" />
+      </Box>
       {/* resource Section */}
       <Box w="100%" bg="#FAFAFA" pos="relative">
         <VStack
@@ -633,7 +445,6 @@ const Resources = ({ page }) => {
           </VStack>
         </VStack>
       </Box>
-
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
         <Box
@@ -769,7 +580,7 @@ const Resources = ({ page }) => {
                 )}
               </Box>
             </GridItem>
-            <GridItem colSpan={[6, 6, 3, 3]}>
+            <GridItem colSpan={[6, 6, 3, 3]} d="none">
               <Box
                 background="#FFFFFF"
                 borderRadius="10"
