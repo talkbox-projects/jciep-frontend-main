@@ -307,12 +307,12 @@ const Card = ({
                 <Text color="#1E1E1E" fontSize="12px">
                   {contact?.description}
                 </Text>
-                <chakra.a href={contact?.url} target="_blank">
-                  <Text pt="24px" color="#1E1E1E" fontSize="12px">
+                <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
+                  <chakra.a href={contact?.url} target="_blank">
                     {contact?.linkName}
                     <Icon pl={1} size="sm" as={FaShareSquare} />
-                  </Text>
-                </chakra.a>
+                  </chakra.a>
+                </Text>
               </VStack>
               <HStack pt="32px" spacing="5px">
                 <Image

@@ -6,7 +6,7 @@ const ApostropheHeadline = ({
   children,
 }) => {
   return (
-    <HStack align="flex-end" spacing={8}>
+    <HStack justifyContent="center" align="flex-end" spacing={8}>
       <Box>
         <Box
           width="6.15px"
@@ -16,7 +16,7 @@ const ApostropheHeadline = ({
           transform="rotate(-30deg)"
         />
       </Box>
-      <Text pb={4} fontSize={fontSize} fontWeight="bold" textAlign="center">
+      <Text pb={2} fontSize={fontSize} fontWeight="bold" textAlign="center">
         {children}
       </Text>
       <Box>
