@@ -14,6 +14,9 @@ import {
   GridItem,
   HStack,
   Icon,
+  Wrap,
+  WrapItem,
+  Divider,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -153,58 +156,69 @@ const PwdDetail = ({ page }) => {
         flexDirection="column"
         alignItems="center"
       >
-        {(pwd?.qna ?? []).map((qnGroup, i) => (
-          <Box
-            key={i}
-            pos="relative"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            pb={8}
-          >
-            <Box pos="relative" maxW="80%">
-              <ApostropheHeadline>
-                {qnGroup.accordionGroup?.title}
-              </ApostropheHeadline>
-            </Box>
-            <Accordion allowToggle mt={["24px", "24px", "55px"]} zIndex={2}>
-              {(qnGroup.accordionGroup?.accordions ?? []).map((qna, index) => (
-                <AccordionItem
-                  background="#fff"
-                  borderRadius={10}
-                  key={index}
-                  mt={index > 0 ? "16px" : "0px"}
-                  border="none"
-                  w={["288px", "288px", "616px"]}
-                >
-                  {({ isExpanded }) => (
-                    <>
-                      <h2>
-                        <AccordionButton>
-                          <Box flex="1" textAlign="center" fontWeight="bold">
-                            {qna.question}
-                          </Box>
-                          {isExpanded ? (
-                            <MinusIcon fontSize="12px" />
-                          ) : (
-                            <AddIcon fontSize="12px" />
+        <VStack spacing={24}>
+          {(pwd?.qna ?? []).map((qnGroup, i) => (
+            <Box
+              key={i}
+              pos="relative"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              <Box pos="relative" maxW="80%">
+                <ApostropheHeadline>
+                  {qnGroup.accordionGroup?.title}
+                </ApostropheHeadline>
+              </Box>
+              <Accordion allowToggle mt={["24px", "24px", 8]} zIndex={2}>
+                {(qnGroup.accordionGroup?.accordions ?? []).map(
+                  (qna, index) => (
+                    <AccordionItem
+                      background="#fff"
+                      borderRadius={10}
+                      key={index}
+                      mt={index > 0 ? "16px" : "0px"}
+                      border="none"
+                      w={["288px", "288px", "616px"]}
+                    >
+                      {({ isExpanded }) => (
+                        <>
+                          <h2>
+                            <AccordionButton>
+                              <Box
+                                p={2}
+                                flex="1"
+                                textAlign="center"
+                                fontWeight="bold"
+                              >
+                                {qna.question}
+                              </Box>
+                              {isExpanded ? (
+                                <MinusIcon fontSize="12px" />
+                              ) : (
+                                <AddIcon fontSize="12px" />
+                              )}
+                            </AccordionButton>
+                          </h2>
+                          {isExpanded && (
+                            <Divider m="auto" w="95%" color="gray.300" />
                           )}
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel pb={4}>
-                        <MultiTextRenderer
-                          textAlign="center"
-                          fontSize={16}
-                          data={qna.response}
-                        />
-                      </AccordionPanel>
-                    </>
-                  )}
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </Box>
-        ))}
+                          <AccordionPanel pt={4} pb={8}>
+                            <MultiTextRenderer
+                              textAlign="center"
+                              fontSize={16}
+                              data={qna.response}
+                            />
+                          </AccordionPanel>
+                        </>
+                      )}
+                    </AccordionItem>
+                  )
+                )}
+              </Accordion>
+            </Box>
+          ))}
+        </VStack>
 
         <Image
           src={pwd?.qnaStyles?.imageTop}
@@ -254,13 +268,6 @@ const PwdDetail = ({ page }) => {
             top="57px"
             right="41px"
             zIndex="0"
-          />
-          <Image
-            src={pwd?.traitSection?.svgObject}
-            w={["91px", "91px", "190px"]}
-            pos="absolute"
-            top={["44px", "44px", "0px"]}
-            right="44px"
           />
         </Box>
 
@@ -367,6 +374,11 @@ const PwdDetail = ({ page }) => {
               </GridItem>
             ))}
           </SimpleGrid>
+          <Text mt={["56px", "56px", "80px"]} fontSize="14px" zIndex={3}>
+            {(pwd?.careerSection?.extraInfo ?? []).map((data, index) => (
+              <chakra.span key={index}>{data.text}</chakra.span>
+            ))}
+          </Text>
         </Container>
 
         <Box>
@@ -436,14 +448,14 @@ const PwdDetail = ({ page }) => {
           <Image
             src={pwd?.videoSection?.leftImage}
             pos="absolute"
-            left="16%"
+            left={["0", "0", "0", "5%", "16%", "25%"]}
             top="0"
             w={["0", "0", "0", "184px"]}
           />
           <Image
             src={pwd?.videoSection?.rightImage}
             pos="absolute"
-            right="18%"
+            right={["0", "0", "0", "5%", "18%", "25%"]}
             bottom="0"
             w={["0", "0", "0", "145px"]}
           />
@@ -468,24 +480,10 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Grid
-          templateColumns={[
-            "repeat(1, 1fr)",
-            "repeat(1, 1fr)",
-            "repeat(2, 1fr)",
-          ]}
-          gap={["36px", "36px", "66px"]}
-          px="16px"
-        >
+        <Wrap spacing={["36px", "36px", "66px"]} px="16px" justify="center">
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
-            <Box key={index}>
-              <Box
-                w="100%"
-                display="flex"
-                flexDirection="column"
-                borderBottom="1px solid #1E1E1E"
-                mb="8px"
-              >
+            <WrapItem key={index}>
+              <Box w="100%" display="flex" flexDirection="column">
                 <Image
                   src={pwd?.referenceSection?.categoryIcon}
                   w="36px"
@@ -494,9 +492,13 @@ const PwdDetail = ({ page }) => {
                 <Text fontSize={["20px", "20px", "24px"]} fontWeight="bold">
                   {category.title}
                 </Text>
-              </Box>
-
-              <Box display="flex" flexDirection="column">
+                <Box
+                  w="100%"
+                  minW={0}
+                  flex={1}
+                  borderBottom="1px solid #1E1E1E"
+                  mb="8px"
+                />
                 {(category.links ?? []).map((link, i) => (
                   <Box display="flex" pb="6px">
                     <Text pr="8px" fontSize="16px">
@@ -508,9 +510,10 @@ const PwdDetail = ({ page }) => {
                   </Box>
                 ))}
               </Box>
-            </Box>
+            </WrapItem>
           ))}
-        </Grid>
+        </Wrap>
+
         <Image
           pos="absolute"
           bottom="0"

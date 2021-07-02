@@ -203,7 +203,12 @@ const Partner = ({ page }) => {
                       </ApostropheHeadline>
                     </Box>
                     <Box maxW={[640, 640, 640, 640, 768]} w="100%">
-                      <Accordion defaultIndex={[0]} as={VStack} align="stretch">
+                      <Accordion
+                        allowToggle
+                        defaultIndex={[0]}
+                        as={VStack}
+                        align="stretch"
+                      >
                         {(partner?.serviceHighlights[key]?.sections ?? []).map(
                           ({ title, content }, index) => {
                             return (
