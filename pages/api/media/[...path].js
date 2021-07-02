@@ -19,6 +19,10 @@ const handler = async (req, res) => {
       bucketName: "media",
     });
     res.setHeader("Content-Type", file.contentType);
+    res.setHeader("Pragma", "public");
+    res.setHeader("Cache-Control", "max-age=31536000");
+    res.setHeader("Expires", new Date(Date.now() + 31536000000).toUTCString());
+
     bucket.openDownloadStream(file._id).pipe(res);
   } catch (error) {
     // console.log(error);

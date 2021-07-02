@@ -183,7 +183,7 @@ const Home = ({ setting, page }) => {
       </Box>
 
       {/* Third Section */}
-      <Box bg="#fff" minH="100vh">
+      <Box bg="#fff">
         <Container>
           <VStack align="center" py={"20vh"}>
             <Image
@@ -229,7 +229,7 @@ const Home = ({ setting, page }) => {
 
       {/* Fourth Section */}
 
-      <Box bg="#F6D644" minH="100vh" position="relative">
+      <Box bg="#F6D644" position="relative">
         <Container>
           <Box py={32}>
             <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
