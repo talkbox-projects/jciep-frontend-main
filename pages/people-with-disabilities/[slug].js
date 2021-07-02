@@ -119,17 +119,20 @@ const PwdDetail = ({ page }) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
+          zIndex={2}
         >
-          <Image src={pwd?.icon} height={["64", "64", "88"]} />
+          <Image src={pwd?.icon} height={[16, 16, 88]} />
         </Box>
-        <Text fontWeight="bold" fontSize={["24", "24", "56"]}>
+        <Text zIndex={2} fontWeight="bold" fontSize={["24", "24", "56"]}>
           {pwd?.name}
         </Text>
-        <MultiTextRenderer
-          textAlign="center"
-          fontSize={["16", "16", "24", "24"]}
-          data={pwd?.description}
-        />
+        <Box zIndex={2}>
+          <MultiTextRenderer
+            textAlign="center"
+            fontSize={["16", "16", "24", "24"]}
+            data={pwd?.description}
+          />
+        </Box>
         <Image
           pos="absolute"
           bottom="0"
@@ -252,11 +255,11 @@ const PwdDetail = ({ page }) => {
         background={pwd?.traitSection?.bgColor}
       >
         <Box display="flex" pos="relative">
-          <Box mt={["110px", "110px", "80px"]}>
+          <Box zIndex={2} mt={["110px", "110px", "80px"]}>
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {pwd?.traitSection?.title}
             </Text>
-            <Text fontSize="16px" position="relative" zIndex="1">
+            <Text zIndex={2} fontSize="16px" position="relative" zIndex="1">
               {pwd?.traitSection?.description}
             </Text>
           </Box>
@@ -421,7 +424,7 @@ const PwdDetail = ({ page }) => {
         pos="relative"
         overflow="hidden"
       >
-        <Box mx="46px">
+        <Box mx="46px" zIndex={2}>
           <HighlightHeadline bgColor="white">
             {pwd?.videoSection?.title}
           </HighlightHeadline>
@@ -432,6 +435,7 @@ const PwdDetail = ({ page }) => {
           mt={["45px", "45px", "59px"]}
           mb={["20px", "20px", "27px"]}
           px={["46px"]}
+          zIndex={2}
         >
           <ApostropheHeadline fontSize={["xl", "2xl"]}>
             {pwd?.videoSection?.description}
@@ -444,6 +448,7 @@ const PwdDetail = ({ page }) => {
           pos="relative"
           mb={["36px", "36px", "105px"]}
           px="24px"
+          zIndex={2}
         >
           <Image
             src={pwd?.videoSection?.leftImage}
@@ -480,7 +485,12 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         {/* References */}
-        <Wrap spacing={["36px", "36px", "66px"]} px="16px" justify="center">
+        <Wrap
+          spacing={["36px", "36px", "66px"]}
+          px="16px"
+          justify="center"
+          zIndex={2}
+        >
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <WrapItem key={index}>
               <Box w="100%" display="flex" flexDirection="column">
@@ -520,6 +530,7 @@ const PwdDetail = ({ page }) => {
           right="0"
           height="100%"
           src={pwd?.referenceSection?.gradient}
+          zIndex={0}
         />
         <Box pos="absolute" bottom={0} width="100%">
           <DividerTriple

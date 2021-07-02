@@ -49,6 +49,13 @@ const theme = extendTheme({
       900: "#1e0100",
     },
   },
+  styles: {
+    global: {
+      img: {
+        "user-select": "none",
+      },
+    },
+  },
 });
 
 const App = ({ Component, pageProps }) => {
