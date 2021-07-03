@@ -226,7 +226,7 @@ const JobOpportunities = ({ page }) => {
     <>
       <VStack spacing={0} align="stretch" w="100%">
         <Box
-          d={!router.query.jobId ? "block" : ["none", "none", "none"]}
+          d={!router.query.jobId ? "block" : ["none", "none", "block"]}
           bgColor="#F6D644"
           position="relative"
         >
