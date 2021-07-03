@@ -1,8 +1,28 @@
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
-
+import { useRouter } from "next/router";
+import {
+  Divider,
+  HStack,
+  Image,
+  VStack,
+  SimpleGrid,
+  GridItem,
+  Tag,
+  Box,
+  Text,
+  Wrap,
+  Link,
+  Button,
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import DividerSimple from "../../components/DividerSimple";
 const PAGE_KEY = "jobOpportunities";
+import wordExtractor from "../../utils/wordExtractor";
+import Container from "../../components/Container";
+import moment from "moment";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export const getServerSideProps = async (context) => {
   return {
@@ -22,12 +42,323 @@ export const getServerSideProps = async (context) => {
   };
 };
 const JobOpportunities = ({ page }) => {
-  return <>{JSON.stringify({ page })}</>;
+  const router = useRouter();
+
+  const jobId = router.query.jobId ?? page?.content?.jobs?.[0]?.id;
+
+  const job = page?.content?.jobs?.find((x) => x.id === jobId);
+  const details = (
+    <>
+      <Text fontSize={["2xl"]} pb={3} fontWeight="bold">
+        {job?.title}
+      </Text>
+      <VStack py={4} spacing={3} align="start">
+        <HStack>
+          <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
+          <Text>
+            {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
+          </Text>
+        </HStack>
+        <HStack>
+          <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
+          <Text>
+            {wordExtractor(page?.content?.wordings, "job_location_label")}
+            {(job?.location ?? []).map((key) =>
+              wordExtractor(page?.content?.wordings, `location_${key}`)
+            )}
+          </Text>
+        </HStack>
+        <HStack>
+          <Image src={page?.content?.icon?.timeIcon} w={6} h={6} />
+          <Text>
+            {wordExtractor(page?.content?.wordings, "job_publishDate_label")}
+            {moment(job?.publishDate)?.format("YYYY-MM-DD hh:mm a")}
+          </Text>
+        </HStack>
+      </VStack>
+      <Divider />
+      <VStack py={4} align="stretch">
+        <Box fontWeight="bold">
+          {wordExtractor(page?.content?.wordings, "job_description_label")}
+        </Box>
+        <Wrap>
+          {(job?.jobFunction ?? []).map((key) => (
+            <Tag rounded="full">
+              {wordExtractor(page?.content?.wordings, `jobFunction_${key}`)}
+            </Tag>
+          ))}
+        </Wrap>
+        <Box
+          sx={{
+            "ul, ol": {
+              px: 4,
+            },
+            li: {
+              listStyle: "none",
+              pb: 2,
+              position: "relative",
+              "&::before": {
+                content: '"．"',
+                position: "absolute",
+                left: "-0.8em",
+                top: "-0.25em",
+              },
+            },
+          }}
+          dangerouslySetInnerHTML={{
+            __html: job?.description ?? "",
+          }}
+        />
+      </VStack>
+      <Divider />
+      <SimpleGrid py={4} spacing={2} direction="row" columns={[1, 2, 3, 3]}>
+        {[
+          {
+            label: wordExtractor(
+              page?.content?.wordings,
+              "job_yearOfExperience_label"
+            ),
+            value: wordExtractor(
+              page?.content?.wordings,
+              `yearOfExperience_${job?.yearOfExperience}`
+            ),
+          },
+          {
+            label: wordExtractor(
+              page?.content?.wordings,
+              "job_qualification_label"
+            ),
+            value: wordExtractor(
+              page?.content?.wordings,
+              `qualification_${job?.qualification}`
+            ),
+          },
+        ].map(({ label, value }, index) => {
+          return (
+            <Box key={index}>
+              <Text>{label}</Text>
+              <Text>{value}</Text>
+            </Box>
+          );
+        })}
+        <GridItem></GridItem>
+      </SimpleGrid>
+    </>
+  );
+
+  const jobList = (
+    <VStack
+      d={!router.query.jobId ? "block" : ["none", "none", "block", "block"]}
+      maxH="100vh"
+      overflow="auto"
+      align="stretch"
+      spacing={4}
+      w={["100%", "100%", "33%", "33%"]}
+      cursor="pointer"
+    >
+      {(page?.content?.jobs ?? []).map((job, index) => (
+        <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
+          <VStack
+            borderColor="#eee"
+            borderWidth={1}
+            p={4}
+            px={6}
+            spacing={3}
+            align="stretch"
+            key={job?.id}
+            _hover={{
+              boxShadow: "md",
+            }}
+            {...(job?.id === jobId && {
+              borderColor: "#F6D644",
+              borderWidth: 2,
+              borderTopWidth: 8,
+            })}
+            borderRadius={8}
+          >
+            <Text pb={3} fontWeight="bold">
+              {job?.title}
+            </Text>
+            <Wrap>
+              {(job?.jobFunction ?? []).map((key) => (
+                <Tag rounded="full">
+                  {wordExtractor(page?.content?.wordings, `jobFunction_${key}`)}
+                </Tag>
+              ))}
+            </Wrap>
+
+            <HStack>
+              <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
+              <Text>
+                {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
+              </Text>
+            </HStack>
+            <HStack>
+              <Image src={page?.content?.icon?.expIcon} w={6} h={6} />
+              <Text>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  `yearOfExperience_${job?.yearOfExperience}`
+                )}
+              </Text>
+            </HStack>
+            <Divider borderColor="gray.200" />
+            <HStack w="100%">
+              <Box flex={1} minW={0} w="100%">
+                <HStack>
+                  <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
+                  <Text>
+                    {(job?.location ?? []).map((key) =>
+                      wordExtractor(page?.content?.wordings, `location_${key}`)
+                    )}
+                  </Text>
+                </HStack>
+              </Box>
+              <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
+            </HStack>
+          </VStack>
+        </NextLink>
+      ))}
+    </VStack>
+  );
+
+  return (
+    <>
+      <VStack spacing={0} align="stretch" w="100%">
+        <Box
+          d={!router.query.jobId ? "block" : ["none", "none", "none"]}
+          bgColor="#F6D644"
+          position="relative"
+        >
+          <Box position="absolute" bottom={0} w="100%">
+            <DividerSimple primary="#FD5F53" />
+          </Box>
+          <Container pt={12} position="relative">
+            <Box pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+              <Text fontSize="5xl" fontWeight="bold">
+                {wordExtractor(page?.content?.wordings, "page_title")}
+              </Text>
+              <Text fontSize="xl">
+                {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
+                <Link decoration="underline">
+                  {wordExtractor(page?.content?.wordings, "page_subtitle_link")}
+                </Link>
+              </Text>
+            </Box>
+            <Image
+              position="absolute"
+              bottom={2}
+              right={2}
+              w={["300px", "300px", "400px", "400px", "400px"]}
+              src={page?.content?.banner?.bgImageRight}
+            />
+          </Container>
+        </Box>
+
+        <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
+          <Container>
+            <HStack align="start" spacing={4}>
+              {jobList}
+              {/* desktop detail page */}
+              <VStack
+                bg="white"
+                flex={1}
+                minW={0}
+                w="100%"
+                align="stretch"
+                borderRadius={8}
+                borderColor="#eee"
+                borderWidth={2}
+                minH={256}
+                p={4}
+              >
+                {details}
+              </VStack>
+            </HStack>
+          </Container>
+        </Box>
+      </VStack>
+      {/* mobile detail page */}
+      <Box mt={16} d={["block", "block", "none"]}>
+        {router.query.jobId ? (
+          <VStack align="stretch" p={4} spacing={0}>
+            <NextLink href="/job-opportunities">
+              <Button
+                alignSelf="start"
+                mb={8}
+                leftIcon={<ArrowBackIcon />}
+                variant="link"
+              >
+                {wordExtractor(page?.content?.wordings, "back_button_label")}
+              </Button>
+            </NextLink>
+            {details}
+          </VStack>
+        ) : (
+          <Box p={4}>{jobList}</Box>
+        )}
+      </Box>
+    </>
+  );
 };
 
 export default withPageCMS(JobOpportunities, {
   key: PAGE_KEY,
   fields: [
+    {
+      name: "banner",
+      label: "頁面橫幅 Hero Banner",
+      component: "group",
+      fields: [
+        {
+          label: "右下圖片 Image Right",
+          name: "bgImageRight",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+      ],
+    },
+    {
+      name: "icon",
+      label: "圖示 Icon",
+      component: "group",
+      fields: [
+        {
+          label: "工作類型圖標 Employment mode icon",
+          name: "modeIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          label: "經驗圖標 Experience icon",
+          name: "expIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          label: "地區圖標 Location icon",
+          name: "locationIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          label: "時間圖標 Publish Date icon",
+          name: "timeIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+      ],
+    },
     {
       name: "jobs",
       label: "工作機會列表",
@@ -324,7 +655,7 @@ export default withPageCMS(JobOpportunities, {
         },
         {
           name: "description",
-          component: "markdown",
+          component: "html",
           label: "詳情 Description",
         },
         {
@@ -357,7 +688,7 @@ export default withPageCMS(JobOpportunities, {
         },
         {
           name: "remarks",
-          component: "markdown",
+          component: "html",
           label: "詳情 Description",
         },
       ],

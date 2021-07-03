@@ -6,7 +6,6 @@ import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
-import Container from "../../components/Container";
 import DividerA from "../../components/DividerA";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
@@ -37,7 +36,6 @@ const PwdMain = ({ page }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       <Box
-        // h="calc(50vw - 40px)"
         minH={["50vh", "70vh"]}
         w="100%"
         position="relative"

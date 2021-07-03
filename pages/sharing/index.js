@@ -168,7 +168,7 @@ const Sharing = ({ page, setting, lang }) => {
         <Box
           bgColor="#F6D644"
           d={["none", "none", "block"]}
-          minH={240}
+          minH="480px"
           position="relative"
           zIndex={10}
           w="100%"
@@ -176,7 +176,7 @@ const Sharing = ({ page, setting, lang }) => {
         >
           <VStack
             align="stretch"
-            pt={36}
+            pt={76}
             w="100%"
             d={["none", "none", "block"]}
           >
