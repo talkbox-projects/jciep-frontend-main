@@ -71,18 +71,6 @@ const IdentityPublicAdd = ({ page }) => {
         message: "輸入有效的英文名稱 Enter valid english name! ",
       });
       return true
-    } else if (dateofBirth === '') {
-      setError("date_of_birth", {
-        type: "manual",
-        message: "輸入有效的出生日期 Enter valid date of birth! ",
-      });
-      return true
-    } else if (gender === "none") {
-      setError("gender", {
-        type: "manual",
-        message: "請選擇性別！please select a gender! ",
-      });
-      return true
     } else if (residentDistrict=== "none") {
       setError("resident_district", {
         type: "manual",
@@ -146,9 +134,9 @@ const IdentityPublicAdd = ({ page }) => {
           chineseName: chinese_name,
           englishName: english_name,
           dob: date_of_birth,
-          gender,
-          district: resident_district,
-          industry,
+          gender: gender === "none" ? undefined : gender,
+          district: resident_district === "none" ? undefined : resident_district,
+          industry: industry === "none" ? undefined : industry,
           tncAccept: terms,
           email: user.email ? user.email : '',
           phone: user.phone ?user.phone : '' 

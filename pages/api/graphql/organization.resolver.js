@@ -89,7 +89,7 @@ export default {
 
             let files = await params.input?.businessRegistration;
             let businessRegistration;
-            
+
             if(files) {
               businessRegistration = await uploadBusinessRegistration(files)
             }
@@ -101,7 +101,7 @@ export default {
               status: "pendingApproval",
               chineseCompanyName: params?.input.chineseCompanyName,
               englishCompanyName: params?.input.englishCompanyName,
-              website: params?.input.website,
+              website: params?.input?.website,
               businessRegistration: businessRegistration,
               industry: params?.input?.industry,
               description: params?.input?.description,

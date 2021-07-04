@@ -73,30 +73,6 @@ const IdentityPwdAdd = ({ page }) => {
         message: "輸入有效的英文名稱 Enter valid english name! ",
       });
       return true
-    } else if (dateofBirth === '') {
-      setError("date_of_birth", {
-        type: "manual",
-        message: "輸入有效的出生日期 Enter valid date of birth! ",
-      });
-      return true
-    } else if (gender === "none") {
-      setError("gender", {
-        type: "manual",
-        message: "請選擇性別！please select a gender! ",
-      });
-      return true
-    } else if (residentDistrict=== "none") {
-      setError("resident_district", {
-        type: "manual",
-        message: "請選擇居住區 Please select a resident district! ",
-      });
-      return true
-    } else if ( personTypes === "none") {
-      setError("person_types", {
-        type: "manual",
-        message: "請選擇人員類型 Please select person type! ",
-      });
-      return true
     } else if (interestedEmployee === "none") {
       setError("interested_employee", {
         type: "manual",
@@ -163,14 +139,14 @@ const IdentityPwdAdd = ({ page }) => {
         input: {
           userId: user.id,
           identity: 'pwd',
-          chineseName: chinese_name,
+          chineseName: chinese_name ,
           englishName: english_name,
           dob: date_of_birth,
-          gender,
-          district: resident_district,
-          pwdType: person_types,
-          interestedEmploymentMode: interested_employee,
-          industry,
+          gender: gender === "none" ? undefined : gender,
+          district: resident_district === "none" ? undefined : resident_district,
+          pwdType: person_types === "none" ? undefined : person_types,
+          interestedEmploymentMode: interested_employee === "none" ? undefined : interested_employee,
+          industry: industry === "none" ? undefined : industry ,
           tncAccept: terms,
           email: user.email ? user.email : '',
           phone: user.phone ?user.phone : '' 

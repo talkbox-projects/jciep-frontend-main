@@ -125,7 +125,7 @@ const IdentityStaffAdd = ({ page }) => {
       });    
   
       if(data && data.IdentityCreate) {
-        router.push("/user/organization/ngo/add")
+        router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`)
       }
     
       } catch (e) {

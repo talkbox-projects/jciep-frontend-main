@@ -209,24 +209,22 @@ export default {
 
        console.log(input)
 
-      let identityExists = await Identity.findOne({userId: input.userId, type: input.identity})
+      // let identityExists = await Identity.findOne({userId: input.userId, type: input.identity})
 
-      if(identityExists) {
-        return {
-          id: identityExists._id
-        }
-      } else {
+      // if(identityExists) {
+      //   throw new Error("Identity already created!");
+      // } else {
         let identity = await new Identity({
           userId : input.userId,
           type: input.identity,
           chineseName: input.chineseName,
           englishName: input.englishName,
-          dob: input.dob, 
-          pwdType: input.pwdType,
-          gender:  input.gender ? input.gender : undefined ,
-          district: input.district ?  input.district : undefined,
-          employementMode: input.interestedEmploymentMode ?  input.interestedEmploymentMode : undefined,
-          industry: input.industry ? input.industry : undefined,
+          dob: input.dob , 
+          pwdType: input?.pwdType,
+          gender:  input?.gender,
+          district: input?.district,
+          employementMode: input?.interestedEmploymentMode,
+          industry: input?.industry ,
           tncAccept:  input.tncAccept,        
           email:  input.email,
           phone:  input.phone  
@@ -235,10 +233,9 @@ export default {
   
         let user = await User.findById(input.userId);
         let identities = user.identities;
-        console.log(identities)
         identities.push(identity._id)
         
-        let updatedUser = await User.findByIdAndUpdate(input.userId, {
+        await User.findByIdAndUpdate(input.userId, {
           identities: identities
         })
   
@@ -246,7 +243,7 @@ export default {
         return {
           id: identity._id
         }
-      }
+      // }
 
       
     },

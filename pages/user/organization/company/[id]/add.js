@@ -75,27 +75,21 @@ const OrganizationCompanyAdd = ({ page }) => {
         message: "輸入有效的英文公司名稱 Enter valid english company name! ",
       });
       return true
-    } else if (industry.trim() === 'none') {
+    } else if (files.length < 1) {
+      setError("businessRegistration", {
+        type: "manual",
+        message: "上傳一個文件 upload a file! ",
+      });
+      return true
+    } 
+    else if (industry.trim() === 'none') {
       setError("industry", {
         type: "manual",
         message: "選擇行業 Select a industry! ",
       });
       return true
     } 
-    else if (companyWebsite.trim() === '') {
-      setError("companyWebsite", {
-        type: "manual",
-        message: "進入公司網站 Enter a company website! ",
-      });
-      return true
-    } 
-    else if (companyDescription.trim() === '') {
-      setError("companyDescription", {
-        type: "manual",
-        message: "輸入有效說明 Enter valid Description! ",
-      });
-      return true
-    }  else {
+    else {
       return false
     }
   }
@@ -108,11 +102,6 @@ const OrganizationCompanyAdd = ({ page }) => {
           return true
         }
 
-        console.log(chineseCompanyName)
-        console.log(englishCompanyName)
-        console.log(industry)
-        console.log(companyWebsite)
-        console.log(companyDescription)
 
         const mutation = gql`
         mutation OrganizationSubmissionCreate($input: OrganizationSubmissionCreateInput!) {
@@ -261,7 +250,6 @@ const OrganizationCompanyAdd = ({ page }) => {
                       {
 
                         files.map((file, index) => {
-                           console.log(file)
                           let url = URL.createObjectURL(file)
                           return (
                               <span key={index}>
@@ -313,6 +301,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                 height="44px"
                 width="117.93px"
                 type="submit"
+                isLoading={isSubmitting}
               >
                 {page?.content?.form?.continue}
               </Button>

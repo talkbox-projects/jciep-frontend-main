@@ -70,18 +70,6 @@ const OrganizationNgoAdd = ({ page }) => {
         message: "輸入有效的英文組織名稱 Enter valid english organization name! ",
       });
       return true
-    } else if (contactNumberngoWebsite.trim() === '') {
-      setError("contactNumberngoWebsite", {
-        type: "manual",
-        message: "輸入有效網站 Enter valid website! ",
-      });
-      return true
-    } else if (ngoDescription.trim() === '') {
-      setError("ngoDescription", {
-        type: "manual",
-        message: "輸入有效說明 Enter valid Description! ",
-      });
-      return true
     }  else if (terms === false) {
       setError("terms", {
         type: "manual",

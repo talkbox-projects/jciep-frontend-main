@@ -24,7 +24,6 @@ const organizationSchema = Schema({
   },
   website: {
     type: String,
-    required: true
   },
   identityId: {
     type: Schema.Types.ObjectId,
@@ -97,7 +96,6 @@ const organizationSubmissionSchema = Schema({
   },
   website: {
     type: String,
-    required: true
   },
   businessRegistration: [
     {

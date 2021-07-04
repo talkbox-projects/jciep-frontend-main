@@ -122,7 +122,6 @@ const IdentityEmployerAdd = ({ page }) => {
         },
       });    
 
-      console.log(data)
   
       if(data) {
         router.push(`/user/organization/company/${data.IdentityCreate.id}/add`)
