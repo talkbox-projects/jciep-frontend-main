@@ -1,13 +1,44 @@
 import { Organization , OrganizationSubmission} from "./organization.model";
+import {createFile} from './media.resolver';
 
-Organization.find().then(data => {
-  console.log(data)
-})
+const uploadFile = async (filename, contentType, createReadStream) => {
+  return await createFile(createReadStream(), {
+    filename: filename.replace(" ", "_"),
+    options: {
+      contentType,
+      metadata: {
+        directory: '/organization',
+      },
+    },
+  });
+}
 
 
-OrganizationSubmission.find().then(data => {
-  console.log(data)
-})
+const uploadBusinessRegistration =  async (files) => {
+  let businessRegistrationFiles = [];
+
+  let businessRegistrationUploaded = new Promise (async (resolve, reject) => {
+    for(let i=0; i< files.length; i++) {
+      const { filename, mimetype: contentType, createReadStream } = await files[i].file;
+
+      let result = await uploadFile(filename, contentType, createReadStream)
+      businessRegistrationFiles.push({
+        id: result.id,
+        filename: result.filename.replace(" ", "_"),
+        directory: result.options.metadata.directory,
+        url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
+        contentType: result.options.contentType,
+      })
+
+      if(businessRegistrationFiles.length === files.length) {
+        resolve(true)
+      }
+    }
+  })
+
+  await businessRegistrationUploaded
+  return businessRegistrationFiles
+}
 
 export default {
   Query: {
@@ -44,6 +75,7 @@ export default {
        * status = pendingApproval
        */
 
+
       let organization = new Promise(async (resolve, reject) => {
         if(params.input.organizationId) {
           let organization = await Organization.findById(params.input.organizationId)
@@ -55,28 +87,39 @@ export default {
           resolve(organization)
         } else {
 
-          resolve(await new Organization({
-            organizationType: params.input.organizationType,
-            remark: params?.input?.remark,
-            status: "pendingApproval",
-            chineseCompanyName: params?.input.chineseCompanyName,
-            englishCompanyName: params?.input.englishCompanyName,
-            website: params?.input.website,
-            businessRegistration: [],
-            industry: params?.input?.industry,
-            description: params?.input?.description,
-            submission: [],
-            district: params?.input?.district,
-            companyBenefit: params?.input?.companyBenefit,
-            logo: [],
-            tncAccept: params?.input?.tncAccept
-          }))
-  
+            let files = await params.input?.businessRegistration;
+            let businessRegistration;
+            
+            if(files) {
+              businessRegistration = await uploadBusinessRegistration(files)
+            }
+
+            
+            resolve(await new Organization({
+              organizationType: params.input.organizationType,
+              remark: params?.input?.remark,
+              status: "pendingApproval",
+              chineseCompanyName: params?.input.chineseCompanyName,
+              englishCompanyName: params?.input.englishCompanyName,
+              website: params?.input.website,
+              businessRegistration: businessRegistration,
+              industry: params?.input?.industry,
+              description: params?.input?.description,
+              businessRegistration:  businessRegistration,
+              submission: [],
+              district: params?.input?.district,
+              companyBenefit: params?.input?.companyBenefit,
+              identityId: params?.input?.identityId,
+              logo: [],
+              tncAccept: params?.input?.tncAccept
+            }))
+      
         }
       })
 
       organization = await organization
 
+      
       if(organization) {
 
         let organizationSubmission = await  new OrganizationSubmission({
@@ -87,12 +130,12 @@ export default {
             chineseCompanyName: organization.chineseCompanyName,
             englishCompanyName: organization.englishCompanyName,
             website: organization.website,
-            businessRegistration: organization.businessRegistration,
+            businessRegistration: organization?.businessRegistration,
             industry: organization?.industry,
             description: organization?.description,
             district: organization?.district,
             companyBenefit: organization?.companyBenefit,
-            logo: organization.logo,
+            logo: organization?.logo,
             tncAccept: organization?.tncAccept,
             createdAt: new Date(),
             updatedAt: new Date()

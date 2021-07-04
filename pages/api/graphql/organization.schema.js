@@ -27,7 +27,6 @@ export default gql`
     organizationType: OrganizationType
     organization: Organization!
     status: OrganizationStatus!
-
     chineseCompanyName: String
     englishCompanyName: String
     website: String
@@ -38,7 +37,6 @@ export default gql`
     companyBenefit: String
     logo: File
     tncAccept: Boolean
-
     createAt: Timestamp!
     updateAt: Timestamp!
     approveAt: Timestamp!

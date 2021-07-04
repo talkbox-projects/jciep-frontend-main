@@ -121,9 +121,11 @@ const IdentityEmployerAdd = ({ page }) => {
           phone: contactNumber 
         },
       });    
+
+      console.log(data)
   
       if(data) {
-        router.push("/user/organization/company/add")
+        router.push(`/user/organization/company/${data.IdentityCreate.id}/add`)
       }
     
 

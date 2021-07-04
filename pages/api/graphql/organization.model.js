@@ -26,6 +26,10 @@ const organizationSchema = Schema({
     type: String,
     required: true
   },
+  identityId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Identity'
+  },
   businessRegistration: [
     {
       id: String,
@@ -64,7 +68,6 @@ const organizationSchema = Schema({
   },
   tncAccept: {
     type: Boolean,
-    required: true
   }
 });
 
@@ -129,7 +132,6 @@ const organizationSubmissionSchema = Schema({
   },
   tncAccept: {
     type: Boolean,
-    required: true
   },
   createdAt: Date,
   updatedAt: Date,
