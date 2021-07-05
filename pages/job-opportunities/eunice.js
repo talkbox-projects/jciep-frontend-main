@@ -23,6 +23,7 @@ import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import { useCallback } from "react";
 
 export const getServerSideProps = async (context) => {
   return {
@@ -47,8 +48,52 @@ const JobOpportunities = ({ page }) => {
   const jobId = router.query.jobId ?? page?.content?.jobs?.[0]?.id;
 
   const job = page?.content?.jobs?.find((x) => x.id === jobId);
+
+  const jobLocationRenderer = useCallback(
+    (job) =>
+      [
+        ...(job?.location ?? []).map((key) =>
+          wordExtractor(page?.content?.wordings, `location_${key}`)
+        ),
+        ...(job?.otherLocation ? [job?.otherLocation] : []),
+      ].map(
+        (location, index, arr) =>
+          `${location}${index === arr.length - 1 ? "" : "，"}` // FIXME: comma for chinese / eng
+      ),
+    [page, wordExtractor]
+  );
+
+  const jobFunctionRenderer = useCallback(
+    (job) =>
+      [
+        ...(job?.jobFunction ?? []).map((key) =>
+          wordExtractor(page?.content?.wordings, `jobFunction_${key}`)
+        ),
+        ...(job?.otherJobFunction ? [job?.otherJobFunction] : []),
+      ].map((jobFunction) => <Tag rounded="full">{jobFunction}</Tag>),
+    [page, wordExtractor]
+  );
+
+  const jobIndustryRenderer = useCallback(
+    (job) =>
+      [
+        ...(job?.industry ?? []).map((key) =>
+          wordExtractor(page?.content?.wordings, `industry_${key}`)
+        ),
+        ...(job?.otherIndustry ? [job?.otherIndustry] : []),
+      ].map(
+        (industry, index, arr) =>
+          `${industry}${index === arr.length - 1 ? "" : "，"}`
+      ),
+    [(page, wordExtractor)] // FIXME: comma for chinese / eng)
+  );
+
   const details = (
     <>
+      <HStack align="flex-end" spacing={4}>
+        {job?.companyLogo && <Image src={job?.companyLogo} w="120px" />}
+        <Text fontSize={["lg"]}>{job?.companyName}</Text>
+      </HStack>
       <Text fontSize={["2xl"]} pb={3} fontWeight="bold">
         {job?.title}
       </Text>
@@ -63,9 +108,7 @@ const JobOpportunities = ({ page }) => {
           <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_location_label")}
-            {(job?.location ?? []).map((key) =>
-              wordExtractor(page?.content?.wordings, `location_${key}`)
-            )}
+            {jobLocationRenderer(job)}
           </Text>
         </HStack>
         <HStack>
@@ -75,19 +118,20 @@ const JobOpportunities = ({ page }) => {
             {moment(job?.publishDate)?.format("YYYY-MM-DD hh:mm a")}
           </Text>
         </HStack>
+        <HStack>
+          <Image src={page?.content?.icon?.applyMethodsIcon} w={6} h={6} />
+          <Text>
+            {wordExtractor(page?.content?.wordings, "job_applyMethods_label")}
+            {job?.applyMethods}
+          </Text>
+        </HStack>
       </VStack>
       <Divider />
       <VStack py={4} align="stretch">
         <Box fontWeight="bold">
           {wordExtractor(page?.content?.wordings, "job_description_label")}
         </Box>
-        <Wrap>
-          {(job?.jobFunction ?? []).map((key) => (
-            <Tag rounded="full">
-              {wordExtractor(page?.content?.wordings, `jobFunction_${key}`)}
-            </Tag>
-          ))}
-        </Wrap>
+        <Wrap>{jobFunctionRenderer(job)}</Wrap>
         <Box
           sx={{
             "ul, ol": {
@@ -133,6 +177,10 @@ const JobOpportunities = ({ page }) => {
               `qualification_${job?.qualification}`
             ),
           },
+          {
+            label: wordExtractor(page?.content?.wordings, "job_industry_label"),
+            value: jobIndustryRenderer(job),
+          },
         ].map(({ label, value }, index) => {
           return (
             <Box key={index}>
@@ -143,6 +191,33 @@ const JobOpportunities = ({ page }) => {
         })}
         <GridItem></GridItem>
       </SimpleGrid>
+      <Divider />
+      <VStack py={4} align="stretch">
+        <Box fontWeight="bold">
+          {wordExtractor(page?.content?.wordings, "company_profile_label")}
+        </Box>
+        <Box
+          sx={{
+            "ul, ol": {
+              px: 4,
+            },
+            li: {
+              listStyle: "none",
+              pb: 2,
+              position: "relative",
+              "&::before": {
+                content: '"．"',
+                position: "absolute",
+                left: "-0.8em",
+                top: "-0.25em",
+              },
+            },
+          }}
+          dangerouslySetInnerHTML={{
+            __html: job?.companyProfile ?? "",
+          }}
+        />
+      </VStack>
     </>
   );
 
@@ -179,17 +254,14 @@ const JobOpportunities = ({ page }) => {
             })}
             borderRadius={8}
           >
+            <HStack align="flex-end" spacing={2}>
+              {job?.companyLogo && <Image src={job?.companyLogo} w="60px" />}
+              <Text fontSize={["md"]}>{job?.companyName}</Text>
+            </HStack>
             <Text pb={3} fontWeight="bold">
               {job?.title}
             </Text>
-            <Wrap>
-              {(job?.jobFunction ?? []).map((key) => (
-                <Tag rounded="full">
-                  {wordExtractor(page?.content?.wordings, `jobFunction_${key}`)}
-                </Tag>
-              ))}
-            </Wrap>
-
+            <Wrap>{jobFunctionRenderer(job)}</Wrap>
             <HStack>
               <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
               <Text>
@@ -210,11 +282,7 @@ const JobOpportunities = ({ page }) => {
               <Box flex={1} minW={0} w="100%">
                 <HStack>
                   <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
-                  <Text>
-                    {(job?.location ?? []).map((key) =>
-                      wordExtractor(page?.content?.wordings, `location_${key}`)
-                    )}
-                  </Text>
+                  <Text>{jobLocationRenderer(job)}</Text>
                 </HStack>
               </Box>
               <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
@@ -360,6 +428,14 @@ export default withPageCMS(JobOpportunities, {
           parse: ({ previewSrc }) => previewSrc,
           previewSrc: (src) => src,
         },
+        {
+          label: "申請方法圖標 Apply Methods icon",
+          name: "applyMethodsIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
       ],
     },
     {
@@ -374,6 +450,24 @@ export default withPageCMS(JobOpportunities, {
         id: Math.random().toString(36).substr(2, 9),
       }),
       fields: [
+        {
+          label: "Company Name",
+          name: "companyName",
+          component: "text",
+        },
+        {
+          label: "Company Logo",
+          name: "companyLogo",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          label: "Company Profile",
+          name: "companyProfile",
+          component: "html",
+        },
         {
           name: "title",
           component: "text",
@@ -393,6 +487,7 @@ export default withPageCMS(JobOpportunities, {
           name: "location",
           component: "list",
           label: "工作地區 Job location",
+          defaultItem: () => "centralAndWestern",
           field: {
             component: "select",
             options: [
@@ -434,6 +529,7 @@ export default withPageCMS(JobOpportunities, {
           name: "jobFunction",
           component: "list",
           label: "工作類別 Job Function",
+          defaultItem: () => "graphicDesign",
           field: {
             component: "select",
             options: [
@@ -554,7 +650,7 @@ export default withPageCMS(JobOpportunities, {
                 value: "medicalAssistant",
                 label: "醫務助理 Medical assistant",
               },
-              { value: "medicalAssistant", label: "其他 Other " },
+              { value: "other", label: "其他 Other " },
             ],
           },
         },
@@ -567,6 +663,7 @@ export default withPageCMS(JobOpportunities, {
           name: "industry",
           component: "list",
           label: "工作行業 Industry",
+          defaultItem: () => "accounting",
           field: {
             component: "select",
             options: [
@@ -657,6 +754,11 @@ export default withPageCMS(JobOpportunities, {
           },
         },
         {
+          name: "applyMethods",
+          component: "text",
+          label: "申請方法 Apply Methods",
+        },
+        {
           name: "description",
           component: "html",
           label: "詳情 Description",
@@ -688,11 +790,6 @@ export default withPageCMS(JobOpportunities, {
             { value: "degree", label: "學士學位 Degree" },
             { value: "masterOrAbove", label: "碩士學位或以上 Master or above" },
           ],
-        },
-        {
-          name: "remarks",
-          component: "html",
-          label: "詳情 Description",
         },
       ],
     },
