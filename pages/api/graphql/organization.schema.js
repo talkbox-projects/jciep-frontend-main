@@ -131,11 +131,18 @@ export default gql`
       limit: Int!
       page: Int!
     ): [Organization]
+
+    OrganizationSubmissionGet(id: ID): OrganizationSubmission
+    OrganizationSubmissionSearch(
+      type: OrganizationType
+      status: OrganizationStatus
+      name: String
+      limit: Int!
+      page: Int!
+    ): OrganizationSubmission
   }
 
   type Mutation {
-
-
     OrganizationSubmissionCreate(
       input: OrganizationSubmissionCreateInput
     ): OrganizationSubmission

@@ -184,12 +184,29 @@ export default gql`
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
-    IdentityGet(id: ID): Identity
-    IdentitySearch(
-      identityTypes: [IdentityType]
+    UserGet(token: String!): User
+
+    """
+    Search User by either phone, email or name. Search the name of every identities.
+    """
+    UserSearch(
+      phone: String
+      email: String
+      name: String
       limit: Int!
       page: Int!
-    ): [Identity] @auth(identityTypes: [admin])
+    ): [User]
+
+    """
+    Search Identtiy by either phone, email or name. Search the name of every identities.
+    """
+    IdentitySearch(
+      phone: String
+      email: String
+      name: String
+      limit: Int!
+      page: Int!
+    ): [User]
   }
 
   type Mutation {
