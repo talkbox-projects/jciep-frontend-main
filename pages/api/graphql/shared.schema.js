@@ -30,13 +30,74 @@ export default gql`
     fullTime
     partTime
   }
+
+  enum PwdType {
+    hearingImpairment
+    visualImpairment
+    speechImpairment
+    physicalImpairment
+    autism
+    mentalIllnessMoodDisorder
+    intellectualDisability
+    visceralDisabilityPersonswithChronicDiseases
+    specificLearningDifficulties
+    attentionDeficitHyperactivityDisorder
+  }
+  
   enum Industry {
-    designArt
     graphicDesign
     illustrationDrawing
     animationDesign
     webDesign
+    photography
+    filmmaking
+    musicSoundDesign
+    dubbingWork
+    softwareMobileAppDesign
+    mobileComputerGameDesign
+    webpageProduction
+    computerProgramming
+    computerRepair
+    privateTuition
+    musicTutor
+    artTutor
+    sportsInstructor
+    performingArtsInstructor
+    performingArtist
+    magicVaudevilleShow
+    twistedBalloonService
+    activityLeader
+    masterOfCeremonies
+    promotionActivities
+    prWork
+    eventPlanning
+    setProduction
+    activityAssistant
+    trusteeGongAidClassInstructor
+    interestClassTutor
+    eventsOfficer
+    teachingAssistant
+    salesJob
+    promoter
+    socialMediaManagement
+    textPromotion
+    promotionalEventPlanning
+    waiter
+    waterBar
+    coffeeBrewing
+    kitchen
+    cashRegister
+    breadCakeMaking
+    frontDeskCustomerService
+    housekeeping
+    makeup
+    hairstyleDesign
+    nailService
+    beautyService
+    professionalGrade
+    medicalAssistant
   }
+  
   enum School {
     hku
   }
@@ -68,7 +129,24 @@ export default gql`
   scalar Timestamp
 
   enum District {
-    central_east
+    centralAndWestern
+    eastern
+    southern
+    wanChai
+    shamShuiPo
+    kowloonCity
+    kwunTong
+    wongTaiSin
+    yauTsimMong
+    islands
+    kwaiTsing
+    north
+    saiKung
+    shaTin
+    taiPo
+    tsuenWan
+    tuenMun
+    yuenLong
   }
 
   input MediaInput {

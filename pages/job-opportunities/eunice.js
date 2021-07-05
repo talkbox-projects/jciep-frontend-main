@@ -157,7 +157,10 @@ const JobOpportunities = ({ page }) => {
       cursor="pointer"
     >
       {(page?.content?.jobs ?? []).map((job, index) => (
-        <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
+        <NextLink
+          href={`/job-opportunities/eunice?jobId=${job?.id}`}
+          key={job?.id}
+        >
           <VStack
             borderColor="#eee"
             borderWidth={1}
@@ -282,7 +285,7 @@ const JobOpportunities = ({ page }) => {
       <Box mt={16} d={["block", "block", "none"]}>
         {router.query.jobId ? (
           <VStack align="stretch" p={4} spacing={0}>
-            <NextLink href="/job-opportunities">
+            <NextLink href="/job-opportunities/eunice">
               <Button
                 alignSelf="start"
                 mb={8}

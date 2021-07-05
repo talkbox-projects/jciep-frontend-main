@@ -47,6 +47,7 @@ const OtpVerifyModal = () => {
             UserLogin(input: $input) {
               token
               user {
+                id
                 phone
                 identities {
                   id

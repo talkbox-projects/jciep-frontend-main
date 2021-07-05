@@ -479,7 +479,7 @@ const PwdDetail = ({ page }) => {
                 src={video.url}
                 title="PWD Video"
                 frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
               />
             </AspectRatio>

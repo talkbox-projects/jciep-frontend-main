@@ -64,6 +64,7 @@ const VerifyToken = () => {
           UserLogin(input: $input) {
             token
             user {
+              id
               email
               identities {
                 id
