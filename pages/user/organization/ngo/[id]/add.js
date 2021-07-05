@@ -10,7 +10,7 @@ import {
   FormHelperText,
   FormLabel,
   Textarea,
-  Checkbox
+  Checkbox,
 } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -26,9 +26,12 @@ import { getGraphQLClient } from "../../../../../utils/apollo";
 const PAGE_KEY = "organization_ngo_add";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -45,10 +48,9 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-
 const OrganizationNgoAdd = ({ page }) => {
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
 
   const {
     handleSubmit,
@@ -57,29 +59,37 @@ const OrganizationNgoAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const validate = (chineseOrganizationName, englishOrganizationName, contactNumberngoWebsite, ngoDescription, terms) => {
-    if(chineseOrganizationName.trim() === '') {
+  const validate = (
+    chineseOrganizationName,
+    englishOrganizationName,
+    contactNumberngoWebsite,
+    ngoDescription,
+    terms
+  ) => {
+    if (chineseOrganizationName.trim() === "") {
       setError("chineseOrganizationName", {
         type: "manual",
-        message: "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
+        message:
+          "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
       });
-      return true
-    } else if (englishOrganizationName.trim() === '') {
+      return true;
+    } else if (englishOrganizationName.trim() === "") {
       setError("englishOrganizationName", {
         type: "manual",
-        message: "輸入有效的英文組織名稱 Enter valid english organization name! ",
+        message:
+          "輸入有效的英文組織名稱 Enter valid english organization name! ",
       });
-      return true
-    }  else if (terms === false) {
+      return true;
+    } else if (terms === false) {
       setError("terms", {
         type: "manual",
         message: "請接受條款和條件 Please accept T&C! ",
       });
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-  }
+  };
 
   const onFormSubmit = useCallback(
     async ({
@@ -87,37 +97,47 @@ const OrganizationNgoAdd = ({ page }) => {
       englishOrganizationName,
       ngoWebsite,
       ngoDescription,
-      terms
+      terms,
     }) => {
       try {
-
-        if(validate(chineseOrganizationName, englishOrganizationName, ngoWebsite,  ngoDescription, terms)) {
-          return true
+        if (
+          validate(
+            chineseOrganizationName,
+            englishOrganizationName,
+            ngoWebsite,
+            ngoDescription,
+            terms
+          )
+        ) {
+          return true;
         }
 
         const mutation = gql`
-        mutation OrganizationSubmissionCreate($input: OrganizationSubmissionCreateInput!) {
-          OrganizationSubmissionCreate(input: $input) {
-            id
+          mutation OrganizationSubmissionCreate(
+            $input: OrganizationSubmissionCreateInput!
+          ) {
+            OrganizationSubmissionCreate(input: $input) {
+              id
+            }
           }
+        `;
+
+        let data = await getGraphQLClient().request(mutation, {
+          input: {
+            organizationType: "ngo",
+            chineseCompanyName: chineseOrganizationName,
+            englishCompanyName: englishOrganizationName,
+            website: ngoWebsite,
+            tncAccept: terms,
+            identityId: id,
+          },
+        });
+
+        if (data && data.OrganizationSubmissionCreate) {
+          router.push(
+            `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
+          );
         }
-      `;
-  
-      let data =await getGraphQLClient().request(mutation, {
-        input: {
-          organizationType: 'ngo',
-          chineseCompanyName: chineseOrganizationName,
-          englishCompanyName: englishOrganizationName,
-          website: ngoWebsite,
-          tncAccept: terms,
-          identityId: id,
-        },
-      });    
-  
-      if(data && data.OrganizationSubmissionCreate) {
-        router.push(`/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`);
-      }
-   
       } catch (e) {
         console.log(e);
       }

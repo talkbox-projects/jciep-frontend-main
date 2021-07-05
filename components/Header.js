@@ -28,6 +28,8 @@ import {
   DrawerOverlay,
   PopoverBody,
   LinkOverlay,
+  Stack,
+  Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
@@ -45,8 +47,9 @@ import { gql } from "graphql-request";
 import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
+import { IoWarning } from "react-icons/io5";
 
-const Header = ({ navigation, header }) => {
+const Header = ({ navigation, header, isLangAvailable }) => {
   const getWording = useGetWording();
   const {
     isLoggedIn,
@@ -122,11 +125,36 @@ const Header = ({ navigation, header }) => {
 
   return (
     <Box>
+      {!isLangAvailable && (
+        <Box
+          borderBottom="1px"
+          borderColor="rgb(239,239,239)"
+          bg="rgb(250,250,250)"
+          position="fixed"
+          h={20}
+          w="100%"
+          zIndex={100}
+        >
+          <Container p={4} h="100%">
+            <HStack spacing={4} h="100%" align="center">
+              <Icon h="32px" w="32px" color="red.500" as={IoWarning} />
+              <Stack spacing={0} lineHeight={1.3}>
+                <Text fontSize={["md", "lg"]}>
+                  No English content available
+                </Text>
+                <Text fontSize="sm">
+                  Sorry, no English content available currently in this page.
+                </Text>
+              </Stack>
+            </HStack>
+          </Container>
+        </Box>
+      )}
       <Box
         d={["none", "none", "block", "block"]}
         bg="white"
         position="fixed"
-        top={0}
+        top={isLangAvailable ? 0 : 20}
         w="100%"
         zIndex={100}
         h={12}
@@ -380,7 +408,7 @@ const Header = ({ navigation, header }) => {
       <Box
         position="fixed"
         zIndex={100}
-        top={0}
+        top={isLangAvailable ? 0 : 20}
         w="100%"
         bg="white"
         d={["block", "block", "none", "none"]}

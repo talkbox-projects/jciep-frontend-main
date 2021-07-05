@@ -35,12 +35,12 @@ const PAGE_KEY = "programme";
 const Iframe = chakra("iframe");
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page:
-        (await getPage({ key: PAGE_KEY, lang: context.locale })) ??
-        {} ??
-        (await getPage({ key: PAGE_KEY, lang: "zh" })),
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

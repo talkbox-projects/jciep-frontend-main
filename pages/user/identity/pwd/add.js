@@ -26,9 +26,12 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 const PAGE_KEY = "identity_pwd_add";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -58,45 +61,53 @@ const IdentityPwdAdd = ({ page }) => {
   // authenticate
   useEffect(() => {
     // if(user === null) router.push('/')
-  }, [user])
+  }, [user]);
 
-  const validate = (chineseName, englishName, dateofBirth, gender, residentDistrict, personTypes, interestedEmployee, industry, terms) => {
-    if(chineseName.trim() === '') {
+  const validate = (
+    chineseName,
+    englishName,
+    dateofBirth,
+    gender,
+    residentDistrict,
+    personTypes,
+    interestedEmployee,
+    industry,
+    terms
+  ) => {
+    if (chineseName.trim() === "") {
       setError("chinese_name", {
         type: "manual",
         message: "輸入有效的中文名稱 Enter valid chinese name! ",
       });
-      return true
-    } else if (englishName.trim() === '') {
+      return true;
+    } else if (englishName.trim() === "") {
       setError("english_name", {
         type: "manual",
         message: "輸入有效的英文名稱 Enter valid english name! ",
       });
-      return true
+      return true;
     } else if (interestedEmployee === "none") {
       setError("interested_employee", {
         type: "manual",
         message: "請選擇感興趣的員工 Please select a interested employee! ",
       });
-      return true
+      return true;
     } else if (industry === "none") {
       setError("industry", {
         type: "manual",
         message: "請選擇行業 Please select industry! ",
       });
-      return true
+      return true;
     } else if (terms === false) {
       setError("terms", {
         type: "manual",
         message: "請接受條款和條件 Please accept T&C! ",
       });
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-   
-  }
-
+  };
 
   const onFormSubmit = useCallback(
     async ({
@@ -111,9 +122,20 @@ const IdentityPwdAdd = ({ page }) => {
       terms,
     }) => {
       try {
-
-        if(validate(chinese_name, english_name, date_of_birth, gender,  resident_district, person_types,  interested_employee, industry, terms)) {
-          return 
+        if (
+          validate(
+            chinese_name,
+            english_name,
+            date_of_birth,
+            gender,
+            resident_district,
+            person_types,
+            interested_employee,
+            industry,
+            terms
+          )
+        ) {
+          return;
         }
 
         console.log(chinese_name);
@@ -126,37 +148,37 @@ const IdentityPwdAdd = ({ page }) => {
         console.log(industry);
         console.log(terms);
 
-        
         const mutation = gql`
-        mutation IdentityCreate($input: IdentityCreateInput!) {
-          IdentityCreate(input: $input) {
-            id
+          mutation IdentityCreate($input: IdentityCreateInput!) {
+            IdentityCreate(input: $input) {
+              id
+            }
           }
-        }
-      `;
-  
-      let data =await getGraphQLClient().request(mutation, {
-        input: {
-          userId: user.id,
-          identity: 'pwd',
-          chineseName: chinese_name ,
-          englishName: english_name,
-          dob: date_of_birth,
-          gender: gender === "none" ? undefined : gender,
-          district: resident_district === "none" ? undefined : resident_district,
-          pwdType: person_types === "none" ? undefined : person_types,
-          interestedEmploymentMode: interested_employee === "none" ? undefined : interested_employee,
-          industry: industry === "none" ? undefined : industry ,
-          tncAccept: terms,
-          email: user.email ? user.email : '',
-          phone: user.phone ?user.phone : '' 
-        },
-      });
-  
-      if(data && data.IdentityCreate) {
-        router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
-      }
+        `;
 
+        let data = await getGraphQLClient().request(mutation, {
+          input: {
+            userId: user.id,
+            identity: "pwd",
+            chineseName: chinese_name,
+            englishName: english_name,
+            dob: date_of_birth,
+            gender: gender === "none" ? undefined : gender,
+            district:
+              resident_district === "none" ? undefined : resident_district,
+            pwdType: person_types === "none" ? undefined : person_types,
+            interestedEmploymentMode:
+              interested_employee === "none" ? undefined : interested_employee,
+            industry: industry === "none" ? undefined : industry,
+            tncAccept: terms,
+            email: user.email ? user.email : "",
+            phone: user.phone ? user.phone : "",
+          },
+        });
+
+        if (data && data.IdentityCreate) {
+          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -214,7 +236,6 @@ const IdentityPwdAdd = ({ page }) => {
                   <Input
                     type="date"
                     placeholder=""
-                    
                     {...register("date_of_birth")}
                   />
                   <FormHelperText>
@@ -228,7 +249,9 @@ const IdentityPwdAdd = ({ page }) => {
                   <Select {...register("gender")}>
                     {page?.content?.form?.gender?.options?.map((option) => {
                       return (
-                        <option key={option.id} value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
                       );
                     })}
                   </Select>
@@ -245,7 +268,9 @@ const IdentityPwdAdd = ({ page }) => {
                     {page?.content?.form?.residentRestrict?.options?.map(
                       (option) => {
                         return (
-                          <option key={option.id} value={option.value}>{option.label}</option>
+                          <option key={option.id} value={option.value}>
+                            {option.label}
+                          </option>
                         );
                       }
                     )}
@@ -264,8 +289,10 @@ const IdentityPwdAdd = ({ page }) => {
                   <Select {...register("person_types")}>
                     {page?.content?.form?.personTypes?.options?.map(
                       (option) => {
-                        return ( 
-                          <option key={option.id} value={option.value}>{option.label}</option>
+                        return (
+                          <option key={option.id} value={option.value}>
+                            {option.label}
+                          </option>
                         );
                       }
                     )}
@@ -285,7 +312,9 @@ const IdentityPwdAdd = ({ page }) => {
                     {page?.content?.form?.employeerMode?.options?.map(
                       (option) => {
                         return (
-                          <option key={option.id} value={option.value}>{option.label}</option>
+                          <option key={option.id} value={option.value}>
+                            {option.label}
+                          </option>
                         );
                       }
                     )}
@@ -302,7 +331,9 @@ const IdentityPwdAdd = ({ page }) => {
                   <Select {...register("industry")}>
                     {page?.content?.form?.industry?.options?.map((option) => {
                       return (
-                        <option key={option.id} value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
                       );
                     })}
                   </Select>

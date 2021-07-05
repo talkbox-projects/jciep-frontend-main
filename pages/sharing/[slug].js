@@ -32,13 +32,16 @@ import NextLink from "next/link";
 const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
+      page,
+      isLangAvailable: context.locale === page.lang,
       post: await getPost({
         idOrSlug: context.params.slug,
         lang: context.locale,
       }),
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

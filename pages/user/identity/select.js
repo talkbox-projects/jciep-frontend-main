@@ -16,9 +16,12 @@ import { useState } from "react";
 const PAGE_KEY = "identity_select";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -36,9 +39,8 @@ export const getServerSideProps = async (context) => {
 };
 
 const IdentitySelect = ({ page }) => {
-  
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
-  
+
   const onRoleSelect = (e, role) => {
     let elements = document.getElementsByClassName("box");
     resetSelectedRole(elements, elements.length);
