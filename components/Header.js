@@ -58,7 +58,7 @@ const Header = ({ navigation, header }) => {
 
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
-  const hidden = process.env.NODE_ENV === "development";
+  const hidden = process.env.NODE_ENV !== "development";
 
   const tabIndex = useMemo(() => {
     const kv = {
