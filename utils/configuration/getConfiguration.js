@@ -2,6 +2,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
 export const getConfiguration = async ({ key, lang }) => {
+  let res = undefined;
   const query = gql`
     query ConfigurationGet($key: String!, $lang: Language!) {
       ConfigurationGet(key: $key, lang: $lang) {
@@ -17,9 +18,15 @@ export const getConfiguration = async ({ key, lang }) => {
     lang,
   };
 
-  const { ConfigurationGet: configuration } = await getGraphQLClient().request(
-    query,
-    variables
-  );
-  return configuration;
+  res = (await getGraphQLClient().request(query, variables)).ConfigurationGet;
+  if (!res)
+    // handle no lang
+    res = (
+      await getGraphQLClient().request(query, {
+        ...variables,
+        lang: "zh",
+      })
+    ).ConfigurationGet;
+
+  return res;
 };

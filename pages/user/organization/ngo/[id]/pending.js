@@ -8,9 +8,12 @@ import { useRouter } from "next/router";
 const PAGE_KEY = "organization_ngo_pending";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -27,9 +30,8 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationNgoPending = ({ page }) => {
-
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>

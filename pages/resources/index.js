@@ -42,9 +42,12 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 const PAGE_KEY = "resources";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

@@ -32,6 +32,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -42,7 +43,6 @@ export const getServerSideProps = async (context) => {
         key: "navigation",
         lang: context.locale,
       }),
-      isLangAvailable: context.locale === page.lang,
     },
   };
 };
@@ -237,10 +237,7 @@ const JobOpportunities = ({ page }) => {
       cursor="pointer"
     >
       {(page?.content?.jobs ?? []).map((job, index) => (
-        <NextLink
-          href={`/job-opportunities/eunice?jobId=${job?.id}`}
-          key={job?.id}
-        >
+        <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
           <VStack
             borderColor="#eee"
             borderWidth={1}
@@ -360,7 +357,7 @@ const JobOpportunities = ({ page }) => {
       <Box mt={16} d={["block", "block", "none"]}>
         {router.query.jobId ? (
           <VStack align="stretch" p={4} spacing={0}>
-            <NextLink href="/job-opportunities/eunice">
+            <NextLink href="/job-opportunities">
               <Button
                 alignSelf="start"
                 mb={8}

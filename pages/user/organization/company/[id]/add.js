@@ -12,7 +12,7 @@ import {
   FormHelperText,
   FormLabel,
   Textarea,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,15 +25,15 @@ import Link from "next/link";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../utils/apollo";
 
-
 const PAGE_KEY = "organization_company_add";
 
-
-
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -52,8 +52,8 @@ export const getServerSideProps = async (context) => {
 const OrganizationCompanyAdd = ({ page }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
-  const {id} = router.query;
-  
+  const { id } = router.query;
+
   const {
     handleSubmit,
     setError,
@@ -61,73 +61,91 @@ const OrganizationCompanyAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-
-  const validate = (chineseCompanyName, englishCompanyName, industry, companyWebsite, companyDescription ) => {
-    if(chineseCompanyName.trim() === '') {
+  const validate = (
+    chineseCompanyName,
+    englishCompanyName,
+    industry,
+    companyWebsite,
+    companyDescription
+  ) => {
+    if (chineseCompanyName.trim() === "") {
       setError("chineseCompanyName", {
         type: "manual",
         message: "輸入有效的中國公司名稱 Enter valid chinese company name! ",
       });
-      return true
-    } else if (englishCompanyName.trim() === '') {
+      return true;
+    } else if (englishCompanyName.trim() === "") {
       setError("englishCompanyName", {
         type: "manual",
         message: "輸入有效的英文公司名稱 Enter valid english company name! ",
       });
-      return true
+      return true;
     } else if (files.length < 1) {
       setError("businessRegistration", {
         type: "manual",
         message: "上傳一個文件 upload a file! ",
       });
-      return true
-    } 
-    else if (industry.trim() === 'none') {
+      return true;
+    } else if (industry.trim() === "none") {
       setError("industry", {
         type: "manual",
         message: "選擇行業 Select a industry! ",
       });
-      return true
-    } 
-    else {
-      return false
+      return true;
+    } else {
+      return false;
     }
-  }
+  };
 
   const onFormSubmit = useCallback(
-    async ({ chineseCompanyName, englishCompanyName, industry, companyWebsite, companyDescription }) => {
+    async ({
+      chineseCompanyName,
+      englishCompanyName,
+      industry,
+      companyWebsite,
+      companyDescription,
+    }) => {
       try {
-        
-        if(validate(chineseCompanyName, englishCompanyName, industry,  companyWebsite, companyDescription)) {
-          return true
+        if (
+          validate(
+            chineseCompanyName,
+            englishCompanyName,
+            industry,
+            companyWebsite,
+            companyDescription
+          )
+        ) {
+          return true;
         }
-
 
         const mutation = gql`
-        mutation OrganizationSubmissionCreate($input: OrganizationSubmissionCreateInput!) {
-          OrganizationSubmissionCreate(input: $input) {
-            id
+          mutation OrganizationSubmissionCreate(
+            $input: OrganizationSubmissionCreateInput!
+          ) {
+            OrganizationSubmissionCreate(input: $input) {
+              id
+            }
           }
-        }
-      `;
-  
-      let data =await getGraphQLClient().request(mutation, {
-        input: {
-          organizationType: 'ngo',
-          chineseCompanyName: chineseCompanyName,
-          englishCompanyName: englishCompanyName,
-          website: companyWebsite,
-          industry: industry,
-          identityId: id,
-          description: companyDescription,
-          businessRegistration: files
-        },
-      });    
-  
-      if (data.OrganizationSubmissionCreate) {
-        router.push(`/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`);
-      }
+        `;
 
+        let data = await getGraphQLClient().request(mutation, {
+          input: {
+            organizationType: "ngo",
+            chineseCompanyName: chineseCompanyName,
+            englishCompanyName: englishCompanyName,
+            website: companyWebsite,
+            industry: industry,
+            identityId: id,
+            description: companyDescription,
+            businessRegistration: files,
+          },
+        });
+
+        if (data.OrganizationSubmissionCreate) {
+          router.push(
+            `/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`
+          );
+        }
       } catch (e) {
         console.log(e);
       }
@@ -135,17 +153,17 @@ const OrganizationCompanyAdd = ({ page }) => {
   );
 
   const onFileUpload = async (e) => {
-    let uploadedFiles = await  e.target.files[0];
+    let uploadedFiles = await e.target.files[0];
     let previousFiles = files;
-    let newFiles = previousFiles.concat(uploadedFiles)
-    setFiles(newFiles)
-  }
+    let newFiles = previousFiles.concat(uploadedFiles);
+    setFiles(newFiles);
+  };
 
   const onRemoveImage = async (index) => {
     let previousFiles = files;
-    let newFiles = previousFiles.filter((file, i) => i !== index)
-    setFiles(newFiles)
-  }
+    let newFiles = previousFiles.filter((file, i) => i !== index);
+    setFiles(newFiles);
+  };
 
   return (
     <VStack py={36}>
@@ -200,7 +218,9 @@ const OrganizationCompanyAdd = ({ page }) => {
                   <Select {...register("industry")}>
                     {page?.content?.form?.industry?.options?.map((option) => {
                       return (
-                        <option key={option.id} value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
                       );
                     })}
                   </Select>
@@ -224,63 +244,75 @@ const OrganizationCompanyAdd = ({ page }) => {
             </SimpleGrid>
 
             <FormControl marginTop="20px !important">
-                <Box width="100%">
-                  <Box 
-                    w={["150px", "150px", "20%"]} 
-                    display="inline-block"
-                    border= "1px solid lightgrey"
-                    borderRadius="5px"
-                    height="140px"
-                    width="140px"
+              <Box width="100%">
+                <Box
+                  w={["150px", "150px", "20%"]}
+                  display="inline-block"
+                  border="1px solid lightgrey"
+                  borderRadius="5px"
+                  height="140px"
+                  width="140px"
+                >
+                  <FormLabel height="100%" padding="18% 28%" width="100%">
+                    <Input
+                      type="file"
+                      multiple={true}
+                      display="none"
+                      onChange={onFileUpload}
+                    />
+                    <span
+                      style={{
+                        textAlign: "center",
+                        fontSize: "30px",
+                        display: "block",
+                      }}
                     >
-                    <FormLabel 
-                      height="100%"
-                      padding="18% 28%"
-                      width="100%"
-                      >
-                      <Input type="file" multiple={true} display="none" onChange={onFileUpload}/>
-                      <span style={{textAlign: "center", fontSize: "30px", display: "block"}}>+</span>
-                      <span style={{textAlign: "center", display: "block"}}>{page?.content?.form?.businessRegistration?.label}</span>
-                    </FormLabel>
-                  </Box>
-                  <Box 
-                    w={["100%", "100%", "80%"]} 
-                    display="inline-block"
-                    verticalAlign="top">
-                      {
-
-                        files.map((file, index) => {
-                          let url = URL.createObjectURL(file)
-                          return (
-                              <span key={index}>
-                                <Image
-                                height="140px"
-                                width="140px" 
-                                display="inline-block"
-                                border= "1px solid lightgrey"
-                                src={url}></Image>
-                                <span 
-                                  style={{
-                                    position: "absolute",
-                                    marginLeft: "-27px",
-                                    background: "lightgrey",
-                                    width: "24px",
-                                    borderRadius: "50%",
-                                    marginTop: "4px",
-                                    textAlign: "center",
-                                    height: "27px"
-                                
-                                  }}
-                                  onClick={() => onRemoveImage(index)}
-                                  >x</span>
-                              </span>
-                                
-                            )    
-                        })
-                      }
-                  </Box>
+                      +
+                    </span>
+                    <span style={{ textAlign: "center", display: "block" }}>
+                      {page?.content?.form?.businessRegistration?.label}
+                    </span>
+                  </FormLabel>
                 </Box>
-                <FormHelperText>{errors?.businessRegistration?.message}</FormHelperText>
+                <Box
+                  w={["100%", "100%", "80%"]}
+                  display="inline-block"
+                  verticalAlign="top"
+                >
+                  {files.map((file, index) => {
+                    let url = URL.createObjectURL(file);
+                    return (
+                      <span key={index}>
+                        <Image
+                          height="140px"
+                          width="140px"
+                          display="inline-block"
+                          border="1px solid lightgrey"
+                          src={url}
+                        ></Image>
+                        <span
+                          style={{
+                            position: "absolute",
+                            marginLeft: "-27px",
+                            background: "lightgrey",
+                            width: "24px",
+                            borderRadius: "50%",
+                            marginTop: "4px",
+                            textAlign: "center",
+                            height: "27px",
+                          }}
+                          onClick={() => onRemoveImage(index)}
+                        >
+                          x
+                        </span>
+                      </span>
+                    );
+                  })}
+                </Box>
+              </Box>
+              <FormHelperText>
+                {errors?.businessRegistration?.message}
+              </FormHelperText>
             </FormControl>
 
             <FormControl marginTop="20px !important">

@@ -24,9 +24,12 @@ import { useLoginHook, useCredential } from "../../../utils/user";
 const PAGE_KEY = "verify_email";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,

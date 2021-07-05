@@ -23,13 +23,15 @@ import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 
-
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -57,44 +59,51 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-
-  const validate = (chineseName, englishName, dateofBirth, gender, residentDistrict, personTypes, interestedEmployee, industry, terms) => {
-    if(chineseName.trim() === '') {
+  const validate = (
+    chineseName,
+    englishName,
+    dateofBirth,
+    gender,
+    residentDistrict,
+    personTypes,
+    interestedEmployee,
+    industry,
+    terms
+  ) => {
+    if (chineseName.trim() === "") {
       setError("chinese_name", {
         type: "manual",
         message: "輸入有效的中文名稱 Enter valid chinese name! ",
       });
-      return true
-    } else if (englishName.trim() === '') {
+      return true;
+    } else if (englishName.trim() === "") {
       setError("english_name", {
         type: "manual",
         message: "輸入有效的英文名稱 Enter valid english name! ",
       });
-      return true
-    } else if (residentDistrict=== "none") {
+      return true;
+    } else if (residentDistrict === "none") {
       setError("resident_district", {
         type: "manual",
         message: "請選擇居住區 Please select a resident district! ",
       });
-      return true
+      return true;
     } else if (industry === "none") {
       setError("industry", {
         type: "manual",
         message: "請選擇行業 Please select industry! ",
       });
-      return true
+      return true;
     } else if (terms === false) {
       setError("terms", {
         type: "manual",
         message: "請接受條款和條件 Please accept T&C! ",
       });
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-   
-  }
-
+  };
 
   const onFormSubmit = useCallback(
     async ({
@@ -107,9 +116,18 @@ const IdentityPublicAdd = ({ page }) => {
       terms,
     }) => {
       try {
-
-        if(validate(chinese_name, english_name, date_of_birth, gender,  resident_district, industry, terms)) {
-          return 
+        if (
+          validate(
+            chinese_name,
+            english_name,
+            date_of_birth,
+            gender,
+            resident_district,
+            industry,
+            terms
+          )
+        ) {
+          return;
         }
         console.log(chinese_name);
         console.log(english_name);
@@ -120,33 +138,33 @@ const IdentityPublicAdd = ({ page }) => {
         console.log(terms);
 
         const mutation = gql`
-        mutation IdentityCreate($input: IdentityCreateInput!) {
-          IdentityCreate(input: $input) {
-            id
+          mutation IdentityCreate($input: IdentityCreateInput!) {
+            IdentityCreate(input: $input) {
+              id
+            }
           }
-        }
-      `;
-  
-      let data =await getGraphQLClient().request(mutation, {
-        input: {
-          userId: user.id,
-          identity: 'public',
-          chineseName: chinese_name,
-          englishName: english_name,
-          dob: date_of_birth,
-          gender: gender === "none" ? undefined : gender,
-          district: resident_district === "none" ? undefined : resident_district,
-          industry: industry === "none" ? undefined : industry,
-          tncAccept: terms,
-          email: user.email ? user.email : '',
-          phone: user.phone ?user.phone : '' 
-        },
-      });
-  
-      if(data && data.IdentityCreate) {
-        router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
-      }
+        `;
 
+        let data = await getGraphQLClient().request(mutation, {
+          input: {
+            userId: user.id,
+            identity: "public",
+            chineseName: chinese_name,
+            englishName: english_name,
+            dob: date_of_birth,
+            gender: gender === "none" ? undefined : gender,
+            district:
+              resident_district === "none" ? undefined : resident_district,
+            industry: industry === "none" ? undefined : industry,
+            tncAccept: terms,
+            email: user.email ? user.email : "",
+            phone: user.phone ? user.phone : "",
+          },
+        });
+
+        if (data && data.IdentityCreate) {
+          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -217,7 +235,9 @@ const IdentityPublicAdd = ({ page }) => {
                   <Select {...register("gender")}>
                     {page?.content?.form?.gender?.options?.map((option) => {
                       return (
-                        <option key={option.id} value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
                       );
                     })}
                   </Select>
@@ -234,7 +254,9 @@ const IdentityPublicAdd = ({ page }) => {
                     {page?.content?.form?.residentRestrict?.options?.map(
                       (option) => {
                         return (
-                          <option key={option.id} value={option.value}>{option.label}</option>
+                          <option key={option.id} value={option.value}>
+                            {option.label}
+                          </option>
                         );
                       }
                     )}
@@ -251,7 +273,9 @@ const IdentityPublicAdd = ({ page }) => {
                   <Select {...register("industry")}>
                     {page?.content?.form?.industry?.options?.map((option) => {
                       return (
-                        <option key={option.id} value={option.value}>{option.label}</option>
+                        <option key={option.id} value={option.value}>
+                          {option.label}
+                        </option>
                       );
                     })}
                   </Select>

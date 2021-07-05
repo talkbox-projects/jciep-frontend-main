@@ -27,9 +27,12 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 const PAGE_KEY = "identity_staff_add";
 
 export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
   return {
     props: {
-      page: (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {},
+      page,
+      isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -57,77 +60,83 @@ const IdentityStaffAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const validate = (contactPersonName, contactEmailAdress, contactNumber, terms) => {
-    if(contactPersonName.trim() === '') {
+  const validate = (
+    contactPersonName,
+    contactEmailAdress,
+    contactNumber,
+    terms
+  ) => {
+    if (contactPersonName.trim() === "") {
       setError("contactPersonName", {
         type: "manual",
         message: "輸入有效的聯繫人姓名 Enter valid contact person name! ",
       });
-      return true
-    } else if (contactEmailAdress.trim() === '') {
+      return true;
+    } else if (contactEmailAdress.trim() === "") {
       setError("contactEmailAdress", {
         type: "manual",
-        message: "輸入有效的聯繫電子郵件地址 Enter valid contact email address! ",
+        message:
+          "輸入有效的聯繫電子郵件地址 Enter valid contact email address! ",
       });
-      return true
-    } else if (contactNumber.trim() === '') {
+      return true;
+    } else if (contactNumber.trim() === "") {
       setError("contactNumber", {
         type: "manual",
         message: "輸入有效的聯繫電話 Enter valid contact Num! ",
       });
-      return true
+      return true;
     } else if (terms === false) {
       setError("terms", {
         type: "manual",
         message: "請接受條款和條件 Please accept T&C! ",
       });
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
-  }
+  };
 
   useEffect(() => {
-    console.log(user)
-  }, [user])
+    console.log(user);
+  }, [user]);
 
   const onFormSubmit = useCallback(
     async ({ contactPersonName, contactEmailAdress, contactNumber, terms }) => {
       try {
-
-        if(validate(contactPersonName, contactEmailAdress, contactNumber, terms)) {
-          return true
+        if (
+          validate(contactPersonName, contactEmailAdress, contactNumber, terms)
+        ) {
+          return true;
         }
 
         console.log(contactPersonName);
         console.log(contactEmailAdress);
         console.log(contactNumber);
         console.log(terms);
-        
+
         const mutation = gql`
-        mutation IdentityCreate($input: IdentityCreateInput!) {
-          IdentityCreate(input: $input) {
-            id
+          mutation IdentityCreate($input: IdentityCreateInput!) {
+            IdentityCreate(input: $input) {
+              id
+            }
           }
+        `;
+
+        let data = await getGraphQLClient().request(mutation, {
+          input: {
+            userId: user.id,
+            identity: "staff",
+            chineseName: contactPersonName,
+            englishName: contactPersonName,
+            tncAccept: terms,
+            email: contactEmailAdress,
+            phone: contactNumber,
+          },
+        });
+
+        if (data && data.IdentityCreate) {
+          router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
         }
-      `;
-  
-      let data =await getGraphQLClient().request(mutation, {
-        input: {
-          userId: user.id,
-          identity: 'staff',
-          chineseName: contactPersonName,
-          englishName: contactPersonName,
-          tncAccept: terms,
-          email: contactEmailAdress,
-          phone: contactNumber 
-        },
-      });    
-  
-      if(data && data.IdentityCreate) {
-        router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`)
-      }
-    
       } catch (e) {
         console.log(e);
       }
