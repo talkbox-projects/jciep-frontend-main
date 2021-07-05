@@ -27,6 +27,7 @@ import {
   useDisclosure,
   DrawerOverlay,
   PopoverBody,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
@@ -270,7 +271,9 @@ const Header = ({ navigation, header }) => {
             borderWidth={1}
             pr={6}
           >
-            <Image p={2} h="100%" src={navigation?.logo} />
+            <LinkOverlay as={NextLink} href="/home">
+              <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
+            </LinkOverlay>
             <Box flex={1} minW={0} w="100%" />
             <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
@@ -385,7 +388,9 @@ const Header = ({ navigation, header }) => {
         d={["block", "block", "none", "none"]}
       >
         <HStack align="center" h={16} p={3}>
-          <Image h="100%" src={navigation?.logo} />
+          <LinkOverlay as={NextLink} href="/home">
+            <Image cursor="pointer" h="100%" src={navigation?.logo} />
+          </LinkOverlay>
           <Box minW={0} w="100%" flex={1} />
           <IconButton
             onClick={mobileMenuDisclosure.onOpen}
@@ -495,6 +500,7 @@ const Header = ({ navigation, header }) => {
                               })}
                               appearance="none"
                               borderBottomWidth={3}
+                              onClick={mobileMenuDisclosure.onClose}
                             >
                               {label}
                             </Button>

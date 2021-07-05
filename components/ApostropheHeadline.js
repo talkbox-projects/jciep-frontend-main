@@ -6,7 +6,7 @@ const ApostropheHeadline = ({
   children,
 }) => {
   return (
-    <Flex align="flex-end">
+    <Flex justify="center" align="flex-end">
       <Box>
         <Box
           width="6.15px"
