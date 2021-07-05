@@ -12,6 +12,18 @@ import "slick-carousel/slick/slick-theme.css";
 
 const theme = extendTheme({
   colors: {
+    secondary: {
+      50: "#E5FFFE",
+      100: "#B8FFFD",
+      200: "#8AFFFB",
+      300: "#5CFFFA",
+      400: "#2EFFF8",
+      500: "#00FFF7",
+      600: "#00CCC5",
+      700: "#009994",
+      800: "#006663",
+      900: "#003331",
+    },
     primary: {
       50: "#fffadd",
       100: "#fcefb2",

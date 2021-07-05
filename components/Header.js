@@ -1,6 +1,7 @@
 import { Box, HStack } from "@chakra-ui/layout";
 import wordListFieldsForCMS from "../utils/tina/wordListFieldsForCMS";
 import NextLink from "next/link";
+import wordExtractor from "../utils/wordExtractor";
 import {
   Drawer,
   Accordion,
@@ -344,6 +345,23 @@ const Header = ({ navigation, header }) => {
                   </HStack>
                 )
               )}
+              <NextLink
+                href={navigation?.actionButton?.path ?? "/"}
+                target="_blank"
+              >
+                <Button
+                  variant="outline"
+                  colorScheme="secondary"
+                  borderRadius="2em"
+                  py={0.5}
+                  _focus={{ outline: "none" }}
+                  fontWeight="normal"
+                  appearance="none"
+                  borderWidth={2}
+                >
+                  {navigation?.actionButton?.label}
+                </Button>
+              </NextLink>
             </HStack>
           </HStack>
         </Container>
@@ -567,6 +585,23 @@ export default withConfigurationCMS(
                 },
               ],
             },
+            {
+              label: "路徑 Path",
+              name: "path",
+              component: "text",
+            },
+            {
+              label: "標籤 Label",
+              name: "label",
+              component: "text",
+            },
+          ],
+        },
+        {
+          name: "actionButton",
+          label: "行動按鈕 Action Button",
+          component: "group",
+          fields: [
             {
               label: "路徑 Path",
               name: "path",
