@@ -170,10 +170,10 @@ const Home = ({ setting, page }) => {
                 ({ icon, name, caption }, index) => {
                   return (
                     <GridItem key={index}>
-                      <VStack fontSize={["xl"]}>
+                      <VStack textAlign="center" fontSize={["xl"]}>
                         <Image w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
-                        <Text textAlign="center">{caption}</Text>
+                        <Text>{caption}</Text>
                       </VStack>
                     </GridItem>
                   );
@@ -463,7 +463,7 @@ const Home = ({ setting, page }) => {
                 {(page?.content?.roleIntroduction?.roles ?? []).map(
                   ({ id, description, features }) => (
                     <TabPanel px={0} key={id} py={12}>
-                      <Text w={"50%"}>
+                      <Text w={["100%", "50%"]}>
                         {(description ?? []).map(
                           ({ _template, content, textcolor, bold }, index) => {
                             switch (_template) {
@@ -500,21 +500,34 @@ const Home = ({ setting, page }) => {
                           ({ id, icon, title, caption, remark }) => (
                             <GridItem
                               as={VStack}
-                              borderWidth={1}
-                              bg="white"
+                              borderWidth={2}
+                              bg={[
+                                "white",
+                                "white",
+                                "white",
+                                "rgb(250,250,250)",
+                              ]}
+                              boxShadow={["lg", "lg", "lg", "none"]}
+                              borderColor={[
+                                "transparent",
+                                "transparent",
+                                "transparent",
+                                "gray.300",
+                              ]}
+                              transition="all 0.2s"
                               _hover={{
                                 boxShadow: "lg",
                                 bg: "white",
-                                opacity: 1,
+                                borderColor: "transparent",
                               }}
                               borderRadius={16}
-                              opacity={0.5}
                               key={id}
                               px={8}
                               pt={12}
                               pb={8}
                               align="center"
                               textAlign="center"
+                              cursor="default"
                             >
                               <Image w={16} src={icon}></Image>
                               <Text fontSize={"2xl"} fontWeight="bold">
