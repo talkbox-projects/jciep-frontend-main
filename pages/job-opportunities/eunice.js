@@ -15,6 +15,7 @@ import {
   Wrap,
   Link,
   Button,
+  Stack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
@@ -85,15 +86,15 @@ const JobOpportunities = ({ page }) => {
         (industry, index, arr) =>
           `${industry}${index === arr.length - 1 ? "" : "，"}`
       ),
-    [(page, wordExtractor)] // FIXME: comma for chinese / eng)
+    [page, wordExtractor] // FIXME: comma for chinese / eng
   );
 
   const details = (
     <>
-      <HStack align="flex-end" spacing={4}>
+      <Stack spacing={2}>
         {job?.companyLogo && <Image src={job?.companyLogo} w="120px" />}
         <Text fontSize={["lg"]}>{job?.companyName}</Text>
-      </HStack>
+      </Stack>
       <Text fontSize={["2xl"]} pb={3} fontWeight="bold">
         {job?.title}
       </Text>
@@ -254,10 +255,10 @@ const JobOpportunities = ({ page }) => {
             })}
             borderRadius={8}
           >
-            <HStack align="flex-end" spacing={2}>
+            <Stack spacing={2}>
               {job?.companyLogo && <Image src={job?.companyLogo} w="60px" />}
               <Text fontSize={["md"]}>{job?.companyName}</Text>
-            </HStack>
+            </Stack>
             <Text pb={3} fontWeight="bold">
               {job?.title}
             </Text>
@@ -282,7 +283,9 @@ const JobOpportunities = ({ page }) => {
               <Box flex={1} minW={0} w="100%">
                 <HStack>
                   <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
-                  <Text>{jobLocationRenderer(job)}</Text>
+                  <Text isTruncated maxW="100%">
+                    {jobLocationRenderer(job)}
+                  </Text>
                 </HStack>
               </Box>
               <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
