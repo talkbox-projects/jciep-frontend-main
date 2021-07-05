@@ -6,7 +6,7 @@ export const getMediaBucket = () =>
     bucketName: "media",
   });
 
-const createFile = async (stream, { filename, options }) => {
+export const createFile = async (stream, { filename, options }) => {
   const bucket = getMediaBucket();
   const uploadStream = bucket.openUploadStream(filename, options);
 

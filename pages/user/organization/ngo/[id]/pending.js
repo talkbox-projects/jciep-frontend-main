@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
+import { useRouter } from "next/router";
 
 const PAGE_KEY = "organization_ngo_pending";
 
@@ -26,6 +27,9 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationNgoPending = ({ page }) => {
+
+  const router = useRouter();
+  const {id} = router.query;
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>

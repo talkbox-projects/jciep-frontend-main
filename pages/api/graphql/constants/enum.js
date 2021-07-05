@@ -27,6 +27,26 @@ export const identityTypes = {
   pwd: { en: "Talents/Carer", zh: "多元人才/照顧者" },
 };
 
+export const organizationStatus = {
+  pendingApproval : {en: "Pending Approval", zh: "待批准"},
+  approved: {en: "Approved", zh: "官方認可"},
+  rejected: {en: "Rejected", zh: "拒絕了"},
+  resubmitRequired: {en: "Resubmit Required", zh: "需要重新提交"}
+}
+
+export const pwdType = {
+  hearingImpairment: {en: "Hearing Impairment", zh: "聽力障礙"},
+  visualImpairment: {en: "Visual Impairment", zh: "視力障礙"},
+  speechImpairment: {en: "Speech Impairment", zh: "言語障礙" },
+  physicalImpairment: {en: "Physical Impairment", zh: "肢體傷殘"},
+  autism: {en: "Autism", zh: "自閉症"},
+  mentalIllnessMoodDisorder: {en: "Mental Illness / Mood Disorder", zh: "精神病/情緒病"},
+  intellectualDisability: {en: "Intellectual Disability", zh: "智能障礙"},
+  visceralDisabilityPersonswithChronicDiseases: {en: "Visceral Disability / Persons with Chronic Diseases", zh: "器官殘障/長期病患"},
+  specificLearningDifficulties: {en: "Specific Learning Difficulties", zh: "特殊學習困難"},
+  attentionDeficitHyperactivityDisorder: {en: "Attention Deficit / Hyperactivity Disorder", zh: "注意力不足/過度活躍症"}
+}
+
 export const genders = {
   male: { en: "Male", zh: "男性" },
   female: { en: "Female", zh: "女性" },
@@ -38,6 +58,11 @@ export const employementModes = {
   fullTime: { en: "Full time", zh: "全職" },
   partTime: { en: "Part time", zh: "兼職" },
 };
+
+export const organizationType = {
+  ngo: {en: "NGO", zh: "非政府組織"},
+  company: {en: "Company", zh: "公司"}
+}
 
 export const writtenLanguage = {
   chinese: { en: "Chinese", zh: "中文" },

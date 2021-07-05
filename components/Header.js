@@ -96,6 +96,7 @@ const Header = ({ navigation, header }) => {
         const mutation = gql`
           mutation UserGet($token: String!) {
             UserGet(token: $token) {
+              id
               email
               identities {
                 id
@@ -104,8 +105,10 @@ const Header = ({ navigation, header }) => {
           }
         `;
         const data = await getGraphQLClient().request(mutation, { token });
+        console.log(data)
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
+        console.log(e)
         removeCredential();
       }
     })();

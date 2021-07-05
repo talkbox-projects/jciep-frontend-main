@@ -52,9 +52,23 @@ const LoginModal = () => {
 
   const toast = useToast();
 
-  const onPhoneLogin = useCallback(({ phone }) => {
+  const onPhoneLogin = useCallback(async ({ phone }) => {
+    const mutation = gql`
+    mutation UserPhoneVerify($phone: String!) {
+      UserPhoneVerify(phone: $phone)
+    }
+  `;
+  let result = await getGraphQLClient().request(mutation, { phone });
+  if (result.UserPhoneVerify) {
+    
     otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
     loginModalDisclosure.onClose();
+  } else {
+    setError("phone", {
+      message: getWording("login.login_error_message"),
+    });
+  }
+  
   }, []);
   
   const onEmailLogin = useCallback(async ({ email, password }) => {
@@ -64,6 +78,7 @@ const LoginModal = () => {
           UserLogin(input: $input) {
             token
             user {
+              id
               email
               identities {
                 id

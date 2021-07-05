@@ -18,6 +18,7 @@ export default gql`
   }
 
   type User {
+    id: ID
     phone: String
     email: String
     facebookId: String
@@ -77,7 +78,7 @@ export default gql`
   }
 
   type Identity {
-    id: ID!
+    id: ID
     type: IdentityType!
     chineseName: String!
     englishName: String!
