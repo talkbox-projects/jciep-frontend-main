@@ -31,7 +31,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: File
-    industry: EnumIndustry
+    industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
@@ -53,7 +53,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: File
-    industry: EnumIndustry
+    industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
@@ -73,7 +73,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: [FileInput]
-    industry: EnumIndustry
+    industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
@@ -92,7 +92,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: [FileInput]
-    industry: EnumIndustry
+    industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String

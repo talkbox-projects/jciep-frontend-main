@@ -40,6 +40,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-multi-carousel": "^2.6.3",
     "react-responsive-carousel": "^3.2.18",
+    "react-select": "^4.3.1",
     "react-slick": "^0.28.1",
     "react-tinacms-editor": "^0.41.1",
     "react-tinacms-inline": "^0.41.1",

@@ -113,14 +113,13 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: EnumDistrict
-    pwdType: EnumPwdType
-    interestedEmploymentMode: EnumEmploymentMode
+    pwdType: [EnumPwdType]
+    interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     industry: EnumIndustry
     tncAccept: Boolean
     email: String
     phone: String
-
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]

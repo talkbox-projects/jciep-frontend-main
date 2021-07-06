@@ -7,7 +7,6 @@ import {
   Input,
   SimpleGrid,
   GridItem,
-  Select,
   Checkbox,
   FormHelperText,
   FormLabel,
@@ -15,8 +14,9 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
+import ReactSelect from "react-select";
 
 import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
@@ -52,44 +52,22 @@ export const getServerSideProps = async (context) => {
 const OrganizationCompanyAdd = ({ page }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
+  const [fileError, setFileError] = useState('')
   const { id } = router.query;
 
   const {
     handleSubmit,
     setError,
     register,
+    control,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const validate = (
-    chineseCompanyName,
-    englishCompanyName,
-    industry,
-    companyWebsite,
-    companyDescription
-  ) => {
-    if (chineseCompanyName.trim() === "") {
-      setError("chineseCompanyName", {
-        type: "manual",
-        message: "輸入有效的中國公司名稱 Enter valid chinese company name! ",
-      });
-      return true;
-    } else if (englishCompanyName.trim() === "") {
-      setError("englishCompanyName", {
-        type: "manual",
-        message: "輸入有效的英文公司名稱 Enter valid english company name! ",
-      });
-      return true;
-    } else if (files.length < 1) {
+  const validate = () => {
+    if (files.length < 1) {
       setError("businessRegistration", {
         type: "manual",
         message: "上傳一個文件 upload a file! ",
-      });
-      return true;
-    } else if (industry.trim() === "none") {
-      setError("industry", {
-        type: "manual",
-        message: "選擇行業 Select a industry! ",
       });
       return true;
     } else {
@@ -106,16 +84,9 @@ const OrganizationCompanyAdd = ({ page }) => {
       companyDescription,
     }) => {
       try {
-        if (
-          validate(
-            chineseCompanyName,
-            englishCompanyName,
-            industry,
-            companyWebsite,
-            companyDescription
-          )
-        ) {
-          return true;
+
+        if(validate()){
+          return 
         }
 
         const mutation = gql`
@@ -134,7 +105,7 @@ const OrganizationCompanyAdd = ({ page }) => {
             chineseCompanyName: chineseCompanyName,
             englishCompanyName: englishCompanyName,
             website: companyWebsite,
-            industry: industry,
+            industry: industry.map(({value}) => ({value}).value),
             identityId: id,
             description: companyDescription,
             businessRegistration: files,
@@ -156,6 +127,7 @@ const OrganizationCompanyAdd = ({ page }) => {
     let uploadedFiles = await e.target.files[0];
     let previousFiles = files;
     let newFiles = previousFiles.concat(uploadedFiles);
+    setFileError('')
     setFiles(newFiles);
   };
 
@@ -184,47 +156,52 @@ const OrganizationCompanyAdd = ({ page }) => {
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.chineseCompanyName}
+                    {page?.content?.form?.chineseCompanyName} <Text as="span" color="red">*</Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chineseCompanyName")}
+                    {...register("chineseCompanyName", {required: true})}
                   />
                   <FormHelperText>
-                    {errors?.chineseCompanyName?.message}
+                    {errors?.chineseCompanyName?.type === "required" && <Text color="red">輸入有效的中國公司名稱 Enter valid chinese company name!</Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.englishCompanyName}
+                    {page?.content?.form?.englishCompanyName} <Text as="span" color="red">*</Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("englishCompanyName")}
+                    {...register("englishCompanyName", {required: true})}
                   />
                   <FormHelperText>
-                    {errors?.englishCompanyName?.message}
+                    {errors?.englishCompanyName?.type === "required" && <Text color="red">輸入有效的英文公司名稱 Enter valid english company name!</Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
 
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.industry?.label}</FormLabel>
-                  <Select {...register("industry")}>
-                    {page?.content?.form?.industry?.options?.map((option) => {
-                      return (
-                        <option key={option.id} value={option.value}>
-                          {option.label}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <FormHelperText>{errors?.industry?.message}</FormHelperText>
+                  <FormLabel>{page?.content?.form?.industry?.label} <Text as="span" color="red">*</Text></FormLabel>
+                  
+                  <Controller
+                    name="industry"
+                    isClearable
+                    control={control}
+                    rules={{required:true}}
+                    render={({ field }) => (
+                      <ReactSelect
+                        {...field}
+                        isMulti
+                        options={page?.content?.form?.industry?.options.map(({label, value}) => ({label, value}))}
+                      />
+                    )}
+                  />
+                  <FormHelperText >{errors?.industry?.type === "required" && <Text color="red">請選擇行業 Please select industry!</Text>}</FormHelperText>
                 </FormControl>
               </GridItem>
 
@@ -236,9 +213,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                     placeholder=""
                     {...register("companyWebsite")}
                   />
-                  <FormHelperText>
-                    {errors?.companyWebsite?.message}
-                  </FormHelperText>
+                  <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>
@@ -251,9 +226,11 @@ const OrganizationCompanyAdd = ({ page }) => {
                   border="1px solid lightgrey"
                   borderRadius="5px"
                   height="140px"
+                  
                   width="140px"
                 >
-                  <FormLabel height="100%" padding="18% 28%" width="100%">
+                  <FormLabel height="100%" padding="18% 28%" width="100%" background= "lightgrey"
+                  cursor="pointer">
                     <Input
                       type="file"
                       multiple={true}
@@ -298,6 +275,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                             width: "24px",
                             borderRadius: "50%",
                             marginTop: "4px",
+                            cursor: "pointer",
                             textAlign: "center",
                             height: "27px",
                           }}
@@ -310,8 +288,8 @@ const OrganizationCompanyAdd = ({ page }) => {
                   })}
                 </Box>
               </Box>
-              <FormHelperText>
-                {errors?.businessRegistration?.message}
+              <FormHelperText color="red">
+                {fileError}
               </FormHelperText>
             </FormControl>
 

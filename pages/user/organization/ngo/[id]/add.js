@@ -59,37 +59,37 @@ const OrganizationNgoAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const validate = (
-    chineseOrganizationName,
-    englishOrganizationName,
-    contactNumberngoWebsite,
-    ngoDescription,
-    terms
-  ) => {
-    if (chineseOrganizationName.trim() === "") {
-      setError("chineseOrganizationName", {
-        type: "manual",
-        message:
-          "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
-      });
-      return true;
-    } else if (englishOrganizationName.trim() === "") {
-      setError("englishOrganizationName", {
-        type: "manual",
-        message:
-          "輸入有效的英文組織名稱 Enter valid english organization name! ",
-      });
-      return true;
-    } else if (terms === false) {
-      setError("terms", {
-        type: "manual",
-        message: "請接受條款和條件 Please accept T&C! ",
-      });
-      return true;
-    } else {
-      return false;
-    }
-  };
+  // const validate = (
+  //   chineseOrganizationName,
+  //   englishOrganizationName,
+  //   contactNumberngoWebsite,
+  //   ngoDescription,
+  //   terms
+  // ) => {
+  //   if (chineseOrganizationName.trim() === "") {
+  //     setError("chineseOrganizationName", {
+  //       type: "manual",
+  //       message:
+  //         "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
+  //     });
+  //     return true;
+  //   } else if (englishOrganizationName.trim() === "") {
+  //     setError("englishOrganizationName", {
+  //       type: "manual",
+  //       message:
+  //         "輸入有效的英文組織名稱 Enter valid english organization name! ",
+  //     });
+  //     return true;
+  //   } else if (terms === false) {
+  //     setError("terms", {
+  //       type: "manual",
+  //       message: "請接受條款和條件 Please accept T&C! ",
+  //     });
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   const onFormSubmit = useCallback(
     async ({
@@ -100,17 +100,7 @@ const OrganizationNgoAdd = ({ page }) => {
       terms,
     }) => {
       try {
-        if (
-          validate(
-            chineseOrganizationName,
-            englishOrganizationName,
-            ngoWebsite,
-            ngoDescription,
-            terms
-          )
-        ) {
-          return true;
-        }
+       
 
         const mutation = gql`
           mutation OrganizationSubmissionCreate(
@@ -128,6 +118,7 @@ const OrganizationNgoAdd = ({ page }) => {
             chineseCompanyName: chineseOrganizationName,
             englishCompanyName: englishOrganizationName,
             website: ngoWebsite,
+            description: ngoDescription,
             tncAccept: terms,
             identityId: id,
           },
@@ -162,31 +153,33 @@ const OrganizationNgoAdd = ({ page }) => {
             <SimpleGrid columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.chineseOrganizationName}
-                  </FormLabel>
+                  <FormLabel>{page?.content?.form?.chineseOrganizationName} <Text as="span" color="red">*</Text></FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chineseOrganizationName")}
+                    {...register("chineseOrganizationName", {
+                      required: true
+                    })}
                   />
                   <FormHelperText>
-                    {errors?.chineseOrganizationName?.message}
+                    {errors?.chineseOrganizationName?.type === "required" && <Text color="red">輸入有效的中文組織名稱 Enter valid chinese organization name!</Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.englishOrganizationName}
+                    {page?.content?.form?.englishOrganizationName} <Text as="span" color="red">*</Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("englishOrganizationName")}
+                    {...register("englishOrganizationName", {
+                      required: true
+                    })}
                   />
                   <FormHelperText>
-                    {errors?.englishOrganizationName?.message}
+                    {errors?.englishOrganizationName?.type === "required" && <Text color="red">輸入有效的英文組織名稱 Enter valid english organization name!</Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -214,10 +207,12 @@ const OrganizationNgoAdd = ({ page }) => {
             </FormControl>
 
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms")}>
+              <Checkbox colorScheme="green" {...register("terms", {
+                required: true
+              })}>
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText>{errors?.terms?.message}</FormHelperText>
+              <FormHelperText>{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">

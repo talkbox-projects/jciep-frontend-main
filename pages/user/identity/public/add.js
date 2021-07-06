@@ -7,13 +7,14 @@ import {
   Input,
   SimpleGrid,
   GridItem,
-  Select,
   Checkbox,
   FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { useForm , Controller} from "react-hook-form";
+import ReactSelect from "react-select";
+
 
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
@@ -56,6 +57,7 @@ const IdentityPublicAdd = ({ page }) => {
     handleSubmit,
     setError,
     register,
+    control,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -116,26 +118,7 @@ const IdentityPublicAdd = ({ page }) => {
       terms,
     }) => {
       try {
-        if (
-          validate(
-            chinese_name,
-            english_name,
-            date_of_birth,
-            gender,
-            resident_district,
-            industry,
-            terms
-          )
-        ) {
-          return;
-        }
-        console.log(chinese_name);
-        console.log(english_name);
-        console.log(date_of_birth);
-        console.log(gender);
-        console.log(resident_district);
-        console.log(industry);
-        console.log(terms);
+        
 
         const mutation = gql`
           mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -152,10 +135,9 @@ const IdentityPublicAdd = ({ page }) => {
             chineseName: chinese_name,
             englishName: english_name,
             dob: date_of_birth,
-            gender: gender === "none" ? undefined : gender,
-            district:
-              resident_district === "none" ? undefined : resident_district,
-            industry: industry === "none" ? undefined : industry,
+            gender:  gender.value,
+            district: resident_district.value,
+            interestedIndustry: industry.map(({value}) => ({value}).value),
             tncAccept: terms,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",
@@ -192,27 +174,27 @@ const IdentityPublicAdd = ({ page }) => {
             <SimpleGrid pt={16} columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.chineseName}</FormLabel>
+                  <FormLabel>{page?.content?.form?.chineseName} <Text as="span" color="red">*</Text></FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chinese_name")}
+                    {...register("chinese_name", {required: true})}
                   />
                   <FormHelperText>
-                    {errors?.chinese_name?.message}
+                    {errors?.chinese_name?.type === "required" && <Text color="red" color="red">輸入有效的中文名稱 Enter valid chinese name!</Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.englishName}</FormLabel>
+                  <FormLabel>{page?.content?.form?.englishName} <Text as="span" color="red">*</Text></FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("english_name")}
+                    {...register("english_name", {required: true})}
                   />
                   <FormHelperText>
-                    {errors?.english_name?.message}
+                    {errors?.english_name?.type === "required" && <Text color="red">輸入有效的英文名稱 Enter valid english name! </Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -232,16 +214,18 @@ const IdentityPublicAdd = ({ page }) => {
               <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.gender?.label}</FormLabel>
-                  <Select {...register("gender")}>
-                    {page?.content?.form?.gender?.options?.map((option) => {
-                      return (
-                        <option key={option.id} value={option.value}>
-                          {option.label}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <FormHelperText>{errors?.gender?.message}</FormHelperText>
+                    <Controller
+                      name="gender"
+                      isClearable
+                      control={control}
+                      render={({ field }) => (
+                        <ReactSelect
+                          {...field}
+                          options={page?.content?.form?.gender?.options.map(({label, value}) => ({label, value}))}
+                        />
+                      )}
+                    />
+                  <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
 
@@ -250,44 +234,46 @@ const IdentityPublicAdd = ({ page }) => {
                   <FormLabel>
                     {page?.content?.form?.residentRestrict?.label}
                   </FormLabel>
-                  <Select {...register("resident_district")}>
-                    {page?.content?.form?.residentRestrict?.options?.map(
-                      (option) => {
-                        return (
-                          <option key={option.id} value={option.value}>
-                            {option.label}
-                          </option>
-                        );
-                      }
+                  <Controller
+                    name="resident_district"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        {...field}
+                        options={page?.content?.form?.residentRestrict?.options.map(({label, value}) => ({label, value}))}
+                      />
                     )}
-                  </Select>
-                  <FormHelperText>
-                    {errors?.resident_district?.message}
-                  </FormHelperText>
+                  />
+                  <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
 
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.industry?.label}</FormLabel>
-                  <Select {...register("industry")}>
-                    {page?.content?.form?.industry?.options?.map((option) => {
-                      return (
-                        <option key={option.id} value={option.value}>
-                          {option.label}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <FormHelperText>{errors?.industry?.message}</FormHelperText>
+                  <FormLabel>{page?.content?.form?.industry?.label} <Text as="span" color="red">*</Text></FormLabel>
+                  <Controller
+                    name="industry"
+                    isClearable
+                    control={control}
+                    rules={{required: true}}
+                    render={({ field }) => (
+                      <ReactSelect
+                        {...field}
+                        isMulti
+                        options={page?.content?.form?.industry?.options.map(({label, value}) => ({label, value}))}
+                      />
+                    )}
+                  />
+                  <FormHelperText >{errors?.industry?.type === "required" && <Text color="red">請選擇行業 Please select industry! </Text>} </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms")}>
+              <Checkbox colorScheme="green" {...register("terms", {required: true})}>
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText>{errors?.terms?.message}</FormHelperText>
+              <FormHelperText>{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">
