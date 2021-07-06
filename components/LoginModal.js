@@ -49,28 +49,25 @@ const LoginModal = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-
   const toast = useToast();
 
   const onPhoneLogin = useCallback(async ({ phone }) => {
     const mutation = gql`
-    mutation UserPhoneVerify($phone: String!) {
-      UserPhoneVerify(phone: $phone)
+      mutation UserPhoneVerify($phone: String!) {
+        UserPhoneVerify(phone: $phone)
+      }
+    `;
+    let result = await getGraphQLClient().request(mutation, { phone });
+    if (result.UserPhoneVerify) {
+      otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
+      loginModalDisclosure.onClose();
+    } else {
+      setError("phone", {
+        message: getWording("login.login_error_message"),
+      });
     }
-  `;
-  let result = await getGraphQLClient().request(mutation, { phone });
-  if (result.UserPhoneVerify) {
-    
-    otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
-    loginModalDisclosure.onClose();
-  } else {
-    setError("phone", {
-      message: getWording("login.login_error_message"),
-    });
-  }
-  
   }, []);
-  
+
   const onEmailLogin = useCallback(async ({ email, password }) => {
     try {
       const mutation = gql`
@@ -82,6 +79,58 @@ const LoginModal = () => {
               email
               identities {
                 id
+                type
+                chineseName
+                englishName
+                dob
+                gender
+                district
+                pwdType
+                interestedEmploymentMode
+                interestedIndustry
+                industry
+                tncAccept
+                email
+                phone
+                profilePic {
+                  url
+                }
+                bannerMedia {
+                  url
+                }
+                yearOfExperience
+                biography
+                portfolio {
+                  id
+                  url
+                  title
+                  description
+                }
+                writtenLanguage
+                oralLanguage
+                hobby
+                education {
+                  school
+                  degree
+                  fieldOfStudy
+                  startDatetime
+                  endDatetime
+                  present
+                }
+                employment {
+                  employmentType
+                  companyName
+                  industry
+                  startDatetime
+                  endDatetime
+                  present
+                }
+                activity {
+                  name
+                  description
+                  startDatetime
+                  endDatetime
+                }
               }
             }
           }

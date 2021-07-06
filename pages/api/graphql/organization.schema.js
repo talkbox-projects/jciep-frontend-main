@@ -105,9 +105,10 @@ export default gql`
 
     chineseCompanyName: String
     englishCompanyName: String
-    website: String
-    businessRegistration: FileInput
     industry: EnumIndustry
+    industryOther: String
+    website: String
+    businessRegistration: [FileInput]
     description: String
     district: District
     companyBenefit: String

@@ -109,6 +109,58 @@ const Header = ({ navigation, header, isLangAvailable }) => {
               email
               identities {
                 id
+                type
+                chineseName
+                englishName
+                dob
+                gender
+                district
+                pwdType
+                interestedEmploymentMode
+                interestedIndustry
+                industry
+                tncAccept
+                email
+                phone
+                profilePic {
+                  url
+                }
+                bannerMedia {
+                  url
+                }
+                yearOfExperience
+                biography
+                portfolio {
+                  id
+                  url
+                  title
+                  description
+                }
+                writtenLanguage
+                oralLanguage
+                hobby
+                education {
+                  school
+                  degree
+                  fieldOfStudy
+                  startDatetime
+                  endDatetime
+                  present
+                }
+                employment {
+                  employmentType
+                  companyName
+                  industry
+                  startDatetime
+                  endDatetime
+                  present
+                }
+                activity {
+                  name
+                  description
+                  startDatetime
+                  endDatetime
+                }
               }
             }
           }

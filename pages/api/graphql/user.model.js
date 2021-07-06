@@ -111,10 +111,12 @@ const identitySchema = Schema({
       enum: Object.keys(industries),
     },
   ],
-  industry: {
-    type: String,
-    enum: Object.keys(industries),
-  },
+  industry: [
+    {
+      type: String,
+      enum: Object.keys(industries),
+    },
+  ],
   biography: {
     type: Object,
   },
@@ -151,8 +153,8 @@ const identitySchema = Schema({
   employment: [
     {
       employmentType: Object,
-      CompanyName: String,
-      Industry: Object,
+      companyName: String,
+      industry: Object,
       startDatetime: Date,
       endDatetime: Date,
       present: Boolean,

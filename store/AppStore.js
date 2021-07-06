@@ -85,8 +85,6 @@ const [AppProvider, useAppContext] = constate((props) => {
     [user, identityId]
   );
 
-  console.log(user, identityId);
-
   return {
     wordings,
     loginModalDisclosure,

@@ -33,8 +33,8 @@ export default gql`
 
   type Employment {
     employmentType: EnumEmploymentMode
-    CompanyName: String
-    Industry: EnumIndustry
+    companyName: String
+    industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -58,8 +58,8 @@ export default gql`
 
   input EmploymentInput {
     employmentType: EnumEmploymentMode
-    CompanyName: String
-    Industry: EnumIndustry
+    companyName: String
+    industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -80,17 +80,20 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: EnumDistrict
-    pwdType: EnumPwdType
-    interestedEmploymentMode: EnumEmploymentMode
+    pwdType: [EnumPwdType]
+    interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
-    industry: EnumIndustry
+    industry: [EnumIndustry]
     tncAccept: Boolean
+
     email: String
     phone: String
 
     profilePic: Media
     bannerMedia: Media
-    # yearOfExperience: EnumYearOfExperience
+    caption: String
+    educationLevel: EnumDegree
+    yearOfExperience: EnumYearOfExperience
 
     biography: JsonContent
     portfolio: [Media]
@@ -148,6 +151,18 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
+
+    profilePic: MediaInput
+    bannerMedia: MediaInput
+    caption: String
+    educationLevel: EnumDegree
+    yearOfExperience: EnumYearOfExperience
+
+    profilePic: MediaInput
+    bannerMedia: MediaInput
+    caption: String
+    educationLevel: EnumDegree
+    yearOfExperience: EnumYearOfExperience
 
     biography: JsonContent
     portfolio: [MediaInput]
