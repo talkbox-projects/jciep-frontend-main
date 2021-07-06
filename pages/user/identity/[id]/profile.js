@@ -1,4 +1,5 @@
-import { Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import { useAppContext } from "../../../../store/AppStore";
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
@@ -28,9 +29,37 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityProfile = () => {
+const PwdProfileSection = () => {
   return (
-    <VStack py={36}>
+    <VStack>
+      <Box>PwdProfileSection</Box>
+    </VStack>
+  );
+};
+
+const PublicProfileSection = () => {
+  return (
+    <VStack>
+      <Box>PublicProfileSection</Box>
+    </VStack>
+  );
+};
+
+const IdentityProfile = () => {
+  const { identity } = useAppContext();
+  console.log(identity);
+  return (
+    <VStack pt={64} pb={36}>
+      <HStack>
+        <VStack>
+          <Box boxShadow="lg"></Box>
+          <Box boxShadow="lg"></Box>
+        </VStack>
+        <VStack>
+          <Box boxShadow="lg"></Box>
+          <Box boxShadow="lg"></Box>
+        </VStack>
+      </HStack>
       <Text>Identity Profile</Text>
     </VStack>
   );

@@ -94,9 +94,13 @@ const Header = ({ navigation, header, isLangAvailable }) => {
   const cms = useCMS();
   const [setCredential, removeCredential] = useCredential();
 
-  const onIdentitySwitch = useCallback((identityId) => {
-    setIdentityId(identityId);
-  }, []);
+  const onIdentitySwitch = useCallback(
+    (identityId) => {
+      // setIdentityId(identityId);
+      router.push(`/user/identity/${identityId}/profile`);
+    },
+    [router]
+  );
 
   useEffect(() => {
     (async () => {
@@ -247,7 +251,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                                 cursor="pointer"
                                 p={2}
                                 spacing={4}
-                                onClick={onIdentitySwitch}
+                                onClick={() => onIdentitySwitch(identity.id)}
                               >
                                 <Avatar size="sm"></Avatar>
                                 <VStack spacing={0}>
@@ -265,21 +269,19 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                                 )}
                               </HStack>
                             ))}
-                            {!user?.identities?.length && (
-                              <Link href="/user/identity/select">
-                                <Button
-                                  size="sm"
-                                  mt={4}
-                                  w="100%"
-                                  alignSelf="center"
-                                  variant="ghost"
-                                  color="gray.500"
-                                  textAlign="center"
-                                >
-                                  {getWording("header.add_identity_label")}
-                                </Button>
-                              </Link>
-                            )}
+                            <Link href="/user/identity/select">
+                              <Button
+                                size="sm"
+                                mt={4}
+                                w="100%"
+                                alignSelf="center"
+                                variant="ghost"
+                                color="gray.500"
+                                textAlign="center"
+                              >
+                                {getWording("header.add_identity_label")}
+                              </Button>
+                            </Link>
                           </VStack>
                           <Divider />
                           <VStack mt={2} align="stretch" spacing={2}>

@@ -1,7 +1,12 @@
 import { model, models, Schema } from "mongoose";
-import { districts, genders, identityTypes , employementModes, industry, pwdType} from "./constants/enum";
 import bcrypt from "bcrypt";
 import { uuidv4 } from "../../../utils/uuid";
+import districts from "./enum/districts";
+import genders from "./enum/genders";
+import identityTypes from "./enum/identityTypes";
+import employmentModes from "./enum/employmentModes";
+import industries from "./enum/industries";
+import pwdTypes from "./enum/pwdTypes";
 
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
@@ -68,7 +73,7 @@ userSchema.methods.comparePassword = async function (password) {
 const identitySchema = Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
   },
   type: {
     type: String,
@@ -78,10 +83,10 @@ const identitySchema = Schema({
   chineseName: String,
   englishName: String,
   email: {
-    type: String
+    type: String,
   },
   phone: {
-    type: String
+    type: String,
   },
   dob: Date,
   gender: {
@@ -94,44 +99,44 @@ const identitySchema = Schema({
   },
   employementMode: {
     type: String,
-    enum: Object.keys(employementModes)
+    enum: Object.keys(employmentModes),
   },
   pwdType: {
     type: String,
-    enum: Object.keys(pwdType)
+    enum: Object.keys(pwdTypes),
   },
   interestedIndustry: [
     {
       type: String,
-      enum: Object.keys(industry)
-    }
+      enum: Object.keys(industries),
+    },
   ],
   industry: {
     type: String,
-    enum: Object.keys(industry)
+    enum: Object.keys(industries),
   },
   biography: {
-    type: Object
+    type: Object,
   },
   portfolio: [
     {
       input: Object,
-      title: String,  
-      description: String
-    }
+      title: String,
+      description: String,
+    },
   ],
   writtenLanguage: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   oralLanguage: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   hobby: {
-    type: String
+    type: String,
   },
   education: [
     {
@@ -140,8 +145,8 @@ const identitySchema = Schema({
       fieldOfStudy: String,
       startDatetime: Date,
       endDatetime: Date,
-      present: Boolean
-    }
+      present: Boolean,
+    },
   ],
   employment: [
     {
@@ -150,20 +155,20 @@ const identitySchema = Schema({
       Industry: Object,
       startDatetime: Date,
       endDatetime: Date,
-      present: Boolean
-    }
+      present: Boolean,
+    },
   ],
   activity: [
     {
       name: String,
       description: String,
       startDatetime: Date,
-      endDatetime: Date
-    }
+      endDatetime: Date,
+    },
   ],
   tncAccept: {
-    type: Boolean
-  }
+    type: Boolean,
+  },
 });
 
 export const Identity = models["Identity"] ?? model("Identity", identitySchema);

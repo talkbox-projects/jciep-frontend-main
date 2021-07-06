@@ -1,14 +1,9 @@
 import { gql } from "apollo-server-core";
 
 export default gql`
-  # graphql-upload
-
   enum JoinStatus {
     binded
     invited
-  }
-  enum PwdType {
-    adhd
   }
 
   type OrganizationRole {
@@ -37,9 +32,9 @@ export default gql`
   }
 
   type Employment {
-    employmentType: EmploymentMode
+    employmentType: EnumEmploymentMode
     CompanyName: String
-    Industry: Industry
+    Industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -54,7 +49,7 @@ export default gql`
 
   input EducationInput {
     school: String
-    degree: Degree
+    degree: EnumDegree
     fieldOfStudy: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -62,9 +57,9 @@ export default gql`
   }
 
   input EmploymentInput {
-    employmentType: EmploymentMode
+    employmentType: EnumEmploymentMode
     CompanyName: String
-    Industry: Industry
+    Industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -79,24 +74,28 @@ export default gql`
 
   type Identity {
     id: ID
-    type: IdentityType!
+    type: EnumIdentityType!
     chineseName: String!
     englishName: String!
     dob: Timestamp
-    gender: Gender
-    district: District
-    pwdType: PwdType
-    interestedEmploymentMode: EmploymentMode
-    interestedIndustry: [Industry]
-    industry: Industry
+    gender: EnumGender
+    district: EnumDistrict
+    pwdType: EnumPwdType
+    interestedEmploymentMode: EnumEmploymentMode
+    interestedIndustry: [EnumIndustry]
+    industry: EnumIndustry
     tncAccept: Boolean
     email: String
     phone: String
 
+    profilePic: Media
+    bannerMedia: Media
+    # yearOfExperience: EnumYearOfExperience
+
     biography: JsonContent
     portfolio: [Media]
-    writtenLanguage: [WrittenLanguage]
-    oralLanguage: [WrittenLanguage]
+    writtenLanguage: [EnumWrittenLanguage]
+    oralLanguage: [EnumOralLanguage]
     hobby: String
     education: [Education]
     employment: [Employment]
@@ -108,24 +107,24 @@ export default gql`
   input IdentityCreateInput {
     userId: ID
     inviteToken: String
-    identity: IdentityType!
+    identity: EnumIdentityType!
     chineseName: String!
     englishName: String!
     dob: Timestamp
-    gender: Gender
-    district: District
-    pwdType: PwdType
-    interestedEmploymentMode: EmploymentMode
-    interestedIndustry: [Industry]
-    industry: Industry
+    gender: EnumGender
+    district: EnumDistrict
+    pwdType: EnumPwdType
+    interestedEmploymentMode: EnumEmploymentMode
+    interestedIndustry: [EnumIndustry]
+    industry: EnumIndustry
     tncAccept: Boolean
     email: String
     phone: String
 
     biography: JsonContent
     portfolio: [MediaInput]
-    writtenLanguage: [WrittenLanguage]
-    oralLanguage: [WrittenLanguage]
+    writtenLanguage: [EnumWrittenLanguage]
+    oralLanguage: [EnumOralLanguage]
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]
@@ -136,24 +135,24 @@ export default gql`
     id: ID
     organizationId: ID
     userId: ID
-    identity: IdentityType!
+    identity: EnumIdentityType!
     chineseName: String!
     englishName: String!
     dob: Timestamp
-    gender: Gender
+    gender: EnumGender
     district: District
-    pwdType: PwdType
-    interestedEmploymentMode: EmploymentMode
-    interestedIndustry: [Industry]
-    industry: Industry
+    pwdType: EnumPwdType
+    interestedEmploymentMode: EnumEmploymentMode
+    interestedIndustry: [EnumIndustry]
+    industry: EnumIndustry
     tncAccept: Boolean
     email: String
     phone: String
 
     biography: JsonContent
     portfolio: [MediaInput]
-    writtenLanguage: [WrittenLanguage]
-    oralLanguage: [WrittenLanguage]
+    writtenLanguage: [EnumWrittenLanguage]
+    oralLanguage: [EnumOralLanguage]
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]
@@ -184,12 +183,29 @@ export default gql`
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
-    IdentityGet(id: ID): Identity
-    IdentitySearch(
-      identityTypes: [IdentityType]
+    UserGet(token: String!): User
+
+    """
+    Search User by either phone, email or name. Search the name of every identities.
+    """
+    UserSearch(
+      phone: String
+      email: String
+      name: String
       limit: Int!
       page: Int!
-    ): [Identity] @auth(identityTypes: [admin])
+    ): [User]
+
+    """
+    Search Identtiy by either phone, email or name. Search the name of every identities.
+    """
+    IdentitySearch(
+      phone: String
+      email: String
+      name: String
+      limit: Int!
+      page: Int!
+    ): [User]
   }
 
   type Mutation {

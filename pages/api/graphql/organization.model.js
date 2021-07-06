@@ -1,14 +1,17 @@
 import { model, models, Schema } from "mongoose";
-import { organizationType, industry, districts, organizationStatus} from "./constants/enum";
+import districts from "./enum/districts";
+import industries from "./enum/industries";
+import organizationStatus from "./enum/organizationStatus";
+import organizationTypes from "./enum/organizationTypes";
 
 const organizationSchema = Schema({
   organizationType: {
     type: String,
-    enum: Object.keys(organizationType),
-    required: true
+    enum: Object.keys(organizationTypes),
+    required: true,
   },
   remark: {
-    type: String
+    type: String,
   },
   status: {
     type: String,
@@ -16,18 +19,18 @@ const organizationSchema = Schema({
   },
   chineseCompanyName: {
     type: String,
-    required: true
+    required: true,
   },
   englishCompanyName: {
     type: String,
-    required: true
+    required: true,
   },
   website: {
     type: String,
   },
   identityId: {
     type: Schema.Types.ObjectId,
-    ref: 'Identity'
+    ref: "Identity",
   },
   businessRegistration: [
     {
@@ -35,52 +38,50 @@ const organizationSchema = Schema({
       url: String,
       filename: String,
       contentType: String,
-      directory: String
-    }
+      directory: String,
+    },
   ],
   industry: {
-    type:String,
-    enum: Object.keys(industry)
+    type: String,
+    enum: Object.keys(industries),
   },
   description: {
-    type: String
+    type: String,
   },
   district: {
     type: String,
-    enum: Object.keys(districts)
+    enum: Object.keys(districts),
   },
   companyBenefit: {
-    type: String
-  }, 
+    type: String,
+  },
   submission: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'OrganizationSubmission'
-    }
+      ref: "OrganizationSubmission",
+    },
   ],
   logo: {
     id: String,
     url: String,
     filename: String,
     contentType: String,
-    directory: String
+    directory: String,
   },
   tncAccept: {
     type: Boolean,
-  }
+  },
 });
-
-
 
 const organizationSubmissionSchema = Schema({
   organizationType: {
     type: String,
-    enum: Object.keys(organizationType),
-    required: true
+    enum: Object.keys(organizationTypes),
+    required: true,
   },
   organization: {
     type: Schema.Types.ObjectId,
-    ref: 'Organization'
+    ref: "Organization",
   },
   status: {
     type: String,
@@ -88,11 +89,11 @@ const organizationSubmissionSchema = Schema({
   },
   chineseCompanyName: {
     type: String,
-    required: true
+    required: true,
   },
   englishCompanyName: {
     type: String,
-    required: true
+    required: true,
   },
   website: {
     type: String,
@@ -103,30 +104,30 @@ const organizationSubmissionSchema = Schema({
       url: String,
       filename: String,
       contentType: String,
-      directory: String
-    }
+      directory: String,
+    },
   ],
   industry: {
-    type:String,
-    enum: Object.keys(industry)
+    type: String,
+    enum: Object.keys(industries),
   },
   description: {
-    type: String
+    type: String,
   },
   district: {
     type: String,
-    enum: Object.keys(districts)
+    enum: Object.keys(districts),
   },
   companyBenefit: {
-    type: String
-  }, 
-  
+    type: String,
+  },
+
   logo: {
     id: String,
     url: String,
     filename: String,
     contentType: String,
-    directory: String
+    directory: String,
   },
   tncAccept: {
     type: Boolean,
@@ -136,12 +137,12 @@ const organizationSubmissionSchema = Schema({
   approvedAt: Date,
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'Identity'
-  }
+    ref: "Identity",
+  },
 });
 
-
-
-
-export const Organization = models["Organization"] ?? model("Organization", organizationSchema);
-export const OrganizationSubmission = models["OrganizationSubmission"] ?? model("OrganizationSubmission", organizationSubmissionSchema);
+export const Organization =
+  models["Organization"] ?? model("Organization", organizationSchema);
+export const OrganizationSubmission =
+  models["OrganizationSubmission"] ??
+  model("OrganizationSubmission", organizationSubmissionSchema);

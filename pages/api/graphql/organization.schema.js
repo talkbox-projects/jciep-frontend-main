@@ -31,7 +31,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: File
-    industry: Industry
+    industry: EnumIndustry
     description: String
     district: District
     companyBenefit: String
@@ -53,7 +53,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: File
-    industry: Industry
+    industry: EnumIndustry
     description: String
     district: District
     companyBenefit: String
@@ -73,7 +73,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: [FileInput]
-    industry: Industry
+    industry: EnumIndustry
     description: String
     district: District
     companyBenefit: String
@@ -92,7 +92,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: [FileInput]
-    industry: Industry
+    industry: EnumIndustry
     description: String
     district: District
     companyBenefit: String
@@ -107,7 +107,7 @@ export default gql`
     englishCompanyName: String
     website: String
     businessRegistration: FileInput
-    industry: Industry
+    industry: EnumIndustry
     description: String
     district: District
     companyBenefit: String
@@ -131,11 +131,18 @@ export default gql`
       limit: Int!
       page: Int!
     ): [Organization]
+
+    OrganizationSubmissionGet(id: ID): OrganizationSubmission
+    OrganizationSubmissionSearch(
+      type: OrganizationType
+      status: OrganizationStatus
+      name: String
+      limit: Int!
+      page: Int!
+    ): OrganizationSubmission
   }
 
   type Mutation {
-
-
     OrganizationSubmissionCreate(
       input: OrganizationSubmissionCreateInput
     ): OrganizationSubmission
