@@ -1,10 +1,10 @@
 export default {
-  _0_2_years: { value: "0-2", label: "0-2年 0-2 years" },
-  _3_5_years: { value: "3-5", label: "3-5年 3-5 years" },
-  _6_8_years: { value: "6-8", label: "6-8年 6-8 years" },
-  _9_years_or_above: { value: "9+", label: "9年或以上 9+ years" },
+  years_0_2: { en: "0-2 years", zh: "0-2年" },
+  years__3_5: { en: "3-5 years", zh: "3-5年" },
+  years__6_8: { en: "6-8 years", zh: "6-8年" },
+  years__9_or_above: { en: "9+ years", zh: "9年或以上" },
   no_experience: {
-    value: "no_experienced",
-    label: "沒有工作經驗",
+    en: "No work experience",
+    zh: "沒有工作經驗",
   },
 };
