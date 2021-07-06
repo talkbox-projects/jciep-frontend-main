@@ -83,6 +83,7 @@ export default gql`
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
+    interestedIndustryOther: String
     industry: [EnumIndustry]
     tncAccept: Boolean
 
@@ -98,7 +99,9 @@ export default gql`
     biography: JsonContent
     portfolio: [Media]
     writtenLanguage: [EnumWrittenLanguage]
+    writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
+    oralLanguageOther: String
     hobby: String
     education: [Education]
     employment: [Employment]
@@ -117,9 +120,10 @@ export default gql`
     gender: EnumGender
     district: EnumDistrict
     pwdType: EnumPwdType
-    interestedEmploymentMode: EnumEmploymentMode
+    interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
-    industry: EnumIndustry
+    interestedIndustryOther: String
+    industry: [EnumIndustry]
     tncAccept: Boolean
     email: String
     phone: String
@@ -127,7 +131,9 @@ export default gql`
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]
+    writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
+    oralLanguageOther: String
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]
@@ -138,16 +144,16 @@ export default gql`
     id: ID
     organizationId: ID
     userId: ID
-    identity: EnumIdentityType!
     chineseName: String!
     englishName: String!
     dob: Timestamp
     gender: EnumGender
     district: District
     pwdType: EnumPwdType
-    interestedEmploymentMode: EnumEmploymentMode
+    interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
-    industry: EnumIndustry
+    interestedIndustryOther: String
+    industry: [EnumIndustry]
     tncAccept: Boolean
     email: String
     phone: String
@@ -161,7 +167,9 @@ export default gql`
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]
+    writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
+    oralLanguageOther: String
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]

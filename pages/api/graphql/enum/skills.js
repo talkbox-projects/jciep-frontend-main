@@ -1,0 +1,138 @@
+export default {
+  computerApplication: { en: "Computer Application", zh: "電腦應用" },
+  officeMachineOperation: {
+    en: "Office Machine Operation",
+    zh: "文儀器材操作",
+  },
+  filing: { en: "Filing", zh: "檔案處理" },
+  mailHandling: { en: "Mail Handling", zh: "郵件處理" },
+  englishWordProcessing: { en: "English Word Processing", zh: "英文文書處理" },
+  chineseWordProcessing: { en: "Chinese Word Processing", zh: "中文文書處理" },
+  basicWordProcessingSales: {
+    en: "Basic Word Processing Sales",
+    zh: "基本文書處理 銷售",
+  },
+  giftWrapping: { en: "Gift Wrapping", zh: "禮品包裝" },
+  shopCleaning: { en: "Shop Cleaning", zh: "店鋪清潔" },
+  convenientStoreOperation: {
+    en: "Convenient Store Operation",
+    zh: "便利店實務",
+  },
+  flowerShopOperation: { en: "Flower Shop Operation", zh: "花店零售實務" },
+  recreationAndSportsEventPreparation: {
+    en: "Recreation and Sports Event Preparation",
+    zh: "康樂及體育活動協作",
+  },
+  audioEquipmentOperation: {
+    en: "Audio Equipment Operation",
+    zh: "音響器材操作",
+  },
+  photography: { en: "Photography", zh: "攝影" },
+  videoRecording: { en: "Video Recording", zh: "錄影" },
+  basicOperationOfCommonPeripherals: {
+    en: "Basic Operation of Common Peripherals",
+    zh: "電腦週邊設備的基本操作",
+  },
+  useOfMultimediaDevices: {
+    en: "Use of Multimedia Devices",
+    zh: "多媒體器材的使用",
+  },
+  hardwareAssemblyPractice: {
+    en: "Hardware Assembly Practice",
+    zh: "硬件裝配實務",
+  },
+  practiceInOperatingSystem: {
+    en: "Practice in Operating System",
+    zh: "操作系統實務",
+  },
+  practiceInSoftwareUtilities: {
+    en: "Practice in Software Utilities",
+    zh: "工具及應用軟件實務",
+  },
+  useOfDigitalEquipment: {
+    en: "Use of Digital Equipment",
+    zh: "數碼器材的使用",
+  },
+  photography: { en: "Photography", zh: "攝影" },
+  graphicDesign: { en: "Graphic Design", zh: "平面設計" },
+  desktopPublishing: { en: "Desktop Publishing", zh: "桌上出版" },
+  cooking: { en: "Cooking", zh: "烹調" },
+  coffeeAndBeveragesPreparation: {
+    en: "Coffee and Beverages Preparation",
+    zh: "咖啡與飲品製作",
+  },
+  dessertPreparation: { en: "Dessert Preparation", zh: "甜品製作" },
+  bakeryAndPatisseriePreparation: {
+    en: "Bakery and Patisserie Preparation",
+    zh: "麵包蛋糕製作",
+  },
+  foodAndBeverageService: {
+    en: "Food and Beverage Service",
+    zh: "廳面服務及水吧協作",
+  },
+  foodPreparation: { en: "Food Preparation", zh: "廚務工作" },
+  cleaning: { en: "Cleaning", zh: "清潔" },
+  storeStockKeeping: { en: "Store / Stock Keeping", zh: "倉務運作" },
+  packaging: { en: "Packaging", zh: "包裝" },
+  packingAndTransportOfGoods: {
+    en: "Packing and Transport of Goods",
+    zh: "運輸包裝",
+  },
+  giftWrapping: { en: "Gift Wrapping", zh: "禮品包裝" },
+  paperCraftMaking: { en: "Paper Craft Making", zh: "紙品製作" },
+  carBeauty: { en: "Car Beauty", zh: "汽車美容" },
+  housekeeping: { en: "Housekeeping", zh: "房務" },
+  gardening: { en: "Gardening", zh: "園藝" },
+  customerServiceAndVenueBooking: {
+    en: "Customer Service and Venue Booking",
+    zh: "客戶服及訂場",
+  },
+  indoorSportsAndRecreationActivities: {
+    en: "Indoor Sports and Recreation Activities",
+    zh: "室內康體活動",
+  },
+  outdoorSportsAndRecreationActivities: {
+    en: "Outdoor Sports and Recreation Activities",
+    zh: "室外康體活動",
+  },
+  clubhouseService: { en: "Clubhouse Service", zh: "會所服務" },
+  campingOperationAndAdventureBasedRecreation: {
+    en: "Camping Operation and Adventure-based Recreation",
+    zh: "營地運作及歷奇活動實務",
+  },
+  healthCareAssistant: { en: "Health Care Assistant", zh: "看護 / 助理員" },
+  occupationalSafetyAndEnvironmentalHygiene: {
+    en: "Occupational Safety and Environmental Hygiene",
+    zh: "職業安全及環境衞生",
+  },
+  workInResidentialHome: { en: "Work in Residential Home", zh: "院舍工作" },
+  healthCareForTheElderly: {
+    en: "Health Care for the Elderly",
+    zh: "長者護理",
+  },
+  assistanceInResidentialHomeActivities: {
+    en: "Assistance in Residential Home Activities",
+    zh: "院舍活動協作",
+  },
+  socialMediaContentWriting: {
+    en: "Social media content writing",
+    zh: "社交平台內容寫作",
+  },
+  webpageDesign: { en: "Webpage design", zh: "網頁設計" },
+  translation: { en: "Translation", zh: "翻譯" },
+  transcription: { en: "Transcription", zh: "轉錄" },
+  woodworkCarpentry: { en: "Woodwork / Carpentry", zh: "木工" },
+  mechanics: { en: "Mechanics", zh: "機械" },
+  masterOfCeremony: { en: "Master of Ceremony", zh: "司儀 / 主持" },
+  socialMediaPlatformManagement: {
+    en: "Social media Platform Management",
+    zh: "社交平台管理",
+  },
+  typing: { en: "Typing", zh: "打字" },
+  dataEntry: { en: "Data Entry", zh: "數據輸入" },
+  storytelling: { en: "Storytelling", zh: "講故事" },
+  magic: { en: "Magic", zh: "魔術" },
+  balloonTwisting: { en: "Balloon twisting", zh: "扭汽球" },
+  dubbing: { en: "Dubbing", zh: "配音" },
+  illustration: { en: "Illustration", zh: "繪畫 / 插畫" },
+};

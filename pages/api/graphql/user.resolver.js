@@ -161,10 +161,11 @@ export default {
     UserGet: async (_parent, { token }) => {
       try {
         let user = jwt.decode(token, "shhhhh");
+        console.log(token, user);
         user = await User.findById(user._id).populate("identities");
-
         return user;
       } catch (error) {
+        console.log(error);
         return null;
       }
     },
@@ -215,7 +216,7 @@ export default {
         pwdType: input?.pwdType,
         gender: input?.gender,
         district: input?.district,
-        employementMode: input?.interestedEmploymentMode,
+        interestedEmploymentMode: input?.interestedEmploymentMode,
         industry: input?.industry,
         tncAccept: input.tncAccept,
         email: input.email,

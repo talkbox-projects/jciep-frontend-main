@@ -11,9 +11,8 @@ export const useCredential = () => {
     ({ token, user }) => {
       setCookie(null, "jciep-token", token, { path: "/" });
       const identities = user?.identities;
-      const identityId = identities?.[0]?.id ?? null;
       setUser(user);
-      setIdentityId(identityId ?? null);
+      setIdentityId((id) => id ?? identities?.[0]?.id ?? null);
     },
     [router]
   );

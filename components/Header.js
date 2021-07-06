@@ -57,6 +57,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
     loginModalDisclosure,
     registerModalDisclosure,
     user,
+    setIdentityId,
     identityId: currentIdentityId,
   } = useAppContext();
 
@@ -96,8 +97,8 @@ const Header = ({ navigation, header, isLangAvailable }) => {
 
   const onIdentitySwitch = useCallback(
     (identityId) => {
-      // setIdentityId(identityId);
       router.push(`/user/identity/${identityId}/profile`);
+      setIdentityId(identityId);
     },
     [router]
   );
@@ -123,6 +124,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                 pwdType
                 interestedEmploymentMode
                 interestedIndustry
+                interestedIndustryOther
                 industry
                 tncAccept
                 email
@@ -142,7 +144,9 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                   description
                 }
                 writtenLanguage
+                writtenLanguageOther
                 oralLanguage
+                oralLanguageOther
                 hobby
                 education {
                   school
@@ -171,7 +175,6 @@ const Header = ({ navigation, header, isLangAvailable }) => {
           }
         `;
         const data = await getGraphQLClient().request(mutation, { token });
-        console.log(data);
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
         console.log(e);

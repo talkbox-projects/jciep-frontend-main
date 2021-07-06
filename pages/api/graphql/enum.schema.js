@@ -9,6 +9,7 @@ import oralLanguages from "./enum/oralLanguages";
 import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
 import pwdTypes from "./enum/pwdTypes";
+import skills from "./enum/skills";
 import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
 
@@ -53,4 +54,5 @@ export default gql`
   ${generateEnumSchema("pwdType", pwdTypes)}
   ${generateEnumSchema("writtenLanguage", writtenLanguages)}
   ${generateEnumSchema("yearOfExperience", yearOfExperiences)}
+  ${generateEnumSchema("skill", skills)}
 `;

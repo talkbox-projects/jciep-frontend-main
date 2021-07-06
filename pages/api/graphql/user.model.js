@@ -1,6 +1,6 @@
 import { model, models, Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { uuidv4 } from "../../../utils/uuid";
+import { uuidv4 } from "../../../utils/general";
 import districts from "./enum/districts";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
@@ -97,7 +97,7 @@ const identitySchema = Schema({
     type: String,
     enum: Object.keys(districts),
   },
-  employementMode: {
+  interestedEmploymentMode: {
     type: String,
     enum: Object.keys(employmentModes),
   },
@@ -111,6 +111,9 @@ const identitySchema = Schema({
       enum: Object.keys(industries),
     },
   ],
+  interestedIndustryOther: {
+    type: String,
+  },
   industry: [
     {
       type: String,
@@ -132,11 +135,17 @@ const identitySchema = Schema({
       type: String,
     },
   ],
+  writtenLanguageOther: {
+    type: String,
+  },
   oralLanguage: [
     {
       type: String,
     },
   ],
+  oralLanguageOther: {
+    type: String,
+  },
   hobby: {
     type: String,
   },

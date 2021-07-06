@@ -88,6 +88,7 @@ const LoginModal = () => {
                 pwdType
                 interestedEmploymentMode
                 interestedIndustry
+                interestedIndustryOther
                 industry
                 tncAccept
                 email
@@ -107,7 +108,9 @@ const LoginModal = () => {
                   description
                 }
                 writtenLanguage
+                writtenLanguageOther
                 oralLanguage
+                oralLanguageOther
                 hobby
                 education {
                   school

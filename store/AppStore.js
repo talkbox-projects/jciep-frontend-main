@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import nookies from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCredential } from "../utils/user";
+import { updateIf } from "../utils/general";
 
 const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
@@ -85,6 +86,20 @@ const [AppProvider, useAppContext] = constate((props) => {
     [user, identityId]
   );
 
+  const updateIdentity = useCallback((id, updater) => {
+    setUser((user) => ({
+      ...user,
+      identities: updateIf(
+        user?.identities ?? [],
+        (identity) => identity.id === id,
+        (identity) =>
+          typeof updater === "function"
+            ? updater(identity)
+            : { ...identity, ...updater }
+      ),
+    }));
+  }, []);
+
   return {
     wordings,
     loginModalDisclosure,
@@ -98,6 +113,7 @@ const [AppProvider, useAppContext] = constate((props) => {
     identity,
     identityId,
     setIdentityId,
+    updateIdentity,
   };
 });
 

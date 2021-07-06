@@ -99,7 +99,9 @@ const VerifyToken = () => {
                   description
                 }
                 writtenLanguage
+                writtenLanguageOther
                 oralLanguage
+                oralLanguageOther
                 hobby
                 education {
                   school

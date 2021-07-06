@@ -60,6 +60,7 @@ const OtpVerifyModal = () => {
                   pwdType
                   interestedEmploymentMode
                   interestedIndustry
+                  interestedIndustryOther
                   industry
                   tncAccept
                   email
@@ -79,7 +80,9 @@ const OtpVerifyModal = () => {
                     description
                   }
                   writtenLanguage
+                  writtenLanguageOther
                   oralLanguage
+                  oralLanguageOther
                   hobby
                   education {
                     school
