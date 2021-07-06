@@ -183,7 +183,7 @@ export default gql`
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
     UserGet(token: String!): User
-
+    
     """
     Search User by either phone, email or name. Search the name of every identities.
     """

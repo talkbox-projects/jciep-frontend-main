@@ -114,6 +114,9 @@ const Header = ({ navigation, header, isLangAvailable }) => {
               email
               identities {
                 id
+                chineseName
+                type
+
               }
             }
           }
@@ -221,7 +224,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                             {getWording("header.identity_subheading")}
                           </Text>
                           <VStack align="stretch">
-                            <HStack
+                            {/* <HStack
                               _hover={{ bg: "gray.50" }}
                               cursor="pointer"
                               p={2}
@@ -243,31 +246,37 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                               <Tag size="sm">
                                 {getWording("header.current_label")}
                               </Tag>
-                            </HStack>
+                            </HStack> */}
                             {(user?.identities ?? []).map((identity) => (
+                              
                               <HStack
-                                key={identity.id}
-                                _hover={{ bg: "gray.100" }}
-                                cursor="pointer"
-                                p={2}
-                                spacing={4}
-                                onClick={() => onIdentitySwitch(identity.id)}
+                              key={identity.id}
+                              _hover={{ bg: "gray.50" }}
+                              cursor="pointer"
+                              p={2}
+                              spacing={4}
+                              onClick={() => onIdentitySwitch(identity.id)}
+                            >
+                              {/* <Avatar size="sm"></Avatar> */}
+                              <VStack
+                                align="start"
+                                spacing={0}
+                                flex={1}
+                                minW={0}
+                                w="100%"
                               >
-                                <Avatar size="sm"></Avatar>
-                                <VStack spacing={0}>
-                                  <Text fontSize="md">
-                                    {identity.chineseName}
-                                  </Text>
-                                  <Text color="gray.500" fontSize="sm">
-                                    {identity.type}
-                                  </Text>
-                                </VStack>
-                                {currentIdentityId === identity.id && (
+                                <Text fontSize="md">{identity.chineseName}</Text>
+                                <Text color="gray.500" fontSize="sm">
+                                {identity.type}
+                                </Text>
+                              </VStack>
+
+                              {currentIdentityId === identity.id && (
                                   <Tag size="sm">
                                     {getWording("header.current_label")}
                                   </Tag>
                                 )}
-                              </HStack>
+                            </HStack>
                             ))}
                             <Link href="/user/identity/select">
                               <Button
