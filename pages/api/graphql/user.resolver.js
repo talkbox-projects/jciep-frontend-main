@@ -3,6 +3,9 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
+import enumResolver from "./enum.resolver"
+
+console.log(enumResolver.Query.EnumDegreeList())
 
 export default {
   Query: {
@@ -200,13 +203,8 @@ export default {
        * Pwd/Public can create identity for his own account.
        */
 
-      console.log(input);
+      console.log(input)
 
-      // let identityExists = await Identity.findOne({userId: input.userId, type: input.identity})
-
-      // if(identityExists) {
-      //   throw new Error("Identity already created!");
-      // } else {
       let identity = await new Identity({
         userId: input.userId,
         type: input.identity,
@@ -231,10 +229,7 @@ export default {
         identities: identities,
       });
 
-      return {
-        id: identity._id,
-      };
-      // }
+      return identity
     },
 
     IdentityUpdate: () => {

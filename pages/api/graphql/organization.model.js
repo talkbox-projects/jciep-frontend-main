@@ -41,10 +41,10 @@ const organizationSchema = Schema({
       directory: String,
     },
   ],
-  industry: {
+  industry: [{
     type: String,
     enum: Object.keys(industries),
-  },
+  }],
   description: {
     type: String,
   },
@@ -107,10 +107,10 @@ const organizationSubmissionSchema = Schema({
       directory: String,
     },
   ],
-  industry: {
+  industry: [{
     type: String,
     enum: Object.keys(industries),
-  },
+  }],
   description: {
     type: String,
   },

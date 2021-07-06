@@ -24,18 +24,18 @@ import {
 import MultiSelect from "react-select";
 import { useCallback, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useAppContext } from "../../../../store/AppStore";
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
-import { getPage } from "../../../../utils/page/getPage";
-import withPageCMS from "../../../../utils/page/withPageCMS";
-import wordExtractor from "../../../../utils/wordExtractor";
-import Container from "../../../../components/Container";
+import { useAppContext } from "../../../store/AppStore";
+import { getConfiguration } from "../../../utils/configuration/getConfiguration";
+import { getPage } from "../../../utils/page/getPage";
+import withPageCMS from "../../../utils/page/withPageCMS";
+import wordExtractor from "../../../utils/wordExtractor";
+import Container from "../../../components/Container";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { getEnums } from "../../../../utils/enums/getEnums";
+import { getEnums } from "../../../utils/enums/getEnums";
 import moment from "moment";
 import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../../../utils/apollo";
+import { getGraphQLClient } from "../../../utils/apollo";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -98,7 +98,7 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
     defaultValues: identity,
   });
 
-  const { updateIdentity } = useAppContext();
+  const { updateIdentity, identityId } = useAppContext();
   const onSubmit = useCallback(
     async (values) => {
       try {
@@ -112,17 +112,17 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
-            id: router.query.id,
+            id: identityId,
             ...values,
           },
         });
-        updateIdentity(router.query.id, data?.IdentityUpdate);
+        updateIdentity(identityId, data?.IdentityUpdate);
         editModeDisclosure.onClose();
       } catch (error) {
         console.error(error);
       }
     },
-    [router, editModeDisclosure]
+    [router, identityId, editModeDisclosure]
   );
 
   const fields = useMemo(() => {

@@ -1,7 +1,6 @@
 import { Box, HStack } from "@chakra-ui/layout";
 import wordListFieldsForCMS from "../utils/tina/wordListFieldsForCMS";
 import NextLink from "next/link";
-import wordExtractor from "../utils/wordExtractor";
 import {
   Drawer,
   Accordion,
@@ -20,7 +19,6 @@ import {
   Tag,
   Text,
   VStack,
-  useMediaQuery,
   IconButton,
   DrawerBody,
   DrawerContent,
@@ -52,6 +50,8 @@ import { IoWarning } from "react-icons/io5";
 
 const Header = ({ navigation, header, isLangAvailable }) => {
   const getWording = useGetWording();
+  const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
+
   const {
     isLoggedIn,
     loginModalDisclosure,
@@ -97,8 +97,8 @@ const Header = ({ navigation, header, isLangAvailable }) => {
 
   const onIdentitySwitch = useCallback(
     (identityId) => {
-      router.push(`/user/identity/${identityId}/profile`);
       setIdentityId(identityId);
+      router.push(`/user/identity/profile`);
     },
     [router]
   );
@@ -174,6 +174,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
             }
           }
         `;
+
         const data = await getGraphQLClient().request(mutation, { token });
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
@@ -182,6 +183,30 @@ const Header = ({ navigation, header, isLangAvailable }) => {
       }
     })();
   }, [setCredential, removeCredential]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const query = gql`
+          query EnumIdentityTypeList {
+            EnumIdentityTypeList {
+              key
+              value {
+                en
+                zh
+              }
+            }
+          }
+        `;
+
+        const data = await getGraphQLClient().request(query);
+        console.log(data);
+        setEnumIdentityTypeList(data.EnumIdentityTypeList);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
 
   const onLogout = useCallback(() => {
     removeCredential();
@@ -276,47 +301,35 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                             {getWording("header.identity_subheading")}
                           </Text>
                           <VStack align="stretch">
-                            <HStack
-                              _hover={{ bg: "gray.50" }}
-                              cursor="pointer"
-                              p={2}
-                              spacing={4}
-                            >
-                              <Avatar size="sm"></Avatar>
-                              <VStack
-                                align="start"
-                                spacing={0}
-                                flex={1}
-                                minW={0}
-                                w="100%"
-                              >
-                                <Text fontSize="md">陳大文</Text>
-                                <Text color="gray.500" fontSize="sm">
-                                  多元人才
-                                </Text>
-                              </VStack>
-                              <Tag size="sm">
-                                {getWording("header.current_label")}
-                              </Tag>
-                            </HStack>
                             {(user?.identities ?? []).map((identity) => (
                               <HStack
                                 key={identity.id}
-                                _hover={{ bg: "gray.100" }}
+                                _hover={{ bg: "gray.50" }}
                                 cursor="pointer"
                                 p={2}
                                 spacing={4}
                                 onClick={() => onIdentitySwitch(identity.id)}
                               >
-                                <Avatar size="sm"></Avatar>
-                                <VStack spacing={0}>
+                                {/* <Avatar size="sm"></Avatar> */}
+                                <VStack
+                                  align="start"
+                                  spacing={0}
+                                  flex={1}
+                                  minW={0}
+                                  w="100%"
+                                >
                                   <Text fontSize="md">
                                     {identity.chineseName}
                                   </Text>
                                   <Text color="gray.500" fontSize="sm">
-                                    {identity.type}
+                                    {
+                                      EnumIdentityTypeList.filter(
+                                        (data) => data.key === identity.type
+                                      )[0]?.value[router.locale]
+                                    }
                                   </Text>
                                 </VStack>
+
                                 {currentIdentityId === identity.id && (
                                   <Tag size="sm">
                                     {getWording("header.current_label")}

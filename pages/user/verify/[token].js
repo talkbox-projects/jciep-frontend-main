@@ -138,12 +138,10 @@ const VerifyToken = () => {
         },
       });
 
-      console.log(data);
       setCredential({
         token: data?.UserLogin?.token,
         user: data?.UserLogin?.user,
       });
-      // setLogin(data?.UserLogin?.user);
       setIdentityId(data?.UserLogin?.user?.identities?.[0]?.id ?? null);
       router.push("/user/identity/select");
     } catch (e) {

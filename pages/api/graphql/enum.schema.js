@@ -21,7 +21,7 @@ const properize = (text) => {
 const generateEnumSchema = (_key, constants) => {
   const key = "Enum" + properize(_key);
   return gql`
-enum ${key} {
+  enum ${key} {
     ${Object.keys(constants).join(",")}  
   }
 
