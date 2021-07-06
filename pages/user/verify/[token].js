@@ -90,7 +90,7 @@ const VerifyToken = () => {
         user: data?.UserLogin?.user,
       });
       // setLogin(data?.UserLogin?.user);
-      setIdentityId(data?.UserLogin?.user?.identities?.[0] ?? null);
+      setIdentityId(data?.UserLogin?.user?.identities?.[0]?.id ?? null);
       router.push("/user/identity/select");
     } catch (e) {
       console.log(e);

@@ -8,7 +8,7 @@ const withPageCMS =
   (Component, { key, fields = [], propName = "page" }) =>
   (props) => {
     const router = useRouter();
-    const _page = props?.[propName];
+    const _page = props?.[propName] ?? {};
     const [page, form] = useForm(
       {
         key,

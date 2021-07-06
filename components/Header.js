@@ -89,9 +89,13 @@ const Header = ({ navigation, header, isLangAvailable }) => {
   const cms = useCMS();
   const [setCredential, removeCredential] = useCredential();
 
-  const onIdentitySwitch = useCallback((identityId) => {
-    setIdentityId(identityId);
-  }, []);
+  const onIdentitySwitch = useCallback(
+    (identityId) => {
+      // setIdentityId(identityId);
+      router.push(`/user/identity/${identityId}/profile`);
+    },
+    [router]
+  );
 
   useEffect(() => {
     (async () => {
@@ -236,7 +240,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                                 cursor="pointer"
                                 p={2}
                                 spacing={4}
-                                onClick={onIdentitySwitch}
+                                onClick={() => onIdentitySwitch(identity.id)}
                               >
                                 <Avatar size="sm"></Avatar>
                                 <VStack spacing={0}>

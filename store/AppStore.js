@@ -79,7 +79,13 @@ const [AppProvider, useAppContext] = constate((props) => {
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
-  const [setCredential, removeCredential] = useCredential();
+
+  const identity = useMemo(
+    () => (user?.identities ?? []).find(({ id }) => id === identityId),
+    [user, identityId]
+  );
+
+  console.log(user, identityId);
 
   return {
     wordings,
@@ -90,6 +96,8 @@ const [AppProvider, useAppContext] = constate((props) => {
     user,
     setUser,
     isLoggedIn,
+
+    identity,
     identityId,
     setIdentityId,
   };

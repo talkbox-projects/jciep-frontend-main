@@ -18,14 +18,17 @@ import userSchema from "./user.schema";
 import organizationSchema from "./organization.schema";
 import userResolver from "./user.resolver";
 import organizationResolver from "./organization.resolver";
-import nookies from "nookies";
-import jwt from "jsonwebtoken";
+import enumSchema from "./enum.schema";
+import enumResolver from "./enum.resolver";
 
 const apolloServer = new ApolloServer({
   uploads: false,
   introspection: true,
   playground: true,
   typeDefs: mergeTypeDefs([
+    /* enum */
+    enumSchema,
+
     sharedSchema,
     mediaSchema,
     pageSchema,
@@ -36,11 +39,13 @@ const apolloServer = new ApolloServer({
     userSchema,
   ]),
   resolvers: mergeResolvers([
+    /* enum */
+    enumResolver,
+
     mediaResolver,
     pageResolver,
     postResolver,
     configurationResolver,
-
     organizationResolver,
     userResolver,
   ]),
