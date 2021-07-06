@@ -83,7 +83,7 @@ const Resources = ({ page }) => {
         ></NextSeo>
       )}
       {/* Banner Section */}
-      <Text>fdsa</Text>
+      {/* <Text>fdsa</Text> */}
       <Box
         bgImg={`url(${page?.content?.heroBannerSection?.image})`}
         bgSize="cover"
