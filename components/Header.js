@@ -30,6 +30,7 @@ import {
   LinkOverlay,
   Stack,
   Icon,
+  CloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
@@ -41,7 +42,7 @@ import RegisterModal from "./RegisterModal";
 import OtpVerifyModal from "./OtpVerifyModal";
 import EmailVerifySentModal from "./EmailVerifyModal";
 import { useGetWording } from "../utils/wordings/useWording";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getGraphQLClient } from "../utils/apollo";
 import { gql } from "graphql-request";
 import nookies from "nookies";
@@ -62,6 +63,10 @@ const Header = ({ navigation, header, isLangAvailable }) => {
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
   const hidden = process.env.NODE_ENV !== "development";
+
+  const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
+    !isLangAvailable
+  );
 
   const tabIndex = useMemo(() => {
     const kv = {
@@ -179,9 +184,13 @@ const Header = ({ navigation, header, isLangAvailable }) => {
     removeCredential();
   }, [removeCredential]);
 
+  useEffect(() => {
+    if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
+  }, [router, setIsShowLangUnavailable, isLangAvailable]);
+
   return (
     <Box>
-      {!isLangAvailable && (
+      {!isLangAvailable && isShowLangUnavailable && (
         <Box
           borderBottom="1px"
           borderColor="rgb(239,239,239)"
@@ -202,6 +211,8 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                   Sorry, no English content available currently in this page.
                 </Text>
               </Stack>
+              <Box w="100%" minW={0} flex={1} />
+              <CloseButton onClick={() => setIsShowLangUnavailable(false)} />
             </HStack>
           </Container>
         </Box>
@@ -210,7 +221,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
         d={["none", "none", "block", "block"]}
         bg="white"
         position="fixed"
-        top={isLangAvailable ? 0 : 20}
+        top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         zIndex={100}
         h={12}
@@ -464,7 +475,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
       <Box
         position="fixed"
         zIndex={100}
-        top={isLangAvailable ? 0 : 20}
+        top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         bg="white"
         d={["block", "block", "none", "none"]}
