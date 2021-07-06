@@ -52,6 +52,8 @@ import { IoWarning } from "react-icons/io5";
 
 const Header = ({ navigation, header, isLangAvailable }) => {
   const getWording = useGetWording();
+  const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([])
+
   const {
     isLoggedIn,
     loginModalDisclosure,
@@ -121,6 +123,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
             }
           }
         `;
+
         const data = await getGraphQLClient().request(mutation, { token });
         console.log(data);
         setCredential({ token, user: data?.UserGet });
@@ -130,6 +133,30 @@ const Header = ({ navigation, header, isLangAvailable }) => {
       }
     })();
   }, [setCredential, removeCredential]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const query = gql`
+          query EnumIdentityTypeList {
+            EnumIdentityTypeList {
+              key
+              value {
+                en
+                zh
+              }
+            }
+          }
+        `;
+
+        const data = await getGraphQLClient().request(query);
+        console.log(data)
+        setEnumIdentityTypeList(data.EnumIdentityTypeList);
+      } catch (e) { 
+        console.log(e);
+      }
+    })();
+  }, [])
 
   const onLogout = useCallback(() => {
     removeCredential();
@@ -267,7 +294,11 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                               >
                                 <Text fontSize="md">{identity.chineseName}</Text>
                                 <Text color="gray.500" fontSize="sm">
-                                {identity.type}
+                                
+                                  {
+                                    (EnumIdentityTypeList.filter((data) => data.key === identity.type))[0].value['zh']
+                                    
+                                  }
                                 </Text>
                               </VStack>
 

@@ -3,6 +3,9 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
+import enumResolver from "./enum.resolver"
+
+console.log(enumResolver.Query.EnumDegreeList())
 
 export default {
   Query: {
