@@ -16,6 +16,7 @@ import withPageCMS from "../../../../utils/page/withPageCMS";
 import wordExtractor from "../../../../utils/wordExtractor";
 import Container from "../../../../components/Container";
 import { AiOutlineEdit } from "react-icons/ai";
+import { useRouter } from "next/router";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -49,6 +50,7 @@ const sectionBorderStyles = {
 };
 
 const PublicProfileSection = ({ value: identity, onChange, page }) => {
+  const router = useRouter();
   const { register, control, handleSubmit } = useForm({
     defaultValues: identity,
     onSuccess: (value) => {
@@ -77,7 +79,7 @@ const PublicProfileSection = ({ value: identity, onChange, page }) => {
           src={page?.content?.headerSection?.bannerPlaceholder}
         ></Image>
         <Avatar
-          size="xl"
+          size="lg"
           position="absolute"
           left={8}
           bottom={0}
@@ -89,6 +91,16 @@ const PublicProfileSection = ({ value: identity, onChange, page }) => {
             {wordExtractor(page?.content?.wordings, "edit_my_profile_label")}
           </Button>
         </HStack>
+        <Text size="2xl" fontWeight="bold">
+          {router.locale === "en"
+            ? identity?.englishName
+            : identity?.chineseName}
+        </Text>
+        <Text size="xl">
+          {router.locale === "en"
+            ? identity?.englishName
+            : identity?.chineseName}
+        </Text>
       </VStack>
       <Text>{JSON.stringify(identity)}</Text>
     </VStack>
@@ -106,11 +118,11 @@ const IdentityProfile = ({ page }) => {
       <Container>
         <HStack>
           <VStack align="stretch" flex={1} minW={0} w="100%">
-            <PublicProfileSection
+            {/* <PublicProfileSection
               value={identity}
               onChange={setIdentity}
               page={page}
-            />
+            /> */}
             <Box boxShadow="lg"></Box>
           </VStack>
           <VStack align="stretch" w="33%">

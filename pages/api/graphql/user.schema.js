@@ -158,12 +158,6 @@ export default gql`
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
 
-    profilePic: MediaInput
-    bannerMedia: MediaInput
-    caption: String
-    educationLevel: EnumDegree
-    yearOfExperience: EnumYearOfExperience
-
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]
