@@ -102,6 +102,8 @@ export default gql`
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
     oralLanguageOther: String
+    skill: [EnumSkill]
+    skillOther: String
     hobby: String
     education: [Education]
     employment: [Employment]
@@ -133,6 +135,8 @@ export default gql`
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
     oralLanguageOther: String
+    skill: [EnumSkill]
+    skillOther: String
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]
@@ -169,6 +173,8 @@ export default gql`
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
     oralLanguageOther: String
+    skill: [EnumSkill]
+    skillOther: String
     hobby: String
     education: [EducationInput]
     employment: [EmploymentInput]
@@ -199,8 +205,6 @@ export default gql`
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
 
-    UserGet(token: String!): User
-
     """
     Search User by either phone, email or name. Search the name of every identities.
     """
@@ -219,6 +223,7 @@ export default gql`
       phone: String
       email: String
       name: String
+      identityType: [EnumIdentityType]
       limit: Int!
       page: Int!
     ): [User]
@@ -237,5 +242,6 @@ export default gql`
 
     IdentityCreate(input: IdentityCreateInput!): Identity
     IdentityUpdate(input: IdentityUpdateInput!): Identity
+    IdentitySuspense(id: ID!): Boolean
   }
 `;

@@ -20,6 +20,7 @@ import {
   AspectRatio,
   Wrap,
   WrapItem,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import MultiSelect from "react-select";
 import { useCallback, useMemo } from "react";
@@ -525,7 +526,7 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
           return (
             <VStack key={index} spacing={4} py={4} px={8} align="stretch">
               <Wrap>
-                {fields.map(
+                {_fields.map(
                   ({
                     name,
                     type,
@@ -714,14 +715,7 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
         {fields.map(({ fields }, index) => {
           return (
             <VStack key={index} spacing={4} py={4} px={8} align="stretch">
-              <Grid
-                templateColumns={[
-                  "repeat(1, 1fr)",
-                  "repeat(1, 1fr)",
-                  "repeat(1, 1fr)",
-                ]}
-                gap={6}
-              >
+              <SimpleGrid gap={6} columns={[1, null, 2]}>
                 {fields.map(({ name, type, options, fullWidth }) => {
                   let valueComponent = null;
                   switch (type) {
@@ -797,18 +791,23 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
                   }
 
                   return (
-                    <GridItem {...(fullWidth && { colSpan: 2 })} key={name}>
+                    <VStack
+                      spacing={0}
+                      align="stretch"
+                      w={fullWidth ? "100%" : "50%"}
+                      key={name}
+                    >
                       <Text>
                         {wordExtractor(
                           page?.content?.wordings,
                           `field_label_${name}`
                         )}
                       </Text>
-                      {valueComponent}
-                    </GridItem>
+                      <Box>{valueComponent}</Box>
+                    </VStack>
                   );
                 })}
-              </Grid>
+              </SimpleGrid>
               <Divider w="100%" />
             </VStack>
           );
