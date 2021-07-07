@@ -1,12 +1,23 @@
+import { Box, Stack, VStack } from "@chakra-ui/react";
+import Container from "../Container";
 import EmployerSection from "./sections/EmployerSection";
 
 const IdentityEmployerProfile = ({ identity, page, enums, editable }) => {
   const props = { identity, page, enums, editable };
 
   return (
-    <VStack align="stretch">
-      <EmployerSection {...props} />
-    </VStack>
+    <Box pt={48} pb={36}>
+      <Container>
+        <Stack align="stretch" direction={["column", "column", "row"]}>
+          <VStack align="stretch" flex={1} minW={0} w="100%">
+            <EmployerSection {...props} />
+          </VStack>{" "}
+          {/* <VStack w={["100%", "100%", "33%"]}>
+            <Box></Box>
+          </VStack> */}
+        </Stack>
+      </Container>
+    </Box>
   );
 };
 

@@ -9,7 +9,7 @@ const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
   const props = { identity, page, enums, editable };
 
   return (
-    <Box pt={64} pb={36}>
+    <Box pt={48} pb={36}>
       <Container>
         <VStack align="stretch">
           <PwdSection {...props} />

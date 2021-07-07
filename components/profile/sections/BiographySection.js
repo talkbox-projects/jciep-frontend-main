@@ -1,10 +1,16 @@
 import { useForm } from "react-hook-form";
-
-import { Box } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
+import SectionCard from "../fragments/SectionCard";
 
 const BiographySection = ({ identity, page, enums, editable }) => {
   const form = useForm();
-  return <Box>BiographySection</Box>;
+  return (
+    <SectionCard>
+      <VStack spacing={1} align="stretch">
+        <Box>BiographySection</Box>
+      </VStack>
+    </SectionCard>
+  );
 };
 
 export default BiographySection;

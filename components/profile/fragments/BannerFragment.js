@@ -13,11 +13,13 @@ import { Controller, useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
+import ProfilePicUploadModal from "./ProfilePicUploadModal";
 
 const BannerFragment = ({ identity, page, enums, editable }) => {
   const { control } = useForm();
 
   const bannerMediaDisclosure = useDisclosure();
+  const profilePicDisclosure = useDisclosure();
   const onUpload = useCallback(({ bannerMedia }) => {
     try {
       // TODO: upload image
@@ -53,6 +55,8 @@ const BannerFragment = ({ identity, page, enums, editable }) => {
         ></Image>
       </AspectRatio>
       <Avatar
+        cursor="pointer"
+        onClick={profilePicDisclosure.onOpen}
         size="xl"
         position="absolute"
         left={8}
@@ -64,6 +68,11 @@ const BannerFragment = ({ identity, page, enums, editable }) => {
         page={page}
         isOpen={bannerMediaDisclosure.isOpen}
         onClose={bannerMediaDisclosure.onClose}
+      />
+      <ProfilePicUploadModal
+        page={page}
+        isOpen={profilePicDisclosure.isOpen}
+        onClose={profilePicDisclosure.onClose}
       />
     </VStack>
   );

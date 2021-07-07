@@ -28,3 +28,7 @@ export const getEnums = async ({ keys = [], lang }) => {
 
   return res;
 };
+
+export const getEnumText = (list, value, locale) => {
+  return list?.find((x) => x.key === value)?.value?.[locale];
+};

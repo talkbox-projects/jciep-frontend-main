@@ -12,8 +12,11 @@ import {
   VStack,
   Box,
   FormControl,
+  FormLabel,
+  Input,
+  FormHelperText,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { AiOutlineCloudUpload } from "react-icons/ai";
@@ -23,13 +26,22 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
   const [mode, setMode] = useState("upload"); // mode = [upload, youtube]
 
   const {
+    reset,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
+
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+      setMode("upload");
+    }
+  }, [isOpen]);
 
   const onSubmit = useCallback(({ bannerMedia }) => {
     try {
+      reset();
     } catch (error) {
       console.error(error);
     }
@@ -81,40 +93,54 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
     <VStack
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      color="#aaa"
       align="center"
       spacing={4}
       py={8}
       px={8}
     >
-      <FormControl isInvalid={errors?.bannerMedia?.message}>
-        <FormLabel></FormLabel>
+      <FormControl
+        as={VStack}
+        align="center"
+        isInvalid={errors?.bannerMedia?.message}
+      >
+        <FormLabel color="#aaa" fontWeight="normal">
+          {wordExtractor(page?.content?.wordings, "form_label_youtube_link")}
+        </FormLabel>
         <Input
           borderRadius="2em"
           {...register("bannerMedia", {
-            valiate: {
-              pattern: {
-                value: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
-                message: wordExtractor(
-                  page?.content?.wording,
-                  "invalid_youtube_link_message"
-                ),
-              },
+            required: wordExtractor(
+              page?.content?.wordings,
+              "invalid_youtube_link_message"
+            ),
+            pattern: {
+              value: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
+              message: wordExtractor(
+                page?.content?.wordings,
+                "invalid_youtube_link_message"
+              ),
             },
           })}
         ></Input>
-        <Button
-          colorScheme="yellow"
-          color="black"
-          px={4}
-          py={2}
-          borderRadius="2em"
-          type="submit"
-          isLoading={isSubmitting}
-        >
-          {wordExtractor(page?.content?.wordings, "save_button_label")}
-        </Button>
+        {errors?.bannerMedia?.message && (
+          <FormHelperText color="red">
+            {errors?.bannerMedia?.message}
+          </FormHelperText>
+        )}
       </FormControl>
+      <Button
+        minW={24}
+        mt={6}
+        colorScheme="yellow"
+        color="black"
+        px={4}
+        py={2}
+        borderRadius="2em"
+        type="submit"
+        isLoading={isSubmitting}
+      >
+        {wordExtractor(page?.content?.wordings, "upload_button_label")}
+      </Button>
       <Text mt={6}>
         {wordExtractor(page?.content?.wordings, "or_label")}{" "}
         <Button

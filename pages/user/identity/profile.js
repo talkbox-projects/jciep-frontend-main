@@ -7,6 +7,7 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { getPage } from "../../../utils/page/getPage";
 import { getEnums } from "../../../utils/enums/getEnums";
 import withPageCMS from "../../../utils/page/withPageCMS";
+import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -64,7 +65,7 @@ const IdentityProfile = ({ enums, page }) => {
     case "staff":
       return <IdentityStaffProfile {...props} />;
     case "employer":
-      return <IdentityPwdProfile {...props} />;
+      return <IdentityEmployerProfile {...props} />;
     default:
       return <Box></Box>;
   }

@@ -9,7 +9,7 @@ const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
   const props = { identity, page, enums, editable };
 
   return (
-    <Box pt={64} pb={36}>
+    <Box pt={48} pb={36}>
       <Container>
         <Stack align="stretch" direction={["column", "column", "row"]}>
           <VStack align="stretch" flex={1} minW={0} w="100%">
@@ -18,9 +18,9 @@ const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
             <PortfolioSection {...props} />
             <ExperienceSection {...props} />
           </VStack>
-          <VStack w={["100%", "100%", "33%"]}>
+          {/* <VStack w={["100%", "100%", "33%"]}>
             <Box>Testing</Box>
-          </VStack>
+          </VStack> */}
         </Stack>
       </Container>
     </Box>
