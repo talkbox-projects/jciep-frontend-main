@@ -13,6 +13,7 @@ import {
   FormHelperText,
   Select,
   Box,
+  Divider,
 } from "@chakra-ui/react";
 import MultiSelect from "react-select";
 import moment from "moment";
@@ -26,7 +27,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
 
-const StaffSection = ({ identity, page, enums, editable }) => {
+const PublicSection = ({ identity, page, enums, editable }) => {
   const router = useRouter();
   const props = { identity, page, enums, editable };
   const editModeDisclosure = useDisclosure();
@@ -42,7 +43,7 @@ const StaffSection = ({ identity, page, enums, editable }) => {
 
   useEffect(() => {
     if (!editModeDisclosure.isOpen) {
-      reset();
+      reset(identity);
     }
   }, [identity, editModeDisclosure.isOpen]);
 
@@ -180,7 +181,6 @@ const StaffSection = ({ identity, page, enums, editable }) => {
             </FormHelperText>
           </FormControl>
         </Stack>
-
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.dob?.message}>
             <FormLabel color="#999" mb={0}>
@@ -253,17 +253,17 @@ const StaffSection = ({ identity, page, enums, editable }) => {
               {errors?.district?.message}
             </FormHelperText>
           </FormControl>
-          <FormControl isInvalid={errors?.pwdType?.message}>
+          <FormControl isInvalid={errors?.industry?.message}>
             <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_pwdType")}
+              {wordExtractor(page?.content?.wordings, "field_label_industry")}
             </FormLabel>
             <Controller
               control={control}
               rules={{}}
-              name={"pwdType"}
+              name={"industry"}
               defaultValue={identity?.pwdType ?? []}
               render={({ field: { name, value, onChange } }) => {
-                const options = enums?.EnumPwdTypeList.map(
+                const options = enums?.EnumIndustryList.map(
                   ({ key: value, value: { [router.locale]: label } }) => ({
                     value,
                     label,
@@ -298,7 +298,7 @@ const StaffSection = ({ identity, page, enums, editable }) => {
               }}
             ></Controller>
             <FormHelperText color="red">
-              {errors?.pwdType?.message}
+              {errors?.industry?.message}
             </FormHelperText>
           </FormControl>
         </Stack>
@@ -375,7 +375,6 @@ const StaffSection = ({ identity, page, enums, editable }) => {
             </Text>
           </FormControl>
         </Stack>
-
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#999" mb={0}>
@@ -388,7 +387,7 @@ const StaffSection = ({ identity, page, enums, editable }) => {
           </FormControl>
           <FormControl>
             <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_gender")}
+              {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Text>
               {getEnumText(
@@ -402,7 +401,7 @@ const StaffSection = ({ identity, page, enums, editable }) => {
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_gender")}
+              {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Text>
               {getEnumText(
@@ -411,6 +410,19 @@ const StaffSection = ({ identity, page, enums, editable }) => {
                 router.locale
               ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
+          </FormControl>
+          <FormControl>
+            <FormLabel color="#999" mb={0}>
+              {wordExtractor(page?.content?.wordings, "field_label_industry")}
+            </FormLabel>
+            <Wrap>
+              {identity?.industry.map((key) => (
+                <Tag key={key}>
+                  {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Tag>
+              ))}
+            </Wrap>
           </FormControl>
         </Stack>
       </VStack>
@@ -468,4 +480,4 @@ const StaffSection = ({ identity, page, enums, editable }) => {
   );
 };
 
-export default StaffSection;
+export default PublicSection;

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { VStack, Box } from "@chakra-ui/react";
 import Container from "../Container";
 import BiographySection from "./sections/BiographySection";
 import ExperienceSection from "./sections/ExperienceSection";

@@ -121,7 +121,7 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: District
-    pwdType: EnumPwdType
+    pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
@@ -159,7 +159,7 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: District
-    pwdType: EnumPwdType
+    pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
