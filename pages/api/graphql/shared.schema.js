@@ -52,19 +52,6 @@ export default gql`
     yuenLong
   }
 
-  input MediaInput {
-    input: Upload
-    title: String
-    description: String
-  }
-
-  type Media {
-    id: String!
-    url: String!
-    title: String
-    description: String
-  }
-
   type File {
     id: String!
     url: String!

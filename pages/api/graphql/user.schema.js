@@ -90,8 +90,8 @@ export default gql`
     email: String
     phone: String
 
-    profilePic: Media
-    bannerMedia: Media
+    profilePic: File
+    bannerMedia: File
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
@@ -120,8 +120,8 @@ export default gql`
     englishName: String!
     dob: Timestamp
     gender: EnumGender
-    district: EnumDistrict
-    pwdType: [EnumPwdType]
+    district: District
+    pwdType: EnumPwdType
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
@@ -129,6 +129,13 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
+
+    profilePic: FileInput
+    bannerMedia: FileInput
+    caption: String
+    educationLevel: EnumDegree
+    yearOfExperience: EnumYearOfExperience
+
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]
@@ -161,8 +168,8 @@ export default gql`
     email: String
     phone: String
 
-    profilePic: MediaInput
-    bannerMedia: MediaInput
+    profilePic: FileInput
+    bannerMedia: FileInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
