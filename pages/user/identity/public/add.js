@@ -61,52 +61,7 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const validate = (
-    chineseName,
-    englishName,
-    dateofBirth,
-    gender,
-    residentDistrict,
-    personTypes,
-    interestedEmployee,
-    industry,
-    terms
-  ) => {
-    if (chineseName.trim() === "") {
-      setError("chinese_name", {
-        type: "manual",
-        message: "輸入有效的中文名稱 Enter valid chinese name! ",
-      });
-      return true;
-    } else if (englishName.trim() === "") {
-      setError("english_name", {
-        type: "manual",
-        message: "輸入有效的英文名稱 Enter valid english name! ",
-      });
-      return true;
-    } else if (residentDistrict === "none") {
-      setError("resident_district", {
-        type: "manual",
-        message: "請選擇居住區 Please select a resident district! ",
-      });
-      return true;
-    } else if (industry === "none") {
-      setError("industry", {
-        type: "manual",
-        message: "請選擇行業 Please select industry! ",
-      });
-      return true;
-    } else if (terms === false) {
-      setError("terms", {
-        type: "manual",
-        message: "請接受條款和條件 Please accept T&C! ",
-      });
-      return true;
-    } else {
-      return false;
-    }
-  };
-
+  
   const onFormSubmit = useCallback(
     async ({
       chinese_name,
@@ -135,9 +90,9 @@ const IdentityPublicAdd = ({ page }) => {
             chineseName: chinese_name,
             englishName: english_name,
             dob: date_of_birth,
-            gender:  gender.value,
-            district: resident_district.value,
-            interestedIndustry: industry.map(({value}) => ({value}).value),
+            gender:  gender?.value,
+            district: resident_district?.value,
+            interestedIndustry: industry?.map(({value}) => ({value})?.value),
             tncAccept: terms,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",

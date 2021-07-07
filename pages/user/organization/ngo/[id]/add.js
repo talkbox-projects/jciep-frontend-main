@@ -59,37 +59,6 @@ const OrganizationNgoAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  // const validate = (
-  //   chineseOrganizationName,
-  //   englishOrganizationName,
-  //   contactNumberngoWebsite,
-  //   ngoDescription,
-  //   terms
-  // ) => {
-  //   if (chineseOrganizationName.trim() === "") {
-  //     setError("chineseOrganizationName", {
-  //       type: "manual",
-  //       message:
-  //         "輸入有效的中文組織名稱 Enter valid chinese organization name! ",
-  //     });
-  //     return true;
-  //   } else if (englishOrganizationName.trim() === "") {
-  //     setError("englishOrganizationName", {
-  //       type: "manual",
-  //       message:
-  //         "輸入有效的英文組織名稱 Enter valid english organization name! ",
-  //     });
-  //     return true;
-  //   } else if (terms === false) {
-  //     setError("terms", {
-  //       type: "manual",
-  //       message: "請接受條款和條件 Please accept T&C! ",
-  //     });
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
   const onFormSubmit = useCallback(
     async ({

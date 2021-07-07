@@ -121,7 +121,7 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: District
-    pwdType: EnumPwdType
+    pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
@@ -129,7 +129,6 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-
     profilePic: FileInput
     bannerMedia: FileInput
     caption: String
@@ -159,7 +158,7 @@ export default gql`
     dob: Timestamp
     gender: EnumGender
     district: District
-    pwdType: EnumPwdType
+    pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
@@ -167,13 +166,11 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-
     profilePic: FileInput
     bannerMedia: FileInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
-
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]

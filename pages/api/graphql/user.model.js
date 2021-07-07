@@ -97,14 +97,16 @@ const identitySchema = Schema({
     type: String,
     enum: Object.keys(districts),
   },
-  interestedEmploymentMode: {
+  interestedEmploymentMode: [{
     type: String,
     enum: Object.keys(employmentModes),
-  },
-  pwdType: {
-    type: String,
-    enum: Object.keys(pwdTypes),
-  },
+  }],
+  pwdType: [
+    {
+      type: String,
+      enum: Object.keys(pwdTypes),
+    }
+  ],
   interestedIndustry: [
     {
       type: String,

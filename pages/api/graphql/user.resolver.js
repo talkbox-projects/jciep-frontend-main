@@ -205,6 +205,8 @@ export default {
 
       console.log(input)
 
+
+
       let identity = await new Identity({
         userId: input.userId,
         type: input.identity,
