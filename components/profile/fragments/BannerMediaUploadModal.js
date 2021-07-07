@@ -80,7 +80,7 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
   const youtubeComponent = (
     <VStack
       as="form"
-      onSubmit={handleSubmit(onYoutubeLinkInsert)}
+      onSubmit={handleSubmit(onSubmit)}
       color="#aaa"
       align="center"
       spacing={4}
