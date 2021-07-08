@@ -7,6 +7,8 @@ import connectDB from "../../../server/db";
 import { processRequest } from "graphql-upload";
 import mediaResolver from "./media.resolver";
 import mediaSchema from "./media.schema";
+import fileSchema from "./file.schema";
+import fileResolver from "./file.resolver";
 import pageSchema from "./page.schema";
 import pageResolver from "./page.resolver";
 import configurationSchema from "./configuration.schema";
@@ -31,6 +33,7 @@ const apolloServer = new ApolloServer({
 
     sharedSchema,
     mediaSchema,
+    fileSchema,
     pageSchema,
     postSchema,
     configurationSchema,
@@ -41,7 +44,7 @@ const apolloServer = new ApolloServer({
   resolvers: mergeResolvers([
     /* enum */
     enumResolver,
-
+    fileResolver,
     mediaResolver,
     pageResolver,
     postResolver,

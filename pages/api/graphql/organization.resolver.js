@@ -1,5 +1,5 @@
 import { Organization , OrganizationSubmission} from "./organization.model";
-import {createFile} from './media.resolver';
+import {createFile} from './file.resolver';
 
 const uploadFile = async (filename, contentType, createReadStream) => {
   return await createFile(createReadStream(), {
@@ -13,7 +13,6 @@ const uploadFile = async (filename, contentType, createReadStream) => {
   });
 }
 
-
 const uploadBusinessRegistration =  async (files) => {
   let businessRegistrationFiles = [];
 
@@ -22,6 +21,7 @@ const uploadBusinessRegistration =  async (files) => {
       const { filename, mimetype: contentType, createReadStream } = await files[i].file;
 
       let result = await uploadFile(filename, contentType, createReadStream)
+
       businessRegistrationFiles.push({
         id: result.id,
         filename: result.filename.replace(" ", "_"),
