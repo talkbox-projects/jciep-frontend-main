@@ -105,7 +105,7 @@ const OrganizationCompanyAdd = ({ page }) => {
             chineseCompanyName: chineseCompanyName,
             englishCompanyName: englishCompanyName,
             website: companyWebsite,
-            industry: industry.map(({value}) => ({value}).value),
+            industry: industry?.map(({value}) => ({value}).value),
             identityId: id,
             description: companyDescription,
             businessRegistration: files,

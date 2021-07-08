@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 export default gql`
   scalar Upload
   type File {
-    id: ID!
+    id: String!
     url: String!
     contentType: String!
     fileSize: Int!
@@ -12,6 +12,6 @@ export default gql`
   scalar FileInput
 
   type Mutation {
-    FileUpload(files: FileInput!): [File]
+    FileUpload(files: FileInput!): [FileOutput]
   }
 `;

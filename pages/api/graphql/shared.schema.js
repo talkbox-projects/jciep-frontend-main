@@ -65,11 +65,6 @@ export default gql`
     description: String
   }
 
-  type File {
-    id: String!
-    url: String!
-  }
-
   type MultiLangString {
     en: String
     cn: String

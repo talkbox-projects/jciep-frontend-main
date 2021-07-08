@@ -24,7 +24,7 @@ export default gql`
 
   type Education {
     school: String
-    degree: Degree
+    degree: EnumDegree
     fieldOfStudy: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -129,13 +129,11 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-
     profilePic: FileInput
     bannerMedia: FileInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
-
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]
@@ -154,8 +152,8 @@ export default gql`
     id: ID
     organizationId: ID
     userId: ID
-    chineseName: String!
-    englishName: String!
+    chineseName: String
+    englishName: String
     dob: Timestamp
     gender: EnumGender
     district: District
@@ -167,13 +165,11 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-
     profilePic: FileInput
     bannerMedia: FileInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
-
     biography: JsonContent
     portfolio: [MediaInput]
     writtenLanguage: [EnumWrittenLanguage]

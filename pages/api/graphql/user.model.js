@@ -97,20 +97,34 @@ const identitySchema = Schema({
     type: String,
     enum: Object.keys(districts),
   },
-  interestedEmploymentMode: {
-    type: String,
-    enum: Object.keys(employmentModes),
-  },
-  pwdType: {
-    type: String,
-    enum: Object.keys(pwdTypes),
-  },
+  pwdType: [
+    {
+      type: String,
+      enum: Object.keys(pwdTypes),
+    }
+  ],
+  interestedEmploymentMode: [
+    {
+      type: String,
+      enum: Object.keys(employmentModes),
+    }
+  ],
   interestedIndustry: [
     {
       type: String,
       enum: Object.keys(industries),
     },
   ],
+  caption: {
+    type: String
+  },
+  educationLevel: {
+    type: String
+  },
+  yearsOfExperience: {
+    type: String
+  },
+  
   interestedIndustryOther: {
     type: String,
   },
@@ -146,13 +160,22 @@ const identitySchema = Schema({
   oralLanguageOther: {
     type: String,
   },
+  skill: [
+    {
+      type: String
+    }
+  ],
+  skillOther: {
+    type:String
+  },
+
   hobby: {
     type: String,
   },
   education: [
     {
       school: String,
-      degree: Object,
+      degree: String,
       fieldOfStudy: String,
       startDatetime: Date,
       endDatetime: Date,
@@ -169,6 +192,12 @@ const identitySchema = Schema({
       present: Boolean,
     },
   ],
+    profilePic: {
+      type: Object
+    },
+    bannerMedia: {
+      type: Object
+    },
   activity: [
     {
       name: String,

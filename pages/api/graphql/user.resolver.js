@@ -3,9 +3,7 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
-import enumResolver from "./enum.resolver"
-
-console.log(enumResolver.Query.EnumDegreeList())
+import {createFile} from './file.resolver';
 
 export default {
   Query: {
@@ -203,7 +201,7 @@ export default {
        * Pwd/Public can create identity for his own account.
        */
 
-      console.log(input)
+      
 
       let identity = await new Identity({
         userId: input.userId,
@@ -215,11 +213,25 @@ export default {
         gender: input?.gender,
         district: input?.district,
         interestedEmploymentMode: input?.interestedEmploymentMode,
+        interestedIndustryOther: input?.interestedIndustryOther,
+        interestedIndustry: input?.interestedIndustry,
         industry: input?.industry,
         tncAccept: input.tncAccept,
         email: input.email,
         phone: input.phone,
-      }).save();
+        caption: input?.caption,
+        educationLevel: input?. educationLevel,
+        yearOfExperience: input?.yearOfExperience,
+        biography: input?.biography,
+        writtenLanguage: input?.writtenLanguage,
+        oralLanguage: input?.oralLanguage,
+        skill: input?.skill,
+        skillOther: input?.skillOther,
+        hobby:input?.hobby,
+        education: input?.education,
+        employment: input?.employment,
+        activity: input?.activity 
+      }).save()
 
       let user = await User.findById(input.userId);
       let identities = user.identities;
@@ -232,12 +244,17 @@ export default {
       return identity
     },
 
-    IdentityUpdate: () => {
+
+    IdentityUpdate: async (_parent, { input }) => {
       /**
        * Admin can update an identity for any user
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
+
+
+       return await Identity.findByIdAndUpdate(input.id, input)
+       
     },
   },
 };
