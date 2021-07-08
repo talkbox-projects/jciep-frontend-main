@@ -10,7 +10,7 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Dropzone from "react-dropzone";
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import {
@@ -28,7 +28,7 @@ import SectionCard from "../fragments/SectionCard";
 
 const PortfolioSection = ({ identity, page, enums, editable }) => {
   //TODO: demo media
-  const medias = [
+  const [medias, setMedias] = useState([
     {
       id: "media-1",
       title: "Title 1",
@@ -71,11 +71,22 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
       type: "pdf",
       url: "http://www.africau.edu/images/default/sample.pdf",
     },
-  ];
+  ]);
 
   const lightBoxDisclosure = useDisclosureWithParams();
   const portfolioMediaDisclosure = useDisclosure();
   const editModeDisclosure = useDisclosure();
+
+  const onItemRemove = useCallback(
+    (index) => {
+      setMedias((medias) => {
+        const newMedias = [...medias];
+        newMedias.splice(index, 1);
+        return newMedias;
+      });
+    },
+    [setMedias]
+  );
 
   const onPortfolioItemClick = useCallback(
     (item) => {
@@ -156,24 +167,30 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
                   boxShadow="sm"
                   position="relative"
                 >
-                  <IconButton
-                    minW="auto"
-                    p={1}
-                    m={0}
-                    position="absolute"
-                    right={0}
-                    top={0}
-                    fontSize="lg"
-                    color="gray.300"
-                    icon={<RiCloseCircleFill />}
-                    variant="link"
-                  />
+                  {editModeDisclosure.isOpen && (
+                    <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onItemRemove(index);
+                      }}
+                      minW="auto"
+                      p={1}
+                      m={0}
+                      position="absolute"
+                      right={0}
+                      top={0}
+                      fontSize="lg"
+                      color="gray.300"
+                      icon={<RiCloseCircleFill />}
+                      variant="link"
+                    />
+                  )}
                   {comp}
                 </Box>
               </AspectRatio>
             );
           })}
-          {editModeDisclosure.isOpen && (
+          {(editModeDisclosure.isOpen || medias.length === 0) && (
             <AspectRatio ratio={1}>
               <VStack
                 onClick={onPortfolioItemClick}

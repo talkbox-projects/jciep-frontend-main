@@ -14,12 +14,6 @@ export default gql`
     pwd
   }
 
-  enum School {
-    hku
-  }
-  enum Degree {
-    bba
-  }
   enum Language {
     en
     zh
