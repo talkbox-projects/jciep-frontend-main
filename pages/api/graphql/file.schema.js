@@ -12,6 +12,6 @@ export default gql`
   scalar FileInput
 
   type Mutation {
-    FileUpload(files: FileInput!): [File]
+    FileUpload(files: FileInput!): [FileOutput]
   }
 `;

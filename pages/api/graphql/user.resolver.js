@@ -220,8 +220,6 @@ export default {
         email: input.email,
         phone: input.phone,
         caption: input?.caption,
-        profilePic: input?.profilePic,
-        bannerMedia: input?.bannerMedia,
         educationLevel: input?. educationLevel,
         yearOfExperience: input?.yearOfExperience,
         biography: input?.biography,
@@ -246,12 +244,17 @@ export default {
       return identity
     },
 
-    IdentityUpdate: () => {
+
+    IdentityUpdate: async (_parent, { input }) => {
       /**
        * Admin can update an identity for any user
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
+
+
+       return await Identity.findByIdAndUpdate(input.id, input)
+       
     },
   },
 };

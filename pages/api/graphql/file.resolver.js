@@ -23,6 +23,40 @@ export const createFile = async (stream, { filename, options }) => {
   return result;
 };
 
+
+export const uploadFiles = async (files) => {
+  let uploadedFiles = []
+  
+  return new Promise ((resolve, reject) => {
+    files.map(async (file) => {
+      const { filename, mimetype: contentType, createReadStream } = await file.file;
+
+      const result = await createFile(createReadStream(), {
+        filename: filename.replace(" ", "_"),
+        options: {
+          contentType,
+          metadata: {
+            directory: "/files",
+          },
+        },
+      });
+
+      uploadedFiles.push({
+        id: result.id,
+        filename: result.filename.replace(" ", "_"),
+        directory: result.options.metadata.directory,
+        url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
+        contentType: result.options.contentType,
+        fileSize: result.length
+      })
+
+      if(uploadedFiles.length === files.length) {
+        resolve(uploadedFiles)
+      }
+    })
+  })
+}
+
 export default {
   Upload: GraphQLUpload,
   Query: {},
@@ -30,7 +64,6 @@ export default {
     FileUpload: async (_parent, { files }) => {
     
       let fileArray = []
-      let uploadedFiles = []
 
       if(files.length > 1) {
         fileArray = files
@@ -38,37 +71,7 @@ export default {
         fileArray .push(files)
       }
 
-      let filesUploaded = new Promise (async (resolve, reject) => {
-        for(let i=0; i< fileArray.length; i++) {
-          const { filename, mimetype: contentType, createReadStream } = await fileArray[i].file;
-
-          const result = await createFile(createReadStream(), {
-            filename: filename.replace(" ", "_"),
-            options: {
-              contentType,
-              metadata: {
-                directory: "/files",
-              },
-            },
-          });
-
-          uploadedFiles.push({
-            id: result.id,
-            filename: result.filename.replace(" ", "_"),
-            directory: result.options.metadata.directory,
-            url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
-            contentType: result.options.contentType,
-            fileSize: result.length
-          })
-
-          if(uploadedFiles.length === fileArray.length) {
-            resolve(true)
-          }
-        }
-      })
-
-      await filesUploaded
-      return uploadedFiles
+      return await uploadFiles(fileArray)
     },
   },
 };

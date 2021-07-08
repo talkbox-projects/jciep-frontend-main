@@ -2,14 +2,14 @@ import gql from "graphql-tag";
 
 export default gql`
   scalar Upload
-  type File {
+  type MediaFile {
     filename: String!
     contentType: String!
     directory: String!
   }
 
   type MediaListOutput {
-    data: [File]
+    data: [MediaFile]
     count: Int
   }
 
@@ -18,7 +18,7 @@ export default gql`
   }
 
   type Mutation {
-    MediaUpload(file: Upload!, directory: String!): File!
+    MediaUpload(file: Upload!, directory: String!): MediaFile!
     MediaDelete(path: String!): Boolean
   }
 `;
