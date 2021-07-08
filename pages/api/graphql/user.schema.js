@@ -24,7 +24,7 @@ export default gql`
 
   type Education {
     school: String
-    degree: EnumDegree
+    degree: Degree
     fieldOfStudy: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -91,13 +91,13 @@ export default gql`
     phone: String
 
     profilePic: File
-    bannerMedia: File
+    bannerMedia: FileMeta
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
 
     biography: JsonContent
-    portfolio: [Media]
+    portfolio: [FileMeta]
     writtenLanguage: [EnumWrittenLanguage]
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
@@ -129,13 +129,15 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-    profilePic: FileInput
-    bannerMedia: FileInput
+
+    profilePic: File
+    bannerMedia: FileMeta
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
+
     biography: JsonContent
-    portfolio: [MediaInput]
+    portfolio: [FileMeta]
     writtenLanguage: [EnumWrittenLanguage]
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
@@ -152,8 +154,8 @@ export default gql`
     id: ID
     organizationId: ID
     userId: ID
-    chineseName: String
-    englishName: String
+    chineseName: String!
+    englishName: String!
     dob: Timestamp
     gender: EnumGender
     district: District
@@ -165,13 +167,15 @@ export default gql`
     tncAccept: Boolean
     email: String
     phone: String
-    profilePic: FileInput
-    bannerMedia: FileInput
+
+    profilePic: File
+    bannerMedia: FileMeta
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
+
     biography: JsonContent
-    portfolio: [MediaInput]
+    portfolio: [FileMeta]
     writtenLanguage: [EnumWrittenLanguage]
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]

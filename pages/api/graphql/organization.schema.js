@@ -60,7 +60,7 @@ export default gql`
     logo: File
 
     biography: JsonContent
-    portfolio: [Media]
+    portfolio: [FileMeta]
     member: [Member]
     submission: [OrganizationSubmission]
     tncAccept: Boolean
@@ -72,12 +72,12 @@ export default gql`
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: [FileInput]
+    businessRegistration: [File]
     industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
-    logo: FileInput
+    logo: File
     identityId: ID!
     organizationId: ID
     tncAccept: Boolean
@@ -91,12 +91,12 @@ export default gql`
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: [FileInput]
+    businessRegistration: [File]
     industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
-    logo: FileInput
+    logo: File
   }
 
   input OrganizationUpdateInput {
@@ -108,14 +108,14 @@ export default gql`
     industry: EnumIndustry
     industryOther: String
     website: String
-    businessRegistration: [FileInput]
+    businessRegistration: [File]
     description: String
     district: District
     companyBenefit: String
-    logo: FileInput
+    logo: File
 
     biography: JsonContent
-    portfolio: [MediaInput]
+    portfolio: [FileMeta]
 
     tncAccept: Boolean
   }
