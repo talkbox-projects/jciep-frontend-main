@@ -1,4 +1,4 @@
-import { VStack, Box } from "@chakra-ui/react";
+import { Stack, VStack, Box } from "@chakra-ui/react";
 import Container from "../Container";
 import BiographySection from "./sections/BiographySection";
 import ExperienceSection from "./sections/ExperienceSection";
@@ -11,12 +11,17 @@ const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
   return (
     <Box pt={48} pb={36}>
       <Container>
-        <VStack align="stretch">
-          <PwdSection {...props} />
-          <BiographySection {...props} />
-          <PortfolioSection {...props} />
-          <ExperienceSection {...props} />
-        </VStack>
+        <Stack align="stretch" direction={["column", "column", "row"]}>
+          <VStack align="stretch" flex={1} minW={0} w="100%">
+            <PwdSection {...props} />
+            <PortfolioSection {...props} />
+            <BiographySection {...props} />
+            <ExperienceSection {...props} />
+          </VStack>
+          <VStack w={["100%", "100%", "33%"]}>
+            <Box></Box>
+          </VStack>
+        </Stack>
       </Container>
     </Box>
   );

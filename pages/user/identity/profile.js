@@ -57,18 +57,30 @@ const IdentityProfile = ({ enums, page }) => {
   const editable = true;
 
   const props = { identity, enums, page, editable };
+  let comp = null;
+
   switch (identity?.type) {
     case "pwd":
-      return <IdentityPwdProfile {...props} />;
+      comp = <IdentityPwdProfile {...props} />;
+      break;
     case "public":
-      return <IdentityPublicProfile {...props} />;
+      comp = <IdentityPublicProfile {...props} />;
+      break;
     case "staff":
-      return <IdentityStaffProfile {...props} />;
+      comp = <IdentityStaffProfile {...props} />;
+      break;
     case "employer":
-      return <IdentityEmployerProfile {...props} />;
+      comp = <IdentityEmployerProfile {...props} />;
+      break;
     default:
-      return <Box></Box>;
+      comp = <Box></Box>;
   }
+
+  return (
+    <Box w="100%" bgColor="#fafafa">
+      {comp}
+    </Box>
+  );
 };
 
 export default withPageCMS(IdentityProfile, {

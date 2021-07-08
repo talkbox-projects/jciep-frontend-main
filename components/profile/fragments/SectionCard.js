@@ -3,7 +3,8 @@ import { Box } from "@chakra-ui/react";
 const sectionBorderStyles = {
   borderRadius: 8,
   borderColor: "gray.300",
-  borderWidth: 2,
+  borderWidth: 1,
+  bg: "white",
 };
 
 const SectionCard = ({ children }) => {

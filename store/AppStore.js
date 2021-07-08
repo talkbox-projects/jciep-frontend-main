@@ -6,7 +6,7 @@ import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCredential } from "../utils/user";
 import { updateIf } from "../utils/general";
 
-const useDisclosureWithParams = () => {
+export const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
   const [params, setParams] = useState(null);
 

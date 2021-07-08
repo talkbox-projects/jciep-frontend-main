@@ -18,9 +18,9 @@ const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
             <PortfolioSection {...props} />
             <ExperienceSection {...props} />
           </VStack>
-          {/* <VStack w={["100%", "100%", "33%"]}>
+          <VStack w={["100%", "100%", "33%"]}>
             <Box>Testing</Box>
-          </VStack> */}
+          </VStack>
         </Stack>
       </Container>
     </Box>
