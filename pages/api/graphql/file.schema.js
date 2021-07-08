@@ -2,7 +2,14 @@ import gql from "graphql-tag";
 
 export default gql`
   scalar Upload
-  scalar FileInput
+  scalar FileUpload
+
+  input FileInput {
+    id: String!
+    url: String!
+    contentType: String!
+    fileSize: Int!
+  }
 
   type File {
     id: String!
@@ -12,10 +19,17 @@ export default gql`
   }
 
   type Mutation {
-    FileUpload(files: FileInput!): [File]
+    FileUpload(files: FileUpload!): [File]
   }
 
-  type FileMetaInput {
+  input FileMetaInput {
+    id: String!
+    url: String!
+    title: String
+    description: String
+  }
+
+  type FileMeta {
     id: String!
     url: String!
     title: String

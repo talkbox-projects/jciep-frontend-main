@@ -130,14 +130,14 @@ export default gql`
     email: String
     phone: String
 
-    profilePic: File
-    bannerMedia: FileMeta
+    profilePic: FileInput
+    bannerMedia: FileMetaInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
 
     biography: JsonContent
-    portfolio: [FileMeta]
+    portfolio: [FileMetaInput]
     writtenLanguage: [EnumWrittenLanguage]
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]
@@ -168,14 +168,14 @@ export default gql`
     email: String
     phone: String
 
-    profilePic: File
-    bannerMedia: FileMeta
+    profilePic: FileInput
+    bannerMedia: FileMetaInput
     caption: String
     educationLevel: EnumDegree
     yearOfExperience: EnumYearOfExperience
 
     biography: JsonContent
-    portfolio: [FileMeta]
+    portfolio: [FileMetaInput]
     writtenLanguage: [EnumWrittenLanguage]
     writtenLanguageOther: String
     oralLanguage: [EnumOralLanguage]

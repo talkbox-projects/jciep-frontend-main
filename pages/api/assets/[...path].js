@@ -3,20 +3,16 @@ import connectDB from "../../../server/db";
 
 const handler = async (req, res) => {
   const path = req.query.path;
-  const directory = `/${path.slice(0, path.length - 1).join("/")}`;
   const filename = path[path.length - 1];
   try {
-    const file = await connection.db.collection("media.files").findOne({
+    const file = await connection.db.collection("assets.files").findOne({
       filename,
-      metadata: {
-        directory,
-      },
     });
     if (!file) {
       throw new Error();
     }
     const bucket = new mongo.GridFSBucket(connection.db, {
-      bucketName: "media",
+      bucketName: "assets",
     });
     res.setHeader("Content-Type", file.contentType);
     res.setHeader("Pragma", "public");

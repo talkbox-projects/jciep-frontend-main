@@ -26,7 +26,6 @@ export default gql`
   }
 
   scalar Upload
-  scalar FileInput
   scalar Timestamp
   scalar JsonContent
   scalar Timestamp
