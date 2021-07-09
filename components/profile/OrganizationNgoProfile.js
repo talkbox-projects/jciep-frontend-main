@@ -11,7 +11,6 @@ const OrganizationNgoProfile = ({ organization, page, enums, editable }) => {
       <NgoSection {...props} />
       <BiographySection {...props} />
       <PortfolioSection {...props} />
-      <ExperienceSection {...props} />
     </VStack>
   );
 };

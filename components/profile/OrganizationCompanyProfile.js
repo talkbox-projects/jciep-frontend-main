@@ -6,7 +6,6 @@ const CompanyProfile = ({ organization, page, enums, editable }) => {
       <CompanySection {...props} />
       <BiographySection {...props} />
       <PortfolioSection {...props} />
-      <ExperienceSection {...props} />
     </VStack>
   );
 };

@@ -4,7 +4,7 @@ import BiographySection from "./sections/BiographySection";
 import ExperienceSection from "./sections/ExperienceSection";
 import PortfolioSection from "./sections/PortfolioSection";
 import PwdSection from "./sections/PwdSection";
-
+import ActivitySection from "./sections/ActivitySection";
 const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
   const props = { identity, page, enums, editable };
 
@@ -17,6 +17,7 @@ const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
             <PortfolioSection {...props} />
             <BiographySection {...props} />
             <ExperienceSection {...props} />
+            <ActivitySection {...props} />
           </VStack>
           <VStack w={["100%", "100%", "33%"]}>
             <Box></Box>
