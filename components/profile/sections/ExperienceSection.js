@@ -12,81 +12,37 @@ import {
 import wordExtractor from "../../../utils/wordExtractor";
 import SectionCard from "../fragments/SectionCard";
 import { RiEdit2Line } from "react-icons/ri";
-import { useDisclosureWithParams } from "../../../store/AppStore";
-import { useCallback, useState } from "react";
+import {
+  useAppContext,
+  useDisclosureWithParams,
+} from "../../../store/AppStore";
+import { useCallback, useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import EducationSubSection from "../fragments/EducationSubSection";
 import EmploymentSubSection from "../fragments/EmploymentSubSection";
-import Dot from "../fragments/Dot";
 
 const ExperienceSection = ({ identity, page, enums, editable }) => {
   const router = useRouter();
 
-  const [education, setEducation] = useState([
-    {
-      school: "Talkbox University",
-      degree: "diploma",
-      fieldOfStudy: "Information Systems",
-      startDatetime: null,
-      endDatetime: null,
-      present: true,
-    },
-    {
-      school: "Talkbox University",
-      degree: "diploma",
-      fieldOfStudy: "Information Systems",
-      startDatetime: null,
-      endDatetime: null,
-      present: false,
-    },
-    {
-      school: "Talkbox University",
-      degree: "diploma",
-      fieldOfStudy: "Information Systems",
-      startDatetime: null,
-      endDatetime: null,
-      present: false,
-    },
-  ]);
-
-  const [employment, setEmployement] = useState([
-    {
-      employmentType: "freelance",
-      companyName: "HKU",
-      industry: "filmmaking",
-      startDatetime: null,
-      endDatetime: null,
-      present: true,
-    },
-    {
-      employmentType: "partTime",
-      companyName: "Talkbox",
-      industry: "musicSoundDesign",
-      startDatetime: null,
-      endDatetime: null,
-      present: false,
-    },
-    {
-      employmentType: "fullTime",
-      companyName: "GreenTomato",
-      industry: "softwareMobileAppDesign",
-      startDatetime: null,
-      endDatetime: null,
-      present: false,
-    },
-  ]);
+  const { updateIdentity } = useAppContext();
 
   const form = useForm({
-    defaultValues: {
-      education,
-      employment,
-    },
+    defaultValues: identity,
   });
-  const { handleSubmit, register, control } = form;
+  useEffect(() => {
+    form.reset(identity);
+  }, [identity]);
+
+  const { handleSubmit } = form;
   const editModelDisclosure = useDisclosureWithParams();
 
-  const onSubmit = useCallback(() => {}, []);
+  const onSubmit = useCallback((values) => {
+    console.log("updated", values);
+    alert("updated");
+    updateIdentity(identity?.id, values);
+    editModelDisclosure.onClose();
+  }, []);
 
   return (
     <SectionCard>
@@ -95,21 +51,22 @@ const ExperienceSection = ({ identity, page, enums, editable }) => {
           <Text flex={1} minW={0} w="100%" fontSize="2xl">
             {wordExtractor(page?.content?.wordings, "experience_header_label")}
           </Text>
-          {editModelDisclosure.isOpen ? (
-            <Button
-              onClick={editModelDisclosure.onClose}
-              variant="link"
-              leftIcon={<RiEdit2Line />}
-            >
-              {wordExtractor(page?.content?.wordings, "save_button_label")}
-            </Button>
-          ) : (
+          {!editModelDisclosure.isOpen ? (
             <Button
               onClick={editModelDisclosure.onOpen}
               variant="link"
               leftIcon={<RiEdit2Line />}
             >
               {wordExtractor(page?.content?.wordings, "section_edit_label")}
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              variant="link"
+              leftIcon={<RiEdit2Line />}
+              type="submit"
+            >
+              {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           )}
         </HStack>
@@ -127,7 +84,7 @@ const ExperienceSection = ({ identity, page, enums, editable }) => {
             form={form}
             page={page}
             enums={enums}
-            identity={{ education }}
+            identity={identity}
             editable={editable}
             editModelDisclosure={editModelDisclosure}
           />
@@ -135,7 +92,7 @@ const ExperienceSection = ({ identity, page, enums, editable }) => {
             form={form}
             page={page}
             enums={enums}
-            identity={{ employment }}
+            identity={identity}
             editable={editable}
             editModelDisclosure={editModelDisclosure}
           />

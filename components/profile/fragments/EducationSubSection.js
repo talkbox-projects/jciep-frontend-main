@@ -87,7 +87,7 @@ const EducationSubSection = ({
                   >
                     <HStack alignSelf="flex-end" pt={2}>
                       <Button
-                        onClick={() => insert(index)}
+                        onClick={() => insert(index, {})}
                         colorScheme="yellow"
                         size="sm"
                         variant="ghost"
@@ -181,7 +181,7 @@ const EducationSubSection = ({
                       </FormLabel>
                       <Input
                         variant="flushed"
-                        {...register("fieldOfStudy", {})}
+                        {...register(`${prefix}.fieldOfStudy`, {})}
                         defaultValue={fieldOfStudy}
                       />
                       <FormHelperText>
@@ -247,7 +247,7 @@ const EducationSubSection = ({
                       isInvalid={errors?.education?.[index]?.fieldOfStudy}
                     >
                       <FormLabel fontSize="sm" color="#999" mb={0}>
-                        <Checkbox>
+                        <Checkbox {...register(`${prefix}.present`, {})}>
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_education_present"
@@ -258,30 +258,26 @@ const EducationSubSection = ({
                         {errors?.education?.[index]?.fieldOfStudy?.message}
                       </FormHelperText>
                     </FormControl>
-
-                    {index === fields?.length - 1 && (
-                      <Box>
-                        <Button
-                          mt={4}
-                          px={2}
-                          size="sm"
-                          alignSelf="flex-start"
-                          variant="outline"
-                          onClick={() => append()}
-                          leftIcon={<AiOutlinePlus />}
-                        >
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "button_label_append"
-                          )}
-                        </Button>
-                      </Box>
-                    )}
                   </VStack>
                 </Box>
               );
             }
           )}
+          {
+            <Box pl={2} borderLeftColor={"#eee"} borderLeftWidth={2}>
+              <Button
+                my={4}
+                px={2}
+                size="sm"
+                alignSelf="flex-start"
+                variant="outline"
+                onClick={() => append({})}
+                leftIcon={<AiOutlinePlus />}
+              >
+                {wordExtractor(page?.content?.wordings, "button_label_append")}
+              </Button>
+            </Box>
+          }
         </VStack>
       </VStack>
     );

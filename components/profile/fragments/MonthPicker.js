@@ -32,16 +32,16 @@ const MonthPicker = ({ value, onChange }) => {
     },
     [month]
   );
-  console.log(
-    "value=",
-    value,
-    " dateString=",
-    dateString,
-    " year=",
-    year,
-    " month=",
-    month
-  );
+  //   console.log(
+  //     "value=",
+  //     value,
+  //     " dateString=",
+  //     dateString,
+  //     " year=",
+  //     year,
+  //     " month=",
+  //     month
+  //   );
   return (
     <HStack w="100%" align="start">
       <Select

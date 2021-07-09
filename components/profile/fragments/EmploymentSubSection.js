@@ -21,9 +21,9 @@ import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 import MonthPicker from "./MonthPicker";
 
-const EducationSubSection = ({
+const EmploymentSubSection = ({
   form: { register, control },
-  identity: { employment },
+  identity,
   page,
   enums,
   editModelDisclosure,
@@ -62,6 +62,16 @@ const EducationSubSection = ({
               },
               index
             ) => {
+              console.log("field item=", {
+                id,
+                jobTitle,
+                companyName,
+                employmentType,
+                industry,
+                present,
+                startDatetime,
+                endDatetime,
+              });
               const errors = errors?.employment?.[index];
               const prefix = `employment[${index}]`;
               const borderColor = present ? "#00BFBA" : "#eee";
@@ -92,7 +102,7 @@ const EducationSubSection = ({
                   >
                     <HStack alignSelf="flex-end" pt={2}>
                       <Button
-                        onClick={() => insert(index)}
+                        onClick={() => insert(index, {})}
                         colorScheme="yellow"
                         size="sm"
                         variant="ghost"
@@ -227,7 +237,7 @@ const EducationSubSection = ({
                       </FormLabel>
                       <Input
                         variant="flushed"
-                        {...register("jobTitle", {})}
+                        {...register(`${prefix}.jobTitle`, {})}
                         defaultValue={jobTitle}
                       />
                       <FormHelperText>
@@ -293,7 +303,7 @@ const EducationSubSection = ({
                       isInvalid={errors?.employment?.[index]?.jobTitle}
                     >
                       <FormLabel fontSize="sm" color="#999" mb={0}>
-                        <Checkbox>
+                        <Checkbox {...register(`${prefix}.present`, {})}>
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_employment_present"
@@ -304,30 +314,26 @@ const EducationSubSection = ({
                         {errors?.employment?.[index]?.jobTitle?.message}
                       </FormHelperText>
                     </FormControl>
-
-                    {index === fields?.length - 1 && (
-                      <Box>
-                        <Button
-                          mt={4}
-                          px={2}
-                          size="sm"
-                          alignSelf="flex-start"
-                          variant="outline"
-                          onClick={() => append()}
-                          leftIcon={<AiOutlinePlus />}
-                        >
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "button_label_append"
-                          )}
-                        </Button>
-                      </Box>
-                    )}
                   </VStack>
                 </Box>
               );
             }
           )}
+          {
+            <Box pl={2} borderLeftColor={"#eee"} borderLeftWidth={2}>
+              <Button
+                my={4}
+                px={2}
+                size="sm"
+                alignSelf="flex-start"
+                variant="outline"
+                onClick={() => append({})}
+                leftIcon={<AiOutlinePlus />}
+              >
+                {wordExtractor(page?.content?.wordings, "button_label_append")}
+              </Button>
+            </Box>
+          }
         </VStack>
       </VStack>
     );
@@ -341,7 +347,7 @@ const EducationSubSection = ({
           )}
         </Text>
         <VStack pl={2} spacing={0} align="stretch">
-          {(employment ?? []).map(
+          {(identity?.employment ?? []).map(
             (
               {
                 present,
@@ -424,4 +430,4 @@ const EducationSubSection = ({
   }
 };
 
-export default EducationSubSection;
+export default EmploymentSubSection;
