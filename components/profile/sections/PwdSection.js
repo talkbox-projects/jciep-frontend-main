@@ -26,12 +26,14 @@ import { getEnumText } from "../../../utils/enums/getEnums";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
+import { useIdentityProfileContext } from "../../../utils/profile/identityProfileState";
 
 const PwdSection = ({ identity, page, enums, editable }) => {
   const router = useRouter();
   const props = { identity, page, enums, editable };
   const editModelDisclosure = useDisclosure();
-  const { updateIdentity } = useAppContext();
+
+  const { onIdentityUpdate } = useIdentityProfileContext();
 
   const {
     handleSubmit,
@@ -46,13 +48,6 @@ const PwdSection = ({ identity, page, enums, editable }) => {
       reset(identity);
     }
   }, [identity, editModelDisclosure.isOpen]);
-
-  const onSubmit = useCallback((values) => {
-    alert("updated");
-    updateIdentity(identity?.id, values);
-    editModelDisclosure.onClose();
-    console.log(values);
-  }, []);
 
   const editor = (
     <>
@@ -1096,7 +1091,10 @@ const PwdSection = ({ identity, page, enums, editable }) => {
     <SectionCard>
       <VStack
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(async ({ type, ...values }) => {
+          await onIdentityUpdate(values);
+          editModelDisclosure.onClose();
+        })}
         spacing={1}
         align="stretch"
       >

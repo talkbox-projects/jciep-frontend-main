@@ -87,17 +87,20 @@ const [AppProvider, useAppContext] = constate((props) => {
   );
 
   const updateIdentity = useCallback((id, updater) => {
-    setUser((user) => ({
-      ...user,
-      identities: updateIf(
-        user?.identities ?? [],
-        (identity) => identity.id === id,
-        (identity) =>
-          typeof updater === "function"
-            ? updater(identity)
-            : { ...identity, ...updater }
-      ),
-    }));
+    setUser((user) => {
+      return {
+        ...user,
+        identities: updateIf(
+          user?.identities ?? [],
+          (identity) => identity.id === id,
+          (identity) => {
+            return typeof updater === "function"
+              ? updater(identity)
+              : { ...identity, ...updater };
+          }
+        ),
+      };
+    });
   }, []);
 
   return {

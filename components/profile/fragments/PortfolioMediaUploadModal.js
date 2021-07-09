@@ -23,6 +23,7 @@ import Dropzone from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import wordExtractor from "../../../utils/wordExtractor";
+import ProfileDropzone from "./ProfileDropzone";
 
 const PortfolioMediaUploadModal = ({
   portfolioItem,
@@ -95,47 +96,17 @@ const PortfolioMediaUploadModal = ({
             </FormControl>
             <VStack p={8} spacing={4} align="stretch">
               {mode === "upload" && (
-                <AspectRatio ratio={2.5}>
-                  <Controller
-                    control={control}
-                    name="url"
-                    render={({ field: { value, onChange } }) => {
-                      return (
-                        <Dropzone>
-                          {({ getRootProps, getInputProps }) => (
-                            <VStack
-                              align="stretch"
-                              w="100%"
-                              borderStyle="dashed"
-                              borderWidth={2}
-                              borderRadius={8}
-                              borderColor="#aaa"
-                              {...getRootProps()}
-                            >
-                              <Icon
-                                as={AiOutlineCloudUpload}
-                                fontSize="4xl"
-                                color="#aaa"
-                              />
-                              <input {...getInputProps()} />
-                              <Text>
-                                {wordExtractor(
-                                  page?.content?.wordings,
-                                  "dropzone_label"
-                                )}
-                                <br />
-                                {wordExtractor(
-                                  page?.content?.wordings,
-                                  "supported_image_format_label"
-                                )}
-                              </Text>
-                            </VStack>
-                          )}
-                        </Dropzone>
-                      );
-                    }}
-                  />
-                </AspectRatio>
+                <Controller
+                  control={control}
+                  name="url"
+                  render={({ field: { value, onChange } }) => {
+                    return (
+                      <AspectRatio ratio={2.5}>
+                        <ProfileDropzone page={page} />{" "}
+                      </AspectRatio>
+                    );
+                  }}
+                />
               )}
 
               {mode === "youtube" && (

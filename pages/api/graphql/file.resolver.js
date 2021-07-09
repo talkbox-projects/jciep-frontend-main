@@ -23,13 +23,16 @@ export const createFile = async (stream, { filename, options }) => {
   return result;
 };
 
-
 export const uploadFiles = async (files) => {
-  let uploadedFiles = []
-  
-  return new Promise ((resolve, reject) => {
+  let uploadedFiles = [];
+
+  return new Promise((resolve, reject) => {
     files.map(async (file) => {
-      const { filename, mimetype: contentType, createReadStream } = await file.file;
+      const {
+        filename,
+        mimetype: contentType,
+        createReadStream,
+      } = await file.file;
 
       const result = await createFile(createReadStream(), {
         filename: filename.replace(" ", "_"),
@@ -45,33 +48,47 @@ export const uploadFiles = async (files) => {
         id: result.id,
         filename: result.filename.replace(" ", "_"),
         directory: result.options.metadata.directory,
-        url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
+        url: `api/media${
+          result.options.metadata.directory
+        }/${result.filename.replace(" ", "_")}`,
         contentType: result.options.contentType,
-        fileSize: result.length
-      })
+        fileSize: result.length,
+      });
 
-      if(uploadedFiles.length === files.length) {
-        resolve(uploadedFiles)
+      if (uploadedFiles.length === files.length) {
+        resolve(uploadedFiles);
       }
-    })
-  })
-}
+    });
+  });
+};
 
 export default {
   Upload: GraphQLUpload,
   Query: {},
   Mutation: {
+    _FileUpload: async (_parent, { files }) => {
+      console.log("testing");
+      const f = await Promise.all(files);
+      console.log("f", f);
+      return [
+        {
+          id: "file-1",
+          contentType: "image/png",
+          url: "https://placeholder.com/",
+          fileSize: 10000,
+        },
+      ];
+    },
     FileUpload: async (_parent, { files }) => {
-    
-      let fileArray = []
+      let fileArray = [];
 
-      if(files.length > 1) {
-        fileArray = files
+      if (files.length > 1) {
+        fileArray = files;
       } else {
-        fileArray .push(files)
+        fileArray.push(files);
       }
 
-      return await uploadFiles(fileArray)
+      return await uploadFiles(fileArray);
     },
   },
 };

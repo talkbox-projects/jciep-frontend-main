@@ -29,6 +29,7 @@ import {
   AiOutlineInsertRowAbove,
 } from "react-icons/ai";
 import BiographyTypeSelector from "../fragments/BiographyTypeSelector";
+import ProfileDropzone from "../fragments/ProfileDropzone";
 
 const BiographySection = ({ identity, page, enums, editable }) => {
   const editModelDisclosure = useDisclosureWithParams();
@@ -42,7 +43,13 @@ const BiographySection = ({ identity, page, enums, editable }) => {
     register,
     formState: { errors },
   } = form;
-  useEffect(() => reset(identity), [identity]);
+
+  useEffect(() => {
+    console.log(identity);
+    if (!editModelDisclosure.isOpen) {
+      reset(identity);
+    }
+  }, [editModelDisclosure.isOpen, reset, identity]);
 
   const {
     fields = [],
@@ -131,39 +138,7 @@ const BiographySection = ({ identity, page, enums, editable }) => {
                   case "image":
                     comp = (
                       <FormControl>
-                        <Dropzone>
-                          {({ getRootProps, getInputProps }) => (
-                            <VStack
-                              p={8}
-                              align="center"
-                              w="100%"
-                              textAlign="center"
-                              borderStyle="dashed"
-                              borderWidth={2}
-                              borderRadius={16}
-                              borderColor="#aaa"
-                              {...getRootProps()}
-                            >
-                              <Icon
-                                as={AiOutlineCloudUpload}
-                                fontSize="4xl"
-                                color="#aaa"
-                              />
-                              <input {...getInputProps()} />
-                              <Text>
-                                {wordExtractor(
-                                  page?.content?.wordings,
-                                  "dropzone_label"
-                                )}
-                                <br />
-                                {wordExtractor(
-                                  page?.content?.wordings,
-                                  "supported_image_format_label"
-                                )}
-                              </Text>
-                            </VStack>
-                          )}
-                        </Dropzone>
+                        <ProfileDropzone page={page} />
                         <FormHelperText color="red">
                           {
                             errors?.biography?.blocks?.[index]?.youtubeUrl
@@ -270,39 +245,7 @@ const BiographySection = ({ identity, page, enums, editable }) => {
                 case "image":
                   comp = (
                     <FormControl>
-                      <Dropzone>
-                        {({ getRootProps, getInputProps }) => (
-                          <VStack
-                            p={8}
-                            align="center"
-                            w="100%"
-                            textAlign="center"
-                            borderStyle="dashed"
-                            borderWidth={2}
-                            borderRadius={16}
-                            borderColor="#aaa"
-                            {...getRootProps()}
-                          >
-                            <Icon
-                              as={AiOutlineCloudUpload}
-                              fontSize="4xl"
-                              color="#aaa"
-                            />
-                            <input {...getInputProps()} />
-                            <Text>
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "dropzone_label"
-                              )}
-                              <br />
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "supported_image_format_label"
-                              )}
-                            </Text>
-                          </VStack>
-                        )}
-                      </Dropzone>
+                      <ProfileDropzone page={page} />
                       <FormHelperText color="red">
                         {
                           errors?.biography?.blocks?.[index]?.youtubeUrl

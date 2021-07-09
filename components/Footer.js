@@ -35,7 +35,7 @@ const Footer = ({ footer }) => {
                     {(partners ?? []).map(
                       ({ id: _id, label, url, logo = "" }) => {
                         return (
-                          <WrapItem maxH={12}>
+                          <WrapItem key={_id} maxH={12}>
                             <Link href={url} key={_id}>
                               <Image
                                 alt={label}

@@ -1,8 +1,5 @@
 import {
   AspectRatio,
-  Text,
-  Icon,
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,46 +7,15 @@ import {
   ModalHeader,
   ModalOverlay,
   VStack,
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  FormHelperText,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
-import { useForm } from "react-hook-form";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 import wordExtractor from "../../../utils/wordExtractor";
+import ProfileDropzone from "./ProfileDropzone";
 
 const ProfilePicUploadModal = ({ page, isOpen, onClose }) => {
   const uploadComponent = (
     <VStack color="#aaa" align="stretch" spacing={4} py={8} px={8} w="100%">
       <AspectRatio ratio={2.5}>
-        <Dropzone>
-          {({ getRootProps, getInputProps }) => (
-            <VStack
-              align="stretch"
-              w="100%"
-              borderStyle="dashed"
-              borderWidth={2}
-              borderRadius={16}
-              borderColor="#aaa"
-              {...getRootProps()}
-            >
-              <Icon as={AiOutlineCloudUpload} fontSize="4xl" color="#aaa" />
-              <input {...getInputProps()} />
-              <Text>
-                {wordExtractor(page?.content?.wordings, "dropzone_label")}
-                <br />
-                {wordExtractor(
-                  page?.content?.wordings,
-                  "supported_image_format_label"
-                )}
-              </Text>
-            </VStack>
-          )}
-        </Dropzone>
+        <ProfileDropzone page={page} />
       </AspectRatio>
     </VStack>
   );

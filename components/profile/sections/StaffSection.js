@@ -16,12 +16,15 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEdit } from "react-icons/ai";
+import { useIdentityProfileContext } from "../../../utils/profile/identityProfileState";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
 
-const StaffSection = ({ identity, page, enums, editable }) => {
+const StaffSection = () => {
   const router = useRouter();
+  const { identity, page, enums, editable, onIdentityUpdate } =
+    useIdentityProfileContext();
   const props = { identity, page, enums, editable };
   const editModelDisclosure = useDisclosure();
 
@@ -33,16 +36,8 @@ const StaffSection = ({ identity, page, enums, editable }) => {
   } = useForm();
 
   useEffect(() => {
-    if (!editModelDisclosure.isOpen) {
-      reset();
-    }
-  }, [identity, editModelDisclosure.isOpen]);
-
-  const onSubmit = useCallback((values) => {
-    alert("updated");
-    editModelDisclosure.onClose();
-    console.log(values);
-  }, []);
+    reset(identity);
+  }, [reset, identity]);
 
   const editor = (
     <>
@@ -252,7 +247,10 @@ const StaffSection = ({ identity, page, enums, editable }) => {
     <SectionCard>
       <VStack
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(async ({ type, ...values }) => {
+          await onIdentityUpdate(values);
+          editModelDisclosure.onClose();
+        })}
         spacing={1}
         align="stretch"
       >

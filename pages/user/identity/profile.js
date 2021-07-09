@@ -8,6 +8,8 @@ import { getPage } from "../../../utils/page/getPage";
 import { getEnums } from "../../../utils/enums/getEnums";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
+import { useCallback, useEffect, useState } from "react";
+import { IdentityProfileProvider } from "../../../utils/profile/identityProfileState";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -53,8 +55,20 @@ export const getServerSideProps = async (context) => {
 };
 
 const IdentityProfile = ({ enums, page }) => {
-  const { identity } = useAppContext();
+  const { identity: _identity, updateIdentity } = useAppContext();
   const editable = true;
+
+  const [identity, _setIdentity] = useState(_identity);
+  useEffect(() => {
+    _setIdentity(_identity);
+  }, [_identity]);
+
+  const setIdentity = useCallback(
+    (identity) => {
+      updateIdentity(_identity?.id, identity);
+    },
+    [_identity, updateIdentity]
+  );
 
   const props = { identity, enums, page, editable };
   let comp = null;
@@ -76,10 +90,19 @@ const IdentityProfile = ({ enums, page }) => {
       comp = <Box></Box>;
   }
 
+  const providerValue = {
+    page,
+    enums,
+    editable: true,
+    identity,
+    setIdentity,
+  };
   return (
-    <Box w="100%" bgColor="#fafafa">
-      {comp}
-    </Box>
+    <IdentityProfileProvider {...providerValue}>
+      <Box w="100%" bgColor="#fafafa">
+        {comp}
+      </Box>
+    </IdentityProfileProvider>
   );
 };
 

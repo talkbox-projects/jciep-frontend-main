@@ -20,6 +20,7 @@ export default gql`
 
   type Mutation {
     FileUpload(files: FileUpload!): [File]
+    _FileUpload(files: [FileUpload]): [File]
   }
 
   input FileMetaInput {

@@ -47,13 +47,6 @@ const PublicSection = ({ identity, page, enums, editable }) => {
     }
   }, [identity, editModelDisclosure.isOpen]);
 
-  const onSubmit = useCallback((values) => {
-    alert("updated");
-    updateIdentity(identity?.id, values);
-    editModelDisclosure.onClose();
-    console.log(values);
-  }, []);
-
   const editor = (
     <>
       <VStack spacing={1} px={8} align="start">
@@ -433,7 +426,11 @@ const PublicSection = ({ identity, page, enums, editable }) => {
     <SectionCard>
       <VStack
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
+        as="form"
+        onSubmit={handleSubmit(async ({ type, ...values }) => {
+          await onIdentityUpdate(values);
+          editModelDisclosure.onClose();
+        })}
         spacing={1}
         align="stretch"
       >
