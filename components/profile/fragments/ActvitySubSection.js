@@ -28,7 +28,6 @@ const ActivitySubSection = ({
   enums,
   editModelDisclosure,
 }) => {
-  const router = useRouter();
   const { fields, append, remove, insert } = useFieldArray({
     control,
     name: "activity",
