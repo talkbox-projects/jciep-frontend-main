@@ -32,17 +32,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
     },
   };
@@ -59,7 +49,6 @@ const OrganizationNgoAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-
   const onFormSubmit = useCallback(
     async ({
       chineseOrganizationName,
@@ -69,8 +58,6 @@ const OrganizationNgoAdd = ({ page }) => {
       terms,
     }) => {
       try {
-       
-
         const mutation = gql`
           mutation OrganizationSubmissionCreate(
             $input: OrganizationSubmissionCreateInput!
@@ -122,33 +109,51 @@ const OrganizationNgoAdd = ({ page }) => {
             <SimpleGrid columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.chineseOrganizationName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.chineseOrganizationName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
                     {...register("chineseOrganizationName", {
-                      required: true
+                      required: true,
                     })}
                   />
                   <FormHelperText>
-                    {errors?.chineseOrganizationName?.type === "required" && <Text color="red">輸入有效的中文組織名稱 Enter valid chinese organization name!</Text>}
+                    {errors?.chineseOrganizationName?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的中文組織名稱 Enter valid chinese organization
+                        name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.englishOrganizationName} <Text as="span" color="red">*</Text>
+                    {page?.content?.form?.englishOrganizationName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
                     {...register("englishOrganizationName", {
-                      required: true
+                      required: true,
                     })}
                   />
                   <FormHelperText>
-                    {errors?.englishOrganizationName?.type === "required" && <Text color="red">輸入有效的英文組織名稱 Enter valid english organization name!</Text>}
+                    {errors?.englishOrganizationName?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的英文組織名稱 Enter valid english organization
+                        name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -176,12 +181,19 @@ const OrganizationNgoAdd = ({ page }) => {
             </FormControl>
 
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms", {
-                required: true
-              })}>
+              <Checkbox
+                colorScheme="green"
+                {...register("terms", {
+                  required: true,
+                })}
+              >
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText>{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
+              <FormHelperText>
+                {errors?.terms?.type === "required" && (
+                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                )}
+              </FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">

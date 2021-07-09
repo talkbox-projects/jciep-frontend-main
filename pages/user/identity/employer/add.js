@@ -33,17 +33,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
     },
   };
@@ -64,7 +54,6 @@ const IdentityEmployerAdd = ({ page }) => {
   const onFormSubmit = useCallback(
     async ({ contactPersonName, contactEmailAdress, contactNumber, terms }) => {
       try {
-        
         const mutation = gql`
           mutation IdentityCreate($input: IdentityCreateInput!) {
             IdentityCreate(input: $input) {
@@ -90,7 +79,6 @@ const IdentityEmployerAdd = ({ page }) => {
             `/user/organization/company/${data.IdentityCreate.id}/add`
           );
         }
-
       } catch (e) {
         console.log(e);
       }
@@ -115,59 +103,99 @@ const IdentityEmployerAdd = ({ page }) => {
             <SimpleGrid columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactPersonName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.contactPersonName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
                     {...register("contactPersonName", {
-                      required: true
+                      required: true,
                     })}
                   />
-                  <FormHelperText >
-                    {errors?.contactPersonName?.type === "required" && <Text color="red">輸入有效的聯繫人姓名 Enter valid contact person name!</Text>}
+                  <FormHelperText>
+                    {errors?.contactPersonName?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的聯繫人姓名 Enter valid contact person name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactEmailAdress} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.contactEmailAdress}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
                     {...register("contactEmailAdress", {
                       required: true,
-                      pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                      pattern:
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                     })}
                   />
-                  <FormHelperText >
-                    {errors?.contactEmailAdress?.type === "required" && <Text color="red">"輸入有效的聯繫電子郵件地址 Enter valid contact email address!</Text>}
-                    {errors?.contactEmailAdress?.type === "pattern" && <Text color="red">"輸入有效的聯繫電子郵件地址 Enter valid contact email address!</Text>}
-
+                  <FormHelperText>
+                    {errors?.contactEmailAdress?.type === "required" && (
+                      <Text color="red">
+                        "輸入有效的聯繫電子郵件地址 Enter valid contact email
+                        address!
+                      </Text>
+                    )}
+                    {errors?.contactEmailAdress?.type === "pattern" && (
+                      <Text color="red">
+                        "輸入有效的聯繫電子郵件地址 Enter valid contact email
+                        address!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactNumber} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.contactNumber}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("contactNumber", {required: true})}
+                    {...register("contactNumber", { required: true })}
                   />
-                  <FormHelperText >
-                    {errors?.contactNumber?.type === "required" && <Text color="red">輸入有效的聯繫電話 Enter valid contact Number!</Text>}
+                  <FormHelperText>
+                    {errors?.contactNumber?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的聯繫電話 Enter valid contact Number!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>
 
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms", {
-                required: true
-              })}>
+              <Checkbox
+                colorScheme="green"
+                {...register("terms", {
+                  required: true,
+                })}
+              >
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText  >{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
+              <FormHelperText>
+                {errors?.terms?.type === "required" && (
+                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                )}
+              </FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">

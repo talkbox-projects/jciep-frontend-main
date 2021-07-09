@@ -34,17 +34,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
     },
   };
@@ -52,7 +42,7 @@ export const getServerSideProps = async (context) => {
 const OrganizationCompanyAdd = ({ page }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
-  const [fileError, setFileError] = useState('')
+  const [fileError, setFileError] = useState("");
   const { id } = router.query;
 
   const {
@@ -84,10 +74,29 @@ const OrganizationCompanyAdd = ({ page }) => {
       companyDescription,
     }) => {
       try {
-
-        if(validate()){
-          return 
+        if (validate()) {
+          return;
         }
+
+        const FileUploadmutation = gql`
+          mutation FileUpload($file: FileUpload!) {
+            FileUpload(files: $file) {
+              id
+              url
+              contentType
+              fileSize
+            }
+          }
+        `;
+
+        let filesUploadData = await getGraphQLClient().request(
+          FileUploadmutation,
+          {
+            file: files,
+          }
+        );
+
+        console.log(filesUploadData);
 
         const mutation = gql`
           mutation OrganizationSubmissionCreate(
@@ -105,12 +114,14 @@ const OrganizationCompanyAdd = ({ page }) => {
             chineseCompanyName: chineseCompanyName,
             englishCompanyName: englishCompanyName,
             website: companyWebsite,
-            industry: industry?.map(({value}) => ({value}).value),
+            industry: industry?.map(({ value }) => ({ value }.value)),
             identityId: id,
             description: companyDescription,
-            businessRegistration: files,
+            businessRegistration: filesUploadData.FileUpload,
           },
         });
+
+        console.log(data);
 
         if (data.OrganizationSubmissionCreate) {
           router.push(
@@ -127,7 +138,7 @@ const OrganizationCompanyAdd = ({ page }) => {
     let uploadedFiles = await e.target.files[0];
     let previousFiles = files;
     let newFiles = previousFiles.concat(uploadedFiles);
-    setFileError('')
+    setFileError("");
     setFiles(newFiles);
   };
 
@@ -156,52 +167,79 @@ const OrganizationCompanyAdd = ({ page }) => {
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.chineseCompanyName} <Text as="span" color="red">*</Text>
+                    {page?.content?.form?.chineseCompanyName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chineseCompanyName", {required: true})}
+                    {...register("chineseCompanyName", { required: true })}
                   />
                   <FormHelperText>
-                    {errors?.chineseCompanyName?.type === "required" && <Text color="red">輸入有效的中國公司名稱 Enter valid chinese company name!</Text>}
+                    {errors?.chineseCompanyName?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的中國公司名稱 Enter valid chinese company name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
                   <FormLabel>
-                    {page?.content?.form?.englishCompanyName} <Text as="span" color="red">*</Text>
+                    {page?.content?.form?.englishCompanyName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
                   </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("englishCompanyName", {required: true})}
+                    {...register("englishCompanyName", { required: true })}
                   />
                   <FormHelperText>
-                    {errors?.englishCompanyName?.type === "required" && <Text color="red">輸入有效的英文公司名稱 Enter valid english company name!</Text>}
+                    {errors?.englishCompanyName?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的英文公司名稱 Enter valid english company name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
 
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.industry?.label} <Text as="span" color="red">*</Text></FormLabel>
-                  
+                  <FormLabel>
+                    {page?.content?.form?.industry?.label}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+
                   <Controller
                     name="industry"
                     isClearable
                     control={control}
-                    rules={{required:true}}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
                         isMulti
-                        options={page?.content?.form?.industry?.options.map(({label, value}) => ({label, value}))}
+                        options={page?.content?.form?.industry?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
                       />
                     )}
                   />
-                  <FormHelperText >{errors?.industry?.type === "required" && <Text color="red">請選擇行業 Please select industry!</Text>}</FormHelperText>
+                  <FormHelperText>
+                    {errors?.industry?.type === "required" && (
+                      <Text color="red">
+                        請選擇行業 Please select industry!
+                      </Text>
+                    )}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
 
@@ -226,11 +264,15 @@ const OrganizationCompanyAdd = ({ page }) => {
                   border="1px solid lightgrey"
                   borderRadius="5px"
                   height="140px"
-                  
                   width="140px"
                 >
-                  <FormLabel height="100%" padding="18% 28%" width="100%" background= "lightgrey"
-                  cursor="pointer">
+                  <FormLabel
+                    height="100%"
+                    padding="18% 28%"
+                    width="100%"
+                    background="lightgrey"
+                    cursor="pointer"
+                  >
                     <Input
                       type="file"
                       multiple={true}
@@ -288,9 +330,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                   })}
                 </Box>
               </Box>
-              <FormHelperText color="red">
-                {fileError}
-              </FormHelperText>
+              <FormHelperText color="red">{fileError}</FormHelperText>
             </FormControl>
 
             <FormControl marginTop="20px !important">

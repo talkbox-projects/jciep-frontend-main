@@ -154,8 +154,8 @@ export default gql`
     id: ID
     organizationId: ID
     userId: ID
-    chineseName: String!
-    englishName: String!
+    chineseName: String
+    englishName: String
     dob: Timestamp
     gender: EnumGender
     district: District

@@ -36,7 +36,9 @@ const StaffSection = () => {
   } = useForm();
 
   useEffect(() => {
-    reset(identity);
+    if (editModelDisclosure.isOpen) {
+      reset(identity);
+    }
   }, [reset, identity]);
 
   const editor = (

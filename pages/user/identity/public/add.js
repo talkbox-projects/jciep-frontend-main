@@ -12,9 +12,8 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useCallback } from "react";
-import { useForm , Controller} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
-
 
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
@@ -33,17 +32,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
     },
   };
@@ -61,7 +50,6 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  
   const onFormSubmit = useCallback(
     async ({
       chinese_name,
@@ -73,8 +61,6 @@ const IdentityPublicAdd = ({ page }) => {
       terms,
     }) => {
       try {
-        
-
         const mutation = gql`
           mutation IdentityCreate($input: IdentityCreateInput!) {
             IdentityCreate(input: $input) {
@@ -90,9 +76,11 @@ const IdentityPublicAdd = ({ page }) => {
             chineseName: chinese_name,
             englishName: english_name,
             dob: date_of_birth,
-            gender:  gender?.value,
+            gender: gender?.value,
             district: resident_district?.value,
-            interestedIndustry: industry?.map(({value}) => ({value})?.value),
+            interestedIndustry: industry?.map(
+              ({ value }) => ({ value }?.value)
+            ),
             tncAccept: terms,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",
@@ -129,27 +117,45 @@ const IdentityPublicAdd = ({ page }) => {
             <SimpleGrid pt={16} columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.chineseName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.chineseName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chinese_name", {required: true})}
+                    {...register("chinese_name", { required: true })}
                   />
                   <FormHelperText>
-                    {errors?.chinese_name?.type === "required" && <Text color="red" color="red">輸入有效的中文名稱 Enter valid chinese name!</Text>}
+                    {errors?.chinese_name?.type === "required" && (
+                      <Text color="red" color="red">
+                        輸入有效的中文名稱 Enter valid chinese name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.englishName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.englishName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("english_name", {required: true})}
+                    {...register("english_name", { required: true })}
                   />
                   <FormHelperText>
-                    {errors?.english_name?.type === "required" && <Text color="red">輸入有效的英文名稱 Enter valid english name! </Text>}
+                    {errors?.english_name?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的英文名稱 Enter valid english name!{" "}
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -169,17 +175,19 @@ const IdentityPublicAdd = ({ page }) => {
               <GridItem>
                 <FormControl>
                   <FormLabel>{page?.content?.form?.gender?.label}</FormLabel>
-                    <Controller
-                      name="gender"
-                      isClearable
-                      control={control}
-                      render={({ field }) => (
-                        <ReactSelect
-                          {...field}
-                          options={page?.content?.form?.gender?.options.map(({label, value}) => ({label, value}))}
-                        />
-                      )}
-                    />
+                  <Controller
+                    name="gender"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        {...field}
+                        options={page?.content?.form?.gender?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
+                      />
+                    )}
+                  />
                   <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
@@ -196,7 +204,9 @@ const IdentityPublicAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
-                        options={page?.content?.form?.residentRestrict?.options.map(({label, value}) => ({label, value}))}
+                        options={page?.content?.form?.residentRestrict?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
                       />
                     )}
                   />
@@ -206,29 +216,49 @@ const IdentityPublicAdd = ({ page }) => {
 
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.industry?.label} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.industry?.label}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Controller
                     name="industry"
                     isClearable
                     control={control}
-                    rules={{required: true}}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
                         isMulti
-                        options={page?.content?.form?.industry?.options.map(({label, value}) => ({label, value}))}
+                        options={page?.content?.form?.industry?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
                       />
                     )}
                   />
-                  <FormHelperText >{errors?.industry?.type === "required" && <Text color="red">請選擇行業 Please select industry! </Text>} </FormHelperText>
+                  <FormHelperText>
+                    {errors?.industry?.type === "required" && (
+                      <Text color="red">
+                        請選擇行業 Please select industry!{" "}
+                      </Text>
+                    )}{" "}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms", {required: true})}>
+              <Checkbox
+                colorScheme="green"
+                {...register("terms", { required: true })}
+              >
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText>{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
+              <FormHelperText>
+                {errors?.terms?.type === "required" && (
+                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                )}
+              </FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">

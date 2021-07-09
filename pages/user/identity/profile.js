@@ -10,6 +10,8 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
 import { useCallback, useEffect, useState } from "react";
 import { IdentityProfileProvider } from "../../../utils/profile/identityProfileState";
+import ProfileStore from "../../../store/ProfileStore";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -38,17 +40,7 @@ export const getServerSideProps = async (context) => {
       page,
       enums,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context)),
       lang: context.locale,
     },
   };
@@ -98,11 +90,13 @@ const IdentityProfile = ({ enums, page }) => {
     setIdentity,
   };
   return (
-    <IdentityProfileProvider {...providerValue}>
-      <Box w="100%" bgColor="#fafafa">
-        {comp}
-      </Box>
-    </IdentityProfileProvider>
+    <ProfileStore.Provider identity={_identity} enums={enums} page={page}>
+      <IdentityProfileProvider {...providerValue}>
+        <Box w="100%" bgColor="#fafafa">
+          {comp}
+        </Box>
+      </IdentityProfileProvider>
+    </ProfileStore.Provider>
   );
 };
 

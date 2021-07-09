@@ -5,17 +5,17 @@ export default gql`
   scalar FileUpload
 
   input FileInput {
-    id: String!
-    url: String!
-    contentType: String!
-    fileSize: Int!
+    id: String
+    url: String
+    contentType: String
+    fileSize: Int
   }
 
   type File {
-    id: String!
-    url: String!
-    contentType: String!
-    fileSize: Int!
+    id: String
+    url: String
+    contentType: String
+    fileSize: Int
   }
 
   type Mutation {
@@ -24,15 +24,15 @@ export default gql`
   }
 
   input FileMetaInput {
-    id: String!
-    url: String!
+    id: String
+    url: String
     title: String
     description: String
   }
 
   type FileMeta {
-    id: String!
-    url: String!
+    id: String
+    url: String
     title: String
     description: String
   }

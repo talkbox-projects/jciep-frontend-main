@@ -102,9 +102,8 @@ const organizationSubmissionSchema = Schema({
     {
       id: String,
       url: String,
-      filename: String,
       contentType: String,
-      directory: String,
+      fileSize: Number
     },
   ],
   industry: [{

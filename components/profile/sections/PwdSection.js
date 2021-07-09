@@ -44,10 +44,10 @@ const PwdSection = ({ identity, page, enums, editable }) => {
   } = useForm();
 
   useEffect(() => {
-    if (!editModelDisclosure.isOpen) {
+    if (editModelDisclosure.isOpen) {
       reset(identity);
     }
-  }, [identity, editModelDisclosure.isOpen]);
+  }, [editModelDisclosure.isOpen, reset, identity]);
 
   const editor = (
     <>

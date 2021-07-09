@@ -13,7 +13,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
-import { useForm , Controller} from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
@@ -33,17 +33,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      setting: await getConfiguration({ key: "setting", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
     },
   };
@@ -73,7 +63,6 @@ const IdentityPwdAdd = ({ page }) => {
       terms,
     }) => {
       try {
-    
         const mutation = gql`
           mutation IdentityCreate($input: IdentityCreateInput!) {
             IdentityCreate(input: $input) {
@@ -91,9 +80,13 @@ const IdentityPwdAdd = ({ page }) => {
             dob: date_of_birth,
             gender: gender?.value,
             district: resident_district?.value,
-            pwdType: person_types?.map(({value}) => ({value})?.value),
-            interestedEmploymentMode:  interested_employee?.map(({value}) => ({value})?.value),
-            interestedIndustry: industry?.map(({value}) => ({value})?.value),
+            pwdType: person_types?.map(({ value }) => ({ value }?.value)),
+            interestedEmploymentMode: interested_employee?.map(
+              ({ value }) => ({ value }?.value)
+            ),
+            interestedIndustry: industry?.map(
+              ({ value }) => ({ value }?.value)
+            ),
             tncAccept: terms,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",
@@ -130,27 +123,45 @@ const IdentityPwdAdd = ({ page }) => {
             <SimpleGrid pt={16} columns={[1, 2, 2, 2]} spacing={4} width="100%">
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.chineseName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.chineseName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("chinese_name", {required: true})}
+                    {...register("chinese_name", { required: true })}
                   />
-                  <FormHelperText >
-                    {errors?.chinese_name?.type === "required" && <Text color="red" >輸入有效的中文名稱 Enter valid chinese name!</Text>}
+                  <FormHelperText>
+                    {errors?.chinese_name?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的中文名稱 Enter valid chinese name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.englishName} <Text as="span" color="red">*</Text></FormLabel>
+                  <FormLabel>
+                    {page?.content?.form?.englishName}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
                   <Input
                     type="text"
                     placeholder=""
-                    {...register("english_name", {required: true})}
+                    {...register("english_name", { required: true })}
                   />
-                  <FormHelperText >
-                    {errors?.english_name?.type === "required" && <Text color="red">輸入有效的英文名稱 Enter valid english name!</Text>}
+                  <FormHelperText>
+                    {errors?.english_name?.type === "required" && (
+                      <Text color="red">
+                        輸入有效的英文名稱 Enter valid english name!
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -162,7 +173,7 @@ const IdentityPwdAdd = ({ page }) => {
                     placeholder=""
                     {...register("date_of_birth")}
                   />
-                  <FormHelperText >
+                  <FormHelperText>
                     {errors?.date_of_birth?.message}
                   </FormHelperText>
                 </FormControl>
@@ -177,7 +188,9 @@ const IdentityPwdAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
-                        options={page?.content?.form?.gender?.options.map(({label, value}) => ({label, value}))}
+                        options={page?.content?.form?.gender?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
                       />
                     )}
                   />
@@ -196,18 +209,18 @@ const IdentityPwdAdd = ({ page }) => {
                 render={({ field }) => (
                   <ReactSelect
                     {...field}
-                    options={page?.content?.form?.residentRestrict?.options.map(({label, value}) => ({label, value}))}
+                    options={page?.content?.form?.residentRestrict?.options.map(
+                      ({ label, value }) => ({ label, value })
+                    )}
                   />
                 )}
               />
-              <FormHelperText ></FormHelperText>
+              <FormHelperText></FormHelperText>
             </FormControl>
 
             <FormControl>
-              <FormLabel>
-                {page?.content?.form?.personTypes?.label}
-              </FormLabel>
-              
+              <FormLabel>{page?.content?.form?.personTypes?.label}</FormLabel>
+
               <Controller
                 name="person_types"
                 isClearable
@@ -216,57 +229,88 @@ const IdentityPwdAdd = ({ page }) => {
                   <ReactSelect
                     {...field}
                     isMulti
-                    options={page?.content?.form?.personTypes?.options.map(({label, value}) => ({label, value}))}
+                    options={page?.content?.form?.personTypes?.options.map(
+                      ({ label, value }) => ({ label, value })
+                    )}
                   />
                 )}
               />
-              <FormHelperText ></FormHelperText>
-            </FormControl>          
-
-             <FormControl>
-                <FormLabel>{page?.content?.form?.employeerMode?.label} <Text as="span" color="red">*</Text></FormLabel>
-                <Controller
-                  name="interested_employee"
-                  isClearable
-                  control={control}
-                  rules={{required:true}}
-                  render={({ field }) => (
-                    <ReactSelect
-                      {...field}
-                      isMulti
-                      options={page?.content?.form?.employeerMode?.options.map(({label, value}) => ({label, value}))}
-                    />
-                  )}
-                />
-                <FormHelperText >
-                  {errors?.interested_employee?.type === "required" && <Text color="red">請選擇感興趣的員工 Please select a interested employee!</Text>}
-                </FormHelperText>
-            </FormControl>    
+              <FormHelperText></FormHelperText>
+            </FormControl>
 
             <FormControl>
-              <FormLabel>{page?.content?.form?.industry?.label} <Text as="span" color="red">*</Text></FormLabel>
-              
+              <FormLabel>
+                {page?.content?.form?.employeerMode?.label}{" "}
+                <Text as="span" color="red">
+                  *
+                </Text>
+              </FormLabel>
               <Controller
-                name="industry"
+                name="interested_employee"
                 isClearable
                 control={control}
-                rules={{required:true}}
+                rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
                     {...field}
                     isMulti
-                    options={page?.content?.form?.industry?.options.map(({label, value}) => ({label, value}))}
+                    options={page?.content?.form?.employeerMode?.options.map(
+                      ({ label, value }) => ({ label, value })
+                    )}
                   />
                 )}
               />
-              <FormHelperText >{errors?.industry?.type === "required" && <Text color="red">請選擇行業 Please select industry!</Text>}</FormHelperText>
+              <FormHelperText>
+                {errors?.interested_employee?.type === "required" && (
+                  <Text color="red">
+                    請選擇感興趣的員工 Please select a interested employee!
+                  </Text>
+                )}
+              </FormHelperText>
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>
+                {page?.content?.form?.industry?.label}{" "}
+                <Text as="span" color="red">
+                  *
+                </Text>
+              </FormLabel>
+
+              <Controller
+                name="industry"
+                isClearable
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <ReactSelect
+                    {...field}
+                    isMulti
+                    options={page?.content?.form?.industry?.options.map(
+                      ({ label, value }) => ({ label, value })
+                    )}
+                  />
+                )}
+              />
+              <FormHelperText>
+                {errors?.industry?.type === "required" && (
+                  <Text color="red">請選擇行業 Please select industry!</Text>
+                )}
+              </FormHelperText>
             </FormControl>
 
             <FormControl marginTop="20px !important">
-              <Checkbox colorScheme="green" {...register("terms", {required: true})}>
+              <Checkbox
+                colorScheme="green"
+                {...register("terms", { required: true })}
+              >
                 {page?.content?.form?.terms}
               </Checkbox>
-              <FormHelperText style={{color: 'red'}} >{errors?.terms?.type === "required" && <Text color="red">請接受條款和條件 Please accept T&C!</Text>}</FormHelperText>
+              <FormHelperText style={{ color: "red" }}>
+                {errors?.terms?.type === "required" && (
+                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                )}
+              </FormHelperText>
             </FormControl>
 
             <FormControl textAlign="center">

@@ -30,12 +30,14 @@ const ExperienceSection = ({ identity, page, enums, editable }) => {
   const form = useForm({
     defaultValues: identity,
   });
-  useEffect(() => {
-    form.reset(identity);
-  }, [identity]);
-
-  const { handleSubmit } = form;
+  const { reset, handleSubmit } = form;
   const editModelDisclosure = useDisclosureWithParams();
+
+  useEffect(() => {
+    if (editModelDisclosure.isOpen) {
+      reset(identity);
+    }
+  }, [editModelDisclosure.isOpen, reset, identity]);
 
   const onSubmit = useCallback((values) => {
     console.log("updated", values);

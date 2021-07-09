@@ -139,9 +139,10 @@ const identitySchema = Schema({
   },
   portfolio: [
     {
-      input: Object,
+      id: String,
+      url: String,
       title: String,
-      description: String,
+      description: String
     },
   ],
   writtenLanguage: [
@@ -193,10 +194,16 @@ const identitySchema = Schema({
     },
   ],
     profilePic: {
-      type: Object
+      id: String,
+      url: String,
+      contentType: String,
+      fileSize: Number
     },
     bannerMedia: {
-      type: Object
+      id: String,
+      url: String,
+      title: String,
+      description: String
     },
   activity: [
     {
