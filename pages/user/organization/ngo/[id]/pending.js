@@ -4,6 +4,7 @@ import { getConfiguration } from "../../../../../utils/configuration/getConfigur
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
+import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "organization_ngo_pending";
 

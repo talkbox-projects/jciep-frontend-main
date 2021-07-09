@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
+import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "identity_staff_add";
 
@@ -49,10 +50,6 @@ const IdentityStaffAdd = ({ page }) => {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   const onFormSubmit = useCallback(
     async ({ contactPersonName, contactEmailAdress, contactNumber, terms }) => {

@@ -29,6 +29,7 @@ import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import NextLink from "next/link";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {

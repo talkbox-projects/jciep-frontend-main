@@ -24,6 +24,7 @@ import withPageCMS from "../../../../../utils/page/withPageCMS";
 import Link from "next/link";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../utils/apollo";
+import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "organization_company_add";
 

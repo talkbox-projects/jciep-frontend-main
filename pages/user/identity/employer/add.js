@@ -23,6 +23,7 @@ import Link from "next/link";
 import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
+import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "employer_identity_add";
 

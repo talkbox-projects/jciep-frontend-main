@@ -37,6 +37,7 @@ import { getEnums } from "../../../utils/enums/getEnums";
 import moment from "moment";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "identity_id_profile";
 

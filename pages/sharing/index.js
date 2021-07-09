@@ -32,6 +32,7 @@ import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Container from "../../components/Container";
 import CategoryTag from "../../components/CategoryTag";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "sharing";
 

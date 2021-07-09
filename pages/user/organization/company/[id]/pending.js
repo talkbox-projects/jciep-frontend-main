@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
+import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "organization_company_pending";
 

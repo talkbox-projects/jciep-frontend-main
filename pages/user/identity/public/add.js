@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
+import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "identity_public_add";
 

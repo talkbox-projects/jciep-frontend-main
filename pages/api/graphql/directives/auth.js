@@ -33,7 +33,6 @@ class AuthDirective extends SchemaDirectiveVisitor {
 
         const context = args[2];
         const user = await getUser(context.user);
-        console.log(user);
         // if (!user.hasRole(requiredRole)) {
         //   throw new Error("not authorized");
         // }

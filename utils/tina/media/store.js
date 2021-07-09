@@ -1,5 +1,5 @@
 import { gql } from "graphql-request";
-import { getGraphQLClient } from "../utils/apollo";
+import { getGraphQLClient } from "../../apollo";
 
 export default class MongooseMediaStore {
   static accept = "*";

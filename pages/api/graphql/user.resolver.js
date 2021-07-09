@@ -3,7 +3,7 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
-import {createFile} from './file.resolver';
+import { createFile } from "./file.resolver";
 
 export default {
   Query: {
@@ -119,7 +119,6 @@ export default {
             await emailVerify.delete();
             const token = jwt.sign(user.toObject(), "shhhhh").toString();
 
-            console.log(user);
             return { token, user };
           }
         } else if (input?.email && input?.password) {
@@ -221,18 +220,18 @@ export default {
         email: input.email,
         phone: input.phone,
         caption: input?.caption,
-        educationLevel: input?. educationLevel,
+        educationLevel: input?.educationLevel,
         yearOfExperience: input?.yearOfExperience,
         biography: input?.biography,
         writtenLanguage: input?.writtenLanguage,
         oralLanguage: input?.oralLanguage,
         skill: input?.skill,
         skillOther: input?.skillOther,
-        hobby:input?.hobby,
+        hobby: input?.hobby,
         education: input?.education,
         employment: input?.employment,
-        activity: input?.activity 
-      }).save()
+        activity: input?.activity,
+      }).save();
 
       let user = await User.findById(input.userId);
       let identities = user.identities;
@@ -242,9 +241,8 @@ export default {
         identities: identities,
       });
 
-      return identity
+      return identity;
     },
-
 
     IdentityUpdate: async (_parent, { input }) => {
       /**
@@ -252,8 +250,7 @@ export default {
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
-        return await Identity.findByIdAndUpdate(input.id, input)
- 
+      return await Identity.findByIdAndUpdate(input.id, input);
     },
   },
 };

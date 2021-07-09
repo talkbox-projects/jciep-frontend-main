@@ -3,7 +3,7 @@ import { withTina } from "tinacms";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { NextSeo } from "next-seo";
-import MongooseMediaStore from "../media/store";
+import MongooseMediaStore from "../utils/tina/media/store";
 import { HtmlFieldPlugin } from "react-tinacms-editor";
 import { AppProvider } from "../store/AppStore";
 

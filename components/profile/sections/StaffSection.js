@@ -39,7 +39,7 @@ const StaffSection = () => {
     if (editModelDisclosure.isOpen) {
       reset(identity);
     }
-  }, [reset, identity]);
+  }, [editModelDisclosure.isOpen, reset, identity]);
 
   const editor = (
     <>

@@ -13,6 +13,7 @@ import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
 import { useState } from "react";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 const PAGE_KEY = "identity_select";
 
 export const getServerSideProps = async (context) => {
