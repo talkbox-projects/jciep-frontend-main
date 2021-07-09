@@ -7,7 +7,7 @@ import { useDisclosureWithParams } from "../../../store/AppStore";
 
 const BiographySection = ({ identity, page, enums, editable }) => {
   const form = useForm();
-  const editModeDisclosure = useDisclosureWithParams();
+  const editModelDisclosure = useDisclosureWithParams();
 
   return (
     <SectionCard>
@@ -16,9 +16,9 @@ const BiographySection = ({ identity, page, enums, editable }) => {
           <Text flex={1} minW={0} w="100%" fontSize="2xl">
             {wordExtractor(page?.content?.wordings, "biography_header_label")}
           </Text>
-          {editModeDisclosure.isOpen ? (
+          {editModelDisclosure.isOpen ? (
             <Button
-              onClick={editModeDisclosure.onClose}
+              onClick={editModelDisclosure.onClose}
               variant="link"
               leftIcon={<RiEdit2Line />}
             >
@@ -26,7 +26,7 @@ const BiographySection = ({ identity, page, enums, editable }) => {
             </Button>
           ) : (
             <Button
-              onClick={editModeDisclosure.onOpen}
+              onClick={editModelDisclosure.onOpen}
               variant="link"
               leftIcon={<RiEdit2Line />}
             >

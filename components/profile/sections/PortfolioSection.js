@@ -75,7 +75,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
 
   const lightBoxDisclosure = useDisclosureWithParams();
   const portfolioMediaDisclosure = useDisclosure();
-  const editModeDisclosure = useDisclosure();
+  const editModelDisclosure = useDisclosure();
 
   const onItemRemove = useCallback(
     (index) => {
@@ -90,7 +90,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
 
   const onPortfolioItemClick = useCallback(
     (item) => {
-      if (editModeDisclosure.isOpen) {
+      if (editModelDisclosure.isOpen) {
         portfolioMediaDisclosure.onOpen({
           item,
         });
@@ -100,7 +100,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
         });
       }
     },
-    [editModeDisclosure.isOpen]
+    [editModelDisclosure.isOpen]
   );
 
   return (
@@ -110,9 +110,9 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
           <Text flex={1} minW={0} w="100%" fontSize="2xl">
             {wordExtractor(page?.content?.wordings, "portfolio_header_label")}
           </Text>
-          {editModeDisclosure.isOpen ? (
+          {editModelDisclosure.isOpen ? (
             <Button
-              onClick={editModeDisclosure.onClose}
+              onClick={editModelDisclosure.onClose}
               variant="link"
               leftIcon={<RiEdit2Line />}
             >
@@ -120,7 +120,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
             </Button>
           ) : (
             <Button
-              onClick={editModeDisclosure.onOpen}
+              onClick={editModelDisclosure.onOpen}
               variant="link"
               leftIcon={<RiEdit2Line />}
             >
@@ -167,7 +167,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
                   boxShadow="sm"
                   position="relative"
                 >
-                  {editModeDisclosure.isOpen && (
+                  {editModelDisclosure.isOpen && (
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
@@ -190,7 +190,7 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
               </AspectRatio>
             );
           })}
-          {(editModeDisclosure.isOpen || medias.length === 0) && (
+          {(editModelDisclosure.isOpen || medias.length === 0) && (
             <AspectRatio ratio={1}>
               <VStack
                 onClick={onPortfolioItemClick}

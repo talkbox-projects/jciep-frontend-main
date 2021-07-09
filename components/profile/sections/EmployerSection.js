@@ -23,7 +23,7 @@ import SectionCard from "../fragments/SectionCard";
 const EmployerSection = ({ identity, page, enums, editable }) => {
   const router = useRouter();
   const props = { identity, page, enums, editable };
-  const editModeDisclosure = useDisclosure();
+  const editModelDisclosure = useDisclosure();
 
   const {
     handleSubmit,
@@ -33,14 +33,14 @@ const EmployerSection = ({ identity, page, enums, editable }) => {
   } = useForm();
 
   useEffect(() => {
-    if (!editModeDisclosure.isOpen) {
+    if (!editModelDisclosure.isOpen) {
       reset();
     }
-  }, [identity, editModeDisclosure.isOpen]);
+  }, [identity, editModelDisclosure.isOpen]);
 
   const onSubmit = useCallback((values) => {
     alert("updated");
-    editModeDisclosure.onClose();
+    editModelDisclosure.onClose();
     console.log(values);
   }, []);
 
@@ -259,9 +259,9 @@ const EmployerSection = ({ identity, page, enums, editable }) => {
         <BannerFragment {...props} />
         <VStack align="stretch">
           <HStack py={2} px={4} spacing={4} justifyContent="flex-end">
-            {editModeDisclosure.isOpen ? (
+            {editModelDisclosure.isOpen ? (
               <>
-                <Button variant="link" onClick={editModeDisclosure.onClose}>
+                <Button variant="link" onClick={editModelDisclosure.onClose}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "cancel_button_label"
@@ -281,7 +281,7 @@ const EmployerSection = ({ identity, page, enums, editable }) => {
               </>
             ) : (
               <Button
-                onClick={editModeDisclosure.onOpen}
+                onClick={editModelDisclosure.onOpen}
                 leftIcon={<AiOutlineEdit />}
                 variant="link"
               >
@@ -293,7 +293,7 @@ const EmployerSection = ({ identity, page, enums, editable }) => {
             )}
           </HStack>
         </VStack>
-        {editModeDisclosure.isOpen ? editor : view}
+        {editModelDisclosure.isOpen ? editor : view}
       </VStack>
     </SectionCard>
   );

@@ -89,7 +89,7 @@ const sectionBorderStyles = {
 
 const ProfileInfoSection = ({ enums, value: identity, page }) => {
   const router = useRouter();
-  const editModeDisclosure = useDisclosure();
+  const editModelDisclosure = useDisclosure();
   const {
     register,
     control,
@@ -118,12 +118,12 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
           },
         });
         updateIdentity(identityId, data?.IdentityUpdate);
-        editModeDisclosure.onClose();
+        editModelDisclosure.onClose();
       } catch (error) {
         console.error(error);
       }
     },
-    [router, identityId, editModeDisclosure]
+    [router, identityId, editModelDisclosure]
   );
 
   const fields = useMemo(() => {
@@ -425,7 +425,7 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
     }
   }, [identity]);
 
-  if (editModeDisclosure.isOpen) {
+  if (editModelDisclosure.isOpen) {
     return (
       <VStack
         as="form"
@@ -679,7 +679,7 @@ const ProfileInfoSection = ({ enums, value: identity, page }) => {
           ></Avatar>
           <HStack p={4} justifyContent="flex-end">
             <Button
-              onClick={editModeDisclosure.onOpen}
+              onClick={editModelDisclosure.onOpen}
               leftIcon={<AiOutlineEdit />}
               variant="link"
             >
