@@ -63,12 +63,11 @@ export default {
     
       let fileArray = []
 
-      if(files.length > 1) {
+      if(files.length > 0) {
         fileArray = files
       } else {
-        fileArray .push(files)
+        fileArray.push(files)
       }
-
       return await uploadFiles(fileArray)
     },
   },

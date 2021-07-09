@@ -89,34 +89,54 @@ const OrganizationCompanyAdd = ({ page }) => {
           return 
         }
 
-        const mutation = gql`
-          mutation OrganizationSubmissionCreate(
-            $input: OrganizationSubmissionCreateInput!
-          ) {
-            OrganizationSubmissionCreate(input: $input) {
-              id
+        const FileUploadmutation = gql`
+          mutation FileUpload($file:FileUpload!) {
+              FileUpload(files: $file) {
+                id
+                url
+                contentType
+                fileSize
+              }
             }
-          }
-        `;
+          `;
 
-        let data = await getGraphQLClient().request(mutation, {
-          input: {
-            organizationType: "ngo",
-            chineseCompanyName: chineseCompanyName,
-            englishCompanyName: englishCompanyName,
-            website: companyWebsite,
-            industry: industry?.map(({value}) => ({value}).value),
-            identityId: id,
-            description: companyDescription,
-            businessRegistration: files,
-          },
-        });
+          let filesUploadData = await getGraphQLClient().request(FileUploadmutation, {
+            file: files
+          })
 
-        if (data.OrganizationSubmissionCreate) {
-          router.push(
-            `/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`
-          );
-        }
+
+          const mutation = gql`
+            mutation OrganizationSubmissionCreate(
+              $input: OrganizationSubmissionCreateInput!
+            ) {
+              OrganizationSubmissionCreate(input: $input) {
+                id
+              }
+            }
+          `;
+
+
+
+        console.log(filesUploadData)
+
+        // let data = await getGraphQLClient().request(mutation, {
+        //   input: {
+        //     organizationType: "ngo",
+        //     chineseCompanyName: chineseCompanyName,
+        //     englishCompanyName: englishCompanyName,
+        //     website: companyWebsite,
+        //     industry: industry?.map(({value}) => ({value}).value),
+        //     identityId: id,
+        //     description: companyDescription,
+        //     businessRegistration: files,
+        //   },
+        // });
+
+        // if (data.OrganizationSubmissionCreate) {
+        //   router.push(
+        //     `/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`
+        //   );
+        // }
       } catch (e) {
         console.log(e);
       }
