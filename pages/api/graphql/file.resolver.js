@@ -3,7 +3,7 @@ import { connection, mongo } from "mongoose";
 
 export const getMediaBucket = () =>
   new mongo.GridFSBucket(connection.db, {
-    bucketName: "files",
+    bucketName: "assets",
   });
 
 export const createFile = async (stream, { filename, options }) => {
@@ -43,9 +43,7 @@ export const uploadFiles = async (files) => {
 
       uploadedFiles.push({
         id: result.id,
-        filename: result.filename.replace(" ", "_"),
-        directory: result.options.metadata.directory,
-        url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
+        url: `api/assets${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
         contentType: result.options.contentType,
         fileSize: result.length
       })

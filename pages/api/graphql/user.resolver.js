@@ -201,8 +201,6 @@ export default {
        * Pwd/Public can create identity for his own account.
        */
 
-      
-
       let identity = await new Identity({
         userId: input.userId,
         type: input.identity,
@@ -217,6 +215,9 @@ export default {
         interestedIndustry: input?.interestedIndustry,
         industry: input?.industry,
         tncAccept: input.tncAccept,
+        profilePic: input?.profilePic,
+        bannerMedia: input?.bannerMedia,
+        portfolio: input?.portfolio,
         email: input.email,
         phone: input.phone,
         caption: input?.caption,
@@ -251,10 +252,8 @@ export default {
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
-
-
-       return await Identity.findByIdAndUpdate(input.id, input)
-       
+        return await Identity.findByIdAndUpdate(input.id, input)
+ 
     },
   },
 };

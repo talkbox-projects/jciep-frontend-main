@@ -24,7 +24,7 @@ export default gql`
 
   type Education {
     school: String
-    degree: Degree
+    degree: EnumDegree
     fieldOfStudy: String
     startDatetime: Timestamp
     endDatetime: Timestamp
