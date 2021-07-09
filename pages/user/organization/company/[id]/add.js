@@ -105,6 +105,8 @@ const OrganizationCompanyAdd = ({ page }) => {
           })
 
 
+          console.log(filesUploadData)
+
           const mutation = gql`
             mutation OrganizationSubmissionCreate(
               $input: OrganizationSubmissionCreateInput!
@@ -116,27 +118,26 @@ const OrganizationCompanyAdd = ({ page }) => {
           `;
 
 
+          let data = await getGraphQLClient().request(mutation, {
+            input: {
+              organizationType: "ngo",
+              chineseCompanyName: chineseCompanyName,
+              englishCompanyName: englishCompanyName,
+              website: companyWebsite,
+              industry: industry?.map(({value}) => ({value}).value),
+              identityId: id,
+              description: companyDescription,
+              businessRegistration: filesUploadData.FileUpload,
+            },
+          });
 
-        console.log(filesUploadData)
+          console.log(data)
 
-        // let data = await getGraphQLClient().request(mutation, {
-        //   input: {
-        //     organizationType: "ngo",
-        //     chineseCompanyName: chineseCompanyName,
-        //     englishCompanyName: englishCompanyName,
-        //     website: companyWebsite,
-        //     industry: industry?.map(({value}) => ({value}).value),
-        //     identityId: id,
-        //     description: companyDescription,
-        //     businessRegistration: files,
-        //   },
-        // });
-
-        // if (data.OrganizationSubmissionCreate) {
-        //   router.push(
-        //     `/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`
-        //   );
-        // }
+          if (data.OrganizationSubmissionCreate) {
+            router.push(
+              `/user/organization/company/${data.OrganizationSubmissionCreate.id}/pending`
+            );
+          }
       } catch (e) {
         console.log(e);
       }

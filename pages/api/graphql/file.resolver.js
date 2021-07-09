@@ -60,7 +60,7 @@ export default {
   Query: {},
   Mutation: {
     FileUpload: async (_parent, { files }) => {
-    
+      
       let fileArray = []
 
       if(files.length > 0) {
@@ -68,6 +68,8 @@ export default {
       } else {
         fileArray.push(files)
       }
+
+      console.log(fileArray)
       return await uploadFiles(fileArray)
     },
   },

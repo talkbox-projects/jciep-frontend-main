@@ -1,45 +1,6 @@
 import { Organization , OrganizationSubmission} from "./organization.model";
 import {createFile} from './file.resolver';
 
-const uploadFile = async (filename, contentType, createReadStream) => {
-  return await createFile(createReadStream(), {
-    filename: filename.replace(" ", "_"),
-    options: {
-      contentType,
-      metadata: {
-        directory: '/organization',
-      },
-    },
-  });
-}
-
-const uploadBusinessRegistration =  async (files) => {
-  let businessRegistrationFiles = [];
-
-  let businessRegistrationUploaded = new Promise (async (resolve, reject) => {
-    for(let i=0; i< files.length; i++) {
-      const { filename, mimetype: contentType, createReadStream } = await files[i].file;
-
-      let result = await uploadFile(filename, contentType, createReadStream)
-
-      businessRegistrationFiles.push({
-        id: result.id,
-        filename: result.filename.replace(" ", "_"),
-        directory: result.options.metadata.directory,
-        url: `api/media${result.options.metadata.directory}/${result.filename.replace(" ", "_")}`,
-        contentType: result.options.contentType,
-      })
-
-      if(businessRegistrationFiles.length === files.length) {
-        resolve(true)
-      }
-    }
-  })
-
-  await businessRegistrationUploaded
-  return businessRegistrationFiles
-}
-
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, params) => {},
@@ -78,78 +39,69 @@ export default {
       console.log(params)
 
 
-      // let organization = new Promise(async (resolve, reject) => {
-      //   if(params.input.organizationId) {
-      //     let organization = await Organization.findById(params.input.organizationId)
+      let organization = new Promise(async (resolve, reject) => {
+        if(params.input.organizationId) {
+          let organization = await Organization.findById(params.input.organizationId)
 
-      //     if (!organization) {
-      //       throw new Error("Organiazation not exists!");
-      //     }
+          if (!organization) {
+            throw new Error("Organiazation not exists!");
+          }
 
-      //     resolve(organization)
-      //   } else {
-
-      //       let files = await params.input?.businessRegistration;
-      //       let businessRegistration;
-
-      //       if(files) {
-      //         businessRegistration = await uploadBusinessRegistration(files)
-      //       }
-
+          resolve(organization)
+        } else {
                         
-      //       resolve(await new Organization({
-      //         organizationType: params.input.organizationType,
-      //         remark: params?.input?.remark,
-      //         status: "pendingApproval",
-      //         chineseCompanyName: params?.input.chineseCompanyName,
-      //         englishCompanyName: params?.input.englishCompanyName,
-      //         website: params?.input?.website,
-      //         businessRegistration: businessRegistration,
-      //         industry: params?.input?.industry,
-      //         description: params?.input?.description,
-      //         businessRegistration:  businessRegistration,
-      //         submission: [],
-      //         district: params?.input?.district,
-      //         companyBenefit: params?.input?.companyBenefit,
-      //         identityId: params?.input?.identityId,
-      //         logo: [],
-      //         tncAccept: params?.input?.tncAccept
-      //       }))
+            resolve(await new Organization({
+              organizationType: params.input.organizationType,
+              remark: params?.input?.remark,
+              status: "pendingApproval",
+              chineseCompanyName: params?.input.chineseCompanyName,
+              englishCompanyName: params?.input.englishCompanyName,
+              website: params?.input?.website,
+              industry: params?.input?.industry,
+              description: params?.input?.description,
+              businessRegistration:  params.input?.businessRegistration,
+              submission: [],
+              district: params?.input?.district,
+              companyBenefit: params?.input?.companyBenefit,
+              identityId: params?.input?.identityId,
+              logo: [],
+              tncAccept: params?.input?.tncAccept
+            }))
       
-      //   }
-      // })
+        }
+      })
 
-      // organization = await organization
+      organization = await organization
 
       
-      // if(organization) {
+      if(organization) {
 
-      //   let organizationSubmission = await  new OrganizationSubmission({
-      //       organizationType: organization.organizationType,
-      //       organization: organization._id,
-      //       remark: organization.remark,
-      //       status: "pendingApproval",
-      //       chineseCompanyName: organization.chineseCompanyName,
-      //       englishCompanyName: organization.englishCompanyName,
-      //       website: organization.website,
-      //       businessRegistration: organization?.businessRegistration,
-      //       industry: organization?.industry,
-      //       description: organization?.description,
-      //       district: organization?.district,
-      //       companyBenefit: organization?.companyBenefit,
-      //       logo: organization?.logo,
-      //       tncAccept: organization?.tncAccept,
-      //       createdAt: new Date(),
-      //       updatedAt: new Date()
-      //     })
+        let organizationSubmission = await  new OrganizationSubmission({
+            organizationType: organization.organizationType,
+            organization: organization._id,
+            remark: organization.remark,
+            status: "pendingApproval",
+            chineseCompanyName: organization.chineseCompanyName,
+            englishCompanyName: organization.englishCompanyName,
+            website: organization.website,
+            businessRegistration: organization?.businessRegistration,
+            industry: organization?.industry,
+            description: organization?.description,
+            district: organization?.district,
+            companyBenefit: organization?.companyBenefit,
+            logo: organization?.logo,
+            tncAccept: organization?.tncAccept,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
           
-      //     await organizationSubmission.save()        
-      //     organization.submission.push(organizationSubmission._id) 
-      //     organization.status = "pendingApproval"
-      //     await organization.save()
+          await organizationSubmission.save()        
+          organization.submission.push(organizationSubmission._id) 
+          organization.status = "pendingApproval"
+          await organization.save()
 
-      //     return await OrganizationSubmission.findById(organizationSubmission._id).populate("organization")  
-      // }
+          return await OrganizationSubmission.findById(organizationSubmission._id).populate("organization")  
+      }
     },
 
     OrganizationSubmissionUpdate: async (_parent, params) => {
