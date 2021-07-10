@@ -34,7 +34,6 @@ export const ExperienceSectionViewer = () => {
       <Stack
         px={1}
         direction={["column", "column", "column", "row"]}
-        px={8}
         spacing={4}
       >
         <EducationSubSectionViewer />
