@@ -78,6 +78,7 @@ const OtpVerifyModal = () => {
                       contentType
                       fileSize
                     }
+                    videoUrl
                     title
                     description
                   }

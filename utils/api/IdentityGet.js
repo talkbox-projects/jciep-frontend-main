@@ -33,6 +33,7 @@ const identityGet = async ({ id }) => {
             contentType
             fileSize
           }
+          videoUrl
           title
           description
         }

@@ -258,9 +258,14 @@ export default {
        * Pwd/Public can update identity for his own account.
        */
       console.log(input);
-      return await Identity.findByIdAndUpdate(input.id, input, {
-        new: true,
-      });
+      try {
+        return await Identity.findByIdAndUpdate(input.id, input, {
+          new: true,
+        });
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
   },
 };

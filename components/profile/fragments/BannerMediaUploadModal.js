@@ -1,7 +1,6 @@
 import {
   AspectRatio,
   Text,
-  Icon,
   Button,
   Modal,
   ModalBody,
@@ -10,49 +9,68 @@ import {
   ModalHeader,
   ModalOverlay,
   VStack,
-  Box,
   FormControl,
   FormLabel,
   Input,
   FormHelperText,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
-import { useForm } from "react-hook-form";
-import { AiOutlineCloudUpload } from "react-icons/ai";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import ProfileStore from "../../../store/ProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";
 
-const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
+const BannerMediaUploadModal = ({ isOpen, onClose }) => {
   const [mode, setMode] = useState("upload"); // mode = [upload, youtube]
 
+  const { identity, page, saveIdentity } = ProfileStore.useContext();
   const {
-    reset,
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm();
-
-  useEffect(() => {
-    if (!isOpen) {
-      reset();
-      setMode("upload");
-    }
-  }, [isOpen]);
-
-  const onSubmit = useCallback(({ bannerMedia }) => {
-    try {
-      reset();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  } = useForm({
+    defaultValues: {
+      id: identity?.id,
+      bannerMedia: identity?.bannerMedia,
+    },
+  });
 
   const uploadComponent = (
     <VStack color="#aaa" align="stretch" spacing={4} py={8} px={8} w="100%">
       <AspectRatio ratio={2.5}>
-        <ProfileDropzone page={page} />
+        <Controller
+          control={control}
+          name="bannerMedia.file"
+          rules={[]}
+          defaultValue={identity?.bannerMedia}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <AspectRatio ratio={2.5}>
+                <ProfileDropzone
+                  value={value}
+                  onChange={onChange}
+                  page={page}
+                />
+              </AspectRatio>
+            );
+          }}
+        />
       </AspectRatio>
+      <Button
+        alignSelf="center"
+        minW={24}
+        mt={6}
+        colorScheme="yellow"
+        color="black"
+        px={4}
+        py={2}
+        borderRadius="2em"
+        type="submit"
+        isLoading={isSubmitting}
+      >
+        {wordExtractor(page?.content?.wordings, "save_button_label")}
+      </Button>
       <Text textAlign="center" mt={6}>
         {wordExtractor(page?.content?.wordings, "or_label")}{" "}
         <Button
@@ -68,14 +86,7 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
   );
 
   const youtubeComponent = (
-    <VStack
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      align="center"
-      spacing={4}
-      py={8}
-      px={8}
-    >
+    <VStack align="center" spacing={4} py={8} px={8}>
       <FormControl
         as={VStack}
         align="center"
@@ -86,7 +97,7 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
         </FormLabel>
         <Input
           borderRadius="2em"
-          {...register("bannerMedia", {
+          {...register("bannerMedia.videoUrl", {
             required: wordExtractor(
               page?.content?.wordings,
               "invalid_youtube_link_message"
@@ -107,6 +118,7 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
         )}
       </FormControl>
       <Button
+        alignSelf="center"
         minW={24}
         mt={6}
         colorScheme="yellow"
@@ -117,7 +129,7 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
         type="submit"
         isLoading={isSubmitting}
       >
-        {wordExtractor(page?.content?.wordings, "upload_button_label")}
+        {wordExtractor(page?.content?.wordings, "save_button_label")}
       </Button>
       <Text mt={6}>
         {wordExtractor(page?.content?.wordings, "or_label")}{" "}
@@ -136,7 +148,17 @@ const BannerMediaUploadModal = ({ page, isOpen, onClose }) => {
   return (
     <Modal size="lg" {...{ isOpen, onClose }}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent
+        as="form"
+        onSubmit={handleSubmit(async (values) => {
+          try {
+            await saveIdentity(values);
+            onClose();
+          } catch (error) {
+            console.error(error);
+          }
+        })}
+      >
         <ModalHeader
           borderBottomWidth={1}
           fontWeight="normal"

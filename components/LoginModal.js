@@ -106,6 +106,7 @@ const LoginModal = () => {
                     contentType
                     fileSize
                   }
+                  videoUrl
                   title
                   description
                 }

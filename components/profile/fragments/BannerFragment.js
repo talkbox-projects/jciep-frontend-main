@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  chakra,
   HStack,
   Image,
   useDisclosure,
@@ -16,17 +17,11 @@ import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
 import ProfilePicUploadModal from "./ProfilePicUploadModal";
 
+const Iframe = chakra("frame");
 const BannerFragment = () => {
-  const { identity, page, enums, editable } = ProfileStore.useContext();
+  const { identity, page } = ProfileStore.useContext();
   const bannerMediaDisclosure = useDisclosure();
   const profilePicDisclosure = useDisclosure();
-  const onUpload = useCallback(({ bannerMedia }) => {
-    try {
-      // TODO: upload image
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
   return (
     <VStack align="stretch" spacing={0} position="relative">
@@ -46,13 +41,17 @@ const BannerFragment = () => {
         </Button>
       </Box>
       <AspectRatio ratio={2.5}>
-        <Image
-          w="100%"
-          src={
-            identity?.bannerMedia?.url ??
-            page?.content?.headerSection?.bannerPlaceholder
-          }
-        ></Image>
+        {identity?.bannerMedia?.videoUrl ? (
+          <Iframe src={identity?.bannerMedia?.videoUrl} w="100%" />
+        ) : (
+          <Image
+            w="100%"
+            src={
+              identity?.bannerMedia?.file?.url ??
+              page?.content?.headerSection?.bannerPlaceholder
+            }
+          ></Image>
+        )}
       </AspectRatio>
       <Avatar
         cursor="pointer"
@@ -63,6 +62,7 @@ const BannerFragment = () => {
         bottom={-12}
         borderWidth={2}
         borderColor="white"
+        src={identity?.profilePic?.url}
       ></Avatar>
       <BannerMediaUploadModal
         page={page}

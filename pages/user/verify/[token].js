@@ -97,6 +97,7 @@ const VerifyToken = () => {
                     contentType
                     fileSize
                   }
+                  videoUrl
                   title
                   description
                 }

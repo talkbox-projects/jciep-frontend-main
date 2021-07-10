@@ -1,9 +1,17 @@
-import { Image, AspectRatio, Icon, Text, VStack } from "@chakra-ui/react";
+import {
+  Image,
+  AspectRatio,
+  Icon,
+  Text,
+  VStack,
+  IconButton,
+} from "@chakra-ui/react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useDropzone } from "react-dropzone";
 import wordExtractor from "../../../utils/wordExtractor";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
+import { RiCloseCircleFill } from "react-icons/ri";
 const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
   const { getRootProps, getInputProps } = useDropzone({
     multiple,
@@ -38,13 +46,12 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
     <VStack
       align="center"
       w="100%"
-      py={6}
       textAlign="center"
       borderStyle="dashed"
       borderWidth={2}
-      borderRadius={16}
       borderColor="#aaa"
       {...getRootProps()}
+      position="relative"
     >
       <>
         <input {...getInputProps()} />
@@ -61,7 +68,23 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
             </Text>
           </>
         ) : (value?.contentType ?? "").startsWith("image") ? (
-          <Image src={value?.url} />
+          <>
+            <Image src={value?.url} />
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange(null);
+              }}
+              minW="auto"
+              position="absolute"
+              right={2}
+              top={0}
+              fontSize="lg"
+              color="gray.300"
+              icon={<RiCloseCircleFill />}
+              variant="link"
+            />
+          </>
         ) : (
           <Text>{value?.url}</Text>
         )}
