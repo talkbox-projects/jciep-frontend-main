@@ -41,6 +41,7 @@ const PublicSectionEditor = () => {
       onSubmit={handleSubmit(async (values) => {
         try {
           await saveIdentity(values);
+          removeEditSection();
         } catch (error) {
           console.error(error);
         }

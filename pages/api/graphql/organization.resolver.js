@@ -1,10 +1,8 @@
-import { Organization , OrganizationSubmission} from "./organization.model";
-import {createFile} from './file.resolver';
+import { Organization, OrganizationSubmission } from "./organization.model";
+import { createFile } from "./file.resolver";
 
 export default {
   Query: {
-    UserEmailValidityCheck: async (_parent, params) => {},
-
     OrganizationGet: async () => {
       /**
        * Get Organization By Id
@@ -36,21 +34,22 @@ export default {
        * status = pendingApproval
        */
 
-      console.log(params)
-
+      console.log(params);
 
       let organization = new Promise(async (resolve, reject) => {
-        if(params.input.organizationId) {
-          let organization = await Organization.findById(params.input.organizationId)
+        if (params.input.organizationId) {
+          let organization = await Organization.findById(
+            params.input.organizationId
+          );
 
           if (!organization) {
             throw new Error("Organiazation not exists!");
           }
 
-          resolve(organization)
+          resolve(organization);
         } else {
-                        
-            resolve(await new Organization({
+          resolve(
+            await new Organization({
               organizationType: params.input.organizationType,
               remark: params?.input?.remark,
               status: "pendingApproval",
@@ -59,48 +58,48 @@ export default {
               website: params?.input?.website,
               industry: params?.input?.industry,
               description: params?.input?.description,
-              businessRegistration:  params.input?.businessRegistration,
+              businessRegistration: params.input?.businessRegistration,
               submission: [],
               district: params?.input?.district,
               companyBenefit: params?.input?.companyBenefit,
               identityId: params?.input?.identityId,
               logo: [],
-              tncAccept: params?.input?.tncAccept
-            }))
-      
+              tncAccept: params?.input?.tncAccept,
+            })
+          );
         }
-      })
+      });
 
-      organization = await organization
+      organization = await organization;
 
-      
-      if(organization) {
+      if (organization) {
+        let organizationSubmission = await new OrganizationSubmission({
+          organizationType: organization.organizationType,
+          organization: organization._id,
+          remark: organization.remark,
+          status: "pendingApproval",
+          chineseCompanyName: organization.chineseCompanyName,
+          englishCompanyName: organization.englishCompanyName,
+          website: organization.website,
+          businessRegistration: organization?.businessRegistration,
+          industry: organization?.industry,
+          description: organization?.description,
+          district: organization?.district,
+          companyBenefit: organization?.companyBenefit,
+          logo: organization?.logo,
+          tncAccept: organization?.tncAccept,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
 
-        let organizationSubmission = await  new OrganizationSubmission({
-            organizationType: organization.organizationType,
-            organization: organization._id,
-            remark: organization.remark,
-            status: "pendingApproval",
-            chineseCompanyName: organization.chineseCompanyName,
-            englishCompanyName: organization.englishCompanyName,
-            website: organization.website,
-            businessRegistration: organization?.businessRegistration,
-            industry: organization?.industry,
-            description: organization?.description,
-            district: organization?.district,
-            companyBenefit: organization?.companyBenefit,
-            logo: organization?.logo,
-            tncAccept: organization?.tncAccept,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          })
-          
-          await organizationSubmission.save()        
-          organization.submission.push(organizationSubmission._id) 
-          organization.status = "pendingApproval"
-          await organization.save()
+        await organizationSubmission.save();
+        organization.submission.push(organizationSubmission._id);
+        organization.status = "pendingApproval";
+        await organization.save();
 
-          return await OrganizationSubmission.findById(organizationSubmission._id).populate("organization")  
+        return await OrganizationSubmission.findById(
+          organizationSubmission._id
+        ).populate("organization");
       }
     },
 

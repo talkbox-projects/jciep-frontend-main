@@ -46,7 +46,7 @@ export const uploadFiles = async (files) => {
 
       uploadedFiles.push({
         id: result.id,
-        url: `api/assets${
+        url: `/api/assets${
           result.options.metadata.directory
         }/${result.filename.replace(" ", "_")}`,
         contentType: result.options.contentType,

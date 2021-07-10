@@ -7,11 +7,14 @@ import { getGraphQLClient } from "../../../utils/apollo";
 const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
   const { getRootProps, getInputProps } = useDropzone({
     multiple,
+    accept: "image/*,application/pdf",
+    maxSize: 1024,
     onDrop: async (files) => {
       try {
+        if (files?.length === 0) return;
         const mutation = gql`
-          mutation _FileUpload($files: [FileUpload]!) {
-            _FileUpload(files: $files) {
+          mutation FileUpload($files: FileUpload!) {
+            FileUpload(files: $files) {
               id
               url
               contentType
@@ -23,10 +26,8 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
           files,
         };
 
-        console.log(1, files);
         const data = await getGraphQLClient().request(mutation, variables);
-        console.log(data);
-        onChange(data?.FileUpload);
+        onChange(data?.FileUpload?.[0]);
       } catch (e) {
         console.error(e);
       }
@@ -59,10 +60,10 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
               )}
             </Text>
           </>
+        ) : (value?.contentType ?? "").startsWith("image") ? (
+          <Image src={value?.url} />
         ) : (
-          <AspectRatio ratio={4 / 3}>
-            <Image src={value} />
-          </AspectRatio>
+          <Text>{value?.url}</Text>
         )}
       </>
     </VStack>

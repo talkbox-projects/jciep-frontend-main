@@ -1,4 +1,5 @@
 import { Box, Stack, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
 import Container from "../Container";
 import EmployerSection from "./sections/EmployerSection";
 

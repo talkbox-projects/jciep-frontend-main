@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { IdentityProfileProvider } from "../../../utils/profile/identityProfileState";
 import ProfileStore from "../../../store/ProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import identityGet from "../../../utils/api/IdentityGet";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -20,6 +21,9 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      api: {
+        identity: await identityGet({ id: context.query.id }),
+      },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
@@ -27,25 +31,21 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityProfile = ({ enums, page }) => {
-  const { identity, updateIdentity } = useAppContext();
-  const editable = true;
-
-  const props = { identity, enums, page, editable };
+const IdentityProfile = ({ api: { identity }, enums, page, ..._props }) => {
   let comp = null;
 
   switch (identity?.type) {
     case "pwd":
-      comp = <IdentityPwdProfile {...props} />;
+      comp = <IdentityPwdProfile />;
       break;
     case "public":
-      comp = <IdentityPublicProfile {...props} />;
+      comp = <IdentityPublicProfile />;
       break;
     case "staff":
-      comp = <IdentityStaffProfile {...props} />;
+      comp = <IdentityStaffProfile />;
       break;
     case "employer":
-      comp = <IdentityEmployerProfile {...props} />;
+      comp = <IdentityEmployerProfile />;
       break;
     default:
       comp = <Box></Box>;

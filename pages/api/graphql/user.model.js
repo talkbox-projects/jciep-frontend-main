@@ -101,13 +101,13 @@ const identitySchema = Schema({
     {
       type: String,
       enum: Object.keys(pwdTypes),
-    }
+    },
   ],
   interestedEmploymentMode: [
     {
       type: String,
       enum: Object.keys(employmentModes),
-    }
+    },
   ],
   interestedIndustry: [
     {
@@ -116,15 +116,15 @@ const identitySchema = Schema({
     },
   ],
   caption: {
-    type: String
+    type: String,
   },
   educationLevel: {
-    type: String
+    type: String,
   },
-  yearsOfExperience: {
-    type: String
+  yearOfExperience: {
+    type: String,
   },
-  
+
   interestedIndustryOther: {
     type: String,
   },
@@ -139,10 +139,15 @@ const identitySchema = Schema({
   },
   portfolio: [
     {
-      id: String,
-      url: String,
+      file: {
+        id: String,
+        url: String,
+        contentType: String,
+        fileSize: Number,
+      },
+      videoUrl: String,
       title: String,
-      description: String
+      description: String,
     },
   ],
   writtenLanguage: [
@@ -163,11 +168,11 @@ const identitySchema = Schema({
   },
   skill: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   skillOther: {
-    type:String
+    type: String,
   },
 
   hobby: {
@@ -193,18 +198,23 @@ const identitySchema = Schema({
       present: Boolean,
     },
   ],
-    profilePic: {
+  profilePic: {
+    id: String,
+    url: String,
+    contentType: String,
+    fileSize: Number,
+  },
+  bannerMedia: {
+    file: {
       id: String,
       url: String,
       contentType: String,
-      fileSize: Number
+      fileSize: Number,
     },
-    bannerMedia: {
-      id: String,
-      url: String,
-      title: String,
-      description: String
-    },
+    videoUrl: String,
+    title: String,
+    description: String,
+  },
   activity: [
     {
       name: String,

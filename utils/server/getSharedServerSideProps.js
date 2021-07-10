@@ -1,4 +1,5 @@
 import { getConfiguration } from "../configuration/getConfiguration";
+import { getEnums } from "../enums/getEnums";
 
 const getSharedServerSideProps = async (context) => {
   const getConfigurations = async (keys) => {
@@ -16,6 +17,23 @@ const getSharedServerSideProps = async (context) => {
 
   return {
     props: {
+      enums:
+        (await getEnums({
+          keys: [
+            "EnumGenderList",
+            "EnumDistrictList",
+            "EnumIndustryList",
+            "EnumEmploymentModeList",
+            "EnumIdentityTypeList",
+            "EnumWrittenLanguageList",
+            "EnumOralLanguageList",
+            "EnumYearOfExperienceList",
+            "EnumDegreeList",
+            "EnumSkillList",
+            "EnumPwdTypeList",
+          ],
+          lang: context.locale,
+        })) ?? {},
       ...(await getConfigurations([
         "setting",
         "header",

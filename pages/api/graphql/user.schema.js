@@ -223,6 +223,8 @@ export default gql`
       page: Int!
     ): [User]
 
+    UserGet(id: ID!): User
+
     """
     Search Identtiy by either phone, email or name. Search the name of every identities.
     """
@@ -234,6 +236,8 @@ export default gql`
       limit: Int!
       page: Int!
     ): [User]
+
+    IdentityGet(id: ID!): Identity
   }
 
   type Mutation {

@@ -66,16 +66,31 @@ const OtpVerifyModal = () => {
                   email
                   phone
                   profilePic {
+                    id
                     url
+                    contentType
+                    fileSize
                   }
                   bannerMedia {
-                    url
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    title
+                    description
                   }
                   yearOfExperience
                   biography
                   portfolio {
-                    id
-                    url
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
                     title
                     description
                   }

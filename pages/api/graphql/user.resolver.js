@@ -20,6 +20,15 @@ export default {
        * Search User
        */
     },
+
+    UserGet: async (_parent, { id }) => {
+      const user = await User.findById(id);
+      return user;
+    },
+    IdentityGet: async (_parent, { id }) => {
+      const identity = await Identity.findById(id);
+      return identity;
+    },
   },
   Mutation: {
     UserPhoneVerify: async (_parent, { phone }) => {
@@ -28,7 +37,6 @@ export default {
        */
       try {
         const phoneVerify = await PhoneVerify.create({ phone });
-        console.log(phoneVerify);
         let result = await sendSms({
           Body: `Otp for phone verification is ${phoneVerify.otp}`,
           To: phoneVerify.phone,
@@ -161,7 +169,6 @@ export default {
     UserGet: async (_parent, { token }) => {
       try {
         let user = jwt.decode(token, "shhhhh");
-        console.log(token, user);
         user = await User.findById(user._id).populate("identities");
         return user;
       } catch (error) {
@@ -250,7 +257,10 @@ export default {
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
-      return await Identity.findByIdAndUpdate(input.id, input);
+      console.log(input);
+      return await Identity.findByIdAndUpdate(input.id, input, {
+        new: true,
+      });
     },
   },
 };

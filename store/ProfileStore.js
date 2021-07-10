@@ -1,5 +1,8 @@
 import constate from "constate";
-import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import identityGet from "../utils/api/IdentityGet";
+import identityUpdate from "../utils/api/IdentityUpdate";
 import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
@@ -16,30 +19,26 @@ const [Provider, useContext] = constate(
       return true;
     }, []);
 
+    const router = useRouter();
     const saveIdentity = useCallback(
       async (partialIdentity) => {
         try {
-          const mutation = gql`
-            mutation IdentityUpdate($input: IdentityUpdateInput!) {
-              IdentityUpdate(input: $input) {
-                id
-              }
-            }
-          `;
-
-          const data = await getGraphQLClient().request(mutation, {
-            input: {
-              id: identity?.id,
-              ...partialIdentity,
-            },
-          });
-          setIdentity((_) => ({ ..._, ...(data?.IdentityUpdate ?? {}) }));
+          const data = await identityUpdate({ input: partialIdentity });
+          console.error(partialIdentity);
+          setIdentity(data);
         } catch (e) {
           console.error(e);
         }
       },
       [setIdentity, identity]
     );
+
+    useEffect(() => {
+      (async () => {
+        const data = await identityGet({ id: router.query.id });
+        setIdentity(data);
+      })();
+    }, [router.query.id]);
 
     return {
       editSection,

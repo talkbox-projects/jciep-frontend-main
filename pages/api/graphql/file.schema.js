@@ -20,19 +20,18 @@ export default gql`
 
   type Mutation {
     FileUpload(files: FileUpload!): [File]
-    _FileUpload(files: [FileUpload]): [File]
   }
 
   input FileMetaInput {
-    id: String
-    url: String
+    file: FileInput
+    videoUrl: String
     title: String
     description: String
   }
 
   type FileMeta {
-    id: String
-    url: String
+    file: File
+    videoUrl: String
     title: String
     description: String
   }

@@ -11,7 +11,6 @@ import {
   ModalOverlay,
   Select,
   VStack,
-  Box,
   FormControl,
   FormLabel,
   Input,
@@ -19,19 +18,11 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
 import { Controller, useForm } from "react-hook-form";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";
 
-const PortfolioMediaUploadModal = ({
-  portfolioItem,
-  page,
-  isOpen,
-  onClose,
-  onSubmit,
-}) => {
+const PortfolioMediaUploadModal = ({ params, page, isOpen, onClose }) => {
   const [mode, setMode] = useState("upload"); // mode = [upload, youtube]
 
   const {
@@ -40,19 +31,39 @@ const PortfolioMediaUploadModal = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      videoUrl: "",
+      file: null,
+      title: "",
+      description: "",
+    },
+  });
 
   useEffect(() => {
-    if (!isOpen) {
-      reset();
-      setMode("upload");
+    if (isOpen) {
+      let type = "upload";
+      if (params?.item?.videoUrl) {
+        type = "youtube";
+      }
+      setMode(type);
+      params?.item
+        ? reset(params?.item)
+        : reset({
+            videoUrl: "",
+            file: null,
+            title: "",
+            description: "",
+          });
     }
-  }, [isOpen]);
+  }, [params, isOpen]);
 
-  const onSubmitButtonClick = useCallback((item) => {
-    console.log(item);
-    onSubmit(item);
-  }, []);
+  const onSubmitButtonClick = useCallback(
+    (item) => {
+      params.onSubmit(item);
+    },
+    [params]
+  );
 
   return (
     <Modal size="lg" {...{ isOpen, onClose }}>
@@ -79,7 +90,7 @@ const PortfolioMediaUploadModal = ({
             align="stretch"
           >
             <FormControl>
-              <Select value={null} onChange={(e) => setMode(e.target.value)}>
+              <Select value={mode} onChange={(e) => setMode(e.target.value)}>
                 <option value="upload">
                   {wordExtractor(
                     page?.content?.wordings,
@@ -98,11 +109,15 @@ const PortfolioMediaUploadModal = ({
               {mode === "upload" && (
                 <Controller
                   control={control}
-                  name="url"
+                  name="file"
                   render={({ field: { value, onChange } }) => {
                     return (
                       <AspectRatio ratio={2.5}>
-                        <ProfileDropzone page={page} />{" "}
+                        <ProfileDropzone
+                          value={value}
+                          onChange={onChange}
+                          page={page}
+                        />
                       </AspectRatio>
                     );
                   }}
@@ -119,7 +134,7 @@ const PortfolioMediaUploadModal = ({
                       )}
                     </FormLabel>
                     <Input
-                      {...register("url", {
+                      {...register("videoUrl", {
                         required: wordExtractor(
                           page?.content?.wordings,
                           "invalid_youtube_link_message"

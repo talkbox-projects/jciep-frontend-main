@@ -10,72 +10,37 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
-import Dropzone from "react-dropzone";
-import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
+import { useCallback, useMemo, useState } from "react";
 import {
   RiAddFill,
   RiCloseCircleFill,
-  RiDeleteBin2Line,
   RiEdit2Line,
   RiFilePdfLine,
-  RiPulseLine,
 } from "react-icons/ri";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import PortfolioMediaUploadModal from "../fragments/PortfolioMediaUploadModal";
 import SectionCard from "../fragments/SectionCard";
+import ProfileStore from "../../../store/ProfileStore";
+import { AiFillFilePdf, AiFillYoutube } from "react-icons/ai";
+import PortfolioGallery from "../fragments/PortfolioGallery";
 
-const PortfolioSection = ({ identity, page, enums, editable }) => {
-  //TODO: demo media
-  const [medias, setMedias] = useState([
-    {
-      id: "media-1",
-      title: "Title 1",
-      description: "description 1",
-      type: "video",
-      url: "https://www.youtube.com/watch?v=i9I55MZLYYY",
-    },
-    {
-      id: "media-2",
-      title: "Title 2",
-      description: "description 2",
-      type: "image",
-      url: "https://loremflickr.com/800/600/dog",
-    },
-    {
-      id: "media-3",
-      title: "Title 3",
-      description: "description 3",
-      type: "image",
-      url: "https://loremflickr.com/800/600/cat",
-    },
-    {
-      id: "media-4",
-      title: "Title pdf 3",
-      description: "description 3",
-      type: "pdf",
-      url: "http://www.africau.edu/images/default/sample.pdf",
-    },
-    {
-      id: "media-5",
-      title: "Title 3",
-      description: "description 3",
-      type: "image",
-      url: "https://loremflickr.com/800/600/cat",
-    },
-    {
-      id: "media-6",
-      title: "Title pdf 3",
-      description: "description 3",
-      type: "pdf",
-      url: "http://www.africau.edu/images/default/sample.pdf",
-    },
-  ]);
+const PortfolioSection = () => {
+  const {
+    page,
+    saveIdentity,
+    identity,
+    editSection,
+    setEditSection,
+    removeEditSection,
+  } = ProfileStore.useContext();
 
-  const lightBoxDisclosure = useDisclosureWithParams();
-  const portfolioMediaDisclosure = useDisclosure();
-  const editModelDisclosure = useDisclosure();
+  const [medias, setMedias] = useState(identity?.portfolio ?? []);
+
+  const portfolioMediaDisclosure = useDisclosureWithParams();
+  const galleryDisclosure = useDisclosureWithParams();
+
+  const isEditable = useMemo(() => editSection === "portfolio", [editSection]);
 
   const onItemRemove = useCallback(
     (index) => {
@@ -89,19 +54,36 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
   );
 
   const onPortfolioItemClick = useCallback(
-    (item) => {
-      if (editModelDisclosure.isOpen) {
+    (index) => {
+      if (isEditable) {
         portfolioMediaDisclosure.onOpen({
-          item,
+          index,
+          item: medias[index],
+          onSubmit: (item) =>
+            setMedias((_) => {
+              const newMedias = [..._];
+              newMedias.splice(index, 1, item);
+              portfolioMediaDisclosure.onClose();
+              return newMedias;
+            }),
         });
       } else {
-        lightBoxDisclosure.onOpen({
-          item,
+        galleryDisclosure.onOpen({
+          item: medias[index],
         });
       }
     },
-    [editModelDisclosure.isOpen]
+    [medias, galleryDisclosure, portfolioMediaDisclosure, isEditable]
   );
+
+  const onSave = useCallback(async () => {
+    try {
+      await saveIdentity({ id: identity?.id, portfolio: medias });
+      removeEditSection();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [identity, medias]);
 
   return (
     <SectionCard>
@@ -110,37 +92,52 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
           <Text flex={1} minW={0} w="100%" fontSize="2xl">
             {wordExtractor(page?.content?.wordings, "portfolio_header_label")}
           </Text>
-          {editModelDisclosure.isOpen ? (
-            <Button
-              onClick={editModelDisclosure.onClose}
-              variant="link"
-              leftIcon={<RiEdit2Line />}
-            >
+          {isEditable ? (
+            <Button onClick={onSave} variant="link" leftIcon={<RiEdit2Line />}>
               {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           ) : (
-            <Button
-              onClick={editModelDisclosure.onOpen}
-              variant="link"
-              leftIcon={<RiEdit2Line />}
-            >
-              {wordExtractor(page?.content?.wordings, "section_edit_label")}
-            </Button>
+            !editSection && (
+              <Button
+                onClick={() => setEditSection("portfolio")}
+                variant="link"
+                leftIcon={<RiEdit2Line />}
+              >
+                {wordExtractor(page?.content?.wordings, "section_edit_label")}
+              </Button>
+            )
           )}
         </HStack>
         <SimpleGrid px={8} py={4} columns={4} gap={3}>
           {(medias ?? []).map((media, index) => {
+            let type = null;
+
+            if (media?.videoUrl) {
+              type = "video";
+            } else if (media?.file) {
+              if ((media?.file?.contentType ?? "").indexOf("image") >= 0) {
+                type = "image";
+              } else {
+                type = "pdf";
+              }
+            }
+
             let comp = null;
-            switch (media.type) {
+            switch (type) {
               case "video":
-                comp = <Icon as={RiFilePdfLine} fontSize="4xl" color="#ddd" />;
+                comp = (
+                  <VStack spacing={0} fontSize="sm" color="#ddd">
+                    <Icon as={AiFillYoutube} fontSize="4xl" />
+                    <Text>Youtube</Text>
+                  </VStack>
+                );
                 break;
               case "image":
                 comp = (
                   <Box
                     w="100%"
                     h="100%"
-                    bgImg={`url('${media?.url}')`}
+                    bgImg={`url('${media?.file?.url}')`}
                     bgPos="center"
                     bgSize="cover"
                   />
@@ -148,12 +145,10 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
                 break;
               case "pdf":
                 comp = (
-                  <Icon
-                    fontSize="4xl"
-                    as={RiFilePdfLine}
-                    fontSize="4xl"
-                    color="#ddd"
-                  />
+                  <VStack spacing={0} fontSize="sm" color="#ddd">
+                    <Icon fontSize="4xl" as={AiFillFilePdf} />
+                    <Text>PDF</Text>
+                  </VStack>
                 );
                 break;
             }
@@ -161,13 +156,13 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
             return (
               <AspectRatio ratio={1}>
                 <Box
-                  onClick={onPortfolioItemClick}
+                  onClick={() => onPortfolioItemClick(index)}
                   cursor="pointer"
                   borderRadius={8}
                   boxShadow="sm"
                   position="relative"
                 >
-                  {editModelDisclosure.isOpen && (
+                  {isEditable && (
                     <IconButton
                       onClick={(e) => {
                         e.stopPropagation();
@@ -190,12 +185,11 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
               </AspectRatio>
             );
           })}
-          {(editModelDisclosure.isOpen || medias.length === 0) && (
+          {(isEditable || medias.length === 0) && (
             <AspectRatio ratio={1}>
               <VStack
-                onClick={onPortfolioItemClick}
+                onClick={() => onPortfolioItemClick(medias?.length)}
                 boxShadow="sm"
-                onClick={portfolioMediaDisclosure.onOpen}
                 cursor="pointer"
               >
                 <IconButton
@@ -212,9 +206,16 @@ const PortfolioSection = ({ identity, page, enums, editable }) => {
         </SimpleGrid>
       </VStack>
       <PortfolioMediaUploadModal
+        params={portfolioMediaDisclosure.params}
         page={page}
         isOpen={portfolioMediaDisclosure.isOpen}
         onClose={portfolioMediaDisclosure.onClose}
+      />
+      <PortfolioGallery
+        params={galleryDisclosure.params}
+        page={page}
+        isOpen={galleryDisclosure.isOpen}
+        onClose={galleryDisclosure.onClose}
       />
     </SectionCard>
   );

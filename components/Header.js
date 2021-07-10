@@ -98,7 +98,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
   const onIdentitySwitch = useCallback(
     (identityId) => {
       setIdentityId(identityId);
-      router.push(`/user/identity/profile`);
+      router.push(`/user/identity/${identityId}`);
     },
     [router]
   );
@@ -130,16 +130,31 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                 email
                 phone
                 profilePic {
+                  id
                   url
+                  contentType
+                  fileSize
                 }
                 bannerMedia {
-                  url
+                  file {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  title
+                  description
                 }
                 yearOfExperience
                 biography
                 portfolio {
-                  id
-                  url
+                  file {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  videoUrl
                   title
                   description
                 }

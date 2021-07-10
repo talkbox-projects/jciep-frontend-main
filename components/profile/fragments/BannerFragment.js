@@ -11,13 +11,13 @@ import {
 import { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
+import ProfileStore from "../../../store/ProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
 import ProfilePicUploadModal from "./ProfilePicUploadModal";
 
-const BannerFragment = ({ identity, page, enums, editable }) => {
-  const { control } = useForm();
-
+const BannerFragment = () => {
+  const { identity, page, enums, editable } = ProfileStore.useContext();
   const bannerMediaDisclosure = useDisclosure();
   const profilePicDisclosure = useDisclosure();
   const onUpload = useCallback(({ bannerMedia }) => {
