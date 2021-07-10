@@ -129,6 +129,7 @@ const VerifyToken = () => {
                 employment {
                   employmentType
                   companyName
+                  jobTitle
                   industry
                   startDatetime
                   endDatetime

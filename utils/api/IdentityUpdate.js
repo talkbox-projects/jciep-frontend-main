@@ -70,6 +70,7 @@ const identityUpdate = async ({ input }) => {
         employment {
           employmentType
           companyName
+          jobTitle
           industry
           startDatetime
           endDatetime

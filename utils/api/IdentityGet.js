@@ -69,6 +69,7 @@ const identityGet = async ({ id }) => {
         employment {
           employmentType
           companyName
+          jobTitle
           industry
           startDatetime
           endDatetime

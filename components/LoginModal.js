@@ -138,6 +138,7 @@ const LoginModal = () => {
                 employment {
                   employmentType
                   companyName
+                  jobTitle
                   industry
                   startDatetime
                   endDatetime

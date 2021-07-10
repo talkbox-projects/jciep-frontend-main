@@ -110,6 +110,7 @@ const OtpVerifyModal = () => {
                   employment {
                     employmentType
                     companyName
+                    jobTitle
                     industry
                     startDatetime
                     endDatetime

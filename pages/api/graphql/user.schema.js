@@ -34,6 +34,7 @@ export default gql`
   type Employment {
     employmentType: EnumEmploymentMode
     companyName: String
+    jobTitle: String
     industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -59,6 +60,7 @@ export default gql`
   input EmploymentInput {
     employmentType: EnumEmploymentMode
     companyName: String
+    jobTitle: String
     industry: EnumIndustry
     startDatetime: Timestamp
     endDatetime: Timestamp

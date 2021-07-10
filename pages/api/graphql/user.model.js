@@ -192,6 +192,7 @@ const identitySchema = Schema({
     {
       employmentType: Object,
       companyName: String,
+      jobTitle: String,
       industry: Object,
       startDatetime: Date,
       endDatetime: Date,
