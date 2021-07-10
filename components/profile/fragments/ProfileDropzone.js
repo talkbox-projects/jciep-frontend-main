@@ -8,7 +8,7 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
   const { getRootProps, getInputProps } = useDropzone({
     multiple,
     accept: "image/*,application/pdf",
-    maxSize: 1024,
+    maxSize: 1024 * 1024,
     onDrop: async (files) => {
       try {
         if (files?.length === 0) return;

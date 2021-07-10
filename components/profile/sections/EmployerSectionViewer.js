@@ -13,8 +13,6 @@ import wordExtractor from "../../../utils/wordExtractor";
 import ProfileStore from "../../../store/ProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
-import moment from "moment";
-import { getEnumText } from "../../../utils/enums/getEnums";
 
 const StaffSectionViewer = () => {
   const router = useRouter();
