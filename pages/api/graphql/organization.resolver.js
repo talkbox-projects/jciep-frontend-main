@@ -1,20 +1,36 @@
-import { Organization, OrganizationSubmission } from "./organization.model";
-import { createFile } from "./file.resolver";
+import { Organization , OrganizationSubmission} from "./organization.model";
+
+
 
 export default {
   Query: {
-    OrganizationGet: async () => {
+    UserEmailValidityCheck: async (_parent, {id}) => {},
+
+    OrganizationGet: async (_parent, {id}) => {
       /**
        * Get Organization By Id
        */
+
+      return await Organization.findById(id).populate('submission')
+      
     },
 
-    OrganizationSearch: async () => {
+    OrganizationSubmissionGet: async (_parent, {id}) => {
+      /**
+       * Get OrganizationSubmission       * 
+       */
+
+      return await OrganizationSubmission.findById(id).populate('organization')
+    },
+    OrganizationSearch: async (_parent , {status, limit, page}) => {
       /**
        * Search Organization
        * Admin can access to all organization
        * other identity can only access to approved organization
        */
+
+
+      return await Organization.find({status}).skip((page -1) * 10).limit(limit)
     },
   },
   Mutation: {
@@ -34,22 +50,19 @@ export default {
        * status = pendingApproval
        */
 
-      console.log(params);
 
       let organization = new Promise(async (resolve, reject) => {
-        if (params.input.organizationId) {
-          let organization = await Organization.findById(
-            params.input.organizationId
-          );
+        if(params.input.organizationId) {
+          let organization = await Organization.findById(params.input.organizationId)
 
           if (!organization) {
             throw new Error("Organiazation not exists!");
           }
 
-          resolve(organization);
+          resolve(organization)
         } else {
-          resolve(
-            await new Organization({
+                        
+            resolve(await new Organization({
               organizationType: params.input.organizationType,
               remark: params?.input?.remark,
               status: "pendingApproval",
@@ -58,56 +71,60 @@ export default {
               website: params?.input?.website,
               industry: params?.input?.industry,
               description: params?.input?.description,
-              businessRegistration: params.input?.businessRegistration,
+              businessRegistration:  params.input?.businessRegistration,
               submission: [],
               district: params?.input?.district,
               companyBenefit: params?.input?.companyBenefit,
               identityId: params?.input?.identityId,
-              logo: [],
-              tncAccept: params?.input?.tncAccept,
-            })
-          );
+              logo: params.input?.logo,
+              tncAccept: params?.input?.tncAccept
+            }))
+      
         }
-      });
+      })
 
-      organization = await organization;
+      organization = await organization
 
-      if (organization) {
-        let organizationSubmission = await new OrganizationSubmission({
-          organizationType: organization.organizationType,
-          organization: organization._id,
-          remark: organization.remark,
-          status: "pendingApproval",
-          chineseCompanyName: organization.chineseCompanyName,
-          englishCompanyName: organization.englishCompanyName,
-          website: organization.website,
-          businessRegistration: organization?.businessRegistration,
-          industry: organization?.industry,
-          description: organization?.description,
-          district: organization?.district,
-          companyBenefit: organization?.companyBenefit,
-          logo: organization?.logo,
-          tncAccept: organization?.tncAccept,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
+      if(organization) {
 
-        await organizationSubmission.save();
-        organization.submission.push(organizationSubmission._id);
-        organization.status = "pendingApproval";
-        await organization.save();
+        let organizationSubmission = await  new OrganizationSubmission({
+            organizationType: organization.organizationType,
+            organization: organization._id,
+            remark: organization.remark,
+            status: "pendingApproval",
+            chineseCompanyName: organization.chineseCompanyName,
+            englishCompanyName: organization.englishCompanyName,
+            website: organization.website,
+            businessRegistration: organization?.businessRegistration,
+            industry: organization?.industry,
+            description: organization?.description,
+            district: organization?.district,
+            companyBenefit: organization?.companyBenefit,
+            logo: organization?.logo,
+            tncAccept: organization?.tncAccept,
+            createAt: new Date(),
+            updateAt: new Date(),
+            createBy: params?.input?.identityId
+          }).save()    
+          
+          organization.submission.push(organizationSubmission._id) 
+          organization.status = "pendingApproval"
+          await organization.save()
 
-        return await OrganizationSubmission.findById(
-          organizationSubmission._id
-        ).populate("organization");
+          return await OrganizationSubmission.findById(organizationSubmission._id).populate("organization").populate('createBy')  
       }
     },
 
-    OrganizationSubmissionUpdate: async (_parent, params) => {
+    OrganizationSubmissionUpdate: async (_parent, {input}) => {
       /**
        * Only admin can call this api
        * Update an organization submission in console by admin
        */
+      
+      return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
+        new: true
+      }).populate('organization')
+
     },
 
     OrganizationUpdate: async (_parent, { input }) => {
@@ -115,6 +132,8 @@ export default {
        * Only admin can call this api
        * Update an organization
        */
+
+
     },
 
     OrganizationMemberInvite: async (_parent, { input }) => {

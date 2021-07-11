@@ -30,7 +30,7 @@ export default gql`
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: File
+    businessRegistration: [File]
     industry: [EnumIndustry]
     description: String
     district: District
@@ -48,17 +48,15 @@ export default gql`
     id: ID!
     organizationType: OrganizationType
     status: OrganizationStatus!
-
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: File
+    businessRegistration: [File]
     industry: [EnumIndustry]
     description: String
     district: District
     companyBenefit: String
     logo: File
-
     biography: JsonContent
     portfolio: [FileMeta]
     member: [Member]
@@ -102,7 +100,6 @@ export default gql`
   input OrganizationUpdateInput {
     id: ID!
     organizationType: OrganizationType
-
     chineseCompanyName: String
     englishCompanyName: String
     industry: EnumIndustry
@@ -113,10 +110,8 @@ export default gql`
     district: District
     companyBenefit: String
     logo: FileInput
-
     biography: JsonContent
     portfolio: [FileMetaInput]
-
     tncAccept: Boolean
   }
 
@@ -134,6 +129,7 @@ export default gql`
     ): [Organization]
 
     OrganizationSubmissionGet(id: ID): OrganizationSubmission
+
     OrganizationSubmissionSearch(
       type: OrganizationType
       status: OrganizationStatus
@@ -154,6 +150,7 @@ export default gql`
 
     OrganizationUpdate(input: OrganizationUpdateInput): Organization
       @auth(identityTypes: [admin])
+      
     OrganizationMemberInvite(input: OrganizationMemberInviteInput): Boolean
     OrganizationMemberRemove(id: ID!): Boolean
     OrganzationMemberBind(inviteToken: String!, identityId: ID!): Identity

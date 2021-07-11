@@ -3,7 +3,7 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
-import { createFile } from "./file.resolver";
+
 
 export default {
   Query: {
@@ -15,19 +15,27 @@ export default {
       }
     },
 
-    IdentitySearch: async () => {
+    IdentitySearch: async (_parent, input) => {
       /**
        * Search User
-       */
+       */ 
+
+      let keys = {}
+      
+      if (input.phone) keys['phone'] = input.phone
+      if (input.email) keys['email'] = input.email
+      if (input.identityType) keys['type'] = {$in: input.identityType}
+
+      return await Identity.find(keys).skip((input.page -1 ) * 10).limit(input?.limit)  
+
     },
 
     UserGet: async (_parent, { id }) => {
-      const user = await User.findById(id);
-      return user;
+      return await User.findById(id);
     },
     IdentityGet: async (_parent, { id }) => {
-      const identity = await Identity.findById(id);
-      return identity;
+      return await Identity.findById(id);
+
     },
   },
   Mutation: {
@@ -57,6 +65,7 @@ export default {
        */
       try {
         const emailVerify = await EmailVerify.create({ email });
+        console.log(emailVerify)
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -169,8 +178,7 @@ export default {
     UserGet: async (_parent, { token }) => {
       try {
         let user = jwt.decode(token, "shhhhh");
-        user = await User.findById(user._id).populate("identities");
-        return user;
+        return await User.findById(user._id).populate("identities");
       } catch (error) {
         console.log(error);
         return null;
@@ -257,7 +265,6 @@ export default {
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
-      console.log(input);
       try {
         return await Identity.findByIdAndUpdate(input.id, input, {
           new: true,

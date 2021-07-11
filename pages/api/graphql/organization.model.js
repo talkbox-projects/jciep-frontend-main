@@ -36,9 +36,8 @@ const organizationSchema = Schema({
     {
       id: String,
       url: String,
-      filename: String,
       contentType: String,
-      directory: String,
+      fileSize: Number
     },
   ],
   industry: [{
@@ -64,9 +63,8 @@ const organizationSchema = Schema({
   logo: {
     id: String,
     url: String,
-    filename: String,
     contentType: String,
-    directory: String,
+    fileSize: Number
   },
   tncAccept: {
     type: Boolean,
@@ -120,21 +118,19 @@ const organizationSubmissionSchema = Schema({
   companyBenefit: {
     type: String,
   },
-
   logo: {
     id: String,
     url: String,
-    filename: String,
     contentType: String,
-    directory: String,
+    fileSize: Number
   },
   tncAccept: {
     type: Boolean,
   },
-  createdAt: Date,
-  updatedAt: Date,
-  approvedAt: Date,
-  createdBy: {
+  createAt: Date,
+  updateAt: Date,
+  approveAt: Date,
+  createBy: {
     type: Schema.Types.ObjectId,
     ref: "Identity",
   },
