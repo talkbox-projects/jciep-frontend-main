@@ -136,7 +136,7 @@ export default gql`
       name: String
       limit: Int!
       page: Int!
-    ): OrganizationSubmission
+    ): [OrganizationSubmission]
   }
 
   type Mutation {

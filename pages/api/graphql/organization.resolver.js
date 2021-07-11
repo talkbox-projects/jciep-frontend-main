@@ -32,7 +32,17 @@ export default {
 
       return await Organization.find({status}).skip((page -1) * 10).limit(limit)
     },
-    
+    OrganizationSubmissionSearch: async( _parent, input)  => {
+
+      let keys = {}
+
+      if (input.type) keys['organizationType'] = input.type
+      if (input.status) keys['status'] = input.status
+      if (input.name) keys['$or'] = [{chineseCompanyName: input?.name}, {englishCompanyName: input?.name} ]
+
+      return await OrganizationSubmission.find(keys).skip((input?.page -1)* 10).limit(input?.limit)
+    }
+
   },
   Mutation: {
     OrganizationSubmissionCreate: async (_parent, params) => {
@@ -121,6 +131,8 @@ export default {
        * Only admin can call this api
        * Update an organization submission in console by admin
        */
+
+      input.updateAt = new Date()
       
       return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
         new: true
