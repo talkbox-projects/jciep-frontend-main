@@ -25,7 +25,8 @@ export default {
       if (input.phone) keys['phone'] = input.phone
       if (input.email) keys['email'] = input.email
       if (input.identityType) keys['type'] = {$in: input.identityType}
-
+      if (input.name) keys['$or'] = [{chineseName: input?.name}, {englishName: input?.name} ] 
+      
       return await Identity.find(keys).skip((input.page -1 ) * 10).limit(input?.limit)  
 
     },

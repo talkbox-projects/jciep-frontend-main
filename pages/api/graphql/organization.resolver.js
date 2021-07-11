@@ -32,6 +32,7 @@ export default {
 
       return await Organization.find({status}).skip((page -1) * 10).limit(limit)
     },
+    
   },
   Mutation: {
     OrganizationSubmissionCreate: async (_parent, params) => {
