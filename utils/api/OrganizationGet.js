@@ -24,6 +24,7 @@ const organizationGet = async ({ id }) => {
           url
         }
         industry
+        industryOther
         district
         companyBenefit
         biography

@@ -1,16 +1,16 @@
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
 import OrganizationBiographySection from "./sections/OrganizationBiographySection";
-import NgoSection from "./sections/NgoSection";
+import EmploymentSection from "./sections/EmploymentSection";
 import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSection";
 
-const OrganizationCompanyProfile = () => {
+const OrganizationEmploymentProfile = () => {
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
         <Stack align="stretch" direction={["column", "column", "row"]}>
           <VStack align="stretch" flex={1} minW={0} w="100%">
-            <NgoSection />
+            <EmploymentSection />
             <OrganizationBiographySection />
             <OrganizationPortfolioSection />
           </VStack>
@@ -23,4 +23,4 @@ const OrganizationCompanyProfile = () => {
   );
 };
 
-export default OrganizationCompanyProfile;
+export default OrganizationEmploymentProfile;

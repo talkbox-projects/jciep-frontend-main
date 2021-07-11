@@ -24,6 +24,7 @@ const organizationUpdate = async ({ input }) => {
           url
         }
         industry
+        industryOther
         district
         companyBenefit
         biography

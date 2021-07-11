@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 
 const StaffSectionEditor = () => {
   const router = useRouter();
-  const { page, enums, saveIdentity, identity, removeEditSection } =
+  const { page, enums, saveIdentity, organization, removeEditSection } =
     IdentityProfileStore.useContext();
 
   const {
@@ -30,8 +30,8 @@ const StaffSectionEditor = () => {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      id: identity.id,
-      caption: identity.caption,
+      id: organization.id,
+      caption: organization.caption,
     },
   });
 
@@ -71,13 +71,14 @@ const StaffSectionEditor = () => {
         <Wrap>
           <Text fontSize="xl" fontWeight="bold">
             {router.locale === "zh"
-              ? identity?.chineseName
-              : identity?.englishName}
+              ? organization?.chineseName
+              : organization?.englishName}
           </Text>
           <Tag>
             {
-              enums?.EnumIdentityTypeList?.find((x) => x.key === identity?.type)
-                ?.value?.[router.locale]
+              enums?.EnumIdentityTypeList?.find(
+                (x) => x.key === organization?.type
+              )?.value?.[router.locale]
             }
           </Tag>
         </Wrap>
@@ -88,7 +89,7 @@ const StaffSectionEditor = () => {
               page?.content?.wordings,
               "field_label_caption"
             )}
-            defaultValue={identity?.caption}
+            defaultValue={organization?.caption}
             {...register("caption", {})}
           ></Input>
           <FormHelperText color="red">
@@ -111,7 +112,7 @@ const StaffSectionEditor = () => {
             </FormLabel>
             <Input
               variant="flushed"
-              defaultValue={identity?.chineseName}
+              defaultValue={organization?.chineseName}
               {...register("chineseName", {
                 required: wordExtractor(
                   page?.content?.wordings,
@@ -132,7 +133,7 @@ const StaffSectionEditor = () => {
             </FormLabel>
             <Input
               variant="flushed"
-              defaultValue={identity?.englishName}
+              defaultValue={organization?.englishName}
               {...register("englishName", {
                 required: wordExtractor(
                   page?.content?.wordings,
@@ -153,7 +154,7 @@ const StaffSectionEditor = () => {
             <Input
               type="email"
               variant="flushed"
-              defaultValue={identity?.email}
+              defaultValue={organization?.email}
               {...register("email", {
                 pattern: {
                   value:
@@ -179,7 +180,7 @@ const StaffSectionEditor = () => {
             </FormLabel>
             <Input
               variant="flushed"
-              defaultValue={identity?.phone}
+              defaultValue={organization?.phone}
               {...register("phone", {
                 required: wordExtractor(
                   page?.content?.wordings,

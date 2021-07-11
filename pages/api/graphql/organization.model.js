@@ -72,6 +72,9 @@ const organizationSchema = Schema({
       enum: Object.keys(industries),
     },
   ],
+  industryOther: {
+    type: String,
+  },
   description: {
     type: String,
   },
@@ -139,6 +142,9 @@ const organizationSubmissionSchema = Schema({
       enum: Object.keys(industries),
     },
   ],
+  industryOther: {
+    type: String,
+  },
   description: {
     type: String,
   },

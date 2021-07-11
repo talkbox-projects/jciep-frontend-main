@@ -5,7 +5,7 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import organizationGet from "../../../utils/api/organizationGet";
 import OrganizationNgoProfile from "../../../components/profile/OrganizationNgoProfile";
-import OrganizationCompanyProfile from "../../../components/profile/OrganizationCompanyProfile";
+import OrganizationEmploymentProfile from "../../../components/profile/OrganizationEmploymentProfile";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -32,8 +32,8 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
     case "ngo":
       comp = <OrganizationNgoProfile />;
       break;
-    case "company":
-      comp = <OrganizationCompanyProfile />;
+    case "employment":
+      comp = <OrganizationEmploymentProfile />;
       break;
     default:
       comp = <Box>fdsa</Box>;

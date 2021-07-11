@@ -89,7 +89,6 @@ export default {
 
         await organizationSubmission.save();
         organization.submission.push(organizationSubmission._id);
-        organization.member.push({});
         organization.status = "pendingApproval";
         await organization.save();
 
