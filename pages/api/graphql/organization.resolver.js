@@ -40,7 +40,7 @@ export default {
       if (input.status) keys['status'] = input.status
       if (input.name) keys['$or'] = [{chineseCompanyName: input?.name}, {englishCompanyName: input?.name} ]
 
-      return await OrganizationSubmission.find(keys).skip((input?.page -1)* 10).limit(input?.limit)
+      return await OrganizationSubmission.find(keys).populate('organization').skip((input?.page -1)* 10).limit(input?.limit)
     }
 
   },
@@ -133,7 +133,7 @@ export default {
        */
 
       input.updateAt = new Date()
-      
+
       return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
         new: true
       }).populate('organization')
