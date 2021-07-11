@@ -25,7 +25,8 @@ export default {
       const user = await User.findById(id);
       return user;
     },
-    IdentityGet: async (_parent, { id }) => {
+    IdentityGet: async (_parent, { id }, { user }) => {
+      console.log("context.user", user);
       const identity = await Identity.findById(id);
       return identity;
     },

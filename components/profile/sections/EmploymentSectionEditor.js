@@ -303,7 +303,7 @@ const EmploymentSectionEditor = () => {
             </FormLabel>
             <Input
               variant="flushed"
-              defaultValue={organization?.skillOther}
+              defaultValue={organization?.industryOther}
               {...register("industryOther", {})}
             ></Input>
             <FormHelperText color="red">

@@ -22,6 +22,8 @@ import userResolver from "./user.resolver";
 import organizationResolver from "./organization.resolver";
 import enumSchema from "./enum.schema";
 import enumResolver from "./enum.resolver";
+import jwt from "jsonwebtoken";
+import { User } from "./user.model";
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -52,6 +54,21 @@ const apolloServer = new ApolloServer({
     organizationResolver,
     userResolver,
   ]),
+  context: async ({ req }) => {
+    try {
+      const token = req.cookies?.["jciep-token"];
+      if (token) {
+        let user = jwt.decode(token, "shhhhh");
+        user = await User.findById(user._id).populate("identities");
+        return { user };
+      } else {
+        return { user: null };
+      }
+    } catch (error) {
+      console.log(error);
+      return { user: null };
+    }
+  },
 });
 
 export const config = {
