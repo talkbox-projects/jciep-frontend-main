@@ -15,13 +15,13 @@ import {
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 
 const PublicSectionEditor = () => {
   const router = useRouter();
   const { page, enums, saveIdentity, identity, removeEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
 
   const {
     handleSubmit,

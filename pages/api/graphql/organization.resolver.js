@@ -1,12 +1,10 @@
 import { Organization, OrganizationSubmission } from "./organization.model";
-import { createFile } from "./file.resolver";
+import { User } from "./user.model";
 
 export default {
   Query: {
-    OrganizationGet: async () => {
-      /**
-       * Get Organization By Id
-       */
+    OrganizationGet: async (_parent, { id }) => {
+      return await Organization.findById(id);
     },
 
     OrganizationSearch: async () => {
@@ -34,9 +32,7 @@ export default {
        * status = pendingApproval
        */
 
-      console.log(params);
-
-      let organization = new Promise(async (resolve, reject) => {
+      const organization = await new Promise(async (resolve, reject) => {
         if (params.input.organizationId) {
           let organization = await Organization.findById(
             params.input.organizationId
@@ -60,6 +56,7 @@ export default {
               description: params?.input?.description,
               businessRegistration: params.input?.businessRegistration,
               submission: [],
+              member: [],
               district: params?.input?.district,
               companyBenefit: params?.input?.companyBenefit,
               identityId: params?.input?.identityId,
@@ -69,8 +66,6 @@ export default {
           );
         }
       });
-
-      organization = await organization;
 
       if (organization) {
         let organizationSubmission = await new OrganizationSubmission({
@@ -94,6 +89,7 @@ export default {
 
         await organizationSubmission.save();
         organization.submission.push(organizationSubmission._id);
+        organization.member.push({});
         organization.status = "pendingApproval";
         await organization.save();
 
@@ -114,7 +110,14 @@ export default {
       /**
        * Only admin can call this api
        * Update an organization
-       */
+       */ try {
+        return await Organization.findByIdAndUpdate(input.id, input, {
+          new: true,
+        });
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
 
     OrganizationMemberInvite: async (_parent, { input }) => {

@@ -1,13 +1,11 @@
 import { Box } from "@chakra-ui/react";
-import IdentityPublicProfile from "../../../components/profile/IdentityPublicProfile";
-import IdentityPwdProfile from "../../../components/profile/IdentityPwdProfile";
-import IdentityStaffProfile from "../../../components/profile/IdentityStaffProfile";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
-import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
-import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
-import identityGet from "../../../utils/api/IdentityGet";
+import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
+import organizationGet from "../../../utils/api/organizationGet";
+import OrganizationNgoProfile from "../../../components/profile/OrganizationNgoProfile";
+import OrganizationCompanyProfile from "../../../components/profile/OrganizationCompanyProfile";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -18,7 +16,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        identity: await identityGet({ id: context.query.id }),
+        organization: await organizationGet({ id: context.query.id }),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -27,40 +25,34 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityProfile = ({ api: { identity }, enums, page, ..._props }) => {
+const OrganizationProfile = ({ api: { organization }, enums, page }) => {
   let comp = null;
 
-  switch (identity?.type) {
-    case "pwd":
-      comp = <IdentityPwdProfile />;
+  switch (organization?.organizationType) {
+    case "ngo":
+      comp = <OrganizationNgoProfile />;
       break;
-    case "public":
-      comp = <IdentityPublicProfile />;
-      break;
-    case "staff":
-      comp = <IdentityStaffProfile />;
-      break;
-    case "employer":
-      comp = <IdentityEmployerProfile />;
+    case "company":
+      comp = <OrganizationCompanyProfile />;
       break;
     default:
-      comp = <Box></Box>;
+      comp = <Box>fdsa</Box>;
   }
 
   return (
-    <IdentityProfileStore.Provider
-      identity={identity}
+    <OrganizationProfileStore.Provider
+      organization={organization}
       enums={enums}
       page={page}
     >
       <Box w="100%" bgColor="#fafafa">
         {comp}
       </Box>
-    </IdentityProfileStore.Provider>
+    </OrganizationProfileStore.Provider>
   );
 };
 
-export default withPageCMS(IdentityProfile, {
+export default withPageCMS(OrganizationProfile, {
   key: PAGE_KEY,
   fields: [
     {

@@ -10,14 +10,14 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
 
 const StaffSectionViewer = () => {
   const router = useRouter();
   const { page, enums, identity, editSection, setEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">

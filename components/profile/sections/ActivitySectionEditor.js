@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import { RiEdit2Line } from "react-icons/ri";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import ActivitySubSectionEditor from "../fragments/ActvitySubSectionEditor";
 
 const ActivitySectionEditor = () => {
   const { page, identity, saveIdentity, removeEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
   const form = useForm({
     defaultValues: {
       id: identity.id,

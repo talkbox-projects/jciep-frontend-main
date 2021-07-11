@@ -1,8 +1,8 @@
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
-import BiographySection from "./sections/BiographySection";
+import IdentityBiographySection from "./sections/IdentityBiographySection";
 import ExperienceSection from "./sections/ExperienceSection";
-import PortfolioSection from "./sections/PortfolioSection";
+import IdentityPortfolioSection from "./sections/IdentityPortfolioSection";
 import PublicSection from "./sections/PublicSection";
 
 const IdentityPublicProfile = ({ identity, page, enums, editable }) => {

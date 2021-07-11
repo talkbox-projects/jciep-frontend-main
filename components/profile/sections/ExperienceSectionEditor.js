@@ -1,14 +1,14 @@
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { RiEdit2Line } from "react-icons/ri";
 import EducationSubSectionEditor from "../fragments/EducationSubSectionEditor";
 import EmploymentSubSectionEditor from "../fragments/EmploymentSubSectionEditor";
 
 const ExperienceSectionEditor = () => {
   const { page, saveIdentity, identity, removeEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
 
   const form = useForm({
     defaultValues: {

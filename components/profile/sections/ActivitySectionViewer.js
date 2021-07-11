@@ -3,11 +3,12 @@ import wordExtractor from "../../../utils/wordExtractor";
 import SectionCard from "../fragments/SectionCard";
 import { RiEdit2Line } from "react-icons/ri";
 import ActvitySubSectionViewer from "../fragments/ActvitySubSectionViewer";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import ActivitySubSectionEditor from "../fragments/ActvitySubSectionEditor";
 
 const ActivitySectionViewer = () => {
-  const { page, editSection, setEditSection } = ProfileStore.useContext();
+  const { page, editSection, setEditSection } =
+    IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">

@@ -1,11 +1,27 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
+import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
+import NgoSectionEditor from "./NgoSectionEditor";
+import NgoSectionViewer from "./NgoSectionViewer";
+import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 
-const NgoSection = ({ identity, page, enums, editable }) => {
+const NgoSection = () => {
+  const { page, organization, saveOrganization, editSection } =
+    OrganizationProfileStore.useContext();
+  const isEditing = editSection === "profile";
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">
-        <Box>NgoSection</Box>
+        <BannerFragment
+          {...{
+            enableBannerMedia: false,
+            page,
+            entity: organization,
+            save: saveOrganization,
+            profilePicPropName: "logo",
+          }}
+        />
+        {isEditing ? <NgoSectionEditor /> : <NgoSectionViewer />}
       </VStack>
     </SectionCard>
   );

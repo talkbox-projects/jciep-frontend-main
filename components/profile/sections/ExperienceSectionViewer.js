@@ -8,13 +8,13 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import EducationSubSectionViewer from "../fragments/EducationSubSectionViewer";
 import EmploymentSubSectionViewer from "../fragments/EmploymentSubSectionViewer";
 
 export const ExperienceSectionViewer = () => {
-  const { page, setEditSection } = ProfileStore.useContext();
+  const { page, setEditSection } = IdentityProfileStore.useContext();
 
   return (
     <VStack px={8} pb={8} align="stretch">

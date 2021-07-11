@@ -16,14 +16,16 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import ProfileStore from "../../../store/ProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";
 
-const BannerMediaUploadModal = ({ isOpen, onClose }) => {
+const BannerMediaUploadModal = ({
+  isOpen,
+  onClose,
+  params: { entity, page, save },
+}) => {
   const [mode, setMode] = useState("upload"); // mode = [upload, youtube]
 
-  const { identity, page, saveIdentity } = ProfileStore.useContext();
   const {
     register,
     handleSubmit,
@@ -31,19 +33,19 @@ const BannerMediaUploadModal = ({ isOpen, onClose }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      id: identity?.id,
-      bannerMedia: identity?.bannerMedia,
+      id: entity?.id,
+      bannerMedia: entity?.bannerMedia,
     },
   });
 
-  const uploadComponent = (
+  const getUploadComponent = () => (
     <VStack color="#aaa" align="stretch" spacing={4} py={8} px={8} w="100%">
       <AspectRatio ratio={2.5}>
         <Controller
           control={control}
           name="bannerMedia.file"
           rules={[]}
-          defaultValue={identity?.bannerMedia}
+          defaultValue={entity?.bannerMedia}
           render={({ field: { value, onChange } }) => {
             return (
               <AspectRatio ratio={2.5}>
@@ -85,7 +87,7 @@ const BannerMediaUploadModal = ({ isOpen, onClose }) => {
     </VStack>
   );
 
-  const youtubeComponent = (
+  const getYoutubeComponent = () => (
     <VStack align="center" spacing={4} py={8} px={8}>
       <FormControl
         as={VStack}
@@ -98,10 +100,6 @@ const BannerMediaUploadModal = ({ isOpen, onClose }) => {
         <Input
           borderRadius="2em"
           {...register("bannerMedia.videoUrl", {
-            required: wordExtractor(
-              page?.content?.wordings,
-              "invalid_youtube_link_message"
-            ),
             pattern: {
               value: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
               message: wordExtractor(
@@ -152,7 +150,7 @@ const BannerMediaUploadModal = ({ isOpen, onClose }) => {
         as="form"
         onSubmit={handleSubmit(async (values) => {
           try {
-            await saveIdentity(values);
+            await save(values);
             onClose();
           } catch (error) {
             console.error(error);
@@ -173,7 +171,7 @@ const BannerMediaUploadModal = ({ isOpen, onClose }) => {
           )}
         </ModalHeader>
         <ModalBody>
-          {mode === "upload" ? uploadComponent : youtubeComponent}
+          {mode === "upload" ? getUploadComponent() : getYoutubeComponent()}
         </ModalBody>
       </ModalContent>
     </Modal>

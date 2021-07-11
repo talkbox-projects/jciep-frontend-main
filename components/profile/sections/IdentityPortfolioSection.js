@@ -21,11 +21,11 @@ import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import PortfolioMediaUploadModal from "../fragments/PortfolioMediaUploadModal";
 import SectionCard from "../fragments/SectionCard";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { AiFillFilePdf, AiFillYoutube } from "react-icons/ai";
 import PortfolioGallery from "../fragments/PortfolioGallery";
 
-const PortfolioSection = () => {
+const IdentityPortfolioSection = () => {
   const {
     page,
     saveIdentity,
@@ -33,7 +33,7 @@ const PortfolioSection = () => {
     editSection,
     setEditSection,
     removeEditSection,
-  } = ProfileStore.useContext();
+  } = IdentityProfileStore.useContext();
 
   const [medias, setMedias] = useState(identity?.portfolio ?? []);
 
@@ -88,7 +88,7 @@ const PortfolioSection = () => {
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">
-        <HStack px={8} py={4} align="center">
+        <HStack w="100%" px={8} py={4} align="center">
           <Text flex={1} minW={0} w="100%" fontSize="2xl">
             {wordExtractor(page?.content?.wordings, "portfolio_header_label")}
           </Text>
@@ -99,6 +99,7 @@ const PortfolioSection = () => {
           ) : (
             !editSection && (
               <Button
+                w="fit-content"
                 onClick={() => setEditSection("portfolio")}
                 variant="link"
                 leftIcon={<RiEdit2Line />}
@@ -221,4 +222,4 @@ const PortfolioSection = () => {
   );
 };
 
-export default PortfolioSection;
+export default IdentityPortfolioSection;

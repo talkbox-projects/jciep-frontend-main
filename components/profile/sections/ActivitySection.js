@@ -1,11 +1,11 @@
 import { VStack } from "@chakra-ui/react";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import SectionCard from "../fragments/SectionCard";
 import ActivitySectionEditor from "./ActivitySectionEditor";
 import ActivitySectionViewer from "./ActivitySectionViewer";
 
 const ActivitySection = () => {
-  const { editSection } = ProfileStore.useContext();
+  const { editSection } = IdentityProfileStore.useContext();
 
   const isEditing = editSection === "activity";
   return (

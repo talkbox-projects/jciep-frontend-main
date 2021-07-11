@@ -37,9 +37,9 @@ export default gql`
     companyBenefit: String
     logo: File
     tncAccept: Boolean
-    createAt: Timestamp!
-    updateAt: Timestamp!
-    approveAt: Timestamp!
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+    approvedAt: Timestamp!
     remark: String
     createBy: Identity
   }
@@ -58,6 +58,10 @@ export default gql`
     district: District
     companyBenefit: String
     logo: File
+
+    contactName: String
+    contactPhone: String
+    contactEmail: String
 
     biography: JsonContent
     portfolio: [FileMeta]
@@ -114,6 +118,10 @@ export default gql`
     companyBenefit: String
     logo: FileInput
 
+    contactName: String
+    contactPhone: String
+    contactEmail: String
+
     biography: JsonContent
     portfolio: [FileMetaInput]
 
@@ -153,7 +161,6 @@ export default gql`
     ): OrganizationSubmission @auth(identityTypes: [admin])
 
     OrganizationUpdate(input: OrganizationUpdateInput): Organization
-      @auth(identityTypes: [admin])
     OrganizationMemberInvite(input: OrganizationMemberInviteInput): Boolean
     OrganizationMemberRemove(id: ID!): Boolean
     OrganzationMemberBind(inviteToken: String!, identityId: ID!): Identity

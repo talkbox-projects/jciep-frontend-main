@@ -14,14 +14,14 @@ import {
 import { useRouter } from "next/router";
 import { Controller, useFieldArray } from "react-hook-form";
 import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 import MonthPicker from "./MonthPicker";
 
 const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
   const router = useRouter();
-  const { page, enums } = ProfileStore.useContext();
+  const { page, enums } = IdentityProfileStore.useContext();
   const { fields, append, remove, insert } = useFieldArray({
     control,
     name: "employment",

@@ -28,6 +28,31 @@ const organizationSchema = Schema({
   website: {
     type: String,
   },
+  contactName: {
+    type: String,
+  },
+  contactPhone: {
+    type: String,
+  },
+  contactEmail: {
+    type: String,
+  },
+  biography: {
+    type: Object,
+  },
+  portfolio: [
+    {
+      file: {
+        id: String,
+        url: String,
+        contentType: String,
+        fileSize: Number,
+      },
+      videoUrl: String,
+      title: String,
+      description: String,
+    },
+  ],
   identityId: {
     type: Schema.Types.ObjectId,
     ref: "Identity",
@@ -41,10 +66,12 @@ const organizationSchema = Schema({
       directory: String,
     },
   ],
-  industry: [{
-    type: String,
-    enum: Object.keys(industries),
-  }],
+  industry: [
+    {
+      type: String,
+      enum: Object.keys(industries),
+    },
+  ],
   description: {
     type: String,
   },
@@ -103,13 +130,15 @@ const organizationSubmissionSchema = Schema({
       id: String,
       url: String,
       contentType: String,
-      fileSize: Number
+      fileSize: Number,
     },
   ],
-  industry: [{
-    type: String,
-    enum: Object.keys(industries),
-  }],
+  industry: [
+    {
+      type: String,
+      enum: Object.keys(industries),
+    },
+  ],
   description: {
     type: String,
   },

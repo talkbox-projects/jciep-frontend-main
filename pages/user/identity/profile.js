@@ -9,7 +9,7 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
 import { useCallback, useEffect, useState } from "react";
 import { IdentityProfileProvider } from "../../../utils/profile/identityProfileState";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "identity_id_profile";
@@ -52,11 +52,15 @@ const IdentityProfile = ({ enums, page }) => {
   }
 
   return (
-    <ProfileStore.Provider identity={identity} enums={enums} page={page}>
+    <IdentityProfileStore.Provider
+      identity={identity}
+      enums={enums}
+      page={page}
+    >
       <Box w="100%" bgColor="#fafafa">
         {comp}
       </Box>
-    </ProfileStore.Provider>
+    </IdentityProfileStore.Provider>
   );
 };
 

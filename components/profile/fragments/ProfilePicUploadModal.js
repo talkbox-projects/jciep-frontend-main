@@ -11,12 +11,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";
 
-const ProfilePicUploadModal = ({ isOpen, onClose }) => {
-  const { identity, page, saveIdentity } = ProfileStore.useContext();
+const ProfilePicUploadModal = ({
+  params: { entity, page, save, propName = "profilePic" },
+  isOpen,
+  onClose,
+}) => {
   const {
     register,
     handleSubmit,
@@ -24,8 +27,8 @@ const ProfilePicUploadModal = ({ isOpen, onClose }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      id: identity?.id,
-      bannerMedia: identity?.bannerMedia,
+      id: entity?.id,
+      bannerMedia: entity?.bannerMedia,
     },
   });
 
@@ -36,7 +39,7 @@ const ProfilePicUploadModal = ({ isOpen, onClose }) => {
         as="form"
         onSubmit={handleSubmit(async (values) => {
           try {
-            await saveIdentity(values);
+            await save(values);
             onClose();
           } catch (error) {
             console.error(error);
@@ -60,9 +63,8 @@ const ProfilePicUploadModal = ({ isOpen, onClose }) => {
           <Box w={240}>
             <Controller
               control={control}
-              name="profilePic"
-              rules={[]}
-              defaultValue={identity?.profilePic}
+              name={propName}
+              defaultValue={entity?.[propName]}
               render={({ field: { value, onChange } }) => {
                 return (
                   <AspectRatio ratio={1}>

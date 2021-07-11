@@ -3,15 +3,16 @@ import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
 import EmployerSectionEditor from "./EmployerSectionEditor";
 import EmployerSectionViewer from "./EmployerSectionViewer";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 
 const EmployerSection = () => {
-  const { editSection } = ProfileStore.useContext();
+  const { page, identity, saveIdentity, editSection } =
+    IdentityProfileStore.useContext();
   const isEditing = editSection === "profile";
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">
-        <BannerFragment />
+        <BannerFragment {...{ page, entity: identity, save: saveIdentity }} />
         {isEditing ? <EmployerSectionEditor /> : <EmployerSectionViewer />}
       </VStack>
     </SectionCard>

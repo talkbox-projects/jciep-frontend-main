@@ -12,12 +12,12 @@ import {
 import moment from "moment";
 import { useFieldArray } from "react-hook-form";
 import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 
 const ActivitySubSectionEditor = ({ form: { register, control } }) => {
-  const { page } = ProfileStore.useContext();
+  const { page } = IdentityProfileStore.useContext();
   const { fields, append, remove, insert } = useFieldArray({
     control,
     name: "activity",

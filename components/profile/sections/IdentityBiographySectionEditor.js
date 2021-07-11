@@ -12,15 +12,15 @@ import {
 } from "@chakra-ui/react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { RiEdit2Line } from "react-icons/ri";
 import BiographyTypeSelector from "../fragments/BiographyTypeSelector";
 import { AiOutlineDelete } from "react-icons/ai";
 import ProfileDropzone from "../fragments/ProfileDropzone";
 
-const BiographySectionEditor = () => {
+const IdentityBiographySectionEditor = () => {
   const { page, saveIdentity, identity, removeEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
 
   const {
     handleSubmit,
@@ -191,4 +191,4 @@ const BiographySectionEditor = () => {
   );
 };
 
-export default BiographySectionEditor;
+export default IdentityBiographySectionEditor;

@@ -55,7 +55,7 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
     >
       <>
         <input {...getInputProps()} />
-        {!value ? (
+        {!value?.url ? (
           <>
             <Icon as={AiOutlineCloudUpload} fontSize="4xl" color="#aaa" />
             <Text>

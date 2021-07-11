@@ -142,6 +142,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                     contentType
                     fileSize
                   }
+                  videoUrl
                   title
                   description
                 }
@@ -174,6 +175,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                 employment {
                   employmentType
                   companyName
+                  jobTitle
                   industry
                   startDatetime
                   endDatetime

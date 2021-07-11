@@ -237,10 +237,7 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                     isInvalid={errors?.education?.[index]?.fieldOfStudy}
                   >
                     <FormLabel fontSize="sm" color="#999" mb={0}>
-                      <Checkbox
-                        defaultChecked={present}
-                        {...register(`${prefix}.present`, {})}
-                      >
+                      <Checkbox {...register(`${prefix}.present`, {})}>
                         {wordExtractor(
                           page?.content?.wordings,
                           "field_label_education_present"

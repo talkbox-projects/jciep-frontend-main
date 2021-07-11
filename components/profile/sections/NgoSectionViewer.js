@@ -10,16 +10,16 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
-import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
 import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
 
-const StaffSectionViewer = () => {
+const NgoSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, identity, editSection, setEditSection } =
-    IdentityProfileStore.useContext();
+  const { page, enums, organization, editSection, setEditSection } =
+    OrganizationProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
@@ -38,33 +38,29 @@ const StaffSectionViewer = () => {
         <Wrap>
           <Text fontSize="xl" fontWeight="bold">
             {router.locale === "zh"
-              ? identity?.chineseName
-              : identity?.englishName}
+              ? organization?.chineseCompanyName
+              : organization?.englishCompanyName}
           </Text>
           <Tag>
             {
-              enums?.EnumIdentityTypeList?.find((x) => x.key === identity?.type)
-                ?.value?.[router.locale]
+              enums?.EnumOrganizationStatusList?.find(
+                (x) => x.key === organization?.status
+              )?.value?.[router.locale]
             }
           </Tag>
         </Wrap>
-        <Text color="#999">
-          {identity?.caption ??
-            wordExtractor(page?.content?.wordings, "empty_text_label")}
-        </Text>
       </VStack>
-
       <VStack px={8} py={4} align="stretch" spacing={4}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_chineseName"
+                "field_label_chineseCompanyName"
               )}
             </FormLabel>
             <Text>
-              {identity?.chineseName ??
+              {organization?.chineseCompanyName ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
@@ -72,11 +68,11 @@ const StaffSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_englishName"
+                "field_label_englishCompanyName"
               )}
             </FormLabel>
             <Text>
-              {identity?.englishName ??
+              {organization?.englishCompanyName ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
@@ -84,19 +80,62 @@ const StaffSectionViewer = () => {
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_email")}
+              {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
             <Text>
-              {identity?.email ??
+              {organization?.website ||
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
           <FormControl>
             <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_phone")}
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_contactName"
+              )}
             </FormLabel>
             <Text>
-              {identity?.phone ??
+              {organization?.contactName ||
+                wordExtractor(page?.content?.wordings, "empty_text_label")}
+            </Text>
+          </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl>
+            <FormLabel color="#999" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_contactEmail"
+              )}
+            </FormLabel>
+            <Text>
+              {organization?.contactEmail ||
+                wordExtractor(page?.content?.wordings, "empty_text_label")}
+            </Text>
+          </FormControl>
+          <FormControl>
+            <FormLabel color="#999" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_contactPhone"
+              )}
+            </FormLabel>
+            <Text>
+              {organization?.contactPhone ||
+                wordExtractor(page?.content?.wordings, "empty_text_label")}
+            </Text>
+          </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl>
+            <FormLabel color="#999" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_organization_description"
+              )}
+            </FormLabel>
+            <Text whiteSpace="pre-wrap">
+              {organization?.description ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
@@ -106,4 +145,4 @@ const StaffSectionViewer = () => {
   );
 };
 
-export default StaffSectionViewer;
+export default NgoSectionViewer;

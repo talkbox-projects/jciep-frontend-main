@@ -1,12 +1,12 @@
 import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 
 const EmploymentSubSectionViewer = () => {
-  const { identity, page, enums } = ProfileStore.useContext();
+  const { identity, page, enums } = IdentityProfileStore.useContext();
   const router = useRouter();
   return (
     <VStack spacing={4} width={["100%", "50%"]} align="stretch">

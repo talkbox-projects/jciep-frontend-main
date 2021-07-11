@@ -65,7 +65,7 @@ const IdentityStaffAdd = ({ page }) => {
         let data = await getGraphQLClient().request(mutation, {
           input: {
             userId: user.id,
-            identity: "employer",
+            identity: "staff",
             chineseName: contactPersonName,
             englishName: contactPersonName,
             tncAccept: terms,

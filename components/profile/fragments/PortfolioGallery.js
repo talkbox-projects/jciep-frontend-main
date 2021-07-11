@@ -13,22 +13,17 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useCallback } from "react";
+import { getYoutubeLink } from "../../../utils/general";
 
 const Iframe = chakra("iframe");
 
 const PortfolioGallery = ({ isOpen, onClose, params }) => {
   const getVideoComponent = useCallback((item) => {
-    const match = (item?.videoUrl ?? "").match(
-      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
-    );
-    const youtubeId = match && match[7].length == 11 ? match[7] : null;
+    const youtubeLink = getYoutubeLink(item?.videoUrl);
     return (
       <VStack align="stretch">
         <AspectRatio ratio={5 / 3}>
-          <iframe
-            src={`https://youtube.com/embed/${youtubeId}`}
-            allowFullScreen
-          />
+          <iframe src={youtubeLink} allowFullScreen />
         </AspectRatio>
         <Text color="gray.500" fontSize="sm">
           {item?.description}

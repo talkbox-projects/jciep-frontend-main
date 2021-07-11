@@ -1,31 +1,34 @@
 import {
   AspectRatio,
+  Text,
   Avatar,
   Box,
   Button,
   chakra,
-  HStack,
   Image,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
-import ProfileStore from "../../../store/ProfileStore";
+import { useDisclosureWithParams } from "../../../store/AppStore";
+import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
 import ProfilePicUploadModal from "./ProfilePicUploadModal";
 
-const Iframe = chakra("frame");
-const BannerFragment = () => {
-  const { identity, page } = ProfileStore.useContext();
-  const bannerMediaDisclosure = useDisclosure();
-  const profilePicDisclosure = useDisclosure();
+const BannerFragment = ({
+  enableBannerMedia = true,
+  entity,
+  page,
+  save,
+  profilePicPropName = "profilePic",
+}) => {
+  const bannerMediaDisclosure = useDisclosureWithParams();
+  const profilePicDisclosure = useDisclosureWithParams();
 
   return (
     <VStack align="stretch" spacing={0} position="relative">
-      <Box>
+      {enableBannerMedia && (
         <Button
           borderRadius={16}
           leftIcon={<AiOutlinePlus />}
@@ -39,21 +42,27 @@ const BannerFragment = () => {
         >
           {wordExtractor(page?.content?.wordings, "add_banner_media_label")}
         </Button>
-      </Box>
-      <AspectRatio ratio={2.5}>
-        {identity?.bannerMedia?.videoUrl ? (
-          <Iframe src={identity?.bannerMedia?.videoUrl} w="100%" />
-        ) : (
+      )}
+      {entity?.bannerMedia?.videoUrl ? (
+        <AspectRatio ratio={16 / 9}>
+          <iframe
+            src={getYoutubeLink(entity?.bannerMedia?.videoUrl)}
+            w="100%"
+          />
+        </AspectRatio>
+      ) : (
+        <AspectRatio ratio={2.5}>
           <Image
             w="100%"
             src={
-              identity?.bannerMedia?.file?.url ??
+              entity?.bannerMedia?.file?.url ??
               page?.content?.headerSection?.bannerPlaceholder
             }
           ></Image>
-        )}
-      </AspectRatio>
+        </AspectRatio>
+      )}
       <Avatar
+        {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
         cursor="pointer"
         onClick={profilePicDisclosure.onOpen}
         size="xl"
@@ -62,14 +71,16 @@ const BannerFragment = () => {
         bottom={-12}
         borderWidth={2}
         borderColor="white"
-        src={identity?.profilePic?.url}
+        objectFit="contain"
+        src={entity?.[profilePicPropName]?.url}
       ></Avatar>
       <BannerMediaUploadModal
-        page={page}
+        params={{ entity, page, save }}
         isOpen={bannerMediaDisclosure.isOpen}
         onClose={bannerMediaDisclosure.onClose}
       />
       <ProfilePicUploadModal
+        params={{ entity, page, save, propName: profilePicPropName }}
         page={page}
         isOpen={profilePicDisclosure.isOpen}
         onClose={profilePicDisclosure.onClose}

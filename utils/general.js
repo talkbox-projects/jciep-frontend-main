@@ -23,3 +23,21 @@ export const updateIf = (arr, condition, updater) => {
     )?._arr ?? []
   );
 };
+
+export const urlRegex =
+  /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+
+export const emailRegex =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+export const youtubeRegex =
+  /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+
+export const getYoutubeId = (url) => {
+  const match = (url ?? "").match(youtubeRegex);
+  return match && match[7].length == 11 ? match[7] : null;
+};
+
+export const getYoutubeLink = (url) => {
+  return `https://youtube.com/embed/${getYoutubeId(url)}`;
+};

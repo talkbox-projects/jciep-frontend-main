@@ -1,4 +1,4 @@
-import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
+import { Text, Box, VStack } from "@chakra-ui/react";
 import moment from "moment";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";

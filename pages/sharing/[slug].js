@@ -30,6 +30,7 @@ import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import NextLink from "next/link";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { getYoutubeLink } from "../../utils/general";
 const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {
@@ -237,17 +238,13 @@ const PostDetail = ({ post, setting, page }) => {
                       </VStack>
                     );
                   case "video-block":
-                    const match = (link ?? "").match(
-                      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
-                    );
-                    const youtubeId =
-                      match && match[7].length == 11 ? match[7] : null;
+                    const youtubeLink = getYoutubeLink(link);
                     return (
                       <VStack align="stretch">
                         <AspectRatio ratio={5 / 3}>
                           <iframe
                             title="post"
-                            src={`https://youtube.com/embed/${youtubeId}`}
+                            src={youtubeLink}
                             allowFullScreen
                           />
                         </AspectRatio>

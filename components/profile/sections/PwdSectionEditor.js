@@ -11,18 +11,19 @@ import {
   Tag,
   Input,
   FormHelperText,
+  Textarea,
   Select,
 } from "@chakra-ui/react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 
 const PwdSectionEditor = () => {
   const router = useRouter();
   const { page, enums, saveIdentity, identity, removeEditSection } =
-    ProfileStore.useContext();
+    IdentityProfileStore.useContext();
 
   const {
     handleSubmit,
@@ -180,12 +181,7 @@ const PwdSectionEditor = () => {
             <Input
               variant="flushed"
               defaultValue={identity?.phone}
-              {...register("phone", {
-                required: wordExtractor(
-                  page?.content?.wordings,
-                  "field_error_message_required"
-                ),
-              })}
+              {...register("phone", {})}
             ></Input>
             <FormHelperText color="red">
               {errors?.phone?.message}
@@ -754,17 +750,11 @@ const PwdSectionEditor = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_hobby")}
             </FormLabel>
-            <Input
-              type="textarea"
+            <Textarea
               variant="flushed"
               defaultValue={identity?.hobby}
-              {...register("hobby", {
-                required: wordExtractor(
-                  page?.content?.wordings,
-                  "field_error_message_required"
-                ),
-              })}
-            ></Input>
+              {...register("hobby", {})}
+            ></Textarea>
             <FormHelperText color="red">
               {errors?.chineseName?.message}
             </FormHelperText>

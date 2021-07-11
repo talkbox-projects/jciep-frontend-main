@@ -1,14 +1,13 @@
 import constate from "constate";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import identityGet from "../utils/api/IdentityGet";
-import identityUpdate from "../utils/api/IdentityUpdate";
+import organizationGet from "../utils/api/organizationGet";
+import organizationUpdate from "../utils/api/OrganizationUpdate";
 import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
-  ({ identity: _identity, page, enums }) => {
-    const { user } = useAppContext();
-    const [identity, setIdentity] = useState(_identity);
+  ({ organization: _organization, page, enums }) => {
+    const [organization, setOrganization] = useState(_organization);
     const [editSection, setEditSection] = useState(null);
 
     const removeEditSection = useCallback(() => {
@@ -20,23 +19,22 @@ const [Provider, useContext] = constate(
     }, []);
 
     const router = useRouter();
-    const saveIdentity = useCallback(
-      async (partialIdentity) => {
+    const saveOrganization = useCallback(
+      async (partialOrganization) => {
         try {
-          const data = await identityUpdate({ input: partialIdentity });
-          console.error(partialIdentity);
-          setIdentity(data);
+          const data = await organizationUpdate({ input: partialOrganization });
+          setOrganization(data);
         } catch (e) {
           console.error(e);
         }
       },
-      [setIdentity, identity]
+      [setOrganization, organization]
     );
 
     useEffect(() => {
       (async () => {
-        const data = await identityGet({ id: router.query.id });
-        setIdentity(data);
+        const data = await organizationGet({ id: router.query.id });
+        setOrganization(data);
       })();
     }, [router.query.id]);
 
@@ -45,8 +43,8 @@ const [Provider, useContext] = constate(
       setEditSection,
       removeEditSection,
 
-      identity,
-      saveIdentity,
+      organization,
+      saveOrganization,
 
       editable,
 
@@ -56,6 +54,6 @@ const [Provider, useContext] = constate(
   }
 );
 
-const ProfileStore = { Provider, useContext };
+const OrganizationProfileStore = { Provider, useContext };
 
-export default ProfileStore;
+export default OrganizationProfileStore;

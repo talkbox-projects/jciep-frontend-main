@@ -257,7 +257,6 @@ export default {
        * Staff and Employer can update identity under his/her organization
        * Pwd/Public can update identity for his own account.
        */
-      console.log(input);
       try {
         return await Identity.findByIdAndUpdate(input.id, input, {
           new: true,

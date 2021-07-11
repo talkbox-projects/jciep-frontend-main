@@ -1,10 +1,10 @@
 import { Text, Box, VStack } from "@chakra-ui/react";
 import moment from "moment";
-import ProfileStore from "../../../store/ProfileStore";
+import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import Dot from "./Dot";
 
 const ActvitySubSectionViewer = () => {
-  const { identity } = ProfileStore.useContext();
+  const { identity } = IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={4} width={["100%", "50%"]} align="stretch">
