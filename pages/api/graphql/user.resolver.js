@@ -3,7 +3,7 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
-
+import facebook from '../services/facebook'
 
 export default {
   Query: {
@@ -169,7 +169,30 @@ export default {
 
             return { token, user };
           }
+        } else if (input.facebookToken) {
+          let userData = await facebook.getProfile(input.facebookToken)
+          
+          if (userData.error) {
+            throw new Error(userData.error.message);
+          }
+
+          let user = await User.findOne({email: userData.email})
+
+          if (!user) {
+            let user = await new User({
+              email: userData.email,
+              facebookId: userData.id
+            }).save() 
+
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return {token, user}
+          } else {
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return {token, user}
+          }
         }
+
+
         return null;
       } catch (err) {
         console.log(err);

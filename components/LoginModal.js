@@ -30,6 +30,9 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 import { useCredential } from "../utils/user";
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import router from "next/router";
+
 
 const LoginModal = () => {
   const {
@@ -67,6 +70,13 @@ const LoginModal = () => {
       });
     }
   }, []);
+
+
+  const responseFacebook = (response) => {
+    loginModalDisclosure.onClose();
+    router.push(`/oauth/facebook/?accessToken=${response.accessToken}`)
+  }
+  
 
   const onEmailLogin = useCallback(async ({ email, password }) => {
     try {
@@ -300,14 +310,29 @@ const LoginModal = () => {
                   </HStack>
                 </Button>
               )}
-              <Button colorScheme="facebook" color="white">
+              {/* <Button colorScheme="facebook" color="white" >
                 <HStack w="100%">
                   <IoLogoFacebook size={18} color="white" />
                   <Text flex={1} minW={0} w="100%">
                     Sign In With Facebook
                   </Text>
                 </HStack>
-              </Button>
+              </Button> */}
+              <FacebookLogin
+                appId="1072341853293859"
+                fields="name,email,picture"
+                callback={responseFacebook} 
+                render={renderProps => (
+                  <Button colorScheme="facebook" color="white" onClick={renderProps.onClick}>
+                    <HStack w="100%">
+                      <IoLogoFacebook size={18} color="white" />
+                      <Text flex={1} minW={0} w="100%">
+                        Sign Up With Facebook
+                      </Text>
+                    </HStack>
+                  </Button> 
+                )}
+                />
               <Button
                 variant="solid"
                 _hover={{ bgColor: "black" }}
