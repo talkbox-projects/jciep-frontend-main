@@ -57,6 +57,8 @@ export const getServerSideProps = async (context) => {
         "EnumDegreeList",
         "EnumSkillList",
         "EnumPwdTypeList",
+        "EnumJoinRoleList",
+        "EnumJoinStatusList",
       ],
       lang: context.locale,
     })) ?? {};

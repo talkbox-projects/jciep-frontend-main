@@ -34,11 +34,11 @@ const [Provider, useContext] = constate(
     );
 
     useEffect(() => {
-      (async () => {
-        const data = await identityGet({ id: router.query.id });
-        setIdentity(data);
-      })();
-    }, [router.query.id]);
+      //   (async () => {
+      //     const data = await identityGet({ id: router.query.id });
+      setIdentity(_identity);
+      //   })();
+    }, [_identity]);
 
     return {
       editSection,

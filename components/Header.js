@@ -317,7 +317,7 @@ const Header = ({ navigation, header, isLangAvailable }) => {
                           <Text my={1} fontWeight="bold">
                             {getWording("header.identity_subheading")}
                           </Text>
-                          <VStack align="stretch">
+                          <VStack maxH={300} overflow="auto" align="stretch">
                             {(user?.identities ?? []).map((identity) => (
                               <HStack
                                 key={identity.id}

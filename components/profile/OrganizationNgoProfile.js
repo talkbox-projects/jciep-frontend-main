@@ -3,8 +3,11 @@ import Container from "../Container";
 import OrganizationBiographySection from "./sections/OrganizationBiographySection";
 import NgoSection from "./sections/NgoSection";
 import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSection";
+import OrganizationProfileStore from "../../store/OrganizationProfileStore";
+import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
 
 const OrganizationNgoProfile = () => {
+  const { organization } = OrganizationProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
@@ -14,8 +17,8 @@ const OrganizationNgoProfile = () => {
             <OrganizationBiographySection />
             <OrganizationPortfolioSection />
           </VStack>
-          <VStack w={["100%", "100%", "33%"]}>
-            <Box></Box>
+          <VStack w={["100%", "100%", "33%"]} align="stretch">
+            <OrganizationMemberListSection />
           </VStack>
         </Stack>
       </Container>

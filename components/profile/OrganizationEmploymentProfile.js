@@ -14,8 +14,8 @@ const OrganizationEmploymentProfile = () => {
             <OrganizationBiographySection />
             <OrganizationPortfolioSection />
           </VStack>
-          <VStack w={["100%", "100%", "33%"]}>
-            <Box></Box>
+          <VStack w={["100%", "100%", "33%"]} align="stretch">
+            <OrganizationMemberListSection />
           </VStack>
         </Stack>
       </Container>

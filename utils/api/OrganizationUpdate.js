@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const organizationUpdate = async ({ input }) => {
+const organizationUpdate = async ({ input }, context) => {
   const query = gql`
     mutation OrganizationUpdate($input: OrganizationUpdateInput!) {
       OrganizationUpdate(input: $input) {
@@ -58,7 +58,7 @@ const organizationUpdate = async ({ input }) => {
     }
   `;
 
-  const data = await getGraphQLClient().request(query, { input });
+  const data = await getGraphQLClient(context).request(query, { input });
 
   return data?.OrganizationUpdate;
 };

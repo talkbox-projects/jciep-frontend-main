@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const organizationGet = async ({ id }) => {
+const organizationGet = async ({ id }, context) => {
   const query = gql`
     query OrganizationGet($id: ID!) {
       OrganizationGet(id: $id) {
@@ -41,8 +41,12 @@ const organizationGet = async ({ id }) => {
         }
         member {
           identity {
+            id
             chineseName
             englishName
+            profilePic {
+              url
+            }
           }
           email
           status
@@ -58,7 +62,7 @@ const organizationGet = async ({ id }) => {
     }
   `;
 
-  const data = await getGraphQLClient().request(query, { id });
+  const data = await getGraphQLClient(context).request(query, { id });
 
   return data?.OrganizationGet;
 };

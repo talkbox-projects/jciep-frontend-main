@@ -3,6 +3,8 @@ import districts from "./enum/districts";
 import industries from "./enum/industries";
 import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
+import joinStatus from "./enum/joinStatus";
+import joinRoles from "./enum/joinRoles";
 
 const organizationSchema = Schema({
   organizationType: {
@@ -61,9 +63,8 @@ const organizationSchema = Schema({
     {
       id: String,
       url: String,
-      filename: String,
       contentType: String,
-      directory: String,
+      fileSize: Number,
     },
   ],
   industry: [
@@ -91,12 +92,28 @@ const organizationSchema = Schema({
       ref: "OrganizationSubmission",
     },
   ],
+  member: [
+    {
+      identityId: {
+        type: Schema.Types.ObjectId,
+        ref: "Identity",
+      },
+      email: String,
+      status: {
+        type: String,
+        enum: Object.keys(joinStatus),
+      },
+      role: {
+        type: String,
+        enum: Object.keys(joinRoles),
+      },
+    },
+  ],
   logo: {
     id: String,
     url: String,
-    filename: String,
     contentType: String,
-    directory: String,
+    fileSize: Number,
   },
   tncAccept: {
     type: Boolean,
@@ -155,21 +172,19 @@ const organizationSubmissionSchema = Schema({
   companyBenefit: {
     type: String,
   },
-
   logo: {
     id: String,
     url: String,
-    filename: String,
     contentType: String,
-    directory: String,
+    fileSize: Number,
   },
   tncAccept: {
     type: Boolean,
   },
-  createdAt: Date,
-  updatedAt: Date,
-  approvedAt: Date,
-  createdBy: {
+  createAt: Date,
+  updateAt: Date,
+  approveAt: Date,
+  createBy: {
     type: Schema.Types.ObjectId,
     ref: "Identity",
   },

@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const identityGet = async ({ id }) => {
+const identityGet = async ({ id }, context) => {
   const query = gql`
     query IdentityGet($id: ID!) {
       IdentityGet(id: $id) {
@@ -82,11 +82,23 @@ const identityGet = async ({ id }) => {
           startDatetime
           endDatetime
         }
+        organizationRole {
+          organization {
+            id
+            logo {
+              url
+            }
+            chineseCompanyName
+            englishCompanyName
+          }
+          status
+          role
+        }
       }
     }
   `;
 
-  const data = await getGraphQLClient().request(query, { id });
+  const data = await getGraphQLClient(context).request(query, { id });
 
   return data?.IdentityGet;
 };

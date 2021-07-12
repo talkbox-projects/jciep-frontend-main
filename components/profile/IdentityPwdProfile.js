@@ -3,6 +3,7 @@ import Container from "../Container";
 import IdentityBiographySection from "./sections/IdentityBiographySection";
 import ExperienceSection from "./sections/ExperienceSection";
 import IdentityPortfolioSection from "./sections/IdentityPortfolioSection";
+import IdentityOrganizationListSection from "./sections/IdentityOrganizationListSection";
 import PwdSection from "./sections/PwdSection";
 import ActivitySection from "./sections/ActivitySection";
 const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
@@ -19,8 +20,8 @@ const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
             <ExperienceSection />
             <ActivitySection />
           </VStack>
-          <VStack w={["100%", "100%", "33%"]}>
-            <Box></Box>
+          <VStack align="stretch" w={["100%", "100%", "33%"]}>
+            <IdentityOrganizationListSection />
           </VStack>
         </Stack>
       </Container>

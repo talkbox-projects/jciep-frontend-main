@@ -73,7 +73,6 @@ export default {
         fileArray.push(files);
       }
 
-      console.log(fileArray);
       return await uploadFiles(fileArray);
     },
   },

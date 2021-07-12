@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const identityUpdate = async ({ input }) => {
+const identityUpdate = async ({ input }, context) => {
   const query = gql`
     mutation IdentityUpdate($input: IdentityUpdateInput!) {
       IdentityUpdate(input: $input) {
@@ -86,7 +86,7 @@ const identityUpdate = async ({ input }) => {
     }
   `;
 
-  const data = await getGraphQLClient().request(query, { input });
+  const data = await getGraphQLClient(context).request(query, { input });
 
   return data?.IdentityUpdate;
 };

@@ -1,9 +1,7 @@
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
-import IdentityBiographySection from "./sections/IdentityBiographySection";
-import ExperienceSection from "./sections/ExperienceSection";
-import IdentityPortfolioSection from "./sections/IdentityPortfolioSection";
 import PublicSection from "./sections/PublicSection";
+import IdentityOrganizationListSection from "./sections/IdentityOrganizationListSection";
 
 const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
   const props = { identity, page, enums, editable };
@@ -15,8 +13,8 @@ const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
           <VStack align="stretch" flex={1} minW={0} w="100%">
             <PublicSection {...props} />
           </VStack>
-          <VStack w={["100%", "100%", "33%"]}>
-            <Box>Testing</Box>
+          <VStack align="stretch" w={["100%", "100%", "33%"]}>
+            <IdentityOrganizationListSection />
           </VStack>
         </Stack>
       </Container>

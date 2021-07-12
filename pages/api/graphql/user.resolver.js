@@ -1,9 +1,9 @@
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
+import { Organization } from "./organization.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
-import { createFile } from "./file.resolver";
 
 export default {
   Query: {
@@ -15,19 +15,45 @@ export default {
       }
     },
 
-    IdentitySearch: async () => {
+    IdentitySearch: async (_parent, input) => {
       /**
        * Search User
        */
+
+      let keys = {};
+
+      if (input.phone) keys["phone"] = input.phone;
+      if (input.email) keys["email"] = input.email;
+      if (input.identityType) keys["type"] = { $in: input.identityType };
+      if (input.name)
+        keys["$or"] = [
+          { chineseName: input?.name },
+          { englishName: input?.name },
+        ];
+
+      return await Identity.find(keys)
+        .skip((input.page - 1) * 10)
+        .limit(input?.limit);
     },
 
     UserGet: async (_parent, { id }) => {
-      const user = await User.findById(id);
-      return user;
+      return await User.findById(id);
     },
-    IdentityGet: async (_parent, { id }, { user }) => {
-      console.log("context.user", user);
+    IdentityGet: async (_parent, { id }, { user }, args) => {
       const identity = await Identity.findById(id);
+
+      const organizations = await Organization.find({
+        member: { $elemMatch: { identityId: id } },
+      });
+
+      identity.organizationRole = (organizations ?? []).map((organization) => {
+        return {
+          organization,
+          status: organization.member[0].status,
+          role: organization.member[0].role,
+        };
+      });
+
       return identity;
     },
   },
@@ -58,6 +84,7 @@ export default {
        */
       try {
         const emailVerify = await EmailVerify.create({ email });
+        console.log(emailVerify);
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -170,8 +197,7 @@ export default {
     UserGet: async (_parent, { token }) => {
       try {
         let user = jwt.decode(token, "shhhhh");
-        user = await User.findById(user._id).populate("identities");
-        return user;
+        return await User.findById(user._id).populate("identities");
       } catch (error) {
         console.log(error);
         return null;

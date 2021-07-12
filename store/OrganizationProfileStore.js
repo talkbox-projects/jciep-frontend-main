@@ -32,11 +32,11 @@ const [Provider, useContext] = constate(
     );
 
     useEffect(() => {
-      (async () => {
-        const data = await organizationGet({ id: router.query.id });
-        setOrganization(data);
-      })();
-    }, [router.query.id]);
+      //   (async () => {
+      //     const data = await organizationGet({ id: router.query.id });
+      setOrganization(organization);
+      //   })();
+    }, [_organization]);
 
     return {
       editSection,

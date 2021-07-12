@@ -7,7 +7,7 @@ const properize = (text) => {
     .replace(/\s+/g, "");
 };
 
-export const getEnums = async ({ keys = [], lang }) => {
+export const getEnums = async ({ keys = [], lang }, context) => {
   let res = undefined;
   const query = gql`
     query {
@@ -24,7 +24,7 @@ export const getEnums = async ({ keys = [], lang }) => {
     }
   `;
 
-  res = await getGraphQLClient().request(query);
+  res = await getGraphQLClient(context).request(query);
 
   return res;
 };

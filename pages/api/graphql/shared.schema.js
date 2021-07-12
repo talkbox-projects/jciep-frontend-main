@@ -9,11 +9,6 @@ export default gql`
     identityTypes: [EnumIdentityType]
   ) on OBJECT | FIELD_DEFINITION
 
-  enum Role {
-    staff
-    pwd
-  }
-
   enum Language {
     en
     zh

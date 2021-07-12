@@ -4,6 +4,8 @@ import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
 import industries from "./enum/industries";
+import joinRoles from "./enum/joinRoles";
+import joinStatus from "./enum/joinStatus";
 import oralLanguages from "./enum/oralLanguages";
 import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
@@ -42,5 +44,8 @@ export default {
     ...generateEnumResolver("writtenLanguage", writtenLanguages),
     ...generateEnumResolver("yearOfExperience", yearOfExperiences),
     ...generateEnumResolver("skill", skills),
+    ...generateEnumResolver("organizationStatus", organizationStatus),
+    ...generateEnumResolver("joinRole", joinRoles),
+    ...generateEnumResolver("joinStatus", joinStatus),
   },
 };

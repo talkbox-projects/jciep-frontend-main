@@ -229,6 +229,13 @@ const identitySchema = Schema({
   },
 });
 
+userSchema.virtual("member.identity", {
+  ref: "Member",
+  localField: "member.identityId",
+  foreignField: "_id",
+  justOne: false,
+});
+
 export const Identity = models["Identity"] ?? model("Identity", identitySchema);
 export const User = models["User"] ?? model("User", userSchema);
 export const EmailVerify =

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useFormScreenPlugin } from "tinacms";
 
 const withConfigurationCMS =
-  (Component, { key, label, fields = [], propName = key }) =>
+  (Component, { key, label, fields = [], propName = key }, context) =>
   (props) => {
     const router = useRouter();
     const lang = router.locale;
@@ -32,7 +32,7 @@ const withConfigurationCMS =
               value,
             },
           };
-          await getGraphQLClient().request(mutation, variables);
+          await getGraphQLClient(context).request(mutation, variables);
         },
       },
       {

@@ -5,6 +5,8 @@ import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
 import industries from "./enum/industries";
+import joinRoles from "./enum/joinRoles";
+import joinStatus from "./enum/joinStatus";
 import oralLanguages from "./enum/oralLanguages";
 import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
@@ -55,4 +57,7 @@ export default gql`
   ${generateEnumSchema("writtenLanguage", writtenLanguages)}
   ${generateEnumSchema("yearOfExperience", yearOfExperiences)}
   ${generateEnumSchema("skill", skills)}
+  ${generateEnumSchema("organizationStatus", organizationStatus)}
+  ${generateEnumSchema("joinRole", joinRoles)}
+  ${generateEnumSchema("joinStatus", joinStatus)}
 `;

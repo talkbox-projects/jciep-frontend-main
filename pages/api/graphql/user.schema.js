@@ -2,14 +2,14 @@ import { gql } from "apollo-server-core";
 
 export default gql`
   enum JoinStatus {
-    binded
+    joined
     invited
   }
 
   type OrganizationRole {
-    organization: Organization
+    organization: Organization!
     status: JoinStatus!
-    role: Role
+    role: EnumJoinRole!
   }
 
   type User {
@@ -111,7 +111,7 @@ export default gql`
     employment: [Employment]
     activity: [Activity]
 
-    organizationRole: OrganizationRole
+    organizationRole: [OrganizationRole]
   }
 
   input IdentityCreateInput {

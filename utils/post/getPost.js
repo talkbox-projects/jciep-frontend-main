@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-export const getPost = async ({ idOrSlug, lang }) => {
+export const getPost = async ({ idOrSlug, lang }, context) => {
   const query = gql`
     query PostGet($idOrSlug: String!, $lang: Language!) {
       PostGet(idOrSlug: $idOrSlug, lang: $lang) {
@@ -27,11 +27,14 @@ export const getPost = async ({ idOrSlug, lang }) => {
     lang,
   };
 
-  const { PostGet: post } = await getGraphQLClient().request(query, variables);
+  const { PostGet: post } = await getGraphQLClient(context).request(
+    query,
+    variables
+  );
   return post;
 };
 
-export const getHottestPosts = async ({ limit }) => {
+export const getHottestPosts = async ({ limit }, context) => {
   const query = gql`
     query PostGetHotest($limit: Int!) {
       PostGetHotest(limit: $limit) {
@@ -52,20 +55,17 @@ export const getHottestPosts = async ({ limit }) => {
     limit,
   };
 
-  const { PostGetHotest: posts } = await getGraphQLClient().request(
+  const { PostGetHotest: posts } = await getGraphQLClient(context).request(
     query,
     variables
   );
   return posts;
 };
 
-export const getFilteredPosts = async ({
-  lang,
-  limit,
-  featureDisplay = false,
-  page,
-  category,
-}) => {
+export const getFilteredPosts = async (
+  { lang, limit, featureDisplay = false, page, category },
+  context
+) => {
   const query = gql`
     query PostSearch(
       $limit: Int!
@@ -105,14 +105,14 @@ export const getFilteredPosts = async ({
     featureDisplay,
   };
 
-  const { PostSearch: posts } = await getGraphQLClient().request(
+  const { PostSearch: posts } = await getGraphQLClient(context).request(
     query,
     variables
   );
   return posts;
 };
 
-export const getRelatedPosts = async ({ limit = 3, category, id }) => {
+export const getRelatedPosts = async ({ limit = 3, category, id }, context) => {
   console.log("sending data", limit);
   const query = gql`
     query PostGetRelated($limit: Int!, $category: String, $id: ID!) {
@@ -136,7 +136,7 @@ export const getRelatedPosts = async ({ limit = 3, category, id }) => {
     id,
   };
 
-  const { PostGetRelated: posts } = await getGraphQLClient().request(
+  const { PostGetRelated: posts } = await getGraphQLClient(context).request(
     query,
     variables
   );

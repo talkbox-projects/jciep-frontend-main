@@ -8,29 +8,22 @@ export default gql`
     employment
   }
 
-  enum OrganizationStatus {
-    pendingApproval
-    approved
-    rejected
-    resubmitRequired
-  }
-
   type Member {
     identity: Identity
     email: String
-    status: JoinStatus!
-    role: Role
+    status: EnumJoinStatus
+    role: EnumJoinRole
   }
 
   type OrganizationSubmission {
     id: ID!
     organizationType: OrganizationType
     organization: Organization!
-    status: OrganizationStatus!
+    status: EnumOrganizationStatus!
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: File
+    businessRegistration: [File]
     industry: [EnumIndustry]
     industryOther: String
     description: String
@@ -48,12 +41,11 @@ export default gql`
   type Organization {
     id: ID!
     organizationType: OrganizationType
-    status: OrganizationStatus!
-
+    status: EnumOrganizationStatus!
     chineseCompanyName: String
     englishCompanyName: String
     website: String
-    businessRegistration: File
+    businessRegistration: [File]
     industry: [EnumIndustry]
     industryOther: String
     description: String
@@ -91,7 +83,7 @@ export default gql`
 
   input OrganizationSubmissionUpdateInput {
     id: ID!
-    status: OrganizationStatus
+    status: EnumOrganizationStatus
     remark: String
     organizationType: OrganizationType
     chineseCompanyName: String
@@ -108,7 +100,6 @@ export default gql`
   input OrganizationUpdateInput {
     id: ID!
     organizationType: OrganizationType
-
     chineseCompanyName: String
     englishCompanyName: String
     industry: [EnumIndustry]
@@ -126,27 +117,28 @@ export default gql`
 
     biography: JsonContent
     portfolio: [FileMetaInput]
-
     tncAccept: Boolean
   }
 
   input OrganizationMemberInviteInput {
+    id: ID!
     email: String!
-    role: Role!
+    role: EnumJoinRole!
   }
 
   type Query {
     OrganizationGet(id: ID): Organization
     OrganizationSearch(
-      status: OrganizationStatus
+      status: EnumOrganizationStatus
       limit: Int!
       page: Int!
     ): [Organization]
 
     OrganizationSubmissionGet(id: ID): OrganizationSubmission
+
     OrganizationSubmissionSearch(
       type: OrganizationType
-      status: OrganizationStatus
+      status: EnumOrganizationStatus
       name: String
       limit: Int!
       page: Int!
@@ -163,7 +155,9 @@ export default gql`
     ): OrganizationSubmission @auth(identityTypes: [admin])
 
     OrganizationUpdate(input: OrganizationUpdateInput): Organization
-    OrganizationMemberInvite(input: OrganizationMemberInviteInput): Boolean
+      @auth(identityTypes: [admin])
+
+    OrganizationMemberInvite(input: OrganizationMemberInviteInput!): Boolean
     OrganizationMemberRemove(id: ID!): Boolean
     OrganzationMemberBind(inviteToken: String!, identityId: ID!): Identity
   }

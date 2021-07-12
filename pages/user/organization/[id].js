@@ -16,7 +16,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        organization: await organizationGet({ id: context.query.id }),
+        organization: await organizationGet({ id: context.query.id }, context),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
