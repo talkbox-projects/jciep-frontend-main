@@ -2,8 +2,8 @@ import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
-import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
+import send from "./email/send";
 
 export default {
   Query: {
@@ -88,11 +88,11 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await sendEmail({
-          To: email,
-          Subject: "Email Verification",
-          Text: `Please verify your email by clicking the link ${host}/user/verify/${emailVerify.token}`,
-        });
+        await send(
+          email,
+          `${host}/user/verify/${emailVerify.token}`,
+          "activation"
+        );
         return true;
       } catch (error) {
         console.error(error);

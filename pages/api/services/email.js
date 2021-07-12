@@ -1,5 +1,5 @@
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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")
+sgMail.setApiKey("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")
 
 
 // Parameters 
@@ -10,7 +10,6 @@ sgMail.setApiKey("SG.QMfTotYrSZWQBfjLvdjrBA.hWnngFH-FNCw-xJcNWJqBPGeFmD9McjeF_Zl
 
 exports.sendEmail = ({To, Subject, Text, Html }) => {
     return new Promise((resolve, reject) => {
-        console.log('yes')
         const msg = {
             to: To, 
             from: 'timtalkbox@gmail.com', 

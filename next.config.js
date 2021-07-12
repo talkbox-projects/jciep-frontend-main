@@ -4,6 +4,19 @@ module.exports = {
     defaultLocale: "zh",
     localeDetection: false,
   },
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.html/,
+      use: [
+        options.defaultLoaders.babel,
+        {
+          loader: "html-loader",
+        },
+      ],
+    });
+
+    return config;
+  },
   async redirects() {
     return [
       {

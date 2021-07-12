@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import send from "./email/send";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
 
@@ -37,6 +38,22 @@ export default {
       return await Organization.find({ status })
         .skip((page - 1) * 10)
         .limit(limit);
+    },
+    OrganizationSubmissionSearch: async (_parent, input) => {
+      let keys = {};
+
+      if (input.type) keys["organizationType"] = input.type;
+      if (input.status) keys["status"] = input.status;
+      if (input.name)
+        keys["$or"] = [
+          { chineseCompanyName: input?.name },
+          { englishCompanyName: input?.name },
+        ];
+
+      return await OrganizationSubmission.find(keys)
+        .populate("organization")
+        .skip((input?.page - 1) * 10)
+        .limit(input?.limit);
     },
   },
   Mutation: {
@@ -139,6 +156,8 @@ export default {
        * Update an organization submission in console by admin
        */
 
+      input.updateAt = new Date();
+
       return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
         new: true,
       }).populate("organization");
@@ -194,7 +213,7 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await sendEmail({
+        await send({
           To: email,
           Subject: "Email Verification",
           Text: `Please verify your email by clicking the link ${host}/user/verify/${emailVerify.token}`,

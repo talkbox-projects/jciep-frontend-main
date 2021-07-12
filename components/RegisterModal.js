@@ -1,6 +1,6 @@
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -45,11 +45,18 @@ const RegisterModal = () => {
     handleSubmit,
     register,
     setError,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
   const toast = useToast();
 
-  const onPhoneRegister = useCallback(async ({e, phone }) => {
+  useEffect(() => {
+    if (!registerModalDisclosure.isOpen) {
+      reset();
+    }
+  }, [registerModalDisclosure.isOpen]);
+
+  const onPhoneRegister = useCallback(async ({ e, phone }) => {
     try {
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
@@ -60,14 +67,12 @@ const RegisterModal = () => {
       if (result.UserPhoneVerify) {
         otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
         registerModalDisclosure.onClose();
-        e.preventDefault()
+        e.preventDefault();
       } else {
         setError("phone", {
           message: getWording("register.register_error_message"),
         });
       }
-      
-
     } catch (e) {
       setError("email", {
         message: getWording("register.register_error_message"),
@@ -75,9 +80,9 @@ const RegisterModal = () => {
     }
   });
 
-  const onEmailRegister = useCallback(async ({e, email }) => {
+  const onEmailRegister = useCallback(async ({ e, email }) => {
     try {
-      console.log(email)
+      console.log(email);
 
       const mutation = gql`
         mutation UserEmailVerify($email: String!) {
@@ -87,7 +92,7 @@ const RegisterModal = () => {
       await getGraphQLClient().request(mutation, { email });
       emailVerifySentModalDisclosure.onOpen();
       registerModalDisclosure.onClose();
-      e.preventDefault()
+      e.preventDefault();
     } catch (e) {
       setError("phone", {
         message: getWording("register.register_error_message"),

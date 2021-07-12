@@ -1,24 +1,34 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs");
+const nodemailerSendGrid = require("nodemailer-sendgrid");
+const html = require("./templates/activation.js").default;
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false,
-  service: process.env.SMTP_SERVICE,
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
+const transporter = {
+  production: nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: false,
+    service: process.env.SMTP_SERVICE,
+    auth: {
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  }),
+  development: nodemailer.createTransport(
+    nodemailerSendGrid({
+      apiKey:
+        "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",
+    })
+  ),
+};
 
 const sendMail = (receiver, subject, content, attachments = []) => {
-  transporter.sendMail(
+  console.log(process.env.NODE_ENV);
+  transporter[process.env.NODE_ENV].sendMail(
     {
       from: process.env.SMTP_SENDER,
       to: receiver,
       subject: subject,
-      html: content,
+      html: "fds",
       attachments: attachments,
     },
     () => {
@@ -27,25 +37,23 @@ const sendMail = (receiver, subject, content, attachments = []) => {
   );
 };
 
-const send = (receiver, url, template) => {
-  fs.readFile(`./email/${template}.html`, "utf8", function (err, content) {
-    console.log("email template ready");
+const send = (receiver, url, templateKey) => {
+  console.log("email template ready");
 
-    const subject = "《賽馬會共融・知行計劃》註冊申請";
+  const subject = "《賽馬會共融・知行計劃》註冊申請";
 
-    sendMail(receiver, subject, content.replace("{{url}}", url), [
-      {
-        filename: "logo-jc-hku.png",
-        path: "./email/assets/img/logo-jc-hku.png",
-        cid: "logo-jc-hku",
-      },
-      {
-        filename: "banner-jc-hku.png",
-        path: "./email/assets/img/banner-jc-hku.png",
-        cid: "banner-jc-hku",
-      },
-    ]);
-  });
+  sendMail(receiver, subject, html.replace("{{url}}", url), [
+    {
+      filename: "logo-jc-hku.png",
+      path: "./email/assets/img/logo-jc-hku.png",
+      cid: "logo-jc-hku",
+    },
+    {
+      filename: "banner-jc-hku.png",
+      path: "./email/assets/img/banner-jc-hku.png",
+      cid: "banner-jc-hku",
+    },
+  ]);
 };
 
 export default send;
