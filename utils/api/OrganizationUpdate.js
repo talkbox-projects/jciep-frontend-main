@@ -54,6 +54,18 @@ const organizationUpdate = async ({ input }, context) => {
         description
 
         tncAccept
+        invitationCode
+
+        submission {
+          status
+          createdAt
+          updatedAt
+          approvedAt
+          createdBy {
+            chineseName
+            englishName
+          }
+        }
       }
     }
   `;

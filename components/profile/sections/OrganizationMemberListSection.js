@@ -20,8 +20,6 @@ const OrganizationMemberListSection = () => {
 
   const router = useRouter();
 
-  const inviteDisclosure = useDisclosureWithParams();
-
   return (
     <SectionCard>
       <HStack px={4} py={4} align="center">
@@ -31,13 +29,6 @@ const OrganizationMemberListSection = () => {
             "related_member_header_label"
           )}
         </Text>
-        <Button
-          leftIcon={<AiOutlinePlus />}
-          variant="link"
-          onClick={() => inviteDisclosure.onOpen({ id: organization.id })}
-        >
-          {wordExtractor(page?.content?.wordings, "button_label_invite")}
-        </Button>
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {(organization?.member ?? []).map(
@@ -83,11 +74,6 @@ const OrganizationMemberListSection = () => {
           }
         )}
       </VStack>
-      <OrganzationMemberInviteModal
-        params={inviteDisclosure.params}
-        isOpen={inviteDisclosure.isOpen}
-        onClose={inviteDisclosure.onClose}
-      />
     </SectionCard>
   );
 };

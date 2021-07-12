@@ -3,11 +3,6 @@ import { gql } from "apollo-server-core";
 export default gql`
   # graphql-upload
 
-  enum OrganizationType {
-    ngo
-    employment
-  }
-
   type Member {
     identity: Identity
     email: String
@@ -17,7 +12,7 @@ export default gql`
 
   type OrganizationSubmission {
     id: ID!
-    organizationType: OrganizationType
+    organizationType: EnumOrganizationType
     organization: Organization!
     status: EnumOrganizationStatus!
     chineseCompanyName: String
@@ -31,16 +26,16 @@ export default gql`
     companyBenefit: String
     logo: File
     tncAccept: Boolean
-    createdAt: Timestamp!
-    updatedAt: Timestamp!
-    approvedAt: Timestamp!
+    createdAt: Timestamp
+    updatedAt: Timestamp
+    approvedAt: Timestamp
     remark: String
-    createBy: Identity
+    createdBy: Identity
   }
 
   type Organization {
     id: ID!
-    organizationType: OrganizationType
+    organizationType: EnumOrganizationType
     status: EnumOrganizationStatus!
     chineseCompanyName: String
     englishCompanyName: String
@@ -62,10 +57,11 @@ export default gql`
     member: [Member]
     submission: [OrganizationSubmission]
     tncAccept: Boolean
+    invitationCode: String
   }
 
   input OrganizationSubmissionCreateInput {
-    organizationType: OrganizationType
+    organizationType: EnumOrganizationType
     remark: String
     chineseCompanyName: String
     englishCompanyName: String
@@ -85,7 +81,7 @@ export default gql`
     id: ID!
     status: EnumOrganizationStatus
     remark: String
-    organizationType: OrganizationType
+    organizationType: EnumOrganizationType
     chineseCompanyName: String
     englishCompanyName: String
     website: String
@@ -99,7 +95,7 @@ export default gql`
 
   input OrganizationUpdateInput {
     id: ID!
-    organizationType: OrganizationType
+    organizationType: EnumOrganizationType
     chineseCompanyName: String
     englishCompanyName: String
     industry: [EnumIndustry]
@@ -137,7 +133,7 @@ export default gql`
     OrganizationSubmissionGet(id: ID): OrganizationSubmission
 
     OrganizationSubmissionSearch(
-      type: OrganizationType
+      type: EnumOrganizationType
       status: EnumOrganizationStatus
       name: String
       limit: Int!

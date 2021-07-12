@@ -5,6 +5,8 @@ import NgoSection from "./sections/NgoSection";
 import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSection";
 import OrganizationProfileStore from "../../store/OrganizationProfileStore";
 import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
+import InvitationCodeSection from "./sections/InvitationCodeSection";
+import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 
 const OrganizationNgoProfile = () => {
   const { organization } = OrganizationProfileStore.useContext();
@@ -18,6 +20,8 @@ const OrganizationNgoProfile = () => {
             <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
+            <OrganizationSubmissionSection />
+            <InvitationCodeSection />
             <OrganizationMemberListSection />
           </VStack>
         </Stack>

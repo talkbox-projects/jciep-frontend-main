@@ -47,10 +47,13 @@ export default {
       });
 
       identity.organizationRole = (organizations ?? []).map((organization) => {
+        const member = organization.member.find(
+          ({ identityId }) => String(identityId) === String(id)
+        );
         return {
           organization,
-          status: organization.member[0].status,
-          role: organization.member[0].role,
+          status: member.status,
+          role: member.role,
         };
       });
 
@@ -88,11 +91,11 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await send(
-          email,
-          `${host}/user/verify/${emailVerify.token}`,
-          "activation"
-        );
+        await send(email, {
+          url: `${host}/user/verify/${emailVerify.token}`,
+          description: "請點擊下列按鈕啟動帳戶",
+          button_text: "啟動帳戶",
+        });
         return true;
       } catch (error) {
         console.error(error);
@@ -153,7 +156,9 @@ export default {
               { upsert: true, new: true }
             ).populate("identities");
             await emailVerify.delete();
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+
+            const { identities, ..._user } = user.toObject();
+            const token = jwt.sign(_user, "shhhhh").toString();
 
             return { token, user };
           }
@@ -162,7 +167,8 @@ export default {
             email: input?.email.trim(),
           }).populate("identities");
           if (await user?.comparePassword(input?.password)) {
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            const { identities, ..._user } = user.toObject();
+            const token = jwt.sign(_user, "shhhhh").toString();
 
             return { token, user };
           } else {
@@ -183,7 +189,8 @@ export default {
               { upsert: true, new: true }
             ).populate("identities");
 
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            const { identities, ..._user } = user.toObject();
+            const token = jwt.sign(_user, "shhhhh").toString();
 
             return { token, user };
           }
@@ -266,6 +273,22 @@ export default {
         employment: input?.employment,
         activity: input?.activity,
       }).save();
+
+      if (input?.invitationCode) {
+        console.log("input", input);
+        await Organization.findOneAndUpdate(
+          { invitationCode: input?.invitationCode },
+          {
+            $push: {
+              member: {
+                identityId: identity.id,
+                role: input.identity === "pwd" ? "member" : "staff",
+                status: input.identity === "pwd" ? "joined" : "pendingApproval",
+              },
+            },
+          }
+        );
+      }
 
       let user = await User.findById(input.userId);
       let identities = user.identities;

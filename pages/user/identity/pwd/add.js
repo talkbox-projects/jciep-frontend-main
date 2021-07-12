@@ -24,6 +24,7 @@ import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../utils/wordExtractor";
 
 const PAGE_KEY = "identity_pwd_add";
 
@@ -62,6 +63,7 @@ const IdentityPwdAdd = ({ page }) => {
       interested_employee,
       industry,
       terms,
+      invitationCode,
     }) => {
       try {
         const mutation = gql`
@@ -89,6 +91,7 @@ const IdentityPwdAdd = ({ page }) => {
               ({ value }) => ({ value }?.value)
             ),
             tncAccept: terms,
+            invitationCode: invitationCode,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",
           },
@@ -195,6 +198,33 @@ const IdentityPwdAdd = ({ page }) => {
                       />
                     )}
                   />
+                </FormControl>
+                <FormControl onInvalid={!!errors?.invitationCode?.message}>
+                  <FormLabel>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                    {...register("invitationCode", {
+                      pattern: {
+                        value: /^[0-9]{6,6}$/,
+                        message: wordExtractor(
+                          page?.content?.wordings,
+                          "invitation_code_error_message"
+                        ),
+                      },
+                    })}
+                  />
+                  <FormHelperText color="red">
+                    {errors?.invitationCode?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>

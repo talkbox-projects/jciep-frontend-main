@@ -48,7 +48,7 @@ import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoWarning } from "react-icons/io5";
 
-const Header = ({ navigation, header, isLangAvailable }) => {
+const Header = ({ navigation, isLangAvailable }) => {
   const getWording = useGetWording();
   const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
 

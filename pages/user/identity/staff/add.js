@@ -24,6 +24,7 @@ import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../utils/wordExtractor";
 
 const PAGE_KEY = "identity_staff_add";
 
@@ -52,7 +53,13 @@ const IdentityStaffAdd = ({ page }) => {
   } = useForm();
 
   const onFormSubmit = useCallback(
-    async ({ contactPersonName, contactEmailAdress, contactNumber, terms }) => {
+    async ({
+      contactPersonName,
+      contactEmailAdress,
+      contactNumber,
+      terms,
+      invitationCode,
+    }) => {
       try {
         const mutation = gql`
           mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -71,6 +78,7 @@ const IdentityStaffAdd = ({ page }) => {
             tncAccept: terms,
             email: contactEmailAdress,
             phone: contactNumber,
+            invitationCode,
           },
         });
 
@@ -175,6 +183,35 @@ const IdentityStaffAdd = ({ page }) => {
                         輸入有效的聯繫電話 Enter valid contact Number!
                       </Text>
                     )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl onInvalid={!!errors?.invitationCode?.message}>
+                  <FormLabel>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                    {...register("invitationCode", {
+                      pattern: {
+                        value: /^[0-9]{6,6}$/,
+                        message: wordExtractor(
+                          page?.content?.wordings,
+                          "invitation_code_error_message"
+                        ),
+                      },
+                    })}
+                  />
+                  <FormHelperText color="red">
+                    {errors?.invitationCode?.message}
                   </FormHelperText>
                 </FormControl>
               </GridItem>

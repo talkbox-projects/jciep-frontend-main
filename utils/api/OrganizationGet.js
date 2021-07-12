@@ -58,6 +58,14 @@ const organizationGet = async ({ id }, context) => {
         description
 
         tncAccept
+        invitationCode
+
+        submission {
+          status
+          createdAt
+          updatedAt
+          approvedAt
+        }
       }
     }
   `;

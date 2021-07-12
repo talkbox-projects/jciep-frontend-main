@@ -3,6 +3,9 @@ import Container from "../Container";
 import OrganizationBiographySection from "./sections/OrganizationBiographySection";
 import EmploymentSection from "./sections/EmploymentSection";
 import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSection";
+import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
+import InvitationCodeSection from "./sections/InvitationCodeSection";
+import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 
 const OrganizationEmploymentProfile = () => {
   return (
@@ -15,6 +18,8 @@ const OrganizationEmploymentProfile = () => {
             <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
+            <OrganizationSubmissionSection />
+            <InvitationCodeSection />
             <OrganizationMemberListSection />
           </VStack>
         </Stack>

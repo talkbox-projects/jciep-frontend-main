@@ -73,6 +73,7 @@ const OrganizationCompanyAdd = ({ page }) => {
       industry,
       companyWebsite,
       companyDescription,
+      invitationCode,
     }) => {
       try {
         if (validate()) {
@@ -111,18 +112,17 @@ const OrganizationCompanyAdd = ({ page }) => {
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
-            organizationType: "ngo",
+            organizationType: "employment",
             chineseCompanyName: chineseCompanyName,
             englishCompanyName: englishCompanyName,
             website: companyWebsite,
             industry: industry?.map(({ value }) => ({ value }.value)),
             identityId: id,
             description: companyDescription,
+            invitationCode: invitationCode,
             businessRegistration: filesUploadData.FileUpload,
           },
         });
-
-        console.log(data);
 
         if (data.OrganizationSubmissionCreate) {
           router.push(
@@ -253,6 +253,35 @@ const OrganizationCompanyAdd = ({ page }) => {
                     {...register("companyWebsite")}
                   />
                   <FormHelperText></FormHelperText>
+                </FormControl>
+              </GridItem>
+              <GridItem>
+                <FormControl onInvalid={!!errors?.invitationCode?.message}>
+                  <FormLabel>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "invitation_code_label"
+                    )}
+                    {...register("invitationCode", {
+                      pattern: {
+                        value: /^[0-9]{6,6}$/,
+                        message: wordExtractor(
+                          page?.content?.wordings,
+                          "invitation_code_error_message"
+                        ),
+                      },
+                    })}
+                  />
+                  <FormHelperText color="red">
+                    {errors?.invitationCode?.message}
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>

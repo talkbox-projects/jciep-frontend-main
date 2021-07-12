@@ -118,6 +118,9 @@ const organizationSchema = Schema({
   tncAccept: {
     type: Boolean,
   },
+  invitationCode: {
+    type: String,
+  },
 });
 
 const organizationSubmissionSchema = Schema({
@@ -181,10 +184,10 @@ const organizationSubmissionSchema = Schema({
   tncAccept: {
     type: Boolean,
   },
-  createAt: Date,
-  updateAt: Date,
+  createdAt: Date,
+  updatedAt: Date,
   approveAt: Date,
-  createBy: {
+  createdBy: {
     type: Schema.Types.ObjectId,
     ref: "Identity",
   },

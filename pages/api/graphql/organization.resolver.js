@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import send from "./email/send";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
@@ -9,6 +8,14 @@ export default {
       const organization = await Organization.findById(id).populate(
         "submission"
       );
+
+      if (!organization?.invitationCode) {
+        organization.invitationCode = parseInt(
+          Math.random() * 900000 + 100000
+        ).toString();
+        await organization.save();
+      }
+
       const identities = await Identity.find({
         _id: { $in: organization.member.map((m) => m.identityId) },
       }).exec();
@@ -103,6 +110,7 @@ export default {
               identityId: params?.input?.identityId,
               logo: params.input?.logo,
               tncAccept: params?.input?.tncAccept,
+              invitationCode: parseInt(Math.random() * 1000000).toString(),
             })
           );
         }
@@ -126,9 +134,9 @@ export default {
           companyBenefit: organization?.companyBenefit,
           logo: organization?.logo,
           tncAccept: organization?.tncAccept,
-          createAt: new Date(),
-          updateAt: new Date(),
-          createBy: params?.input?.identityId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          createdBy: params?.input?.identityId,
         }).save();
 
         organization.submission.push(organizationSubmission._id);
@@ -146,7 +154,7 @@ export default {
 
         return await OrganizationSubmission.findById(organizationSubmission._id)
           .populate("organization")
-          .populate("createBy");
+          .populate("createdBy");
       }
     },
 
@@ -188,19 +196,7 @@ export default {
        * Pwd/Public can not call this api.
        */
       try {
-        await Organization.findByIdAndUpdate(
-          id,
-          {
-            $push: {
-              member: {
-                email,
-                role,
-                status: "invited",
-              },
-            },
-          },
-          { new: true }
-        );
+        const organization = await Organization.findById(id);
 
         const emailVerify = await EmailVerify.create({
           email,
@@ -213,10 +209,11 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await send({
-          To: email,
-          Subject: "Email Verification",
-          Text: `Please verify your email by clicking the link ${host}/user/verify/${emailVerify.token}`,
+        await send(email, {
+          url: `${host}/user/invite/${emailVerify.token}`,
+          title: "《賽馬會共融・知行計劃》邀請函",
+          description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
+          button_text: "前往登入/註冊",
         });
 
         return true;
