@@ -94,7 +94,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             borderColor="#eee"
             bgColor="white"
             borderWidth={1}
-            p={2}
+            py={4}
             px={6}
             spacing={3}
             align="stretch"
@@ -110,8 +110,15 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             borderRadius={8}
           >
             <VStack spacing={0} align="start">
-              {organization?.profilePic?.url && (
-                <Avatar src={organization?.logo?.url} size="lg" />
+              {organization?.logo?.url && (
+                <Avatar
+                  bg="white"
+                  borderWidth={2}
+                  borderColor="gray.300"
+                  src={organization?.logo?.url}
+                  size="lg"
+                  f
+                />
               )}
               <Text pt={2} color="#000">
                 {router.locale === "zh"
