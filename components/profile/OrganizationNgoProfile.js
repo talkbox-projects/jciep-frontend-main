@@ -9,7 +9,7 @@ import InvitationCodeSection from "./sections/InvitationCodeSection";
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 
 const OrganizationNgoProfile = () => {
-  const { organization } = OrganizationProfileStore.useContext();
+  const { editable } = OrganizationProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
@@ -20,8 +20,12 @@ const OrganizationNgoProfile = () => {
             <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
-            <OrganizationSubmissionSection />
-            <InvitationCodeSection />
+            {editable && (
+              <>
+                <OrganizationSubmissionSection />
+                <InvitationCodeSection />
+              </>
+            )}
             <OrganizationMemberListSection />
           </VStack>
         </Stack>

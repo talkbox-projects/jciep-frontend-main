@@ -16,7 +16,8 @@ import OrganzationMemberInviteModal from "../fragments/OrganzationMemberInviteMo
 import SectionCard from "../fragments/SectionCard";
 
 const OrganizationMemberListSection = () => {
-  const { organization, page, enums } = OrganizationProfileStore.useContext();
+  const { organization, page, enums, editable } =
+    OrganizationProfileStore.useContext();
 
   const router = useRouter();
 
@@ -31,8 +32,9 @@ const OrganizationMemberListSection = () => {
         </Text>
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
-        {(organization?.member ?? []).map(
-          ({ identity, email, role, status }) => {
+        {(organization?.member ?? [])
+          .filter((m) => (!editable ? m?.role === "member" : true))
+          .map(({ identity, email, role, status }) => {
             return (
               <HStack
                 {...(identity?.id && {
@@ -71,8 +73,7 @@ const OrganizationMemberListSection = () => {
                 </Tag>
               </HStack>
             );
-          }
-        )}
+          })}
       </VStack>
     </SectionCard>
   );

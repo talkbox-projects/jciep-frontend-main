@@ -6,6 +6,7 @@ import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import organizationGet from "../../../utils/api/organizationGet";
 import OrganizationNgoProfile from "../../../components/profile/OrganizationNgoProfile";
 import OrganizationEmploymentProfile from "../../../components/profile/OrganizationEmploymentProfile";
+import { useAppContext } from "../../../store/AppStore";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -28,6 +29,12 @@ export const getServerSideProps = async (context) => {
 const OrganizationProfile = ({ api: { organization }, enums, page }) => {
   let comp = null;
 
+  const { identity: { id: currentId } = {} } = useAppContext();
+  const editable = !!(organization?.member ?? []).find((m) => {
+    console.log(m?.identity?.id, currentId, m?.role, "staff");
+    return m?.identity?.id === currentId && m?.role === "staff";
+  });
+
   switch (organization?.organizationType) {
     case "ngo":
       comp = <OrganizationNgoProfile />;
@@ -36,7 +43,7 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
       comp = <OrganizationEmploymentProfile />;
       break;
     default:
-      comp = <Box>fdsa</Box>;
+      comp = <Box></Box>;
   }
 
   return (
@@ -44,6 +51,7 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
       organization={organization}
       enums={enums}
       page={page}
+      editable={editable}
     >
       <Box w="100%" bgColor="#fafafa">
         {comp}

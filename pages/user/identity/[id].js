@@ -8,6 +8,9 @@ import IdentityEmployerProfile from "../../../components/profile/IdentityEmploye
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import identityGet from "../../../utils/api/IdentityGet";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useAppContext } from "../../../store/AppStore";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -27,8 +30,11 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityProfile = ({ api: { identity }, enums, page, ..._props }) => {
+const IdentityProfile = ({ api: { identity }, enums, page }) => {
   let comp = null;
+  const { identity: { id: currentId } = {} } = useAppContext();
+  const router = useRouter();
+  const editable = currentId === router.query.id;
 
   switch (identity?.type) {
     case "pwd":
@@ -52,6 +58,7 @@ const IdentityProfile = ({ api: { identity }, enums, page, ..._props }) => {
       identity={identity}
       enums={enums}
       page={page}
+      editable={editable}
     >
       <Box w="100%" bgColor="#fafafa">
         {comp}

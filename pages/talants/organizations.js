@@ -53,7 +53,11 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
 
   const organizationId = router.query.organizationId ?? organizations?.[0].id;
 
-  const organization = organizations?.find((x) => x.id === organizationId);
+  const organization = organizations?.find((x) => {
+    return x.id === organizationId;
+  });
+
+  console.log(organization);
 
   const details = (
     <OrganizationProfileStore.Provider

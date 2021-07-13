@@ -22,8 +22,8 @@ const IdentityOrganizationListSection = () => {
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {!hasOrganization ? (
-          <Text>
-            {wordExtractor(page?.content?.wording, "no_organization_created")}
+          <Text align="center" color="#999" fontSize="sm">
+            {wordExtractor(page?.content?.wordings, "no_organization_created")}
           </Text>
         ) : (
           (identity?.organizationRole ?? []).map(
@@ -38,7 +38,11 @@ const IdentityOrganizationListSection = () => {
                   _hover={{ bg: "#fafafa" }}
                   cursor="pointer"
                 >
-                  <Avatar size="md" src={organization?.logo?.url}></Avatar>
+                  <Avatar
+                    {...(organization?.logo?.url && { bgColor: "white" })}
+                    size="md"
+                    src={organization?.logo?.url}
+                  ></Avatar>
                   <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
                     <Text>{organization?.chineseCompanyName}</Text>
                     <Text color="#999" fontSize="sm">
