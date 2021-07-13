@@ -231,10 +231,11 @@ export default gql`
       phone: String
       email: String
       name: String
+      organizationId: ID
       identityType: [EnumIdentityType]
       limit: Int!
       page: Int!
-    ): [User]
+    ): [Identity]
 
     IdentityGet(id: ID!): Identity
   }

@@ -16,13 +16,13 @@ import { AiOutlineEdit } from "react-icons/ai";
 
 const StaffSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, identity, editSection, setEditSection } =
+  const { page, enums, identity, editSection, setEditSection, editable } =
     IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {!editSection && (
+        {editable && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}

@@ -6,7 +6,7 @@ import EmploymentSectionViewer from "./EmploymentSectionViewer";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 
 const EmploymentSection = () => {
-  const { page, organization, saveOrganization, editSection } =
+  const { page, organization, saveOrganization, editSection, editable } =
     OrganizationProfileStore.useContext();
   const isEditing = editSection === "profile";
   return (
@@ -19,6 +19,7 @@ const EmploymentSection = () => {
             entity: organization,
             save: saveOrganization,
             profilePicPropName: "logo",
+            editable,
           }}
         />
         {isEditing ? <EmploymentSectionEditor /> : <EmploymentSectionViewer />}

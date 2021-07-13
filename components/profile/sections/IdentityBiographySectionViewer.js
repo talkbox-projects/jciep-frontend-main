@@ -12,8 +12,10 @@ import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 
 export const IdentityBiographySectionViewer = () => {
-  const { page, identity, setEditSection } = IdentityProfileStore.useContext();
+  const { page, identity, setEditSection, editable, editSection } =
+    IdentityProfileStore.useContext();
 
+  console.log("identity", identity?.biography?.blocks ?? []);
   return (
     <VStack px={8} pb={8} align="stretch">
       <HStack py={4} align="center">
@@ -21,13 +23,15 @@ export const IdentityBiographySectionViewer = () => {
           {wordExtractor(page?.content?.wordings, "biography_header_label")}
         </Text>
 
-        <Button
-          onClick={() => setEditSection("biography")}
-          variant="link"
-          leftIcon={<RiEdit2Line />}
-        >
-          {wordExtractor(page?.content?.wordings, "section_edit_label")}
-        </Button>
+        {editable && !editSection && (
+          <Button
+            onClick={() => setEditSection("biography")}
+            variant="link"
+            leftIcon={<RiEdit2Line />}
+          >
+            {wordExtractor(page?.content?.wordings, "section_edit_label")}
+          </Button>
+        )}
       </HStack>
       {(identity?.biography?.blocks ?? []).map(
         ({ id, type, youtubeUrl, text, file }, index) => {

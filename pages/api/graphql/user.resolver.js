@@ -4,6 +4,8 @@ import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendSms } from "../services/phone";
 import send from "./email/send";
+import facebook from "../services/facebook";
+import { Types } from "mongoose";
 
 export default {
   Query: {
@@ -25,15 +27,48 @@ export default {
       if (input.phone) keys["phone"] = input.phone;
       if (input.email) keys["email"] = input.email;
       if (input.identityType) keys["type"] = { $in: input.identityType };
+      if (input.organizationId) {
+        const organization = await Organization.findById(input.organizationId);
+        keys["_id"] = {
+          $in: organization.member
+            .filter((x) => !!x.identityId)
+            .map((m) => Types.ObjectId(m.identityId)),
+        };
+      }
       if (input.name)
         keys["$or"] = [
           { chineseName: input?.name },
           { englishName: input?.name },
         ];
 
-      return await Identity.find(keys)
+      const organizations = await Organization.find();
+
+      const identities = await Identity.find(keys)
         .skip((input.page - 1) * 10)
         .limit(input?.limit);
+
+      identities.forEach((identity) => {
+        identity.organizationRole = (organizations ?? []).reduce(
+          (_a, organization) => {
+            const member = organization.member.find(
+              ({ identityId }) => String(identityId) === String(identity.id)
+            );
+            if (member) {
+              console.log(member);
+              _a.push({
+                organization,
+                status: member.status,
+                role: member.role,
+              });
+            }
+            return _a;
+          },
+          []
+        );
+      });
+
+      console.log(identities);
+      return identities;
     },
 
     UserGet: async (_parent, { id }) => {
@@ -194,7 +229,29 @@ export default {
 
             return { token, user };
           }
+        } else if (input.facebookToken) {
+          let userData = await facebook.getProfile(input.facebookToken);
+
+          if (userData.error) {
+            throw new Error(userData.error.message);
+          }
+
+          let user = await User.findOne({ email: userData.email });
+
+          if (!user) {
+            let user = await new User({
+              email: userData.email,
+              facebookId: userData.id,
+            }).save();
+
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return { token, user };
+          } else {
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return { token, user };
+          }
         }
+
         return null;
       } catch (err) {
         console.log(err);

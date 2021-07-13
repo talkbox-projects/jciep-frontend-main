@@ -7,7 +7,7 @@ import EducationSubSectionEditor from "../fragments/EducationSubSectionEditor";
 import EmploymentSubSectionEditor from "../fragments/EmploymentSubSectionEditor";
 
 const ExperienceSectionEditor = () => {
-  const { page, saveIdentity, identity, removeEditSection } =
+  const { page, saveIdentity, identity, removeEditSection, editable } =
     IdentityProfileStore.useContext();
 
   const form = useForm({
@@ -36,9 +36,11 @@ const ExperienceSectionEditor = () => {
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "experience_header_label")}
         </Text>
-        <Button variant="link" type="submit" leftIcon={<RiEdit2Line />}>
-          {wordExtractor(page?.content?.wordings, "save_button_label")}
-        </Button>
+        {editable && (
+          <Button variant="link" type="submit" leftIcon={<RiEdit2Line />}>
+            {wordExtractor(page?.content?.wordings, "save_button_label")}
+          </Button>
+        )}
       </HStack>
       <Stack px={1} direction={"column"} px={8} spacing={4}>
         <EducationSubSectionEditor form={form} />

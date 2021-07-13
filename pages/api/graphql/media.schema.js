@@ -3,6 +3,8 @@ import gql from "graphql-tag";
 export default gql`
   scalar Upload
   type MediaFile {
+    id: String!
+    url: String!
     filename: String!
     contentType: String!
     directory: String!

@@ -6,13 +6,15 @@ import PwdSectionViewer from "./PwdSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 
 const PwdSection = () => {
-  const { page, identity, saveIdentity, editSection } =
+  const { page, identity, saveIdentity, editSection, editable } =
     IdentityProfileStore.useContext();
   const isEditing = editSection === "profile";
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">
-        <BannerFragment {...{ page, entity: identity, save: saveIdentity }} />
+        <BannerFragment
+          {...{ page, entity: identity, save: saveIdentity, editable }}
+        />
         {isEditing ? <PwdSectionEditor /> : <PwdSectionViewer />}
       </VStack>
     </SectionCard>

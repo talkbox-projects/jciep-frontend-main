@@ -10,7 +10,7 @@ import {
   IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   RiAddFill,
   RiCloseCircleFill,
@@ -33,9 +33,13 @@ const IdentityPortfolioSection = () => {
     editSection,
     setEditSection,
     removeEditSection,
+    editable,
   } = IdentityProfileStore.useContext();
 
   const [medias, setMedias] = useState(identity?.portfolio ?? []);
+  useEffect(() => {
+    setMedias(identity?.portfolio ?? []);
+  }, [identity?.portfolio]);
 
   const portfolioMediaDisclosure = useDisclosureWithParams();
   const galleryDisclosure = useDisclosureWithParams();
@@ -97,6 +101,7 @@ const IdentityPortfolioSection = () => {
               {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           ) : (
+            editable &&
             !editSection && (
               <Button
                 w="fit-content"

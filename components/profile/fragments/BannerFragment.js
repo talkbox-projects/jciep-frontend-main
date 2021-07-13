@@ -22,13 +22,14 @@ const BannerFragment = ({
   page,
   save,
   profilePicPropName = "profilePic",
+  editable = true,
 }) => {
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
 
   return (
     <VStack align="stretch" spacing={0} position="relative">
-      {enableBannerMedia && (
+      {editable && enableBannerMedia && (
         <Button
           borderRadius={16}
           leftIcon={<AiOutlinePlus />}
@@ -63,8 +64,10 @@ const BannerFragment = ({
       )}
       <Avatar
         {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
-        cursor="pointer"
-        onClick={profilePicDisclosure.onOpen}
+        {...(editable && {
+          cursor: "pointer",
+          onClick: profilePicDisclosure.onOpen,
+        })}
         size="xl"
         position="absolute"
         left={8}

@@ -12,7 +12,7 @@ import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 
 export const OrganizationBiographySectionViewer = () => {
-  const { page, organization, setEditSection } =
+  const { page, organization, setEditSection, editable, editSection } =
     OrganizationProfileStore.useContext();
 
   return (
@@ -22,13 +22,15 @@ export const OrganizationBiographySectionViewer = () => {
           {wordExtractor(page?.content?.wordings, "biography_header_label")}
         </Text>
 
-        <Button
-          onClick={() => setEditSection("biography")}
-          variant="link"
-          leftIcon={<RiEdit2Line />}
-        >
-          {wordExtractor(page?.content?.wordings, "section_edit_label")}
-        </Button>
+        {editable && !editSection && (
+          <Button
+            onClick={() => setEditSection("biography")}
+            variant="link"
+            leftIcon={<RiEdit2Line />}
+          >
+            {wordExtractor(page?.content?.wordings, "section_edit_label")}
+          </Button>
+        )}
       </HStack>
       {(organization?.biography?.blocks ?? []).map(
         ({ id, type, youtubeUrl, text, file }, index) => {

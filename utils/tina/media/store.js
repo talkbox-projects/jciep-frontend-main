@@ -89,17 +89,3 @@ export default class MongooseMediaStore {
     }
   }
 }
-
-// limit	The number of records returned by the current query.
-// offset	A number representing the beginning of the current record set.
-// nextOffset	Optional: A number representing the beginning of the next set of records.
-// totalCount	The total number of records available.
-
-//   persist(files: MediaUploadOptions[]): Promise<Media[]>
-//   previewSrc(
-//     src: string,
-//     fieldPath?: string,
-//     formValues?: any
-//   ): Promise<string> | string
-//   list(options?: MediaListOptions): Promise<MediaList>
-//   delete(media: Media): Promise<void>

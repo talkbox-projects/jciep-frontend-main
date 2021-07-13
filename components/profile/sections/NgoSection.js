@@ -6,7 +6,7 @@ import NgoSectionViewer from "./NgoSectionViewer";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 
 const NgoSection = () => {
-  const { page, organization, saveOrganization, editSection } =
+  const { page, organization, saveOrganization, editSection, editable } =
     OrganizationProfileStore.useContext();
   const isEditing = editSection === "profile";
   return (
@@ -19,6 +19,7 @@ const NgoSection = () => {
             entity: organization,
             save: saveOrganization,
             profilePicPropName: "logo",
+            editable,
           }}
         />
         {isEditing ? <NgoSectionEditor /> : <NgoSectionViewer />}

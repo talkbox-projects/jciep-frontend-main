@@ -7,7 +7,7 @@ import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import ActivitySubSectionEditor from "../fragments/ActvitySubSectionEditor";
 
 const ActivitySectionViewer = () => {
-  const { page, editSection, setEditSection } =
+  const { page, editSection, setEditSection, editable } =
     IdentityProfileStore.useContext();
 
   return (
@@ -16,7 +16,7 @@ const ActivitySectionViewer = () => {
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "Activity_header_label")}
         </Text>
-        {!editSection && (
+        {editable && !editSection && (
           <Button
             onClick={() => setEditSection("activity")}
             variant="link"

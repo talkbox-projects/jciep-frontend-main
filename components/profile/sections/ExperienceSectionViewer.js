@@ -14,7 +14,8 @@ import EducationSubSectionViewer from "../fragments/EducationSubSectionViewer";
 import EmploymentSubSectionViewer from "../fragments/EmploymentSubSectionViewer";
 
 export const ExperienceSectionViewer = () => {
-  const { page, setEditSection } = IdentityProfileStore.useContext();
+  const { page, setEditSection, editable, editSection } =
+    IdentityProfileStore.useContext();
 
   return (
     <VStack px={8} pb={8} align="stretch">
@@ -23,13 +24,15 @@ export const ExperienceSectionViewer = () => {
           {wordExtractor(page?.content?.wordings, "experience_header_label")}
         </Text>
 
-        <Button
-          onClick={() => setEditSection("experience")}
-          variant="link"
-          leftIcon={<RiEdit2Line />}
-        >
-          {wordExtractor(page?.content?.wordings, "section_edit_label")}
-        </Button>
+        {editable && !editSection && (
+          <Button
+            onClick={() => setEditSection("experience")}
+            variant="link"
+            leftIcon={<RiEdit2Line />}
+          >
+            {wordExtractor(page?.content?.wordings, "section_edit_label")}
+          </Button>
+        )}
       </HStack>
       <Stack
         px={1}

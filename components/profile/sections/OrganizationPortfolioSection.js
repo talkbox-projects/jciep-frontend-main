@@ -33,6 +33,7 @@ const IdentityPortfolioSection = () => {
     editSection,
     setEditSection,
     removeEditSection,
+    editable,
   } = OrganizationProfileStore.useContext();
 
   const [medias, setMedias] = useState(organization?.portfolio ?? []);
@@ -97,6 +98,7 @@ const IdentityPortfolioSection = () => {
               {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           ) : (
+            editable &&
             !editSection && (
               <Button
                 onClick={() => setEditSection("portfolio")}

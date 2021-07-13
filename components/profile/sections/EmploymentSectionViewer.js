@@ -17,13 +17,13 @@ import { getEnumText } from "../../../utils/enums/getEnums";
 
 const EmploymentSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, organization, editSection, setEditSection } =
+  const { page, enums, organization, editSection, setEditSection, editable } =
     OrganizationProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {!editSection && (
+        {editable && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}

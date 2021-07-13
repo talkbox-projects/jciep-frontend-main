@@ -76,7 +76,7 @@ const Header = ({ navigation, isLangAvailable }) => {
       2: /^(\/people-with-disabilities)/g,
       3: /^(\/resources)/g,
       4: /^(\/job-opportunities)/g,
-      5: /^(\/talents)/g,
+      5: /^(\/talants)/g,
       6: /^(\/sharing)/g,
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {

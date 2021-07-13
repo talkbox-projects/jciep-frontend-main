@@ -6,8 +6,7 @@ import identityUpdate from "../utils/api/IdentityUpdate";
 import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
-  ({ identity: _identity, page, enums }) => {
-    const { user } = useAppContext();
+  ({ identity: _identity, page, enums, editable = true }) => {
     const [identity, setIdentity] = useState(_identity);
     const [editSection, setEditSection] = useState(null);
 
@@ -15,11 +14,6 @@ const [Provider, useContext] = constate(
       setEditSection(null);
     }, []);
 
-    const editable = useMemo(() => {
-      return true;
-    }, []);
-
-    const router = useRouter();
     const saveIdentity = useCallback(
       async (partialIdentity) => {
         try {
@@ -34,10 +28,7 @@ const [Provider, useContext] = constate(
     );
 
     useEffect(() => {
-      //   (async () => {
-      //     const data = await identityGet({ id: router.query.id });
       setIdentity(_identity);
-      //   })();
     }, [_identity]);
 
     return {
