@@ -1,7 +1,7 @@
 import constate from "constate";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import organizationGet from "../utils/api/organizationGet";
+import organizationGet from "../utils/api/OrganizationGet";
 import organizationUpdate from "../utils/api/OrganizationUpdate";
 import { useAppContext } from "./AppStore";
 
