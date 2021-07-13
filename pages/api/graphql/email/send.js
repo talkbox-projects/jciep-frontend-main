@@ -1,29 +1,18 @@
 const nodemailer = require("nodemailer");
 const html = require("./templates/activation.js").default;
 
-const transporter = {
-  production: nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: false,
-    service: process.env.SMTP_SERVICE,
-    auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  }),
-  development: nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: "cf787698eb2171",
-      pass: "30b46ed4217152",
-    },
-  }),
-};
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USERNAME,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
 
 const sendMail = (receiver, subject, content) => {
-  transporter[process.env.NODE_ENV].sendMail(
+  transporter.sendMail(
     {
       from: process.env.SMTP_SENDER,
       to: receiver,

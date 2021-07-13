@@ -227,7 +227,8 @@ const Header = ({ navigation, isLangAvailable }) => {
 
   const onLogout = useCallback(() => {
     removeCredential();
-  }, [removeCredential]);
+    router.push("/");
+  }, [router, removeCredential]);
 
   useEffect(() => {
     if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
