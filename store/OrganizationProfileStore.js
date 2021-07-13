@@ -45,6 +45,7 @@ const [Provider, useContext] = constate(
 
       organization,
       saveOrganization,
+      setOrganization,
 
       editable,
 

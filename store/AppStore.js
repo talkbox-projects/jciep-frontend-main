@@ -8,7 +8,7 @@ import { updateIf } from "../utils/general";
 
 export const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
-  const [params, setParams] = useState(null);
+  const [params, setParams] = useState({});
 
   const onOpen = useCallback(
     (params) => {
@@ -18,7 +18,7 @@ export const useDisclosureWithParams = () => {
     [disclosure.onOpen]
   );
   const onClose = useCallback(() => {
-    setParams(null);
+    setParams({});
     disclosure.onClose();
   }, [disclosure.onClose]);
 
@@ -77,6 +77,7 @@ const [AppProvider, useAppContext] = constate((props) => {
   const registerModalDisclosure = useDisclosureWithParams();
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
+  const invitationFormModalDisclosure = useDisclosureWithParams();
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);

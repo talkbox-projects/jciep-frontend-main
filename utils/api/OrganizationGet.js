@@ -61,10 +61,26 @@ const organizationGet = async ({ id }, context) => {
         invitationCode
 
         submission {
+          id
           status
           createdAt
           updatedAt
-          approvedAt
+          vettedAt
+
+          chineseCompanyName
+          englishCompanyName
+          industry
+          industryOther
+          description
+          website
+          businessRegistration {
+            url
+          }
+
+          contactName
+          contactEmail
+          contactPhone
+          remark
         }
       }
     }

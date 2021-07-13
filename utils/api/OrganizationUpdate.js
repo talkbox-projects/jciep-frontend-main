@@ -57,14 +57,30 @@ const organizationUpdate = async ({ input }, context) => {
         invitationCode
 
         submission {
+          id
           status
           createdAt
           updatedAt
-          approvedAt
-          createdBy {
-            chineseName
-            englishName
+          vettedAt
+
+          chineseCompanyName
+          englishCompanyName
+
+          # employer only
+          industry
+          # employer only
+          industryOther
+
+          description
+          website
+          businessRegistration {
+            url
           }
+
+          contactName
+          contactEmail
+          contactPhone
+          remark
         }
       }
     }

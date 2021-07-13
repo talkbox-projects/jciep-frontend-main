@@ -25,10 +25,15 @@ export default gql`
     district: District
     companyBenefit: String
     logo: File
+
+    contactName: String
+    contactPhone: String
+    contactEmail: String
+
     tncAccept: Boolean
     createdAt: Timestamp
     updatedAt: Timestamp
-    approvedAt: Timestamp
+    vettedAt: Timestamp
     remark: String
     createdBy: Identity
   }
@@ -68,6 +73,7 @@ export default gql`
     website: String
     businessRegistration: [FileInput]
     industry: [EnumIndustry]
+    industryOther: String
     description: String
     district: District
     companyBenefit: String
@@ -75,6 +81,10 @@ export default gql`
     identityId: ID!
     organizationId: ID
     tncAccept: Boolean
+
+    contactName: String
+    contactPhone: String
+    contactEmail: String
   }
 
   input OrganizationSubmissionUpdateInput {
@@ -91,6 +101,10 @@ export default gql`
     district: District
     companyBenefit: String
     logo: FileInput
+
+    contactName: String
+    contactPhone: String
+    contactEmail: String
   }
 
   input OrganizationUpdateInput {
@@ -147,8 +161,8 @@ export default gql`
     ): OrganizationSubmission
 
     OrganizationSubmissionUpdate(
-      input: OrganizationSubmissionUpdateInput
-    ): OrganizationSubmission @auth(identityTypes: [admin])
+      input: OrganizationSubmissionUpdateInput!
+    ): OrganizationSubmission
 
     OrganizationUpdate(input: OrganizationUpdateInput): Organization
       @auth(identityTypes: [admin])

@@ -184,9 +184,12 @@ const organizationSubmissionSchema = Schema({
   tncAccept: {
     type: Boolean,
   },
+  remark: {
+    type: String,
+  },
   createdAt: Date,
   updatedAt: Date,
-  approveAt: Date,
+  vettedAt: Date,
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "Identity",

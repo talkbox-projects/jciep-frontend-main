@@ -101,10 +101,14 @@ export default {
               englishCompanyName: params?.input.englishCompanyName,
               website: params?.input?.website,
               industry: params?.input?.industry,
+              industryOther: params?.input?.industryOther,
               description: params?.input?.description,
               businessRegistration: params.input?.businessRegistration,
               submission: [],
               member: [],
+              contactName: params?.input?.contactName,
+              contactEmail: params?.input?.contactEmail,
+              contactPhone: params?.input?.contactPhone,
               district: params?.input?.district,
               companyBenefit: params?.input?.companyBenefit,
               identityId: params?.input?.identityId,
@@ -122,18 +126,22 @@ export default {
         let organizationSubmission = await new OrganizationSubmission({
           organizationType: organization.organizationType,
           organization: organization._id,
-          remark: organization.remark,
+          remark: params?.input.remark,
           status: "pendingApproval",
-          chineseCompanyName: organization.chineseCompanyName,
-          englishCompanyName: organization.englishCompanyName,
-          website: organization.website,
-          businessRegistration: organization?.businessRegistration,
-          industry: organization?.industry,
-          description: organization?.description,
-          district: organization?.district,
-          companyBenefit: organization?.companyBenefit,
-          logo: organization?.logo,
-          tncAccept: organization?.tncAccept,
+          chineseCompanyName: params?.input.chineseCompanyName,
+          englishCompanyName: params?.input.englishCompanyName,
+          website: params?.input.website,
+          businessRegistration: params?.input.businessRegistration,
+          industry: params?.input.industry,
+          industryOther: params?.input.industryOther,
+          description: params?.input.description,
+          district: params?.input.district,
+          companyBenefit: params?.input.companyBenefit,
+          logo: params?.input.logo,
+          contactName: params?.input.contactName,
+          contactEmail: params?.input.contactEmail,
+          contactPhone: params?.input.contactPhone,
+          tncAccept: params?.input.tncAccept,
           createdAt: new Date(),
           updatedAt: new Date(),
           createdBy: params?.input?.identityId,
@@ -147,8 +155,6 @@ export default {
           status: "joined",
           email: "",
         });
-
-        console.log("organization", organization);
 
         await organization.save();
 
@@ -165,6 +171,10 @@ export default {
        */
 
       input.updateAt = new Date();
+
+      if (["approved", "rejected"].includes(input?.status)) {
+        input.vettedAt = new Date();
+      }
 
       return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
         new: true,
