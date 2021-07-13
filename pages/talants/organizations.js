@@ -1,4 +1,3 @@
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -7,15 +6,10 @@ import {
   HStack,
   Image,
   VStack,
-  SimpleGrid,
-  GridItem,
-  Tag,
   Box,
   Text,
-  Wrap,
   Link,
   Button,
-  Stack,
   Avatar,
   Select,
 } from "@chakra-ui/react";
@@ -23,18 +17,15 @@ import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
-import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { useCallback } from "react";
-import identitySearch from "../../utils/api/IdentitySearch";
-import IdentityProfileStore from "../../store/IdentityProfileStore";
-import PwdSection from "../../components/profile/sections/PwdSection";
-import IdentityPortfolioSection from "../../components/profile/sections/IdentityPortfolioSection";
-import IdentityBiographySection from "../../components/profile/sections/IdentityBiographySection";
-import ExperienceSection from "../../components/profile/sections/ExperienceSection";
-import ActivitySection from "../../components/profile/sections/ActivitySection";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import organizationSearch from "../../utils/api/OrganizationSearch";
+import OrganizationBiographySection from "../../components/profile/sections/OrganizationBiographySection";
+import OrganizationPortfolioSection from "../../components/profile/sections/OrganizationPortfolioSection";
+import OrganizationProfileStore from "../../store/OrganizationProfileStore";
+import OrganizationNgoProfile from "../../components/profile/OrganizationNgoProfile";
+import NgoSection from "../../components/profile/sections/NgoSection";
+import OrganizationMemberListSection from "../../components/profile/sections/OrganizationMemberListSection";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -50,12 +41,6 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
           limit: 0,
         }),
-        identities: await identitySearch({
-          identityType: ["pwd"],
-          organizationId: context.query.organizationId,
-          limit: 10,
-          page: 1,
-        }),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -63,54 +48,35 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityOpportunities = ({
-  api: { organizations, identities },
-  page,
-  enums,
-}) => {
+const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
   const router = useRouter();
 
-  const identityId = router.query.identityId ?? identities?.[0].id;
+  const organizationId = router.query.organizationId ?? organizations?.[0].id;
 
-  const identity = identities?.find((x) => x.id === identityId);
-
-  const generateUrlParameter = useCallback(
-    ({ identityId, organizationId }) => {
-      let query = "";
-      if (identityId ?? router.query.identityId) {
-        query += `identityId=${identityId ?? router.query.identityId}`;
-      }
-      if (organizationId ?? router.query.organizationId) {
-        query += `organizationId=${
-          organizationId ?? router.query.organizationId
-        }`;
-      }
-      return `/talants/individuals?${query}`;
-    },
-    [router]
-  );
+  const organization = organizations?.find((x) => x.id === organizationId);
 
   const details = (
-    <IdentityProfileStore.Provider
-      identity={identity}
+    <OrganizationProfileStore.Provider
+      organization={organization}
       enums={enums}
       page={page}
       editable={false}
     >
       <VStack align="stretch" flex={1} minW={0} w="100%">
-        <PwdSection />
-        <IdentityPortfolioSection />
-        <IdentityBiographySection />
-        <ExperienceSection />
-        <ActivitySection />
+        <NgoSection />
+        <OrganizationBiographySection />
+        <OrganizationPortfolioSection />
+        <OrganizationMemberListSection />
       </VStack>
-    </IdentityProfileStore.Provider>
+    </OrganizationProfileStore.Provider>
   );
 
-  const identityList = (
+  const organizationList = (
     <VStack
       d={
-        !router.query.identityId ? "block" : ["none", "none", "block", "block"]
+        !router.query.organizationId
+          ? "block"
+          : ["none", "none", "block", "block"]
       }
       overflow="auto"
       align="stretch"
@@ -119,10 +85,10 @@ const IdentityOpportunities = ({
       cursor="pointer"
     >
       {" "}
-      {(identities ?? []).map((identity) => (
+      {(organizations ?? []).map((organization) => (
         <NextLink
-          href={`/talants/individuals?identityId=${identity?.id}`}
-          key={identity?.id}
+          href={`/talants/organizations?organizationId=${organization?.id}`}
+          key={organization?.id}
         >
           <VStack
             borderColor="#eee"
@@ -132,11 +98,11 @@ const IdentityOpportunities = ({
             px={6}
             spacing={3}
             align="stretch"
-            key={identity?.id}
+            key={organization?.id}
             _hover={{
               boxShadow: "md",
             }}
-            {...(identity?.id === identityId && {
+            {...(organization?.id === organizationId && {
               borderColor: "#F6D644",
               borderWidth: 2,
               borderTopWidth: 8,
@@ -144,61 +110,29 @@ const IdentityOpportunities = ({
             borderRadius={8}
           >
             <VStack spacing={0} align="start">
-              {identity?.profilePic?.url && (
-                <Avatar src={identity?.profilePic?.url} size="lg" />
+              {organization?.profilePic?.url && (
+                <Avatar src={organization?.logo?.url} size="lg" />
               )}
               <Text pt={2} color="#000">
-                {identity?.chineseName}
+                {router.locale === "zh"
+                  ? organization?.chineseCompanyName
+                  : organization?.enghlishCompanyName}
               </Text>
-              <Text color="#999">{identity?.caption}</Text>
+              <Text color="#999">{organization?.description}</Text>
             </VStack>
-            {identity?.interestedIndustry?.length > 0 && (
-              <Wrap>
-                {(enums?.EnumIndustryList ?? [])
-                  .filter((x) =>
-                    (identity?.interestedIndustry ?? []).includes(x.key)
-                  )
-                  .map(({ key: value, value: { [router.locale]: label } }) => (
-                    <Tag key={value}>{label}</Tag>
-                  ))}
-              </Wrap>
-            )}
             <Divider borderColor="gray.200" />
             <VStack align="stretch">
               <HStack>
-                <Image src={page?.content?.icon?.degreeIcon} w={6} h={6} />
+                <Image src={page?.content?.icon?.userIcon} w={6} h={6} />
                 <Text>
-                  {
-                    (enums?.EnumDegreeList ?? []).find(
-                      (x) => identity?.educationLevel === x.key
-                    )?.value?.[router?.locale]
-                  }
+                  {organization?.member?.length}{" "}
+                  {wordExtractor(page?.content?.wordings, "number_of_members")}
                 </Text>
               </HStack>
-              {identity?.yearOfExperience && (
+              {organization?.website && (
                 <HStack>
-                  <Image src={page?.content?.icon?.expIcon} w={6} h={6} />
-                  <Text>
-                    {(enums?.EnumYearOfExperienceList ?? [])
-                      .filter((x) =>
-                        (identity?.yearOfExperience ?? []).includes(x.key)
-                      )
-                      .map(({ value: { [router.locale]: label } }) => label)}
-                  </Text>
-                </HStack>
-              )}
-              {identity?.interestedEmploymentMode?.length > 0 && (
-                <HStack>
-                  <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
-                  <Text>
-                    {(enums?.EnumEmploymentModeList ?? [])
-                      .filter((x) =>
-                        (identity?.interestedEmploymentMode ?? []).includes(
-                          x.key
-                        )
-                      )
-                      .map(({ value: { [router.locale]: label } }) => label)}
-                  </Text>
+                  <Image src={page?.content?.icon?.urlIcon} w={6} h={6} />
+                  <Text>{organization?.website}</Text>
                 </HStack>
               )}
             </VStack>
@@ -212,7 +146,7 @@ const IdentityOpportunities = ({
     <>
       <VStack spacing={0} align="stretch" w="100%">
         <Box
-          d={!router.query.identityId ? "block" : ["none", "none", "block"]}
+          d={!router.query.organizationId ? "block" : ["none", "none", "block"]}
           bgColor="#F6D644"
           position="relative"
         >
@@ -248,30 +182,8 @@ const IdentityOpportunities = ({
 
         <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
           <Container>
-            <Box w="300px">
-              <Select
-                value={router.query.organizationId ?? ""}
-                onChange={(e) =>
-                  router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
-                  )
-                }
-                variant="flushed"
-              >
-                <option key="" value="">
-                  Organization
-                </option>
-                {(organizations ?? []).map(
-                  ({ id, chineseCompanyName, enghlishCompanyName }) => (
-                    <option key={id} value={id}>
-                      {chineseCompanyName}
-                    </option>
-                  )
-                )}
-              </Select>
-            </Box>
             <HStack mt={4} align="stretch" spacing={4}>
-              {identityList}
+              {organizationList}
               {/* desktop detail page */}
               {details}
             </HStack>
@@ -280,9 +192,9 @@ const IdentityOpportunities = ({
       </VStack>
       {/* mobile detail page */}
       <Box bg="#fafafa" pt={[24, 0]} d={["block", "block", "none"]}>
-        {router.query.identityId ? (
+        {router.query.organizationId ? (
           <Box px={1}>
-            <NextLink href="/talants/individuals">
+            <NextLink href="/talants/organizations">
               <Button
                 alignSelf="start"
                 mb={8}
@@ -295,33 +207,7 @@ const IdentityOpportunities = ({
             {details}
           </Box>
         ) : (
-          <Box p={4}>
-            <Box w="300px">
-              <Select
-                value={router.query.organizationId ?? ""}
-                onChange={(e) =>
-                  router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
-                  )
-                }
-                variant="flushed"
-              >
-                <option key="" value="">
-                  Organization
-                </option>
-                {(organizations ?? []).map(
-                  ({ id, chineseCompanyName, enghlishCompanyName }) => (
-                    <option key={id} value={id}>
-                      {router.locale === "zh"
-                        ? chineseCompanyName
-                        : enghlishCompanyName}
-                    </option>
-                  )
-                )}
-              </Select>
-            </Box>
-            {identityList}
-          </Box>
+          <Box p={4}>{organizationList}</Box>
         )}
       </Box>
     </>

@@ -24,7 +24,6 @@ export default {
           return String(x._id) === String(member.identityId);
         });
       });
-      console.log(organization);
       return organization;
     },
 
@@ -45,7 +44,22 @@ export default {
       const organizations = await Organization.find({
         ...(status && { status: { $in: status } }),
       }).populate("submission");
-      console.log(organizations);
+
+      const identities = await Identity.find({
+        _id: {
+          $in: organizations.reduce(
+            (_arr, x) => [..._arr, ...x.member.map((m) => m.identityId)],
+            []
+          ),
+        },
+      });
+      organizations.forEach((organization) => {
+        organization.member.forEach((member) => {
+          member.identity = identities.find((x) => {
+            return String(x._id) === String(member.identityId);
+          });
+        });
+      });
       return organizations;
     },
     OrganizationSubmissionSearch: async (_parent, input) => {
@@ -205,9 +219,24 @@ export default {
        * Only admin can call this api
        * Update an organization
        */ try {
-        return await Organization.findByIdAndUpdate(input.id, input, {
-          new: true,
+        const organization = await Organization.findByIdAndUpdate(
+          input.id,
+          input,
+          {
+            new: true,
+          }
+        ).populate("submission");
+
+        const identities = await Identity.find({
+          _id: { $in: organization.member.map((m) => m.identityId) },
+        }).exec();
+        organization.member.forEach((member) => {
+          member.identity = identities.find((x) => {
+            return String(x._id) === String(member.identityId);
+          });
         });
+
+        return organization;
       } catch (error) {
         console.error(error);
         return null;

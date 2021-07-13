@@ -6,16 +6,12 @@ import organizationUpdate from "../utils/api/OrganizationUpdate";
 import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
-  ({ organization: _organization, page, enums }) => {
+  ({ organization: _organization, page, enums, editable = true }) => {
     const [organization, setOrganization] = useState(_organization);
     const [editSection, setEditSection] = useState(null);
 
     const removeEditSection = useCallback(() => {
       setEditSection(null);
-    }, []);
-
-    const editable = useMemo(() => {
-      return true;
     }, []);
 
     const router = useRouter();

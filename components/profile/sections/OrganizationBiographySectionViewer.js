@@ -14,6 +14,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 export const OrganizationBiographySectionViewer = () => {
   const { page, organization, setEditSection, editable, editSection } =
     OrganizationProfileStore.useContext();
+  console.log("editable", editable);
 
   return (
     <VStack px={8} pb={8} align="stretch">
