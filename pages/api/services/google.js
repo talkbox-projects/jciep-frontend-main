@@ -5,8 +5,8 @@ exports.getProfile = async (accessToken) => {
     return new Promise((resolve, reject) => request(
       `https://www.googleapis.com/oauth2/v2/userinfo`, {
         headers: {
-          accessToken: accessToken
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       } )
       .on('data', (data) => {
         return resolve(JSON.parse(data))

@@ -4,6 +4,14 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/email";
 import { sendSms } from "../services/phone";
 import facebook from '../services/facebook'
+import google from '../services/google';
+
+User.findOneAndDelete({email: "rajatgouri020@gmail.com"}).then(data => {
+  console.log(data)
+})  
+.catch(err => {
+  console.log(err)
+})
 
 export default {
   Query: {
@@ -176,13 +184,37 @@ export default {
             throw new Error(userData.error.message);
           }
 
-          let user = await User.findOne({email: userData.email})
+          let user = await User.findOne({email: userData.email}).populate('identities')
 
           if (!user) {
             let user = await new User({
               email: userData.email,
               facebookId: userData.id
-            }).save() 
+            }).save()
+
+
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return {token, user}
+          } else {
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return {token, user}
+          }
+        } else if (input.googleToken) {
+          console.log(input.googleToken)
+
+          let userData = await google.getProfile(input.googleToken)
+
+          if(userData.error) {
+            throw new Error(userData.error.message);
+          }
+
+          let user = await User.findOne({email: userData.email}).populate('identities')
+
+          if (!user) {
+            let user = await new User({
+              email: userData.email,
+              facebookId: userData.id
+            }).save()
 
             const token = jwt.sign(user.toObject(), "shhhhh").toString();
             return {token, user}

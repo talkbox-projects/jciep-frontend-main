@@ -32,6 +32,7 @@ import { useGetWording } from "../utils/wordings/useWording";
 import { useCredential } from "../utils/user";
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import router from "next/router";
+import GoogleLogin from 'react-google-login'
 
 
 const LoginModal = () => {
@@ -75,6 +76,11 @@ const LoginModal = () => {
   const responseFacebook = (response) => {
     loginModalDisclosure.onClose();
     router.push(`/oauth/facebook/?accessToken=${response.accessToken}`)
+  }
+
+  const responseGoogle = (response) => {
+    loginModalDisclosure.onClose(); 
+    router.push(`/oauth/google/?accessToken=${response.accessToken}`)
   }
   
 
@@ -183,6 +189,9 @@ const LoginModal = () => {
       });
     }
   }, []);
+
+
+
 
   return (
     <Modal
@@ -346,14 +355,24 @@ const LoginModal = () => {
                   </Text>
                 </HStack>
               </Button>
-              <Button colorScheme="google" color="white">
-                <HStack w="100%">
-                  <IoLogoGoogle size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign In With Google
-                  </Text>
-                </HStack>
-              </Button>
+              <GoogleLogin
+                  clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
+                  render={renderProps => (
+                    // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
+                    <Button colorScheme="google" color="white" onClick={renderProps.onClick}>
+                      <HStack w="100%">
+                        <IoLogoGoogle size={18} color="white" />
+                        <Text flex={1} minW={0} w="100%">
+                          Sign Up With Google
+                        </Text>
+                      </HStack>
+                    </Button>
+                    )}
+                  buttonText="Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={'single_host_origin'}
+                />
             </VStack>
             <Button
               alignSelf="start"
