@@ -31,12 +31,10 @@ const [Provider, useContext] = constate(
       [setOrganization, organization]
     );
 
-    useEffect(() => {
-      //   (async () => {
-      //     const data = await organizationGet({ id: router.query.id });
+    const refreshOrganization = useCallback(async () => {
+      const organization = await organizationGet({ id: router.query.id });
       setOrganization(organization);
-      //   })();
-    }, [_organization]);
+    }, []);
 
     return {
       editSection,
@@ -46,6 +44,7 @@ const [Provider, useContext] = constate(
       organization,
       saveOrganization,
       setOrganization,
+      refreshOrganization,
 
       editable,
 

@@ -25,6 +25,7 @@ import Link from "next/link";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../../utils/wordExtractor";
 
 const PAGE_KEY = "organization_company_add";
 
@@ -73,13 +74,8 @@ const OrganizationCompanyAdd = ({ page }) => {
       industry,
       companyWebsite,
       companyDescription,
-      invitationCode,
     }) => {
       try {
-        if (validate()) {
-          return;
-        }
-
         const FileUploadmutation = gql`
           mutation FileUpload($file: FileUpload!) {
             FileUpload(files: $file) {
@@ -119,7 +115,6 @@ const OrganizationCompanyAdd = ({ page }) => {
             industry: industry?.map(({ value }) => ({ value }.value)),
             identityId: id,
             description: companyDescription,
-            invitationCode: invitationCode,
             businessRegistration: filesUploadData.FileUpload,
           },
         });
@@ -253,35 +248,6 @@ const OrganizationCompanyAdd = ({ page }) => {
                     {...register("companyWebsite")}
                   />
                   <FormHelperText></FormHelperText>
-                </FormControl>
-              </GridItem>
-              <GridItem>
-                <FormControl onInvalid={!!errors?.invitationCode?.message}>
-                  <FormLabel>
-                    {wordExtractor(
-                      page?.content?.wordings,
-                      "invitation_code_label"
-                    )}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "invitation_code_label"
-                    )}
-                    {...register("invitationCode", {
-                      pattern: {
-                        value: /^[0-9]{6,6}$/,
-                        message: wordExtractor(
-                          page?.content?.wordings,
-                          "invitation_code_error_message"
-                        ),
-                      },
-                    })}
-                  />
-                  <FormHelperText color="red">
-                    {errors?.invitationCode?.message}
-                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>

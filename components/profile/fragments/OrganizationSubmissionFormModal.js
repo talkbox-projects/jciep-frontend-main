@@ -27,8 +27,11 @@ import { emailRegex, urlRegex } from "../../../utils/general";
 import ProfileDropzone from "./ProfileDropzone";
 import { useAppContext } from "../../../store/AppStore";
 
-const OrganizationSubmissionFormModal = ({ isOpen, onClose, params = {} }) => {
-  const { organization, submission = null } = params;
+const OrganizationSubmissionFormModal = ({
+  isOpen,
+  onClose,
+  params: { organization, submission = null, onRefresh } = {},
+}) => {
   const { page, enums, setOrganization } =
     OrganizationProfileStore.useContext();
   const router = useRouter();
@@ -54,17 +57,13 @@ const OrganizationSubmissionFormModal = ({ isOpen, onClose, params = {} }) => {
         const _submission = await OrganizationSubmissionCreate({
           input: { identityId, organizationId: organization.id, ...values },
         });
-
-        setOrganization((o) => ({
-          ...o,
-          submission: [_submission, ...o.submission],
-        }));
+        onRefresh();
         onClose();
       } catch (error) {
         console.error(error);
       }
     },
-    [organization, onClose]
+    [organization, onRefresh, onClose]
   );
 
   return (

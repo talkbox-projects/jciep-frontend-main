@@ -168,6 +168,15 @@ const organizationSubmissionSchema = Schema({
   description: {
     type: String,
   },
+  contactName: {
+    type: String,
+  },
+  contactPhone: {
+    type: String,
+  },
+  contactEmail: {
+    type: String,
+  },
   district: {
     type: String,
     enum: Object.keys(districts),

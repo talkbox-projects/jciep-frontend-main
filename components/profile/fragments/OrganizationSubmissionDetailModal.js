@@ -34,7 +34,7 @@ import OrganizationSubmissionUpdate from "../../../utils/api/OrganizationSubmiss
 const OrganizationSubmissionDetailModal = ({
   isOpen,
   onClose,
-  params: { submission, isLatest } = {},
+  params: { submission, isLatest, onRefresh } = {},
 }) => {
   const { page, enums, setOrganization } =
     OrganizationProfileStore.useContext();
@@ -60,19 +60,13 @@ const OrganizationSubmissionDetailModal = ({
         const _submission = await OrganizationSubmissionUpdate({
           input: { id: submission.id, ...values },
         });
-
-        setOrganization((o) => ({
-          ...o,
-          submission: o.submission.map((s) =>
-            s.id === submission.id ? _submission : s
-          ),
-        }));
+        onRefresh();
         onClose();
       } catch (error) {
         console.error(error);
       }
     },
-    [submission, onClose]
+    [submission, onRefresh, onClose]
   );
 
   return (
@@ -249,76 +243,105 @@ const OrganizationSubmissionDetailModal = ({
           <Divider py={4} />
 
           <Box py={4}>
-            {!isLatest ? (
-              <Alert status="info" variant="left-accent">
-                {wordExtractor(
-                  page?.content?.wordings,
-                  "is_not_latest_submission_label"
-                )}
-              </Alert>
-            ) : (
-              !submission?.vettedAt && (
-                <VStack align="center">
-                  <SimpleGrid alignSelf="stretch" gap={6}>
-                    <GridItem>
-                      <FormControl>
-                        <FormLabel>
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "field_label_submission_status"
-                          )}
-                        </FormLabel>
-                        <Select
-                          defaultValue="approved"
-                          {...register("status", {})}
-                        >
-                          {enums?.EnumOrganizationStatusList?.map(
-                            ({
-                              key: value,
-                              value: { [router.locale]: label },
-                            }) => (
-                              <option key={value} value={value}>
-                                {label}
-                              </option>
-                            )
-                          )}
-                        </Select>
-                      </FormControl>
-                    </GridItem>
-                    <GridItem>
-                      <FormControl>
-                        <FormLabel>
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "field_label_submission_remark"
-                          )}
-                        </FormLabel>
-                        <Textarea
-                          rows={5}
-                          resize="none"
-                          {...register("remark", {})}
-                        />
-                      </FormControl>
-                    </GridItem>
-                  </SimpleGrid>
-                  <Button
-                    alignSelf="center"
-                    minW={24}
-                    mt={6}
-                    colorScheme="yellow"
-                    color="black"
-                    px={4}
-                    py={2}
-                    borderRadius="2em"
-                    type="submit"
-                  >
+            {submission?.vettedAt || !isLatest ? (
+              <VStack>
+                {!isLatest && (
+                  <Alert status="info" variant="left-accent">
                     {wordExtractor(
                       page?.content?.wordings,
-                      "save_button_label"
+                      "is_not_latest_submission_label"
                     )}
-                  </Button>
-                </VStack>
-              )
+                  </Alert>
+                )}
+                <SimpleGrid alignSelf="stretch" gap={6}>
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel>
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "field_label_submission_status"
+                        )}
+                      </FormLabel>
+                      <Tag>
+                        {
+                          enums?.EnumOrganizationStatusList?.find(
+                            (x) => x.key === submission?.status
+                          )?.value?.[router.locale]
+                        }
+                      </Tag>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel>
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "field_label_submission_remark"
+                        )}
+                      </FormLabel>
+                      <Text whiteSpace="no-wrap">{submission?.remark}</Text>
+                    </FormControl>
+                  </GridItem>
+                </SimpleGrid>
+              </VStack>
+            ) : (
+              <VStack align="center">
+                <SimpleGrid alignSelf="stretch" gap={6}>
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel>
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "field_label_submission_status"
+                        )}
+                      </FormLabel>
+                      <Select
+                        defaultValue="approved"
+                        {...register("status", {})}
+                      >
+                        {enums?.EnumOrganizationStatusList?.map(
+                          ({
+                            key: value,
+                            value: { [router.locale]: label },
+                          }) => (
+                            <option key={value} value={value}>
+                              {label}
+                            </option>
+                          )
+                        )}
+                      </Select>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel>
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "field_label_submission_remark"
+                        )}
+                      </FormLabel>
+                      <Textarea
+                        rows={5}
+                        resize="none"
+                        {...register("remark", {})}
+                      />
+                    </FormControl>
+                  </GridItem>
+                </SimpleGrid>
+                <Button
+                  alignSelf="center"
+                  minW={24}
+                  mt={6}
+                  colorScheme="yellow"
+                  color="black"
+                  px={4}
+                  py={2}
+                  borderRadius="2em"
+                  type="submit"
+                >
+                  {wordExtractor(page?.content?.wordings, "save_button_label")}
+                </Button>
+              </VStack>
             )}
           </Box>
         </ModalBody>

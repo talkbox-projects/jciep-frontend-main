@@ -77,7 +77,6 @@ const [AppProvider, useAppContext] = constate((props) => {
   const registerModalDisclosure = useDisclosureWithParams();
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
-  const invitationFormModalDisclosure = useDisclosureWithParams();
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);

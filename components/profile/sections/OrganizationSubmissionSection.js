@@ -29,7 +29,8 @@ import OrganzationMemberInviteModal from "../fragments/OrganzationMemberInviteMo
 import SectionCard from "../fragments/SectionCard";
 
 const OrganizationSubmissionSection = () => {
-  const { organization, page, enums } = OrganizationProfileStore.useContext();
+  const { organization, page, enums, refreshOrganization } =
+    OrganizationProfileStore.useContext();
 
   const submissionFormDisclosure = useDisclosureWithParams();
   const submissionDetailDisclosure = useDisclosureWithParams();
@@ -47,7 +48,10 @@ const OrganizationSubmissionSection = () => {
           variant="ghost"
           leftIcon={<AiOutlinePlus />}
           onClick={() => {
-            submissionFormDisclosure.onOpen({ organization });
+            submissionFormDisclosure.onOpen({
+              organization,
+              onRefresh: refreshOrganization,
+            });
           }}
         >
           {wordExtractor(page?.content?.wordings, "提交申請")}
@@ -71,6 +75,7 @@ const OrganizationSubmissionSection = () => {
                     submissionDetailDisclosure.onOpen({
                       submission,
                       isLatest: index === 0,
+                      onRefresh: refreshOrganization,
                     });
                     // router.push(`/user/identity/${id}`);
                   }}

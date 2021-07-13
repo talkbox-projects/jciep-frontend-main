@@ -176,6 +176,23 @@ export default {
         input.vettedAt = new Date();
       }
 
+      if (["approved"].includes(input?.status)) {
+        const submission = await OrganizationSubmission.findById(input.id);
+        if (submission) {
+          await Organization.findByIdAndUpdate(submission.organization, {
+            status: input?.status,
+            chineseCompanyName: submission?.chineseCompanyName,
+            englishCompanyName: submission?.englishCompanyName,
+            website: submission?.website,
+            contactEmail: submission?.contactEmail,
+            contactPhone: submission?.contactPhone,
+            contactName: submission?.contactName,
+            industry: submission?.industry,
+            industryOther: submission?.industryOther,
+          });
+        }
+      }
+
       return await OrganizationSubmission.findByIdAndUpdate(input.id, input, {
         new: true,
       }).populate("organization");
