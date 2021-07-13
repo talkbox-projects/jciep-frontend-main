@@ -3,7 +3,7 @@ import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
-import organizationGet from "../../../utils/api/organizationGet";
+import organizationGet from "../../../utils/api/OrganizationGet";
 import OrganizationNgoProfile from "../../../components/profile/OrganizationNgoProfile";
 import OrganizationEmploymentProfile from "../../../components/profile/OrganizationEmploymentProfile";
 import { useAppContext } from "../../../store/AppStore";
