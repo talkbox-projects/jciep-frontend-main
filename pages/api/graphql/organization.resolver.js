@@ -35,16 +35,18 @@ export default {
 
       return await OrganizationSubmission.findById(id).populate("organization");
     },
-    OrganizationSearch: async (_parent, { status, limit, page }) => {
+    OrganizationSearch: async (_parent, { status }) => {
       /**
        * Search Organization
        * Admin can access to all organization
        * other identity can only access to approved organization
        */
 
-      return await Organization.find({ status })
-        .skip((page - 1) * 10)
-        .limit(limit);
+      const organizations = await Organization.find({
+        ...(status && { status: { $in: status } }),
+      }).populate("submission");
+      console.log(organizations);
+      return organizations;
     },
     OrganizationSubmissionSearch: async (_parent, input) => {
       let keys = {};

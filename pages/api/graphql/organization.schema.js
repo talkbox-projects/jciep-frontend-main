@@ -138,11 +138,7 @@ export default gql`
 
   type Query {
     OrganizationGet(id: ID): Organization
-    OrganizationSearch(
-      status: EnumOrganizationStatus
-      limit: Int!
-      page: Int!
-    ): [Organization]
+    OrganizationSearch(status: [EnumOrganizationStatus]): [Organization]
 
     OrganizationSubmissionGet(id: ID): OrganizationSubmission
 

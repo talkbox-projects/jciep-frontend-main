@@ -17,6 +17,7 @@ import {
   Button,
   Stack,
   Avatar,
+  Select,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
@@ -33,19 +34,25 @@ import IdentityBiographySection from "../../components/profile/sections/Identity
 import ExperienceSection from "../../components/profile/sections/ExperienceSection";
 import ActivitySection from "../../components/profile/sections/ActivitySection";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import organizationSearch from "../../utils/api/OrganizationSearch";
 
 const PAGE_KEY = "identity_id_profile";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
-  const { organizationId, status } = context.query;
   return {
     props: {
       page,
       api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          type: ["ngo"],
+          limit: 0,
+        }),
         identities: await identitySearch({
           identityType: ["pwd"],
+          organizationId: context.query.organizationId,
           limit: 10,
           page: 1,
         }),
@@ -56,24 +63,31 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityOpportunities = ({ api: { identities }, page, enums }) => {
+const IdentityOpportunities = ({
+  api: { organizations, identities },
+  page,
+  enums,
+}) => {
   const router = useRouter();
 
   const identityId = router.query.identityId ?? identities?.[0].id;
 
   const identity = identities?.find((x) => x.id === identityId);
 
-  const identityFunctionRenderer = useCallback(
-    (identity) =>
-      [
-        ...(identity?.identityFunction ?? []).map((key) =>
-          wordExtractor(page?.content?.wordings, `identityFunction_${key}`)
-        ),
-        ...(identity?.otherIdentityFunction
-          ? [identity?.otherIdentityFunction]
-          : []),
-      ].map((identityFunction) => <Tag rounded="full">{identityFunction}</Tag>),
-    [page, wordExtractor]
+  const generateUrlParameter = useCallback(
+    ({ identityId, organizationId }) => {
+      let query = "";
+      if (identityId ?? router.query.identityId) {
+        query += `identityId=${identityId ?? router.query.identityId}`;
+      }
+      if (organizationId ?? router.query.organizationId) {
+        query += `organizationId=${
+          organizationId ?? router.query.organizationId
+        }`;
+      }
+      return `/talants/individuals?${query}`;
+    },
+    [router]
   );
 
   const details = (
@@ -104,6 +118,7 @@ const IdentityOpportunities = ({ api: { identities }, page, enums }) => {
       w={["100%", "100%", "33%", "33%"]}
       cursor="pointer"
     >
+      {" "}
       {(identities ?? []).map((identity) => (
         <NextLink
           href={`/talants/individuals?identityId=${identity?.id}`}
@@ -233,7 +248,29 @@ const IdentityOpportunities = ({ api: { identities }, page, enums }) => {
 
         <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
           <Container>
-            <HStack align="stretch" spacing={4}>
+            <Box w="300px">
+              <Select
+                value={router.query.organizationId ?? ""}
+                onChange={(e) =>
+                  router.push(
+                    generateUrlParameter({ organizationId: e.target.value })
+                  )
+                }
+                variant="flushed"
+              >
+                <option key="" value="">
+                  Organization
+                </option>
+                {(organizations ?? []).map(
+                  ({ id, chineseCompanyName, enghlishCompanyName }) => (
+                    <option key={id} value={id}>
+                      {chineseCompanyName}
+                    </option>
+                  )
+                )}
+              </Select>
+            </Box>
+            <HStack mt={4} align="stretch" spacing={4}>
               {identityList}
               {/* desktop detail page */}
               {details}
@@ -258,7 +295,33 @@ const IdentityOpportunities = ({ api: { identities }, page, enums }) => {
             {details}
           </Box>
         ) : (
-          <Box p={4}>{identityList}</Box>
+          <Box p={4}>
+            <Box w="300px">
+              <Select
+                value={router.query.organizationId ?? ""}
+                onChange={(e) =>
+                  router.push(
+                    generateUrlParameter({ organizationId: e.target.value })
+                  )
+                }
+                variant="flushed"
+              >
+                <option key="" value="">
+                  Organization
+                </option>
+                {(organizations ?? []).map(
+                  ({ id, chineseCompanyName, enghlishCompanyName }) => (
+                    <option key={id} value={id}>
+                      {router.locale === "zh"
+                        ? chineseCompanyName
+                        : enghlishCompanyName}
+                    </option>
+                  )
+                )}
+              </Select>
+            </Box>
+            {identityList}
+          </Box>
         )}
       </Box>
     </>
