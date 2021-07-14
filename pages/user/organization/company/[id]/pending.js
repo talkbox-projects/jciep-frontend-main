@@ -5,6 +5,8 @@ import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../../../store/AppStore";
+import {useRouter} from 'next/router';
+import { useCredential } from "../../../../../utils/user";
 
 const PAGE_KEY = "organization_company_pending";
 
@@ -21,18 +23,25 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationCompanyPending = ({ page }) => {
-
   const {user} = useAppContext()
+  const router = useRouter();
+  const [setCredential, removeCredential] = useCredential();
+
+  const logout = () => {
+    removeCredential()
+    router.push('/')
+  }
+
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
-      <Box justifyContent="center" width="100%" marginTop="10px !important">
+      <Box justifyContent="center" width="100%" >
         <Box
-          maxWidth={600}
+          maxWidth={470}
           width="100%"
-          textAlign="left"
+          textAlign="center"
           margin="auto"
-          padding="25px"
+          padding="0px 25px"
         >
           <Heading as="h4" textAlign="center">
             {page?.content?.heading?.title}
@@ -41,7 +50,7 @@ const OrganizationCompanyPending = ({ page }) => {
           <Image
             height="150px"
             width="150px"
-            marginTop="30px !important"
+            marginTop="50px !important"
             margin="auto"
             src={page?.content?.companySuccess?.image}
           />
@@ -50,7 +59,7 @@ const OrganizationCompanyPending = ({ page }) => {
             {page?.content?.companySuccess?.description}
           </Text>
 
-          <Box width="100%" textAlign="center">
+          <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
               <Button
                 color="#1E1E1E"
@@ -71,7 +80,7 @@ const OrganizationCompanyPending = ({ page }) => {
           {
             user?.email ?
             <Text
-              marginTop="35px"
+              marginTop="50px"
               fontWeight={600}
               textAlign="center"
               fontSize="16px"
@@ -81,8 +90,15 @@ const OrganizationCompanyPending = ({ page }) => {
             : null
           }
           
-          <Text marginTop="30px" textAlign="center">
-            {page?.content?.footer?.drop}
+          <Text marginTop="10px" textAlign="center">
+            <Text as="span">
+                {page?.content?.footer?.drop?.text} 
+                <Text as="span"
+                  cursor="pointer"
+                  onClick={logout}>
+                  {page?.content?.footer?.drop?.button}
+                </Text>
+              </Text>
           </Text>
         </Box>
       </Box>
@@ -167,7 +183,19 @@ export default withPageCMS(OrganizationCompanyPending, {
         {
           name: "drop",
           label: "降低 Drop",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 Text",
+              component: "text",
+            },
+            {
+              name: "button",
+              label: "按鈕文字 Button text",
+              component: "text",
+            }
+          ]
         },
       ],
     },

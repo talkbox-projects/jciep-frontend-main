@@ -15,7 +15,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../store/AppStore";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
+import { useCredential } from "../../../utils/user";
 const PAGE_KEY = "identity_select";
 
 
@@ -35,8 +36,15 @@ export const getServerSideProps = async (context) => {
 const IdentitySelect = ({ page }) => {
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
   const { user } = useAppContext();
+  const router = useRouter();
+  const [setCredential, removeCredential] = useCredential();
+  
 
-
+  const logout = () => {
+    removeCredential()
+    router.push('/')
+  }
+ 
   const onRoleSelect = (e, role) => {
     let elements = document.getElementsByClassName("box");
     resetSelectedRole(elements, elements.length);
@@ -54,7 +62,11 @@ const IdentitySelect = ({ page }) => {
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Text fontSize="30px" marginTop="5px">
+      <Text 
+        fontSize="36px"
+        fontWeight={600}
+        letterSpacing="1.5px"
+      >
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
@@ -74,7 +86,7 @@ const IdentitySelect = ({ page }) => {
           <SimpleGrid pt={16} columns={[1, 1, 2, 3]} spacing={8}>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -97,7 +109,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -120,7 +132,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -143,7 +155,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 borderRadius="20px"
@@ -166,7 +178,7 @@ const IdentitySelect = ({ page }) => {
               </Box>
             </GridItem>
           </SimpleGrid>
-          <Box textAlign="center" marginTop="30px">
+          <Box textAlign="center" marginTop="60px">
             <Link href={selectedRole}>
               <Button
                 backgroundColor="#F6D644"
@@ -176,7 +188,7 @@ const IdentitySelect = ({ page }) => {
               >
                 {page?.content?.footer?.button}
               </Button>
-            </Link>
+            </Link><br/>
             {
               user?.email ?
               <Text marginTop="35px" fontWeight={600} fontSize="16px">
@@ -184,7 +196,14 @@ const IdentitySelect = ({ page }) => {
               </Text>
               : null
             }
-            <Text marginTop="30px">{page?.content?.footer?.drop}</Text>
+            <Text as="span" marginTop="40px">
+              {page?.content?.footer?.drop?.text} 
+              <Text as="span"
+                cursor="pointer"
+                onClick={logout}>
+                {page?.content?.footer?.drop?.button}
+              </Text>
+            </Text>
           </Box>
         </Box>
       </Box>
@@ -334,7 +353,19 @@ export default withPageCMS(IdentitySelect, {
         {
           name: "drop",
           label: "降低 Drop",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 Text",
+              component: "text",
+            },
+            {
+              name: "button",
+              label: "按鈕文字 Button text",
+              component: "text",
+            }
+          ]
         },
       ],
     },
