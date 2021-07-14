@@ -22,14 +22,14 @@ const transporter = {
   }),
 };
 
-const sendMail = (receiver, subject, content) => {
+const sendMail = (receiver, subject, content, attachments = []) => {
   transporter[process.env.NODE_ENV].sendMail(
     {
       from: process.env.SMTP_SENDER,
       to: receiver,
       subject: subject,
       html: content,
-      attachments: [],
+      attachments,
     },
     () => {
       console.log("sent to " + receiver);
@@ -37,7 +37,7 @@ const sendMail = (receiver, subject, content) => {
   );
 };
 
-const send = (receiver, params) => {
+const send = (receiver, params, attachments) => {
   const subject = "《賽馬會共融・知行計劃》註冊申請";
   sendMail(
     receiver,
@@ -45,7 +45,8 @@ const send = (receiver, params) => {
     Object.entries(params).reduce(
       (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
       html
-    )
+    ),
+    attachments
   );
 };
 

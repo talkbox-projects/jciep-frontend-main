@@ -6,6 +6,9 @@ import { sendSms } from "../services/phone";
 import facebook from "../services/facebook";
 import google from "../services/google";
 import { Types } from "mongoose";
+import send from "./email/send";
+import bannerBase64 from "./email/templates/assets/img/bannerBase64";
+import logoBase64 from "./email/templates/assets/img/logoBase64";
 
 User.findOneAndDelete({ email: "rajatgouri020@gmail.com" })
   .then((data) => {
@@ -134,11 +137,28 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await send(email, {
-          url: `${host}/user/verify/${emailVerify.token}`,
-          description: "請點擊下列按鈕啟動帳戶",
-          button_text: "啟動帳戶",
-        });
+        await send(
+          email,
+          {
+            url: `${host}/user/verify/${emailVerify.token}`,
+            description: "請點擊下列按鈕啟動帳戶",
+            button_text: "啟動帳戶",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
         return true;
       } catch (error) {
         console.error(error);

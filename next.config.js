@@ -6,11 +6,10 @@ module.exports = {
   },
   webpack: (config, options) => {
     config.module.rules.push({
-      test: /\.html/,
+      test: /\.(png|jpe?g|gif)$/i,
       use: [
-        options.defaultLoaders.babel,
         {
-          loader: "html-loader",
+          loader: "file-loader",
         },
       ],
     });
