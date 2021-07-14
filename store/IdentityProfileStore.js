@@ -9,6 +9,7 @@ const [Provider, useContext] = constate(
   ({ identity: _identity, page, enums, editable = true }) => {
     const [identity, setIdentity] = useState(_identity);
     const [editSection, setEditSection] = useState(null);
+    const isAdmin = true;
 
     const removeEditSection = useCallback(() => {
       setEditSection(null);
@@ -40,6 +41,7 @@ const [Provider, useContext] = constate(
       saveIdentity,
 
       editable,
+      isAdmin,
 
       page,
       enums,

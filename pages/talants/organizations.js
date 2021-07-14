@@ -23,7 +23,6 @@ import organizationSearch from "../../utils/api/OrganizationSearch";
 import OrganizationBiographySection from "../../components/profile/sections/OrganizationBiographySection";
 import OrganizationPortfolioSection from "../../components/profile/sections/OrganizationPortfolioSection";
 import OrganizationProfileStore from "../../store/OrganizationProfileStore";
-import OrganizationNgoProfile from "../../components/profile/OrganizationNgoProfile";
 import NgoSection from "../../components/profile/sections/NgoSection";
 import OrganizationMemberListSection from "../../components/profile/sections/OrganizationMemberListSection";
 
@@ -136,7 +135,10 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               <HStack>
                 <Image src={page?.content?.icon?.userIcon} w={6} h={6} />
                 <Text>
-                  {organization?.member?.length}{" "}
+                  {
+                    organization?.member?.filter((x) => x.role === "member")
+                      ?.length
+                  }{" "}
                   {wordExtractor(page?.content?.wordings, "number_of_members")}
                 </Text>
               </HStack>

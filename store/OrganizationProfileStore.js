@@ -13,6 +13,8 @@ const [Provider, useContext] = constate(
       setEditSection(null);
     }, []);
 
+    const isAdmin = true;
+
     const router = useRouter();
     const saveOrganization = useCallback(
       async (partialOrganization) => {
@@ -41,6 +43,7 @@ const [Provider, useContext] = constate(
       setOrganization,
       refreshOrganization,
 
+      isAdmin,
       editable,
 
       page,

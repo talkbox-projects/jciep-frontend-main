@@ -271,12 +271,29 @@ export default {
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
-        await send(email, {
-          url: `${host}/user/invite/${emailVerify.token}`,
-          title: "《賽馬會共融・知行計劃》邀請函",
-          description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
-          button_text: "前往登入/註冊",
-        });
+        await send(
+          email,
+          {
+            url: `${host}/user/invite/${emailVerify.token}`,
+            title: "《賽馬會共融・知行計劃》邀請函",
+            description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
+            button_text: "前往登入/註冊",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
 
         return true;
       } catch (error) {
@@ -284,20 +301,32 @@ export default {
         return false;
       }
     },
-    OrganizationMemberRemove: async (_parent, { input }) => {
-      /**
-       * Admin can send invitation for any organization
-       * Staff can only remove member for his/her organization
-       * Employer can only remove member for his/her organization
-       * Pwd/Public can not call this api.
-       */
+    OrganizationMemberRemove: async (
+      _parent,
+      { organizationId, identityId }
+    ) => {
+      try {
+        await Organization.findByIdAndUpdate(
+          organizationId,
+          {
+            $pull: { member: { identityId } },
+          },
+          { new: true }
+        );
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     },
-    OrganzationMemberBind: () => {
-      /**
-       * invite token should represent a member in an organization with status = invited
-       * return error if token is invalid.
-       * update the status (to joined) and corresponding identityId
-       */
+    OrganizationRemove: async (_parent, { id }) => {
+      try {
+        await Organization.findByIdAndDelete(id);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     },
   },
 };

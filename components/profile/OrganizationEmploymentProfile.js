@@ -6,6 +6,7 @@ import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSectio
 import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
 import InvitationCodeSection from "./sections/InvitationCodeSection";
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
+import OrganizationOperationSection from "./sections/OrganizationOperationSection";
 
 const OrganizationEmploymentProfile = () => {
   return (
@@ -18,8 +19,12 @@ const OrganizationEmploymentProfile = () => {
             <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
-            <OrganizationSubmissionSection />
-            <InvitationCodeSection />
+            {editable && (
+              <>
+                <OrganizationOperationSection />
+                <OrganizationSubmissionSection />
+              </>
+            )}
             <OrganizationMemberListSection />
           </VStack>
         </Stack>

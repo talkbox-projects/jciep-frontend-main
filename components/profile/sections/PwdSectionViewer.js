@@ -9,6 +9,7 @@ import {
   VStack,
   Wrap,
   Tag,
+  useToast,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -16,15 +17,61 @@ import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
 import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
+import { MdRadioButtonUnchecked, MdRadioButtonChecked } from "react-icons/md";
 
 const PwdSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, identity, editSection, setEditSection, editable } =
-    IdentityProfileStore.useContext();
+  const {
+    isAdmin,
+    page,
+    enums,
+    identity,
+    editSection,
+    setEditSection,
+    saveIdentity,
+    editable,
+  } = IdentityProfileStore.useContext();
+
+  const toast = useToast();
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
+        {editable && isAdmin && (
+          <Button
+            variant="outline"
+            isActive={!!identity?.published}
+            onClick={async () => {
+              try {
+                await saveIdentity({
+                  id: identity?.id,
+                  published: !identity?.published,
+                });
+                toast({
+                  title: !identity?.published ? "已發佈檔案" : "已取消發佈",
+                  status: !identity?.published ? "info" : "warning",
+                  position: "bottom",
+                });
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+            leftIcon={
+              !identity?.published ? (
+                <MdRadioButtonUnchecked />
+              ) : (
+                <MdRadioButtonChecked />
+              )
+            }
+          >
+            {wordExtractor(
+              page?.content?.wordings,
+              identity?.published
+                ? "published_my_profile_label"
+                : "publish_my_profile_label"
+            )}
+          </Button>
+        )}
         {editable && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}

@@ -63,14 +63,14 @@ const IdentityPwdAddSuccess = ({ page }) => {
             </Link>
           </Box>
 
-          <Text
+          {/* <Text
             marginTop="35px"
             fontWeight={600}
             textAlign="center"
             fontSize="16px"
           >
             {page?.content?.footer?.email}
-          </Text>
+          </Text> */}
           <Text marginTop="30px" textAlign="center">
             {page?.content?.footer?.drop}
           </Text>

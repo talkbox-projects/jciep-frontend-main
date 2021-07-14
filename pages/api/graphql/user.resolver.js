@@ -421,12 +421,40 @@ export default {
        * Pwd/Public can update identity for his own account.
        */
       try {
-        return await Identity.findByIdAndUpdate(input.id, input, {
+        const identity = await Identity.findByIdAndUpdate(input.id, input, {
           new: true,
         });
+
+        const organizations = await Organization.find({
+          member: { $elemMatch: { identityId: input.id } },
+        });
+
+        identity.organizationRole = (organizations ?? []).map(
+          (organization) => {
+            const member = organization.member.find(
+              ({ identityId }) => String(identityId) === String(input.id)
+            );
+            return {
+              organization,
+              status: member.status,
+              role: member.role,
+            };
+          }
+        );
+
+        return identity;
       } catch (error) {
         console.error(error);
         return null;
+      }
+    },
+    IdentityRemove: async (_parent, { id }) => {
+      try {
+        await Identity.findByIdAndDelete(id);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
       }
     },
   },

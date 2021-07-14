@@ -18,6 +18,7 @@ const identityUpdate = async ({ input }, context) => {
         interestedIndustryOther
         industry
         tncAccept
+        published
         email
         phone
         profilePic {
@@ -81,6 +82,18 @@ const identityUpdate = async ({ input }, context) => {
           description
           startDatetime
           endDatetime
+        }
+        organizationRole {
+          organization {
+            id
+            logo {
+              url
+            }
+            chineseCompanyName
+            englishCompanyName
+          }
+          status
+          role
         }
       }
     }

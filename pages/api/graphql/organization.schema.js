@@ -168,7 +168,8 @@ export default gql`
       @auth(identityTypes: [admin])
 
     OrganizationMemberInvite(input: OrganizationMemberInviteInput!): Boolean
-    OrganizationMemberRemove(id: ID!): Boolean
-    OrganzationMemberBind(inviteToken: String!, identityId: ID!): Identity
+    OrganizationMemberRemove(organizationId: ID!, identityId: ID!): Boolean
+
+    OrganizationRemove(id: ID!): Boolean
   }
 `;

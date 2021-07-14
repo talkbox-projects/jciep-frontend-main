@@ -257,6 +257,7 @@ export default gql`
 
     IdentityCreate(input: IdentityCreateInput!): Identity
     IdentityUpdate(input: IdentityUpdateInput!): Identity
-    IdentitySuspense(id: ID!): Boolean
+
+    IdentityRemove(id: ID!): Boolean
   }
 `;

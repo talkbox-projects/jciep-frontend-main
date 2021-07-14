@@ -6,8 +6,11 @@ import IdentityPortfolioSection from "./sections/IdentityPortfolioSection";
 import IdentityOrganizationListSection from "./sections/IdentityOrganizationListSection";
 import PwdSection from "./sections/PwdSection";
 import ActivitySection from "./sections/ActivitySection";
-const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
-  const props = { identity, page, enums, editable };
+import IdentityOperationSection from "./sections/IdentityOperationSection";
+import IdentityProfileStore from "../../store/IdentityProfileStore";
+
+const IdentityPwdProfile = () => {
+  const { editable } = IdentityProfileStore.useContext();
 
   return (
     <Box pt={[24, 48]} pb={36}>
@@ -21,6 +24,8 @@ const IdentityPwdProfile = ({ identity, page, enums, editable }) => {
             <ActivitySection />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
+            {editable && <IdentityOperationSection />}
+
             <IdentityOrganizationListSection />
           </VStack>
         </Stack>

@@ -2,9 +2,11 @@ import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
 import PublicSection from "./sections/PublicSection";
 import IdentityOrganizationListSection from "./sections/IdentityOrganizationListSection";
+import IdentityOperationSection from "./sections/IdentityOperationSection";
+import IdentityProfileStore from "../../store/IdentityProfileStore";
 
-const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
-  const props = { identity, page, enums, editable };
+const IdentityPublicProfile = () => {
+  const { editable } = IdentityProfileStore.useContext();
 
   return (
     <Box pt={[24, 48]} pb={36}>
@@ -14,6 +16,7 @@ const IdentityPublicProfile = ({ identity, page, enums, editable }) => {
             <PublicSection {...props} />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
+            {editable && <IdentityOperationSection />}
             <IdentityOrganizationListSection />
           </VStack>
         </Stack>

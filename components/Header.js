@@ -362,20 +362,20 @@ const Header = ({ navigation, isLangAvailable }) => {
                               )}
                             </HStack>
                           ))}
-                          <Link href="/user/identity/select">
-                            <Button
-                              size="sm"
-                              mt={4}
-                              w="100%"
-                              alignSelf="center"
-                              variant="ghost"
-                              color="gray.500"
-                              textAlign="center"
-                            >
-                              {getWording("header.add_identity_label")}
-                            </Button>
-                          </Link>
                         </VStack>
+                        <Link href="/user/identity/select">
+                          <Button
+                            size="sm"
+                            mt={4}
+                            w="100%"
+                            alignSelf="center"
+                            variant="ghost"
+                            color="gray.500"
+                            textAlign="center"
+                          >
+                            {getWording("header.add_identity_label")}
+                          </Button>
+                        </Link>
                         <Divider />
                         <VStack mt={2} align="stretch" spacing={2}>
                           <Link onClick={registerModalDisclosure.onOpen}>

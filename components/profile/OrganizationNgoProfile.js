@@ -7,6 +7,7 @@ import OrganizationProfileStore from "../../store/OrganizationProfileStore";
 import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
 import InvitationCodeSection from "./sections/InvitationCodeSection";
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
+import OrganizationOperationSection from "./sections/OrganizationOperationSection";
 
 const OrganizationNgoProfile = () => {
   const { editable } = OrganizationProfileStore.useContext();
@@ -22,6 +23,7 @@ const OrganizationNgoProfile = () => {
           <VStack w={["100%", "100%", "33%"]} align="stretch">
             {editable && (
               <>
+                <OrganizationOperationSection />
                 <OrganizationSubmissionSection />
                 <InvitationCodeSection />
               </>
