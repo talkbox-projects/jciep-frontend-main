@@ -44,6 +44,7 @@ const organizationSearch = async ({ status, type, name }, context) => {
           description
         }
         member {
+          identityId
           identity {
             id
             chineseName

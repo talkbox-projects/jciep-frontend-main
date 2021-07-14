@@ -4,6 +4,7 @@ export default gql`
   # graphql-upload
 
   type Member {
+    identityId: ID
     identity: Identity
     email: String
     status: EnumJoinStatus

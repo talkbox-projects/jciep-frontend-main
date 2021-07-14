@@ -260,14 +260,6 @@ export default {
       try {
         const organization = await Organization.findById(id);
 
-        const emailVerify = await EmailVerify.create({
-          email,
-          meta: {
-            key: "invitation",
-            role,
-          },
-        });
-
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";

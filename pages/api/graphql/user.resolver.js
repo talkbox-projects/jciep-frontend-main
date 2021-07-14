@@ -451,6 +451,13 @@ export default {
     IdentityRemove: async (_parent, { id }) => {
       try {
         await Identity.findByIdAndDelete(id);
+        await Organization.findByIdAndUpdate(
+          organizationId,
+          {
+            $pull: { member: { identityId } },
+          },
+          { new: true }
+        );
         return true;
       } catch (error) {
         console.error(error);

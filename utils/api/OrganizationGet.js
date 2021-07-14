@@ -40,6 +40,7 @@ const organizationGet = async ({ id }, context) => {
           description
         }
         member {
+          identityId
           identity {
             id
             chineseName

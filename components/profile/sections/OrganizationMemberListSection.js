@@ -38,7 +38,7 @@ const OrganizationMemberListSection = () => {
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {(organization?.member ?? [])
           .filter((m) => (!editable ? m?.role === "member" : true))
-          .map(({ identity, email, role, status }) => {
+          .map(({ identityId, identity, email, role, status }) => {
             return (
               <HStack
                 {...(identity?.id && {
@@ -89,7 +89,7 @@ const OrganizationMemberListSection = () => {
                           try {
                             const data = await OrganizationMemberRemove({
                               organizationId: organization?.id,
-                              identityId: identity.id,
+                              identityId: identityId,
                             });
                             await refreshOrganization();
                             removeDisclosure.onClose();

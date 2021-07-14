@@ -40,6 +40,7 @@ const organizationUpdate = async ({ input }, context) => {
           description
         }
         member {
+          identityId
           identity {
             chineseName
             englishName
