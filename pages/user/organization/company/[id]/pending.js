@@ -4,6 +4,7 @@ import { getConfiguration } from "../../../../../utils/configuration/getConfigur
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../../../store/AppStore";
 
 const PAGE_KEY = "organization_company_pending";
 
@@ -20,6 +21,8 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationCompanyPending = ({ page }) => {
+
+  const {user} = useAppContext()
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
@@ -65,14 +68,19 @@ const OrganizationCompanyPending = ({ page }) => {
             </Link>
           </Box>
 
-          <Text
-            marginTop="35px"
-            fontWeight={600}
-            textAlign="center"
-            fontSize="16px"
-          >
-            {page?.content?.footer?.email}
-          </Text>
+          {
+            user?.email ?
+            <Text
+              marginTop="35px"
+              fontWeight={600}
+              textAlign="center"
+              fontSize="16px"
+            >
+              {page?.content?.footer?.email?.firstText} {user?.email} {page?.content?.footer?.email?.lastText}
+            </Text>
+            : null
+          }
+          
           <Text marginTop="30px" textAlign="center">
             {page?.content?.footer?.drop}
           </Text>
@@ -142,7 +150,19 @@ export default withPageCMS(OrganizationCompanyPending, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ]
         },
         {
           name: "drop",

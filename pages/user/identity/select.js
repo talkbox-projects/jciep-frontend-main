@@ -12,9 +12,12 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../store/AppStore";
+import { useRouter } from "next/router";
 const PAGE_KEY = "identity_select";
+
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -31,6 +34,8 @@ export const getServerSideProps = async (context) => {
 
 const IdentitySelect = ({ page }) => {
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
+  const { user } = useAppContext();
+
 
   const onRoleSelect = (e, role) => {
     let elements = document.getElementsByClassName("box");
@@ -172,9 +177,13 @@ const IdentitySelect = ({ page }) => {
                 {page?.content?.footer?.button}
               </Button>
             </Link>
-            <Text marginTop="35px" fontWeight={600} fontSize="16px">
-              {page?.content?.footer?.email}
-            </Text>
+            {
+              user?.email ?
+              <Text marginTop="35px" fontWeight={600} fontSize="16px">
+                {page?.content?.footer?.email.firstText} {user?.email} {page?.content?.footer?.email.lastText}
+              </Text>
+              : null
+            }
             <Text marginTop="30px">{page?.content?.footer?.drop}</Text>
           </Box>
         </Box>
@@ -308,7 +317,19 @@ export default withPageCMS(IdentitySelect, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ]
         },
         {
           name: "drop",

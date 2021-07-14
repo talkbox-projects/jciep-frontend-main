@@ -7,14 +7,6 @@ import facebook from "../services/facebook";
 import google from "../services/google";
 import { Types } from "mongoose";
 
-User.findOneAndDelete({ email: "rajatgouri020@gmail.com" })
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {

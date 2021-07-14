@@ -4,6 +4,7 @@ import { getConfiguration } from "../../../../../utils/configuration/getConfigur
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../../../store/AppStore";
 
 const PAGE_KEY = "identity_public_add_success";
 
@@ -20,6 +21,9 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPublicAddSuccess = ({ page }) => {
+
+  const {user} = useAppContext()
+
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
@@ -71,7 +75,7 @@ const IdentityPublicAddSuccess = ({ page }) => {
             textAlign="center"
             fontSize="16px"
           >
-            {page?.content?.footer?.email}
+            {page?.content?.footer?.email?.firstText}  {page?.content?.footer?.email?.lastText} 
           </Text>
           <Text marginTop="30px" textAlign="center">
             {page?.content?.footer?.drop}
@@ -142,7 +146,19 @@ export default withPageCMS(IdentityPublicAddSuccess, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ]
         },
         {
           name: "drop",
