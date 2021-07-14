@@ -34,6 +34,7 @@ const getSharedServerSideProps = async (context) => {
             "EnumOrganizationStatusList",
             "EnumJoinRoleList",
             "EnumJoinStatusList",
+            "EnumOrganizationTypeList",
           ],
           lang: context.locale,
         })) ?? {},

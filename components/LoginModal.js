@@ -355,9 +355,9 @@ const LoginModal = () => {
                 </HStack>
               </Button>
               <GoogleLogin
+                autoLoad={false}
                 clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
                 render={(renderProps) => (
-                  // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
                   <Button
                     colorScheme="google"
                     color="white"

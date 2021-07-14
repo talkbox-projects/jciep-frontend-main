@@ -48,7 +48,6 @@ export const getServerSideProps = async (context) => {
         organizations: await organizationSearch({
           status: ["approved"],
           type: ["ngo"],
-          limit: 0,
         }),
         identities: await identitySearch({
           identityType: ["pwd"],
