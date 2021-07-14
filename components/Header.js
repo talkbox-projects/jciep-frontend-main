@@ -383,6 +383,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                 </PopoverContent>
               )}
             </Popover>
+            s
           </HStack>
         </Container>
         <Container mt={4}>

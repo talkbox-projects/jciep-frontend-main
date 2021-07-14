@@ -3,9 +3,17 @@ import { Organization } from "./organization.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import { sendSms } from "../services/phone";
-import send from "./email/send";
 import facebook from "../services/facebook";
+import google from "../services/google";
 import { Types } from "mongoose";
+
+User.findOneAndDelete({ email: "rajatgouri020@gmail.com" })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 export default {
   Query: {
@@ -236,11 +244,37 @@ export default {
             throw new Error(userData.error.message);
           }
 
-          let user = await User.findOne({ email: userData.email });
+          let user = await User.findOne({ email: userData.email }).populate(
+            "identities"
+          );
 
           if (!user) {
             let user = await new User({
               email: userData.email,
+              facebookId: userData.id,
+            }).save();
+
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return { token, user };
+          } else {
+            const token = jwt.sign(user.toObject(), "shhhhh").toString();
+            return { token, user };
+          }
+        } else if (input.googleToken) {
+          console.log(input.googleToken);
+
+          let userData = await google.getProfile(input.googleToken);
+
+          if (userData.error) {
+            throw new Error(userData.error.message);
+          }
+
+          let user = await User.findOne({ email: userData.email }).populate(
+            "identities"
+          );
+
+          if (!user) {
+            let user = await new User({
               facebookId: userData.id,
             }).save();
 

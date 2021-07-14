@@ -2,6 +2,8 @@ import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import GoogleLogin from "react-google-login";
+
 import {
   Box,
   FormControl,
@@ -85,6 +87,11 @@ const RegisterModal = () => {
   const responseFacebook = (response) => {
     registerModalDisclosure.onClose();
     router.push(`/oauth/facebook/?accessToken=${response.accessToken}`);
+  };
+
+  const responseGoogle = (response) => {
+    registerModalDisclosure.onClose();
+    router.push(`/oauth/google/?accessToken=${response.accessToken}`);
   };
 
   const onEmailRegister = useCallback(async ({ e, email }) => {
@@ -238,7 +245,7 @@ const RegisterModal = () => {
               </Button> */}
 
               <FacebookLogin
-                appId="1072341853293859"
+                appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
                 render={(renderProps) => (
@@ -270,14 +277,36 @@ const RegisterModal = () => {
                   </Text>
                 </HStack>
               </Button>
-              <Button colorScheme="google" color="white">
+              {/* <Button colorScheme="google" color="white">
                 <HStack w="100%">
                   <IoLogoGoogle size={18} color="white" />
                   <Text flex={1} minW={0} w="100%">
                     Sign Up With Google
                   </Text>
                 </HStack>
-              </Button>
+              </Button> */}
+              <GoogleLogin
+                clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
+                render={(renderProps) => (
+                  // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
+                  <Button
+                    colorScheme="google"
+                    color="white"
+                    onClick={renderProps.onClick}
+                  >
+                    <HStack w="100%">
+                      <IoLogoGoogle size={18} color="white" />
+                      <Text flex={1} minW={0} w="100%">
+                        Sign Up With Google
+                      </Text>
+                    </HStack>
+                  </Button>
+                )}
+                buttonText="Login"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={"single_host_origin"}
+              />
             </VStack>
             <Button
               alignSelf="start"
