@@ -44,13 +44,14 @@ const AdminOrganization = ({ enums }) => {
   const [params, setParams] = useState({
     status: enums?.EnumOrganizationStatusList.map((x) => x.key),
     type: enums?.EnumOrganizationTypeList.map((x) => x.key),
+    name: "",
   });
 
   const fetchOrganizations = useCallback(
-    async ({ status, type }) => {
+    async ({ status, type, name }) => {
       try {
         setIsLoading(true);
-        setOrganizations(await organizationSearch({ status, type }));
+        setOrganizations(await organizationSearch({ status, type, name }));
       } catch (error) {
         console.error(error);
       }
@@ -63,6 +64,7 @@ const AdminOrganization = ({ enums }) => {
     fetchOrganizations({
       status: params?.status,
       type: params?.type,
+      name: params?.name,
     });
   }, [fetchOrganizations, params]);
 
@@ -121,7 +123,7 @@ const AdminOrganization = ({ enums }) => {
               <Input
                 value={params?.name}
                 onChange={(e) =>
-                  setParams((_) => ({ ...params, [name]: e.target.value }))
+                  setParams((_) => ({ ...params, name: e.target.value }))
                 }
               ></Input>
             </FormControl>

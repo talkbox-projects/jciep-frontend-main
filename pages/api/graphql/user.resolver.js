@@ -35,6 +35,7 @@ export default {
 
       let keys = {};
 
+      if (input.published) keys["published"] = input.published;
       if (input.phone) keys["phone"] = input.phone;
       if (input.email) keys["email"] = input.email;
       if (input.identityType) keys["type"] = { $in: input.identityType };
@@ -383,6 +384,7 @@ export default {
         education: input?.education,
         employment: input?.employment,
         activity: input?.activity,
+        published: input?.published || false,
       }).save();
 
       if (input?.invitationCode) {

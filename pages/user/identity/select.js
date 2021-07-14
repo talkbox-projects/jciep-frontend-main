@@ -8,7 +8,6 @@ import {
   GridItem,
   Image,
 } from "@chakra-ui/react";
-import { getConfiguration } from "../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
@@ -161,6 +160,7 @@ const IdentitySelect = ({ page }) => {
               </Box>
             </GridItem>
           </SimpleGrid>
+
           <Box textAlign="center" marginTop="30px">
             <Link href={selectedRole}>
               <Button
@@ -172,10 +172,10 @@ const IdentitySelect = ({ page }) => {
                 {page?.content?.footer?.button}
               </Button>
             </Link>
-            <Text marginTop="35px" fontWeight={600} fontSize="16px">
+            {/* <Text marginTop="35px" fontWeight={600} fontSize="16px">
               {page?.content?.footer?.email}
-            </Text>
-            <Text marginTop="30px">{page?.content?.footer?.drop}</Text>
+            </Text> */}
+            {/* <Text marginTop="30px">{page?.content?.footer?.drop}</Text> */}
           </Box>
         </Box>
       </Box>

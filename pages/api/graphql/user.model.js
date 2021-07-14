@@ -227,6 +227,10 @@ const identitySchema = Schema({
   tncAccept: {
     type: Boolean,
   },
+  published: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.virtual("member.identity", {

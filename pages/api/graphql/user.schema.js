@@ -83,6 +83,7 @@ export default gql`
     interestedIndustryOther: String
     industry: [EnumIndustry]
     tncAccept: Boolean
+    published: Boolean
 
     email: String
     phone: String
@@ -124,6 +125,7 @@ export default gql`
     interestedIndustryOther: String
     industry: [EnumIndustry]
     tncAccept: Boolean
+    published: Boolean
     email: String
     phone: String
 
@@ -164,6 +166,7 @@ export default gql`
     interestedIndustryOther: String
     industry: [EnumIndustry]
     tncAccept: Boolean
+    published: Boolean
     email: String
     phone: String
 
@@ -233,6 +236,7 @@ export default gql`
       name: String
       organizationId: ID
       identityType: [EnumIdentityType]
+      published: Boolean
       limit: Int!
       page: Int!
     ): [Identity]

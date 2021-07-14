@@ -11,12 +11,14 @@ const identitySearch = async (
       $page: Int!
       $organizationId: ID
       $identityType: [EnumIdentityType]
+      $published: Boolean
     ) {
       IdentitySearch(
         limit: $limit
         page: $page
         organizationId: $organizationId
         identityType: $identityType
+        published: $published
       ) {
         id
         type
@@ -31,6 +33,7 @@ const identitySearch = async (
         interestedIndustryOther
         industry
         tncAccept
+        published
         email
         phone
         profilePic {

@@ -82,6 +82,7 @@ const VerifyToken = () => {
                 interestedIndustry
                 industry
                 tncAccept
+                published
                 email
                 phone
                 profilePic {

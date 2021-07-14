@@ -34,7 +34,7 @@ export default {
 
       return await OrganizationSubmission.findById(id).populate("organization");
     },
-    OrganizationSearch: async (_parent, { status = [], type = [] }) => {
+    OrganizationSearch: async (_parent, { status = [], type = [], name }) => {
       /**
        * Search Organization
        * Admin can access to all organization
@@ -44,6 +44,9 @@ export default {
       const organizations = await Organization.find({
         ...(status?.length && { status: { $in: status } }),
         ...(type?.length && { organizationType: { $in: type } }),
+        ...(name && {
+          $or: [{ chineseCompanyName: name }, { englishCompanyName: name }],
+        }),
       }).populate("submission");
 
       const identities = await Identity.find({

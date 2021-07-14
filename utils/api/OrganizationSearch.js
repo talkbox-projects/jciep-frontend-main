@@ -1,13 +1,14 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const organizationSearch = async ({ status, type }, context) => {
+const organizationSearch = async ({ status, type, name }, context) => {
   const query = gql`
     query OrganizationSearch(
       $status: [EnumOrganizationStatus]
       $type: [EnumOrganizationType]
+      $name: String
     ) {
-      OrganizationSearch(status: $status, type: $type) {
+      OrganizationSearch(status: $status, type: $type, name: $name) {
         id
         organizationType
         status
@@ -90,6 +91,7 @@ const organizationSearch = async ({ status, type }, context) => {
   `;
 
   const data = await getGraphQLClient(context).request(query, {
+    name,
     status,
     type,
   });

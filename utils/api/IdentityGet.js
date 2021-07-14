@@ -18,6 +18,7 @@ const identityGet = async ({ id }, context) => {
         interestedIndustryOther
         industry
         tncAccept
+        published
         email
         phone
         profilePic {

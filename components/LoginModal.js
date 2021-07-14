@@ -104,6 +104,7 @@ const LoginModal = () => {
                 interestedIndustryOther
                 industry
                 tncAccept
+                published
                 email
                 phone
                 profilePic {

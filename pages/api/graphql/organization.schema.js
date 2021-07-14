@@ -139,6 +139,7 @@ export default gql`
   type Query {
     OrganizationGet(id: ID): Organization
     OrganizationSearch(
+      name: String
       status: [EnumOrganizationStatus]
       type: [EnumOrganizationType]
     ): [Organization]

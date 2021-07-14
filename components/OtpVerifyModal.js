@@ -63,6 +63,7 @@ const OtpVerifyModal = () => {
                   interestedIndustryOther
                   industry
                   tncAccept
+                  published
                   email
                   phone
                   profilePic {

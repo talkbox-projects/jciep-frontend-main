@@ -50,6 +50,7 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
         identities: await identitySearch({
+          published: true,
           identityType: ["pwd"],
           organizationId: context.query.organizationId,
           limit: 10,
@@ -69,7 +70,7 @@ const IdentityOpportunities = ({
 }) => {
   const router = useRouter();
 
-  const identityId = router.query.identityId ?? identities?.[0].id;
+  const identityId = router.query.identityId ?? identities?.[0]?.id;
 
   const identity = identities?.find((x) => x.id === identityId);
 

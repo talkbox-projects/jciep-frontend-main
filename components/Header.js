@@ -127,6 +127,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                 interestedIndustryOther
                 industry
                 tncAccept
+                published
                 email
                 phone
                 profilePic {
@@ -275,6 +276,13 @@ const Header = ({ navigation, isLangAvailable }) => {
         <Container>
           <HStack py={2} fontSize="sm" alignItems="center">
             <Box flex={1} minW={0} w="100%" />
+            {user && (
+              <NextLink href="/admin/organizations">
+                <Button variant="link" size="sm">
+                  管理介面
+                </Button>
+              </NextLink>
+            )}
             <Select
               border="none"
               size="sm"
