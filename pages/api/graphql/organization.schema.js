@@ -138,7 +138,10 @@ export default gql`
 
   type Query {
     OrganizationGet(id: ID): Organization
-    OrganizationSearch(status: [EnumOrganizationStatus]): [Organization]
+    OrganizationSearch(
+      status: [EnumOrganizationStatus]
+      type: [EnumOrganizationType]
+    ): [Organization]
 
     OrganizationSubmissionGet(id: ID): OrganizationSubmission
 
