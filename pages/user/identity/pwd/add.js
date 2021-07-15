@@ -109,11 +109,7 @@ const IdentityPwdAdd = ({ page }) => {
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Text 
-        fontSize="36px" 
-        letterSpacing="1.5px"
-        fontWeight={600}
-      >
+      <Text fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
@@ -203,6 +199,8 @@ const IdentityPwdAdd = ({ page }) => {
                     )}
                   />
                 </FormControl>
+              </GridItem>
+              <GridItem>
                 <FormControl onInvalid={!!errors?.invitationCode?.message}>
                   <FormLabel>
                     {wordExtractor(

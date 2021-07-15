@@ -30,6 +30,7 @@ const PwdSectionViewer = () => {
     setEditSection,
     saveIdentity,
     editable,
+    userFieldVisible = false,
   } = IdentityProfileStore.useContext();
 
   const toast = useToast();
@@ -102,103 +103,125 @@ const PwdSectionViewer = () => {
         </Text>
       </VStack>
       <VStack px={8} py={4} align="stretch" spacing={4}>
-        <Stack direction={["column", "column", "row"]}>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(
-                page?.content?.wordings,
-                "field_label_chineseName"
-              )}
-            </FormLabel>
-            <Text>
-              {identity?.chineseName ??
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(
-                page?.content?.wordings,
-                "field_label_englishName"
-              )}
-            </FormLabel>
-            <Text>
-              {identity?.englishName ??
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_email")}
-            </FormLabel>
-            <Text>
-              {identity?.email ??
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_phone")}
-            </FormLabel>
-            <Text>
-              {identity?.phone ??
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-        </Stack>
-
-        <Stack direction={["column", "column", "row"]}>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_dob")}
-            </FormLabel>
-            <Text>
-              {moment(identity?.dob).format("YYYY-MM-DD") ??
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_district")}
-            </FormLabel>
-            <Text>
-              {getEnumText(
-                enums?.EnumGenderList,
-                identity?.gender,
-                router.locale
-              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_district")}
-            </FormLabel>
-            <Text>
-              {getEnumText(
-                enums?.EnumDistrictList,
-                identity?.district,
-                router.locale
-              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-          <FormControl>
-            <FormLabel color="#999" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_industry")}
-            </FormLabel>
-            <Wrap>
-              {identity?.industry.map((key) => (
-                <Tag key={key}>
-                  {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
+        {userFieldVisible && (
+          <>
+            <Stack direction={["column", "column", "row"]}>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_chineseName"
+                  )}
+                </FormLabel>
+                <Text>
+                  {identity?.chineseName ??
                     wordExtractor(page?.content?.wordings, "empty_text_label")}
-                </Tag>
-              ))}
-            </Wrap>
-          </FormControl>
-        </Stack>
+                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_englishName"
+                  )}
+                </FormLabel>
+                <Text>
+                  {identity?.englishName ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+            </Stack>
+            <Stack direction={["column", "column", "row"]}>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(page?.content?.wordings, "field_label_email")}
+                </FormLabel>
+                <Text>
+                  {identity?.email ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(page?.content?.wordings, "field_label_phone")}
+                </FormLabel>
+                <Text>
+                  {identity?.phone ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+            </Stack>
+
+            <Stack direction={["column", "column", "row"]}>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(page?.content?.wordings, "field_label_dob")}
+                </FormLabel>
+                <Text>
+                  {moment(identity?.dob).format("YYYY-MM-DD") ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_district"
+                  )}
+                </FormLabel>
+                <Text>
+                  {getEnumText(
+                    enums?.EnumGenderList,
+                    identity?.gender,
+                    router.locale
+                  ) ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+            </Stack>
+            <Stack direction={["column", "column", "row"]}>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_district"
+                  )}
+                </FormLabel>
+                <Text>
+                  {getEnumText(
+                    enums?.EnumDistrictList,
+                    identity?.district,
+                    router.locale
+                  ) ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel color="#999" mb={0}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_industry"
+                  )}
+                </FormLabel>
+                <Wrap>
+                  {identity?.industry.map((key) => (
+                    <Tag key={key}>
+                      {getEnumText(
+                        enums?.EnumIndustryList,
+                        key,
+                        router.locale
+                      ) ??
+                        wordExtractor(
+                          page?.content?.wordings,
+                          "empty_text_label"
+                        )}
+                    </Tag>
+                  ))}
+                </Wrap>
+              </FormControl>
+            </Stack>
+          </>
+        )}
         <Divider />
         <Stack direction={["column", "column", "row"]}>
           <FormControl>

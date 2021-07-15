@@ -1,7 +1,7 @@
 import request from "request";
 
 const gateways = {
-  production: (phone, message) => {
+  production: async (phone, message) => {
     try {
       const url = "https://vercode.accessyou-anyip.com/sms/sendsms-vercode.php";
       const accountno = process.env.SMS_ACCOUNT;
@@ -16,7 +16,8 @@ const gateways = {
         url: requestUrl,
       };
 
-      const response = request(options);
+      const response = await request(options);
+      console.log(response);
 
       return true;
     } catch (error) {
@@ -24,7 +25,7 @@ const gateways = {
     }
   },
 
-  development: (phone, message) => {
+  development: async (phone, message) => {
     try {
       const url = "https://vercode.accessyou-anyip.com/sms/sendsms-vercode.php";
       const accountno = process.env.SMS_ACCOUNT;
@@ -39,7 +40,7 @@ const gateways = {
         url: requestUrl,
       };
 
-      const response = request(options);
+      const response = await request(options);
       return true;
     } catch (error) {
       return false;

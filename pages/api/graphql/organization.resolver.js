@@ -82,6 +82,21 @@ export default {
         .skip((input?.page - 1) * 10)
         .limit(input?.limit);
     },
+
+    OrganizationInvitationCodeValidity: async (
+      _parent,
+      { invitationCode, organizationType }
+    ) => {
+      try {
+        return await Organization.exists({
+          invitationCode,
+          organizationType,
+          status: "approved",
+        });
+      } catch (error) {
+        return false;
+      }
+    },
   },
   Mutation: {
     OrganizationSubmissionCreate: async (_parent, params, context) => {

@@ -139,6 +139,10 @@ export default gql`
 
   type Query {
     OrganizationGet(id: ID): Organization
+    OrganizationInvitationCodeValidity(
+      invitationCode: String!
+      organizationType: EnumOrganizationType
+    ): Boolean
     OrganizationSearch(
       name: String
       status: [EnumOrganizationStatus]

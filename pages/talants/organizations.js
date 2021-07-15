@@ -60,6 +60,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
 
   const details = (
     <OrganizationProfileStore.Provider
+      userFieldVisible={false}
       organization={organization}
       enums={enums}
       page={page}

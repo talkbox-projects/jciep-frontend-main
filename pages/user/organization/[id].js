@@ -52,6 +52,7 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
 
   return (
     <OrganizationProfileStore.Provider
+      userFieldVisible={true}
       organization={organization}
       enums={enums}
       page={page}

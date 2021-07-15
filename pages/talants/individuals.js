@@ -92,6 +92,7 @@ const IdentityOpportunities = ({
 
   const details = (
     <IdentityProfileStore.Provider
+      userFieldVisible={false}
       identity={identity}
       enums={enums}
       page={page}

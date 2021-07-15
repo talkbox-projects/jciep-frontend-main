@@ -96,7 +96,9 @@ const IdentityEmployerAdd = ({ page }) => {
 
   return (
     <VStack py={36}>
-      <Text mt={10} fontSize="16px">{page?.content?.step?.title}</Text>
+      <Text mt={10} fontSize="16px">
+        {page?.content?.step?.title}
+      </Text>
       <Text fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
         {page?.content?.step?.subTitle}
       </Text>
@@ -204,6 +206,29 @@ const IdentityEmployerAdd = ({ page }) => {
                       "invitation_code_label"
                     )}
                     {...register("invitationCode", {
+                      validate: {
+                        validity: async (invitationCode) => {
+                          try {
+                            if (invitationCode) return true;
+                            const valid =
+                              await OrganizationInvitationCodeValidity({
+                                invitationCode,
+                                type: "employment",
+                              });
+                            if (valid) {
+                              return wordExtractor(
+                                page?.content?.wordings,
+                                "invitation_code_error_message"
+                              );
+                            }
+                          } catch (error) {
+                            return wordExtractor(
+                              page?.content?.wordings,
+                              "invitation_code_error_message"
+                            );
+                          }
+                        },
+                      },
                       pattern: {
                         value: /^[0-9]{6,6}$/,
                         message: wordExtractor(

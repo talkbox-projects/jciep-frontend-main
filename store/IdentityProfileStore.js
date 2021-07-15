@@ -6,7 +6,13 @@ import identityUpdate from "../utils/api/IdentityUpdate";
 import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
-  ({ identity: _identity, page, enums, editable = true }) => {
+  ({
+    identity: _identity,
+    page,
+    enums,
+    userFieldVisible = false,
+    editable = true,
+  }) => {
     const [identity, setIdentity] = useState(_identity);
     const [editSection, setEditSection] = useState(null);
     const { identity: myIdentity } = useAppContext();
@@ -50,6 +56,7 @@ const [Provider, useContext] = constate(
 
       editable,
       isAdmin,
+      userFieldVisible,
 
       page,
       enums,

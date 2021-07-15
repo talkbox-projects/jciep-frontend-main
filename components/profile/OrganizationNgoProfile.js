@@ -10,7 +10,8 @@ import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSect
 import OrganizationOperationSection from "./sections/OrganizationOperationSection";
 
 const OrganizationNgoProfile = () => {
-  const { isAdmin, editable } = OrganizationProfileStore.useContext();
+  const { organization, isAdmin, editable } =
+    OrganizationProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
@@ -25,7 +26,9 @@ const OrganizationNgoProfile = () => {
               <>
                 <OrganizationOperationSection />
                 <OrganizationSubmissionSection />
-                <InvitationCodeSection />
+                {organization?.status === "approved" && (
+                  <InvitationCodeSection />
+                )}
               </>
             )}
             <OrganizationMemberListSection />
