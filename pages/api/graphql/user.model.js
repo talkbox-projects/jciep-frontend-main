@@ -27,7 +27,7 @@ const phoneVerifySchema = Schema({
 
 phoneVerifySchema.pre("validate", async function (next) {
   if (this.isNew) {
-    this.otp = Math.floor(Math.random() * 900000);
+    this.otp = parseInt(Math.random() * 900000 + 100000).toString();
   }
   next();
 });

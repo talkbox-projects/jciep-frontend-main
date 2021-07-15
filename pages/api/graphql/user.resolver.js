@@ -240,10 +240,12 @@ export default {
           } else {
             await phoneVerify.delete();
             const user = await User.findOneAndUpdate(
-              { phone: phoneVerify?.phone },
-              { phone: phoneVerify?.phone },
+              { phone: input.phone },
+              { phone: input.phone },
               { upsert: true, new: true }
             ).populate("identities");
+
+            console.log(user);
 
             const { identities, ..._user } = user.toObject();
             const token = jwt.sign(_user, "shhhhh").toString();
