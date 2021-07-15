@@ -280,7 +280,6 @@ const Header = ({ navigation, isLangAvailable }) => {
       >
         <Container>
           <HStack py={2} fontSize="sm" alignItems="center">
-            <Box flex={1} minW={0} w="100%" />
             {identity?.type === "admin" && (
               <Menu>
                 <MenuButton>
