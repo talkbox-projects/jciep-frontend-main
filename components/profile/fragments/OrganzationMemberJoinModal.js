@@ -19,8 +19,11 @@ import { useForm } from "react-hook-form";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 
-const OrganizationMemberJoinModal = ({ isOpen, onClose, params }) => {
-  const { page, enums } = OrganizationProfileStore.useContext();
+const OrganizationMemberJoinModal = ({
+  isOpen,
+  onClose,
+  params: { onSubmit, page } = {},
+}) => {
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -39,7 +42,7 @@ const OrganizationMemberJoinModal = ({ isOpen, onClose, params }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay></ModalOverlay>
-      <ModalContent as="form" onSubmit={handleSubmit(params?.onSubmit)}>
+      <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <ModalHeader>
           {wordExtractor(
             page?.content?.wordings,

@@ -195,113 +195,109 @@ export default {
 
        */
 
-      try {
-        if (input?.emailVerificationToken) {
-          const emailVerify = await EmailVerify.findOne({
-            token: input?.emailVerificationToken,
-          });
-          if (!emailVerify?.email) {
-            throw new Error("Invalid Token");
-          } else {
-            const user = await User.findOneAndUpdate(
-              { email: emailVerify?.email },
-              {
-                email: emailVerify?.email,
-                password: await User.generateHash(input?.password),
-              },
-              { upsert: true, new: true }
-            ).populate("identities");
-            await emailVerify.delete();
+      if (input?.emailVerificationToken) {
+        const emailVerify = await EmailVerify.findOne({
+          token: input?.emailVerificationToken,
+        });
+        if (!emailVerify?.email) {
+          throw new Error("Invalid Token");
+        } else {
+          const user = await User.findOneAndUpdate(
+            { email: emailVerify?.email },
+            {
+              email: emailVerify?.email,
+              password: await User.generateHash(input?.password),
+            },
+            { upsert: true, new: true }
+          ).populate("identities");
+          await emailVerify.delete();
 
-            const { identities, ..._user } = user.toObject();
-            const token = jwt.sign(_user, "shhhhh").toString();
+          const { identities, ..._user } = user.toObject();
+          const token = jwt.sign(_user, "shhhhh").toString();
 
-            return { token, user };
-          }
-        } else if (input?.email && input?.password) {
-          const user = await User.findOne({
-            email: input?.email.trim(),
-          }).populate("identities");
-          if (await user?.comparePassword(input?.password)) {
-            const { identities, ..._user } = user.toObject();
-            const token = jwt.sign(_user, "shhhhh").toString();
+          return { token, user };
+        }
+      } else if (input?.email && input?.password) {
+        const user = await User.findOne({
+          email: input?.email.trim(),
+        }).populate("identities");
+        if (await user?.comparePassword(input?.password)) {
+          const { identities, ..._user } = user.toObject();
+          const token = jwt.sign(_user, "shhhhh").toString();
 
-            return { token, user };
-          } else {
-            throw new Error("Wrong Email and Password!");
-          }
-        } else if (input?.phone) {
-          const phoneVerify = await PhoneVerify.findOne({
-            phone: input?.phone,
-            otp: input?.otp,
-          });
-          if (!phoneVerify) {
-            throw new Error("Invalid OTP");
-          } else {
-            await phoneVerify.delete();
-            const user = await User.findOneAndUpdate(
-              { phone: input.phone },
-              { phone: input.phone },
-              { upsert: true, new: true }
-            ).populate("identities");
+          return { token, user };
+        } else {
+          throw new Error("Wrong Email and Password!");
+        }
+      } else if (input?.phone) {
+        const phoneVerify = await PhoneVerify.findOne({
+          phone: input?.phone,
+          otp: input?.otp,
+        });
+        if (!phoneVerify) {
+          throw new Error("Invalid OTP");
+        } else {
+          await phoneVerify.delete();
+          const user = await User.findOneAndUpdate(
+            { phone: input.phone },
+            { phone: input.phone },
+            { upsert: true, new: true }
+          ).populate("identities");
 
-            console.log(user);
+          console.log(user);
 
-            const { identities, ..._user } = user.toObject();
-            const token = jwt.sign(_user, "shhhhh").toString();
+          const { identities, ..._user } = user.toObject();
+          const token = jwt.sign(_user, "shhhhh").toString();
 
-            return { token, user };
-          }
-        } else if (input.facebookToken) {
-          let userData = await facebook.getProfile(input.facebookToken);
+          return { token, user };
+        }
+      } else if (input.facebookToken) {
+        let userData = await facebook.getProfile(input.facebookToken);
 
-          if (userData.error) {
-            throw new Error(userData.error.message);
-          }
-
-          let user = await User.findOne({ email: userData.email }).populate(
-            "identities"
-          );
-
-          if (!user) {
-            let user = await new User({
-              facebookId: userData.id,
-            }).save();
-
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
-            return { token, user };
-          } else {
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
-            return { token, user };
-          }
-        } else if (input.googleToken) {
-          let userData = await google.getProfile(input.googleToken);
-
-          if (userData.error) {
-            throw new Error(userData.error.message);
-          }
-
-          let user = await User.findOne({ email: userData.email }).populate(
-            "identities"
-          );
-
-          if (!user) {
-            let user = await new User({
-              googleId: userData.id,
-            }).save();
-
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
-            return { token, user };
-          } else {
-            const token = jwt.sign(user.toObject(), "shhhhh").toString();
-            return { token, user };
-          }
+        if (userData.error) {
+          throw new Error(userData.error.message);
         }
 
-        return null;
-      } catch (err) {
-        console.log(err);
+        let user = await User.findOne({ email: userData.email }).populate(
+          "identities"
+        );
+
+        if (!user) {
+          let user = await new User({
+            facebookId: userData.id,
+          }).save();
+
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
+        } else {
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
+        }
+      } else if (input.googleToken) {
+        let userData = await google.getProfile(input.googleToken);
+
+        if (userData.error) {
+          throw new Error(userData.error.message);
+        }
+
+        let user = await User.findOne({ email: userData.email }).populate(
+          "identities"
+        );
+
+        if (!user) {
+          let user = await new User({
+            googleId: userData.id,
+          }).save();
+
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
+        } else {
+          const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          return { token, user };
+        }
       }
+
+      return null;
     },
 
     UserGet: async (_parent, { token }) => {

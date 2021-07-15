@@ -1,6 +1,5 @@
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
-import SectionCard from "../fragments/SectionCard";
 import { RiEdit2Line } from "react-icons/ri";
 import ActvitySubSectionViewer from "../fragments/ActvitySubSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
