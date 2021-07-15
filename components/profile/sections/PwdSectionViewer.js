@@ -30,7 +30,7 @@ const PwdSectionViewer = () => {
     setEditSection,
     saveIdentity,
     editable,
-    userFieldVisible = false,
+    userFieldVisible,
   } = IdentityProfileStore.useContext();
 
   const toast = useToast();

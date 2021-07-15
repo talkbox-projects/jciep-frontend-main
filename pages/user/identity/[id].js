@@ -59,6 +59,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
 
   return (
     <IdentityProfileStore.Provider
+      userFieldVisible={true}
       identity={identity}
       enums={enums}
       page={page}
