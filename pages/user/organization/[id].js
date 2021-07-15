@@ -32,7 +32,11 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
   const { identity: { id: currentId } = {} } = useAppContext();
   const editable = !!(organization?.member ?? []).find((m) => {
     console.log(m?.identity?.id, currentId, m?.role, "staff");
-    return m?.identity?.id === currentId && m?.role === "staff";
+    return (
+      m?.identity?.id === currentId &&
+      m?.role === "staff" &&
+      m?.status === "joined"
+    );
   });
 
   switch (organization?.organizationType) {
