@@ -5,6 +5,7 @@ import nookies, { destroyCookie, setCookie } from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCredential } from "../utils/user";
 import { updateIf } from "../utils/general";
+import { useCMS } from "tinacms";
 
 export const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
@@ -85,6 +86,16 @@ const [AppProvider, useAppContext] = constate((props) => {
     () => (user?.identities ?? []).find(({ id }) => id === identityId),
     [user, identityId]
   );
+
+  const cms = useCMS();
+
+  useEffect(() => {
+    if (identity?.type === "admin") {
+      cms.enable();
+    } else {
+      cms.disable();
+    }
+  }, [identity]);
 
   const updateIdentity = useCallback((id, updater) => {
     setUser((user) => {

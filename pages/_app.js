@@ -74,7 +74,7 @@ const App = ({ Component, pageProps }) => {
   return (
     <AppProvider {...pageProps}>
       <ChakraProvider theme={theme} resetCSS={true}>
-        <NextSeo title="賽馬會共融． 知行計劃" />
+        <NextSeo title="賽馬會共融．知行計劃" />
         <VStack w="100vw" align="stretch" spacing={0}>
           <Header {...pageProps}></Header>
           <Box mt={[-16, -16, -12, -12]}>
@@ -90,6 +90,6 @@ const App = ({ Component, pageProps }) => {
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [HtmlFieldPlugin],
-  enabled: true,
+  enabled: false,
   sidebar: true,
 });
