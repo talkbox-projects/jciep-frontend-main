@@ -196,7 +196,7 @@ const VerifyToken = () => {
   if (!emailVerify) {
     return (
       <VStack>
-        <Container pt={36} maxW={400}>
+        <Container pt={36} maxWidth="400px" width="100%">
           <VStack spacing={8}>
             <Heading>{getWording("emailVerify.heading")}</Heading>
             <Text textAlign="center" fontSize="lg" color="red.500">
@@ -225,7 +225,7 @@ const VerifyToken = () => {
 
   return (
     <VStack>
-      <Container pt={36} maxW={400}>
+      <Container pt={36} maxWidth="400px" width="100%">
         <VStack spacing={8} as="form" onSubmit={handleSubmit(onUserCreate)}>
           <Heading>{getWording("emailVerify.heading")}</Heading>
           <Text>
