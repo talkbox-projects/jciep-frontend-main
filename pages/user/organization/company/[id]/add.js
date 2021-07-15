@@ -57,10 +57,7 @@ const OrganizationCompanyAdd = ({ page }) => {
 
   const validate = () => {
     if (files.length < 1) {
-      setError("businessRegistration", {
-        type: "manual",
-        message: "上傳一個文件 upload a file! ",
-      });
+      setFileError('上傳一個文件 upload a file!')
       return true;
     } else {
       return false;
@@ -76,6 +73,11 @@ const OrganizationCompanyAdd = ({ page }) => {
       companyDescription,
     }) => {
       try {
+
+        if(validate()) {
+          return 
+        }
+
         const FileUploadmutation = gql`
           mutation FileUpload($file: FileUpload!) {
             FileUpload(files: $file) {

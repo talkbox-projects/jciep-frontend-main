@@ -75,6 +75,7 @@ const OrganizationNgoPending = ({ page }) => {
               </Button>
             </Link>
           </Box>
+<<<<<<< HEAD
           {user?.email ? (
             <Text
               marginTop="35px"
@@ -87,6 +88,10 @@ const OrganizationNgoPending = ({ page }) => {
             </Text>
           ) : null}
 
+=======
+          
+          
+>>>>>>> rajat-dev-1
           <Text marginTop="10px" textAlign="center">
             <Text as="span">
               {page?.content?.footer?.drop?.text}
@@ -158,23 +163,7 @@ export default withPageCMS(OrganizationNgoPending, {
       label: "頁腳 Footer",
       component: "group",
       fields: [
-        {
-          name: "email",
-          label: "電子郵件 Email",
-          component: "group",
-          fields: [
-            {
-              name: "firstText",
-              label: "第一個文本 First Text",
-              component: "text",
-            },
-            {
-              name: "lastText",
-              label: "最後的文字 Last text",
-              component: "text",
-            },
-          ],
-        },
+        
         {
           name: "drop",
           label: "降低 Drop",
