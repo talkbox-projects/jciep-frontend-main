@@ -178,24 +178,19 @@ const IdentitySelect = ({ page }) => {
               </Box>
             </GridItem>
           </SimpleGrid>
-          <Box textAlign="center" marginTop="60px">
+          <Box textAlign="center" marginTop="60px" >
             <Link href={selectedRole}>
               <Button
                 backgroundColor="#F6D644"
                 borderRadius="22px"
                 height="44px"
+                marginBottom="20px"
                 width="117.93px"
               >
                 {page?.content?.footer?.button}
               </Button>
             </Link><br/>
-            {
-              user?.email ?
-              <Text marginTop="35px" fontWeight={600} fontSize="16px">
-                {page?.content?.footer?.email.firstText} {user?.email} {page?.content?.footer?.email.lastText}
-              </Text>
-              : null
-            }
+           
             <Text as="span" marginTop="40px">
               {page?.content?.footer?.drop?.text} 
               <Text as="span"
@@ -332,23 +327,6 @@ export default withPageCMS(IdentitySelect, {
           name: "button",
           label: "主標題 Title",
           component: "text",
-        },
-        {
-          name: "email",
-          label: "電子郵件 Email",
-          component: "group",
-          fields: [
-            {
-              name: "firstText",
-              label: "第一個文本 First Text",
-              component: "text",
-            },
-            {
-              name: "lastText",
-              label: "最後的文字 Last text",
-              component: "text",
-            },
-          ]
         },
         {
           name: "drop",
