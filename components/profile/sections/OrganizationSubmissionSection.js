@@ -42,20 +42,22 @@ const OrganizationSubmissionSection = () => {
           {wordExtractor(page?.content?.wordings, "submission_header_label")}
         </Text>
         <Box flex={1} minW={0} w="100%" />
-        <Button
-          size="sm"
-          colorScheme="gray"
-          variant="ghost"
-          leftIcon={<AiOutlinePlus />}
-          onClick={() => {
-            submissionFormDisclosure.onOpen({
-              organization,
-              onRefresh: refreshOrganization,
-            });
-          }}
-        >
-          {wordExtractor(page?.content?.wordings, "提交申請")}
-        </Button>
+        {["rejected", "resubmit"].includes(organization?.status) && (
+          <Button
+            size="sm"
+            colorScheme="gray"
+            variant="ghost"
+            leftIcon={<AiOutlinePlus />}
+            onClick={() => {
+              submissionFormDisclosure.onOpen({
+                organization,
+                onRefresh: refreshOrganization,
+              });
+            }}
+          >
+            {wordExtractor(page?.content?.wordings, "提交申請")}
+          </Button>
+        )}
       </HStack>
       <VStack pb={4} align="stretch" direction={"column"} spacing={4}>
         <Text px={4} fontSize="sm" color="#aaa">

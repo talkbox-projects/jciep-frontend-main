@@ -29,15 +29,17 @@ const NgoSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) && !editSection && (
-          <Button
-            onClick={() => setEditSection("profile")}
-            leftIcon={<AiOutlineEdit />}
-            variant="link"
-          >
-            {wordExtractor(page?.content?.wordings, "edit_my_profile_label")}
-          </Button>
-        )}
+        {(isAdmin || editable) &&
+          organization?.status === "approved" &&
+          !editSection && (
+            <Button
+              onClick={() => setEditSection("profile")}
+              leftIcon={<AiOutlineEdit />}
+              variant="link"
+            >
+              {wordExtractor(page?.content?.wordings, "edit_my_profile_label")}
+            </Button>
+          )}
       </HStack>
       <VStack spacing={1} px={8} align="start">
         <Wrap>
