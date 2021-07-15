@@ -10,14 +10,6 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 
-User.findOneAndDelete({ email: "rajatgouri020@gmail.com" })
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {

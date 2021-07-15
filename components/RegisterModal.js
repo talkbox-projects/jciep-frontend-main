@@ -40,6 +40,7 @@ const RegisterModal = () => {
     loginModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
+    setEmail,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -104,6 +105,7 @@ const RegisterModal = () => {
         }
       `;
       await getGraphQLClient().request(mutation, { email });
+      setEmail(email);
       emailVerifySentModalDisclosure.onOpen();
       registerModalDisclosure.onClose();
       e.preventDefault();
@@ -285,7 +287,7 @@ const RegisterModal = () => {
                   </Text>
                 </HStack>
               </Button> */}
-              {/* <GoogleLogin
+              <GoogleLogin
                 clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
                 render={(renderProps) => (
                   // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
@@ -306,7 +308,7 @@ const RegisterModal = () => {
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
-              /> */}
+              />
             </VStack>
             <Button
               alignSelf="start"

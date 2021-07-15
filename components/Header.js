@@ -199,6 +199,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         `;
 
         const data = await getGraphQLClient().request(mutation, { token });
+        console.log(data)
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
         console.log(e);

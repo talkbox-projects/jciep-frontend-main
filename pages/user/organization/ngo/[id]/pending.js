@@ -5,6 +5,8 @@ import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../../../store/AppStore";
+import { useCredential } from "../../../../../utils/user";
 
 const PAGE_KEY = "organization_ngo_pending";
 
@@ -23,16 +25,24 @@ export const getServerSideProps = async (context) => {
 const OrganizationNgoPending = ({ page }) => {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAppContext();
+  const [setCredential, removeCredential] = useCredential();
+
+  const logout = () => {
+    removeCredential();
+    router.push("/");
+  };
+
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Box justifyContent="center" width="100%" marginTop="10px !important">
+      <Box justifyContent="center" width="100%">
         <Box
-          maxWidth={600}
+          maxWidth={470}
           width="100%"
-          textAlign="left"
+          textAlign="center"
           margin="auto"
-          padding="25px"
+          padding="0px 25px"
         >
           <Heading as="h4" textAlign="center">
             {page?.content?.heading?.title}
@@ -41,14 +51,14 @@ const OrganizationNgoPending = ({ page }) => {
           <Image
             height="150px"
             width="150px"
-            marginTop="30px !important"
+            marginTop="50px !important"
             margin="auto"
             src={page?.content?.ngoSuccess?.image}
           />
 
           <Text marginTop="30px">{page?.content?.ngoSuccess?.description}</Text>
 
-          <Box width="100%" textAlign="center">
+          <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
               <Button
                 color="#1E1E1E"
@@ -65,17 +75,25 @@ const OrganizationNgoPending = ({ page }) => {
               </Button>
             </Link>
           </Box>
+          {user?.email ? (
+            <Text
+              marginTop="35px"
+              fontWeight={600}
+              textAlign="center"
+              fontSize="16px"
+            >
+              {page?.content?.footer?.email?.firstText} {user?.email}{" "}
+              {page?.content?.footer?.email?.lastText}
+            </Text>
+          ) : null}
 
-          {/* <Text
-            marginTop="35px"
-            fontWeight={600}
-            textAlign="center"
-            fontSize="16px"
-          >
-            {page?.content?.footer?.email}
-          </Text> */}
-          <Text marginTop="30px" textAlign="center">
-            {page?.content?.footer?.drop}
+          <Text marginTop="10px" textAlign="center">
+            <Text as="span">
+              {page?.content?.footer?.drop?.text}
+              <Text as="span" cursor="pointer" onClick={logout}>
+                {page?.content?.footer?.drop?.button}
+              </Text>
+            </Text>
           </Text>
         </Box>
       </Box>
@@ -143,12 +161,36 @@ export default withPageCMS(OrganizationNgoPending, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ],
         },
         {
           name: "drop",
           label: "降低 Drop",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 Text",
+              component: "text",
+            },
+            {
+              name: "button",
+              label: "按鈕文字 Button text",
+              component: "text",
+            },
+          ],
         },
       ],
     },

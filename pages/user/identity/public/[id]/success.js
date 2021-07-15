@@ -4,6 +4,9 @@ import { getConfiguration } from "../../../../../utils/configuration/getConfigur
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../../../store/AppStore";
+import { useCredential } from "../../../../../utils/user";
+import { useRouter } from "next/router";
 
 const PAGE_KEY = "identity_public_add_success";
 
@@ -20,25 +23,39 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPublicAddSuccess = ({ page }) => {
+
+  const {user} = useAppContext()
+  const router = useRouter();
+  const [setCredential, removeCredential] = useCredential();
+
+  const logout = () => {
+    removeCredential()
+    router.push('/')
+  }
+ 
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
       <Box justifyContent="center" width="100%" marginTop="10px !important">
         <Box
-          maxWidth={600}
+          maxWidth={470}
           width="100%"
-          textAlign="left"
+          textAlign="center"
           margin="auto"
-          padding="25px"
+          padding="0px 25px"
         >
-          <Heading as="h4" textAlign="center">
+          <Heading as="h4" 
+            textAlign="center" 
+            fontSize="36px" 
+            letterSpacing="1.5px"
+            fontWeight={600}>
             {page?.content?.heading?.title}
           </Heading>
 
           <Image
             height="150px"
             width="150px"
-            marginTop="30px !important"
+            marginTop="50px !important"
             margin="auto"
             src={page?.content?.publicSuccess?.image}
           />
@@ -47,7 +64,7 @@ const IdentityPublicAddSuccess = ({ page }) => {
             {page?.content?.publicSuccess?.description}
           </Text>
 
-          <Box width="100%" textAlign="center">
+          <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
               <Button
                 color="#1E1E1E"
@@ -63,6 +80,7 @@ const IdentityPublicAddSuccess = ({ page }) => {
                 {page?.content?.publicSuccess?.button}
               </Button>
             </Link>
+<<<<<<< HEAD
           </Box>
 
           {/* <Text
@@ -75,6 +93,31 @@ const IdentityPublicAddSuccess = ({ page }) => {
           </Text> */}
           <Text marginTop="30px" textAlign="center">
             {page?.content?.footer?.drop}
+=======
+          </Box><br/>
+          {
+            user?.email ?
+            <Text
+              marginTop="35px"
+              fontWeight={600}
+              textAlign="center"
+              fontSize="16px"
+            >
+              {page?.content?.footer?.email?.firstText}  {user?.email} {page?.content?.footer?.email?.lastText} 
+            </Text>
+            : null
+          }
+          
+          <Text marginTop="10px" textAlign="center">
+            <Text as="span">
+              {page?.content?.footer?.drop?.text} 
+              <Text as="span"
+                cursor="pointer"
+                onClick={logout}>
+                {page?.content?.footer?.drop?.button}
+              </Text>
+            </Text>
+>>>>>>> rajat-dev-1
           </Text>
         </Box>
       </Box>
@@ -142,12 +185,36 @@ export default withPageCMS(IdentityPublicAddSuccess, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ]
         },
         {
           name: "drop",
           label: "降低 Drop",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 Text",
+              component: "text",
+            },
+            {
+              name: "button",
+              label: "按鈕文字 Button text",
+              component: "text",
+            }
+          ]
         },
       ],
     },

@@ -17,13 +17,16 @@ import {
   PinInputField,
   IconButton,
   Text,
-  Progress,
+  Progress, 
+  UnorderedList,
+  ListItem
 } from "@chakra-ui/react";
 import { useGetWording } from "../utils/wordings/useWording";
 import { FaArrowLeft } from "react-icons/fa";
 
 const EmailVerifySentModal = () => {
-  const { emailVerifySentModalDisclosure } = useAppContext();
+  const { emailVerifySentModalDisclosure, email } = useAppContext();
+
 
   const getWording = useGetWording();
 
@@ -43,10 +46,17 @@ const EmailVerifySentModal = () => {
               emailVerifySentModalDisclosure.onClose();
             }}
           ></IconButton>
-          <Text>{getWording("emailVerifySent.title")}</Text>
+          <Text textAlign="center" width="80%">{getWording("emailVerifySent.title")}</Text>
         </ModalHeader>
         <ModalBody>
-          <Text>{getWording("emailVerifySent.description")}</Text>
+          <Text fontSize="15px">{getWording("emailVerifySent.description_header_first_half")} {email} {getWording("emailVerifySent.description_header_second_half")}</Text>
+          <Text fontSize="15px" marginTop="8px">{getWording("emailVerifySent.description_body_ques")} </Text>
+          <Text fontSize="15px" marginTop="8px">{getWording("emailVerifySent.description_body_text")} </Text>
+          <UnorderedList>
+            <ListItem fontSize="15px">{getWording("emailVerifySent.description_body_list1")}</ListItem>
+            <ListItem fontSize="15px">{getWording("emailVerifySent.description_body_list2")}</ListItem>
+            <ListItem fontSize="15px">{getWording("emailVerifySent.description_body_list3")}</ListItem>
+          </UnorderedList>
         </ModalBody>
       </ModalContent>
     </Modal>

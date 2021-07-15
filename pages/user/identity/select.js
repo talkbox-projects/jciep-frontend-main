@@ -11,9 +11,13 @@ import {
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../store/AppStore";
+import router, { useRouter } from "next/router";
+import { useCredential } from "../../../utils/user";
 const PAGE_KEY = "identity_select";
+
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -30,7 +34,16 @@ export const getServerSideProps = async (context) => {
 
 const IdentitySelect = ({ page }) => {
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
+  const { user } = useAppContext();
+  const router = useRouter();
+  const [setCredential, removeCredential] = useCredential();
+  
 
+  const logout = () => {
+    removeCredential()
+    router.push('/')
+  }
+ 
   const onRoleSelect = (e, role) => {
     let elements = document.getElementsByClassName("box");
     resetSelectedRole(elements, elements.length);
@@ -48,7 +61,11 @@ const IdentitySelect = ({ page }) => {
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Text fontSize="30px" marginTop="5px">
+      <Text 
+        fontSize="36px"
+        fontWeight={600}
+        letterSpacing="1.5px"
+      >
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
@@ -68,7 +85,7 @@ const IdentitySelect = ({ page }) => {
           <SimpleGrid pt={16} columns={[1, 1, 2, 3]} spacing={8}>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -91,7 +108,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -114,7 +131,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 className="box"
@@ -137,7 +154,7 @@ const IdentitySelect = ({ page }) => {
             </GridItem>
             <GridItem>
               <Box
-                h="300"
+                minHeight="320px"
                 textAlign="center"
                 padding="15%"
                 borderRadius="20px"
@@ -160,8 +177,12 @@ const IdentitySelect = ({ page }) => {
               </Box>
             </GridItem>
           </SimpleGrid>
+<<<<<<< HEAD
 
           <Box textAlign="center" marginTop="30px">
+=======
+          <Box textAlign="center" marginTop="60px">
+>>>>>>> rajat-dev-1
             <Link href={selectedRole}>
               <Button
                 backgroundColor="#F6D644"
@@ -171,11 +192,30 @@ const IdentitySelect = ({ page }) => {
               >
                 {page?.content?.footer?.button}
               </Button>
+<<<<<<< HEAD
             </Link>
             {/* <Text marginTop="35px" fontWeight={600} fontSize="16px">
               {page?.content?.footer?.email}
             </Text> */}
             {/* <Text marginTop="30px">{page?.content?.footer?.drop}</Text> */}
+=======
+            </Link><br/>
+            {
+              user?.email ?
+              <Text marginTop="35px" fontWeight={600} fontSize="16px">
+                {page?.content?.footer?.email.firstText} {user?.email} {page?.content?.footer?.email.lastText}
+              </Text>
+              : null
+            }
+            <Text as="span" marginTop="40px">
+              {page?.content?.footer?.drop?.text} 
+              <Text as="span"
+                cursor="pointer"
+                onClick={logout}>
+                {page?.content?.footer?.drop?.button}
+              </Text>
+            </Text>
+>>>>>>> rajat-dev-1
           </Box>
         </Box>
       </Box>
@@ -308,12 +348,36 @@ export default withPageCMS(IdentitySelect, {
         {
           name: "email",
           label: "電子郵件 Email",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "firstText",
+              label: "第一個文本 First Text",
+              component: "text",
+            },
+            {
+              name: "lastText",
+              label: "最後的文字 Last text",
+              component: "text",
+            },
+          ]
         },
         {
           name: "drop",
           label: "降低 Drop",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 Text",
+              component: "text",
+            },
+            {
+              name: "button",
+              label: "按鈕文字 Button text",
+              component: "text",
+            }
+          ]
         },
       ],
     },

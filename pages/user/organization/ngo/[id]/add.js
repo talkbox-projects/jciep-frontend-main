@@ -95,7 +95,7 @@ const OrganizationNgoAdd = ({ page }) => {
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
-      <Text fontSize="30px" marginTop="5px">
+      <Text fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="30px !important">

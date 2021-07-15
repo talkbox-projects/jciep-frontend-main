@@ -109,7 +109,11 @@ const IdentityPwdAdd = ({ page }) => {
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Text fontSize="30px" marginTop="5px">
+      <Text 
+        fontSize="36px" 
+        letterSpacing="1.5px"
+        fontWeight={600}
+      >
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
