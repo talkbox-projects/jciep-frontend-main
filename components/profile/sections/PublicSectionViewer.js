@@ -18,8 +18,15 @@ import { getEnumText } from "../../../utils/enums/getEnums";
 
 const PublicSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, identity, editSection, setEditSection, editable } =
-    IdentityProfileStore.useContext();
+  const {
+    page,
+    enums,
+    identity,
+    editSection,
+    setEditSection,
+    isAdmin,
+    editable,
+  } = IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
