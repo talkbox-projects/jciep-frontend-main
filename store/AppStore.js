@@ -81,7 +81,7 @@ const [AppProvider, useAppContext] = constate((props) => {
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
-  const [email, setEmail] = useState(null)
+  const [email, setEmail] = useState(null);
 
   const identity = useMemo(
     () => (user?.identities ?? []).find(({ id }) => id === identityId),
@@ -94,7 +94,8 @@ const [AppProvider, useAppContext] = constate((props) => {
     if (identity?.type === "admin") {
       cms.enable();
     } else {
-      cms.disable();
+      cms.enable();
+      // cms.disable();
     }
   }, [identity]);
 
