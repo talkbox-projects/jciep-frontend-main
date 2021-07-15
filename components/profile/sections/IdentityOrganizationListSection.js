@@ -6,6 +6,7 @@ import {
   HStack,
   Avatar,
   Button,
+  Link,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AiOutlineUserAdd } from "react-icons/ai";
@@ -15,6 +16,7 @@ import OrganizationMemberJoin from "../../../utils/api/OrganizationMemberJoin";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationMemberJoinModal from "../fragments/OrganzationMemberJoinModal";
 import SectionCard from "../fragments/SectionCard";
+import NextLink from "next/link";
 
 const IdentityOrganizationListSection = () => {
   const { identity, page, enums, refreshIdentity } =
@@ -66,7 +68,18 @@ const IdentityOrganizationListSection = () => {
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {!hasOrganization ? (
           <Text align="center" color="#999" fontSize="sm">
-            {wordExtractor(page?.content?.wordings, "no_organization_created")}
+            <NextLink
+              href={`/user/organization/${
+                identity?.type === "staff" ? "ngo" : "company"
+              }/${identity?.id}/add`}
+            >
+              <Button variant="link">
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "no_organization_created"
+                )}
+              </Button>
+            </NextLink>
           </Text>
         ) : (
           (identity?.organizationRole ?? []).map(

@@ -29,6 +29,10 @@ const [Provider, useContext] = constate(
       [setOrganization, organization]
     );
 
+    useEffect(() => {
+      setOrganization(_organization);
+    }, [_organization]);
+
     const refreshOrganization = useCallback(async () => {
       const organization = await organizationGet({ id: router.query.id });
       setOrganization(organization);
