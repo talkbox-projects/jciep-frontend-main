@@ -25,8 +25,7 @@ const transporter = {
 const sendMail = (receiver, subject, content, attachments = []) => {
   transporter[process.env.NODE_ENV].sendMail(
     {
-      // from: process.env.SMTP_SENDER,
-      from: "noreply@talkboxapp.com",
+      from: process.env.SMTP_SENDER,
       to: receiver,
       subject: subject,
       html: content,
