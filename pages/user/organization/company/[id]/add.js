@@ -41,6 +41,19 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
+
+
+const customStyles = {
+  multiValue: (provided, state) => {
+    const borderRadius = "15px"  
+    return { ...provided, borderRadius };
+  },
+  multiValueRemove: (provided, state) => {
+    const color = "grey"
+    return {...provided, color}
+  }
+}
+
 const OrganizationCompanyAdd = ({ page }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
@@ -223,6 +236,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <ReactSelect
+                        styles={customStyles}
                         {...field}
                         isMulti
                         options={page?.content?.form?.industry?.options.map(

@@ -41,6 +41,17 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+const customStyles = {
+  multiValue: (provided, state) => {
+    const borderRadius = "15px"  
+    return { ...provided, borderRadius };
+  },
+  multiValueRemove: (provided, state) => {
+    const color = "grey"
+    return {...provided, color}
+  }
+}
+
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
@@ -265,6 +276,7 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
                     options={page?.content?.form?.personTypes?.options.map(
@@ -290,6 +302,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
                     options={page?.content?.form?.employeerMode?.options.map(
@@ -322,6 +335,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
                     options={page?.content?.form?.industry?.options.map(
@@ -352,18 +366,6 @@ const IdentityPwdAdd = ({ page }) => {
             </FormControl>
 
             <FormControl textAlign="center">
-              {/* <Button
-                color="black"
-                fontWeight="bold"
-                lineHeight={3}
-                borderRadius="20px"
-                colorScheme="primary"
-                bgColor="primary.400"
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                {page?.content?.form?.continue}
-              </Button> */}
               <Button
                 backgroundColor="#F6D644"
                 borderRadius="22px"

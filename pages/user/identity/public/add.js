@@ -39,6 +39,19 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+
+const customStyles = {
+  multiValue: (provided, state) => {
+    const borderRadius = "15px"  
+    return { ...provided, borderRadius };
+  },
+  multiValueRemove: (provided, state) => {
+    const color = "grey"
+    return {...provided, color}
+  }
+}
+
+
 const IdentityPublicAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
@@ -233,6 +246,7 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
+                        styles={customStyles}
                         {...field}
                         isMulti
                         options={page?.content?.form?.industry?.options.map(
