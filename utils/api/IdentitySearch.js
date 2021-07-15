@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
 const identitySearch = async (
-  { limit, page, organizationId, identityType, published },
+  { limit, page, organizationId, identityType, published, name },
   context
 ) => {
   const query = gql`

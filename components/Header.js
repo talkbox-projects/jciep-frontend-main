@@ -28,6 +28,10 @@ import {
   LinkOverlay,
   Stack,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   CloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -277,11 +281,21 @@ const Header = ({ navigation, isLangAvailable }) => {
           <HStack py={2} fontSize="sm" alignItems="center">
             <Box flex={1} minW={0} w="100%" />
             {user && (
-              <NextLink href="/admin/organizations">
-                <Button variant="link" size="sm">
-                  管理介面
-                </Button>
-              </NextLink>
+              <Menu>
+                <MenuButton>
+                  <Button variant="link" size="sm">
+                    管理介面
+                  </Button>
+                </MenuButton>
+                <MenuList>
+                  <NextLink href="/admin/identities">
+                    <MenuItem key="identities">用戶管理</MenuItem>
+                  </NextLink>
+                  <NextLink href="/admin/organizations">
+                    <MenuItem key="organizations">組織管理</MenuItem>
+                  </NextLink>
+                </MenuList>
+              </Menu>
             )}
             <Select
               border="none"

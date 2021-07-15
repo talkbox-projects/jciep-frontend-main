@@ -56,7 +56,7 @@ export default {
       const organizations = await Organization.find();
 
       const identities = await Identity.find(keys)
-        .skip((input.page - 1) * 10)
+        .skip((input.page - 1) * input?.limit)
         .limit(input?.limit);
 
       identities.forEach((identity) => {

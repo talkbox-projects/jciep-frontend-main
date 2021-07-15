@@ -6,7 +6,7 @@ import IdentityOperationSection from "./sections/IdentityOperationSection";
 import IdentityProfileStore from "../../store/IdentityProfileStore";
 
 const IdentityStaffProfile = () => {
-  const { editable } = IdentityProfileStore.useContext();
+  const { isAdmin, editable } = IdentityProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
@@ -15,7 +15,7 @@ const IdentityStaffProfile = () => {
             <StaffSection />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
-            {editable && <IdentityOperationSection />}
+            {isAdmin && editable && <IdentityOperationSection />}
             <IdentityOrganizationListSection />
           </VStack>
         </Stack>

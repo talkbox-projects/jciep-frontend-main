@@ -10,7 +10,7 @@ import IdentityOperationSection from "./sections/IdentityOperationSection";
 import IdentityProfileStore from "../../store/IdentityProfileStore";
 
 const IdentityPwdProfile = () => {
-  const { editable } = IdentityProfileStore.useContext();
+  const { isAdmin, editable } = IdentityProfileStore.useContext();
 
   return (
     <Box pt={[24, 48]} pb={36}>
@@ -24,7 +24,7 @@ const IdentityPwdProfile = () => {
             <ActivitySection />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
-            {editable && <IdentityOperationSection />}
+            {isAdmin && editable && <IdentityOperationSection />}
 
             <IdentityOrganizationListSection />
           </VStack>
