@@ -40,6 +40,7 @@ const RegisterModal = () => {
     loginModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
+    setEmail
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -104,6 +105,7 @@ const RegisterModal = () => {
         }
       `;
       await getGraphQLClient().request(mutation, { email });
+      setEmail(email)
       emailVerifySentModalDisclosure.onOpen();
       registerModalDisclosure.onClose();
       e.preventDefault();
