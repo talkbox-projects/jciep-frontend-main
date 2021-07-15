@@ -71,9 +71,9 @@ const IdentityPwdAddSuccess = ({ page }) => {
           >
             {page?.content?.footer?.email}
           </Text> */}
-          <Text marginTop="30px" textAlign="center">
+          {/* <Text marginTop="30px" textAlign="center">
             {page?.content?.footer?.drop}
-          </Text>
+          </Text> */}
         </Box>
       </Box>
     </VStack>

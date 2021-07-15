@@ -13,11 +13,10 @@ const IdentityPublicProfile = () => {
       <Container>
         <Stack align="stretch" direction={["column", "column", "row"]}>
           <VStack align="stretch" flex={1} minW={0} w="100%">
-            <PublicSection {...props} />
+            <PublicSection />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
             {editable && <IdentityOperationSection />}
-            <IdentityOrganizationListSection />
           </VStack>
         </Stack>
       </Container>
