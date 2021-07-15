@@ -17,8 +17,15 @@ import { getEnumText } from "../../../utils/enums/getEnums";
 
 const EmploymentSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, organization, editSection, setEditSection, editable } =
-    OrganizationProfileStore.useContext();
+  const {
+    page,
+    enums,
+    organization,
+    editSection,
+    setEditSection,
+    isAdmin,
+    editable,
+  } = OrganizationProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">

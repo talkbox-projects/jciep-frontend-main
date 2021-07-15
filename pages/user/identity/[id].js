@@ -49,6 +49,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
       break;
     case "employer":
       comp = <IdentityEmployerProfile />;
+      break;
     case "admin":
       comp = <IdentityAdminProfile />;
       break;
