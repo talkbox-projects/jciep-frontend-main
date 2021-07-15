@@ -57,6 +57,7 @@ const Header = ({ navigation, isLangAvailable }) => {
   const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
 
   const {
+    identity,
     isLoggedIn,
     loginModalDisclosure,
     registerModalDisclosure,
@@ -67,7 +68,6 @@ const Header = ({ navigation, isLangAvailable }) => {
 
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
-  const hidden = process.env.NODE_ENV !== "development";
 
   const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
     !isLangAvailable
@@ -281,7 +281,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         <Container>
           <HStack py={2} fontSize="sm" alignItems="center">
             <Box flex={1} minW={0} w="100%" />
-            {user && (
+            {identity?.type === "admin" && (
               <Menu>
                 <MenuButton>
                   <Button variant="link" size="sm">
@@ -298,6 +298,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                 </MenuList>
               </Menu>
             )}
+            <Box flex={1} minW={0} w="100%" />
             <Select
               border="none"
               size="sm"
@@ -406,7 +407,6 @@ const Header = ({ navigation, isLangAvailable }) => {
                 </PopoverContent>
               )}
             </Popover>
-            s
           </HStack>
         </Container>
         <Container mt={4}>
