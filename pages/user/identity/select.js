@@ -102,7 +102,7 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   src={page?.content?.pwd?.image}
                 />
-                <Text marginTop="20px !important" width="190px" margin="auto">
+                <Text marginTop="20px !important" width="190px" margin="auto" fontWeight={600} letter-spacing="1.5px">
                   {page?.content?.pwd?.title}
                 </Text>
               </Box>
@@ -125,7 +125,7 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   src={page?.content?.employeer?.image}
                 />
-                <Text marginTop="20px !important" width="190px" margin="auto">
+                <Text marginTop="20px !important" width="190px" margin="auto" fontWeight={600} letter-spacing="1.5px">
                   {page?.content?.employeer?.title}
                 </Text>
               </Box>
@@ -148,7 +148,7 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   src={page?.content?.ngo?.image}
                 />
-                <Text marginTop="20px !important" width="190px" margin="auto">
+                <Text marginTop="20px !important" width="190px" margin="auto" fontWeight={600} letter-spacing="1.5px">
                   {page?.content?.ngo?.title}
                 </Text>
               </Box>
@@ -172,7 +172,7 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   src={page?.content?.public?.image}
                 />
-                <Text marginTop="20px !important" width="190px" margin="auto">
+                <Text marginTop="20px !important" width="190px" margin="auto" fontWeight={600} letter-spacing="1.5px">
                   {page?.content?.public?.title}
                 </Text>
               </Box>
@@ -185,6 +185,7 @@ const IdentitySelect = ({ page }) => {
                 borderRadius="22px"
                 height="44px"
                 marginBottom="20px"
+                fontWeight={600}
                 width="117.93px"
               >
                 {page?.content?.footer?.button}
