@@ -263,7 +263,6 @@ export default {
 
           if (!user) {
             let user = await new User({
-              email: userData.email,
               facebookId: userData.id,
             }).save();
 
@@ -274,8 +273,6 @@ export default {
             return { token, user };
           }
         } else if (input.googleToken) {
-          console.log(input.googleToken);
-
           let userData = await google.getProfile(input.googleToken);
 
           if (userData.error) {
@@ -288,7 +285,7 @@ export default {
 
           if (!user) {
             let user = await new User({
-              facebookId: userData.id,
+              googleId: userData.id,
             }).save();
 
             const token = jwt.sign(user.toObject(), "shhhhh").toString();

@@ -45,9 +45,6 @@ const userSchema = Schema({
   facebookId: {
     type: String,
   },
-  facebookId: {
-    type: String,
-  },
   appleId: {
     type: String,
   },
