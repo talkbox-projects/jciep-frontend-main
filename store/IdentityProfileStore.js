@@ -11,6 +11,7 @@ const [Provider, useContext] = constate(
     const [editSection, setEditSection] = useState(null);
     const { identity: myIdentity } = useAppContext();
     const isAdmin = myIdentity?.type === "admin";
+    const router = useRouter();
 
     const removeEditSection = useCallback(() => {
       setEditSection(null);
@@ -29,6 +30,11 @@ const [Provider, useContext] = constate(
       [setIdentity, identity]
     );
 
+    const refreshIdentity = useCallback(async () => {
+      const identity = await identityGet({ id: router.query.id });
+      setIdentity(identity);
+    }, []);
+
     useEffect(() => {
       setIdentity(_identity);
     }, [_identity]);
@@ -40,6 +46,7 @@ const [Provider, useContext] = constate(
 
       identity,
       saveIdentity,
+      refreshIdentity,
 
       editable,
       isAdmin,

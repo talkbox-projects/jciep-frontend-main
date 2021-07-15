@@ -6,6 +6,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 
@@ -16,6 +17,7 @@ const OrganizationMemberRemoveModal = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
       <ModalContent>
         <ModalHeader>
           {wordExtractor(page?.content?.wordings, "remove_confirmation_title")}

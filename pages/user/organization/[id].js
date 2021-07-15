@@ -29,11 +29,11 @@ export const getServerSideProps = async (context) => {
 const OrganizationProfile = ({ api: { organization }, enums, page }) => {
   let comp = null;
 
-  const { identity: { id: currentId } = {} } = useAppContext();
+  const { identityId } = useAppContext();
   const editable = !!(organization?.member ?? []).find((m) => {
-    console.log(m?.identity?.id, currentId, m?.role, "staff");
+    console.log(m?.identity?.id, identityId, m?.role, "staff");
     return (
-      m?.identity?.id === currentId &&
+      m?.identity?.id === identityId &&
       m?.role === "staff" &&
       m?.status === "joined"
     );

@@ -169,7 +169,9 @@ export default gql`
       @auth(identityTypes: [admin])
 
     OrganizationMemberInvite(input: OrganizationMemberInviteInput!): Boolean
+    OrganizationMemberJoin(invitationCode: String!, identityId: ID!): Boolean
     OrganizationMemberRemove(organizationId: ID!, identityId: ID!): Boolean
+    OrganizationMemberApprove(organizationId: ID!, identityId: ID!): Boolean
 
     OrganizationRemove(id: ID!): Boolean
   }

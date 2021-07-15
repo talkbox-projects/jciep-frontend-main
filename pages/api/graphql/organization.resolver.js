@@ -247,10 +247,52 @@ export default {
       }
     },
 
-    OrganizationMemberInvite: async (
-      _parent,
-      { input: { id, email, role } }
-    ) => {
+    OrganizationMemberJoin: async (_parent, { identityId, invitationCode }) => {
+      try {
+        const identity = await Identity.findById(identityId);
+        const organization = await Organization.findOne({ invitationCode });
+
+        if (!identity || !organization) {
+          return false;
+        }
+
+        if (
+          !(
+            ["pwd", "staff"].includes(identity.type) &&
+            organization.organizationType === "ngo"
+          )
+        ) {
+          return false;
+        }
+
+        const exists = !!(organization.member ?? []).find(
+          (m) => String(m.identityId) === String(identityId)
+        );
+
+        if (exists) {
+          return false;
+        }
+
+        await Organization.findOneAndUpdate(
+          { invitationCode },
+          {
+            $push: {
+              member: {
+                identityId: identity.id,
+                role: identity.type === "pwd" ? "member" : "staff",
+                status: "pendingApproval",
+              },
+            },
+          }
+        );
+        return true;
+      } catch (error) {
+        return false;
+        console.log(error);
+      }
+    },
+
+    OrganizationMemberInvite: async (_parent, { input: { id, email } }) => {
       /**
        * Admin can send invitation for any organization
        * Staff can only send invitation for his/her organization
@@ -304,6 +346,28 @@ export default {
             $pull: { member: { identityId } },
           },
           { new: true }
+        );
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+
+    OrganizationMemberApprove: async (
+      _parent,
+      { organizationId, identityId }
+    ) => {
+      try {
+        await Organization.findByIdAndUpdate(
+          organizationId,
+          {
+            $set: { [`member.$[m].status`]: "joined" },
+          },
+          {
+            arrayFilters: [{ "m.identityId": identityId }],
+            new: true,
+          }
         );
         return true;
       } catch (error) {

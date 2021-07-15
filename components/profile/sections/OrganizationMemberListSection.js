@@ -1,21 +1,27 @@
 import {
-  Box,
   VStack,
   Tag,
   Text,
   HStack,
   Avatar,
   Button,
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
   IconButton,
+  Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { MdDelete } from "react-icons/md";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import SectionCard from "../fragments/SectionCard";
 import OrganizationMemberRemove from "../../../utils/api/OrganizationMemberRemove";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import OrganizationMemberRemoveModal from "../fragments/OrganizationMemberRemoveModal";
+import { IoEllipsisVertical } from "react-icons/io5";
+import OrganizationMemberApproveModal from "../fragments/OrganizationMemberApproveModal";
+import OrganizationMemberApprove from "../../../utils/api/OrganizationMemberApprove";
 
 const OrganizationMemberListSection = () => {
   const { organization, page, enums, editable, refreshOrganization, isAdmin } =
@@ -24,6 +30,7 @@ const OrganizationMemberListSection = () => {
   const router = useRouter();
 
   const removeDisclosure = useDisclosureWithParams();
+  const approveDisclosure = useDisclosureWithParams();
 
   return (
     <SectionCard>
@@ -80,34 +87,118 @@ const OrganizationMemberListSection = () => {
                   }
                 </Tag>
                 {(isAdmin || editable) && (
-                  <IconButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeDisclosure.onOpen({
-                        page,
-                        onSubmit: async (e) => {
-                          try {
-                            const data = await OrganizationMemberRemove({
-                              organizationId: organization?.id,
-                              identityId: identityId,
-                            });
-                            await refreshOrganization();
-                            removeDisclosure.onClose();
-                          } catch (error) {
-                            console.error(error);
-                          }
-                        },
-                      });
-                    }}
-                    icon={<MdDelete />}
-                    variant="link"
-                  ></IconButton>
+                  <Box>
+                    <Menu size="sm">
+                      <MenuButton onClick={(e) => e.stopPropagation()}>
+                        <IconButton
+                          fontSize="xs"
+                          variant="link"
+                          as={IoEllipsisVertical}
+                          size="xs"
+                          fontSize="xs"
+                        />
+                      </MenuButton>
+                      <MenuList>
+                        {status === "pendingApproval" && (
+                          <MenuItem
+                            color="green"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              approveDisclosure.onOpen({
+                                page,
+                                onSubmit: async (e) => {
+                                  try {
+                                    const data =
+                                      await OrganizationMemberApprove({
+                                        organizationId: organization?.id,
+                                        identityId: identityId,
+                                      });
+                                    await refreshOrganization();
+                                    approveDisclosure.onClose();
+                                  } catch (error) {
+                                    console.error(error);
+                                  }
+                                },
+                              });
+                            }}
+                          >
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "approve_organization_member_label"
+                            )}
+                          </MenuItem>
+                        )}
+                        {status === "pendingApproval" && (
+                          <MenuItem
+                            color="red"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeDisclosure.onOpen({
+                                page,
+                                onSubmit: async (e) => {
+                                  try {
+                                    const data = await OrganizationMemberRemove(
+                                      {
+                                        organizationId: organization?.id,
+                                        identityId: identityId,
+                                      }
+                                    );
+                                    await refreshOrganization();
+                                    removeDisclosure.onClose();
+                                  } catch (error) {
+                                    console.error(error);
+                                  }
+                                },
+                              });
+                            }}
+                          >
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "reject_organization_member_label"
+                            )}
+                          </MenuItem>
+                        )}
+
+                        {status === "joined" && (
+                          <MenuItem
+                            color="red"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeDisclosure.onOpen({
+                                page,
+                                onSubmit: async (e) => {
+                                  try {
+                                    const data = await OrganizationMemberRemove(
+                                      {
+                                        organizationId: organization?.id,
+                                        identityId: identityId,
+                                      }
+                                    );
+                                    await refreshOrganization();
+                                    removeDisclosure.onClose();
+                                  } catch (error) {
+                                    console.error(error);
+                                  }
+                                },
+                              });
+                            }}
+                          >
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "remove_organization_member_label"
+                            )}
+                          </MenuItem>
+                        )}
+                      </MenuList>
+                    </Menu>
+                  </Box>
                 )}
               </HStack>
             );
           })}
       </VStack>
       <OrganizationMemberRemoveModal {...removeDisclosure} />
+      <OrganizationMemberApproveModal {...approveDisclosure} />
     </SectionCard>
   );
 };

@@ -20,7 +20,6 @@ import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import OrganizationMemberInvite from "../../../utils/api/OrganizationMemberInvite";
 import { emailRegex } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
-import OrganizationSubmissionDetailModal from "./OrganizationSubmissionDetailModal";
 
 const OrganzationMemberInviteModal = ({ isOpen, onClose, params }) => {
   const { page, enums } = OrganizationProfileStore.useContext();

@@ -380,7 +380,6 @@ export default {
       }).save();
 
       if (input?.invitationCode) {
-        console.log("input", input);
         await Organization.findOneAndUpdate(
           { invitationCode: input?.invitationCode },
           {

@@ -1,14 +1,29 @@
-import { Box, VStack, Tag, Text, HStack, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  Tag,
+  Text,
+  HStack,
+  Avatar,
+  Button,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { useDisclosureWithParams } from "../../../store/AppStore";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import OrganizationMemberJoin from "../../../utils/api/OrganizationMemberJoin";
 import wordExtractor from "../../../utils/wordExtractor";
+import OrganizationMemberJoinModal from "../fragments/OrganzationMemberJoinModal";
 import SectionCard from "../fragments/SectionCard";
 
 const IdentityOrganizationListSection = () => {
-  const { identity, page, enums } = IdentityProfileStore.useContext();
+  const { identity, page, enums, refreshIdentity } =
+    IdentityProfileStore.useContext();
 
   const router = useRouter();
   const hasOrganization = identity?.organizationRole?.length > 0;
+
+  const joinDisclosure = useDisclosureWithParams();
 
   return (
     <SectionCard>
@@ -19,6 +34,34 @@ const IdentityOrganizationListSection = () => {
             "related_organization_header_label"
           )}
         </Text>
+
+        <Button
+          variant="link"
+          leftIcon={<AiOutlineUserAdd />}
+          onClick={(e) => {
+            e.stopPropagation();
+            joinDisclosure.onOpen({
+              page,
+              onSubmit: async (params) => {
+                try {
+                  await OrganizationMemberJoin({
+                    invitationCode: params?.invitationCode,
+                    identityId: identity?.id,
+                  });
+                  refreshIdentity();
+                  joinDisclosure.onClose();
+                } catch (error) {
+                  console.error(error);
+                }
+              },
+            });
+          }}
+        >
+          {wordExtractor(
+            page?.content?.wordings,
+            "join_via_invitation_code_button_label"
+          )}
+        </Button>
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {!hasOrganization ? (
@@ -64,7 +107,7 @@ const IdentityOrganizationListSection = () => {
           )
         )}
       </VStack>
-      <Box></Box>
+      <OrganizationMemberJoinModal {...joinDisclosure} />
     </SectionCard>
   );
 };
