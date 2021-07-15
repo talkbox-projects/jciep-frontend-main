@@ -136,13 +136,14 @@ const googleLogin = ({ page }) => {
 
         const data = await getGraphQLClient().request(mutation, variables);
 
-        console.log(data);
         setCredential(data?.UserLogin);
-        const user = data?.UserLogin?.user;
-        if (user?.identities?.length === 0) {
-          router.push("/user/identity/select");
-        } else {
-          router.push("/");
+        if (data?.UserLogin) {
+          const user = data?.UserLogin?.user;
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
         }
       } catch (e) {
         console.log(e);
