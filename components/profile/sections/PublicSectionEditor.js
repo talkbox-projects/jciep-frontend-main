@@ -271,7 +271,7 @@ const PublicSectionEditor = () => {
               control={control}
               rules={{}}
               name={"industry"}
-              defaultValue={identity?.pwdType ?? []}
+              defaultValue={identity?.industry ?? []}
               render={({ field: { name, value, onChange } }) => {
                 const options = enums?.EnumIndustryList.map(
                   ({ key: value, value: { [router.locale]: label } }) => ({
