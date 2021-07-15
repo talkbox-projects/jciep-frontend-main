@@ -179,10 +179,13 @@ const IdentityPwdAdd = ({ page }) => {
                   <Input
                     type="date"
                     placeholder=""
-                    {...register("date_of_birth")}
+                    {...register("date_of_birth", {
+                      required: true
+                    })}
                   />
+
                   <FormHelperText>
-                    {errors?.date_of_birth?.message}
+                    {errors?.date_of_birth?.type === "required" && <Text color="red">出生日期為必填項 Enter a valid Date of Birth </Text>}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -339,7 +342,7 @@ const IdentityPwdAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-                {page?.content?.form?.terms}
+                <a href={page?.content?.form?.terms?.text}> {page?.content?.form?.terms?.text}</a>
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
@@ -614,7 +617,19 @@ export default withPageCMS(IdentityPwdAdd, {
         {
           name: "terms",
           label: "條款和條件 T&C Label",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 text",
+              component: "text",
+            },
+            {
+              name: "link",
+              label: "關聯 Link",
+              component: "text",
+            }
+          ]
         },
         {
           name: "continue",
