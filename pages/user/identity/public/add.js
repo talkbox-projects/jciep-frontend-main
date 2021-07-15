@@ -89,7 +89,7 @@ const IdentityPublicAdd = ({ page }) => {
         });
 
         if (data && data.IdentityCreate) {
-          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+          router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
         }
       } catch (e) {
         console.log(e);
