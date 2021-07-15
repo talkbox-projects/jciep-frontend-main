@@ -258,7 +258,7 @@ export default {
           throw new Error(userData.error.message);
         }
 
-        let user = await User.findOne({ email: userData.email }).populate(
+        let user = await User.findOne({ facebookId: userData.id }).populate(
           "identities"
         );
 
@@ -280,7 +280,7 @@ export default {
           throw new Error(userData.error.message);
         }
 
-        let user = await User.findOne({ email: userData.email }).populate(
+        let user = await User.findOne({ googleId: userData.id }).populate(
           "identities"
         );
 
