@@ -33,6 +33,7 @@ const IdentityPortfolioSection = () => {
     editSection,
     setEditSection,
     removeEditSection,
+    isAdmin,
     editable,
   } = OrganizationProfileStore.useContext();
 
@@ -98,7 +99,7 @@ const IdentityPortfolioSection = () => {
               {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           ) : (
-            editable &&
+            (isAdmin || editable) &&
             !editSection && (
               <Button
                 onClick={() => setEditSection("portfolio")}

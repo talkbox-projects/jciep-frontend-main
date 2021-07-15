@@ -19,7 +19,7 @@ const OrganizationEmploymentProfile = () => {
             <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
-            {editable && (
+            {(isAdmin || editable) && (
               <>
                 <OrganizationOperationSection />
                 <OrganizationSubmissionSection />

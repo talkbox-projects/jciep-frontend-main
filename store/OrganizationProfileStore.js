@@ -3,17 +3,18 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import organizationGet from "../utils/api/OrganizationGet";
 import organizationUpdate from "../utils/api/OrganizationUpdate";
+import { useAppContext } from "./AppStore";
 
 const [Provider, useContext] = constate(
   ({ organization: _organization, page, enums, editable = true }) => {
     const [organization, setOrganization] = useState(_organization);
     const [editSection, setEditSection] = useState(null);
+    const { identity: myIdentity } = useAppContext();
+    const isAdmin = myIdentity?.type === "admin";
 
     const removeEditSection = useCallback(() => {
       setEditSection(null);
     }, []);
-
-    const isAdmin = true;
 
     const router = useRouter();
     const saveOrganization = useCallback(

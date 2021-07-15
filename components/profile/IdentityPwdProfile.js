@@ -24,7 +24,7 @@ const IdentityPwdProfile = () => {
             <ActivitySection />
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
-            {isAdmin && editable && <IdentityOperationSection />}
+            {(isAdmin || editable) && <IdentityOperationSection />}
 
             <IdentityOrganizationListSection />
           </VStack>

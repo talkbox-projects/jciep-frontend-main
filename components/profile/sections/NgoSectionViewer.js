@@ -13,18 +13,23 @@ import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
-import moment from "moment";
-import { getEnumText } from "../../../utils/enums/getEnums";
 
 const NgoSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, organization, editSection, editable, setEditSection } =
-    OrganizationProfileStore.useContext();
+  const {
+    isAdmin,
+    page,
+    enums,
+    organization,
+    editSection,
+    editable,
+    setEditSection,
+  } = OrganizationProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {editable && !editSection && (
+        {(isAdmin || editable) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}

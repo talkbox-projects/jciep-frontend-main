@@ -30,6 +30,7 @@ const IdentityPortfolioSection = () => {
     page,
     saveIdentity,
     identity,
+    isAdmin,
     editSection,
     setEditSection,
     removeEditSection,
@@ -101,7 +102,7 @@ const IdentityPortfolioSection = () => {
               {wordExtractor(page?.content?.wordings, "save_button_label")}
             </Button>
           ) : (
-            editable &&
+            (isAdmin || editable) &&
             !editSection && (
               <Button
                 w="fit-content"

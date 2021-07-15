@@ -102,6 +102,7 @@ const Header = ({ navigation, isLangAvailable }) => {
   const onIdentitySwitch = useCallback(
     (identityId) => {
       setIdentityId(identityId);
+      nookies.set(null, "jciep-identityId", identityId, { path: "/" });
       router.push(`/user/identity/${identityId}`);
     },
     [router]

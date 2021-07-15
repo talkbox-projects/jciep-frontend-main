@@ -50,7 +50,6 @@ const VerifyToken = () => {
   const getWording = useGetWording();
   const [emailVerify, setEmailVerify] = useState(null);
   const [setCredential, removeCredential] = useCredential();
-  // const setLogin = useLoginHook();
   const { setUser, setIdentityId } = useAppContext();
 
   const {

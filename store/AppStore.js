@@ -1,7 +1,7 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import nookies from "nookies";
+import nookies, { destroyCookie, setCookie } from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCredential } from "../utils/user";
 import { updateIf } from "../utils/general";

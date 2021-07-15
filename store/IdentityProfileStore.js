@@ -9,7 +9,8 @@ const [Provider, useContext] = constate(
   ({ identity: _identity, page, enums, editable = true }) => {
     const [identity, setIdentity] = useState(_identity);
     const [editSection, setEditSection] = useState(null);
-    const isAdmin = true;
+    const { identity: myIdentity } = useAppContext();
+    const isAdmin = myIdentity?.type === "admin";
 
     const removeEditSection = useCallback(() => {
       setEditSection(null);

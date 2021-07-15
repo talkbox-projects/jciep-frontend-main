@@ -37,7 +37,7 @@ const OrganizationMemberListSection = () => {
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {(organization?.member ?? [])
-          .filter((m) => (!editable ? m?.role === "member" : true))
+          .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
           .map(({ identityId, identity, email, role, status }) => {
             return (
               <HStack
@@ -79,7 +79,7 @@ const OrganizationMemberListSection = () => {
                       ?.value?.[router?.locale]
                   }
                 </Tag>
-                {isAdmin && editable && (
+                {(isAdmin || editable) && (
                   <IconButton
                     onClick={(e) => {
                       e.stopPropagation();

@@ -2,9 +2,10 @@ import { Box } from "@chakra-ui/react";
 import IdentityPublicProfile from "../../../components/profile/IdentityPublicProfile";
 import IdentityPwdProfile from "../../../components/profile/IdentityPwdProfile";
 import IdentityStaffProfile from "../../../components/profile/IdentityStaffProfile";
+import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
+import IdentityAdminProfile from "../../../components/profile/IdentityAdminProfile";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
-import IdentityEmployerProfile from "../../../components/profile/IdentityEmployerProfile";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import identityGet from "../../../utils/api/IdentityGet";
@@ -48,6 +49,8 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
       break;
     case "employer":
       comp = <IdentityEmployerProfile />;
+    case "admin":
+      comp = <IdentityAdminProfile />;
       break;
     default:
       comp = <Box></Box>;

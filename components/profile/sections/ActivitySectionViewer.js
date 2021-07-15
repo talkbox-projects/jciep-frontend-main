@@ -4,10 +4,9 @@ import SectionCard from "../fragments/SectionCard";
 import { RiEdit2Line } from "react-icons/ri";
 import ActvitySubSectionViewer from "../fragments/ActvitySubSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
-import ActivitySubSectionEditor from "../fragments/ActvitySubSectionEditor";
 
 const ActivitySectionViewer = () => {
-  const { page, editSection, setEditSection, editable } =
+  const { page, editSection, setEditSection, isAdmin, editable } =
     IdentityProfileStore.useContext();
 
   return (
@@ -16,7 +15,7 @@ const ActivitySectionViewer = () => {
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "Activity_header_label")}
         </Text>
-        {editable && !editSection && (
+        {(isAdmin || editable) && !editSection && (
           <Button
             onClick={() => setEditSection("activity")}
             variant="link"

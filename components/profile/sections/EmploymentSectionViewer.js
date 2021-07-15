@@ -23,7 +23,7 @@ const EmploymentSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {editable && !editSection && (
+        {(isAdmin || editable) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}

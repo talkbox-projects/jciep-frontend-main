@@ -13,18 +13,13 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
+import moment from "moment";
+import { getEnumText } from "../../../utils/enums/getEnums";
 
-const StaffSectionViewer = () => {
+const AdminSectionViewer = () => {
   const router = useRouter();
-  const {
-    page,
-    enums,
-    identity,
-    editSection,
-    setEditSection,
-    isAdmin,
-    editable,
-  } = IdentityProfileStore.useContext();
+  const { page, enums, identity, editSection, setEditSection, editable } =
+    IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
@@ -111,4 +106,4 @@ const StaffSectionViewer = () => {
   );
 };
 
-export default StaffSectionViewer;
+export default AdminSectionViewer;
