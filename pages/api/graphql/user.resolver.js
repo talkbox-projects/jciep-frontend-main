@@ -2,7 +2,7 @@ import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
 import nookies from "nookies";
 import jwt from "jsonwebtoken";
-import { sendSms } from "../services/phone";
+import sendSms from "../services/phone";
 import facebook from "../services/facebook";
 import google from "../services/google";
 import { Types } from "mongoose";
@@ -106,11 +106,11 @@ export default {
        */
       try {
         const phoneVerify = await PhoneVerify.create({ phone });
-        let result = await sendSms({
-          Body: `Otp for phone verification is ${phoneVerify.otp}`,
-          To: phoneVerify.phone,
-        });
-        if (result.sid) {
+        let result = await sendSms(
+          phoneVerify.phone,
+          `Otp for phone verification is ${phoneVerify.otp}`
+        );
+        if (result) {
           return true;
         } else {
           return false;

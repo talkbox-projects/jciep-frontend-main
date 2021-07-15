@@ -28,14 +28,14 @@ const IdentityPwdAddSuccess = ({ page }) => {
   const [setCredential, removeCredential] = useCredential();
 
   const logout = () => {
-    removeCredential()
-    router.push('/')
-  }
- 
+    removeCredential();
+    router.push("/");
+  };
+
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
-      <Box justifyContent="center" width="100%" >
+      <Box justifyContent="center" width="100%">
         <Box
           maxWidth={470}
           width="100%"
@@ -55,7 +55,7 @@ const IdentityPwdAddSuccess = ({ page }) => {
             src={page?.content?.pwdSuccess?.image}
           />
 
-          <Text marginTop="60px" >{page?.content?.pwdSuccess?.description}</Text>
+          <Text marginTop="60px">{page?.content?.pwdSuccess?.description}</Text>
 
           <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
@@ -74,44 +74,26 @@ const IdentityPwdAddSuccess = ({ page }) => {
               </Button>
             </Link>
           </Box>
-<<<<<<< HEAD
-
-          {/* <Text
-            marginTop="35px"
-            fontWeight={600}
-            textAlign="center"
-            fontSize="16px"
-          >
-            {page?.content?.footer?.email}
-          </Text> */}
-          {/* <Text marginTop="30px" textAlign="center">
-            {page?.content?.footer?.drop}
-          </Text> */}
-=======
-          {
-            user?.email ?
+          {user?.email ? (
             <Text
               marginTop="35px"
               fontWeight={600}
               textAlign="center"
               fontSize="16px"
             >
-              {page?.content?.footer?.email?.firstText} {user?.email} {page?.content?.footer?.email?.lastText} 
+              {page?.content?.footer?.email?.firstText} {user?.email}{" "}
+              {page?.content?.footer?.email?.lastText}
             </Text>
-            : null
-          }
-          
+          ) : null}
+
           <Text marginTop="10px" textAlign="center">
             <Text as="span">
-                {page?.content?.footer?.drop?.text} 
-                <Text as="span"
-                  cursor="pointer"
-                  onClick={logout}>
-                  {page?.content?.footer?.drop?.button}
-                </Text>
+              {page?.content?.footer?.drop?.text}
+              <Text as="span" cursor="pointer" onClick={logout}>
+                {page?.content?.footer?.drop?.button}
               </Text>
+            </Text>
           </Text>
->>>>>>> rajat-dev-1
         </Box>
       </Box>
     </VStack>
@@ -190,7 +172,7 @@ export default withPageCMS(IdentityPwdAddSuccess, {
               label: "最後的文字 Last text",
               component: "text",
             },
-          ]
+          ],
         },
         {
           name: "drop",
@@ -206,8 +188,8 @@ export default withPageCMS(IdentityPwdAddSuccess, {
               name: "button",
               label: "按鈕文字 Button text",
               component: "text",
-            }
-          ]
+            },
+          ],
         },
       ],
     },

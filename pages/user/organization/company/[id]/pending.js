@@ -5,7 +5,7 @@ import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../../../store/AppStore";
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router";
 import { useCredential } from "../../../../../utils/user";
 
 const PAGE_KEY = "organization_company_pending";
@@ -23,19 +23,19 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationCompanyPending = ({ page }) => {
-  const {user} = useAppContext()
+  const { user } = useAppContext();
   const router = useRouter();
   const [setCredential, removeCredential] = useCredential();
 
   const logout = () => {
-    removeCredential()
-    router.push('/')
-  }
+    removeCredential();
+    router.push("/");
+  };
 
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
-      <Box justifyContent="center" width="100%" >
+      <Box justifyContent="center" width="100%">
         <Box
           maxWidth={470}
           width="100%"
@@ -77,41 +77,25 @@ const OrganizationCompanyPending = ({ page }) => {
             </Link>
           </Box>
 
-<<<<<<< HEAD
-          {/* <Text
-            marginTop="35px"
-            fontWeight={600}
-            textAlign="center"
-            fontSize="16px"
-          >
-            {page?.content?.footer?.email}
-          </Text> */}
-          <Text marginTop="30px" textAlign="center">
-            {page?.content?.footer?.drop}
-=======
-          {
-            user?.email ?
+          {user?.email ? (
             <Text
               marginTop="50px"
               fontWeight={600}
               textAlign="center"
               fontSize="16px"
             >
-              {page?.content?.footer?.email?.firstText} {user?.email} {page?.content?.footer?.email?.lastText}
+              {page?.content?.footer?.email?.firstText} {user?.email}{" "}
+              {page?.content?.footer?.email?.lastText}
             </Text>
-            : null
-          }
-          
+          ) : null}
+
           <Text marginTop="10px" textAlign="center">
             <Text as="span">
-                {page?.content?.footer?.drop?.text} 
-                <Text as="span"
-                  cursor="pointer"
-                  onClick={logout}>
-                  {page?.content?.footer?.drop?.button}
-                </Text>
+              {page?.content?.footer?.drop?.text}
+              <Text as="span" cursor="pointer" onClick={logout}>
+                {page?.content?.footer?.drop?.button}
               </Text>
->>>>>>> rajat-dev-1
+            </Text>
           </Text>
         </Box>
       </Box>
@@ -191,7 +175,7 @@ export default withPageCMS(OrganizationCompanyPending, {
               label: "最後的文字 Last text",
               component: "text",
             },
-          ]
+          ],
         },
         {
           name: "drop",
@@ -207,8 +191,8 @@ export default withPageCMS(OrganizationCompanyPending, {
               name: "button",
               label: "按鈕文字 Button text",
               component: "text",
-            }
-          ]
+            },
+          ],
         },
       ],
     },

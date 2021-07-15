@@ -23,16 +23,15 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPublicAddSuccess = ({ page }) => {
-
-  const {user} = useAppContext()
+  const { user } = useAppContext();
   const router = useRouter();
   const [setCredential, removeCredential] = useCredential();
 
   const logout = () => {
-    removeCredential()
-    router.push('/')
-  }
- 
+    removeCredential();
+    router.push("/");
+  };
+
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
@@ -44,11 +43,13 @@ const IdentityPublicAddSuccess = ({ page }) => {
           margin="auto"
           padding="0px 25px"
         >
-          <Heading as="h4" 
-            textAlign="center" 
-            fontSize="36px" 
+          <Heading
+            as="h4"
+            textAlign="center"
+            fontSize="36px"
             letterSpacing="1.5px"
-            fontWeight={600}>
+            fontWeight={600}
+          >
             {page?.content?.heading?.title}
           </Heading>
 
@@ -80,44 +81,27 @@ const IdentityPublicAddSuccess = ({ page }) => {
                 {page?.content?.publicSuccess?.button}
               </Button>
             </Link>
-<<<<<<< HEAD
           </Box>
-
-          {/* <Text
-            marginTop="35px"
-            fontWeight={600}
-            textAlign="center"
-            fontSize="16px"
-          >
-            {page?.content?.footer?.email}
-          </Text> */}
-          <Text marginTop="30px" textAlign="center">
-            {page?.content?.footer?.drop}
-=======
-          </Box><br/>
-          {
-            user?.email ?
+          <br />
+          {user?.email ? (
             <Text
               marginTop="35px"
               fontWeight={600}
               textAlign="center"
               fontSize="16px"
             >
-              {page?.content?.footer?.email?.firstText}  {user?.email} {page?.content?.footer?.email?.lastText} 
+              {page?.content?.footer?.email?.firstText} {user?.email}{" "}
+              {page?.content?.footer?.email?.lastText}
             </Text>
-            : null
-          }
-          
+          ) : null}
+
           <Text marginTop="10px" textAlign="center">
             <Text as="span">
-              {page?.content?.footer?.drop?.text} 
-              <Text as="span"
-                cursor="pointer"
-                onClick={logout}>
+              {page?.content?.footer?.drop?.text}
+              <Text as="span" cursor="pointer" onClick={logout}>
                 {page?.content?.footer?.drop?.button}
               </Text>
             </Text>
->>>>>>> rajat-dev-1
           </Text>
         </Box>
       </Box>
@@ -197,7 +181,7 @@ export default withPageCMS(IdentityPublicAddSuccess, {
               label: "最後的文字 Last text",
               component: "text",
             },
-          ]
+          ],
         },
         {
           name: "drop",
@@ -213,8 +197,8 @@ export default withPageCMS(IdentityPublicAddSuccess, {
               name: "button",
               label: "按鈕文字 Button text",
               component: "text",
-            }
-          ]
+            },
+          ],
         },
       ],
     },
