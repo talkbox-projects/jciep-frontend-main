@@ -342,7 +342,7 @@ const IdentityPwdAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-                <a href={page?.content?.form?.terms?.text}> {page?.content?.form?.terms?.text}</a>
+                <a href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text}</a>
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
