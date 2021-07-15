@@ -139,7 +139,7 @@ const googleLogin = ({ page }) => {
         console.log(data);
         setCredential(data?.UserLogin);
         const user = data?.UserLogin?.user;
-        if (user.identities?.length === 0) {
+        if (user?.identities?.length === 0) {
           router.push("/user/identity/select");
         } else {
           router.push("/");
