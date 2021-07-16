@@ -32,6 +32,11 @@ const OrganizationMemberListSection = () => {
   const removeDisclosure = useDisclosureWithParams();
   const approveDisclosure = useDisclosureWithParams();
 
+  const hasOnlyOneStaff =
+    (organization?.member ?? []).filter(
+      (m) => m?.role === "staff" && m?.status === "joined"
+    )?.length === 1;
+
   return (
     <SectionCard>
       <HStack px={4} py={4} align="center">
@@ -46,6 +51,102 @@ const OrganizationMemberListSection = () => {
         {(organization?.member ?? [])
           .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
           .map(({ identityId, identity, email, role, status }) => {
+            const availableOperations = [];
+
+            if (isAdmin || editable) {
+              if (status === "pendingApproval") {
+                availableOperations.push(
+                  <MenuItem
+                    color="red"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeDisclosure.onOpen({
+                        page,
+                        onSubmit: async (e) => {
+                          try {
+                            const data = await OrganizationMemberRemove({
+                              organizationId: organization?.id,
+                              identityId: identityId,
+                            });
+                            await refreshOrganization();
+                            removeDisclosure.onClose();
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "reject_organization_member_label"
+                    )}
+                  </MenuItem>
+                );
+                availableOperations.push(
+                  <MenuItem
+                    color="green"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      approveDisclosure.onOpen({
+                        page,
+                        onSubmit: async (e) => {
+                          try {
+                            const data = await OrganizationMemberApprove({
+                              organizationId: organization?.id,
+                              identityId: identityId,
+                            });
+                            await refreshOrganization();
+                            approveDisclosure.onClose();
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "approve_organization_member_label"
+                    )}
+                  </MenuItem>
+                );
+              }
+              if (
+                status === "joined" &&
+                !(role === "staff" && hasOnlyOneStaff)
+              ) {
+                availableOperations.push(
+                  <MenuItem
+                    color="red"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeDisclosure.onOpen({
+                        page,
+                        onSubmit: async (e) => {
+                          try {
+                            const data = await OrganizationMemberRemove({
+                              organizationId: organization?.id,
+                              identityId: identityId,
+                            });
+                            await refreshOrganization();
+                            removeDisclosure.onClose();
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "remove_organization_member_label"
+                    )}
+                  </MenuItem>
+                );
+              }
+            }
+
             return (
               <HStack
                 {...(identity?.id && {
@@ -86,7 +187,7 @@ const OrganizationMemberListSection = () => {
                       ?.value?.[router?.locale]
                   }
                 </Tag>
-                {(isAdmin || editable) && (
+                {availableOperations.length > 0 && (
                   <Box>
                     <Menu size="sm">
                       <MenuButton onClick={(e) => e.stopPropagation()}>
@@ -98,98 +199,7 @@ const OrganizationMemberListSection = () => {
                           fontSize="xs"
                         />
                       </MenuButton>
-                      <MenuList>
-                        {status === "pendingApproval" && (
-                          <MenuItem
-                            color="green"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              approveDisclosure.onOpen({
-                                page,
-                                onSubmit: async (e) => {
-                                  try {
-                                    const data =
-                                      await OrganizationMemberApprove({
-                                        organizationId: organization?.id,
-                                        identityId: identityId,
-                                      });
-                                    await refreshOrganization();
-                                    approveDisclosure.onClose();
-                                  } catch (error) {
-                                    console.error(error);
-                                  }
-                                },
-                              });
-                            }}
-                          >
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "approve_organization_member_label"
-                            )}
-                          </MenuItem>
-                        )}
-                        {status === "pendingApproval" && (
-                          <MenuItem
-                            color="red"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeDisclosure.onOpen({
-                                page,
-                                onSubmit: async (e) => {
-                                  try {
-                                    const data = await OrganizationMemberRemove(
-                                      {
-                                        organizationId: organization?.id,
-                                        identityId: identityId,
-                                      }
-                                    );
-                                    await refreshOrganization();
-                                    removeDisclosure.onClose();
-                                  } catch (error) {
-                                    console.error(error);
-                                  }
-                                },
-                              });
-                            }}
-                          >
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "reject_organization_member_label"
-                            )}
-                          </MenuItem>
-                        )}
-
-                        {status === "joined" && (
-                          <MenuItem
-                            color="red"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeDisclosure.onOpen({
-                                page,
-                                onSubmit: async (e) => {
-                                  try {
-                                    const data = await OrganizationMemberRemove(
-                                      {
-                                        organizationId: organization?.id,
-                                        identityId: identityId,
-                                      }
-                                    );
-                                    await refreshOrganization();
-                                    removeDisclosure.onClose();
-                                  } catch (error) {
-                                    console.error(error);
-                                  }
-                                },
-                              });
-                            }}
-                          >
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "remove_organization_member_label"
-                            )}
-                          </MenuItem>
-                        )}
-                      </MenuList>
+                      <MenuList>{availableOperations}</MenuList>
                     </Menu>
                   </Box>
                 )}
