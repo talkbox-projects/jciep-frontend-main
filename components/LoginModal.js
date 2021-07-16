@@ -33,6 +33,7 @@ import { useCredential } from "../utils/user";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import router from "next/router";
 import GoogleLogin from "react-google-login";
+import AppleLogin from "react-apple-login";
 
 const LoginModal = () => {
   const {
@@ -90,6 +91,10 @@ const LoginModal = () => {
             user {
               id
               email
+              snsMeta {
+                profilePicUrl
+                displayName
+              }
               identities {
                 id
                 type
@@ -336,25 +341,13 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoFacebook size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign Up With Facebook
+                        Sign In With Facebook
                       </Text>
                     </HStack>
                   </Button>
                 )}
               />
-              <Button
-                variant="solid"
-                _hover={{ bgColor: "black" }}
-                bgColor="black"
-                color="white"
-              >
-                <HStack w="100%">
-                  <IoLogoApple size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign In With Apple
-                  </Text>
-                </HStack>
-              </Button>
+
               <GoogleLogin
                 autoLoad={false}
                 clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
@@ -367,7 +360,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoGoogle size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign Up With Google
+                        Sign In With Google
                       </Text>
                     </HStack>
                   </Button>
@@ -376,6 +369,31 @@ const LoginModal = () => {
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
+              />
+              <AppleLogin
+                clientId="com.talkboxapp.teamwork.service.hku"
+                redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
+                responseType={"code"}
+                responseMode={"query"}
+                usePopup={true}
+                render={(renderProps) => {
+                  return (
+                    <Button
+                      variant="solid"
+                      _hover={{ bgColor: "black" }}
+                      bgColor="black"
+                      color="white"
+                      onClick={renderProps.onClick}
+                    >
+                      <HStack w="100%">
+                        <IoLogoApple size={18} color="white" />
+                        <Text flex={1} minW={0} w="100%">
+                          Sign In With Apple
+                        </Text>
+                      </HStack>
+                    </Button>
+                  );
+                }}
               />
             </VStack>
             <Button

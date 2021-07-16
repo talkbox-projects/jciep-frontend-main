@@ -49,6 +49,10 @@ const OtpVerifyModal = () => {
               user {
                 id
                 phone
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
                 identities {
                   id
                   type

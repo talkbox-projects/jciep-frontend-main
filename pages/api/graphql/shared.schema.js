@@ -14,31 +14,8 @@ export default gql`
     zh
   }
 
-  scalar Upload
   scalar Timestamp
   scalar JsonContent
-  scalar Timestamp
-
-  enum District {
-    centralAndWestern
-    eastern
-    southern
-    wanChai
-    shamShuiPo
-    kowloonCity
-    kwunTong
-    wongTaiSin
-    yauTsimMong
-    islands
-    kwaiTsing
-    north
-    saiKung
-    shaTin
-    taiPo
-    tsuenWan
-    tuenMun
-    yuenLong
-  }
 
   type MultiLangString {
     en: String

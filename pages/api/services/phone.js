@@ -17,7 +17,6 @@ const gateways = {
       };
 
       const response = await request(options);
-      console.log(response);
 
       return true;
     } catch (error) {

@@ -47,6 +47,7 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
+          published: true,
           type: ["ngo"],
         }),
         identities: await identitySearch({
@@ -78,12 +79,12 @@ const IdentityOpportunities = ({
     ({ identityId, organizationId }) => {
       let query = "";
       if (identityId ?? router.query.identityId) {
-        query += `identityId=${identityId ?? router.query.identityId}`;
+        query += `identityId=${identityId ?? router.query.identityId}&`;
       }
       if (organizationId ?? router.query.organizationId) {
         query += `organizationId=${
           organizationId ?? router.query.organizationId
-        }`;
+        }&`;
       }
       return `/talants/individuals?${query}`;
     },

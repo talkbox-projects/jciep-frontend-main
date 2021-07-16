@@ -47,6 +47,10 @@ const facebookLogin = ({ page }) => {
               user {
                 id
                 email
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
                 identities {
                   id
                   type

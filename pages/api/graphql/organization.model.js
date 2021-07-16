@@ -121,6 +121,10 @@ const organizationSchema = Schema({
   invitationCode: {
     type: String,
   },
+  published: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const organizationSubmissionSchema = Schema({

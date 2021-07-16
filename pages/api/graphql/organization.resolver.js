@@ -26,6 +26,7 @@ export default {
           return String(x._id) === String(member.identityId);
         });
       });
+
       return organization;
     },
 
@@ -36,7 +37,10 @@ export default {
 
       return await OrganizationSubmission.findById(id).populate("organization");
     },
-    OrganizationSearch: async (_parent, { status = [], type = [], name }) => {
+    OrganizationSearch: async (
+      _parent,
+      { status = [], type = [], name, published = undefined }
+    ) => {
       /**
        * Search Organization
        * Admin can access to all organization
@@ -44,6 +48,7 @@ export default {
        */
 
       const organizations = await Organization.find({
+        ...(published !== undefined && { published }),
         ...(status?.length && { status: { $in: status } }),
         ...(type?.length && { organizationType: { $in: type } }),
         ...(name && {
@@ -129,6 +134,8 @@ export default {
 
           resolve(organization);
         } else {
+          const identity = await Identity.findById(params?.input?.identityId);
+
           resolve(
             await new Organization({
               organizationType: params.input.organizationType,
@@ -143,15 +150,15 @@ export default {
               businessRegistration: params.input?.businessRegistration,
               submission: [],
               member: [],
-              contactName: params?.input?.contactName,
-              contactEmail: params?.input?.contactEmail,
-              contactPhone: params?.input?.contactPhone,
+              contactName: identity?.chineseName || "",
+              contactEmail: identity?.email || "",
+              contactPhone: identity?.phone || "",
               district: params?.input?.district,
               companyBenefit: params?.input?.companyBenefit,
               identityId: params?.input?.identityId,
               logo: params.input?.logo,
               tncAccept: params?.input?.tncAccept,
-              invitationCode: parseInt(Math.random() * 1000000).toString(),
+              invitationCode: Math.floor(100000 + Math.random() * 900000),
             })
           );
         }

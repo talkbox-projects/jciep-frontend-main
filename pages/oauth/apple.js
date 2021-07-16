@@ -9,7 +9,7 @@ import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
 
-const PAGE_KEY = "googleLogin";
+const PAGE_KEY = "appleLogin";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -32,7 +32,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const googleLogin = ({ page }) => {
+const appleLogin = ({ page }) => {
   const router = useRouter();
   const { accessToken } = router.query;
   const [setCredential] = useCredential();
@@ -134,27 +134,17 @@ const googleLogin = ({ page }) => {
 
         const variables = {
           input: {
-            googleToken: accessToken,
+            appleToken: accessToken,
           },
         };
 
         const data = await getGraphQLClient().request(mutation, variables);
-
         setCredential(data?.UserLogin);
-        if (data?.UserLogin) {
-          const user = data?.UserLogin?.user;
-          if (user?.identities?.length === 0) {
-            router.push("/user/identity/select");
-          } else {
-            router.push("/");
-          }
-        }
+        router.push("/");
       } catch (e) {
         console.log(e);
       }
     })();
-
-    console.log(accessToken);
   }, [accessToken]);
 
   return (
@@ -177,6 +167,6 @@ const googleLogin = ({ page }) => {
   );
 };
 
-export default withPageCMS(googleLogin, {
+export default withPageCMS(appleLogin, {
   key: PAGE_KEY,
 });

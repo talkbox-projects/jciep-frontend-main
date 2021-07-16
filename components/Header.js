@@ -118,6 +118,10 @@ const Header = ({ navigation, isLangAvailable }) => {
             UserGet(token: $token) {
               id
               email
+              snsMeta {
+                profilePicUrl
+                displayName
+              }
               identities {
                 id
                 type
@@ -199,7 +203,6 @@ const Header = ({ navigation, isLangAvailable }) => {
         `;
 
         const data = await getGraphQLClient().request(mutation, { token });
-        console.log(data);
         setCredential({ token, user: data?.UserGet });
       } catch (e) {
         console.log(e);

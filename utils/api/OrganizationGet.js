@@ -60,6 +60,7 @@ const organizationGet = async ({ id }, context) => {
 
         tncAccept
         invitationCode
+        published
 
         submission {
           id

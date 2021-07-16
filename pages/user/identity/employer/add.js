@@ -25,6 +25,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
+import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
 
 const PAGE_KEY = "employer_identity_add";
 
@@ -84,9 +85,13 @@ const IdentityEmployerAdd = ({ page }) => {
         });
 
         if (data) {
-          router.push(
-            `/user/organization/company/${data.IdentityCreate.id}/add`
-          );
+          if (!invitationCode) {
+            router.push(
+              `/user/organization/company/${data.IdentityCreate.id}/add`
+            );
+          } else {
+            router.push(`/user/identity/${data.IdentityCreate.id}`);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -209,19 +214,21 @@ const IdentityEmployerAdd = ({ page }) => {
                       validate: {
                         validity: async (invitationCode) => {
                           try {
-                            if (invitationCode) return true;
+                            if (!invitationCode) return true;
                             const valid =
                               await OrganizationInvitationCodeValidity({
                                 invitationCode,
-                                type: "employment",
+                                organizationType: "employment",
                               });
-                            if (valid) {
+                            if (!valid) {
                               return wordExtractor(
                                 page?.content?.wordings,
                                 "invitation_code_error_message"
                               );
                             }
+                            return true;
                           } catch (error) {
+                            console.error(error);
                             return wordExtractor(
                               page?.content?.wordings,
                               "invitation_code_error_message"
@@ -252,8 +259,10 @@ const IdentityEmployerAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                <a href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text}</a>
-                
+                <a href={page?.content?.form?.terms?.link}>
+                  {" "}
+                  {page?.content?.form?.terms?.text}
+                </a>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -335,8 +344,8 @@ export default withPageCMS(IdentityEmployerAdd, {
               name: "link",
               label: "關聯 Link",
               component: "text",
-            }
-          ]
+            },
+          ],
         },
         {
           name: "continue",

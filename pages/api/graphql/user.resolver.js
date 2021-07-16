@@ -85,16 +85,16 @@ export default {
         member: { $elemMatch: { identityId: id } },
       });
 
-      identity.organizationRole = (organizations ?? []).map((organization) => {
-        const member = organization.member.find(
-          ({ identityId }) => String(identityId) === String(id)
-        );
-        return {
-          organization,
-          status: member.status,
-          role: member.role,
-        };
-      });
+      // identity.organizationRole = (organizations ?? []).map((organization) => {
+      //   const member = organization.member.find(
+      //     ({ identityId }) => String(identityId) === String(id)
+      //   );
+      //   return {
+      //     organization,
+      //     status: member.status,
+      //     role: member.role,
+      //   };
+      // });
 
       return identity;
     },
@@ -244,33 +244,35 @@ export default {
             { upsert: true, new: true }
           ).populate("identities");
 
-          console.log(user);
-
           const { identities, ..._user } = user.toObject();
           const token = jwt.sign(_user, "shhhhh").toString();
 
           return { token, user };
         }
       } else if (input.facebookToken) {
-        let userData = await facebook.getProfile(input.facebookToken);
+        const snsMeta = await facebook.getProfile(input.facebookToken);
 
-        if (userData.error) {
-          throw new Error(userData.error.message);
+        if (!snsMeta) {
+          throw new Error("failed to login via facebook");
         }
 
-        let user = await User.findOne({ facebookId: userData.id }).populate(
+        let user = await User.findOne({ facebookId: snsMeta.id }).populate(
           "identities"
         );
 
         if (!user) {
           let user = await new User({
-            facebookId: userData.id,
+            facebookId: snsMeta.id,
           }).save();
 
           const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          user.snsMeta = snsMeta;
+          console.log(snsMeta);
           return { token, user };
         } else {
           const token = jwt.sign(user.toObject(), "shhhhh").toString();
+          user.snsMeta = snsMeta;
+          console.log(snsMeta);
           return { token, user };
         }
       } else if (input.googleToken) {
@@ -310,7 +312,7 @@ export default {
       }
     },
 
-    UserLogout: (_parent, args, { _context }) => {
+    UserLogout: (_parent, { _context }) => {
       nookies.destroy(_context, "x-token", {
         maxAge: 30 * 24 * 60 * 60,
         path: "/",
