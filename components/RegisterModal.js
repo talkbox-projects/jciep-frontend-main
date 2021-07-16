@@ -260,7 +260,6 @@ const RegisterModal = () => {
               <GoogleLogin
                 clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
                 render={(renderProps) => (
-                  // <button onClick={renderProps.onClick} disabled={renderProps.disabled}>This is my custom Google button</button>
                   <Button
                     colorScheme="google"
                     color="white"
@@ -281,7 +280,7 @@ const RegisterModal = () => {
               />
               <AppleLogin
                 clientId="com.talkboxapp.teamwork.service.hku"
-                redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
+                redirectURI={`${process.env.HOST_URL}/oauth/apple`}
                 responseType={"code"}
                 responseMode={"query"}
                 usePopup={true}
