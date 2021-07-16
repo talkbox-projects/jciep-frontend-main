@@ -227,7 +227,8 @@ const IdentityEmployerAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                {page?.content?.form?.terms}
+                <a href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text}</a>
+                
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -298,7 +299,19 @@ export default withPageCMS(IdentityEmployerAdd, {
         {
           name: "terms",
           label: "條款和條件 T&C Label",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 text",
+              component: "text",
+            },
+            {
+              name: "link",
+              label: "關聯 Link",
+              component: "text",
+            }
+          ]
         },
         {
           name: "continue",
