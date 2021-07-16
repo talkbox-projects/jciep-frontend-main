@@ -51,7 +51,6 @@ const OrganizationSubmissionSection = () => {
             onClick={() => {
               submissionFormDisclosure.onOpen({
                 organization,
-                onRefresh: refreshOrganization,
               });
             }}
           >

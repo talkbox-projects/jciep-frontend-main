@@ -34,9 +34,9 @@ import OrganizationSubmissionUpdate from "../../../utils/api/OrganizationSubmiss
 const OrganizationSubmissionDetailModal = ({
   isOpen,
   onClose,
-  params: { submission, isLatest, onRefresh } = {},
+  params: { submission, isLatest } = {},
 }) => {
-  const { page, enums, setOrganization } =
+  const { page, enums, refreshOrganization } =
     OrganizationProfileStore.useContext();
   const router = useRouter();
 
@@ -60,13 +60,13 @@ const OrganizationSubmissionDetailModal = ({
         const _submission = await OrganizationSubmissionUpdate({
           input: { id: submission.id, ...values },
         });
-        onRefresh();
+        refreshOrganization();
         onClose();
       } catch (error) {
         console.error(error);
       }
     },
-    [submission, onRefresh, onClose]
+    [submission, refreshOrganization, onClose]
   );
 
   return (

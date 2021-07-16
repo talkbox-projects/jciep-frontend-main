@@ -1,4 +1,6 @@
 import send from "./email/send";
+import bannerBase64 from "./email/templates/assets/img/bannerBase64";
+import logoBase64 from "./email/templates/assets/img/logoBase64";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
 
@@ -209,13 +211,15 @@ export default {
 
       if (["approved", "rejected"].includes(input?.status)) {
         input.vettedAt = new Date();
+        await Organization.findByIdAndUpdate(submission.organization, {
+          status: input?.status,
+        });
       }
 
       if (["approved"].includes(input?.status)) {
         const submission = await OrganizationSubmission.findById(input.id);
         if (submission) {
           await Organization.findByIdAndUpdate(submission.organization, {
-            status: input?.status,
             chineseCompanyName: submission?.chineseCompanyName,
             englishCompanyName: submission?.englishCompanyName,
             website: submission?.website,
@@ -323,10 +327,10 @@ export default {
         await send(
           email,
           {
-            url: `${host}/user/invite/${emailVerify.token}`,
+            url: `${host}`,
             title: "《賽馬會共融・知行計劃》邀請函",
             description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
-            button_text: "前往登入/註冊",
+            button_text: "前往",
           },
           [
             {
