@@ -98,9 +98,26 @@ const IdentityPortfolioSection = () => {
             {wordExtractor(page?.content?.wordings, "portfolio_header_label")}
           </Text>
           {isEditable ? (
-            <Button onClick={onSave} variant="link" leftIcon={<RiEdit2Line />}>
-              {wordExtractor(page?.content?.wordings, "save_button_label")}
-            </Button>
+            <VStack align="stretch">
+              <HStack py={2} spacing={4} justifyContent="flex-end">
+                <Button variant="link" onClick={removeEditSection}>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "cancel_button_label"
+                  )}
+                </Button>
+                <Button
+                  colorScheme="yellow"
+                  color="black"
+                  px={8}
+                  py={2}
+                  borderRadius="2em"
+                  onClick={onSave}
+                >
+                  {wordExtractor(page?.content?.wordings, "save_button_label")}
+                </Button>
+              </HStack>
+            </VStack>
           ) : (
             (isAdmin || editable) &&
             !editSection && (

@@ -685,6 +685,116 @@ const Header = ({ navigation, isLangAvailable }) => {
                     <option value="zh">繁</option>
                     <option value="en">EN</option>
                   </Select>
+                  <Popover placement="bottom-end" gutter={20}>
+                    <PopoverTrigger>
+                      <Avatar size="xs"></Avatar>
+                    </PopoverTrigger>
+                    {!isLoggedIn ? (
+                      <PopoverContent p={3} w={48}>
+                        <VStack align="stretch">
+                          <Link
+                            onClick={() => {
+                              mobileMenuDisclosure.onClose();
+                              loginModalDisclosure.onOpen();
+                            }}
+                          >
+                            {getWording("header.login_label")}
+                          </Link>
+                          <Link
+                            onClick={() => {
+                              mobileMenuDisclosure.onClose();
+                              registerModalDisclosure.onOpen();
+                            }}
+                          >
+                            {getWording("header.register_label")}
+                          </Link>
+                        </VStack>
+                      </PopoverContent>
+                    ) : (
+                      <PopoverContent p={3} w={72}>
+                        <VStack align="stretch" spacing={4}>
+                          {
+                            <VStack spacing={2} align="stretch">
+                              <Text my={1} fontWeight="bold">
+                                {getWording("header.identity_subheading")}
+                              </Text>
+                              <VStack
+                                maxH={300}
+                                overflow="auto"
+                                align="stretch"
+                              >
+                                {(user?.identities ?? []).map((identity) => (
+                                  <HStack
+                                    key={identity.id}
+                                    _hover={{ bg: "gray.50" }}
+                                    cursor="pointer"
+                                    p={2}
+                                    spacing={4}
+                                    onClick={() =>
+                                      onIdentitySwitch(identity.id)
+                                    }
+                                  >
+                                    {/* <Avatar size="sm"></Avatar> */}
+                                    <VStack
+                                      align="start"
+                                      spacing={0}
+                                      flex={1}
+                                      minW={0}
+                                      w="100%"
+                                    >
+                                      <Text fontSize="md">
+                                        {identity.chineseName}
+                                      </Text>
+                                      <Text color="gray.500" fontSize="sm">
+                                        {
+                                          EnumIdentityTypeList.filter(
+                                            (data) => data.key === identity.type
+                                          )[0]?.value[router.locale]
+                                        }
+                                      </Text>
+                                    </VStack>
+
+                                    {currentIdentityId === identity.id && (
+                                      <Tag size="sm">
+                                        {getWording("header.current_label")}
+                                      </Tag>
+                                    )}
+                                  </HStack>
+                                ))}
+                              </VStack>
+                              <Link href="/user/identity/select">
+                                <Button
+                                  size="sm"
+                                  mt={4}
+                                  w="100%"
+                                  alignSelf="center"
+                                  variant="ghost"
+                                  color="gray.500"
+                                  textAlign="center"
+                                >
+                                  {getWording("header.add_identity_label")}
+                                </Button>
+                              </Link>
+                              <Divider />
+                              <VStack mt={2} align="stretch" spacing={2}>
+                                <Link
+                                  onClick={() => {
+                                    mobileMenuDisclosure.onClose();
+                                    registerModalDisclosure.onOpen();
+                                  }}
+                                >
+                                  {getWording("header.account_setting_label")}
+                                </Link>
+                                <Link onClick={onLogout}>
+                                  {getWording("header.logout_label")}
+                                </Link>
+                              </VStack>
+                            </VStack>
+                          }
+                        </VStack>
+                      </PopoverContent>
+                    )}
+                  </Popover>
                 </HStack>
               </VStack>
             </DrawerBody>

@@ -25,7 +25,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
         <AspectRatio ratio={5 / 3}>
           <iframe src={youtubeLink} allowFullScreen />
         </AspectRatio>
-        <Text color="gray.500" fontSize="sm">
+        <Text whiteSpace="pre" color="gray.500" fontSize="sm">
           {item?.description}
         </Text>
       </VStack>
@@ -36,7 +36,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
     return (
       <VStack align="stretch">
         <Image src={item?.file?.url} allowFullScreen />
-        <Text color="gray.500" fontSize="sm">
+        <Text whiteSpace="pre" color="gray.500" fontSize="sm">
           {item?.description}
         </Text>
       </VStack>
@@ -47,7 +47,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
     return (
       <VStack align="stretch">
         <Iframe h="90vh" src={item?.file?.url} />
-        <Text color="gray.500" fontSize="sm">
+        <Text whiteSpace="pre" color="gray.500" fontSize="sm">
           {item?.description}
         </Text>
       </VStack>
