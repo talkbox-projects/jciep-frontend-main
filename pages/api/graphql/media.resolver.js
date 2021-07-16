@@ -56,7 +56,7 @@ export default {
       const { filename, mimetype: contentType, createReadStream } = await file;
 
       const result = await createFile(createReadStream(), {
-        filename: filename.replace(" ", "_"),
+        filename: filename.replace(/\s/g, "_"),
         options: {
           contentType,
           metadata: {
@@ -66,7 +66,7 @@ export default {
       });
 
       return {
-        filename: result.filename.replace(" ", "_"),
+        filename: result.filename.replace(/\s/g, "_"),
         directory: result.options.metadata.directory,
         contentType: result.options.contentType,
       };

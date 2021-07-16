@@ -132,7 +132,7 @@ const IdentityPortfolioSection = () => {
             )
           )}
         </HStack>
-        <SimpleGrid px={8} py={4} columns={4} gap={3}>
+        <SimpleGrid px={8} py={4} columns={[2, 2, 2, 4]} gap={3}>
           {(medias ?? []).map((media, index) => {
             let type = null;
 

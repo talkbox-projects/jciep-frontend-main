@@ -89,6 +89,7 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
       borderColor="#aaa"
       {...getRootProps()}
       position="relative"
+      cursor="pointer"
     >
       <>
         <input {...getInputProps()} />

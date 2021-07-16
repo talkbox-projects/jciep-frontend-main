@@ -35,7 +35,7 @@ export const uploadFiles = async (files) => {
       } = await file.file;
 
       const result = await createFile(createReadStream(), {
-        filename: filename.replace(" ", "_"),
+        filename: filename.replace(/\s/g, "_"),
         options: {
           contentType,
           metadata: {
@@ -48,7 +48,7 @@ export const uploadFiles = async (files) => {
         id: result.id,
         url: `/api/assets${
           result.options.metadata.directory
-        }/${result.filename.replace(" ", "_")}`,
+        }/${result.filename.replace(/\s/g, "_")}`,
         contentType: result.options.contentType,
         fileSize: result.length,
       });
