@@ -36,7 +36,7 @@ const OrganizationSubmissionDetailModal = ({
   onClose,
   params: { submission, isLatest } = {},
 }) => {
-  const { page, enums, refreshOrganization } =
+  const { page, enums, refreshOrganization, isAdmin } =
     OrganizationProfileStore.useContext();
   const router = useRouter();
 
@@ -243,7 +243,7 @@ const OrganizationSubmissionDetailModal = ({
           <Divider py={4} />
 
           <Box py={4}>
-            {submission?.vettedAt || !isLatest ? (
+            {!isAdmin || submission?.vettedAt || !isLatest ? (
               <VStack>
                 {!isLatest && (
                   <Alert status="info" variant="left-accent">
