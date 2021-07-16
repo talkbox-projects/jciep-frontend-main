@@ -5,6 +5,8 @@ import {
   Text,
   VStack,
   IconButton,
+  useToast,
+  Box,
 } from "@chakra-ui/react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useDropzone } from "react-dropzone";
@@ -12,7 +14,27 @@ import wordExtractor from "../../../utils/wordExtractor";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { RiCloseCircleFill } from "react-icons/ri";
+
 const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
+  const toast = useToast();
+
+  const getDropErrorCodeMsg = (errCode) => {
+    switch (errCode) {
+      case "file-invalid-type":
+        return wordExtractor(
+          page?.content?.wordings,
+          "dropzone_error_invalid_type"
+        );
+      case "file-too-large":
+        return wordExtractor(
+          page?.content?.wordings,
+          "dropzone_error_file_too_large"
+        );
+      default:
+        return wordExtractor(page?.content?.wordings, "dropzone_error_general");
+    }
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     multiple,
     accept: "image/*,application/pdf",
@@ -39,6 +61,21 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
       } catch (e) {
         console.error(e);
       }
+    },
+    onDropRejected: (files) => {
+      files.map(({ errors, file }) => {
+        toast({
+          title: file.name,
+          description: (
+            <Box>
+              {errors?.map((error, i) => (
+                <Text key={i}>{getDropErrorCodeMsg(error.code)}</Text>
+              ))}
+            </Box>
+          ),
+          status: "error",
+        });
+      });
     },
   });
 
@@ -86,7 +123,12 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
             />
           </>
         ) : (
-          <Text>{value?.url}</Text>
+          <Text>
+            {value?.url?.slice(
+              value?.url?.lastIndexOf("/") + 1,
+              value?.url?.length
+            )}
+          </Text>
         )}
       </>
     </VStack>
