@@ -12,7 +12,7 @@ import {
   FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 
@@ -30,7 +30,6 @@ const PAGE_KEY = "identity_pwd_add";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
@@ -52,9 +51,13 @@ const customStyles = {
   }
 }
 
+
+
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
+  const [showIndustryOther, setShowIndustryOther] = useState(false)
+
   const {
     handleSubmit,
     setError,
@@ -72,6 +75,7 @@ const IdentityPwdAdd = ({ page }) => {
       resident_district,
       person_types,
       interested_employee,
+      interested_industry_other,
       industry,
       terms,
       invitationCode,
@@ -84,6 +88,21 @@ const IdentityPwdAdd = ({ page }) => {
             }
           }
         `;
+
+
+        console.log(chinese_name)
+        console.log(english_name)
+        console.log(date_of_birth)
+        console.log(gender)
+        console.log(resident_district)
+        console.log(person_types)
+        console.log(interested_employee)
+        console.log(interested_industry_other)
+        console.log(industry)
+        console.log(terms)
+        console.log(invitationCode)
+
+
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
@@ -101,6 +120,7 @@ const IdentityPwdAdd = ({ page }) => {
             interestedIndustry: industry?.map(
               ({ value }) => ({ value }?.value)
             ),
+            interestedIndustryOther: interested_industry_other,
             tncAccept: terms,
             invitationCode: invitationCode,
             email: user.email ? user.email : "",
@@ -108,14 +128,26 @@ const IdentityPwdAdd = ({ page }) => {
           },
         });
 
-        if (data && data.IdentityCreate) {
-          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
-        }
+        console.log(data)
+
+        // if (data && data.IdentityCreate) {
+        //   router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+        // }
       } catch (e) {
         console.log(e);
       }
     }
   );
+
+  const onIndustryChange = (field, value) => {
+    field.onChange(value)
+    let hasOther = value.filter(data => data.value === 'other')
+    if(hasOther.length > 0) {
+      setShowIndustryOther(true)
+    } else {
+      setShowIndustryOther(false)
+    }
+  }
 
   return (
     <VStack py={36}>
@@ -320,6 +352,7 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
+            
             <FormControl>
               <FormLabel>
                 {page?.content?.form?.industry?.label}{" "}
@@ -338,6 +371,7 @@ const IdentityPwdAdd = ({ page }) => {
                     styles={customStyles}
                     {...field}
                     isMulti
+                    onChange={(value) => onIndustryChange(field, value)}
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -350,6 +384,31 @@ const IdentityPwdAdd = ({ page }) => {
                 )}
               </FormHelperText>
             </FormControl>
+
+            {
+              showIndustryOther ? 
+              <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.interestedIndustryOther}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("interested_industry_other", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.interested_industry_other?.type === "required" && (
+                      <Text color="red">
+                        輸入一個有效的感興趣的行業 其他 Enter valid interested industry other
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+            : null
+            }
 
             <FormControl marginTop="20px !important">
               <Checkbox
@@ -615,6 +674,11 @@ export default withPageCMS(IdentityPwdAdd, {
               ],
             },
           ],
+        },
+        {
+          name: "interestedIndustryOther",
+          label: "相關行業 其他 Interedted Industry Other",
+          component: "text",
         },
         {
           name: "terms",
