@@ -1,5 +1,6 @@
 export default {
   notSpecified: { en: "N/A", zh: "沒指定" },
+  upperSecondary: { en: "Upper Secondary", zh: "高中" },
   diploma: { en: "Diploma", zh: "文憑" },
   highDiploma: { en: "Higher Diploma", zh: "高級文憑" },
   associateDegree: { en: "Associate Degree", zh: "副學士學位" },

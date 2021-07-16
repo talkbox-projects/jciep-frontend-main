@@ -7,8 +7,10 @@ import OrganizationMemberListSection from "./sections/OrganizationMemberListSect
 import InvitationCodeSection from "./sections/InvitationCodeSection";
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 import OrganizationOperationSection from "./sections/OrganizationOperationSection";
+import OrganizationProfileStore from "../../store/OrganizationProfileStore";
 
 const OrganizationEmploymentProfile = () => {
+  const { isAdmin, editable } = OrganizationProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
