@@ -8,11 +8,13 @@ import {
   VStack,
   Wrap,
   Tag,
+  useToast,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
+import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
 
 const NgoSectionViewer = () => {
   const router = useRouter();
@@ -23,12 +25,52 @@ const NgoSectionViewer = () => {
     organization,
     editSection,
     editable,
+    saveOrganization,
     setEditSection,
+    refreshOrganization,
   } = OrganizationProfileStore.useContext();
+
+  const toast = useToast();
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
+        {(isAdmin || editable) && (
+          <Button
+            variant="outline"
+            isActive={!!organization?.published}
+            onClick={async () => {
+              try {
+                await saveOrganization({
+                  id: organization?.id,
+                  published: !organization?.published,
+                });
+                refreshOrganization();
+                toast({
+                  title: !organization?.published ? "已發佈檔案" : "已取消發佈",
+                  status: !organization?.published ? "info" : "warning",
+                  position: "bottom",
+                });
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+            leftIcon={
+              !organization?.published ? (
+                <MdRadioButtonUnchecked />
+              ) : (
+                <MdRadioButtonChecked />
+              )
+            }
+          >
+            {wordExtractor(
+              page?.content?.wordings,
+              organization?.published
+                ? "published_my_profile_label"
+                : "publish_my_profile_label"
+            )}
+          </Button>
+        )}
         {(isAdmin || editable) &&
           organization?.status === "approved" &&
           !editSection && (

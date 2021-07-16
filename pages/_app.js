@@ -6,7 +6,7 @@ import { NextSeo } from "next-seo";
 import MongooseMediaStore from "../utils/tina/media/store";
 import { HtmlFieldPlugin } from "react-tinacms-editor";
 import { AppProvider } from "../store/AppStore";
-
+import Head from "next/head";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -73,6 +73,9 @@ const theme = extendTheme({
 const App = ({ Component, pageProps }) => {
   return (
     <AppProvider {...pageProps}>
+      <Head>
+        <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" />
+      </Head>
       <ChakraProvider theme={theme} resetCSS={true}>
         <NextSeo title="賽馬會共融．知行計劃" />
         <VStack w="100vw" align="stretch" spacing={0}>

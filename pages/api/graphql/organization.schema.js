@@ -1,8 +1,6 @@
 import { gql } from "apollo-server-core";
 
 export default gql`
-  # graphql-upload
-
   type Member {
     identityId: ID
     identity: Identity
@@ -23,7 +21,7 @@ export default gql`
     industry: [EnumIndustry]
     industryOther: String
     description: String
-    district: District
+    district: EnumDistrict
     companyBenefit: String
     logo: File
 
@@ -50,7 +48,7 @@ export default gql`
     industry: [EnumIndustry]
     industryOther: String
     description: String
-    district: District
+    district: EnumDistrict
     companyBenefit: String
     logo: File
 
@@ -64,6 +62,7 @@ export default gql`
     submission: [OrganizationSubmission]
     tncAccept: Boolean
     invitationCode: String
+    published: Boolean
   }
 
   input OrganizationSubmissionCreateInput {
@@ -76,7 +75,7 @@ export default gql`
     industry: [EnumIndustry]
     industryOther: String
     description: String
-    district: District
+    district: EnumDistrict
     companyBenefit: String
     logo: FileInput
     identityId: ID!
@@ -99,7 +98,7 @@ export default gql`
     businessRegistration: [FileInput]
     industry: [EnumIndustry]
     description: String
-    district: District
+    district: EnumDistrict
     companyBenefit: String
     logo: FileInput
 
@@ -118,7 +117,7 @@ export default gql`
     website: String
     businessRegistration: [FileInput]
     description: String
-    district: District
+    district: EnumDistrict
     companyBenefit: String
     logo: FileInput
 
@@ -129,6 +128,7 @@ export default gql`
     biography: JsonContent
     portfolio: [FileMetaInput]
     tncAccept: Boolean
+    published: Boolean
   }
 
   input OrganizationMemberInviteInput {
@@ -147,6 +147,7 @@ export default gql`
       name: String
       status: [EnumOrganizationStatus]
       type: [EnumOrganizationType]
+      published: Boolean
     ): [Organization]
 
     OrganizationSubmissionGet(id: ID): OrganizationSubmission

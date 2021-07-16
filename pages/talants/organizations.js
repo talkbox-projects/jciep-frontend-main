@@ -37,6 +37,7 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
+          published: true,
           type: ["ngo"],
           limit: 0,
         }),
@@ -146,7 +147,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               {organization?.website && (
                 <HStack>
                   <Image src={page?.content?.icon?.urlIcon} w={6} h={6} />
-                  <Text>{organization?.website}</Text>
+                  <Text wordBreak="break-word">{organization?.website}</Text>
                 </HStack>
               )}
             </VStack>

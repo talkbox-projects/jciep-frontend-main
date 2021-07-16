@@ -192,7 +192,7 @@ const IdentityPortfolioSection = () => {
               </AspectRatio>
             );
           })}
-          {(isEditable || medias.length === 0) && (
+          {isEditable && (
             <AspectRatio ratio={1}>
               <VStack
                 onClick={() => onPortfolioItemClick(medias?.length)}

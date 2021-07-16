@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
+import OrganizationInvitationCodeValidity from "../../../utils/api/OrganizationInvitationCodeValidity";
 import wordExtractor from "../../../utils/wordExtractor";
 
 const OrganizationMemberJoinModal = ({
@@ -62,6 +63,29 @@ const OrganizationMemberJoinModal = ({
                 "invitation_code_label"
               )}
               {...register("invitationCode", {
+                validate: {
+                  validity: async (invitationCode) => {
+                    try {
+                      const valid = await OrganizationInvitationCodeValidity({
+                        invitationCode,
+                        organizationType: "employment",
+                      });
+                      if (!valid) {
+                        return wordExtractor(
+                          page?.content?.wordings,
+                          "invitation_code_error_message"
+                        );
+                      }
+                      return true;
+                    } catch (error) {
+                      console.error(error);
+                      return wordExtractor(
+                        page?.content?.wordings,
+                        "invitation_code_error_message"
+                      );
+                    }
+                  },
+                },
                 pattern: {
                   value: /^[0-9]{6,6}$/,
                   message: wordExtractor(

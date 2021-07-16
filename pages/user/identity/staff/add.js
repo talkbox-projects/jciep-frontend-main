@@ -25,6 +25,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
+import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
 
 const PAGE_KEY = "identity_staff_add";
 
@@ -83,7 +84,11 @@ const IdentityStaffAdd = ({ page }) => {
         });
 
         if (data) {
-          router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
+          if (!invitationCode) {
+            router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
+          } else {
+            router.push(`/user/identity/${data.IdentityCreate.id}`);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -201,6 +206,31 @@ const IdentityStaffAdd = ({ page }) => {
                       "invitation_code_label"
                     )}
                     {...register("invitationCode", {
+                      validate: {
+                        validity: async (invitationCode) => {
+                          try {
+                            if (!invitationCode) return true;
+                            const valid =
+                              await OrganizationInvitationCodeValidity({
+                                invitationCode,
+                                organizationType: "ngo",
+                              });
+                            if (!valid) {
+                              return wordExtractor(
+                                page?.content?.wordings,
+                                "invitation_code_error_message"
+                              );
+                            }
+                            return true;
+                          } catch (error) {
+                            console.error(error);
+                            return wordExtractor(
+                              page?.content?.wordings,
+                              "invitation_code_error_message"
+                            );
+                          }
+                        },
+                      },
                       pattern: {
                         value: /^[0-9]{6,6}$/,
                         message: wordExtractor(

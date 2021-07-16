@@ -56,6 +56,7 @@ const organizationUpdate = async ({ input }, context) => {
 
         tncAccept
         invitationCode
+        published
 
         submission {
           id

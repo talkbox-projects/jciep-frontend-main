@@ -33,6 +33,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 import router from "next/router";
+import AppleLogin from "react-apple-login";
 
 const RegisterModal = () => {
   const {
@@ -237,15 +238,6 @@ const RegisterModal = () => {
                   </HStack>
                 </Button>
               )}
-              {/* <Button colorScheme="facebook" color="white" onClick={onFacebookClick}>
-                <HStack w="100%">
-                  <IoLogoFacebook size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign Up With Facebook
-                  </Text>
-                </HStack>
-              </Button> */}
-
               <FacebookLogin
                 appId="1091464314720526"
                 fields="name,email,picture"
@@ -265,28 +257,6 @@ const RegisterModal = () => {
                   </Button>
                 )}
               />
-
-              <Button
-                variant="solid"
-                _hover={{ bgColor: "black" }}
-                bgColor="black"
-                color="white"
-              >
-                <HStack w="100%">
-                  <IoLogoApple size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign Up With Apple
-                  </Text>
-                </HStack>
-              </Button>
-              {/* <Button colorScheme="google" color="white">
-                <HStack w="100%">
-                  <IoLogoGoogle size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign Up With Google
-                  </Text>
-                </HStack>
-              </Button> */}
               <GoogleLogin
                 clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
                 render={(renderProps) => (
@@ -308,6 +278,31 @@ const RegisterModal = () => {
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
+              />
+              <AppleLogin
+                clientId="com.talkboxapp.teamwork.service.hku"
+                redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
+                responseType={"code"}
+                responseMode={"query"}
+                usePopup={true}
+                render={(renderProps) => {
+                  return (
+                    <Button
+                      variant="solid"
+                      _hover={{ bgColor: "black" }}
+                      bgColor="black"
+                      color="white"
+                      onClick={renderProps.onClick}
+                    >
+                      <HStack w="100%">
+                        <IoLogoApple size={18} color="white" />
+                        <Text flex={1} minW={0} w="100%">
+                          Sign In With Apple
+                        </Text>
+                      </HStack>
+                    </Button>
+                  );
+                }}
               />
             </VStack>
             <Button

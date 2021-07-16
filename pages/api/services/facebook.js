@@ -1,17 +1,20 @@
-const request = require('requests');
+const { default: axios } = require("axios");
+const request = require("requests");
 
 exports.getProfile = async (accessToken) => {
   try {
-    return new Promise((resolve, reject) => request(
-      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email`, {} )
-      .on('data', (data) => {
-        return resolve(JSON.parse(data))
-      })
-      .on('end' , (err) => {
-        return reject(err)
-      })
+    const { data: { id, name: displayName } = {} } = await axios.get(
+      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name`
     );
+    const { data: { data: { url: profilePicUrl } } = {} } = await axios.get(
+      `https://graph.facebook.com/v11.0/${id}/picture?format=json&format=json&method=get&pretty=0&redirect=false&suppress_http_code=1&transport=cors&type=large`
+    );
+    return {
+      displayName,
+      profilePicUrl,
+    };
   } catch (e) {
-    throw e;
+    console.log(e);
+    return null;
   }
 };

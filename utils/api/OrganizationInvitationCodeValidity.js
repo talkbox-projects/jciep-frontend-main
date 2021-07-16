@@ -3,9 +3,8 @@ import { getGraphQLClient } from "../apollo";
 
 const OrganizationInvitationCodeValidity = async (params, context) => {
   const { invitationCode, organizationType } = params;
-  console.error({ invitationCode, identityId });
   const query = gql`
-    mutation OrganizationInvitationCodeValidity(
+    query OrganizationInvitationCodeValidity(
       $invitationCode: String!
       $organizationType: EnumOrganizationType!
     ) {
@@ -21,7 +20,7 @@ const OrganizationInvitationCodeValidity = async (params, context) => {
     organizationType,
   });
 
-  return data?.OrganizationMemberJoin;
+  return data?.OrganizationInvitationCodeValidity;
 };
 
 export default OrganizationInvitationCodeValidity;

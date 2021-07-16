@@ -25,6 +25,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
+import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
 
 const PAGE_KEY = "identity_pwd_add";
 
@@ -42,21 +43,19 @@ export const getServerSideProps = async (context) => {
 
 const customStyles = {
   multiValue: (provided, state) => {
-    const borderRadius = "15px"  
+    const borderRadius = "15px";
     return { ...provided, borderRadius };
   },
   multiValueRemove: (provided, state) => {
-    const color = "grey"
-    return {...provided, color}
-  }
-}
-
-
+    const color = "grey";
+    return { ...provided, color };
+  },
+};
 
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
-  const [showIndustryOther, setShowIndustryOther] = useState(false)
+  const [showIndustryOther, setShowIndustryOther] = useState(false);
 
   const {
     handleSubmit,
@@ -90,20 +89,17 @@ const IdentityPwdAdd = ({ page }) => {
           }
         `;
 
-
-        console.log(chinese_name)
-        console.log(english_name)
-        console.log(date_of_birth)
-        console.log(gender)
-        console.log(resident_district)
-        console.log(person_types)
-        console.log(interested_employee)
-        console.log(interested_industry_other)
-        console.log(industry)
-        console.log(terms)
-        console.log(invitationCode)
-
-
+        console.log(chinese_name);
+        console.log(english_name);
+        console.log(date_of_birth);
+        console.log(gender);
+        console.log(resident_district);
+        console.log(person_types);
+        console.log(interested_employee);
+        console.log(interested_industry_other);
+        console.log(industry);
+        console.log(terms);
+        console.log(invitationCode);
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
@@ -129,7 +125,6 @@ const IdentityPwdAdd = ({ page }) => {
           },
         });
 
-
         if (data && data.IdentityCreate) {
           router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
         }
@@ -140,15 +135,15 @@ const IdentityPwdAdd = ({ page }) => {
   );
 
   const onIndustryChange = (field, value) => {
-    field.onChange(value)
-    let hasOther = value.filter(data => data.value === 'other')
-    if(hasOther.length > 0) {
-      setShowIndustryOther(true)
+    field.onChange(value);
+    let hasOther = value.filter((data) => data.value === "other");
+    if (hasOther.length > 0) {
+      setShowIndustryOther(true);
     } else {
-      setValue("interested_industry_other", "")
-      setShowIndustryOther(false)
+      setValue("interested_industry_other", "");
+      setShowIndustryOther(false);
     }
-  }
+  };
 
   return (
     <VStack py={36}>
@@ -220,12 +215,16 @@ const IdentityPwdAdd = ({ page }) => {
                     type="date"
                     placeholder=""
                     {...register("date_of_birth", {
-                      required: true
+                      required: true,
                     })}
                   />
 
                   <FormHelperText>
-                    {errors?.date_of_birth?.type === "required" && <Text color="red">出生日期為必填項 Enter a valid Date of Birth </Text>}
+                    {errors?.date_of_birth?.type === "required" && (
+                      <Text color="red">
+                        出生日期為必填項 Enter a valid Date of Birth{" "}
+                      </Text>
+                    )}
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -262,6 +261,31 @@ const IdentityPwdAdd = ({ page }) => {
                       "invitation_code_label"
                     )}
                     {...register("invitationCode", {
+                      validate: {
+                        validity: async (invitationCode) => {
+                          try {
+                            if (!invitationCode) return true;
+                            const valid =
+                              await OrganizationInvitationCodeValidity({
+                                invitationCode,
+                                organizationType: "ngo",
+                              });
+                            if (!valid) {
+                              return wordExtractor(
+                                page?.content?.wordings,
+                                "invitation_code_error_message"
+                              );
+                            }
+                            return true;
+                          } catch (error) {
+                            console.error(error);
+                            return wordExtractor(
+                              page?.content?.wordings,
+                              "invitation_code_error_message"
+                            );
+                          }
+                        },
+                      },
                       pattern: {
                         value: /^[0-9]{6,6}$/,
                         message: wordExtractor(
@@ -351,7 +375,6 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-            
             <FormControl>
               <FormLabel>
                 {page?.content?.form?.industry?.label}{" "}
@@ -384,37 +407,39 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-            {
-              showIndustryOther ? 
+            {showIndustryOther ? (
               <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.interestedIndustryOther}{" "}
-                    <Text as="span" color="red">
-                      *
+                <FormLabel>
+                  {page?.content?.form?.interestedIndustryOther}{" "}
+                  <Text as="span" color="red">
+                    *
+                  </Text>
+                </FormLabel>
+                <Input
+                  type="text"
+                  placeholder=""
+                  {...register("interested_industry_other", { required: true })}
+                />
+                <FormHelperText>
+                  {errors?.interested_industry_other?.type === "required" && (
+                    <Text color="red">
+                      輸入一個有效的感興趣的行業 其他 Enter valid interested
+                      industry other
                     </Text>
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder=""
-                    {...register("interested_industry_other", { required: true })}
-                  />
-                  <FormHelperText>
-                    {errors?.interested_industry_other?.type === "required" && (
-                      <Text color="red">
-                        輸入一個有效的感興趣的行業 其他 Enter valid interested industry other
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-            : null
-            }
+                  )}
+                </FormHelperText>
+              </FormControl>
+            ) : null}
 
             <FormControl marginTop="20px !important">
               <Checkbox
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-                <a href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text}</a>
+                <a href={page?.content?.form?.terms?.link}>
+                  {" "}
+                  {page?.content?.form?.terms?.text}
+                </a>
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
@@ -693,8 +718,8 @@ export default withPageCMS(IdentityPwdAdd, {
               name: "link",
               label: "關聯 Link",
               component: "text",
-            }
-          ]
+            },
+          ],
         },
         {
           name: "continue",

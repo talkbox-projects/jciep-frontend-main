@@ -7,6 +7,11 @@ export default gql`
     role: EnumJoinRole!
   }
 
+  type SnsMeta {
+    profilePicUrl: String
+    displayName: String
+  }
+
   type User {
     id: ID
     phone: String
@@ -15,6 +20,7 @@ export default gql`
     appleId: String
     googleId: String
     identities: [Identity]
+    snsMeta: SnsMeta
   }
 
   type Education {
@@ -118,7 +124,7 @@ export default gql`
     englishName: String!
     dob: Timestamp
     gender: EnumGender
-    district: District
+    district: EnumDistrict
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
@@ -159,7 +165,7 @@ export default gql`
     englishName: String
     dob: Timestamp
     gender: EnumGender
-    district: District
+    district: EnumDistrict
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumIndustry]
