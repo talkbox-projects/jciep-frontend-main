@@ -18,7 +18,6 @@ const OrganizationEmploymentProfile = () => {
           <VStack align="stretch" flex={1} minW={0} w="100%">
             <EmploymentSection />
             <OrganizationBiographySection />
-            <OrganizationPortfolioSection />
           </VStack>
           <VStack w={["100%", "100%", "33%"]} align="stretch">
             {(isAdmin || editable) && (
