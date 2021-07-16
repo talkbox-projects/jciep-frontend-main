@@ -61,6 +61,7 @@ const IdentityPwdAdd = ({ page }) => {
   const {
     handleSubmit,
     setError,
+    setValue,
     register,
     control,
     formState: { errors, isSubmitting },
@@ -128,11 +129,10 @@ const IdentityPwdAdd = ({ page }) => {
           },
         });
 
-        console.log(data)
 
-        // if (data && data.IdentityCreate) {
-        //   router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
-        // }
+        if (data && data.IdentityCreate) {
+          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -145,6 +145,7 @@ const IdentityPwdAdd = ({ page }) => {
     if(hasOther.length > 0) {
       setShowIndustryOther(true)
     } else {
+      setValue("interested_industry_other", "")
       setShowIndustryOther(false)
     }
   }
