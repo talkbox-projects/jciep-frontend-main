@@ -186,13 +186,16 @@ export default {
 
         organization.submission.push(organizationSubmission._id);
         organization.status = "pendingApproval";
-        organization.member.push({
-          identityId: params?.input?.identityId,
-          role: "staff",
-          status: "joined",
-          email: "",
-        });
 
+        const exists = !!organization.member.find((m) => m?.identityId);
+
+        if (!exists) {
+          organization.member.push({
+            identityId: params?.input?.identityId,
+            role: "staff",
+            status: "joined",
+          });
+        }
         await organization.save();
 
         return await OrganizationSubmission.findById(organizationSubmission._id)
