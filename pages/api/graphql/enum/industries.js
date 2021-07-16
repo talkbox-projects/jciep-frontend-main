@@ -3,6 +3,7 @@ export default {
   illustrationDrawing: { en: "Illustration drawing", zh: "插畫繪製" },
   animationDesign: { en: "Animation design", zh: "動畫設計" },
   webDesign: { en: "Web Design", zh: "網頁設計" },
+  other: { en: "Other", zh: "其他" },
   photography: { en: "Photography", zh: "攝影" },
   filmmaking: { en: "Filmmaking", zh: "影片製作" },
   musicSoundDesign: { en: "Music/sound design", zh: "音樂/音效設計" },

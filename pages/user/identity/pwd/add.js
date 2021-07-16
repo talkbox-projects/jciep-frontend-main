@@ -12,7 +12,7 @@ import {
   FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 
@@ -30,7 +30,6 @@ const PAGE_KEY = "identity_pwd_add";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
@@ -41,12 +40,28 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+const customStyles = {
+  multiValue: (provided, state) => {
+    const borderRadius = "15px"  
+    return { ...provided, borderRadius };
+  },
+  multiValueRemove: (provided, state) => {
+    const color = "grey"
+    return {...provided, color}
+  }
+}
+
+
+
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
+  const [showIndustryOther, setShowIndustryOther] = useState(false)
+
   const {
     handleSubmit,
     setError,
+    setValue,
     register,
     control,
     formState: { errors, isSubmitting },
@@ -61,6 +76,7 @@ const IdentityPwdAdd = ({ page }) => {
       resident_district,
       person_types,
       interested_employee,
+      interested_industry_other,
       industry,
       terms,
       invitationCode,
@@ -73,6 +89,21 @@ const IdentityPwdAdd = ({ page }) => {
             }
           }
         `;
+
+
+        console.log(chinese_name)
+        console.log(english_name)
+        console.log(date_of_birth)
+        console.log(gender)
+        console.log(resident_district)
+        console.log(person_types)
+        console.log(interested_employee)
+        console.log(interested_industry_other)
+        console.log(industry)
+        console.log(terms)
+        console.log(invitationCode)
+
+
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
@@ -90,12 +121,14 @@ const IdentityPwdAdd = ({ page }) => {
             interestedIndustry: industry?.map(
               ({ value }) => ({ value }?.value)
             ),
+            interestedIndustryOther: interested_industry_other,
             tncAccept: terms,
             invitationCode: invitationCode,
             email: user.email ? user.email : "",
             phone: user.phone ? user.phone : "",
           },
         });
+
 
         if (data && data.IdentityCreate) {
           router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
@@ -105,6 +138,17 @@ const IdentityPwdAdd = ({ page }) => {
       }
     }
   );
+
+  const onIndustryChange = (field, value) => {
+    field.onChange(value)
+    let hasOther = value.filter(data => data.value === 'other')
+    if(hasOther.length > 0) {
+      setShowIndustryOther(true)
+    } else {
+      setValue("interested_industry_other", "")
+      setShowIndustryOther(false)
+    }
+  }
 
   return (
     <VStack py={36}>
@@ -263,6 +307,7 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
                     options={page?.content?.form?.personTypes?.options.map(
@@ -288,6 +333,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
                     options={page?.content?.form?.employeerMode?.options.map(
@@ -305,6 +351,7 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
+            
             <FormControl>
               <FormLabel>
                 {page?.content?.form?.industry?.label}{" "}
@@ -320,8 +367,10 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                    styles={customStyles}
                     {...field}
                     isMulti
+                    onChange={(value) => onIndustryChange(field, value)}
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -334,6 +383,31 @@ const IdentityPwdAdd = ({ page }) => {
                 )}
               </FormHelperText>
             </FormControl>
+
+            {
+              showIndustryOther ? 
+              <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.interestedIndustryOther}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder=""
+                    {...register("interested_industry_other", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.interested_industry_other?.type === "required" && (
+                      <Text color="red">
+                        輸入一個有效的感興趣的行業 其他 Enter valid interested industry other
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+            : null
+            }
 
             <FormControl marginTop="20px !important">
               <Checkbox
@@ -350,18 +424,6 @@ const IdentityPwdAdd = ({ page }) => {
             </FormControl>
 
             <FormControl textAlign="center">
-              {/* <Button
-                color="black"
-                fontWeight="bold"
-                lineHeight={3}
-                borderRadius="20px"
-                colorScheme="primary"
-                bgColor="primary.400"
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                {page?.content?.form?.continue}
-              </Button> */}
               <Button
                 backgroundColor="#F6D644"
                 borderRadius="22px"
@@ -611,6 +673,11 @@ export default withPageCMS(IdentityPwdAdd, {
               ],
             },
           ],
+        },
+        {
+          name: "interestedIndustryOther",
+          label: "相關行業 其他 Interedted Industry Other",
+          component: "text",
         },
         {
           name: "terms",
