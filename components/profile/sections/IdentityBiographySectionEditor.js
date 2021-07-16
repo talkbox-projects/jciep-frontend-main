@@ -57,9 +57,24 @@ const IdentityBiographySectionEditor = () => {
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "biography_header_label")}
         </Text>
-        <Button variant="link" type="submit" leftIcon={<RiEdit2Line />}>
-          {wordExtractor(page?.content?.wordings, "save_button_label")}
-        </Button>
+        <VStack align="stretch">
+          <HStack py={2} spacing={4} justifyContent="flex-end">
+            <Button variant="link" onClick={removeEditSection}>
+              {wordExtractor(page?.content?.wordings, "cancel_button_label")}
+            </Button>
+            <Button
+              colorScheme="yellow"
+              color="black"
+              px={8}
+              py={2}
+              borderRadius="2em"
+              type="submit"
+              isLoading={isSubmitting}
+            >
+              {wordExtractor(page?.content?.wordings, "save_button_label")}
+            </Button>
+          </HStack>
+        </VStack>
       </HStack>
       <VStack px={8} align="stretch">
         {(fields ?? []).map(({ id, type, youtubeUrl, text, file }, index) => {
