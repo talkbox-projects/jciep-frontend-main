@@ -51,6 +51,7 @@ import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoWarning } from "react-icons/io5";
+import ResetPasswordModal from "./ResetPasswordModal";
 
 const Header = ({ navigation, isLangAvailable }) => {
   const getWording = useGetWording();
@@ -400,9 +401,11 @@ const Header = ({ navigation, isLangAvailable }) => {
                         </Link>
                         <Divider />
                         <VStack mt={2} align="stretch" spacing={2}>
-                          <Link onClick={registerModalDisclosure.onOpen}>
-                            {getWording("header.account_setting_label")}
-                          </Link>
+                          <NextLink passHref href="/user/account">
+                            <Link>
+                              {getWording("header.account_setting_label")}
+                            </Link>
+                          </NextLink>
                           <Link onClick={onLogout}>
                             {getWording("header.logout_label")}
                           </Link>
@@ -534,6 +537,7 @@ const Header = ({ navigation, isLangAvailable }) => {
       <RegisterModal />
       <OtpVerifyModal />
       <EmailVerifySentModal />
+      <ResetPasswordModal />
       <Box
         position="fixed"
         zIndex={100}

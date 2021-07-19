@@ -1,4 +1,21 @@
-import { Text, Box, VStack, Avatar, HStack } from "@chakra-ui/react";
+import {
+  Text,
+  Icon,
+  VStack,
+  Avatar,
+  HStack,
+  Wrap,
+  Button,
+  Box,
+} from "@chakra-ui/react";
+import { useCallback, useMemo } from "react";
+import {
+  IoLogoApple,
+  IoLogoFacebook,
+  IoLogoGoogle,
+  IoMail,
+} from "react-icons/io5";
+import { RiArrowRightLine } from "react-icons/ri";
 import Container from "../../../components/Container";
 import { useAppContext } from "../../../store/AppStore";
 import { useInjectParams } from "../../../utils/general";
@@ -23,24 +40,109 @@ export const getServerSideProps = async (context) => {
 };
 
 const AccountInfoPage = ({ page }) => {
-  const { user } = useAppContext();
+  const { user, resetPasswordModalDisclosure } = useAppContext();
   const injectParams = useInjectParams();
+
+  const getLoginMethod = useCallback(({ user }) => {
+    let loginMethod = null;
+    if (user?.facebookId) {
+      return "facebook";
+    } else if (user?.googleId) {
+      return "google";
+    } else if (user?.appleId) {
+      return "apple";
+    } else {
+      return "email";
+    }
+  }, []);
+
+  const getLoginMethodDisplay = useCallback(
+    ({ user }) => {
+      let loginMethodDisplay = null;
+      const loginMethod = getLoginMethod({ user });
+      switch (loginMethod) {
+        case "facebook":
+          loginMethodDisplay = (
+            <HStack color="facebook.500">
+              <Icon fontSize="lg" as={IoLogoFacebook} /> <Text>Facebook</Text>
+            </HStack>
+          );
+          break;
+        case "google":
+          loginMethodDisplay = (
+            <HStack color="google.500">
+              <Icon fontSize="lg" as={IoLogoGoogle} /> <Text>Google</Text>
+            </HStack>
+          );
+          break;
+        case "apple":
+          loginMethodDisplay = (
+            <HStack color="gray.500">
+              <Icon fontSize="lg" as={IoLogoApple} /> <Text>facebook</Text>
+            </HStack>
+          );
+          break;
+
+        default:
+          loginMethodDisplay = (
+            <HStack color="gray.500">
+              <Icon fontSize="lg" as={IoMail} /> <Text>Email</Text>
+            </HStack>
+          );
+      }
+
+      if (loginMethod === "email") {
+        return injectParams(wordExtractor(page?.content?.wordings, "message"), {
+          displayName: <Text fontWeight="bold">{user?.email}</Text>,
+          login_method: <>{loginMethodDisplay}</>,
+        });
+      } else {
+        return injectParams(wordExtractor(page?.content?.wordings, "message"), {
+          displayName: (
+            <>
+              <Avatar ml={2} src={user?.snsMeta?.profilePicUrl} size="sm" />
+              <Text fontWeight="bold">{user?.snsMeta?.displayName}</Text>
+            </>
+          ),
+          login_method: <>{loginMethodDisplay}</>,
+        });
+      }
+    },
+    [page]
+  );
+
+  const resetPasswordLink = useMemo(() => {
+    const loginViaEmail = getLoginMethod({ user }) === "email";
+    if (loginViaEmail) {
+      return (
+        <Button
+          onClick={() => {
+            resetPasswordModalDisclosure.onOpen();
+          }}
+          variant="outline"
+          colorScheme="gray"
+          rightIcon={<RiArrowRightLine />}
+        >
+          重設密碼
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  }, [getLoginMethod, user]);
+
   return (
-    <VStack py={[24, 36]}>
+    <VStack py={[24, 40]}>
       <Container>
         <Text fontSize="4xl">
           {wordExtractor(page?.content?.wordings, "title")}
         </Text>
       </Container>
       <Container>
-        <VStack mt={8} align="start">
-          <Text align="center" px={1} boxShadow="lg" borderRadius={8} p={8}>
-            {injectParams(wordExtractor(page?.content?.wordings, "message"), {
-              login_method: "Google",
-              avatar: <Avatar src={user?.snsMeta?.profilePicUrl} size="lg" />,
-            })}
-          </Text>
-        </VStack>
+        <Wrap mt={8} spacing={1} align="center" px={1} borderRadius={8}>
+          {getLoginMethodDisplay({ user })}
+        </Wrap>
+        <Box mt={16}>{resetPasswordLink}</Box>
       </Container>
     </VStack>
   );

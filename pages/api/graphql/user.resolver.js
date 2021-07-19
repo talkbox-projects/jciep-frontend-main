@@ -125,8 +125,10 @@ export default {
        * Send an email with a verification link (md5 token) to inbox.
        */
       try {
-        const emailVerify = await EmailVerify.create({ email });
-        console.log(emailVerify);
+        const emailVerify = await EmailVerify.create({
+          email,
+          meta: { type: "register" },
+        });
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -302,17 +304,76 @@ export default {
       return true;
     },
 
-    UserPasswordResetEmailSend: (_parent, { email }) => {
+    UserPasswordResetEmailSend: async (_parent, { email }) => {
       /**
        * Send password reset email with reset link + md5_token
        */
+      try {
+        const emailVerify = await EmailVerify.create({
+          email,
+          meta: { type: "resetPassword" },
+        });
+        let host = process.env.HOST_URL
+          ? process.env.HOST_URL
+          : "http://localhost:3000";
+        await send(
+          email,
+          {
+            url: `${host}/user/password/${emailVerify.token}/reset`,
+            description: "請點擊下列按鈕重設密碼",
+            button_text: "重設密碼",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     },
 
-    UserPasswordReset: (_parent, { token, password }) => {
+    UserPasswordReset: async (_parent, { token, password }) => {
       /**
        * email is decoded from token
        * Verify token and reset password
        */
+      try {
+        const emailVerify = await EmailVerify.findOne({
+          token,
+        });
+
+        console.log(emailVerify);
+
+        const { type } = emailVerify?.meta || {};
+
+        if (type === "resetPassword") {
+          await emailVerify.delete();
+          const user = await User.findOneAndUpdate(
+            { email: emailVerify?.email },
+            {
+              email: emailVerify?.email,
+              password: await User.generateHash(password),
+            },
+            { upsert: true, new: true }
+          );
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
 
     IdentityCreate: async (_parent, { input }) => {
