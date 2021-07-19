@@ -40,8 +40,8 @@ const ActvitySubSectionViewer = () => {
                   <Text color="#aaa">
                     {moment(startDatetime).format("DD/MM/YYYY")}
                   </Text>
-                  <Text pt={2}>{name}</Text>
-                  <Text color="#666" whiteSpace="pre-line">
+                  <Text fontSize={"md"} fontFamily="SFNSDisplay" pt={2}>{name}</Text>
+                  <Text fontSize={"md"}  whiteSpace="pre-line" fontFamily="SFNSDisplay">
                     {description}
                   </Text>
                 </VStack>

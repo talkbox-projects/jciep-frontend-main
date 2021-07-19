@@ -23,7 +23,7 @@ const EducationSubSectionViewer = () => {
               <Box
                 pl={2}
                 key={index}
-                borderLeftColor={borderColor}
+                borderLeftColor="#eee"
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -49,14 +49,14 @@ const EducationSubSectionViewer = () => {
                       {wordExtractor(page?.content?.wordings, "present_label")}
                     </Text>
                   )}
-                  <Text color="#aaa">
+                  <Text color="#666666">
                     {moment(startDatetime).format("MM/YYYY")} -{" "}
                     {present
                       ? moment(endDatetime).format("MM/YYYY")
                       : wordExtractor(page?.content?.wordings, "present_label")}
                   </Text>
-                  <Text>{fieldOfStudy}</Text>
-                  <Text>{school}</Text>
+                  <Text fontSize={"md"} fontFamily="SFNSDisplay">{fieldOfStudy}</Text>
+                  <Text fontSize={"md"} color="#666666">{school}</Text>
                 </VStack>
               </Box>
             );

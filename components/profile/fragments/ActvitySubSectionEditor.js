@@ -27,7 +27,8 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
       <VStack pl={2} spacing={0} align="stretch">
         {(fields ?? []).map(
           ({ id, name, description, startDatetime }, index) => {
-            const errors = errors?.activity?.[index];
+            const errors = {} 
+            errors?.activity?.[index];
             const prefix = `activity[${index}]`;
             const borderColor = "#eee";
             console.log(startDatetime);

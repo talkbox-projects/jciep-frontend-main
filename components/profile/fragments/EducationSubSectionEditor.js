@@ -10,6 +10,8 @@ import {
   FormLabel,
   FormHelperText,
   Button,
+  SimpleGrid,
+  GridItem
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -47,14 +49,15 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
             },
             index
           ) => {
-            const errors = errors?.education?.[index];
+            const errors = {} 
+            errors?.education?.[index];
             const prefix = `education[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
             return (
               <Box
                 pl={2}
                 key={id}
-                borderLeftColor={borderColor}
+                borderLeftColor={"#eee"}
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -178,14 +181,15 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                       {errors?.education?.[index]?.fieldOfStudy?.message}
                     </FormHelperText>
                   </FormControl>
-                  <HStack pt={2} w="100%" spacing={2}>
+                  
+                    <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
+                    <GridItem >
                     <FormControl
-                      w="50%"
                       as={HStack}
                       align="center"
                       isInvalid={errors?.degree?.message}
                     >
-                      <FormLabel w={32} fontSize="sm" color="#999" mb={0}>
+                      <FormLabel w={[24,24,32]} fontSize="sm" color="#999" mb={0}>
                         {wordExtractor(
                           page?.content?.wordings,
                           "field_label_education_startDatetime"
@@ -196,6 +200,7 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                         control={control}
                         defaultValue={startDatetime}
                         render={({ field }) => (
+
                           <MonthPicker page={page} {...field} />
                         )}
                       />
@@ -203,8 +208,9 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                         {errors?.startDatetime?.message}
                       </FormHelperText>
                     </FormControl>
+                    </GridItem>
+                    <GridItem>
                     <FormControl
-                      w="50%"
                       as={HStack}
                       align="center"
                       isInvalid={errors?.endDatetime?.message}
@@ -227,7 +233,10 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                         {errors?.endDatetime?.message}
                       </FormHelperText>
                     </FormControl>
-                  </HStack>
+                    </GridItem>
+                    </SimpleGrid>
+                   
+                    
 
                   <FormControl
                     pt={2}
@@ -262,6 +271,8 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
               my={4}
               px={2}
               size="sm"
+              w={["100%", "auto"]}
+              borderRadius="15px"
               alignSelf="flex-start"
               variant="outline"
               onClick={() => append({})}

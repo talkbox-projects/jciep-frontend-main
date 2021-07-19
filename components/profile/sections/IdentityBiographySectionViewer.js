@@ -18,7 +18,7 @@ export const IdentityBiographySectionViewer = () => {
   return (
     <VStack px={8} pb={8} align="stretch">
       <HStack py={4} align="center">
-        <Text flex={1} minW={0} w="100%" fontSize="2xl">
+        <Text flex={1} minW={0} w="100%" fontSize="2xl" fontFamily="SFNSDisplay"  >
           {wordExtractor(page?.content?.wordings, "biography_header_label")}
         </Text>
 
