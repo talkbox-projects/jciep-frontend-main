@@ -17,6 +17,8 @@ import {
   Wrap,
   WrapItem,
   Link,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -28,6 +30,8 @@ import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Slider from "react-slick";
+import { useRouter } from "next/router";
+import { useCMS } from "tinacms";
 
 const PAGE_KEY = "programme";
 
@@ -55,7 +59,8 @@ export const getServerSideProps = async (context) => {
 };
 
 const Programme = ({ page }) => {
-  console.log(page?.content?.heroBannerSection?.sliderImage);
+  const router = useRouter();
+  const cms = useCMS();
   const sliderRef = useRef(null);
   const settings = {
     ref: (c) => (sliderRef.current = c),
@@ -140,6 +145,47 @@ const Programme = ({ page }) => {
         </VStack>
       </Box>
 
+      <Box bg={page?.content?.visionSection?.bgColor} w="100%">
+        <Container>
+          <Flex w="100%" justify="flex-end">
+            {router.locale === "zh" ? (
+              <Button
+                value={"en"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                Display english version
+              </Button>
+            ) : (
+              <Button
+                value={"zh"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                顯示為中文
+              </Button>
+            )}
+          </Flex>
+        </Container>
+      </Box>
       {/* Vision Section */}
       <Box bg={page?.content?.visionSection?.bgColor} w="100%">
         <Container py={24}>
