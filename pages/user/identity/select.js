@@ -100,7 +100,7 @@ const IdentitySelect = ({ page }) => {
                   width="190px"
                   margin="auto"
                   fontWeight={600}
-                  letter-spacing="1.5px"
+                  letterSpacing="1.5px"
                 >
                   {page?.content?.pwd?.title}
                 </Text>
@@ -129,7 +129,7 @@ const IdentitySelect = ({ page }) => {
                   width="190px"
                   margin="auto"
                   fontWeight={600}
-                  letter-spacing="1.5px"
+                  letterSpacing="1.5px"
                 >
                   {page?.content?.employeer?.title}
                 </Text>
@@ -158,7 +158,7 @@ const IdentitySelect = ({ page }) => {
                   width="190px"
                   margin="auto"
                   fontWeight={600}
-                  letter-spacing="1.5px"
+                  letterSpacing="1.5px"
                 >
                   {page?.content?.ngo?.title}
                 </Text>
@@ -188,7 +188,7 @@ const IdentitySelect = ({ page }) => {
                   width="190px"
                   margin="auto"
                   fontWeight={600}
-                  letter-spacing="1.5px"
+                  letterSpacing="1.5px"
                 >
                   {page?.content?.public?.title}
                 </Text>

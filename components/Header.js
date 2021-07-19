@@ -118,6 +118,9 @@ const Header = ({ navigation, isLangAvailable }) => {
             UserGet(token: $token) {
               id
               email
+              facebookId
+              googleId
+              appleId
               snsMeta {
                 profilePicUrl
                 displayName

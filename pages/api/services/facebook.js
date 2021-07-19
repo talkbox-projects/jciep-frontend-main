@@ -10,6 +10,7 @@ exports.getProfile = async (accessToken) => {
       `https://graph.facebook.com/v11.0/${id}/picture?format=json&format=json&method=get&pretty=0&redirect=false&suppress_http_code=1&transport=cors&type=large`
     );
     return {
+      id,
       displayName,
       profilePicUrl,
     };

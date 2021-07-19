@@ -93,6 +93,6 @@ const App = ({ Component, pageProps }) => {
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [HtmlFieldPlugin],
-  enabled: false,
+  enabled: process.env.NODE_ENV === "development",
   sidebar: true,
 });

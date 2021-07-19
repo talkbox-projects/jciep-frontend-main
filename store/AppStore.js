@@ -94,8 +94,8 @@ const [AppProvider, useAppContext] = constate((props) => {
     if (identity?.type === "admin") {
       cms.enable();
     } else {
-      // cms.enable();
-      cms.disable();
+      cms.enable();
+      // cms.disable();
     }
   }, [identity]);
 

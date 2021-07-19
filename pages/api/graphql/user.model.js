@@ -51,6 +51,14 @@ const userSchema = Schema({
   googleId: {
     type: String,
   },
+  snsMeta: {
+    profilePicUrl: {
+      type: String,
+    },
+    displayName: {
+      type: String,
+    },
+  },
   identities: [
     {
       type: Schema.Types.ObjectId,
