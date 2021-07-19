@@ -133,11 +133,10 @@ const IdentityStaffAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.contactPersonName?.type === "required" && (
                       <Text color="red">
-                        輸入有效的聯繫人姓名 Enter valid contact person name!
-                          {/* {wordExtractor(
+                          {wordExtractor(
                             page?.content?.wordings,
                             "contact_person_name_required"
-                          )} */}
+                          )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -153,7 +152,10 @@ const IdentityStaffAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "contact_email_placeholder"
+                    )}
                     {...register("contactEmailAdress", {
                       required: true,
                       pattern:
@@ -163,14 +165,20 @@ const IdentityStaffAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.contactEmailAdress?.type === "required" && (
                       <Text color="red">
-                        "輸入有效的聯繫電子郵件地址 Enter valid contact email
-                        address!
+                     
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "contact_email_required"
+                      )}
                       </Text>
                     )}
                     {errors?.contactEmailAdress?.type === "pattern" && (
                       <Text color="red">
-                        "輸入有效的聯繫電子郵件地址 Enter valid contact email
-                        address!
+                     
+                        {wordExtractor(
+                        page?.content?.wordings,
+                        "contact_email_pattern"
+                      )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -186,13 +194,19 @@ const IdentityStaffAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "contact_number_placeholder"
+                    )}
                     {...register("contactNumber", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.contactNumber?.type === "required" && (
                       <Text color="red">
-                        輸入有效的聯繫電話 Enter valid contact Number!
+                        {wordExtractor(
+                        page?.content?.wordings,
+                        "contact_number_required"
+                      )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -265,7 +279,12 @@ const IdentityStaffAdd = ({ page }) => {
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
-                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                  <Text color="red">
+                    {wordExtractor(
+                        page?.content?.wordings,
+                        "tnc_required"
+                      )}
+                    </Text>
                 )}
               </FormHelperText>
             </FormControl>
