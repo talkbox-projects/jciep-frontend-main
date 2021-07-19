@@ -55,7 +55,6 @@ const customStyles = {
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
-  const [showIndustryOther, setShowIndustryOther] = useState(false);
 
   const {
     handleSubmit,
@@ -441,7 +440,7 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-            {showIndustryOther ? (
+            
               <FormControl>
                 <FormLabel>
                   {page?.content?.form?.interestedIndustryOther}{" "}
@@ -470,7 +469,7 @@ const IdentityPwdAdd = ({ page }) => {
                   )}
                 </FormHelperText>
               </FormControl>
-            ) : null}
+            
 
             <FormControl marginTop="20px !important">
               <Checkbox

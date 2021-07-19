@@ -39,7 +39,7 @@ export const getServerSideProps = async (context) => {
       lang: context.locale,
     },
   };
-};
+};        
 
 
 const customStyles = {
