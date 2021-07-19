@@ -135,12 +135,6 @@ const EducationSubSectionEditor = ({ form: { register, control } }) => {
                       {...register(`${prefix}.degree`, {})}
                       defaultValue={degree}
                     >
-                      <option key={"unselected"} value={""}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                      </option>
                       {(enums?.EnumDegreeList ?? []).map(
                         ({
                           key: value,

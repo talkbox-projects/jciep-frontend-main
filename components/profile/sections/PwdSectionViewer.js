@@ -158,8 +158,12 @@ const PwdSectionViewer = () => {
                   {wordExtractor(page?.content?.wordings, "field_label_dob")}
                 </FormLabel>
                 <Text>
-                  {moment(identity?.dob).format("YYYY-MM-DD") ??
-                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                  {identity?.dob
+                    ? moment(identity?.dob).format("YYYY-MM-DD")
+                    : wordExtractor(
+                        page?.content?.wordings,
+                        "empty_text_label"
+                      )}
                 </Text>
               </FormControl>
               <FormControl>
@@ -421,7 +425,7 @@ const PwdSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_hobby")}
             </FormLabel>
-            <Text>
+            <Text whiteSpace="pre">
               {identity?.hobby ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>

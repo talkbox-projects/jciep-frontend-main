@@ -20,6 +20,7 @@ const EmploymentSubSectionViewer = () => {
               present,
               startDatetime,
               endDatetime,
+              jobTitle,
               companyName,
               industry,
               employmentType,
@@ -65,16 +66,20 @@ const EmploymentSubSectionViewer = () => {
                       }
                     </Tag>
                     <Text>
-                      {moment(startDatetime).format("MM/YYYY")} -{" "}
+                      {startDatetime &&
+                        `${moment(startDatetime).format("YYYY/MM")} - `}
                       {present
-                        ? moment(endDatetime).format("MM/YYYY")
-                        : wordExtractor(
+                        ? wordExtractor(
                             page?.content?.wordings,
                             "present_label"
-                          )}
+                          )
+                        : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>
-                  <Text pt={2}>{companyName}</Text>
+                  {/* <Text pt={2}>{`${companyName} (${jobTitle})`}</Text> */}
+                  <Text pt={2}>
+                    {companyName} {jobTitle && `(${jobTitle})`}
+                  </Text>
                   <Text>
                     {
                       enums?.EnumEmploymentModeList?.find(
