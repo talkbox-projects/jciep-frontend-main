@@ -291,11 +291,11 @@ const Resources = ({ page }) => {
         </Container>
       </Box>
       <Box bg="#FEB534">
-        <DividerSimple nextColor="#FAFAFA" />
+        <DividerSimple nextColor="#F3F3F3" />
       </Box>
       {/* resource Section */}
 
-      <Box bg="#fafafa">
+      <Box bg="#F3F3F3">
         <Container>
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
@@ -476,7 +476,7 @@ const Resources = ({ page }) => {
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}
-          background="#FAFAFA"
+          background="#F3F3F3"
         >
           <Box
             display="flex"
