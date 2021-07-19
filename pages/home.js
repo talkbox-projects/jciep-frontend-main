@@ -349,7 +349,7 @@ const Home = ({ setting, page }) => {
                   <AspectRatio
                     overflow="hidden"
                     borderRadius={16}
-                    borderWWidth={4}
+                    borderWidth={4}
                     borderColor="white"
                     ratio={1}
                   >
