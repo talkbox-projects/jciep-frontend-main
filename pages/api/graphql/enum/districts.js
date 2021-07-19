@@ -1,4 +1,5 @@
 const districts = {
+  unselected: { en: "-", zh: "-" },
   centralAndWestern: { en: "Central and Western", zh: "中西區" },
   eastern: { en: "Eastern", zh: "東區" },
   southern: { en: "Southern", zh: "南區" },

@@ -211,9 +211,6 @@ const PwdSectionEditor = () => {
               {...register("gender", {})}
               defaultValue={identity?.gender}
             >
-              <option key={"unselected"} value={""}>
-                {wordExtractor(page?.content?.wordings, "empty_text_label")}
-              </option>
               {(enums?.EnumGenderList ?? []).map(
                 ({ key: value, value: { [router.locale]: label } = {} }) => {
                   return (
@@ -244,9 +241,6 @@ const PwdSectionEditor = () => {
               })}
               defaultValue={identity?.district}
             >
-              <option key={"unselected"} value={""}>
-                {wordExtractor(page?.content?.wordings, "empty_text_label")}
-              </option>
               {(enums?.EnumDistrictList ?? []).map(
                 ({ key: value, value: { [router.locale]: label } = {} }) => {
                   return (
@@ -495,9 +489,6 @@ const PwdSectionEditor = () => {
               {...register("educationLevel", {})}
               defaultValue={identity?.educationLevel}
             >
-              <option key={"unselected"} value={""}>
-                {wordExtractor(page?.content?.wordings, "empty_text_label")}
-              </option>
               {(enums?.EnumDegreeList ?? []).map(
                 ({ key: value, value: { [router.locale]: label } = {} }) => {
                   return (
@@ -524,9 +515,6 @@ const PwdSectionEditor = () => {
               {...register("yearOfExperience", {})}
               defaultValue={identity?.yearOfExperience}
             >
-              <option key={"unselected"} value={""}>
-                {wordExtractor(page?.content?.wordings, "empty_text_label")}
-              </option>
               {(enums?.EnumYearOfExperienceList ?? []).map(
                 ({ key: value, value: { [router.locale]: label } = {} }) => {
                   return (
