@@ -19,7 +19,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 import MonthPicker from "./MonthPicker";
 
-const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
+const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
   const router = useRouter();
   const { page, enums } = IdentityProfileStore.useContext();
   const { fields, append, remove, insert } = useFieldArray({
@@ -60,6 +60,8 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
             const errors = errors?.employment?.[index];
             const prefix = `employment[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
+
+            const isCurrentJob = watch(`${prefix}.present`);
             return (
               <Box
                 pl={2}
@@ -147,12 +149,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                       {...register(`${prefix}.industry`, {})}
                       defaultValue={industry}
                     >
-                      <option key={"unselected"} value={""}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                      </option>
                       {(enums?.EnumIndustryList ?? []).map(
                         ({
                           key: value,
@@ -186,12 +182,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                       {...register(`${prefix}.employmentType`, {})}
                       defaultValue={employmentType}
                     >
-                      <option key={"unselected"} value={""}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                      </option>
                       {(enums?.EnumEmploymentModeList ?? []).map(
                         ({
                           key: value,
@@ -271,7 +261,11 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                         control={control}
                         defaultValue={endDatetime}
                         render={({ field }) => (
-                          <MonthPicker page={page} {...field} />
+                          <MonthPicker
+                            page={page}
+                            {...field}
+                            isDisabled={isCurrentJob}
+                          />
                         )}
                       />
                       <FormHelperText color="red">

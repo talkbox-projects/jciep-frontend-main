@@ -2,7 +2,7 @@ import { HStack, VStack, Select, Text, Checkbox } from "@chakra-ui/react";
 import moment from "moment";
 import { forwardRef, useCallback, useMemo, useState } from "react";
 
-const MonthPicker = ({ value, onChange }) => {
+const MonthPicker = ({ value, onChange, isDisabled }) => {
   const [dateString, setDateString] = useState(
     !value ? "-/-" : moment(value).format("MM/yyyy")
   );
@@ -43,7 +43,7 @@ const MonthPicker = ({ value, onChange }) => {
   //     month
   //   );
   return (
-    <HStack w="100%" align="start">
+    <HStack w="100%" align="start" {...(isDisabled && { opacity: 0.4 })}>
       <Select
         placeholder=""
         variant="flushed"
@@ -53,6 +53,7 @@ const MonthPicker = ({ value, onChange }) => {
         w="100%"
         value={year}
         onChange={(e) => onYearChange(e.target.value)}
+        isDisabled={isDisabled}
       >
         <option value="-">-</option>
         {[...Array(80).keys()].map((x) => {
@@ -73,6 +74,7 @@ const MonthPicker = ({ value, onChange }) => {
         size="sm"
         value={month}
         onChange={(e) => onMonthChange(e.target.value)}
+        isDisabled={isDisabled}
       >
         <option value="-">-</option>
         {[...Array(12).keys()].map((x) => {
