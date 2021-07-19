@@ -445,7 +445,7 @@ const IdentityPwdAdd = ({ page }) => {
                 <FormLabel>
                   {page?.content?.form?.interestedIndustryOther}{" "}
                   <Text as="span" color="red">
-                    *
+                    
                   </Text>
                 </FormLabel>
                 <Input
@@ -454,7 +454,7 @@ const IdentityPwdAdd = ({ page }) => {
                     page?.content?.wordings,
                     "interested_industry_other_placeholder"
                   )}
-                  {...register("interested_industry_other", { required: true })}
+                  {...register("interested_industry_other")}
                 />
                 <FormHelperText>
                   {errors?.interested_industry_other?.type === "required" && (
