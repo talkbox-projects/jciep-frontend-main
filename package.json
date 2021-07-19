@@ -62,6 +62,9 @@
     "twilio": "^3.65.0"
   },
   "devDependencies": {
-    "babel-plugin-import-graphql": "^2.8.1"
+    "babel-plugin-import-graphql": "^2.8.1",
+    "eslint": "^7.31.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

@@ -6,13 +6,35 @@ export default [
     label: "頁面橫幅區塊 Hero Banner Setion",
     component: "group",
     fields: [
+      // {
+      //   label: "Hero Image 圖片",
+      //   name: "image",
+      //   component: "image",
+      //   uploadDir: () => "/programme",
+      //   parse: ({ previewSrc }) => previewSrc,
+      //   previewSrc: (src) => src,
+      // },
       {
-        label: "Hero Image 圖片",
-        name: "image",
-        component: "image",
-        uploadDir: () => "/programme",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
+        label: "Slider Image 圖片",
+        name: "sliderImage",
+        component: "group-list",
+        itemProps: ({ id: key, name: label }) => ({
+          key,
+          label,
+        }),
+        defaultItem: () => ({
+          id: Math.random().toString(36).substr(2, 9),
+        }),
+        fields: [
+          {
+            label: "Image 圖片",
+            name: "image",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
       },
       {
         name: "title 標題",

@@ -1,5 +1,6 @@
 import {
   AspectRatio,
+  Button,
   chakra,
   GridItem,
   HStack,
@@ -33,6 +34,7 @@ import HighlightHeadline from "../../components/HighlightHeadline";
 import Container from "../../components/Container";
 import CategoryTag from "../../components/CategoryTag";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../utils/wordExtractor";
 
 const PAGE_KEY = "sharing";
 
@@ -345,6 +347,41 @@ const Sharing = ({ page, setting, lang }) => {
                 />
               </Text>
             </Box>
+            {router?.query?.category && (
+              <HStack align="center" p={1}>
+                <Text>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "selected_category_label"
+                  )}
+                </Text>
+                <CategoryTag
+                  size="sm"
+                  category={categories?.find(
+                    (category) => category.key === router.query.category
+                  )}
+                />
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  variant="link"
+                  onClick={() => {
+                    router.push(
+                      {
+                        pathname: "/sharing",
+                      },
+                      undefined,
+                      { shallow: true }
+                    );
+                  }}
+                >
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "cancel_button_label"
+                  )}
+                </Button>
+              </HStack>
+            )}
             <InfiniteScroll
               dataLength={latestPosts.length}
               next={fetchPosts}

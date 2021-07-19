@@ -9,8 +9,6 @@ import {
   Box,
   Text,
   Image,
-  chakra,
-  Heading,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -18,13 +16,12 @@ import {
   Icon,
   Tooltip,
   Divider,
-  IconButton,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
-import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
+import { VStack, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
-import Accordian from "./../../../components/Acordian";
-import wordExtractor from "../../../utils/wordExtractor";
 import {
   AiOutlineInfoCircle,
   AiOutlineMinus,
@@ -33,10 +30,9 @@ import {
 import Container from "../../../components/Container";
 import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
-import DividerTriple from "../../../components/DividerTriple";
 import DividerA from "../../../components/DividerA";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Slider from "react-slick";
+import { useCMS } from "tinacms";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -61,6 +57,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const Partner = ({ page }) => {
+  const cms = useCMS();
   const router = useRouter();
   const slug = router.query.slug;
   const partner = (page?.content?.partnerSection?.partners ?? [])?.find(
@@ -114,21 +111,62 @@ const Partner = ({ page }) => {
                     fontWeight={900}
                     bgColor="#F6D644"
                     fontSize={["24px", "56px"]}
-                    children={partner?.agencyName}
-                  />
+                  >
+                    {partner?.agencyName}
+                  </Text>
                 </Box>
                 <Box>
-                  <Text
-                    bgColor="#F6D644"
-                    fontSize={["24px", "56px"]}
-                    children={partner?.projectName}
-                  />
+                  <Text bgColor="#F6D644" fontSize={["24px", "56px"]}>
+                    {partner?.projectName}
+                  </Text>
                 </Box>
               </VStack>
             </Box>
           </Container>
           <DividerSimple />
         </VStack>
+      </Box>
+
+      <Box bgColor="#fafafa" w="100%">
+        <Container>
+          <Flex w="100%" justify="flex-end">
+            {router.locale === "zh" ? (
+              <Button
+                value={"en"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                Display english version
+              </Button>
+            ) : (
+              <Button
+                value={"zh"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                顯示為中文
+              </Button>
+            )}
+          </Flex>
+        </Container>
       </Box>
 
       {/* Plan Section */}
