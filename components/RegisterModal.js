@@ -302,6 +302,7 @@ const RegisterModal = () => {
                     </Button>
                   );
                 }}
+                callback={console.log}
               />
             </VStack>
             <Button

@@ -34,7 +34,7 @@ export const getServerSideProps = async (context) => {
 
 const appleLogin = ({ page }) => {
   const router = useRouter();
-  const { accessToken } = router.query;
+  const { code: accessToken } = router.query;
   const [setCredential] = useCredential();
 
   useEffect(() => {
