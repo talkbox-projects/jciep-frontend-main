@@ -122,7 +122,10 @@ const IdentityStaffAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "contact_person_name_placeholder"
+                    )}
                     {...register("contactPersonName", {
                       required: true,
                     })}
@@ -131,6 +134,10 @@ const IdentityStaffAdd = ({ page }) => {
                     {errors?.contactPersonName?.type === "required" && (
                       <Text color="red">
                         輸入有效的聯繫人姓名 Enter valid contact person name!
+                          {/* {wordExtractor(
+                            page?.content?.wordings,
+                            "contact_person_name_required"
+                          )} */}
                       </Text>
                     )}
                   </FormHelperText>

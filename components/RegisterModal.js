@@ -137,7 +137,7 @@ const RegisterModal = () => {
                     {getWording("register.register_email_label")}
                   </FormLabel>
                   <Input
-                    placeholder="testing@example.com"
+                    placeholder={getWording("register.register_email_placeholder")}
                     {...register("email")}
                   />
                   <FormHelperText>{errors?.email?.message}</FormHelperText>

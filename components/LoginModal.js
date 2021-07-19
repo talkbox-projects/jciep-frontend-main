@@ -215,7 +215,7 @@ const LoginModal = () => {
                 <FormControl>
                   <FormLabel>{getWording("login.login_email_label")}</FormLabel>
                   <Input
-                    placeholder="testing@example.com"
+                    placeholder={getWording("login.login_email_placeholder")}
                     {...register("email")}
                   />
                   <FormHelperText>{errors?.email?.message}</FormHelperText>
@@ -224,7 +224,9 @@ const LoginModal = () => {
                   <FormLabel>
                     {getWording("login.login_password_label")}
                   </FormLabel>
-                  <Input type="password" {...register("password")} />
+                  <Input type="password" 
+                    placeholder={getWording("login.login_password_placeholder")}
+                  {...register("password")} />
                   <FormHelperText color="red.500">
                     {errors?.password?.message}
                   </FormHelperText>
