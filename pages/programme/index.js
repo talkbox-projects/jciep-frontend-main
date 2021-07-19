@@ -1,4 +1,5 @@
-import { Box, VStack, Grid, GridItem, SimpleGrid } from "@chakra-ui/layout";
+import React, { useRef } from "react";
+import { Box, VStack, GridItem, SimpleGrid } from "@chakra-ui/layout";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -10,7 +11,6 @@ import {
   Image,
   Icon,
   Accordion,
-  Button,
   AccordionItem,
   AccordionPanel,
   AccordionButton,
@@ -20,15 +20,14 @@ import {
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
-import metaTextTemplates from "../../utils/tina/metaTextTemplates";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
-import Accordian from "../../components/Acordian";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import HighlightHeadline from "../../components/HighlightHeadline";
+import Slider from "react-slick";
 
 const PAGE_KEY = "programme";
 
@@ -56,6 +55,16 @@ export const getServerSideProps = async (context) => {
 };
 
 const Programme = ({ page }) => {
+  console.log(page?.content?.heroBannerSection?.sliderImage);
+  const sliderRef = useRef(null);
+  const settings = {
+    ref: (c) => (sliderRef.current = c),
+    autoplay: true,
+    dots: false,
+    speed: 500,
+    slidesToShow: 1,
+  };
+
   return (
     <VStack
       mt={["64px", 0]}
@@ -78,14 +87,26 @@ const Programme = ({ page }) => {
         w="100vw"
         position="relative"
         overflowY="visible"
-        backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
-        backgroundSize="cover"
-        backgroundPosition={["center"]}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
+        // backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
+        // backgroundSize="cover"
+        // backgroundPosition={["center"]}
         zIndex="-1"
       >
+        <Slider {...settings}>
+          {(page?.content?.heroBannerSection?.sliderImage ?? []).map(
+            ({ image }, index) => {
+              return (
+                <Image
+                  minH={["40vh", "70vh"]}
+                  key={index}
+                  src={image}
+                  objectFit="cover"
+                  objectPosition="center center"
+                />
+              );
+            }
+          )}
+        </Slider>
         <VStack
           align="stretch"
           position="absolute"
@@ -137,7 +158,7 @@ const Programme = ({ page }) => {
               <MultiTextRenderer data={page?.content?.visionSection?.detail} />
             </Box>
             {(page?.content?.visionSection?.sections ?? []).map(
-              ({ title, description, id }, index) => {
+              ({ title, description, id }) => {
                 return (
                   <VStack pt={16} key={id}>
                     <Box position="relative" mx={["47px", "47px", "0px"]}>
@@ -228,8 +249,8 @@ const Programme = ({ page }) => {
               align="center"
             >
               {(page?.content?.partnerSection?.partners ?? []).map(
-                ({ id, agencyName, projectName, contact, slug }) => (
-                  <NextLink href={`/programme/partner/${slug}`}>
+                ({ id, agencyName, projectName, contact, slug }, i) => (
+                  <NextLink key={i} href={`/programme/partner/${slug}`}>
                     <WrapItem
                       as={VStack}
                       w={["100%", "100%", "40%", "25%"]}
@@ -324,9 +345,9 @@ const Programme = ({ page }) => {
             justifyContent="center"
           >
             {(page?.content?.referenceSection?.references ?? []).map(
-              ({ categoryName, icon, items }, index) => {
+              ({ categoryName, icon, items }, i) => {
                 return (
-                  <GridItem>
+                  <GridItem key={i}>
                     <VStack
                       w="100%"
                       spacing={0}

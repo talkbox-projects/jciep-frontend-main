@@ -9,8 +9,6 @@ import {
   Box,
   Text,
   Image,
-  chakra,
-  Heading,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -18,13 +16,10 @@ import {
   Icon,
   Tooltip,
   Divider,
-  IconButton,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
-import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
+import { VStack, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
-import Accordian from "./../../../components/Acordian";
-import wordExtractor from "../../../utils/wordExtractor";
 import {
   AiOutlineInfoCircle,
   AiOutlineMinus,
@@ -33,9 +28,7 @@ import {
 import Container from "../../../components/Container";
 import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
-import DividerTriple from "../../../components/DividerTriple";
 import DividerA from "../../../components/DividerA";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Slider from "react-slick";
 const PAGE_KEY = "programme";
 
@@ -114,15 +107,14 @@ const Partner = ({ page }) => {
                     fontWeight={900}
                     bgColor="#F6D644"
                     fontSize={["24px", "56px"]}
-                    children={partner?.agencyName}
-                  />
+                  >
+                    {partner?.agencyName}
+                  </Text>
                 </Box>
                 <Box>
-                  <Text
-                    bgColor="#F6D644"
-                    fontSize={["24px", "56px"]}
-                    children={partner?.projectName}
-                  />
+                  <Text bgColor="#F6D644" fontSize={["24px", "56px"]}>
+                    {partner?.projectName}
+                  </Text>
                 </Box>
               </VStack>
             </Box>
