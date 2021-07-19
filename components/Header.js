@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, HStack } from "@chakra-ui/layout";
 import wordListFieldsForCMS from "../utils/tina/wordListFieldsForCMS";
 import NextLink from "next/link";
@@ -26,13 +27,10 @@ import {
   DrawerOverlay,
   PopoverBody,
   LinkOverlay,
-  Stack,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  CloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
@@ -50,7 +48,6 @@ import { gql } from "graphql-request";
 import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
-import { IoWarning } from "react-icons/io5";
 
 const Header = ({ navigation, isLangAvailable }) => {
   const getWording = useGetWording();
@@ -69,9 +66,9 @@ const Header = ({ navigation, isLangAvailable }) => {
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
 
-  const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
-    !isLangAvailable
-  );
+  // const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
+  //   !isLangAvailable
+  // );
 
   const tabIndex = useMemo(() => {
     const kv = {
@@ -243,13 +240,13 @@ const Header = ({ navigation, isLangAvailable }) => {
     router.push("/");
   }, [router, removeCredential]);
 
-  useEffect(() => {
-    if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
-  }, [router, setIsShowLangUnavailable, isLangAvailable]);
+  // useEffect(() => {
+  //   if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
+  // }, [router, setIsShowLangUnavailable, isLangAvailable]);
 
   return (
     <Box>
-      {!isLangAvailable && isShowLangUnavailable && (
+      {/* {!isLangAvailable && isShowLangUnavailable && (
         <Box
           borderBottom="1px"
           borderColor="rgb(239,239,239)"
@@ -275,12 +272,12 @@ const Header = ({ navigation, isLangAvailable }) => {
             </HStack>
           </Container>
         </Box>
-      )}
+      )} */}
       <Box
         d={["none", "none", "block", "block"]}
         bg="white"
         position="fixed"
-        top={isShowLangUnavailable ? 20 : 0}
+        // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         zIndex={100}
         h={12}
@@ -305,7 +302,7 @@ const Header = ({ navigation, isLangAvailable }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
-            <Select
+            {/* <Select
               border="none"
               size="sm"
               w={16}
@@ -323,7 +320,7 @@ const Header = ({ navigation, isLangAvailable }) => {
             >
               <option value="zh">繁</option>
               <option value="en">EN</option>
-            </Select>
+            </Select> */}
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 <Avatar size="xs"></Avatar>
@@ -537,7 +534,7 @@ const Header = ({ navigation, isLangAvailable }) => {
       <Box
         position="fixed"
         zIndex={100}
-        top={isShowLangUnavailable ? 20 : 0}
+        // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         bg="white"
         d={["block", "block", "none", "none"]}
@@ -669,7 +666,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                     {getWording("header.font_size_level_label")}
                   </Link>
                   <Box flex={1} minW={0} w="100%" />
-                  <Select
+                  {/* <Select
                     border="none"
                     size="sm"
                     w={16}
@@ -687,7 +684,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                   >
                     <option value="zh">繁</option>
                     <option value="en">EN</option>
-                  </Select>
+                  </Select> */}
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
                       <Avatar size="xs"></Avatar>
