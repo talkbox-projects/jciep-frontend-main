@@ -16,6 +16,8 @@ import {
   Icon,
   Tooltip,
   Divider,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, HStack, Stack } from "@chakra-ui/layout";
@@ -30,6 +32,7 @@ import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
 import DividerA from "../../../components/DividerA";
 import Slider from "react-slick";
+import { useCMS } from "tinacms";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -54,6 +57,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const Partner = ({ page }) => {
+  const cms = useCMS();
   const router = useRouter();
   const slug = router.query.slug;
   const partner = (page?.content?.partnerSection?.partners ?? [])?.find(
@@ -121,6 +125,48 @@ const Partner = ({ page }) => {
           </Container>
           <DividerSimple />
         </VStack>
+      </Box>
+
+      <Box bgColor="#fafafa" w="100%">
+        <Container>
+          <Flex w="100%" justify="flex-end">
+            {router.locale === "zh" ? (
+              <Button
+                value={"en"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                Display english version
+              </Button>
+            ) : (
+              <Button
+                value={"zh"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                顯示為中文
+              </Button>
+            )}
+          </Flex>
+        </Container>
       </Box>
 
       {/* Plan Section */}
