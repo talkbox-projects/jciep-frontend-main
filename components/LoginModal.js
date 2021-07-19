@@ -378,7 +378,7 @@ const LoginModal = () => {
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
                 responseType={"code"}
                 responseMode={"query"}
-                usePopup={true}
+                usePopup={false}
                 render={(renderProps) => {
                   return (
                     <Button
