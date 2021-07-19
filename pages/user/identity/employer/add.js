@@ -16,10 +16,8 @@ import { useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
-import Link from "next/link";
 import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";

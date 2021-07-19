@@ -11,6 +11,7 @@ const identitySearch = async (
       $page: Int!
       $organizationId: ID
       $identityType: [EnumIdentityType]
+      $name: String
       $published: Boolean
     ) {
       IdentitySearch(
@@ -19,6 +20,7 @@ const identitySearch = async (
         organizationId: $organizationId
         identityType: $identityType
         published: $published
+        name: $name
       ) {
         id
         type
@@ -119,6 +121,7 @@ const identitySearch = async (
     limit,
     organizationId,
     identityType,
+    name,
     published,
   });
 

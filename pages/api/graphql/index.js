@@ -3,6 +3,7 @@ import {
   mergeResolvers,
   mergeTypeDefs,
 } from "apollo-server-micro";
+import nookies from "nookies";
 import connectDB from "../../../server/db";
 import { processRequest } from "graphql-upload";
 import mediaResolver from "./media.resolver";
@@ -54,19 +55,22 @@ const apolloServer = new ApolloServer({
     organizationResolver,
     userResolver,
   ]),
-  context: async ({ req }) => {
+  context: async (context) => {
     try {
-      const token = req.cookies?.["jciep-token"];
+      const token = nookies.get(context);
+
       if (token) {
         let user = jwt.decode(token, "shhhhh");
-        user = await User.findById(user._id).populate("identities");
-        return { user };
-      } else {
-        return { user: null };
+        if (user) {
+          user = await User.findById(user._id).populate("identities");
+          console.log("user", user);
+          return { user, context };
+        }
       }
+      return { user: null, context };
     } catch (error) {
       console.log(error);
-      return { user: null };
+      return { user: null, context };
     }
   },
 });

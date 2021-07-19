@@ -11,8 +11,14 @@ import {
   FormHelperText,
   FormLabel,
   Textarea,
+  IconButton,
   Image,
 } from "@chakra-ui/react";
+import {
+  RiAddFill,
+  RiCloseCircleFill,
+  
+} from "react-icons/ri";
 import { useCallback, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -271,18 +277,17 @@ const OrganizationCompanyAdd = ({ page }) => {
             <FormControl marginTop="20px !important">
               <Box width="100%">
                 <Box
-                  w={["150px", "150px", "20%"]}
+                  w={["100%", "47.5%", "23.5%"]}
+                  h={["250px", "210px", "180px"]}
                   display="inline-block"
-                  border="1px solid lightgrey"
-                  borderRadius="5px"
-                  height="140px"
-                  width="140px"
+                  boxShadow="0px 1px 0px 0.5px #d3d3d3fc"
+                 
+                  marginRight="10px"
+                  marginBottom="10px"
                 >
                   <FormLabel
                     height="100%"
-                    padding="18% 28%"
                     width="100%"
-                    background="lightgrey"
                     cursor="pointer"
                   >
                     <Input
@@ -291,56 +296,65 @@ const OrganizationCompanyAdd = ({ page }) => {
                       display="none"
                       onChange={onFileUpload}
                     />
-                    <span
-                      style={{
-                        textAlign: "center",
-                        fontSize: "30px",
-                        display: "block",
-                      }}
-                    >
-                      +
-                    </span>
-                    <span style={{ textAlign: "center", display: "block" }}>
-                      {page?.content?.form?.businessRegistration?.label}
-                    </span>
+                    <Text height="100%" display="flex" justifyContent="center" flexDirection="column">
+                      <Text as="span"
+                        textAlign="center"
+                        fontSize="30px"
+                        display="block"                        
+                      >
+                          <IconButton
+                            zIndex="-1"
+                            fontSize="4xl"
+                            icon={<RiAddFill />}
+                            variant="link"
+                          />
+                      </Text>
+                      <Text as="span" 
+                        textAlign="center" 
+                        display="block" >
+                        {page?.content?.form?.businessRegistration?.label}
+                      </Text>
+                    </Text>
+                    
                   </FormLabel>
                 </Box>
-                <Box
-                  w={["100%", "100%", "80%"]}
-                  display="inline-block"
-                  verticalAlign="top"
-                >
+                
                   {files.map((file, index) => {
                     let url = URL.createObjectURL(file);
                     return (
-                      <span key={index}>
+                      <Box
+                          w={["100%", "47.5%", "23.5%"]}
+                          h={["250px", "210px", "180px"]}
+                          display="inline-block"
+                          verticalAlign="top"
+                          marginRight="10px"
+                          marginBottom="10px"
+                        >
+                      <Text as="span" key={index} position="relative">
                         <Image
-                          height="140px"
-                          width="140px"
+                          height="100%"
                           display="inline-block"
                           border="1px solid lightgrey"
+                          objectFit="cover"
                           src={url}
                         ></Image>
-                        <span
-                          style={{
-                            position: "absolute",
-                            marginLeft: "-27px",
-                            background: "lightgrey",
-                            width: "24px",
-                            borderRadius: "50%",
-                            marginTop: "4px",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            height: "27px",
+                       <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRemoveImage(index)
                           }}
-                          onClick={() => onRemoveImage(index)}
-                        >
-                          x
-                        </span>
-                      </span>
+                          marginLeft="-40px"
+                          marginTop="10px"
+                          fontSize="25px"
+                          position="absolute"
+                          color="gray.300"
+                          icon={<RiCloseCircleFill />}
+                          variant="link"
+                        />
+                      </Text>
+                    </Box>
                     );
                   })}
-                </Box>
               </Box>
               <FormHelperText color="red">{fileError}</FormHelperText>
             </FormControl>

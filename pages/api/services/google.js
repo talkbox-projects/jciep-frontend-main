@@ -1,24 +1,25 @@
-const request = require('requests');
+const { default: axios } = require("axios");
+const request = require("requests");
 
 exports.getProfile = async (accessToken) => {
   try {
-    return new Promise((resolve, reject) => request(
-      `https://www.googleapis.com/oauth2/v2/userinfo`, {
+    const { data: response } = await axios.get(
+      `https://www.googleapis.com/oauth2/v2/userinfo`,
+      {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      } )
-      .on('data', (data) => {
-        return resolve(JSON.parse(data))
-      })
-      .on('end' , (err) => {
-        return reject(err)
-      })
+      }
     );
+    const snsMeta = {
+      id: response.id,
+      displayName: response.name,
+      profilePicUrl: response.picture,
+    };
+    return snsMeta;
   } catch (e) {
     throw e;
   }
 };
-
 
 //uri: `https://www.googleapis.com/plus/v1/people/me?access_token=${accessToken}`

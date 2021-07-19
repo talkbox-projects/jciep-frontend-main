@@ -25,6 +25,7 @@ import Container from "../../components/Container";
 import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useCallback } from "react";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};

@@ -49,6 +49,9 @@ const OtpVerifyModal = () => {
               user {
                 id
                 phone
+                facebookId
+                googleId
+                appleId
                 snsMeta {
                   profilePicUrl
                   displayName

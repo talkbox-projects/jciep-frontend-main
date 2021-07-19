@@ -158,7 +158,7 @@ export default {
         return false;
       }
     },
-    UserLogin: async (_parent, { input }) => {
+    UserLogin: async (_parent, { input }, { context }) => {
       /**
        * Login via facebook/google/apple/email+password/phone+otp method. 
        * 
@@ -251,7 +251,6 @@ export default {
         }
       } else if (input.facebookToken) {
         const snsMeta = await facebook.getProfile(input.facebookToken);
-
         if (!snsMeta) {
           throw new Error("failed to login via facebook");
         }
@@ -259,44 +258,31 @@ export default {
         let user = await User.findOne({ facebookId: snsMeta.id }).populate(
           "identities"
         );
-
         if (!user) {
-          let user = await new User({
-            facebookId: snsMeta.id,
-          }).save();
-
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          user.snsMeta = snsMeta;
-          console.log(snsMeta);
-          return { token, user };
-        } else {
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          user.snsMeta = snsMeta;
-          console.log(snsMeta);
-          return { token, user };
+          user = await new User({ facebookId: snsMeta.id }).save();
         }
+        const { identities, ..._user } = user.toObject();
+        const token = jwt.sign(_user, "shhhhh").toString();
+        user.snsMeta = snsMeta;
+        await user.save();
+        return { token, user };
       } else if (input.googleToken) {
-        let userData = await google.getProfile(input.googleToken);
-
-        if (userData.error) {
-          throw new Error(userData.error.message);
+        let snsMeta = await google.getProfile(input.googleToken);
+        if (!snsMeta) {
+          throw new Error("failed to login via google");
         }
 
-        let user = await User.findOne({ googleId: userData.id }).populate(
+        let user = await User.findOne({ facebookId: snsMeta.id }).populate(
           "identities"
         );
-
         if (!user) {
-          let user = await new User({
-            googleId: userData.id,
-          }).save();
-
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          return { token, user };
-        } else {
-          const token = jwt.sign(user.toObject(), "shhhhh").toString();
-          return { token, user };
+          user = await new User({ facebookId: snsMeta.id }).save();
         }
+        const { identities, ..._user } = user.toObject();
+        const token = jwt.sign(_user, "shhhhh").toString();
+        user.snsMeta = snsMeta;
+        await user.save();
+        return { token, user };
       }
 
       return null;
@@ -313,12 +299,6 @@ export default {
     },
 
     UserLogout: (_parent, { _context }) => {
-      nookies.destroy(_context, "x-token", {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/",
-        httpOnly: true,
-        secure: true,
-      });
       return true;
     },
 
