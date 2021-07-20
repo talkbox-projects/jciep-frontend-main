@@ -35,13 +35,12 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        organizations: [],
-        // await organizationSearch({
-        //   status: ["approved"],
-        //   published: true,
-        //   type: ["ngo"],
-        //   limit: 0,
-        // }),
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true,
+          type: ["ngo"],
+          limit: 0,
+        }),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
