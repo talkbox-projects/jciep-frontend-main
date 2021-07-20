@@ -121,16 +121,6 @@ const IdentityPwdAdd = ({ page }) => {
     }
   );
 
-  const onIndustryChange = (field, value) => {
-    field.onChange(value);
-    let hasOther = value.filter((data) => data.value === "other");
-    if (hasOther.length > 0) {
-      setShowIndustryOther(true);
-    } else {
-      setValue("interested_industry_other", "");
-      setShowIndustryOther(false);
-    }
-  };
 
   return (
     <VStack py={36}>
@@ -311,7 +301,7 @@ const IdentityPwdAdd = ({ page }) => {
 
             <FormControl>
               <FormLabel>
-                {page?.content?.form?.residentDistrict?.label}
+                {page?.content?.form?.residentRestrict?.label}
               </FormLabel>
               <Controller
                 name="resident_district"
@@ -324,7 +314,7 @@ const IdentityPwdAdd = ({ page }) => {
                       "resident_district_placeholder"
                     )}
                     {...field}
-                    options={page?.content?.form?.residentDistrict?.options.map(
+                    options={page?.content?.form?.residentRestrict?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
                   />
@@ -420,7 +410,7 @@ const IdentityPwdAdd = ({ page }) => {
                       page?.content?.wordings,
                       "industry_placeholder"
                     )}
-                    onChange={(value) => onIndustryChange(field, value)}
+                    
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -603,7 +593,7 @@ export default withPageCMS(IdentityPwdAdd, {
           ],
         },
         {
-          name: "residentDistrict",
+          name: "residentRestrict",
           label: "居住區 Resident District Label",
           component: "group",
           fields: [
