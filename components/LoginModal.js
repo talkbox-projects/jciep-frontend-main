@@ -1,3 +1,4 @@
+import React from "react";
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
@@ -12,7 +13,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  useToast,
   Button,
   VStack,
   HStack,
@@ -53,149 +53,160 @@ const LoginModal = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const toast = useToast();
-
-  const onPhoneLogin = useCallback(async ({ phone }) => {
-    const mutation = gql`
-      mutation UserPhoneVerify($phone: String!) {
-        UserPhoneVerify(phone: $phone)
+  const onPhoneLogin = useCallback(
+    async ({ phone }) => {
+      const mutation = gql`
+        mutation UserPhoneVerify($phone: String!) {
+          UserPhoneVerify(phone: $phone)
+        }
+      `;
+      let result = await getGraphQLClient().request(mutation, { phone });
+      if (result.UserPhoneVerify) {
+        otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
+        loginModalDisclosure.onClose();
+      } else {
+        setError("phone", {
+          message: getWording("login.login_error_message"),
+        });
       }
-    `;
-    let result = await getGraphQLClient().request(mutation, { phone });
-    if (result.UserPhoneVerify) {
-      otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
-      loginModalDisclosure.onClose();
-    } else {
-      setError("phone", {
-        message: getWording("login.login_error_message"),
-      });
-    }
-  }, []);
+    },
+    [getWording, loginModalDisclosure, otpVerifyModalDisclosure, setError]
+  );
 
   const responseFacebook = (response) => {
-    loginModalDisclosure.onClose();
     router.push(`/oauth/facebook/?accessToken=${response.accessToken}`);
+    loginModalDisclosure.onClose();
   };
 
   const responseGoogle = (response) => {
-    loginModalDisclosure.onClose();
     router.push(`/oauth/google/?accessToken=${response.accessToken}`);
+    loginModalDisclosure.onClose();
   };
 
-  const onEmailLogin = useCallback(async ({ email, password }) => {
-    try {
-      const mutation = gql`
-        mutation UserLogin($input: LoginInput) {
-          UserLogin(input: $input) {
-            token
-            user {
-              id
-              email
-              facebookId
-              googleId
-              appleId
-              snsMeta {
-                profilePicUrl
-                displayName
-              }
-              identities {
+  const onEmailLogin = useCallback(
+    async ({ email, password }) => {
+      try {
+        const mutation = gql`
+          mutation UserLogin($input: LoginInput) {
+            UserLogin(input: $input) {
+              token
+              user {
                 id
-                type
-                chineseName
-                englishName
-                dob
-                gender
-                district
-                pwdType
-                interestedEmploymentMode
-                interestedIndustry
-                interestedIndustryOther
-                industry
-                tncAccept
-                published
                 email
-                phone
-                profilePic {
+                facebookId
+                googleId
+                appleId
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
+                identities {
                   id
-                  url
-                  contentType
-                  fileSize
-                }
-                bannerMedia {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                yearOfExperience
-                biography
-                portfolio {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                writtenLanguage
-                writtenLanguageOther
-                oralLanguage
-                oralLanguageOther
-                hobby
-                education {
-                  school
-                  degree
-                  fieldOfStudy
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                employment {
-                  employmentType
-                  companyName
-                  jobTitle
+                  type
+                  chineseName
+                  englishName
+                  dob
+                  gender
+                  district
+                  pwdType
+                  interestedEmploymentMode
+                  interestedIndustry
+                  interestedIndustryOther
                   industry
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                activity {
-                  name
-                  description
-                  startDatetime
-                  endDatetime
+                  tncAccept
+                  published
+                  email
+                  phone
+                  profilePic {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  bannerMedia {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  yearOfExperience
+                  biography
+                  portfolio {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  writtenLanguage
+                  writtenLanguageOther
+                  oralLanguage
+                  oralLanguageOther
+                  hobby
+                  education {
+                    school
+                    degree
+                    fieldOfStudy
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  employment {
+                    employmentType
+                    companyName
+                    jobTitle
+                    industry
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  activity {
+                    name
+                    description
+                    startDatetime
+                    endDatetime
+                  }
                 }
               }
             }
           }
+        `;
+
+        const variables = {
+          input: {
+            email,
+            password,
+          },
+        };
+
+        const data = await getGraphQLClient().request(mutation, variables);
+        setCredential(data?.UserLogin);
+        loginModalDisclosure.onClose();
+        if (data?.UserLogin) {
+          const user = data?.UserLogin?.user;
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
         }
-      `;
-
-      const variables = {
-        input: {
-          email,
-          password,
-        },
-      };
-
-      const data = await getGraphQLClient().request(mutation, variables);
-      setCredential(data?.UserLogin);
-      loginModalDisclosure.onClose();
-      router.push("/");
-    } catch (e) {
-      setError("password", {
-        message: getWording("login.login_error_message"),
-      });
-    }
-  }, []);
+      } catch (e) {
+        setError("password", {
+          message: getWording("login.login_error_message"),
+        });
+      }
+    },
+    [getWording, loginModalDisclosure, setCredential, setError]
+  );
 
   return (
     <Modal
