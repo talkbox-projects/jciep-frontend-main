@@ -1,3 +1,4 @@
+import React from "react";
 import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
@@ -19,9 +20,9 @@ import {
   TabPanel,
   AspectRatio,
   IconButton,
+  Button,
 } from "@chakra-ui/react";
 import Container from "../components/Container";
-import { getConfiguration } from "../utils/configuration/getConfiguration";
 import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
@@ -33,7 +34,6 @@ import ApostropheHeadline from "../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
-import CategoryTag from "../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 
@@ -117,6 +117,21 @@ const Home = ({ setting, page }) => {
               >
                 {page?.content?.banner?.description}
               </Text>
+              <Button
+                borderRadius="full"
+                color="white"
+                bg="transparent"
+                variant="outline"
+                _hover={{
+                  bg: "rgba(255,255,255, 0.3)",
+                }}
+                onClick={() =>
+                  page?.content?.banner?.buttonHyperlink &&
+                  router.push(page?.content?.banner?.buttonHyperlink)
+                }
+              >
+                {page?.content?.banner?.buttonText}
+              </Button>
             </VStack>
           </Container>
           <DividerSimple nextColor="#fafafa"></DividerSimple>
@@ -606,14 +621,14 @@ export default withPageCMS(Home, {
       label: "主頁橫幅 Hero Banner",
       component: "group",
       fields: [
-        {
-          label: "主頁圖片 Image",
-          name: "image",
-          component: "image",
-          uploadDir: () => "/home",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
+        // {
+        //   label: "主頁圖片 Image",
+        //   name: "image",
+        //   component: "image",
+        //   uploadDir: () => "/home",
+        //   parse: ({ previewSrc }) => previewSrc,
+        //   previewSrc: (src) => src,
+        // },
         {
           name: "title",
           label: "主標題 Title",
@@ -622,9 +637,18 @@ export default withPageCMS(Home, {
         },
         {
           name: "description",
-          label: "description",
           label: "副標題  Description",
           component: "textarea",
+        },
+        {
+          name: "buttonText",
+          label: "按鈕文字 Button Text",
+          component: "text",
+        },
+        {
+          name: "buttonHyperlink",
+          label: "按鈕連結 Button Hyperlink",
+          component: "text",
         },
       ],
     },
