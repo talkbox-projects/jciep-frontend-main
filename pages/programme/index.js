@@ -32,6 +32,7 @@ import HighlightHeadline from "../../components/HighlightHeadline";
 import Slider from "react-slick";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
+import Anchor from "../../components/Anchor";
 
 const PAGE_KEY = "programme";
 
@@ -86,6 +87,7 @@ const Programme = ({ page }) => {
       )}
 
       {/* Banner Section */}
+      <Anchor name="vision" />
       <Box
         h="40vh"
         minH={["40vh", "70vh"]}
@@ -263,6 +265,7 @@ const Programme = ({ page }) => {
       </Box>
 
       {/* Partner Section */}
+      <Anchor name="partner" />
       <Box bg="#FAFAFA">
         <Box
           backgroundImage={`url(${page?.content?.partnerSection?.bgImageMain})`}
@@ -368,6 +371,7 @@ const Programme = ({ page }) => {
         </Box>
       </Box>
       {/* Reference Section */}
+      <Anchor name="reference" />
       <Box
         bg={page?.content?.referenceSection?.bgStyle?.bgColor}
         w="100%"

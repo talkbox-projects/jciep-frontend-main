@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -6,17 +6,10 @@ import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
 import Slider from "react-slick";
 import {
-  Divider,
-  Icon,
-  Accordion,
-  AccordionItem,
-  AccordionPanel,
-  AccordionButton,
   Heading,
   Text,
   Image,
   Box,
-  Stack,
   UnorderedList,
   ListItem,
   Button,
@@ -26,18 +19,16 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import Card from "../../components/CarouselCard";
-import ButtonGroup from "../../components/CarouselButtons";
 import Container from "../../components/Container";
 import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import { FaArrowLeft, FaArrowRight, FaShareSquare } from "react-icons/fa";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Anchor from "../../components/Anchor";
 
 const PAGE_KEY = "resources";
 
@@ -296,6 +287,7 @@ const Resources = ({ page }) => {
       {/* resource Section */}
 
       <Box bg="#F3F3F3">
+        <Anchor name="list" />
         <Container>
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
@@ -473,6 +465,7 @@ const Resources = ({ page }) => {
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
+        <Anchor name="equip" top="0" />
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}
@@ -528,6 +521,7 @@ const Resources = ({ page }) => {
                         ({ label, url }, index) => {
                           return (
                             <ListItem
+                              key={index}
                               display="flex"
                               _before={{
                                 content: '"."',
@@ -579,6 +573,7 @@ const Resources = ({ page }) => {
                         ({ label, url }, index) => {
                           return (
                             <ListItem
+                              key={index}
                               display="flex"
                               _before={{
                                 content: '"."',
@@ -632,6 +627,7 @@ const Resources = ({ page }) => {
                       ).map(({ label, url }, index) => {
                         return (
                           <ListItem
+                            key={index}
                             display="flex"
                             _before={{
                               content: '"."',
