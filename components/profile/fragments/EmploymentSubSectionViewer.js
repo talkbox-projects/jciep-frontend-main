@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -50,7 +51,6 @@ const EmploymentSubSectionViewer = () => {
                   mb={8}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   {present && (
@@ -76,17 +76,17 @@ const EmploymentSubSectionViewer = () => {
                         : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>
-                  {/* <Text pt={2}>{`${companyName} (${jobTitle})`}</Text> */}
-                  <Text pt={2}>
-                    {companyName} {jobTitle && `(${jobTitle})`}
-                  </Text>
+                  <Text>{jobTitle}</Text>
                   <Text>
+                    {companyName} (
                     {
                       enums?.EnumEmploymentModeList?.find(
                         (x) => x.key === employmentType
                       )?.value?.[router.locale]
                     }
+                    )
                   </Text>
+                  <Text></Text>
                 </VStack>
               </Box>
             );

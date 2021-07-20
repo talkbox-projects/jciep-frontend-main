@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Box,
@@ -61,7 +62,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
             const prefix = `employment[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
 
-            const isCurrentJob = watch(`${prefix}.present`);
+            const isCurrent = watch(`${prefix}.present`);
             return (
               <Box
                 pl={2}
@@ -84,7 +85,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                   mb={12}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   <HStack alignSelf="flex-end" pt={2}>
@@ -264,7 +264,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                           <MonthPicker
                             page={page}
                             {...field}
-                            isDisabled={isCurrentJob}
+                            isDisabled={isCurrent}
                           />
                         )}
                       />
