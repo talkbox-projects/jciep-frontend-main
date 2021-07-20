@@ -151,7 +151,13 @@ const OrganizationMemberListSection = () => {
               <HStack
                 {...(identity?.id && {
                   onClick: () => {
-                    router.push(`/user/identity/${identity.id}`);
+                    if (editable) {
+                      router.push(`/user/identity/${identity.id}`);
+                    } else {
+                      router.push(
+                        `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
+                      );
+                    }
                   },
                   _hover: {
                     bg: "#fafafa",

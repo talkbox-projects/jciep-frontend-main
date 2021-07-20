@@ -40,6 +40,7 @@ const LoginModal = () => {
     loginModalDisclosure,
     registerModalDisclosure,
     otpVerifyModalDisclosure,
+    resetPasswordModalDisclosure,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -228,6 +229,20 @@ const LoginModal = () => {
                   <FormHelperText color="red.500">
                     {errors?.password?.message}
                   </FormHelperText>
+                </FormControl>
+                <FormControl as={VStack} align="end">
+                  <Button
+                    onClick={() => {
+                      loginModalDisclosure.onClose();
+                      resetPasswordModalDisclosure.onOpen();
+                    }}
+                    fontWeight="normal"
+                    variant="link"
+                    textDecor="underline"
+                    color="black"
+                  >
+                    {getWording("login.forget_password_label")}
+                  </Button>
                 </FormControl>
                 <FormControl>
                   <Button

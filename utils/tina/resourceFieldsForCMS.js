@@ -62,40 +62,59 @@ const textareaWithTooltip = [
   },
 ];
 
-const equipBlockFields = [
+const equipBlockFields = ({ setting }) => [
+  {
+    name: "category",
+    label: "分類 Category",
+    component: "select",
+    defaultValue: "",
+    options: [
+      { value: "notSpecified", label: "無 N/A" },
+      ...(setting?.value?.categories ?? []).map(({ key, label }) => ({
+        value: key,
+        label: label,
+      })),
+    ],
+  },
   {
     name: "content",
     label: "內容 content",
     component: "blocks",
     templates: metaTextTemplates,
   },
+
   {
-    name: "links",
-    label: "鏈結 Links",
-    component: "group-list",
-    itemProps: ({ id: key, label }) => ({
-      key,
-      label,
-    }),
-    defaultItem: () => ({
-      id: Math.random().toString(36).substr(2, 9),
-    }),
-    fields: [
-      {
-        name: "url",
-        label: "URL",
-        component: "text",
-      },
-      {
-        name: "label",
-        label: "標籤 Label",
-        component: "text",
-      },
-    ],
+    name: "link",
+    label: "鏈結 Link",
+    component: "text",
   },
+  // {
+  //   name: "links",
+  //   label: "鏈結 Links",
+  //   component: "group-list",
+  //   itemProps: ({ id: key, label }) => ({
+  //     key,
+  //     label,
+  //   }),
+  //   defaultItem: () => ({
+  //     id: Math.random().toString(36).substr(2, 9),
+  //   }),
+  //   fields: [
+  //     {
+  //       name: "url",
+  //       label: "URL",
+  //       component: "text",
+  //     },
+  //     {
+  //       name: "label",
+  //       label: "標籤 Label",
+  //       component: "text",
+  //     },
+  //   ],
+  // },
 ];
 
-export default [
+export default (props) => [
   {
     name: "heroBannerSection",
     label: "頁面橫幅區塊 Hero Banner Setion",
@@ -516,7 +535,7 @@ export default [
         name: "left",
         label: "左方區塊 Left Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
       {
         label: "Background Image 圖片",
@@ -530,13 +549,13 @@ export default [
         name: "topRight",
         label: "右上區塊 Top Right Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
       {
         name: "bottomRight",
         label: "右下區塊 Bottom Right Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
     ],
   },

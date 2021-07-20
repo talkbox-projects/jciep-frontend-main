@@ -24,7 +24,6 @@ import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
-import wordExtractor from "../../utils/wordExtractor";
 import React from "react";
 import Container from "../../components/Container";
 import { AiFillBulb, AiOutlineBulb } from "react-icons/ai";
@@ -302,13 +301,9 @@ const PwdDetail = ({ page }) => {
               flexDirection="column"
               transition="all 0.2s"
               cursor="default"
-              // _hover={{
-              //   boxShadow: "lg",
-              //   cursor: "pointer",
-              // }}
             >
               <Text fontSize="lg">{trait.captionTop}</Text>
-              <Text fontSize={["24px", "24px", "36px"]} fontWeight="bold">
+              <Text fontSize={["2xl", "2xl", "2xl"]} fontWeight="bold">
                 {trait.text}
               </Text>
             </Box>

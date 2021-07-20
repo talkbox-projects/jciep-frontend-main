@@ -89,6 +89,7 @@ export const getFilteredPosts = async (
           title
           excerpt
           category
+          content
           tags
           publishDate
           coverImage

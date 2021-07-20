@@ -134,6 +134,10 @@ const JobOpportunities = ({ page }) => {
             "ul, ol": {
               px: 4,
             },
+            a: {
+              color: "green.500",
+              textDecor: "underline",
+            },
             li: {
               listStyle: "none",
               pb: 2,

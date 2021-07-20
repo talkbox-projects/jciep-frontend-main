@@ -9,6 +9,7 @@ const withPageCMS =
   (props) => {
     const router = useRouter();
     const _page = props?.[propName] ?? {};
+
     const [page, form] = useForm(
       {
         key,
@@ -40,7 +41,10 @@ const withPageCMS =
             name: "content",
             label: "頁面內容 Page Content",
             component: "group",
-            fields: [...fields, wordListFieldsForCMS({ name: "wordings" })],
+            fields: [
+              ...(typeof fields === "function" ? fields(props) : fields),
+              wordListFieldsForCMS({ name: "wordings" }),
+            ],
           },
         ],
         onSubmit: async (values) => {
