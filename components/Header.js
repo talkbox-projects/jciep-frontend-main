@@ -676,6 +676,13 @@ const Header = ({ navigation, isLangAvailable }) => {
                     {getWording("header.font_size_level_label")}
                   </Link>
                   <Box flex={1} minW={0} w="100%" />
+                  <Text>
+                    {
+                      (navigation.social ?? []).map(({icon, url}) => {
+                        return <a href={url}><Image display="inline-flex" height="25px" src={icon}/></a>
+                      })
+                    }
+                  </Text>
                   <Select
                     border="none"
                     size="sm"
