@@ -72,7 +72,7 @@ const Footer = ({ footer }) => {
               columns={[2, 2, 3, 5, 5]}
               gap={12}
             >
-              {(footer?.sitemap ?? []).map(({ id, links = [], title, url }) => (
+              {(footer?.sitemap ?? []).map(({ id, links = [], title, url = "/", }) => (
                 <VStack key={id} align="start">
                   <NextLink href={url}>
                     <Button
@@ -85,7 +85,7 @@ const Footer = ({ footer }) => {
                       {title}
                     </Button>
                   </NextLink>
-                  {(links ?? []).map(({ id: _id, url = "", label = "" }) => {
+                  {(links ?? []).map(({ id: _id, url = "/", label = "" , icon }) => {
                     return (
                       <NextLink id={_id} href={url}>
                         <Button
@@ -96,6 +96,12 @@ const Footer = ({ footer }) => {
                           color="black"
                         >
                           {label}
+                          {
+                            (icon ?? []).map(({icon, url}) => {
+                              return <a href={url}><Image  src={icon} height="30px"/></a>
+                            })
+                          }
+                          
                         </Button>
                       </NextLink>
                     );
@@ -232,6 +238,34 @@ export default withConfigurationCMS(Footer, {
               name: "label",
               label: "標籤 Label",
               component: "text",
+            },
+            {
+              label: "圖標 icon",
+              name: "icon",
+              component: "group-list",
+              itemProps: ({ id: key, label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "url",
+                  label: "路由 Url",
+                  placeholder: "https://",
+                  component: "text",
+                },
+                {
+                  label: "圖標 Icon",
+                  name: "icon",
+                  component: "image",
+                  uploadDir: () => "/footer/icon",
+                  parse: ({ previewSrc }) => previewSrc,
+                  previewSrc: (src) => src,
+                }
+              ] 
             },
             {
               name: "url",
