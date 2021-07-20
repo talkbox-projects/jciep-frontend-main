@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
@@ -37,6 +37,7 @@ import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
+import VisibilitySensor from "react-visibility-sensor";
 
 const PAGE_KEY = "home";
 
@@ -59,6 +60,8 @@ const Home = ({ setting, page }) => {
   const router = useRouter();
 
   const isMobile = useBreakpointValue([true, false]);
+  const videoRef = useRef(undefined);
+  const [hasVideoEnded, setHasVideoEnded] = useState(false);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -81,6 +84,10 @@ const Home = ({ setting, page }) => {
   useEffect(() => {
     fetchFeaturePosts();
   }, [fetchFeaturePosts]);
+
+  useEffect(() => {
+    if (isMobile || !isMobile) setHasVideoEnded(false);
+  }, [isMobile]);
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
@@ -198,16 +205,24 @@ const Home = ({ setting, page }) => {
 
       {/* Third Section */}
       <Box>
-        <AspectRatio h="100%" ratio={isMobile ? 1 / 3 : 5 / 3}>
-          <Video
-            h="100%"
-            src={
-              isMobile ? "/logo_video_mobile.mp4" : "/logo_video_desktop.mov"
-            }
-            autoPlay
-            muted
-          />
-        </AspectRatio>
+        <VisibilitySensor
+          onChange={(isVisible) => {
+            if (!hasVideoEnded && !!videoRef?.current)
+              isVisible ? videoRef.current.play() : videoRef.current.pause();
+          }}
+        >
+          <AspectRatio h="100%" ratio={isMobile ? 3 / 5 : 5 / 3}>
+            <Video
+              ref={videoRef}
+              h="100%"
+              src={
+                isMobile ? "/logo_video_mobile.mp4" : "/logo_video_desktop.mov"
+              }
+              muted
+              onEnded={() => setHasVideoEnded(true)}
+            />
+          </AspectRatio>
+        </VisibilitySensor>
       </Box>
       {/* <Box bg="#fff">
         <Container>
