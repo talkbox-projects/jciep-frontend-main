@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/router";
 import { VStack, Box, Text, Grid } from "@chakra-ui/layout";
 import { Image, chakra } from "@chakra-ui/react";
@@ -9,6 +10,7 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import DividerA from "../../components/DividerA";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
+import Anchor from "../../components/Anchor";
 
 const PAGE_KEY = "pwd";
 
@@ -51,7 +53,6 @@ const PwdMain = ({ page }) => {
         flexDirection="column"
         alignItems="center"
         zIndex="-1"
-        display="flex"
         justifyContent="center"
       >
         <Box mb="43px" position="relative" zIndex={10}>
@@ -139,6 +140,7 @@ const PwdMain = ({ page }) => {
       </Box>
 
       {/* PWDs List */}
+      <Anchor id="list" />
       <Box
         bg={page?.content?.pwdList?.bgStyle?.bgColor}
         w="100%"
@@ -173,8 +175,9 @@ const PwdMain = ({ page }) => {
           mt={["36px", "56px"]}
           justifyContent="center"
         >
-          {(page?.content?.pwdList?.pwds ?? []).map((data) => (
+          {(page?.content?.pwdList?.pwds ?? []).map((data, i) => (
             <Box
+              key={i}
               w="100%"
               h={["132px", "132px", "122px"]}
               transition="all 0.2s"

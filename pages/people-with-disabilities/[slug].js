@@ -28,6 +28,7 @@ import wordExtractor from "../../utils/wordExtractor";
 import React from "react";
 import Container from "../../components/Container";
 import { AiFillInfoCircle, AiOutlineBulb } from "react-icons/ai";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
@@ -74,7 +75,7 @@ const PwdDetail = ({ page }) => {
         const remaining = [];
         const pwds = page.content.pwdList.pwds;
         let currentIndex = pwds.findIndex((data) => data.slug === pwd.slug);
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 3; i++) {
           if (currentIndex + i < pwds.length - 1) {
             remaining.push(pwds[currentIndex + i]);
           } else {
@@ -615,6 +616,28 @@ const PwdDetail = ({ page }) => {
               </Text>
             </Box>
           ))}
+          <Box
+            transition="all 0.2s"
+            w="100%"
+            h={["132px", "132px", "122px"]}
+            bg="#FAFAFA"
+            borderRadius="10px"
+            cursor="pointer"
+            _hover={{
+              boxShadow: "12px 12px 24px 0px rgba(30,30,30,0.1)",
+            }}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            px="12px"
+            onClick={() => router.push("/people-with-disabilities#list")}
+          >
+            <Icon as={HiOutlineDotsHorizontal} h="48px" w="48px" />
+            <Text fontSize={["16px", "16px", "24px"]} textAlign="center">
+              顯示更多
+            </Text>
+          </Box>
         </Grid>
         <Image
           pos="absolute"
