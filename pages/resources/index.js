@@ -287,7 +287,7 @@ const Resources = ({ page }) => {
       {/* resource Section */}
 
       <Box bg="#F3F3F3">
-        <Anchor name="list" />
+        <Anchor id="list" />
         <Container>
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
@@ -352,14 +352,10 @@ const Resources = ({ page }) => {
               bg="white"
               p={4}
               borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickPrev()}
             >
-              <IconButton
-                cursor="pointer"
-                onClick={() => sliderRef.current.slickPrev()}
-                variant="unstyled"
-                as={FaArrowLeft}
-                size="md"
-              />
+              <IconButton variant="unstyled" as={FaArrowLeft} size="md" />
             </Box>
           </HStack>
           <HStack
@@ -380,11 +376,11 @@ const Resources = ({ page }) => {
               bg="white"
               p={4}
               borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickNext()}
             >
               <IconButton
-                cursor="pointer"
                 borderRadius="50%"
-                onClick={() => sliderRef.current.slickNext()}
                 variant="unstyled"
                 round={true}
                 size="md"
@@ -465,7 +461,7 @@ const Resources = ({ page }) => {
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
-        <Anchor name="equip" top="0" />
+        <Anchor id="equip" top="0" />
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}

@@ -1,7 +1,8 @@
 import React from "react";
-const Anchor = ({ name, top = "-80px", left, bottom, right, style = {} }) => (
+const Anchor = ({ id, top = "-80px", left, bottom, right, style = {} }) => (
   <a
-    name={name}
+    id={id}
+    name={id}
     style={{
       display: "block",
       position: "relative",
