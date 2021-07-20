@@ -219,6 +219,8 @@ export default {
 
       input.updateAt = new Date();
 
+      const submission = await OrganizationSubmission.findById(input?.id);
+
       if (["approved", "rejected"].includes(input?.status)) {
         input.vettedAt = new Date();
         await Organization.findByIdAndUpdate(submission.organization, {
