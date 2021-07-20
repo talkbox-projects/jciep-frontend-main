@@ -44,6 +44,9 @@ const IdentityOrganizationListSection = () => {
             e.stopPropagation();
             joinDisclosure.onOpen({
               page,
+              organizationType: ["pwd", "staff"].includes(identity?.type)
+                ? "ngo"
+                : "employment",
               onSubmit: async (params) => {
                 try {
                   await OrganizationMemberJoin({

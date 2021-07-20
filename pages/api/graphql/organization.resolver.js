@@ -95,6 +95,7 @@ export default {
       { invitationCode, organizationType }
     ) => {
       try {
+        console.log({ invitationCode, organizationType });
         return await Organization.exists({
           invitationCode,
           organizationType,
