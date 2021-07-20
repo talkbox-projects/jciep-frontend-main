@@ -21,6 +21,7 @@ import {
   AspectRatio,
   IconButton,
   Button,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Container from "../components/Container";
 import metaTextTemplates from "../utils/tina/metaTextTemplates";
@@ -56,6 +57,8 @@ const Video = chakra("video");
 const Home = ({ setting, page }) => {
   const [posts, setPosts] = useState([]);
   const router = useRouter();
+
+  const isMobile = useBreakpointValue([true, false]);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -194,7 +197,19 @@ const Home = ({ setting, page }) => {
       </Box>
 
       {/* Third Section */}
-      <Box bg="#fff">
+      <Box>
+        <AspectRatio h="100%" ratio={isMobile ? 1 / 3 : 5 / 3}>
+          <Video
+            h="100%"
+            src={
+              isMobile ? "/logo_video_mobile.mp4" : "/logo_video_desktop.mov"
+            }
+            autoPlay
+            muted
+          />
+        </AspectRatio>
+      </Box>
+      {/* <Box bg="#fff">
         <Container>
           <VStack align="center" py={"20vh"}>
             <Image
@@ -236,7 +251,7 @@ const Home = ({ setting, page }) => {
             </Text>
           </VStack>
         </Container>
-      </Box>
+      </Box> */}
 
       {/* Fourth Section */}
 
