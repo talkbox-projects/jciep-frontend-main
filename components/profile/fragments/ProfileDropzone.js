@@ -1,6 +1,6 @@
+import React from "react";
 import {
   Image,
-  AspectRatio,
   Icon,
   Text,
   VStack,
@@ -21,17 +21,20 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
   const getDropErrorCodeMsg = (errCode) => {
     switch (errCode) {
       case "file-invalid-type":
-        return wordExtractor(
-          page?.content?.wordings,
-          "dropzone_error_invalid_type"
-        );
+        return "不支援的檔案類別，請上載PNG、JPG、PDF";
+      // return wordExtractor(
+      //   page?.content?.wordings,
+      //   "dropzone_error_invalid_type"
+      // );
       case "file-too-large":
-        return wordExtractor(
-          page?.content?.wordings,
-          "dropzone_error_file_too_large"
-        );
+        // return wordExtractor(
+        //   page?.content?.wordings,
+        //   "dropzone_error_file_too_large"
+        // );
+        return "檔案大小不能超過 1 MB";
       default:
-        return wordExtractor(page?.content?.wordings, "dropzone_error_general");
+        // return wordExtractor(page?.content?.wordings, "dropzone_error_general");
+        return "不支援的檔案類別";
     }
   };
 
