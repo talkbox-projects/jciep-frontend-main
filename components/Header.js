@@ -305,6 +305,7 @@ const Header = ({ navigation, isLangAvailable }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
+            
             <Select
               border="none"
               size="sm"

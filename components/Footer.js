@@ -83,13 +83,16 @@ const Footer = ({ footer }) => {
                       fontSize={["xl", "xl", "lg"]}
                     >
                       {title}
-                      {
-                        (social ?? []).map(({icon, id, url})=>{
-                          return <a href={url}><Image src={icon} height="30px"></Image></a>
-                        })
-                      }
                     </Button>
                   </NextLink>
+                  <Text w="100%">
+                  {
+                    (social ?? []).map(({icon, id, url})=>{
+                      return <a href={url}><Image display="inline-flex" src={icon} height="30px"></Image></a>
+                    })
+                  }
+                  </Text>
+                  
                   {(links ?? []).map(({ id: _id, url = "/", label = "" }) => {
                     return (
                       <NextLink id={_id} href={url}>
