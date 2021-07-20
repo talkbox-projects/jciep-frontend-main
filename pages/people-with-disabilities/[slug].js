@@ -27,7 +27,7 @@ import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import React from "react";
 import Container from "../../components/Container";
-import { AiFillBulb, AiOutlineBulb } from "react-icons/ai";
+import { AiFillInfoCircle, AiOutlineBulb } from "react-icons/ai";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
@@ -85,7 +85,7 @@ const PwdDetail = ({ page }) => {
         setRemainingPwds(remaining);
       }
     }
-  }, [pwd]);
+  }, [page.content.pwdList.pwds, pwd]);
 
   const performSelection = (data, item) => {
     setActiveJob(item);
@@ -262,7 +262,7 @@ const PwdDetail = ({ page }) => {
             <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {pwd?.traitSection?.title}
             </Text>
-            <Text zIndex={2} fontSize="16px" position="relative" zIndex="1">
+            <Text zIndex={2} fontSize="16px" position="relative">
               {pwd?.traitSection?.description}
             </Text>
           </Box>
@@ -382,11 +382,26 @@ const PwdDetail = ({ page }) => {
               </GridItem>
             ))}
           </SimpleGrid>
-          <Text mt={["56px", "56px", "80px"]} fontSize="14px" zIndex={3}>
-            {(pwd?.careerSection?.extraInfo ?? []).map((data, index) => (
-              <chakra.span key={index}>{data.text}</chakra.span>
-            ))}
-          </Text>
+          <Box
+            mt={["56px", "56px", "80px"]}
+            zIndex={3}
+            p={4}
+            bg="white"
+            borderRadius="xl"
+          >
+            <HStack>
+              <Icon
+                as={AiFillInfoCircle}
+                fontSize="48px"
+                color="rgb(252,210,0)"
+              />
+              <Text fontSize="14px">
+                {(pwd?.careerSection?.extraInfo ?? []).map((data, index) => (
+                  <chakra.span key={index}>{data.text}</chakra.span>
+                ))}
+              </Text>
+            </HStack>
+          </Box>
         </Container>
 
         <Box>
@@ -469,8 +484,9 @@ const PwdDetail = ({ page }) => {
             bottom="0"
             w={["0", "0", "0", "145px"]}
           />
-          {pwd?.videoSection?.videos.map((video) => (
+          {pwd?.videoSection?.videos.map((video, i) => (
             <AspectRatio
+              key={i}
               border="5px solid #FFFFFF"
               maxW="668px"
               ratio={668 / 376}
@@ -481,9 +497,9 @@ const PwdDetail = ({ page }) => {
               <iframe
                 src={video.url}
                 title="PWD Video"
-                frameborder="0"
+                frameBorder="0"
                 allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
+                allowFullScreen
               />
             </AspectRatio>
           ))}
@@ -515,7 +531,7 @@ const PwdDetail = ({ page }) => {
                   mb="8px"
                 />
                 {(category.links ?? []).map((link, i) => (
-                  <Box display="flex" pb="6px">
+                  <Box key={i} display="flex" pb="6px">
                     <Text pr="8px" fontSize="16px">
                       .
                     </Text>
@@ -574,8 +590,9 @@ const PwdDetail = ({ page }) => {
           w="100%"
           px="10%"
         >
-          {(remainingPwds ?? []).map((data) => (
+          {(remainingPwds ?? []).map((data, i) => (
             <Box
+              key={i}
               transition="all 0.2s"
               w="100%"
               h={["132px", "132px", "122px"]}
