@@ -85,16 +85,16 @@ export default {
         member: { $elemMatch: { identityId: id } },
       });
 
-      // identity.organizationRole = (organizations ?? []).map((organization) => {
-      //   const member = organization.member.find(
-      //     ({ identityId }) => String(identityId) === String(id)
-      //   );
-      //   return {
-      //     organization,
-      //     status: member.status,
-      //     role: member.role,
-      //   };
-      // });
+      identity.organizationRole = (organizations ?? []).map((organization) => {
+        const member = organization.member.find(
+          ({ identityId }) => String(identityId) === String(id)
+        );
+        return {
+          organization,
+          status: member.status,
+          role: member.role,
+        };
+      });
 
       return identity;
     },

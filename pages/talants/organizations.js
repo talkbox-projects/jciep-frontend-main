@@ -58,8 +58,6 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
     return x.id === organizationId;
   });
 
-  console.log(organization);
-
   const details = (
     <OrganizationProfileStore.Provider
       userFieldVisible={false}
