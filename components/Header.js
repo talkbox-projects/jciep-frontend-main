@@ -276,7 +276,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         </Box>
       )} */}
       <Box
-        d={["none", "none", "block", "block"]}
+        d={["none", "none", "none", "block"]}
         bg="white"
         position="fixed"
         // top={isShowLangUnavailable ? 20 : 0}
@@ -542,7 +542,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         bg="white"
-        d={["block", "block", "none", "none"]}
+        d={["block", "block", "block", "none"]}
       >
         <HStack align="center" h={16} p={3}>
           <LinkOverlay as={NextLink} href="/home">
