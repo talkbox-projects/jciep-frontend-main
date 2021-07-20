@@ -35,12 +35,13 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        organizations: await organizationSearch({
-          status: ["approved"],
-          published: true,
-          type: ["ngo"],
-          limit: 0,
-        }),
+        organizations: [],
+        // await organizationSearch({
+        //   status: ["approved"],
+        //   published: true,
+        //   type: ["ngo"],
+        //   limit: 0,
+        // }),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -51,7 +52,7 @@ export const getServerSideProps = async (context) => {
 const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
   const router = useRouter();
 
-  const organizationId = router.query.organizationId ?? organizations?.[0].id;
+  const organizationId = router.query.organizationId ?? organizations?.[0]?.id;
 
   const organization = organizations?.find((x) => {
     return x.id === organizationId;
