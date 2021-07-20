@@ -427,9 +427,11 @@ const Header = ({ navigation, isLangAvailable }) => {
             borderWidth={1}
             pr={6}
           >
-            <LinkOverlay as={NextLink} href="/home">
-              <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
-            </LinkOverlay>
+            <Box>
+              <LinkOverlay as={NextLink} href="/home">
+                <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
+              </LinkOverlay>
+            </Box>
             <Box flex={1} minW={0} w="100%" />
             <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
