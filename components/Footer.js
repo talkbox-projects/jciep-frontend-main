@@ -72,7 +72,7 @@ const Footer = ({ footer }) => {
               columns={[2, 2, 3, 5, 5]}
               gap={12}
             >
-              {(footer?.sitemap ?? []).map(({ id, links = [], title, url = "/", }) => (
+              {(footer?.sitemap ?? []).map(({ id, links = [], title, url, social= [] }) => (
                 <VStack key={id} align="start">
                   <NextLink href={url}>
                     <Button
@@ -83,9 +83,14 @@ const Footer = ({ footer }) => {
                       fontSize={["xl", "xl", "lg"]}
                     >
                       {title}
+                      {
+                        (social ?? []).map(({icon, id, url})=>{
+                          return <a href={url}><Image src={icon} height="30px"></Image></a>
+                        })
+                      }
                     </Button>
                   </NextLink>
-                  {(links ?? []).map(({ id: _id, url = "/", label = "" , icon }) => {
+                  {(links ?? []).map(({ id: _id, url = "/", label = "" }) => {
                     return (
                       <NextLink id={_id} href={url}>
                         <Button
@@ -96,12 +101,6 @@ const Footer = ({ footer }) => {
                           color="black"
                         >
                           {label}
-                          {
-                            (icon ?? []).map(({icon, url}) => {
-                              return <a href={url}><Image  src={icon} height="30px"/></a>
-                            })
-                          }
-                          
                         </Button>
                       </NextLink>
                     );
@@ -112,7 +111,7 @@ const Footer = ({ footer }) => {
           </Stack>
 
           <HStack pt={16} alignSelf="center">
-            {footer?.links?.map(({ id, label, url = "" }) => {
+            {footer?.links?.map(({ id, label, url = "/" }) => {
               return (
                 <Link key={id} href={url} target="blank">
                   {label}
@@ -240,32 +239,32 @@ export default withConfigurationCMS(Footer, {
               component: "text",
             },
             {
-              label: "圖標 icon",
+              name: "url",
+              label: "路由 Url",
+              placeholder: "https://",
+              component: "text",
+            },
+          ],
+        },
+        {
+          name: "social",
+          label: "社會的 Social",
+          component: "group-list",
+          itemProps: ({ id: key, label }) => ({
+            key,
+            label,
+          }),
+          defaultItem: () => ({
+            id: Math.random().toString(36).substr(2, 9),
+          }),
+          fields: [
+            {
+              label: "圖標 Icon",
               name: "icon",
-              component: "group-list",
-              itemProps: ({ id: key, label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "url",
-                  label: "路由 Url",
-                  placeholder: "https://",
-                  component: "text",
-                },
-                {
-                  label: "圖標 Icon",
-                  name: "icon",
-                  component: "image",
-                  uploadDir: () => "/footer/icon",
-                  parse: ({ previewSrc }) => previewSrc,
-                  previewSrc: (src) => src,
-                }
-              ] 
+              component: "image",
+              uploadDir: () => "/footer/icon",
+              parse: ({ previewSrc }) => previewSrc,
+              previewSrc: (src) => src,
             },
             {
               name: "url",
