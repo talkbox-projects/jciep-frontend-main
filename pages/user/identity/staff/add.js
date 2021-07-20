@@ -99,7 +99,7 @@ const IdentityStaffAdd = ({ page }) => {
   return (
     <VStack py={36}>
       <Text mt={10}>{page?.content?.step?.title}</Text>
-      <Text fontSize="30px" marginTop="5px">
+      <Text fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
@@ -275,7 +275,10 @@ const IdentityStaffAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                {page?.content?.form?.terms}
+                <a href={page?.content?.form?.terms?.link}>
+                  {" "}
+                  {page?.content?.form?.terms?.text}
+                </a>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -351,7 +354,19 @@ export default withPageCMS(IdentityStaffAdd, {
         {
           name: "terms",
           label: "條款和條件 T&C Label",
-          component: "text",
+          component: "group",
+          fields: [
+            {
+              name: "text",
+              label: "文本 text",
+              component: "text",
+            },
+            {
+              name: "link",
+              label: "關聯 Link",
+              component: "text",
+            },
+          ],
         },
         {
           name: "continue",

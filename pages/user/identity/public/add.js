@@ -260,7 +260,7 @@ const IdentityPublicAdd = ({ page }) => {
                   <FormLabel>
                     {page?.content?.form?.industry?.label}{" "}
                     <Text as="span" color="red">
-                      *
+                      
                     </Text>
                   </FormLabel>
                   <Controller
