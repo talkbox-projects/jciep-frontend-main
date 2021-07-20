@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import DividerSimple from "../../../components/DividerSimple";
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../../utils/configuration/getConfiguration";
@@ -32,6 +32,7 @@ import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
 import DividerA from "../../../components/DividerA";
 import Slider from "react-slick";
+import { SRLWrapper, useLightbox } from "simple-react-lightbox";
 import { useCMS } from "tinacms";
 const PAGE_KEY = "programme";
 
@@ -59,6 +60,7 @@ export const getServerSideProps = async (context) => {
 const Partner = ({ page }) => {
   const cms = useCMS();
   const router = useRouter();
+  const { openLightbox } = useLightbox();
   const slug = router.query.slug;
   const partner = (page?.content?.partnerSection?.partners ?? [])?.find(
     (x) => x.slug === slug
@@ -71,7 +73,11 @@ const Partner = ({ page }) => {
     dots: false,
     speed: 500,
     slidesToShow: 1,
+    beforeChange: (oldIndex, newIndex) => setSliderIndex(newIndex),
   };
+
+  const [sliderIndex, setSliderIndex] = useState(0);
+
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {/* First Section */}
@@ -83,6 +89,11 @@ const Partner = ({ page }) => {
         position="relative"
         overflow="hidden"
       >
+        <SRLWrapper
+          elements={(partner?.sliderImage ?? []).map(({ image }) => ({
+            src: image,
+          }))}
+        />
         <Slider {...settings}>
           {(partner?.sliderImage ?? []).map(({ image }, index) => {
             return (
@@ -119,6 +130,18 @@ const Partner = ({ page }) => {
                   <Text bgColor="#F6D644" fontSize={["24px", "56px"]}>
                     {partner?.projectName}
                   </Text>
+                </Box>
+                <Box pt={4}>
+                  <Button
+                    borderRadius="full"
+                    bg="black"
+                    color="white"
+                    _hover={{ bg: "#333333" }}
+                    _active={{ bg: "#666666" }}
+                    onClick={() => openLightbox(sliderIndex)}
+                  >
+                    顯示全圖
+                  </Button>
                 </Box>
               </VStack>
             </Box>

@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
 import { withTina } from "tinacms";
 import Header from "../components/Header";
@@ -9,6 +10,7 @@ import { AppProvider } from "../store/AppStore";
 import Head from "next/head";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import SimpleReactLightbox from "simple-react-lightbox";
 
 const theme = extendTheme({
   colors: {
@@ -72,27 +74,30 @@ const theme = extendTheme({
 
 const App = ({ Component, pageProps }) => {
   return (
-    <AppProvider {...pageProps}>
-      <Head>
-        <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" />
-      </Head>
-      <ChakraProvider theme={theme} resetCSS={true}>
-        <NextSeo title="賽馬會共融．知行計劃" />
-        <VStack w="100vw" align="stretch" spacing={0}>
-          <Header {...pageProps}></Header>
-          <Box mt={[-16, -16, -12, -12]}>
-            <Component {...pageProps} />
-          </Box>
-          <Footer {...pageProps}></Footer>
-        </VStack>
-      </ChakraProvider>
-    </AppProvider>
+    <SimpleReactLightbox>
+      <AppProvider {...pageProps}>
+        <Head>
+          <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" />
+        </Head>
+        <ChakraProvider theme={theme} resetCSS={true}>
+          <NextSeo title="賽馬會共融．知行計劃" />
+          <VStack w="100vw" align="stretch" spacing={0}>
+            <Header {...pageProps}></Header>
+            <Box mt={[-16, -16, -12, -12]}>
+              <Component {...pageProps} />
+            </Box>
+            <Footer {...pageProps}></Footer>
+          </VStack>
+        </ChakraProvider>
+      </AppProvider>
+    </SimpleReactLightbox>
   );
 };
 
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [HtmlFieldPlugin],
+  // eslint-disable-next-line no-undef
   enabled: process.env.NODE_ENV === "development",
   sidebar: true,
 });
