@@ -372,7 +372,7 @@ const Programme = ({ page }) => {
         </Box>
       </Box>
       {/* Reference Section */}
-      <Anchor id="reference" />
+      <Anchor id="reference" top="-100px" />
       <Box
         bg={page?.content?.referenceSection?.bgStyle?.bgColor}
         w="100%"
