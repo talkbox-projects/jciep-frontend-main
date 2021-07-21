@@ -43,6 +43,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      isShowLangSwitcher: true,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -150,7 +151,7 @@ const Partner = ({ page }) => {
         </VStack>
       </Box>
 
-      <Box bgColor="#fafafa" w="100%">
+      {/* <Box bgColor="#fafafa" w="100%">
         <Container>
           <Flex w="100%" justify="flex-end">
             {router.locale === "zh" ? (
@@ -190,7 +191,7 @@ const Partner = ({ page }) => {
             )}
           </Flex>
         </Container>
-      </Box>
+      </Box> */}
 
       {/* Plan Section */}
       <Box

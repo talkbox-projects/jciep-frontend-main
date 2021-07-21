@@ -45,6 +45,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      isShowLangSwitcher: true,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -147,7 +148,7 @@ const Programme = ({ page }) => {
         </VStack>
       </Box>
 
-      <Box bg={page?.content?.visionSection?.bgColor} w="100%">
+      {/* <Box bg={page?.content?.visionSection?.bgColor} w="100%">
         <Container>
           <Flex w="100%" justify="flex-end">
             {router.locale === "zh" ? (
@@ -187,7 +188,7 @@ const Programme = ({ page }) => {
             )}
           </Flex>
         </Container>
-      </Box>
+      </Box> */}
       {/* Vision Section */}
       <Box bg={page?.content?.visionSection?.bgColor} w="100%">
         <Container py={24}>

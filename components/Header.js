@@ -51,7 +51,11 @@ import { AiOutlineMenu } from "react-icons/ai";
 // import { IoWarning } from "react-icons/io5";
 import ResetPasswordModal from "./ResetPasswordModal";
 
-const Header = ({ navigation, isLangAvailable }) => {
+const Header = ({
+  navigation,
+  isLangAvailable,
+  isShowLangSwitcher = false,
+}) => {
   const getWording = useGetWording();
   const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
 
@@ -305,34 +309,35 @@ const Header = ({ navigation, isLangAvailable }) => {
             )}
             <Box flex={1} minW={0} w="100%" />
             <Text>
-              {(navigation.social ?? []).map(({ icon, url }) => {
+              {(navigation.social ?? []).map(({ icon, url }, i) => {
                 return (
-                  <a href={url}>
+                  <a key={i} href={url}>
                     <Image display="inline-flex" height="25px" src={icon} />
                   </a>
                 );
               })}
             </Text>
-            <Select
-              border="none"
-              size="sm"
-              w={16}
-              variant="flushed"
-              value={router.locale}
-              onChange={(e) => {
-                if (cms.enabled) {
-                  window.location.href = `/${e.target.value}${router.asPath}`;
-                } else {
-                  router.push(router.pathname, router.pathname, {
-                    locale: e.target.value,
-                  });
-                }
-              }}
-            >
-              <option value="zh">繁</option>
-              <option value="en">EN</option>
-            </Select>{" "}
-            */}
+            {isShowLangSwitcher && (
+              <Select
+                border="none"
+                size="sm"
+                w={16}
+                variant="flushed"
+                value={router.locale}
+                onChange={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+              >
+                <option value="zh">繁</option>
+                <option value="en">EN</option>
+              </Select>
+            )}
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 <Avatar size="xs"></Avatar>
@@ -684,9 +689,9 @@ const Header = ({ navigation, isLangAvailable }) => {
                   </Link>
                   <Box flex={1} minW={0} w="100%" />
                   <Text>
-                    {(navigation.social ?? []).map(({ icon, url }) => {
+                    {(navigation.social ?? []).map(({ icon, url }, i) => {
                       return (
-                        <a href={url}>
+                        <a key={i} href={url}>
                           <Image
                             display="inline-flex"
                             height="25px"
@@ -696,26 +701,27 @@ const Header = ({ navigation, isLangAvailable }) => {
                       );
                     })}
                   </Text>
-                  <Select
-                    border="none"
-                    size="sm"
-                    w={16}
-                    variant="flushed"
-                    value={router.locale}
-                    onChange={(e) => {
-                      if (cms.enabled) {
-                        window.location.href = `/${e.target.value}${router.asPath}`;
-                      } else {
-                        router.push(router.pathname, router.pathname, {
-                          locale: e.target.value,
-                        });
-                      }
-                    }}
-                  >
-                    <option value="zh">繁</option>
-                    <option value="en">EN</option>
-                  </Select>{" "}
-                  */}
+                  {isShowLangSwitcher && (
+                    <Select
+                      border="none"
+                      size="sm"
+                      w={16}
+                      variant="flushed"
+                      value={router.locale}
+                      onChange={(e) => {
+                        if (cms.enabled) {
+                          window.location.href = `/${e.target.value}${router.asPath}`;
+                        } else {
+                          router.push(router.pathname, router.pathname, {
+                            locale: e.target.value,
+                          });
+                        }
+                      }}
+                    >
+                      <option value="zh">繁</option>
+                      <option value="en">EN</option>
+                    </Select>
+                  )}
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
                       <Avatar size="xs"></Avatar>
