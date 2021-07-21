@@ -206,17 +206,18 @@ const Home = ({ setting, page }) => {
       {/* Third Section */}
       <Box>
         <VisibilitySensor
+          partialVisibility
           onChange={(isVisible) => {
             if (!hasVideoEnded && !!videoRef?.current)
               isVisible ? videoRef.current.play() : videoRef.current.pause();
           }}
         >
-          <AspectRatio h="100%" ratio={isMobile ? 3 / 5 : 5 / 3}>
+          <AspectRatio h="100%" ratio={isMobile ? 2 / 5 : 5 / 3}>
             <Video
               ref={videoRef}
               h="100%"
               src={
-                isMobile ? "/logo_video_mobile.mp4" : "/logo_video_desktop.mov"
+                isMobile ? "/logo_video_mobile.mov" : "/logo_video_desktop.mov"
               }
               muted
               onEnded={() => setHasVideoEnded(true)}
