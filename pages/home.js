@@ -38,7 +38,7 @@ import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
-
+import NextLink from "next/link";
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
