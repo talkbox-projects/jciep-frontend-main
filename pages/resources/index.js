@@ -733,6 +733,7 @@ const Resources = ({ page, enums, setting }) => {
             </GridItem>
             {/* temp hidden */}
             <GridItem colSpan={[6, 6, 3, 3]}>
+              <Anchor id="tips" top="-140px" />
               <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
                 {page?.content?.equipSection?.bottomRight?.category && (
                   <HStack p={8} align="start" w="100%">
