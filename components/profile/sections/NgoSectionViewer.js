@@ -9,6 +9,7 @@ import {
   Wrap,
   Tag,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";

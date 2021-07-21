@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import MultiSelect from "react-select";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import wordExtractor from "../../utils/wordExtractor";
 
 const PAGE_KEY = "identity_id_profile";
 

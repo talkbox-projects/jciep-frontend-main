@@ -33,7 +33,7 @@ const EducationSubSectionViewer = () => {
               <Box
                 pl={2}
                 key={index}
-                borderLeftColor={borderColor}
+                borderLeftColor="#eee"
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -58,26 +58,18 @@ const EducationSubSectionViewer = () => {
                       {wordExtractor(page?.content?.wordings, "present_label")}
                     </Text>
                   )}
-                  <Wrap color="#aaa">
-                    <Tag size="sm" fontWeight="normal">
-                      {
-                        enums?.EnumDegreeList?.find((x) => x.key === degree)
-                          ?.value?.[router.locale]
-                      }
-                    </Tag>
-                    <Text color="#aaa">
-                      {startDatetime &&
-                        `${moment(startDatetime).format("YYYY/MM")} - `}
-                      {present
-                        ? wordExtractor(
-                            page?.content?.wordings,
-                            "present_label"
-                          )
-                        : endDatetime && moment(endDatetime).format("YYYY/MM")}
-                    </Text>
-                  </Wrap>
-                  <Text>{fieldOfStudy}</Text>
-                  <Text>{school}</Text>
+                  <Text color="#666666">
+                    {moment(startDatetime).format("MM/YYYY")} -{" "}
+                    {present
+                      ? moment(endDatetime).format("MM/YYYY")
+                      : wordExtractor(page?.content?.wordings, "present_label")}
+                  </Text>
+                  <Text fontSize={"md"} fontFamily="SFNSDisplay">
+                    {fieldOfStudy}
+                  </Text>
+                  <Text fontSize={"md"} color="#666666">
+                    {school}
+                  </Text>
                 </VStack>
               </Box>
             );

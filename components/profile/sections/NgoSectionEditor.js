@@ -51,7 +51,6 @@ const NgoSectionEditor = () => {
       align="stretch"
     >
       <VStack align="stretch">
-        {/* <Text>{JSON.stringify({ organization, enums })}</Text> */}
         <HStack py={2} px={4} spacing={4} justifyContent="flex-end">
           <Button variant="link" onClick={removeEditSection}>
             {wordExtractor(page?.content?.wordings, "cancel_button_label")}

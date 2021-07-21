@@ -5,7 +5,10 @@ import { NextSeo } from "next-seo";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
 import Slider from "react-slick";
+import CategoryTag from "../../components/CategoryTag";
+import NextLink from "next/link";
 import {
+  Divider,
   Heading,
   Text,
   Image,
@@ -33,8 +36,9 @@ import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import Anchor from "../../components/Anchor";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import Anchor from "../../components/Anchor";
 import ReactSelect from "react-select";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -47,22 +51,12 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
-      enums: (await getSharedServerSideProps(context))?.props?.enums,
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
 
-const Resources = ({ page, enums }) => {
+const Resources = ({ page, enums, setting }) => {
   const router = useRouter();
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
@@ -96,6 +90,11 @@ const Resources = ({ page, enums }) => {
     });
   }, [page?.content?.resourceSection?.resources, serivceTargetFilter]);
 
+  const categories = setting?.value?.categories;
+  const getCategoryData = (key) => {
+    return (categories ?? []).find((c) => c.key === key);
+  };
+
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {page?.content?.seo?.title && (
@@ -105,7 +104,6 @@ const Resources = ({ page, enums }) => {
         ></NextSeo>
       )}
       {/* Banner Section */}
-      {/* <Text>fdsa</Text> */}
       <Box
         bgImg={`url(${page?.content?.heroBannerSection?.image})`}
         bgSize="cover"
@@ -562,162 +560,125 @@ const Resources = ({ page, enums }) => {
             mx="auto"
           >
             <GridItem rowSpan="2" colSpan={[6, 6, 3, 3]}>
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                h={["100%", "100%", "571px"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.left?.content}
-                />
-                {page?.content?.equipSection?.left?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.left?.links ?? []).map(
-                        ({ label, url }, index) => {
-                          return (
-                            <ListItem
-                              key={index}
-                              display="flex"
-                              _before={{
-                                content: '"."',
-                                color: "black",
-                                pr: "6px",
-                                fontWeight: "bold",
-                                fontSize: "20px",
-                              }}
-                              fontSize="16px"
-                            >
-                              <Link
-                                pt="8px"
-                                isExternal
-                                textDecoration="underline"
-                                href={url}
-                              >
-                                {label}
-                              </Link>
-                            </ListItem>
-                          );
-                        }
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.left?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.left?.category
                       )}
-                    </UnorderedList>
-                  </Box>
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.left?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.left?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={page?.content?.equipSection?.left?.link ?? ""}
+                    >
+                      <Button
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
             <GridItem colSpan={[6, 6, 3, 3]}>
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                minH={["300px", "300px", "100%"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.topRight?.content}
-                />
-                {page?.content?.equipSection?.topRight?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.topRight?.links ?? []).map(
-                        ({ label, url }, index) => {
-                          return (
-                            <ListItem
-                              key={index}
-                              display="flex"
-                              _before={{
-                                content: '"."',
-                                color: "black",
-                                pr: "6px",
-                                fontWeight: "bold",
-                                fontSize: "20px",
-                              }}
-                              fontSize="16px"
-                            >
-                              <Link
-                                pt="8px"
-                                isExternal
-                                textDecoration="underline"
-                                href={url}
-                              >
-                                {label}
-                              </Link>
-                            </ListItem>
-                          );
-                        }
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.topRight?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.topRight?.category
                       )}
-                    </UnorderedList>
-                  </Box>
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.topRight?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.topRight?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={page?.content?.equipSection?.topRight?.link ?? ""}
+                    >
+                      <Button
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
             {/* temp hidden */}
-            <GridItem colSpan={[6, 6, 3, 3]} d="none">
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                minH={["300px", "300px", "100%"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.bottomRight?.content}
-                />
-                {page?.content?.equipSection?.bottomRight?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList>
-                      {(
-                        page?.content?.equipSection?.bottomRight?.links ?? []
-                      ).map(({ label, url }, index) => {
-                        return (
-                          <ListItem
-                            key={index}
-                            display="flex"
-                            _before={{
-                              content: '"."',
-                              color: "black",
-                              mr: "6px",
-                              fontWeight: "bold",
-                              fontSize: "20px",
-                            }}
-                            fontSize="16px"
-                          >
-                            {" "}
-                            <Link
-                              pt="8px"
-                              isExternal
-                              textDecoration="underline"
-                              href={url}
-                            >
-                              {label}
-                            </Link>
-                          </ListItem>
-                        );
-                      })}
-                    </UnorderedList>
-                  </Box>
+            <GridItem colSpan={[6, 6, 3, 3]}>
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.bottomRight?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.bottomRight?.category
+                      )}
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.bottomRight?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.bottomRight?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={
+                        page?.content?.equipSection?.bottomRight?.link ?? ""
+                      }
+                    >
+                      <Button
+                        p={2}
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
           </Grid>
         </Box>
@@ -795,5 +756,5 @@ const Resources = ({ page, enums }) => {
 
 export default withPageCMS(Resources, {
   key: PAGE_KEY,
-  fields: resourceFieldsForCMS,
+  fields: (props) => resourceFieldsForCMS(props),
 });

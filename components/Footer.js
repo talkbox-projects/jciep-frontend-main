@@ -72,7 +72,7 @@ const Footer = ({ footer }) => {
               columns={[2, 2, 3, 5, 5]}
               gap={12}
             >
-              {(footer?.sitemap ?? []).map(({ id, links = [], title, url }) => (
+              {(footer?.sitemap ?? []).map(({ id, links = [], title, url, social= [] }) => (
                 <VStack key={id} align="start">
                   <NextLink href={url}>
                     <Button
@@ -85,7 +85,15 @@ const Footer = ({ footer }) => {
                       {title}
                     </Button>
                   </NextLink>
-                  {(links ?? []).map(({ id: _id, url = "", label = "" }) => {
+                  <Text w="100%">
+                  {
+                    (social ?? []).map(({icon, id, url})=>{
+                      return <a href={url}><Image display="inline-flex" src={icon} height="30px"></Image></a>
+                    })
+                  }
+                  </Text>
+                  
+                  {(links ?? []).map(({ id: _id, url = "/", label = "" }) => {
                     return (
                       <NextLink key={_id} id={_id} href={url}>
                         <Button
@@ -106,7 +114,7 @@ const Footer = ({ footer }) => {
           </Stack>
 
           <HStack pt={16} alignSelf="center">
-            {footer?.links?.map(({ id, label, url = "" }) => {
+            {footer?.links?.map(({ id, label, url = "/" }) => {
               return (
                 <Link key={id} href={url} target="blank">
                   {label}
@@ -232,6 +240,34 @@ export default withConfigurationCMS(Footer, {
               name: "label",
               label: "標籤 Label",
               component: "text",
+            },
+            {
+              name: "url",
+              label: "路由 Url",
+              placeholder: "https://",
+              component: "text",
+            },
+          ],
+        },
+        {
+          name: "social",
+          label: "社會的 Social",
+          component: "group-list",
+          itemProps: ({ id: key, label }) => ({
+            key,
+            label,
+          }),
+          defaultItem: () => ({
+            id: Math.random().toString(36).substr(2, 9),
+          }),
+          fields: [
+            {
+              label: "圖標 Icon",
+              name: "icon",
+              component: "image",
+              uploadDir: () => "/footer/icon",
+              parse: ({ previewSrc }) => previewSrc,
+              previewSrc: (src) => src,
             },
             {
               name: "url",

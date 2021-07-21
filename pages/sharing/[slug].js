@@ -214,6 +214,12 @@ const PostDetail = ({ post, setting, page }) => {
                   case "content-block":
                     return (
                       <Box
+                        sx={{
+                          a: {
+                            color: "green.500",
+                            textDecor: "underline",
+                          },
+                        }}
                         w="100%"
                         pt="40px"
                         dangerouslySetInnerHTML={{

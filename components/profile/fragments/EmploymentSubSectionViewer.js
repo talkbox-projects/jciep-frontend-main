@@ -33,7 +33,7 @@ const EmploymentSubSectionViewer = () => {
               <Box
                 pl={2}
                 key={index}
-                borderLeftColor={borderColor}
+                borderLeftColor="#eee"
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -58,7 +58,7 @@ const EmploymentSubSectionViewer = () => {
                       {wordExtractor(page?.content?.wordings, "present_label")}
                     </Text>
                   )}
-                  <Wrap color="#aaa">
+                  <Wrap color="#666666">
                     <Tag size="sm" fontWeight="normal">
                       {
                         enums?.EnumIndustryList?.find((x) => x.key === industry)
@@ -76,9 +76,10 @@ const EmploymentSubSectionViewer = () => {
                         : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>
-                  <Text>{jobTitle}</Text>
-                  <Text>
-                    {companyName} (
+                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
+                    {companyName}
+                  </Text>
+                  <Text fontSize={"md"} color="#666666">
                     {
                       enums?.EnumEmploymentModeList?.find(
                         (x) => x.key === employmentType

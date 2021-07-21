@@ -54,7 +54,7 @@ const IdentityBiographySectionEditor = () => {
       pb={8}
     >
       <HStack px={8} py={4} align="center">
-        <Text flex={1} minW={0} w="100%" fontSize="2xl">
+        <Text flex={1} minW={0} w="100%" fontSize="2xl" fontFamily="SFNSDisplay"  >
           {wordExtractor(page?.content?.wordings, "biography_header_label")}
         </Text>
         <VStack align="stretch">

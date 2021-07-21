@@ -38,7 +38,7 @@ import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
-
+import NextLink from "next/link";
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
@@ -75,7 +75,11 @@ const Home = ({ setting, page }) => {
         featureDisplay: true,
         limit: 20,
       });
-      setPosts(data);
+      setPosts(
+        data
+          .sort(() => Math.random() - 0.5)
+          .slice(0, Math.max(5, data?.length ?? 0))
+      );
     } catch (err) {
       console.log("***** error", err);
     }
@@ -276,7 +280,7 @@ const Home = ({ setting, page }) => {
           <Box py={32}>
             <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
               {(page?.content?.transitionBanner?.slides ?? []).map(
-                ({ caption, image }, index) => (
+                ({ caption, image, link }, index) => (
                   <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: 12 }}>
                     <Box textAlign="center">
                       {caption && (
@@ -287,17 +291,19 @@ const Home = ({ setting, page }) => {
                         </Box>
                       )}
                     </Box>
-                    <Box
-                      borderWidth={4}
-                      borderColor="white"
-                      borderRadius={32}
-                      bgImage={`url(${image})`}
-                      bgSize="cover"
-                      bgPos="center"
-                      w="240px"
-                      h="240px"
-                      maxW="100%"
-                    />
+                    <NextLink href={link ?? "#"}>
+                      <Box
+                        borderWidth={4}
+                        borderColor="white"
+                        borderRadius={32}
+                        bgImage={`url(${image})`}
+                        bgSize="cover"
+                        bgPos="center"
+                        w="240px"
+                        h="240px"
+                        maxW="100%"
+                      />
+                    </NextLink>
                   </Box>
                 )
               )}
@@ -399,7 +405,7 @@ const Home = ({ setting, page }) => {
                     borderColor="white"
                     ratio={1}
                   >
-                    <Image src={post?.coverImage} />
+                    <Image src={post?.content?.feature?.image} />
                   </AspectRatio>
                 </Box>
                 <VStack
@@ -441,7 +447,7 @@ const Home = ({ setting, page }) => {
                     whiteSpace="pre-wrap"
                     bgColor="white"
                   >
-                    {post?.title}
+                    {post?.content?.feature?.tagline ?? post?.title}
                   </Heading>
                   <Text
                     d="block"
@@ -797,65 +803,70 @@ export default withPageCMS(Home, {
               label: "描述 Caption",
               component: "text",
             },
+            {
+              name: "link",
+              label: "網址 URL",
+              component: "text",
+            },
           ],
         },
       ],
     },
 
-    {
-      name: "sharing",
-      label: "文章分享 Sharing",
-      component: "group",
-      fields: [
-        {
-          name: "slides",
-          label: "區段 Slides",
-          component: "group-list",
-          itemProps: ({ id: key, caption: label }) => ({
-            key,
-            label,
-          }),
-          defaultItem: () => ({
-            id: Math.random().toString(36).substr(2, 9),
-          }),
-          fields: [
-            {
-              name: "image",
-              label: "圖片  Image",
-              component: "image",
-              uploadDir: () => "/home/sharing",
-              parse: ({ previewSrc }) => previewSrc,
-              previewSrc: (src) => src,
-            },
-            {
-              name: "persona",
-              label: "人物/機構 Person/Organization",
-              component: "text",
-            },
-            {
-              name: "category",
-              label: "分類 Category",
-              component: "text",
-            },
-            {
-              name: "persona",
-              label: "人物/機構 Person/Organization",
-              component: "text",
-            },
-            {
-              name: "title",
-              label: "標題",
-              component: "textarea",
-            },
-            {
-              name: "excerpt",
-              label: "描述",
-              component: "textarea",
-            },
-          ],
-        },
-      ],
-    },
+    // {
+    //   name: "sharing",
+    //   label: "文章分享 Sharing",
+    //   component: "group",
+    //   fields: [
+    //     {
+    //       name: "slides",
+    //       label: "區段 Slides",
+    //       component: "group-list",
+    //       itemProps: ({ id: key, caption: label }) => ({
+    //         key,
+    //         label,
+    //       }),
+    //       defaultItem: () => ({
+    //         id: Math.random().toString(36).substr(2, 9),
+    //       }),
+    //       fields: [
+    //         {
+    //           name: "image",
+    //           label: "圖片  Image",
+    //           component: "image",
+    //           uploadDir: () => "/home/sharing",
+    //           parse: ({ previewSrc }) => previewSrc,
+    //           previewSrc: (src) => src,
+    //         },
+    //         {
+    //           name: "persona",
+    //           label: "人物/機構 Person/Organization",
+    //           component: "text",
+    //         },
+    //         {
+    //           name: "category",
+    //           label: "分類 Category",
+    //           component: "text",
+    //         },
+    //         {
+    //           name: "persona",
+    //           label: "人物/機構 Person/Organization",
+    //           component: "text",
+    //         },
+    //         {
+    //           name: "title",
+    //           label: "標題",
+    //           component: "textarea",
+    //         },
+    //         {
+    //           name: "excerpt",
+    //           label: "描述",
+    //           component: "textarea",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
 
     {
       label: "角色介紹 Role Introduction",

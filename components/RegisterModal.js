@@ -137,10 +137,10 @@ const RegisterModal = () => {
                     {getWording("register.register_email_label")}
                   </FormLabel>
                   <Input
-                    placeholder="testing@example.com"
-                    {...register("email")}
+                    placeholder={getWording("register.register_email_placeholder")}
+                    {...register("email", {required: true})}
                   />
-                  <FormHelperText>{errors?.email?.message}</FormHelperText>
+                    <FormHelperText color="red">{errors?.email?.type === 'required' && <Text>{getWording("register.register_email_required")}</Text>}</FormHelperText>
                 </FormControl>
                 <FormControl>
                   <Button

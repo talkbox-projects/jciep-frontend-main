@@ -14,6 +14,8 @@
   font-display: swap;
 }
 
+@font-face {font-family: "SFNSDisplay"; src: url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.eot"); src: url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.woff") format("woff"), url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/344d17417b87d35e88d9df15bea12e2e.svg#SFNSDisplay") format("svg"); }
+
 body {
   font-family: "GenJyuuGotic";
   color: #1e1e1e;
