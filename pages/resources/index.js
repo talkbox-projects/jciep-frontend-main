@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -17,6 +17,11 @@ import {
   GridItem,
   IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
@@ -29,12 +34,15 @@ import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Anchor from "../../components/Anchor";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import ReactSelect from "react-select";
+import { useRouter } from "next/router";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const PAGE_KEY = "resources";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
@@ -49,11 +57,13 @@ export const getServerSideProps = async (context) => {
         key: "navigation",
         lang: context.locale,
       }),
+      enums: (await getSharedServerSideProps(context))?.props?.enums,
     },
   };
 };
 
-const Resources = ({ page }) => {
+const Resources = ({ page, enums }) => {
+  const router = useRouter();
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
   const settings = {
@@ -64,6 +74,27 @@ const Resources = ({ page }) => {
     variableWidth: true,
     infinite: false,
   };
+
+  const [serivceTargetFilter, setSerivceTargetFilter] = useState([]);
+  const serviceTargetList = useMemo(
+    () =>
+      enums?.EnumServiceTargetList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumServiceTargetList, router.locale]
+  );
+
+  const filteredResourceList = useMemo(() => {
+    if (serivceTargetFilter.length === 0)
+      return page?.content?.resourceSection?.resources;
+    // console.log(page?.content?.resourceSection?.resources);
+    return page?.content?.resourceSection?.resources.filter((resource) => {
+      return serivceTargetFilter?.some((tag) =>
+        resource?.serviceTarget?.tags?.find(({ value }) => value === tag)
+      );
+    });
+  }, [page?.content?.resourceSection?.resources, serivceTargetFilter]);
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
@@ -294,45 +325,83 @@ const Resources = ({ page }) => {
           </Text>
         </Container>
 
-        <Box d={["none", "none", "block"]} p={4} pos="relative" w="100vw">
+        <Box
+          d={["none", "none", "block"]}
+          p={4}
+          pos="relative"
+          w="100vw"
+          minH="600px"
+        >
+          <Container>
+            <HStack pb={4}>
+              <Menu closeOnSelect={false}>
+                <MenuButton
+                  as={Button}
+                  variant="outline"
+                  rightIcon={<ChevronDownIcon />}
+                  borderWidth={0}
+                  borderBottomWidth="2px"
+                  size="lg"
+                  borderRadius={0}
+                  px={0}
+                  _hover={{}}
+                  _focus={{}}
+                  _active={{}}
+                >
+                  篩選服務對象
+                </MenuButton>
+                <MenuList minWidth="240px">
+                  <MenuOptionGroup
+                    value={serivceTargetFilter}
+                    onChange={setSerivceTargetFilter}
+                    type="checkbox"
+                  >
+                    {serviceTargetList?.map((target, i) => (
+                      <MenuItemOption key={i} value={target.value}>
+                        {target.label}
+                      </MenuItemOption>
+                    ))}
+                  </MenuOptionGroup>
+                </MenuList>
+              </Menu>
+            </HStack>
+          </Container>
           <Slider {...settings}>
-            {(page?.content?.resourceSection?.resources ?? []).map(
-              (resource, index) => {
-                const {
-                  name,
-                  category,
-                  organization,
-                  serviceTarget,
-                  services,
-                  internship,
-                  probationOrReferral,
-                  subsidy,
-                  remark,
-                  topColor,
-                  contact,
-                  reminder,
-                } = resource;
-                return (
-                  <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
-                    <Card
-                      name={name}
-                      topColor={topColor}
-                      organization={organization}
-                      category={category}
-                      serviceTarget={serviceTarget}
-                      services={services}
-                      internship={internship}
-                      probationOrReferral={probationOrReferral}
-                      subsidy={subsidy}
-                      remark={remark}
-                      contact={contact}
-                      reminder={reminder}
-                      page={page}
-                    />
-                  </Box>
-                );
-              }
-            )}
+            {(filteredResourceList ?? []).map((resource, index) => {
+              const {
+                name,
+                category,
+                organization,
+                serviceTarget,
+                services,
+                internship,
+                probationOrReferral,
+                subsidy,
+                remark,
+                topColor,
+                contact,
+                reminder,
+              } = resource;
+              return (
+                <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
+                  <Card
+                    name={name}
+                    topColor={topColor}
+                    organization={organization}
+                    category={category}
+                    serviceTarget={serviceTarget}
+                    services={services}
+                    internship={internship}
+                    probationOrReferral={probationOrReferral}
+                    subsidy={subsidy}
+                    remark={remark}
+                    contact={contact}
+                    reminder={reminder}
+                    page={page}
+                  />
+                </Box>
+              );
+            })}
           </Slider>
           <HStack
             pos="absolute"
@@ -396,44 +465,43 @@ const Resources = ({ page }) => {
           d={["block", "block", "none"]}
         >
           <Box>
-            {(
-              page?.content?.resourceSection?.resources?.slice(0, showItems) ??
-              []
-            ).map((resource, index) => {
-              const {
-                name,
-                category,
-                organization,
-                serviceTarget,
-                services,
-                internship,
-                probationOrReferral,
-                subsidy,
-                remark,
-                topColor,
-                contact,
-                reminder,
-              } = resource;
-              return (
-                <VStack key={index} px={2} alignItems="stretch">
-                  <Card
-                    name={name}
-                    topColor={topColor}
-                    organization={organization}
-                    category={category}
-                    serviceTarget={serviceTarget}
-                    services={services}
-                    internship={internship}
-                    probationOrReferral={probationOrReferral}
-                    subsidy={subsidy}
-                    remark={remark}
-                    contact={contact}
-                    reminder={reminder}
-                    page={page}
-                  />
-                </VStack>
-              );
-            })}
+            {(filteredResourceList?.slice(0, showItems) ?? []).map(
+              (resource, index) => {
+                const {
+                  name,
+                  category,
+                  organization,
+                  serviceTarget,
+                  services,
+                  internship,
+                  probationOrReferral,
+                  subsidy,
+                  remark,
+                  topColor,
+                  contact,
+                  reminder,
+                } = resource;
+                return (
+                  <VStack key={index} px={2} alignItems="stretch">
+                    <Card
+                      name={name}
+                      topColor={topColor}
+                      organization={organization}
+                      category={category}
+                      serviceTarget={serviceTarget}
+                      services={services}
+                      internship={internship}
+                      probationOrReferral={probationOrReferral}
+                      subsidy={subsidy}
+                      remark={remark}
+                      contact={contact}
+                      reminder={reminder}
+                      page={page}
+                    />
+                  </VStack>
+                );
+              }
+            )}
             <VStack mt={6} w="100%" align="center">
               <Button
                 variant="outline"

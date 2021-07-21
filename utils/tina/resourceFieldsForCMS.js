@@ -1,4 +1,58 @@
+// import { getEnums } from "../enums/getEnums";
+import React from "react";
+import ReactSelect from "react-select";
 import metaTextTemplates from "./metaTextTemplates";
+
+// const getServiceTargetList = async () =>
+//   (await getEnums({
+//     keys: ["EnumServiceTargetList"],
+//     lang: "zh",
+//   }).then((data) =>
+//     data?.EnumServiceTargetList?.map((target) => ({
+//       value: target.key,
+//       label: target.value.zh,
+//     }))
+//   )) ?? [];
+
+const renderReactSelect = ({ field, input }) => (
+  <>
+    <div>
+      <label htmlFor={field.name}>{field.label}</label>
+    </div>
+    <div>
+      <ReactSelect
+        options={serviceTargetList}
+        isMulti
+        closeMenuOnSelect={false}
+        name={field.name}
+        {...input}
+      />
+    </div>
+  </>
+);
+
+const serviceTargetList = [
+  { value: "employer", label: "僱主" },
+  {
+    value: "attentionDeficitHyperactivityDisorder",
+    label: "注意力不足/過度活躍症",
+  },
+  { value: "autism", label: "自閉症譜系障礙" },
+  { value: "hearingImpairment", label: "聽力障礙" },
+  { value: "intellectualDisability", label: "智能障礙" },
+  { value: "mentalIllnessMoodDisorder", label: "精神病/情緒病" },
+  { value: "physicalImpairment", label: "肢體傷殘" },
+  { value: "specificLearningDifficulties", label: "特殊學習困難" },
+  { value: "speechImpairment", label: "言語障礙" },
+  {
+    value: "visceralDisabilityPersonswithChronicDiseases",
+    label: "器官殘障/長期病患",
+  },
+  { value: "visualImpairment", label: "視力障礙" },
+  { value: "moderateDisabilities", label: "指定的中度殘疾人士" },
+  { value: "mildIntellectualDisability", label: "輕度智障人士" },
+  { value: "specialEducationalNeeds", label: "特殊教育需要人士" },
+];
 
 const textLinkWithTooltip = [
   {
@@ -57,7 +111,7 @@ const textareaWithTooltip = [
   },
   {
     name: "description",
-    component: "text",
+    component: "textarea",
     label: "描述 Tooltip description",
   },
 ];
@@ -392,7 +446,14 @@ export default [
             name: "serviceTarget",
             label: "服務對象 ServiceTarget",
             component: "group",
-            fields: textareaWithTooltip,
+            fields: [
+              ...textareaWithTooltip,
+              {
+                name: "tags",
+                label: "標籤 Tags",
+                component: renderReactSelect,
+              },
+            ],
           },
           {
             name: "contact",
