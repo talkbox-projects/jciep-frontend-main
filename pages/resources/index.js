@@ -2,7 +2,6 @@ import React, { useMemo, useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
 import Slider from "react-slick";
 import CategoryTag from "../../components/CategoryTag";
@@ -13,20 +12,18 @@ import {
   Text,
   Image,
   Box,
-  UnorderedList,
-  ListItem,
   Button,
   Grid,
   GridItem,
   IconButton,
-  Link,
+  Portal,
   Menu,
   MenuButton,
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
 } from "@chakra-ui/react";
-import { VStack, HStack, Flex } from "@chakra-ui/layout";
+import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
@@ -39,11 +36,83 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import Anchor from "../../components/Anchor";
-import ReactSelect from "react-select";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const PAGE_KEY = "resources";
+
+const serviceOrgList = [
+  { value: "gov", label: "政府主導的計劃" },
+  { value: "non-gov", label: "非政府組織提供的服務" },
+];
+
+const serviceDetailList = [
+  {
+    value: "assessment",
+    label: "為殘疾人士提供的就業支援服務 (工作/就業評估)",
+  },
+  {
+    value: "counseling",
+    label: "為殘疾人士提供的就業支援服務 (工作/就業輔導)",
+  },
+  { value: "matching", label: "為殘疾人士提供的就業支援服務 (工作配對)" },
+  { value: "followUp", label: "為殘疾人士提供的就業支援服務 (就業後跟進)" },
+  {
+    value: "training",
+    label: "為殘疾人士提供的就業支援服務 (職業訓練/就業培訓)",
+  },
+  {
+    value: "instruction",
+    label: "為殘疾人士提供的就業支援服務 (職場督導/指導)",
+  },
+  {
+    value: "guidance",
+    label: "為殘疾人士提供的就業支援服務 (為僱主和職員提供培訓/指導)",
+  },
+  { value: "internship", label: "實習機會" },
+  { value: "probationOrReferral", label: "在職試用和/或工作轉介" },
+  { value: "employer", label: "為僱主提供的津貼" },
+  { value: "trainee", label: "為僱員/實習生/訓練生提供的津貼" },
+];
+
+const ServiceFilter = ({
+  label,
+  value = [],
+  onChange = () => undefined,
+  list = [],
+}) => (
+  <Menu closeOnSelect={false}>
+    <MenuButton
+      as={Button}
+      variant="outline"
+      rightIcon={<ChevronDownIcon />}
+      borderWidth={0}
+      borderBottomWidth="2px"
+      size="lg"
+      borderRadius={0}
+      _hover={{}}
+      _focus={{}}
+      _active={{}}
+      px={0}
+      minW={["120px", "120px", "180px", "240px"]}
+      textAlign="left"
+    >
+      {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+      {label}
+    </MenuButton>
+    <Portal>
+      <MenuList minWidth="240px">
+        <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
+          {list?.map((target, i) => (
+            <MenuItemOption key={i} value={target.value}>
+              {target.label}
+            </MenuItemOption>
+          ))}
+        </MenuOptionGroup>
+      </MenuList>
+    </Portal>
+  </Menu>
+);
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -69,7 +138,10 @@ const Resources = ({ page, enums, setting }) => {
     infinite: false,
   };
 
-  const [serivceTargetFilter, setSerivceTargetFilter] = useState([]);
+  const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
+  const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
+  const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
+
   const serviceTargetList = useMemo(
     () =>
       enums?.EnumServiceTargetList?.map((target) => ({
@@ -80,15 +152,50 @@ const Resources = ({ page, enums, setting }) => {
   );
 
   const filteredResourceList = useMemo(() => {
-    if (serivceTargetFilter.length === 0)
+    if (
+      serviceOrgFilter.length === 0 &&
+      serviceTargetFilter.length === 0 &&
+      serviceDetailFilter.length === 0
+    )
       return page?.content?.resourceSection?.resources;
-    // console.log(page?.content?.resourceSection?.resources);
+
     return page?.content?.resourceSection?.resources.filter((resource) => {
-      return serivceTargetFilter?.some((tag) =>
-        resource?.serviceTarget?.tags?.find(({ value }) => value === tag)
-      );
+      const isServiceOrgMatched =
+        serviceOrgFilter.length === 0 ||
+        serviceOrgFilter?.includes(resource?.category);
+
+      const isServiceTarget =
+        serviceTargetFilter.length === 0 ||
+        !!resource?.serviceTarget?.tags?.find(({ value }) =>
+          serviceTargetFilter?.includes(value)
+        );
+
+      const isServiceDetail = (() => {
+        if (serviceDetailFilter.length === 0) return true;
+        const isSupport = !!resource?.services?.find(({ category }) =>
+          serviceDetailFilter?.includes(category)
+        );
+        const isInternship =
+          serviceDetailFilter?.includes("internship") &&
+          resource?.internship?.value === true;
+        const isProbationOrReferral =
+          serviceDetailFilter?.includes("probationOrReferral") &&
+          resource?.probationOrReferral?.value === true;
+        const isSubsidy = !!resource?.subsidy?.find(({ target }) =>
+          serviceDetailFilter?.includes(target)
+        );
+
+        return isSupport || isInternship || isProbationOrReferral || isSubsidy;
+      })();
+
+      return isServiceOrgMatched && isServiceTarget && isServiceDetail;
     });
-  }, [page?.content?.resourceSection?.resources, serivceTargetFilter]);
+  }, [
+    page?.content?.resourceSection?.resources,
+    serviceDetailFilter,
+    serviceOrgFilter,
+    serviceTargetFilter,
+  ]);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -321,6 +428,27 @@ const Resources = ({ page, enums, setting }) => {
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
           </Text>
+          <Stack direction={["column", "row"]} spacing={8} pb={4}>
+            <ServiceFilter
+              label="服務提供機構"
+              value={serviceOrgFilter}
+              onChange={setServiceOrgFilter}
+              list={serviceOrgList}
+            />
+            <ServiceFilter
+              label="服務對象"
+              value={serviceTargetFilter}
+              onChange={setServiceTargetFilter}
+              list={serviceTargetList}
+            />
+            <ServiceFilter
+              label="服務內容"
+              value={serviceDetailFilter}
+              onChange={setServiceDetailFilter}
+              list={serviceDetailList}
+            />
+          </Stack>
+          <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
         </Container>
 
         <Box
@@ -330,41 +458,8 @@ const Resources = ({ page, enums, setting }) => {
           w="100vw"
           minH="600px"
         >
-          <Container>
-            <HStack pb={4}>
-              <Menu closeOnSelect={false}>
-                <MenuButton
-                  as={Button}
-                  variant="outline"
-                  rightIcon={<ChevronDownIcon />}
-                  borderWidth={0}
-                  borderBottomWidth="2px"
-                  size="lg"
-                  borderRadius={0}
-                  px={0}
-                  _hover={{}}
-                  _focus={{}}
-                  _active={{}}
-                >
-                  篩選服務對象
-                </MenuButton>
-                <MenuList minWidth="240px">
-                  <MenuOptionGroup
-                    value={serivceTargetFilter}
-                    onChange={setSerivceTargetFilter}
-                    type="checkbox"
-                  >
-                    {serviceTargetList?.map((target, i) => (
-                      <MenuItemOption key={i} value={target.value}>
-                        {target.label}
-                      </MenuItemOption>
-                    ))}
-                  </MenuOptionGroup>
-                </MenuList>
-              </Menu>
-            </HStack>
-          </Container>
-          <Slider {...settings}>
+          <Slider {...settings} initialSlide={0} draggable={false}>
+            <Box minW="150px" />
             {(filteredResourceList ?? []).map((resource, index) => {
               const {
                 name,
@@ -405,10 +500,10 @@ const Resources = ({ page, enums, setting }) => {
             pos="absolute"
             zIndex={1}
             left={0}
-            top={0}
-            h="100%"
+            top="35%"
+            // h="100%"
             align="center"
-            p={12}
+            m={12}
           >
             <Box
               _hover={{
@@ -428,11 +523,11 @@ const Resources = ({ page, enums, setting }) => {
           <HStack
             pos="absolute"
             zIndex={1}
-            top={0}
             right={0}
-            h="100%"
+            top="35%"
+            // h="100%"
             align="center"
-            p={12}
+            m={12}
           >
             <Box
               _hover={{
@@ -500,28 +595,27 @@ const Resources = ({ page, enums, setting }) => {
                 );
               }
             )}
-            <VStack mt={6} w="100%" align="center">
-              <Button
-                variant="outline"
-                borderColor="black"
-                borderWidth={2}
-                p={3}
-                size="xl"
-                borderRadius="2em"
-                onClick={() =>
-                  setShowItems((i) =>
-                    Math.min(
-                      i + 3,
-                      page?.content?.resourceSection?.resources?.length
+            {showItems < filteredResourceList?.length && (
+              <VStack mt={6} w="100%" align="center">
+                <Button
+                  variant="outline"
+                  borderColor="black"
+                  borderWidth={2}
+                  p={3}
+                  size="xl"
+                  borderRadius="2em"
+                  onClick={() =>
+                    setShowItems((i) =>
+                      Math.min(i + 3, filteredResourceList?.length)
                     )
-                  )
-                }
-                outline="none"
-                appearance="none"
-              >
-                {wordExtractor(page?.content?.wordings, "showMore")}
-              </Button>
-            </VStack>
+                  }
+                  outline="none"
+                  appearance="none"
+                >
+                  {wordExtractor(page?.content?.wordings, "showMore")}
+                </Button>
+              </VStack>
+            )}
           </Box>
         </VStack>
       </Box>
