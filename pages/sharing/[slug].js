@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
@@ -219,6 +219,18 @@ const PostDetail = ({ post, setting, page }) => {
                             color: "green.500",
                             textDecor: "underline",
                           },
+                          table: {
+                            w: "100%",
+                            th: {
+                              borderWidth: "1px",
+                              borderColor: "gray.500",
+                              bg: "gray.100",
+                            },
+                            td: {
+                              borderWidth: "1px",
+                              borderColor: "gray.500",
+                            },
+                          },
                         }}
                         w="100%"
                         pt="40px"
@@ -243,7 +255,7 @@ const PostDetail = ({ post, setting, page }) => {
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );
-                  case "video-block":
+                  case "video-block": {
                     const youtubeLink = getYoutubeLink(link);
                     return (
                       <VStack align="stretch">
@@ -257,7 +269,7 @@ const PostDetail = ({ post, setting, page }) => {
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );
-
+                  }
                   default:
                 }
               }
