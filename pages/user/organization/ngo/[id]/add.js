@@ -23,6 +23,7 @@ import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../../utils/wordExtractor";
 
 const PAGE_KEY = "organization_ngo_add";
 
@@ -118,7 +119,10 @@ const OrganizationNgoAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "chinese_organization_name_placeholder"
+                    )}
                     {...register("chineseOrganizationName", {
                       required: true,
                     })}
@@ -126,8 +130,13 @@ const OrganizationNgoAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.chineseOrganizationName?.type === "required" && (
                       <Text color="red">
-                        輸入有效的中文組織名稱 Enter valid chinese organization
-                        name!
+                        {/* 輸入有效的中文組織名稱 Enter valid chinese organization
+                        name! */}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "chinese_organization_name_required"
+                        )}
+
                       </Text>
                     )}
                   </FormHelperText>
@@ -143,7 +152,10 @@ const OrganizationNgoAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "english_organization_name_placeholder"
+                    )}
                     {...register("englishOrganizationName", {
                       required: true,
                     })}
@@ -151,8 +163,13 @@ const OrganizationNgoAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.englishOrganizationName?.type === "required" && (
                       <Text color="red">
-                        輸入有效的英文組織名稱 Enter valid english organization
-                        name!
+                        {/* 輸入有效的英文組織名稱 Enter valid english organization
+                        name! */}
+
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "english_organization_name_required"
+                      )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -164,10 +181,13 @@ const OrganizationNgoAdd = ({ page }) => {
                   <FormLabel>{page?.content?.form?.ngoWebsite}</FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "ngo_website_placeholder"
+                    )}
                     {...register("ngoWebsite")}
                   />
-                  <FormHelperText>{errors?.ngoWebsite?.message}</FormHelperText>
+                  <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
             </SimpleGrid>
@@ -175,10 +195,13 @@ const OrganizationNgoAdd = ({ page }) => {
             <FormControl marginTop="20px !important">
               <FormLabel>{page?.content?.form?.ngoDescription}</FormLabel>
               <Textarea
-                placeholder=""
+                placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "ngo_description_placeholder"
+                )}
                 {...register("ngoDescription")}
               ></Textarea>
-              <FormHelperText>{errors?.ngoDescription?.message}</FormHelperText>
+              <FormHelperText></FormHelperText>
             </FormControl>
 
             <FormControl marginTop="20px !important">
@@ -192,7 +215,13 @@ const OrganizationNgoAdd = ({ page }) => {
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
-                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                  <Text color="red">
+                    {/* 請接受條款和條件 Please accept T&C! */}
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
+                  </Text>
                 )}
               </FormHelperText>
             </FormControl>

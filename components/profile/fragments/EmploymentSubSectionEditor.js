@@ -11,6 +11,8 @@ import {
   FormLabel,
   FormHelperText,
   Button,
+  SimpleGrid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Controller, useFieldArray } from "react-hook-form";
@@ -58,7 +60,8 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
               startDatetime,
               endDatetime,
             });
-            const errors = errors?.employment?.[index];
+            const errors = {};
+            errors?.employment?.[index];
             const prefix = `employment[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
 
@@ -67,7 +70,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
               <Box
                 pl={2}
                 key={id}
-                borderLeftColor={borderColor}
+                borderLeftColor="#eee"
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -219,60 +222,63 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                       {errors?.employment?.[index]?.jobTitle?.message}
                     </FormHelperText>
                   </FormControl>
-                  <HStack pt={2} w="100%" spacing={2}>
-                    <FormControl
-                      w="50%"
-                      as={HStack}
-                      align="center"
-                      isInvalid={errors?.industry?.message}
-                    >
-                      <FormLabel w={32} fontSize="sm" color="#999" mb={0}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "field_label_employment_startDatetime"
-                        )}
-                      </FormLabel>
-                      <Controller
-                        name={`${prefix}.startDatetime`}
-                        control={control}
-                        defaultValue={startDatetime}
-                        render={({ field }) => (
-                          <MonthPicker page={page} {...field} />
-                        )}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.startDatetime?.message}
-                      </FormHelperText>
-                    </FormControl>
-                    <FormControl
-                      w="50%"
-                      as={HStack}
-                      align="center"
-                      isInvalid={errors?.endDatetime?.message}
-                    >
-                      <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "field_label_employment_endDatetime"
-                        )}
-                      </FormLabel>
-                      <Controller
-                        name={`${prefix}.endDatetime`}
-                        control={control}
-                        defaultValue={endDatetime}
-                        render={({ field }) => (
-                          <MonthPicker
-                            page={page}
-                            {...field}
-                            isDisabled={isCurrent}
-                          />
-                        )}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.endDatetime?.message}
-                      </FormHelperText>
-                    </FormControl>
-                  </HStack>
+                  <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
+                    <GridItem>
+                      <FormControl
+                        as={HStack}
+                        align="center"
+                        isInvalid={errors?.industry?.message}
+                      >
+                        <FormLabel
+                          w={[24, 24, 32]}
+                          fontSize="sm"
+                          color="#999"
+                          mb={0}
+                        >
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "field_label_employment_startDatetime"
+                          )}
+                        </FormLabel>
+                        <Controller
+                          name={`${prefix}.startDatetime`}
+                          control={control}
+                          defaultValue={startDatetime}
+                          render={({ field }) => (
+                            <MonthPicker page={page} {...field} />
+                          )}
+                        />
+                        <FormHelperText color="red">
+                          {errors?.startDatetime?.message}
+                        </FormHelperText>
+                      </FormControl>
+                    </GridItem>
+                    <GridItem>
+                      <FormControl
+                        as={HStack}
+                        align="center"
+                        isInvalid={errors?.endDatetime?.message}
+                      >
+                        <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "field_label_employment_endDatetime"
+                          )}
+                        </FormLabel>
+                        <Controller
+                          name={`${prefix}.endDatetime`}
+                          control={control}
+                          defaultValue={endDatetime}
+                          render={({ field }) => (
+                            <MonthPicker page={page} {...field} />
+                          )}
+                        />
+                        <FormHelperText color="red">
+                          {errors?.endDatetime?.message}
+                        </FormHelperText>
+                      </FormControl>
+                    </GridItem>
+                  </SimpleGrid>
 
                   <FormControl
                     pt={2}
@@ -307,6 +313,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
               my={4}
               px={2}
               size="sm"
+              w={["100%", "auto"]}
               alignSelf="flex-start"
               variant="outline"
               onClick={() => append({})}

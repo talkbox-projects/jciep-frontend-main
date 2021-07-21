@@ -304,7 +304,16 @@ const Header = ({ navigation, isLangAvailable }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
-            {/* <Select
+            <Text>
+              {(navigation.social ?? []).map(({ icon, url }) => {
+                return (
+                  <a href={url}>
+                    <Image display="inline-flex" height="25px" src={icon} />
+                  </a>
+                );
+              })}
+            </Text>
+            <Select
               border="none"
               size="sm"
               w={16}
@@ -322,7 +331,8 @@ const Header = ({ navigation, isLangAvailable }) => {
             >
               <option value="zh">繁</option>
               <option value="en">EN</option>
-            </Select> */}
+            </Select>{" "}
+            */}
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 <Avatar size="xs"></Avatar>
@@ -673,7 +683,20 @@ const Header = ({ navigation, isLangAvailable }) => {
                     {getWording("header.font_size_level_label")}
                   </Link>
                   <Box flex={1} minW={0} w="100%" />
-                  {/* <Select
+                  <Text>
+                    {(navigation.social ?? []).map(({ icon, url }) => {
+                      return (
+                        <a href={url}>
+                          <Image
+                            display="inline-flex"
+                            height="25px"
+                            src={icon}
+                          />
+                        </a>
+                      );
+                    })}
+                  </Text>
+                  <Select
                     border="none"
                     size="sm"
                     w={16}
@@ -691,7 +714,8 @@ const Header = ({ navigation, isLangAvailable }) => {
                   >
                     <option value="zh">繁</option>
                     <option value="en">EN</option>
-                  </Select> */}
+                  </Select>{" "}
+                  */}
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
                       <Avatar size="xs"></Avatar>
@@ -825,6 +849,34 @@ export default withConfigurationCMS(
           uploadDir: () => "/navigation",
           parse: ({ previewSrc }) => previewSrc,
           previewSrc: (src) => src,
+        },
+        {
+          label: "社會的 social",
+          name: "social",
+          component: "group-list",
+          itemProps: (item) => ({
+            key: item.id,
+            label: item.label,
+          }),
+          defaultItem: () => ({
+            id: Math.random().toString(36).substr(2, 9),
+          }),
+          fields: [
+            {
+              label: "圖標 Icon",
+              name: "icon",
+              component: "image",
+              uploadDir: () => "/navigation",
+              parse: ({ previewSrc }) => previewSrc,
+              previewSrc: (src) => src,
+            },
+            {
+              name: "url",
+              label: "路由 Url",
+              placeholder: "https://",
+              component: "text",
+            },
+          ],
         },
         {
           name: "menu",

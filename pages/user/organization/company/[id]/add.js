@@ -63,7 +63,7 @@ const customStyles = {
 const OrganizationCompanyAdd = ({ page }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
-  const [fileError, setFileError] = useState("");
+  const [fileError, setFileError] = useState(false);
   const { id } = router.query;
 
   const {
@@ -76,9 +76,10 @@ const OrganizationCompanyAdd = ({ page }) => {
 
   const validate = () => {
     if (files.length < 1) {
-      setFileError('上傳一個文件 upload a file!')
+      setFileError(true)
       return true;
     } else {
+      setFileError(false)
       return false;
     }
   };
@@ -191,13 +192,20 @@ const OrganizationCompanyAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "chinese_company_name_placeholder"
+                    )}
                     {...register("chineseCompanyName", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.chineseCompanyName?.type === "required" && (
                       <Text color="red">
-                        輸入有效的中國公司名稱 Enter valid chinese company name!
+                        {/* 輸入有效的中國公司名稱 Enter valid chinese company name! */}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "chinese_company_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -213,13 +221,20 @@ const OrganizationCompanyAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "english_company_name_placeholder"
+                    )}
                     {...register("englishCompanyName", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.englishCompanyName?.type === "required" && (
                       <Text color="red">
-                        輸入有效的英文公司名稱 Enter valid english company name!
+                        {/* 輸入有效的英文公司名稱 Enter valid english company name! */}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "english_company_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -245,6 +260,10 @@ const OrganizationCompanyAdd = ({ page }) => {
                         styles={customStyles}
                         {...field}
                         isMulti
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "industry_placeholder"
+                        )}
                         options={page?.content?.form?.industry?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
@@ -254,7 +273,11 @@ const OrganizationCompanyAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.industry?.type === "required" && (
                       <Text color="red">
-                        請選擇行業 Please select industry!
+                        {/* 請選擇行業 Please select industry! */}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "industry_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -266,7 +289,10 @@ const OrganizationCompanyAdd = ({ page }) => {
                   <FormLabel>{page?.content?.form?.companyWebsite}</FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "company_website_placeholder"
+                    )}
                     {...register("companyWebsite")}
                   />
                   <FormHelperText></FormHelperText>
@@ -356,13 +382,25 @@ const OrganizationCompanyAdd = ({ page }) => {
                     );
                   })}
               </Box>
-              <FormHelperText color="red">{fileError}</FormHelperText>
+              {
+                fileError ? 
+                <FormHelperText color="red">
+                  {wordExtractor(
+                      page?.content?.wordings,
+                      "business_registration_required"
+                  )}
+                </FormHelperText>
+                : null
+              }
             </FormControl>
 
             <FormControl marginTop="20px !important">
               <FormLabel>{page?.content?.form?.companyDescription}</FormLabel>
               <Textarea
-                placeholder=""
+                placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "company_description_placeholder"
+                )}
                 {...register("companyDescription")}
               ></Textarea>
               <FormHelperText>

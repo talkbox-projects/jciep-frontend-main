@@ -23,6 +23,8 @@ import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../utils/wordExtractor";
+
 
 const PAGE_KEY = "identity_public_add";
 
@@ -37,7 +39,7 @@ export const getServerSideProps = async (context) => {
       lang: context.locale,
     },
   };
-};
+};        
 
 
 const customStyles = {
@@ -143,13 +145,20 @@ const IdentityPublicAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "chinese_name_placeholder"
+                      )}
                     {...register("chinese_name", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.chinese_name?.type === "required" && (
                       <Text color="red" color="red">
-                        輸入有效的中文名稱 Enter valid chinese name!
+                        {/* 輸入有效的中文名稱 Enter valid chinese name! */}
+                        {wordExtractor(
+                        page?.content?.wordings,
+                        "chinese_name_required"
+                      )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -165,13 +174,19 @@ const IdentityPublicAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "english_name_placeholder"
+                    )}
                     {...register("english_name", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.english_name?.type === "required" && (
                       <Text color="red">
-                        輸入有效的英文名稱 Enter valid english name!{" "}
+                        {wordExtractor(
+                        page?.content?.wordings,
+                        "english_name_required"
+                      )}{" "}
                       </Text>
                     )}
                   </FormHelperText>
@@ -186,7 +201,7 @@ const IdentityPublicAdd = ({ page }) => {
                     {...register("date_of_birth")}
                   />
                   <FormHelperText>
-                    {errors?.date_of_birth?.message}
+
                   </FormHelperText>
                 </FormControl>
               </GridItem>
@@ -200,6 +215,10 @@ const IdentityPublicAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "gender_placeholder"
+                        )}
                         options={page?.content?.form?.gender?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
@@ -222,6 +241,10 @@ const IdentityPublicAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "resident_district_placeholder"
+                        )}
                         options={page?.content?.form?.residentRestrict?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
@@ -237,7 +260,7 @@ const IdentityPublicAdd = ({ page }) => {
                   <FormLabel>
                     {page?.content?.form?.industry?.label}{" "}
                     <Text as="span" color="red">
-                      *
+                      
                     </Text>
                   </FormLabel>
                   <Controller
@@ -249,6 +272,10 @@ const IdentityPublicAdd = ({ page }) => {
                         styles={customStyles}
                         {...field}
                         isMulti
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "industry_placeholder"
+                        )}
                         options={page?.content?.form?.industry?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
@@ -258,7 +285,10 @@ const IdentityPublicAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.industry?.type === "required" && (
                       <Text color="red">
-                        請選擇行業 Please select industry!{" "}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "industry_required"
+                        )}
                       </Text>
                     )}{" "}
                   </FormHelperText>
@@ -274,7 +304,12 @@ const IdentityPublicAdd = ({ page }) => {
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
-                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                  <Text color="red">
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
+                    </Text>
                 )}
               </FormHelperText>
             </FormControl>

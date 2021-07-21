@@ -55,7 +55,6 @@ const customStyles = {
 const IdentityPwdAdd = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
-  const [showIndustryOther, setShowIndustryOther] = useState(false);
 
   const {
     handleSubmit,
@@ -88,18 +87,6 @@ const IdentityPwdAdd = ({ page }) => {
             }
           }
         `;
-
-        console.log(chinese_name);
-        console.log(english_name);
-        console.log(date_of_birth);
-        console.log(gender);
-        console.log(resident_district);
-        console.log(person_types);
-        console.log(interested_employee);
-        console.log(interested_industry_other);
-        console.log(industry);
-        console.log(terms);
-        console.log(invitationCode);
 
         let data = await getGraphQLClient().request(mutation, {
           input: {
@@ -134,16 +121,6 @@ const IdentityPwdAdd = ({ page }) => {
     }
   );
 
-  const onIndustryChange = (field, value) => {
-    field.onChange(value);
-    let hasOther = value.filter((data) => data.value === "other");
-    if (hasOther.length > 0) {
-      setShowIndustryOther(true);
-    } else {
-      setValue("interested_industry_other", "");
-      setShowIndustryOther(false);
-    }
-  };
 
   return (
     <VStack py={36}>
@@ -174,13 +151,19 @@ const IdentityPwdAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "chinese_name_placeholder"
+                    )}
                     {...register("chinese_name", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.chinese_name?.type === "required" && (
                       <Text color="red">
-                        輸入有效的中文名稱 Enter valid chinese name!
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "chinese_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -196,13 +179,20 @@ const IdentityPwdAdd = ({ page }) => {
                   </FormLabel>
                   <Input
                     type="text"
-                    placeholder=""
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "english_name_placeholder"
+                    )}
                     {...register("english_name", { required: true })}
                   />
                   <FormHelperText>
                     {errors?.english_name?.type === "required" && (
                       <Text color="red">
-                        輸入有效的英文名稱 Enter valid english name!
+                        {/* 輸入有效的英文名稱 Enter valid english name! */}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "english_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -222,7 +212,10 @@ const IdentityPwdAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.date_of_birth?.type === "required" && (
                       <Text color="red">
-                        出生日期為必填項 Enter a valid Date of Birth{" "}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "date_of_birth_required"
+                        )}{" "}
                       </Text>
                     )}
                   </FormHelperText>
@@ -238,6 +231,10 @@ const IdentityPwdAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "gender_placeholder"
+                        )}
                         options={page?.content?.form?.gender?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
@@ -312,6 +309,10 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "resident_district_placeholder"
+                    )}
                     {...field}
                     options={page?.content?.form?.residentRestrict?.options.map(
                       ({ label, value }) => ({ label, value })
@@ -331,6 +332,10 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                  placeholder={wordExtractor(
+                    page?.content?.wordings,
+                    "person_types_placeholder"
+                  )}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -360,6 +365,10 @@ const IdentityPwdAdd = ({ page }) => {
                     styles={customStyles}
                     {...field}
                     isMulti
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "interested_employee_placeholder"
+                    )}
                     options={page?.content?.form?.employeerMode?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -369,7 +378,11 @@ const IdentityPwdAdd = ({ page }) => {
               <FormHelperText>
                 {errors?.interested_employee?.type === "required" && (
                   <Text color="red">
-                    請選擇感興趣的員工 Please select a interested employee!
+                    {/* 請選擇感興趣的員工 Please select a interested employee! */}
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "interested_employee_required"
+                    )}
                   </Text>
                 )}
               </FormHelperText>
@@ -393,7 +406,11 @@ const IdentityPwdAdd = ({ page }) => {
                     styles={customStyles}
                     {...field}
                     isMulti
-                    onChange={(value) => onIndustryChange(field, value)}
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "industry_placeholder"
+                    )}
+                    
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -402,34 +419,47 @@ const IdentityPwdAdd = ({ page }) => {
               />
               <FormHelperText>
                 {errors?.industry?.type === "required" && (
-                  <Text color="red">請選擇行業 Please select industry!</Text>
+                  <Text color="red">
+                  {/* 請選擇行業 Please select industry! */}
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "industry_required"
+                    )}
+                  </Text>
                 )}
               </FormHelperText>
             </FormControl>
 
-            {showIndustryOther ? (
+            
               <FormControl>
                 <FormLabel>
                   {page?.content?.form?.interestedIndustryOther}{" "}
                   <Text as="span" color="red">
-                    *
+                    
                   </Text>
                 </FormLabel>
                 <Input
                   type="text"
-                  placeholder=""
-                  {...register("interested_industry_other", { required: true })}
+                  placeholder={wordExtractor(
+                    page?.content?.wordings,
+                    "interested_industry_other_placeholder"
+                  )}
+                  {...register("interested_industry_other")}
                 />
                 <FormHelperText>
                   {errors?.interested_industry_other?.type === "required" && (
                     <Text color="red">
-                      輸入一個有效的感興趣的行業 其他 Enter valid interested
-                      industry other
+                      {/* 輸入一個有效的感興趣的行業 其他 Enter valid interested
+                      industry other */}
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "interested_industry_other_required"
+                      )}
                     </Text>
                   )}
                 </FormHelperText>
               </FormControl>
-            ) : null}
+            
 
             <FormControl marginTop="20px !important">
               <Checkbox
@@ -443,7 +473,14 @@ const IdentityPwdAdd = ({ page }) => {
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
-                  <Text color="red">請接受條款和條件 Please accept T&C!</Text>
+                  <Text color="red">
+                    {/* 請接受條款和條件 Please accept T&C!
+                   */}
+                    {wordExtractor(
+                    page?.content?.wordings,
+                    "tnc_required"
+                  )}
+                  </Text>
                 )}
               </FormHelperText>
             </FormControl>
