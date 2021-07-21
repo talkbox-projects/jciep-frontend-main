@@ -76,14 +76,10 @@ const EmploymentSubSectionViewer = () => {
                         : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>
-<<<<<<< HEAD
-                  <Text>{jobTitle}</Text>
-                  <Text>
-                    {companyName} (
-=======
-                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">{companyName}</Text>
+                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
+                    {companyName}
+                  </Text>
                   <Text fontSize={"md"} color="#666666">
->>>>>>> origin/profile-fixes
                     {
                       enums?.EnumEmploymentModeList?.find(
                         (x) => x.key === employmentType
