@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
+import { Text, Box, VStack, Wrap, Tag, Flex, HStack } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -77,17 +77,22 @@ const EmploymentSubSectionViewer = () => {
                     </Text>
                   </Wrap>
                   <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
-                    {companyName}
+                    {jobTitle}
                   </Text>
-                  <Text fontSize={"md"} color="#666666">
-                    {
-                      enums?.EnumEmploymentModeList?.find(
-                        (x) => x.key === employmentType
-                      )?.value?.[router.locale]
-                    }
-                    )
-                  </Text>
-                  <Text></Text>
+                  <HStack>
+                    <Text fontSize={"md"} color="#666666">
+                      {companyName}
+                    </Text>
+                    {employmentType !== "unselected" && (
+                      <Tag size="sm" fontWeight="normal">
+                        {
+                          enums?.EnumEmploymentModeList?.find(
+                            (x) => x.key === employmentType
+                          )?.value?.[router.locale]
+                        }
+                      </Tag>
+                    )}
+                  </HStack>
                 </VStack>
               </Box>
             );

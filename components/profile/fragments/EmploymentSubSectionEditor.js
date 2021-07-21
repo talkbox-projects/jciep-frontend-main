@@ -270,7 +270,11 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                           control={control}
                           defaultValue={endDatetime}
                           render={({ field }) => (
-                            <MonthPicker page={page} {...field} />
+                            <MonthPicker
+                              page={page}
+                              {...field}
+                              isDisabled={isCurrent}
+                            />
                           )}
                         />
                         <FormHelperText color="red">

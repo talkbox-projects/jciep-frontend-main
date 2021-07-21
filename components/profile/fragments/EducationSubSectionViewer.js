@@ -58,13 +58,25 @@ const EducationSubSectionViewer = () => {
                       {wordExtractor(page?.content?.wordings, "present_label")}
                     </Text>
                   )}
-                  <Text color="#666666">
-                    {moment(startDatetime).format("MM/YYYY")} -{" "}
-                    {present
-                      ? moment(endDatetime).format("MM/YYYY")
-                      : wordExtractor(page?.content?.wordings, "present_label")}
-                  </Text>
-                  <Text fontSize={"md"} fontFamily="SFNSDisplay">
+                  <Wrap color="#666666">
+                    <Tag size="sm" fontWeight="normal">
+                      {
+                        enums?.EnumDegreeList?.find((x) => x.key === degree)
+                          ?.value?.[router.locale]
+                      }
+                    </Tag>
+                    <Text>
+                      {startDatetime &&
+                        `${moment(startDatetime).format("YYYY/MM")} - `}
+                      {present
+                        ? wordExtractor(
+                            page?.content?.wordings,
+                            "present_label"
+                          )
+                        : endDatetime && moment(endDatetime).format("YYYY/MM")}
+                    </Text>
+                  </Wrap>
+                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
                     {fieldOfStudy}
                   </Text>
                   <Text fontSize={"md"} color="#666666">
