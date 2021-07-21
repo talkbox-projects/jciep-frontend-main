@@ -378,26 +378,28 @@ const PwdDetail = ({ page }) => {
               </GridItem>
             ))}
           </SimpleGrid>
-          <Box
-            mt={["56px", "56px", "80px"]}
-            zIndex={3}
-            p={4}
-            bg="white"
-            borderRadius="xl"
-          >
-            <HStack>
-              <Icon
-                as={AiFillInfoCircle}
-                fontSize="48px"
-                color="rgb(252,210,0)"
-              />
-              <Text fontSize="14px">
-                {(pwd?.careerSection?.extraInfo ?? []).map((data, index) => (
-                  <chakra.span key={index}>{data.text}</chakra.span>
-                ))}
-              </Text>
-            </HStack>
-          </Box>
+          {pwd?.careerSection?.extraInfo?.length > 0 && (
+            <Box
+              mt={["56px", "56px", "80px"]}
+              zIndex={3}
+              p={4}
+              bg="white"
+              borderRadius="xl"
+            >
+              <HStack>
+                <Icon
+                  as={AiFillInfoCircle}
+                  fontSize="48px"
+                  color="rgb(252,210,0)"
+                />
+                <Text fontSize="14px">
+                  {(pwd?.careerSection?.extraInfo ?? []).map((data, index) => (
+                    <chakra.span key={index}>{data.text}</chakra.span>
+                  ))}
+                </Text>
+              </HStack>
+            </Box>
+          )}
         </Container>
 
         <Box>
