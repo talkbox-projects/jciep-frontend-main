@@ -18,6 +18,9 @@ import {
   WrapItem,
   Divider,
   Tooltip,
+  Stack,
+  Flex,
+  Heading,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -290,7 +293,41 @@ const PwdDetail = ({ page }) => {
           />
         </Box>
 
-        <Grid
+        <Stack
+          position="relative"
+          direction={["column", "row"]}
+          mt={16}
+          zIndex={2}
+          spacing={16}
+        >
+          <VStack minW="50%" spacing={8}>
+            <Box w="100%" py={2} borderBottom="1px">
+              <Heading size="lg">
+                {pwd?.traitSection?.prosSection?.title}
+              </Heading>
+            </Box>
+            {pwd?.traitSection?.prosSection?.list?.map((text, i) => (
+              <HStack spacing={4} w="100%" key={i} minH="32px">
+                <Image src={pwd?.traitSection?.prosSection?.icon} w="32px" />
+                <Text fontSize="lg">{text}</Text>
+              </HStack>
+            ))}
+          </VStack>
+          <VStack minW="50%" spacing={8}>
+            <Box w="100%" py={2} borderBottom="1px">
+              <Heading size="lg">
+                {pwd?.traitSection?.consSection?.title}
+              </Heading>
+            </Box>
+            {pwd?.traitSection?.consSection?.list?.map((text, i) => (
+              <HStack spacing={4} w="100%" key={i} minH="32px">
+                <Image src={pwd?.traitSection?.consSection?.icon} w="32px" />
+                <Text fontSize="lg">{text}</Text>
+              </HStack>
+            ))}
+          </VStack>
+        </Stack>
+        {/* <Grid
           templateColumns={[
             "repeat(1, 1fr)",
             "repeat(1, 1fr)",
@@ -322,7 +359,7 @@ const PwdDetail = ({ page }) => {
               </Text>
             </Box>
           ))}
-        </Grid>
+        </Grid> */}
         <Text mt={["56px", "56px", "80px"]} fontSize="14px">
           {(pwd?.traitSection?.extraInfo ?? []).map((data, index) => (
             <chakra.span key={index}>{data.text}</chakra.span>
