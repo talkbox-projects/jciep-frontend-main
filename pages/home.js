@@ -404,7 +404,7 @@ const Home = ({ setting, page }) => {
                     borderColor="white"
                     ratio={1}
                   >
-                    <Image src={post?.coverImage} />
+                    <Image src={post?.content?.feature?.image} />
                   </AspectRatio>
                 </Box>
                 <VStack
