@@ -236,9 +236,11 @@ const LoginModal = () => {
                   <FormLabel>
                     {getWording("login.login_password_label")}
                   </FormLabel>
-                  <Input type="password" 
+                  <Input
+                    type="password"
                     placeholder={getWording("login.login_password_placeholder")}
-                  {...register("password")} />
+                    {...register("password")}
+                  />
                   <FormHelperText color="red.500">
                     {errors?.password?.message}
                   </FormHelperText>

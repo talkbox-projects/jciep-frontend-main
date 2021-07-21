@@ -9,11 +9,20 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
+import getRawBody from "raw-body";
+import util from "util";
+import multer from "multer";
 
 const PAGE_KEY = "appleLogin";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  await util.promisify(multer().any())(context.req, context.res);
+
+  if (context.req.method == "POST") {
+    const body = await getRawBody(context.req);
+    console.log(body.toString("utf-8"));
+  }
 
   return {
     props: {

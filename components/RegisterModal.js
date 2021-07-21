@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
+import React from "react";
 
 import {
   Box,
@@ -137,10 +138,18 @@ const RegisterModal = () => {
                     {getWording("register.register_email_label")}
                   </FormLabel>
                   <Input
-                    placeholder={getWording("register.register_email_placeholder")}
-                    {...register("email", {required: true})}
+                    placeholder={getWording(
+                      "register.register_email_placeholder"
+                    )}
+                    {...register("email", { required: true })}
                   />
-                    <FormHelperText color="red">{errors?.email?.type === 'required' && <Text>{getWording("register.register_email_required")}</Text>}</FormHelperText>
+                  <FormHelperText color="red">
+                    {errors?.email?.type === "required" && (
+                      <Text>
+                        {getWording("register.register_email_required")}
+                      </Text>
+                    )}
+                  </FormHelperText>
                 </FormControl>
                 <FormControl>
                   <Button
@@ -280,9 +289,9 @@ const RegisterModal = () => {
               />
               <AppleLogin
                 clientId="com.talkboxapp.teamwork.service.hku"
-                redirectURI={`${process.env.HOST_URL}/oauth/apple`}
-                responseType={"code"}
-                responseMode={"query"}
+                redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
+                responseType={"code id_token"}
+                responseMode={"form_post"}
                 usePopup={false}
                 render={(renderProps) => {
                   return (
@@ -302,7 +311,6 @@ const RegisterModal = () => {
                     </Button>
                   );
                 }}
-                callback={console.log}
               />
             </VStack>
             <Button
