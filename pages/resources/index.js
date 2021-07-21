@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -13,6 +13,8 @@ import {
   Text,
   Image,
   Box,
+  UnorderedList,
+  ListItem,
   Button,
   Grid,
   GridItem,
@@ -30,6 +32,7 @@ import ApostropheHeadline from "../../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import Anchor from "../../components/Anchor";
 
 const PAGE_KEY = "resources";
 
@@ -283,6 +286,7 @@ const Resources = ({ page, setting }) => {
       {/* resource Section */}
 
       <Box bg="#F3F3F3">
+        <Anchor id="list" />
         <Container>
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
@@ -347,14 +351,10 @@ const Resources = ({ page, setting }) => {
               bg="white"
               p={4}
               borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickPrev()}
             >
-              <IconButton
-                cursor="pointer"
-                onClick={() => sliderRef.current.slickPrev()}
-                variant="unstyled"
-                as={FaArrowLeft}
-                size="md"
-              />
+              <IconButton variant="unstyled" as={FaArrowLeft} size="md" />
             </Box>
           </HStack>
           <HStack
@@ -375,11 +375,11 @@ const Resources = ({ page, setting }) => {
               bg="white"
               p={4}
               borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickNext()}
             >
               <IconButton
-                cursor="pointer"
                 borderRadius="50%"
-                onClick={() => sliderRef.current.slickNext()}
                 variant="unstyled"
                 round={true}
                 size="md"
@@ -460,6 +460,7 @@ const Resources = ({ page, setting }) => {
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
+        <Anchor id="equip" top="0" />
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}

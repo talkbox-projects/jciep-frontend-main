@@ -121,7 +121,10 @@ const IdentityOpportunities = ({
       {" "}
       {(identities ?? []).map((identity) => (
         <NextLink
-          href={`/talants/individuals?identityId=${identity?.id}`}
+          href={generateUrlParameter({
+            identityId: identity?.id,
+            organizationId: router?.query?.organizationId,
+          })}
           key={identity?.id}
         >
           <VStack
@@ -253,7 +256,10 @@ const IdentityOpportunities = ({
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
                   router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
+                    generateUrlParameter({
+                      identityId: "",
+                      organizationId: e.target.value,
+                    })
                   )
                 }
                 variant="flushed"
@@ -301,7 +307,10 @@ const IdentityOpportunities = ({
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
                   router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
+                    generateUrlParameter({
+                      identityId: "",
+                      organizationId: e.target.value,
+                    })
                   )
                 }
                 variant="flushed"

@@ -1,3 +1,4 @@
+import React from "react";
 import { useAppContext } from "../store/AppStore";
 import { Controller, useForm } from "react-hook-form";
 import { useCallback } from "react";
@@ -24,10 +25,12 @@ import { FaArrowLeft } from "react-icons/fa";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useCredential } from "../utils/user";
+import { useRouter } from "next/router";
 
 const OtpVerifyModal = () => {
   const { otpVerifyModalDisclosure } = useAppContext();
   const phone = otpVerifyModalDisclosure?.params?.phone;
+  const router = useRouter();
 
   const getWording = useGetWording();
 
@@ -145,14 +148,28 @@ const OtpVerifyModal = () => {
 
         setCredential(data?.UserLogin);
         otpVerifyModalDisclosure.onClose();
-        router.push("/");
+        if (data?.UserLogin) {
+          const user = data?.UserLogin?.user;
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
+        }
       } catch (e) {
         setError("otp", {
           message: getWording("otpVerify.invalid_otp_message"),
         });
       }
     },
-    [phone]
+    [
+      getWording,
+      otpVerifyModalDisclosure,
+      phone,
+      router,
+      setCredential,
+      setError,
+    ]
   );
 
   return (

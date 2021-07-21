@@ -1,8 +1,8 @@
+import React from "react";
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
-import { RiEdit2Line } from "react-icons/ri";
 import EducationSubSectionEditor from "../fragments/EducationSubSectionEditor";
 import EmploymentSubSectionEditor from "../fragments/EmploymentSubSectionEditor";
 
@@ -55,7 +55,7 @@ const ExperienceSectionEditor = () => {
           </HStack>
         </VStack>
       </HStack>
-      <Stack px={1} direction={"column"} px={8} spacing={4}>
+      <Stack direction={"column"} px={8} spacing={4}>
         <EducationSubSectionEditor form={form} />
         <EmploymentSubSectionEditor form={form} />
       </Stack>

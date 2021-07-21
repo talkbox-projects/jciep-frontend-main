@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { useEffect } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -32,7 +33,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const appleLogin = ({ page }) => {
+const AppleLogin = ({ page }) => {
   const router = useRouter();
   const { code: accessToken } = router.query;
   const [setCredential] = useCredential();
@@ -140,12 +141,19 @@ const appleLogin = ({ page }) => {
 
         const data = await getGraphQLClient().request(mutation, variables);
         setCredential(data?.UserLogin);
-        router.push("/");
+        if (data?.UserLogin) {
+          const user = data?.UserLogin?.user;
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
+        }
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [accessToken]);
+  }, [accessToken, router, setCredential]);
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
@@ -167,6 +175,6 @@ const appleLogin = ({ page }) => {
   );
 };
 
-export default withPageCMS(appleLogin, {
+export default withPageCMS(AppleLogin, {
   key: PAGE_KEY,
 });

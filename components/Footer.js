@@ -1,3 +1,4 @@
+import React from "react";
 import { Divider, HStack, Text } from "@chakra-ui/layout";
 import {
   Box,
@@ -31,7 +32,7 @@ const Footer = ({ footer }) => {
                   <Box w="150px" color="gray.500">
                     {title}
                   </Box>
-                  <Wrap spacing={8} align="center">
+                  <Wrap spacing={4} align="center">
                     {(partners ?? []).map(
                       ({ id: _id, label, url, logo = "" }) => {
                         return (
@@ -59,7 +60,6 @@ const Footer = ({ footer }) => {
             spacing={8}
             align={"start"}
             direction={["column", "column", "row", "row"]}
-            spacing={8}
           >
             <Box>
               <Image maxW={150} src={footer?.logo} />
@@ -87,7 +87,7 @@ const Footer = ({ footer }) => {
                   </NextLink>
                   {(links ?? []).map(({ id: _id, url = "", label = "" }) => {
                     return (
-                      <NextLink id={_id} href={url}>
+                      <NextLink key={_id} id={_id} href={url}>
                         <Button
                           fontSize={["xl", "xl", "lg"]}
                           textAlign="left"

@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import {
   Box,
@@ -276,11 +277,12 @@ const Card = ({
             </Box>
             <MotionBox
               overflow="hidden"
-              animate={{ height: show ? "auto" : 0 }}
+              height={0}
               transition={{ duration: 0.5 }}
               alignItems="start"
               spacing={0}
               w="100%"
+              {...(show && { animate: { height: "auto" } })}
             >
               <Divider />
               <HStack pt="8px" spacing="5px" align="start">

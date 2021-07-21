@@ -276,7 +276,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         </Box>
       )} */}
       <Box
-        d={["none", "none", "block", "block"]}
+        d={["none", "none", "none", "block"]}
         bg="white"
         position="fixed"
         // top={isShowLangUnavailable ? 20 : 0}
@@ -427,9 +427,11 @@ const Header = ({ navigation, isLangAvailable }) => {
             borderWidth={1}
             pr={6}
           >
-            <LinkOverlay as={NextLink} href="/home">
-              <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
-            </LinkOverlay>
+            <Box>
+              <LinkOverlay as={NextLink} href="/home">
+                <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
+              </LinkOverlay>
+            </Box>
             <Box flex={1} minW={0} w="100%" />
             <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
@@ -542,7 +544,7 @@ const Header = ({ navigation, isLangAvailable }) => {
         // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         bg="white"
-        d={["block", "block", "none", "none"]}
+        d={["block", "block", "block", "none"]}
       >
         <HStack align="center" h={16} p={3}>
           <LinkOverlay as={NextLink} href="/home">

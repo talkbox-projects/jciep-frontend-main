@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
@@ -21,6 +21,7 @@ import {
   AspectRatio,
   IconButton,
   Button,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Container from "../components/Container";
 import metaTextTemplates from "../utils/tina/metaTextTemplates";
@@ -36,6 +37,7 @@ import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
+import VisibilitySensor from "react-visibility-sensor";
 
 const PAGE_KEY = "home";
 
@@ -56,6 +58,10 @@ const Video = chakra("video");
 const Home = ({ setting, page }) => {
   const [posts, setPosts] = useState([]);
   const router = useRouter();
+
+  const isMobile = useBreakpointValue([true, false]);
+  const videoRef = useRef(undefined);
+  const [hasVideoEnded, setHasVideoEnded] = useState(false);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -83,6 +89,10 @@ const Home = ({ setting, page }) => {
     fetchFeaturePosts();
   }, [fetchFeaturePosts]);
 
+  useEffect(() => {
+    if (isMobile || !isMobile) setHasVideoEnded(false);
+  }, [isMobile]);
+
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       {page?.content?.seo?.title && (
@@ -95,7 +105,7 @@ const Home = ({ setting, page }) => {
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
         <AspectRatio h="100%" ratio={5 / 3}>
-          <Video h="100%" src="/banner_video.mp4" autoPlay="true" loop></Video>
+          <Video h="100%" src="/banner_video.mp4" autoPlay loop muted />
         </AspectRatio>
         <VStack
           zIndex={10}
@@ -198,7 +208,27 @@ const Home = ({ setting, page }) => {
       </Box>
 
       {/* Third Section */}
-      <Box bg="#fff">
+      <Box>
+        <VisibilitySensor
+          onChange={(isVisible) => {
+            if (!hasVideoEnded && !!videoRef?.current)
+              isVisible ? videoRef.current.play() : videoRef.current.pause();
+          }}
+        >
+          <AspectRatio h="100%" ratio={isMobile ? 3 / 5 : 5 / 3}>
+            <Video
+              ref={videoRef}
+              h="100%"
+              src={
+                isMobile ? "/logo_video_mobile.mp4" : "/logo_video_desktop.mov"
+              }
+              muted
+              onEnded={() => setHasVideoEnded(true)}
+            />
+          </AspectRatio>
+        </VisibilitySensor>
+      </Box>
+      {/* <Box bg="#fff">
         <Container>
           <VStack align="center" py={"20vh"}>
             <Image
@@ -240,7 +270,7 @@ const Home = ({ setting, page }) => {
             </Text>
           </VStack>
         </Container>
-      </Box>
+      </Box> */}
 
       {/* Fourth Section */}
 
