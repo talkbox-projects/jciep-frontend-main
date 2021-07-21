@@ -300,7 +300,7 @@ const IdentityPublicAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-               <a href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text} </a>
+               <a target="_blank" href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text} </a>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -507,6 +507,7 @@ export default withPageCMS(IdentityPublicAdd, {
               name: "link",
               label: "關聯 Link",
               component: "text",
+              placeholder:"https://"
             }
           ]
         },
