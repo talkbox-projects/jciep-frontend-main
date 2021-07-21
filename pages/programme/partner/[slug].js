@@ -333,7 +333,7 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid justifyContent="center" gap={12} columns={[2, 2, 4, 4]}>
+            <SimpleGrid justifyContent="center" display="flex" gap={12} columns={[2, 2, 4, 4]}>
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (
