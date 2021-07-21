@@ -166,6 +166,11 @@ export default [
             component: "text",
           },
           {
+            name: "remark",
+            label: "多元人才備註 PWD Remark",
+            component: "textarea",
+          },
+          {
             name: "description",
             label: "多元人才描述 PWD Description",
             component: "blocks",

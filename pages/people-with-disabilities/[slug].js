@@ -17,6 +17,7 @@ import {
   Wrap,
   WrapItem,
   Divider,
+  Tooltip,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -26,7 +27,11 @@ import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import React from "react";
 import Container from "../../components/Container";
-import { AiFillInfoCircle, AiOutlineBulb } from "react-icons/ai";
+import {
+  AiFillInfoCircle,
+  AiOutlineBulb,
+  AiOutlineInfoCircle,
+} from "react-icons/ai";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
@@ -126,9 +131,16 @@ const PwdDetail = ({ page }) => {
         >
           <Image src={pwd?.icon} height={[16, 16, 88]} />
         </Box>
-        <Text zIndex={2} fontWeight="bold" fontSize={["24", "24", "56"]}>
-          {pwd?.name}
-        </Text>
+        <HStack zIndex={2} fontSize={["24", "24", "56"]}>
+          <Text fontWeight="bold">{pwd?.name}</Text>
+          {pwd?.remark && (
+            <Tooltip hasArrow label={pwd?.remark}>
+              <Text d="inline">
+                <Icon as={AiOutlineInfoCircle}></Icon>
+              </Text>
+            </Tooltip>
+          )}
+        </HStack>
         <Box zIndex={2}>
           <MultiTextRenderer
             textAlign="center"
@@ -142,6 +154,7 @@ const PwdDetail = ({ page }) => {
           right="0"
           height="86%"
           src={pwd?.descriptionStyles?.bgGradient}
+          zIndex={1}
         />
         <Box pos="absolute" bottom="0" w="100%">
           <DividerA
