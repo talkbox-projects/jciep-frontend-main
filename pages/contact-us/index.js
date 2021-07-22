@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { VStack, Box, Text, Grid } from "@chakra-ui/layout";
-import { Image, chakra } from "@chakra-ui/react";
+import { Image, chakra, Container, Heading } from "@chakra-ui/react";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
@@ -11,6 +11,7 @@ import DividerA from "../../components/DividerA";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Anchor from "../../components/Anchor";
+import contactUsFieldsForCMS from "../../utils/tina/contactUsFieldsForCMS";
 
 const PAGE_KEY = "contactUs";
 
@@ -46,45 +47,26 @@ const ContactUs = ({ page }) => {
         position="relative"
         overflowY="visible"
         backgroundColor={page?.content?.banner?.bgColor}
-        backgroundImage={`url(${page?.content?.banner?.bgImageMain})`}
+        // backgroundImage={`url(${page?.content?.banner?.bgImageMain})`}
         backgroundSize="cover"
         backgroundPosition="center center"
         display="flex"
         flexDirection="column"
         alignItems="center"
-        zIndex="-1"
         justifyContent="center"
       >
-        <Box mb="43px" position="relative" zIndex={10}>
-          <Text textAlign="center" fontSize={["16", "16", "24", "24"]}>
-            {page?.content?.banner?.reference}
-          </Text>
-          <MultiTextRenderer
-            textAlign="center"
-            fontSize={["24", "24", "56", "56"]}
-            data={page?.content?.banner?.quote}
-            parentStyles={{ zIndex: "1" }}
-          />
-          <Box
-            position="absolute"
-            bottom={["1", "1", "2", "2"]}
-            right={["-1", "-1", "-3", "-3"]}
-            pt={["0", "0", "6", "6"]}
-            pb="5"
-            background="#fff"
-            w={["110px", "110px", "250px", "250px"]}
-            zIndex="-1"
-          />
-        </Box>
+        <Container>
+          <Image src={page?.content?.banner?.bgImageMain} />
+        </Container>
         <Image
           position="absolute"
           bottom="-74px"
           left={["0", "0", "0", "0", "149"]}
           src={page?.content?.banner?.bgImageLeft}
-          h={["0%", "0%", "300px", "388px"]}
+          h={["0%", "0%", "200px", "200px", "306px"]}
           w="auto"
           maxW="334"
-          zIndex="1"
+          zIndex="2"
         />
         <Image
           position="absolute"
@@ -94,19 +76,63 @@ const ContactUs = ({ page }) => {
           h={["142px", "142px", "200px", "200px", "306px"]}
           w="auto"
           maxW="551"
-          zIndex="1"
+          zIndex="2"
         />
-        <Image
+        <Box pos="absolute" bottom="-1px" w="100%">
+          <DividerA
+            primaryColor="rgb(252,181,48)"
+            secondaryColor="rgb(255,255,255)"
+            nextColor="rgb(32,191,186)"
+          />
+        </Box>
+        {/* <Image
           position="absolute"
           bottom="-1px"
           src={page?.content?.banner?.bgImageBottom}
           width="100%"
           fit="contain"
-        />
+        /> */}
+      </Box>
+
+      <Box
+        bg={page?.content?.contactSection?.bgColor}
+        w="100%"
+        justifyContent="center"
+        alignItems="center"
+        p={16}
+      >
+        <Container maxW="container.lg" justifyContent="center">
+          <VStack spacing={8}>
+            <HighlightHeadline bgColor="#fff">
+              {page?.content?.contactSection?.title}
+            </HighlightHeadline>
+            <Text fontSize="xl">
+              {page?.content?.contactSection?.description}
+            </Text>
+            <Box
+              bg={page?.content?.contactSection?.contactInfo?.bgColor}
+              p={8}
+              borderRadius="xl"
+              w="100%"
+              zIndex={10}
+            >
+              <iframe
+                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId"
+                width="340"
+                height="130"
+                style={{ border: "none", overflow: "hidden" }}
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen="true"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              ></iframe>
+            </Box>
+          </VStack>
+        </Container>
       </Box>
 
       {/* Excerpt Section */}
-      <Box
+      {/* <Box
         bg={page?.content?.excerpt?.bgColor}
         w="100%"
         paddingTop={["59px", "59px", "151px"]}
@@ -137,10 +163,10 @@ const ContactUs = ({ page }) => {
             data={page?.content?.excerpt?.content}
           />
         </Box>
-      </Box>
+      </Box> */}
 
       {/* PWDs List */}
-      <Anchor id="list" />
+      {/* <Anchor id="list" />
       <Box
         bg={page?.content?.pwdList?.bgStyle?.bgColor}
         w="100%"
@@ -235,12 +261,12 @@ const ContactUs = ({ page }) => {
             />
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </VStack>
   );
 };
 
 export default withPageCMS(ContactUs, {
   key: PAGE_KEY,
-  fields: pwdFieldsForCMS,
+  fields: contactUsFieldsForCMS,
 });
