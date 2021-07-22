@@ -159,7 +159,6 @@ const PostDetail = ({ post, setting, page }) => {
             desktopProps={{
               top: "160px",
               left: "0px",
-              mr: 12,
             }}
             isMobileBreakPointValue={[true, true, true, false]}
           >
