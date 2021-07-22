@@ -17,6 +17,7 @@ import {
   Tooltip,
   Divider,
   Button,
+  Wrap,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
 import { VStack, HStack, Stack } from "@chakra-ui/layout";
@@ -116,7 +117,7 @@ const Partner = ({ page }) => {
           w="100%"
         >
           <Container>
-            <Box pb={16}>
+            <Box pb={[0, 16]}>
               <VStack mx={8} align="start" spacing={0}>
                 <Box>
                   <Text
@@ -391,12 +392,12 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid justifyContent="center" gap={12} columns={[2, 2, 4, 4]}>
+            <Wrap justify="center" spacing={12}>
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (
-                    <VStack key={index}>
-                      <Image w="200px" src={image} />
+                    <VStack key={index} maxW={["35%", "35%", "35%", "20%"]}>
+                      <Image minW={["100px", "200px"]} src={image} />
                       <Text
                         textAlign="center"
                         w={["100%", "100%", "150px"]}
@@ -416,7 +417,7 @@ const Partner = ({ page }) => {
                   );
                 }
               )}
-            </SimpleGrid>
+            </Wrap>
           </VStack>
         </Container>
       </Box>

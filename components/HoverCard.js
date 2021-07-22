@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
 
-// #Has to be wrapped by a display flex parent
 const HoverCard = ({
   children,
   mobileProps,
