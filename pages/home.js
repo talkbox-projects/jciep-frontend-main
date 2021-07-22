@@ -105,7 +105,11 @@ const Home = ({ setting, page }) => {
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
         <AspectRatio h="100%" ratio={5 / 3}>
+<<<<<<< HEAD
           <Video h="100%" src="/banner_video.mp4" autoPlay loop muted />
+=======
+          <Video h="100%" src={ page?.content?.banner?.video ? page?.content?.banner?.video : "/banner_video.mp4"} autoPlay="true" loop></Video>
+>>>>>>> profile-fixes
         </AspectRatio>
         <VStack
           zIndex={10}
@@ -659,6 +663,12 @@ export default withPageCMS(Home, {
         //   parse: ({ previewSrc }) => previewSrc,
         //   previewSrc: (src) => src,
         // },
+        {
+          name: "video",
+          label: "視頻 Video",
+          component: "text",
+          placeholder:"https://"
+        },
         {
           name: "title",
           label: "主標題 Title",

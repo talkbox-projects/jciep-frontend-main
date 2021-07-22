@@ -283,7 +283,7 @@ const IdentityEmployerAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                <a href={page?.content?.form?.terms?.link}>
+                <a target="_blank" href={page?.content?.form?.terms?.link}>
                   {" "}
                   {page?.content?.form?.terms?.text}
                 </a>
@@ -374,6 +374,7 @@ export default withPageCMS(IdentityEmployerAdd, {
               name: "link",
               label: "關聯 Link",
               component: "text",
+              placeholder:"https://"
             },
           ],
         },

@@ -223,7 +223,7 @@ const Resources = ({ page, enums, setting }) => {
             px={2}
             mb={36}
             fontWeight="bold"
-            fontSize={["3xl", "5xl", "6xl"]}
+            fontSize={["3xl", "4xl", "5xl"]}
             bg="#F6D644"
           >
             {page?.content?.heroBannerSection["title 標題"]}

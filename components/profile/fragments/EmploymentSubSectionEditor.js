@@ -68,9 +68,9 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
             const isCurrent = watch(`${prefix}.present`);
             return (
               <Box
-                pl={2}
+                pl={[0,2]}
                 key={id}
-                borderLeftColor="#eee"
+                borderLeftColor={["transparent","#eee"]}
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -80,10 +80,10 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                   left={"-5px"}
                   h={"8px"}
                   w={"8px"}
-                  bgColor={borderColor}
+                  bgColor={["transparent",borderColor]}
                 />
                 <VStack
-                  pl={2}
+                  pl={[0,2]}
                   mt={-3}
                   mb={12}
                   spacing={0.5}
@@ -312,13 +312,14 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
           }
         )}
         {
-          <Box pl={2} borderLeftColor={"#eee"} borderLeftWidth={2}>
+          <Box pl={[0,2]} borderLeftColor={["transparent","#eee"]} borderLeftWidth={2}>
             <Button
               my={4}
               px={2}
               size="sm"
               w={["100%", "auto"]}
               alignSelf="flex-start"
+              borderRadius="15px"
               variant="outline"
               onClick={() => append({})}
               leftIcon={<AiOutlinePlus />}
