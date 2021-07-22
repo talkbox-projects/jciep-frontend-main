@@ -318,7 +318,7 @@ const RegisterModal = () => {
                       <HStack w="100%">
                         <IoLogoApple size={18} color="white" />
                         <Text flex={1} minW={0} w="100%">
-                          {getWording("register.sign_up_with_google")}
+                          {getWording("register.sign_up_with_apple")}
                         </Text>
                       </HStack>
                     </Button>
