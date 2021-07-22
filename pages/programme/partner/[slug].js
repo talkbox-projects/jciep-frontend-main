@@ -215,11 +215,7 @@ const Partner = ({ page }) => {
             <HighlightHeadline bgColor={"#F6D644"}>
               {partner?.projectName}
             </HighlightHeadline>
-            <Text
-              fontWeight={900}
-              fontSize={["24px", "40px"]}
-              children={partner?.agencyName}
-            >
+            <Text fontWeight={900} fontSize={["24px", "40px"]}>
               {page?.content?.partnerSection?.planSection?.title}
             </Text>
             <SimpleGrid
@@ -228,7 +224,6 @@ const Partner = ({ page }) => {
               justifyContent="center"
               columns={[1, 1, 1, 2]}
               spacing={8}
-              display="flex"
             >
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
                 return (
@@ -396,12 +391,7 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid
-              justifyContent="center"
-              display="flex"
-              gap={12}
-              columns={[2, 2, 4, 4]}
-            >
+            <SimpleGrid justifyContent="center" gap={12} columns={[2, 2, 4, 4]}>
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (

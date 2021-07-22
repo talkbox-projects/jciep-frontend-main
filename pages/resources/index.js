@@ -101,7 +101,7 @@ const ServiceFilter = ({
       {label}
     </MenuButton>
     <Portal>
-      <MenuList minWidth="240px">
+      <MenuList maxW="100vw" minWidth="240px">
         <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
           {list?.map((target, i) => (
             <MenuItemOption key={i} value={target.value}>
@@ -553,7 +553,7 @@ const Resources = ({ page, enums, setting }) => {
         </Box>
         <VStack
           w="100%"
-          px={[2, 4]}
+          p={[2, 4]}
           justifyContent="center"
           d={["block", "block", "none"]}
         >

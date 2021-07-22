@@ -131,6 +131,30 @@ export default [
         previewSrc: (src) => src,
       },
       {
+        name: "planSection",
+        label: "計晝目標 Plan Section",
+        component: "group",
+        fields: [
+          {
+            name: "title",
+            label: "Title 標題",
+            component: "text",
+          },
+        ],
+      },
+      {
+        name: "serviceTarget",
+        label: "服務對象 Service Target Section",
+        component: "group",
+        fields: [
+          {
+            name: "title",
+            label: "Title 標題",
+            component: "text",
+          },
+        ],
+      },
+      {
         name: "serviceSection",
         label: "合作伙伴圖片區塊 Service Section",
         component: "group",
