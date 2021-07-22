@@ -236,9 +236,11 @@ const LoginModal = () => {
                   <FormLabel>
                     {getWording("login.login_password_label")}
                   </FormLabel>
-                  <Input type="password" 
+                  <Input
+                    type="password"
                     placeholder={getWording("login.login_password_placeholder")}
-                  {...register("password")} />
+                    {...register("password")}
+                  />
                   <FormHelperText color="red.500">
                     {errors?.password?.message}
                   </FormHelperText>
@@ -363,6 +365,7 @@ const LoginModal = () => {
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
+                redirectUri={`/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"

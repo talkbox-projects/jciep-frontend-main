@@ -116,7 +116,7 @@ const Sharing = ({ page, setting, lang }) => {
     fetchHottestPosts();
   }, []);
 
-  const featuredArticleCategory = getCategoryData(featuredArticle.category);
+  const featuredArticleCategory = getCategoryData(featuredArticle?.category);
 
   const SkeletonPlaceholder = () => (
     <Grid

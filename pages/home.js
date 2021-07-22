@@ -78,7 +78,7 @@ const Home = ({ setting, page }) => {
       setPosts(
         data
           .sort(() => Math.random() - 0.5)
-          .slice(0, Math.max(5, data?.length ?? 0))
+          .slice(0, Math.min(5, data?.length ?? 0))
       );
     } catch (err) {
       console.log("***** error", err);
@@ -105,7 +105,16 @@ const Home = ({ setting, page }) => {
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
         <AspectRatio h="100%" ratio={5 / 3}>
-          <Video h="100%" src="/banner_video.mp4" autoPlay loop muted />
+          <Video
+            h="100%"
+            src={
+              page?.content?.banner?.video
+                ? page?.content?.banner?.video
+                : "/banner_video.mp4"
+            }
+            autoPlay="true"
+            loop
+          ></Video>
         </AspectRatio>
         <VStack
           zIndex={10}
@@ -336,7 +345,7 @@ const Home = ({ setting, page }) => {
 
       {/* Fifth Section */}
 
-      <Box bg="#00BFBA" h="100vh" position="relative">
+      <Box bg="#00BFBA" position="relative">
         <Carousel
           showArrows={true}
           showIndicators={false}
@@ -350,7 +359,7 @@ const Home = ({ setting, page }) => {
               <HStack
                 px={3}
                 position="absolute"
-                h="100vh"
+                h="100%"
                 zIndex={25}
                 align="center"
                 left={[2, 2, 2, 2, 8, "10vw"]}
@@ -372,7 +381,7 @@ const Home = ({ setting, page }) => {
                 top={0}
                 right={[2, 2, 2, 2, 8, "10vw"]}
                 position="absolute"
-                h="100vh"
+                h="100%"
                 align="center"
               >
                 <IconButton
@@ -387,24 +396,17 @@ const Home = ({ setting, page }) => {
           }}
         >
           {(posts ?? []).map((post, index) => (
-            <Container key={index}>
+            <Container key={index} py={28}>
               <Stack
                 align="center"
                 justifyContent="center"
                 spacing={[6, 8, 10, 16]}
                 px="50px"
-                h="100vh"
                 direction={["column", "column", "column", "row"]}
                 onClick={() => router.push(`/sharing/${post?.slug}`)}
               >
                 <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                  <AspectRatio
-                    overflow="hidden"
-                    borderRadius={16}
-                    borderWidth={4}
-                    borderColor="white"
-                    ratio={1}
-                  >
+                  <AspectRatio overflow="hidden" ratio={1}>
                     <Image src={post?.content?.feature?.image} />
                   </AspectRatio>
                 </Box>
@@ -666,6 +668,12 @@ export default withPageCMS(Home, {
         //   parse: ({ previewSrc }) => previewSrc,
         //   previewSrc: (src) => src,
         // },
+        {
+          name: "video",
+          label: "視頻 Video",
+          component: "text",
+          placeholder: "https://",
+        },
         {
           name: "title",
           label: "主標題 Title",

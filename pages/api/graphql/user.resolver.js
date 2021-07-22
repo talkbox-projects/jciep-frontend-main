@@ -285,6 +285,23 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
         return { token, user };
+      } else if (input.appleToken) {
+        let snsMeta = await google.getProfile(input.appleToken);
+        if (!snsMeta) {
+          throw new Error("failed to login via apple");
+        }
+
+        let user = await User.findOne({ appleId: snsMeta.id }).populate(
+          "identities"
+        );
+        if (!user) {
+          user = await new User({ appleId: snsMeta.id }).save();
+        }
+        const { identities, ..._user } = user.toObject();
+        const token = jwt.sign(_user, "shhhhh").toString();
+        user.snsMeta = snsMeta;
+        await user.save();
+        return { token, user };
       }
 
       return null;

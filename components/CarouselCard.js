@@ -229,51 +229,53 @@ const Card = ({
                   />
                 </HStack>
               )}
-              <UnorderedList pt="8px" m={0} listStyleType="none">
-                <HStack spacing="5px">
-                  <Image
-                    w="24px"
-                    h="24px"
-                    src={
-                      page?.content?.resourceSection?.resourceListIcons?.tick
-                    }
-                  />
+              {subsidy?.length > 0 && (
+                <UnorderedList pt="8px" m={0} listStyleType="none">
+                  <HStack spacing="5px">
+                    <Image
+                      w="24px"
+                      h="24px"
+                      src={
+                        page?.content?.resourceSection?.resourceListIcons?.tick
+                      }
+                    />
 
-                  <TextTool
-                    text={wordExtractor(
-                      page?.content?.wordings,
-                      "fundingHeading"
-                    )}
-                    fontSize="16px"
-                  />
-                </HStack>
-                {(subsidy ?? []).map(({ target, description }, index) => {
-                  return (
-                    <ListItem
-                      display="flex"
-                      _before={{
-                        content: '"."',
-                        color: "black",
-                        pr: "6px",
-                        fontWeight: "bold",
-                        fontSize: "12px",
-                      }}
-                      key={index}
-                      ml="40px"
-                    >
-                      <TextTool
-                        text={wordExtractor(
-                          page?.content?.wordings,
-                          "target_" + target
-                        )}
-                        description={description}
-                        fontSize="12px"
-                        small
-                      />
-                    </ListItem>
-                  );
-                })}
-              </UnorderedList>
+                    <TextTool
+                      text={wordExtractor(
+                        page?.content?.wordings,
+                        "fundingHeading"
+                      )}
+                      fontSize="16px"
+                    />
+                  </HStack>
+                  {(subsidy ?? []).map(({ target, description }, index) => {
+                    return (
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          pr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="40px"
+                      >
+                        <TextTool
+                          text={wordExtractor(
+                            page?.content?.wordings,
+                            "target_" + target
+                          )}
+                          description={description}
+                          fontSize="12px"
+                          small
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </UnorderedList>
+              )}
             </Box>
             <MotionBox
               overflow="hidden"

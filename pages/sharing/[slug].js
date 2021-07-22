@@ -124,12 +124,12 @@ const PostDetail = ({ post, setting, page }) => {
     if (post?.id) {
       const posts = await getRelatedPosts({
         limit: 3,
-        category: post.category,
+        category: post?.category,
         id: post.id,
       });
       setRelatedArticles(posts);
     }
-  }, [post?.id]);
+  }, [post?.category, post.id]);
 
   useEffect(() => {
     updateReadCount(post.id);
