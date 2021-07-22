@@ -332,7 +332,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <IoMdPhonePortrait size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Phone
+                      {getWording("register.sign_in_with_phone")}
                     </Text>
                   </HStack>
                 </Button>
@@ -348,19 +348,11 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <AiOutlineMail size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Email
+                      {getWording("register.sign_in_with_email")}
                     </Text>
                   </HStack>
                 </Button>
               )}
-              {/* <Button colorScheme="facebook" color="white" >
-                <HStack w="100%">
-                  <IoLogoFacebook size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign In With Facebook
-                  </Text>
-                </HStack>
-              </Button> */}
               <FacebookLogin
                 appId="1091464314720526"
                 fields="name,email,picture"
@@ -375,7 +367,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoFacebook size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign In With Facebook
+                        {getWording("register.sign_in_with_facebook")}
                       </Text>
                     </HStack>
                   </Button>
@@ -394,7 +386,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoGoogle size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign In With Google
+                        {getWording("register.sign_in_with_google")}
                       </Text>
                     </HStack>
                   </Button>
@@ -409,6 +401,7 @@ const LoginModal = () => {
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
                 responseType={"code"}
                 responseMode={"query"}
+                nonce="NONCE"
                 usePopup={false}
                 render={(renderProps) => {
                   return (
@@ -422,7 +415,7 @@ const LoginModal = () => {
                       <HStack w="100%">
                         <IoLogoApple size={18} color="white" />
                         <Text flex={1} minW={0} w="100%">
-                          Sign In With Apple
+                          {getWording("register.sign_in_with_apple")}
                         </Text>
                       </HStack>
                     </Button>

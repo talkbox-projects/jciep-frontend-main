@@ -35,6 +35,7 @@ import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 import router from "next/router";
 import AppleLogin from "react-apple-login";
+import { emailRegex } from "../utils/general";
 
 const RegisterModal = () => {
   const {
@@ -141,7 +142,17 @@ const RegisterModal = () => {
                     placeholder={getWording(
                       "register.register_email_placeholder"
                     )}
-                    {...register("email", { required: true })}
+                    {...register("email", {
+                      required: getWording(
+                        "register.register_email_error_message"
+                      ),
+                      pattern: {
+                        value: emailRegex,
+                        message: getWording(
+                          "register.register_email_error_message"
+                        ),
+                      },
+                    })}
                   />
                   <FormHelperText color="red">
                     {errors?.email?.type === "required" && (
@@ -226,7 +237,7 @@ const RegisterModal = () => {
                   <HStack w="100%">
                     <IoMdPhonePortrait size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign Up With Phone
+                      {getWording("register.sign_up_with_phone")}
                     </Text>
                   </HStack>
                 </Button>
@@ -242,7 +253,7 @@ const RegisterModal = () => {
                   <HStack w="100%">
                     <AiOutlineMail size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign Up With Email
+                      {getWording("register.sign_up_with_email")}
                     </Text>
                   </HStack>
                 </Button>
@@ -260,7 +271,7 @@ const RegisterModal = () => {
                     <HStack w="100%">
                       <IoLogoFacebook size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign Up With Facebook
+                        {getWording("register.sign_up_with_facebook")}
                       </Text>
                     </HStack>
                   </Button>
@@ -277,7 +288,7 @@ const RegisterModal = () => {
                     <HStack w="100%">
                       <IoLogoGoogle size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign Up With Google
+                        {getWording("register.sign_up_with_google")}
                       </Text>
                     </HStack>
                   </Button>
@@ -307,7 +318,7 @@ const RegisterModal = () => {
                       <HStack w="100%">
                         <IoLogoApple size={18} color="white" />
                         <Text flex={1} minW={0} w="100%">
-                          Sign In With Apple
+                          {getWording("register.sign_up_with_google")}
                         </Text>
                       </HStack>
                     </Button>

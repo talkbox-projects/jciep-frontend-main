@@ -463,7 +463,7 @@ const Home = ({ setting, page }) => {
                   </Text>
                   <Heading
                     lineHeight="xl"
-                    fontSize={["4xl", "4xl", "4xl", "4xl"]}
+                    fontSize={["2xl", "3xl", "4xl", "4xl"]}
                     whiteSpace="pre-wrap"
                     bgColor="white"
                   >
