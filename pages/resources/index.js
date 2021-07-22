@@ -553,7 +553,7 @@ const Resources = ({ page, enums, setting }) => {
         </Box>
         <VStack
           w="100%"
-          px={[2, 4]}
+          p={[2, 4]}
           justifyContent="center"
           d={["block", "block", "none"]}
         >
