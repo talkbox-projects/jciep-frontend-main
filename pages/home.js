@@ -114,6 +114,7 @@ const Home = ({ setting, page }) => {
             }
             autoPlay="true"
             loop
+            playsInline
           ></Video>
         </AspectRatio>
         <VStack
@@ -234,6 +235,7 @@ const Home = ({ setting, page }) => {
               }
               muted
               onEnded={() => setHasVideoEnded(true)}
+              playsInline
             />
           </AspectRatio>
         </VisibilitySensor>
