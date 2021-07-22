@@ -274,11 +274,11 @@ export default {
           throw new Error("failed to login via google");
         }
 
-        let user = await User.findOne({ facebookId: snsMeta.id }).populate(
+        let user = await User.findOne({ googleId: snsMeta.id }).populate(
           "identities"
         );
         if (!user) {
-          user = await new User({ facebookId: snsMeta.id }).save();
+          user = await new User({ googleId: snsMeta.id }).save();
         }
         const { identities, ..._user } = user.toObject();
         const token = jwt.sign(_user, "shhhhh").toString();

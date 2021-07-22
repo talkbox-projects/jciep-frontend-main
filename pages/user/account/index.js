@@ -8,12 +8,13 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
-import { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   IoLogoApple,
   IoLogoFacebook,
   IoLogoGoogle,
   IoMail,
+  IoPhoneLandscapeOutline,
 } from "react-icons/io5";
 import { RiArrowRightLine } from "react-icons/ri";
 import Container from "../../../components/Container";
@@ -44,13 +45,14 @@ const AccountInfoPage = ({ page }) => {
   const injectParams = useInjectParams();
 
   const getLoginMethod = useCallback(({ user }) => {
-    let loginMethod = null;
     if (user?.facebookId) {
       return "facebook";
     } else if (user?.googleId) {
       return "google";
     } else if (user?.appleId) {
       return "apple";
+    } else if (user?.phone) {
+      return "phone";
     } else {
       return "email";
     }
@@ -78,11 +80,19 @@ const AccountInfoPage = ({ page }) => {
         case "apple":
           loginMethodDisplay = (
             <HStack color="gray.500">
-              <Icon fontSize="lg" as={IoLogoApple} /> <Text>facebook</Text>
+              <Icon fontSize="lg" as={IoLogoApple} /> <Text>Facebook</Text>
             </HStack>
           );
           break;
 
+        case "phone":
+          loginMethodDisplay = (
+            <HStack color="gray.500">
+              <Icon fontSize="lg" as={IoPhoneLandscapeOutline} />{" "}
+              <Text>Phone</Text>
+            </HStack>
+          );
+          break;
         default:
           loginMethodDisplay = (
             <HStack color="gray.500">
@@ -94,6 +104,11 @@ const AccountInfoPage = ({ page }) => {
       if (loginMethod === "email") {
         return injectParams(wordExtractor(page?.content?.wordings, "message"), {
           displayName: <Text fontWeight="bold">{user?.email}</Text>,
+          login_method: <>{loginMethodDisplay}</>,
+        });
+      } else if (loginMethod === "phone") {
+        return injectParams(wordExtractor(page?.content?.wordings, "message"), {
+          displayName: <Text fontWeight="bold">{user?.phone}</Text>,
           login_method: <>{loginMethodDisplay}</>,
         });
       } else {
@@ -108,7 +123,7 @@ const AccountInfoPage = ({ page }) => {
         });
       }
     },
-    [page]
+    [getLoginMethod, injectParams, page?.content?.wordings]
   );
 
   const resetPasswordLink = useMemo(() => {

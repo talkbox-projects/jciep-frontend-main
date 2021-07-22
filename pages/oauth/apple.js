@@ -57,6 +57,9 @@ const AppleLogin = ({ page }) => {
               user {
                 id
                 email
+                facebookId
+                googleId
+                appleId
                 snsMeta {
                   profilePicUrl
                   displayName
