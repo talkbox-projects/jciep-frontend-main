@@ -9,6 +9,7 @@ import { Types } from "mongoose";
 import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
+import apple from "../services/apple";
 
 export default {
   Query: {
@@ -286,7 +287,7 @@ export default {
         await user.save();
         return { token, user };
       } else if (input.appleToken) {
-        let snsMeta = await google.getProfile(input.appleToken);
+        let snsMeta = await apple.getProfile(input.appleToken);
         if (!snsMeta) {
           throw new Error("failed to login via apple");
         }

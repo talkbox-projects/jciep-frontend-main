@@ -2,49 +2,43 @@ import React from "react";
 import { useEffect } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { VStack } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
-import getRawBody from "raw-body";
-import util from "util";
-import multer from "multer";
+
+import formidable from "formidable";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "appleLogin";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  await util.promisify(multer().any())(context.req, context.res);
+  const form = formidable({ multiples: true });
 
-  if (context.req.method == "POST") {
-    const body = await getRawBody(context.req);
-    console.log(body.toString("utf-8"));
-  }
+  console.log(context.query);
+
+  const body = await new Promise((r) => {
+    form.parse(context.req, (err, fields) => {
+      r(fields);
+    });
+  });
+  console.log(body);
 
   return {
     props: {
       page,
+      id_token: body?.id_token || context.query.id_token,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...getSharedServerSideProps(context)?.props,
     },
   };
 };
 
-const AppleLogin = ({ page }) => {
+const AppleLogin = ({ id_token: accessToken }) => {
   const router = useRouter();
-  const { code: accessToken } = router.query;
   const [setCredential] = useCredential();
 
   useEffect(() => {

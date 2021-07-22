@@ -292,7 +292,9 @@ const RegisterModal = () => {
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
                 responseType={"code id_token"}
                 responseMode={"form_post"}
+                scope="email name"
                 usePopup={false}
+                nonce="NONCE"
                 render={(renderProps) => {
                   return (
                     <Button
