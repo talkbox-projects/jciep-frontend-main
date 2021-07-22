@@ -105,12 +105,12 @@ const Home = ({ setting, page }) => {
 
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
-        <AspectRatio h="100%" ratio={5 / 3}>
+        <AspectRatio h="100%" ratio={5 / 3} zIndex="-1">
           {page?.content?.banner?.youtube ? (
             <iframe
               width="560"
               height="315"
-              src={page?.content?.banner?.youtube}
+              src={`${page?.content?.banner?.youtube}?controls=0&autoplay=1&loop=1&playsinline=1&rel=0&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1`}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -120,7 +120,7 @@ const Home = ({ setting, page }) => {
             <Video
               h="100%"
               src={page?.content?.banner?.video}
-              autoPlay="true"
+              autoPlay
               loop
               playsInline
             ></Video>
@@ -128,7 +128,7 @@ const Home = ({ setting, page }) => {
             <Video
               h="100%"
               src={"/banner_video.mp4"}
-              autoPlay="true"
+              autoPlay
               loop
               playsInline
             ></Video>
