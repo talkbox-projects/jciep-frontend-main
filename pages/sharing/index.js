@@ -74,10 +74,10 @@ const Sharing = ({ page, setting, lang }) => {
         category: router.query.category ?? undefined,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
       });
+      totalRef.current = totalRecords;
       setLatestPosts((latestPosts) =>
         pageRef.current > 1 ? [...latestPosts, ...data] : data
       );
-      totalRef.current = totalRecords;
       pageRef.current++;
     } catch (err) {
       console.log("***** error", err);
@@ -391,6 +391,10 @@ const Sharing = ({ page, setting, lang }) => {
                 </Button>
               </HStack>
             )}
+            <Box>
+              {latestPosts.length} {totalRef.current}
+            </Box>
+
             <InfiniteScroll
               dataLength={latestPosts.length}
               next={fetchPosts}
