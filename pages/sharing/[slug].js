@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPost, getRelatedPosts } from "../../utils/post/getPost";
@@ -19,7 +18,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { ImShare } from "react-icons/im";
-import { Box, VStack, Wrap, HStack, WrapItem, Link } from "@chakra-ui/layout";
+import { Box, VStack, Wrap, WrapItem } from "@chakra-ui/layout";
 import moment from "moment";
 import wordExtractor from "../../utils/wordExtractor";
 import DividerSimple from "../../components/DividerSimple";
@@ -28,9 +27,9 @@ import Container from "../../components/Container";
 import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import NextLink from "next/link";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { getYoutubeLink } from "../../utils/general";
+import HoverCard from "../../components/HoverCard";
 const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {
@@ -134,7 +133,7 @@ const PostDetail = ({ post, setting, page }) => {
   useEffect(() => {
     updateReadCount(post.id);
     fetchRelatedPosts();
-  }, [fetchRelatedPosts]);
+  }, [fetchRelatedPosts, post.id]);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -147,53 +146,65 @@ const PostDetail = ({ post, setting, page }) => {
     <VStack w="100%" spacing={0} align="center" pb={16} bgColor="#fafafa">
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
+
       <Container
         pt={16}
         pb={32}
-        maxW={["100%", "100%", 600, 576, 600]}
-        position="relative"
+        // maxW={["100%", "100%", 600, 576, 600]}
+        maxW={["100%", "100%", "container.lg", "container.lg", "container.lg"]}
+        d="flex"
       >
-        <VStack
-          position="absolute"
-          left={-56}
-          bottom={32}
-          display={["none", "none", "none", "block"]}
-          w={48}
+        <HoverCard
+          desktopProps={{
+            top: "160px",
+            left: "0px",
+            mr: 12,
+          }}
+          isMobileBreakPointValue={[true, true, true, false]}
         >
-          <Box pl={8} position="relative" mb={4}>
-            <ApostropheHeadline color="#eee">
-              <Text fontSize="lg">
-                {wordExtractor(page?.content?.wordings, "furthurReading")}
-              </Text>
-            </ApostropheHeadline>
-          </Box>
-          {relatedArticles.map(({ category, title, excerpt, slug }, index) => {
-            return (
-              <VStack
-                align="start"
-                key={index}
-                cursor="pointer"
-                onClick={() => router.push(`/sharing/${slug}`)}
-              >
-                <CategoryTag
-                  size="sm"
-                  withIcon={false}
-                  category={getCategoryData(category)}
-                />
-                <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
-                  {title}
-                </Text>
-                {excerpt && (
-                  <Text fontSize="md" noOfLines={3} color="#1E1E1E">
-                    {excerpt}
-                  </Text>
+          {({ isMobile }) =>
+            isMobile ? null : (
+              <VStack w={48}>
+                <Box pl={8} position="relative" mb={4}>
+                  <ApostropheHeadline color="#eee">
+                    <Text fontSize="lg">
+                      {wordExtractor(page?.content?.wordings, "furthurReading")}
+                    </Text>
+                  </ApostropheHeadline>
+                </Box>
+                {relatedArticles.map(
+                  ({ category, title, excerpt, slug }, index) => {
+                    return (
+                      <VStack
+                        align="start"
+                        key={index}
+                        cursor="pointer"
+                        onClick={() => router.push(`/sharing/${slug}`)}
+                      >
+                        <CategoryTag
+                          size="sm"
+                          withIcon={false}
+                          category={getCategoryData(category)}
+                        />
+                        <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
+                          {title}
+                        </Text>
+                        {excerpt && (
+                          <Text fontSize="md" noOfLines={3} color="#1E1E1E">
+                            {excerpt}
+                          </Text>
+                        )}
+                        <br />
+                        <Divider />
+                      </VStack>
+                    );
+                  }
                 )}
-                <br />
-                <Divider />
               </VStack>
-            );
-          })}
-        </VStack>
+            )
+          }
+        </HoverCard>
+
         <VStack align="stretch" textAlign="left" spacing={2}>
           {post?.excerpt && (
             <Text
@@ -275,57 +286,60 @@ const PostDetail = ({ post, setting, page }) => {
               }
             )}
           </VStack>
-          {post?.tags?.length > 0 && (
-            <VStack align="start" pt={12}>
-              <Divider />
-              <Text pt={8} textAlign="left">
-                {wordExtractor(page?.content?.wordings, "tagsHeading")}
-              </Text>
-              <Wrap mt={6} spacing={8}>
-                {(post?.tags ?? []).map((tag, i) => {
-                  return (
-                    <WrapItem key={i}>
-                      <Tag
-                        p={3}
-                        size="lg"
-                        fontSize="lg"
-                        borderRadius={16}
-                        bg="gray.50"
-                        key={i}
-                      >
-                        {tag}
-                      </Tag>
-                    </WrapItem>
-                  );
-                })}
-              </Wrap>
-            </VStack>
-          )}
+        </VStack>
+      </Container>
 
-          {post?.references?.length > 0 && (
-            <VStack align="start" pt={8}>
-              <Divider />
-              <Text pt={8} textAlign="left">
-                {wordExtractor(page?.content?.wordings, "referenceHeading")}
-              </Text>
-              {(post?.references ?? []).map(({ label, url = "#" }, index) => {
+      <Container maxW={["100%", "100%", 600, 576, 600]} position="relative">
+        {post?.tags?.length > 0 && (
+          <VStack align="start" pt={12}>
+            <Divider />
+            <Text pt={8} textAlign="left">
+              {wordExtractor(page?.content?.wordings, "tagsHeading")}
+            </Text>
+            <Wrap mt={6} spacing={8}>
+              {(post?.tags ?? []).map((tag, i) => {
                 return (
-                  <chakra.a href={url} target="_blank" key={index}>
-                    <Button
-                      rightIcon={<ImShare />}
-                      fontWeight="normal"
-                      variant="link"
-                      size="sm"
-                      color="#1E1E1E"
+                  <WrapItem key={i}>
+                    <Tag
+                      p={3}
+                      size="lg"
+                      fontSize="lg"
+                      borderRadius={16}
+                      bg="gray.50"
+                      key={i}
                     >
-                      {label}
-                    </Button>
-                  </chakra.a>
+                      {tag}
+                    </Tag>
+                  </WrapItem>
                 );
               })}
-            </VStack>
-          )}
-        </VStack>
+            </Wrap>
+          </VStack>
+        )}
+
+        {post?.references?.length > 0 && (
+          <VStack align="start" pt={8}>
+            <Divider />
+            <Text pt={8} textAlign="left">
+              {wordExtractor(page?.content?.wordings, "referenceHeading")}
+            </Text>
+            {(post?.references ?? []).map(({ label, url = "#" }, index) => {
+              return (
+                <chakra.a href={url} target="_blank" key={index}>
+                  <Button
+                    rightIcon={<ImShare />}
+                    fontWeight="normal"
+                    variant="link"
+                    size="sm"
+                    color="#1E1E1E"
+                  >
+                    {label}
+                  </Button>
+                </chakra.a>
+              );
+            })}
+          </VStack>
+        )}
       </Container>
 
       <Box w="100%">
