@@ -1,8 +1,8 @@
+import React from "react";
 import { useForm, usePlugin } from "@tinacms/react-core";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import wordListFieldsForCMS from "../tina/wordListFieldsForCMS";
 const withPageCMS =
   (Component, { key, fields = [], propName = "page" }) =>
@@ -46,6 +46,19 @@ const withPageCMS =
               wordListFieldsForCMS({ name: "wordings" }),
             ],
           },
+          {
+            name: "lang",
+            label: "語言 Language",
+            // eslint-disable-next-line react/display-name
+            component: ({ field }) => (
+              <>
+                <label htmlFor={field.name}>{field.label}</label>
+                <h5 id={field.name} name={field.name}>
+                  {router?.locale}
+                </h5>
+              </>
+            ),
+          },
         ],
         onSubmit: async (values) => {
           const mutation = gql`
@@ -60,7 +73,7 @@ const withPageCMS =
           const variables = {
             input: {
               key,
-              lang: router.locale,
+              lang: router.locale, // FIXME
               ...values,
             },
           };

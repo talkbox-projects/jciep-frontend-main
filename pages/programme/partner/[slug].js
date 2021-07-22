@@ -16,7 +16,6 @@ import {
   Icon,
   Tooltip,
   Divider,
-  Flex,
   Button,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
@@ -34,6 +33,7 @@ import DividerA from "../../../components/DividerA";
 import Slider from "react-slick";
 import { SRLWrapper, useLightbox } from "simple-react-lightbox";
 import { useCMS } from "tinacms";
+import wordExtractor from "../../../utils/wordExtractor";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -141,7 +141,10 @@ const Partner = ({ page }) => {
                     _active={{ bg: "#666666" }}
                     onClick={() => openLightbox(sliderIndex)}
                   >
-                    顯示全圖
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "banner_showImages"
+                    )}
                   </Button>
                 </Box>
               </VStack>
