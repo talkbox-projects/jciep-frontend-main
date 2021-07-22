@@ -155,11 +155,7 @@ const RegisterModal = () => {
                     })}
                   />
                   <FormHelperText color="red">
-                    {errors?.email?.type === "required" && (
-                      <Text>
-                        {getWording("register.register_email_required")}
-                      </Text>
-                    )}
+                    {errors?.email?.message}
                   </FormHelperText>
                 </FormControl>
                 <FormControl>
@@ -185,7 +181,20 @@ const RegisterModal = () => {
                   <FormLabel>
                     {getWording("register.register_phone_label")}
                   </FormLabel>
-                  <Input placeholder="91234567" {...register("phone")} />
+                  <Input
+                    placeholder="91234567"
+                    {...register("phone", {
+                      required: getWording(
+                        "register.register_phone_error_message"
+                      ),
+                      pattern: {
+                        value: emailRegex,
+                        message: getWording(
+                          "register.register_phone_error_message"
+                        ),
+                      },
+                    })}
+                  />
                   <FormHelperText>{errors?.phone?.message}</FormHelperText>
                 </FormControl>
                 <FormControl>
