@@ -406,9 +406,7 @@ const Home = ({ setting, page }) => {
                 onClick={() => router.push(`/sharing/${post?.slug}`)}
               >
                 <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                  <AspectRatio overflow="hidden" ratio={1}>
-                    <Image src={post?.content?.feature?.image} />
-                  </AspectRatio>
+                  <Image src={post?.content?.feature?.image} />
                 </Box>
                 <VStack
                   px={8}
