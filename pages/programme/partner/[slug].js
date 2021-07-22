@@ -128,11 +128,6 @@ const Partner = ({ page }) => {
                     {partner?.agencyName}
                   </Text>
                 </Box>
-                <Box>
-                  <Text bgColor="#F6D644" fontSize={["24px", "56px"]}>
-                    {partner?.projectName}
-                  </Text>
-                </Box>
                 <Box pt={4}>
                   <Button
                     borderRadius="full"
