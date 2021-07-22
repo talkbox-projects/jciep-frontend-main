@@ -116,7 +116,7 @@ const Partner = ({ page }) => {
           w="100%"
         >
           <Container>
-            <Box pb={16}>
+            <Box pb={[0, 16]}>
               <VStack mx={8} align="start" spacing={0}>
                 <Box>
                   <Text

@@ -81,7 +81,7 @@ const App = ({ Component, pageProps }) => {
         </Head>
         <ChakraProvider theme={theme} resetCSS={true}>
           <NextSeo title="賽馬會共融．知行計劃" />
-          <VStack align="stretch" spacing={0}>
+          <VStack align="stretch" spacing={0} overflowX="hidden">
             <Header {...pageProps}></Header>
             <Box mt={[-16, -16, -12, -12]}>
               <Component {...pageProps} />
