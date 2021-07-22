@@ -73,7 +73,7 @@ const Footer = ({ footer }) => {
               gap={12}
             >
               {(footer?.sitemap ?? []).map(
-                ({ id, links = [], title, url, social = [] }) => (
+                ({ id, links = [], title, url = "/", social = [] }) => (
                   <VStack key={id} align="start">
                     <NextLink href={url}>
                       <Button
@@ -100,21 +100,23 @@ const Footer = ({ footer }) => {
                       })}
                     </Text>
 
-                    {(links ?? []).map(({ id: _id, url = "/", label = "" }) => {
-                      return (
-                        <NextLink key={_id} id={_id} href={url}>
-                          <Button
-                            fontSize={["xl", "xl", "lg"]}
-                            textAlign="left"
-                            variant="link"
-                            fontWeight="normal"
-                            color="black"
-                          >
-                            {label}
-                          </Button>
-                        </NextLink>
-                      );
-                    })}
+                    {(links ?? []).map(
+                      ({ id: _id, url = "/", label = "" }, i) => {
+                        return (
+                          <NextLink id={_id} href={url} key={i}>
+                            <Button
+                              fontSize={["xl", "xl", "lg"]}
+                              textAlign="left"
+                              variant="link"
+                              fontWeight="normal"
+                              color="black"
+                            >
+                              {label}
+                            </Button>
+                          </NextLink>
+                        );
+                      }
+                    )}
                   </VStack>
                 )
               )}

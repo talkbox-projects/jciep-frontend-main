@@ -205,6 +205,7 @@ const Partner = ({ page }) => {
         position="relative"
         bgColor="#fafafa"
         backgroundPosition="left bottom"
+        width="100%"
       >
         <Container
           // zIndex={200}
@@ -220,15 +221,15 @@ const Partner = ({ page }) => {
               {page?.content?.partnerSection?.planSection?.title}
             </Text>
             <SimpleGrid
-              px={[8, 8, 4, 4]}
-              py={[8, 16]}
+              px={[1, 8, 4, 4]}
+              py={[4, 16]}
               justifyContent="center"
               columns={[1, 1, 1, 2]}
               spacing={8}
             >
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
                 return (
-                  <GridItem w="100%" key={index}>
+                  <GridItem key={index}>
                     <Stack
                       w="100%"
                       spacing={[8, 8, 4]}
