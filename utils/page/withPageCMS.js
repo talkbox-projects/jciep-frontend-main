@@ -73,8 +73,8 @@ const withPageCMS =
           const variables = {
             input: {
               key,
-              lang: router.locale, // FIXME
               ...values,
+              lang: router.locale, // FIXME
             },
           };
           await getGraphQLClient().request(mutation, variables);
