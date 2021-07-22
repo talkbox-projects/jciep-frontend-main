@@ -40,7 +40,6 @@ import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
 import { getNullableType } from "graphql";
-
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {

@@ -87,9 +87,9 @@ const Footer = ({ footer }) => {
                       </Button>
                     </NextLink>
                     <Text w="100%">
-                      {(social ?? []).map(({ icon, id, url }, i) => {
+                      {(social ?? []).map(({ icon, id, url }) => {
                         return (
-                          <a href={url} key={i}>
+                          <a href={url} key={id}>
                             <Image
                               display="inline-flex"
                               src={icon}
