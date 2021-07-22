@@ -332,7 +332,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <IoMdPhonePortrait size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      {getWording("register.sign_in_with_phone")}
+                      {getWording("login.sign_in_with_phone")}
                     </Text>
                   </HStack>
                 </Button>
@@ -348,7 +348,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <AiOutlineMail size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      {getWording("register.sign_in_with_email")}
+                      {getWording("login.sign_in_with_email")}
                     </Text>
                   </HStack>
                 </Button>
@@ -367,7 +367,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoFacebook size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        {getWording("register.sign_in_with_facebook")}
+                        {getWording("login.sign_in_with_facebook")}
                       </Text>
                     </HStack>
                   </Button>
@@ -386,7 +386,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoGoogle size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        {getWording("register.sign_in_with_google")}
+                        {getWording("login.sign_in_with_google")}
                       </Text>
                     </HStack>
                   </Button>
@@ -415,7 +415,7 @@ const LoginModal = () => {
                       <HStack w="100%">
                         <IoLogoApple size={18} color="white" />
                         <Text flex={1} minW={0} w="100%">
-                          {getWording("register.sign_in_with_apple")}
+                          {getWording("login.sign_in_with_apple")}
                         </Text>
                       </HStack>
                     </Button>
