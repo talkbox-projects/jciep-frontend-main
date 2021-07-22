@@ -16,6 +16,7 @@ import {
   TabList,
   TabPanels,
   Tab,
+  Link,
   TabPanel,
   AspectRatio,
   IconButton,
@@ -464,7 +465,7 @@ const Home = ({ setting, page }) => {
               </TabList>
               <TabPanels>
                 {(page?.content?.roleIntroduction?.roles ?? []).map(
-                  ({ id, description, features }) => (
+                  ({ id, description, link, features }) => (
                     <TabPanel px={0} key={id} py={12}>
                       <Text w={["100%", "50%"]}>
                         {(description ?? []).map(
@@ -500,7 +501,8 @@ const Home = ({ setting, page }) => {
                         gap={[4, 4, 4, 4]}
                       >
                         {(features ?? []).map(
-                          ({ id, icon, title, caption, remark }) => (
+                          ({ id, icon, title, link="/", caption, remark }) => (
+                            <Link href={link}>
                             <GridItem
                               as={VStack}
                               borderWidth={2}
@@ -544,6 +546,7 @@ const Home = ({ setting, page }) => {
                                 {remark}
                               </Text>
                             </GridItem>
+                            </Link>
                           )
                         )}
                       </Grid>
@@ -873,6 +876,7 @@ export default withPageCMS(Home, {
               templates: metaTextTemplates,
               label: "描述 description",
             },
+            
             {
               name: "features",
               component: "group-list",
@@ -897,6 +901,12 @@ export default withPageCMS(Home, {
                   name: "title",
                   component: "text",
                   label: "標題 Title",
+                },
+                {
+                  name: "link",
+                  label: "關聯 Link",
+                  component: "text",
+                  placeholder:"https://"
                 },
                 {
                   name: "caption",
