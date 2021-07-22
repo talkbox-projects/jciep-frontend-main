@@ -98,9 +98,9 @@ const Card = ({
       mb="8px"
       mr={["", "", "24px"]}
     >
-      <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
+      <Box minH="620px" borderRadius="10px" bg="#FFFFFF">
         <VStack borderRadius="10px" alignItems="start" px="16px" w="100%">
-          <VStack w="100%" minH="520px" alignItems="start">
+          <VStack w="100%" minH="620px" alignItems="start">
             <Text pt="40px" h="58px" color={topColor}>
               {wordExtractor(
                 page?.content?.wordings,
@@ -150,7 +150,10 @@ const Card = ({
               />
             </HStack>
             <Divider />
-            <Box w="100%" minH="281px">
+            <Box
+              w="100%"
+              // minH="281px"
+            >
               <UnorderedList m={0} pt="8px">
                 <HStack spacing="5px">
                   <Image
@@ -355,7 +358,9 @@ const Card = ({
             mt="10px"
             fontSize="16px"
           >
-            {wordExtractor(page?.content?.wordings, "showMore")}
+            {show
+              ? wordExtractor(page?.content?.wordings, "showLess")
+              : wordExtractor(page?.content?.wordings, "showMore")}
           </Text>
         </Box>
       </Box>

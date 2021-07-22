@@ -398,7 +398,7 @@ const Partner = ({ page }) => {
                         textAlign="center"
                         w={["100%", "100%", "150px"]}
                         fontSize={["xl", "2xl"]}
-                        fontWeight="semibold"
+                        fontWeight="semibold"     
                       >
                         {label}
                         {description && (
