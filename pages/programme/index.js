@@ -302,6 +302,7 @@ const Programme = ({ page }) => {
                 ({ id, agencyName, projectName, contact, slug }, i) => (
                   <NextLink key={i} href={`/programme/partner/${slug}`}>
                     <WrapItem
+                      position="relative"
                       as={VStack}
                       w={["100%", "100%", "40%", "25%"]}
                       transition="all 0.2s"
@@ -330,7 +331,11 @@ const Programme = ({ page }) => {
                       </Text>
                       <Text fontSize="lg">{projectName}</Text>
                       <Box flex={1} minH="max-content" h="100%" />
-                      <Image w={["75%"]} src={contact?.logo}></Image>
+                      <Image
+                        w={["75%"]}
+                        src={contact?.watermark}
+                        position="absolute"
+                      ></Image>
                     </WrapItem>
                   </NextLink>
                 )

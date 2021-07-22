@@ -315,6 +315,14 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
+              {
+                label: "水印 Watermark",
+                name: "watermark",
+                component: "image",
+                uploadDir: () => "/programme",
+                parse: ({ previewSrc }) => previewSrc,
+                previewSrc: (src) => src,
+              },
 
               {
                 name: "fields",
