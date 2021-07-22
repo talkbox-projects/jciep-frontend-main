@@ -36,6 +36,7 @@ import { useEffect } from "react";
 import CategoryTag from "../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
+import { getNullableType } from "graphql";
 
 const PAGE_KEY = "home";
 
@@ -90,9 +91,17 @@ const Home = ({ setting, page }) => {
 
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
+        
         <AspectRatio h="100%" ratio={5 / 3}>
-          <Video h="100%" src={ page?.content?.banner?.video ? page?.content?.banner?.video : "/banner_video.mp4"} autoPlay="true" loop></Video>
+          {page?.content?.banner?.youtube ?
+            <iframe width="560" height="315" src={page?.content?.banner?.youtube} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            : page?.content?.banner?.video ? 
+            <Video h="100%" src={ page?.content?.banner?.video} autoPlay="true" loop></Video>
+            : <Video h="100%" src={"/banner_video.mp4"} autoPlay="true" loop></Video>
+          }
         </AspectRatio>
+        {/*  */}
+
         <VStack
           zIndex={10}
           align="stretch"
@@ -613,6 +622,12 @@ export default withPageCMS(Home, {
           uploadDir: () => "/home",
           parse: ({ previewSrc }) => previewSrc,
           previewSrc: (src) => src,
+        },
+        {
+          name: "youtube",
+          label: "你管嵌入式鏈接 Youtube embedded link",
+          component: "text",
+          placeholder:"https://www.youtube.com/embed/...."
         },
         {
           name: "video",

@@ -72,7 +72,7 @@ const Footer = ({ footer }) => {
               columns={[2, 2, 3, 5, 5]}
               gap={12}
             >
-              {(footer?.sitemap ?? []).map(({ id, links = [], title, url, social= [] }) => (
+              {(footer?.sitemap ?? []).map(({ id, links = [], title, url = "/", social= [] }) => (
                 <VStack key={id} align="start">
                   <NextLink href={url}>
                     <Button
