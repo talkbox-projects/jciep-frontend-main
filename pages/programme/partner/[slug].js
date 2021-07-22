@@ -122,7 +122,6 @@ const Partner = ({ page }) => {
                   <Text
                     fontWeight={900}
                     bgColor="#F6D644"
-<<<<<<< HEAD
                     fontSize={["24px", "56px"]}
                   >
                     {partner?.agencyName}
@@ -145,19 +144,6 @@ const Partner = ({ page }) => {
                     顯示全圖
                   </Button>
                 </Box>
-=======
-                    fontSize={["24px", "40px"]}
-                    children={partner?.agencyName}
-                  />
-                </Box>
-                {/* <Box>
-                  <Text
-                    bgColor="#F6D644"
-                    fontSize={["24px", "40px"]}
-                    children={partner?.projectName}
-                  />
-                </Box> */}
->>>>>>> profile-fixes
               </VStack>
             </Box>
           </Container>
@@ -223,16 +209,14 @@ const Partner = ({ page }) => {
           pb={[16, 16, 16, 24]}
         >
           <VStack spacing={8}>
-         
             <HighlightHeadline bgColor={"#F6D644"}>
-                {partner?.projectName}
-              </HighlightHeadline>
-            <Text 
-            
+              {partner?.projectName}
+            </HighlightHeadline>
+            <Text
               fontWeight={900}
               fontSize={["24px", "40px"]}
-              children={partner?.agencyName}>
-            
+              children={partner?.agencyName}
+            >
               {page?.content?.partnerSection?.planSection?.title}
             </Text>
             <SimpleGrid
@@ -409,7 +393,12 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid justifyContent="center" display="flex" gap={12} columns={[2, 2, 4, 4]}>
+            <SimpleGrid
+              justifyContent="center"
+              display="flex"
+              gap={12}
+              columns={[2, 2, 4, 4]}
+            >
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (
