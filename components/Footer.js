@@ -100,21 +100,23 @@ const Footer = ({ footer }) => {
                       })}
                     </Text>
 
-                    {(links ?? []).map(({ id: _id, url = "/", label = "" }) => {
-                      return (
-                        <NextLink id={_id} href={url}>
-                          <Button
-                            fontSize={["xl", "xl", "lg"]}
-                            textAlign="left"
-                            variant="link"
-                            fontWeight="normal"
-                            color="black"
-                          >
-                            {label}
-                          </Button>
-                        </NextLink>
-                      );
-                    })}
+                    {(links ?? []).map(
+                      ({ id: _id, url = "/", label = "" }, i) => {
+                        return (
+                          <NextLink id={_id} href={url} key={i}>
+                            <Button
+                              fontSize={["xl", "xl", "lg"]}
+                              textAlign="left"
+                              variant="link"
+                              fontWeight="normal"
+                              color="black"
+                            >
+                              {label}
+                            </Button>
+                          </NextLink>
+                        );
+                      }
+                    )}
                   </VStack>
                 )
               )}

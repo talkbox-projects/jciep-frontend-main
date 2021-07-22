@@ -39,6 +39,7 @@ import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
+import { getNullableType } from "graphql";
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
@@ -111,9 +112,9 @@ const Home = ({ setting, page }) => {
               height="315"
               src={page?.content?.banner?.youtube}
               title="YouTube video player"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+              allowFullScreen
             ></iframe>
           ) : page?.content?.banner?.video ? (
             <Video
@@ -121,6 +122,7 @@ const Home = ({ setting, page }) => {
               src={page?.content?.banner?.video}
               autoPlay="true"
               loop
+              playsInline
             ></Video>
           ) : (
             <Video
@@ -128,10 +130,10 @@ const Home = ({ setting, page }) => {
               src={"/banner_video.mp4"}
               autoPlay="true"
               loop
+              playsInline
             ></Video>
           )}
         </AspectRatio>
-        {/*  */}
 
         <VStack
           zIndex={10}

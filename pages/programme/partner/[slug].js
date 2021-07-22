@@ -224,7 +224,7 @@ const Partner = ({ page }) => {
               px={[1, 8, 4, 4]}
               py={[4, 16]}
               justifyContent="center"
-              columns={[1, 1, 4, 4]}
+              columns={[1, 1, 1, 2]}
               spacing={8}
             >
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
@@ -393,7 +393,7 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid justifyContent="center" gap={12} columns={[2, 2, 4, 4]}>
+            <Wrap justify="center" spacing={12}>
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (
@@ -418,7 +418,7 @@ const Partner = ({ page }) => {
                   );
                 }
               )}
-            </SimpleGrid>
+            </Wrap>
           </VStack>
         </Container>
       </Box>
