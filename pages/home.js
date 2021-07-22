@@ -37,8 +37,13 @@ import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
+<<<<<<< HEAD
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
+=======
+import { getNullableType } from "graphql";
+
+>>>>>>> profile-fixes
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
@@ -104,7 +109,9 @@ const Home = ({ setting, page }) => {
 
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">
+        
         <AspectRatio h="100%" ratio={5 / 3}>
+<<<<<<< HEAD
           <Video
             h="100%"
             src={
@@ -116,7 +123,17 @@ const Home = ({ setting, page }) => {
             loop
             playsInline
           ></Video>
+=======
+          {page?.content?.banner?.youtube ?
+            <iframe width="560" height="315" src={page?.content?.banner?.youtube} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            : page?.content?.banner?.video ? 
+            <Video h="100%" src={ page?.content?.banner?.video} autoPlay="true" loop></Video>
+            : <Video h="100%" src={"/banner_video.mp4"} autoPlay="true" loop></Video>
+          }
+>>>>>>> profile-fixes
         </AspectRatio>
+        {/*  */}
+
         <VStack
           zIndex={10}
           align="stretch"
@@ -668,6 +685,12 @@ export default withPageCMS(Home, {
         //   parse: ({ previewSrc }) => previewSrc,
         //   previewSrc: (src) => src,
         // },
+        {
+          name: "youtube",
+          label: "你管嵌入式鏈接 Youtube embedded link",
+          component: "text",
+          placeholder:"https://www.youtube.com/embed/...."
+        },
         {
           name: "video",
           label: "視頻 Video",
