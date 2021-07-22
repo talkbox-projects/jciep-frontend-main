@@ -681,6 +681,26 @@ const Header = ({
                           </NextLink>
                         )
                     )}
+                    <NextLink
+                      href={navigation?.actionButton?.path ?? "/"}
+                      target="_blank"
+                    >
+                      <Button
+                        fontSize="2xl"
+                        textAlign="left"
+                        variant="unstyled"
+                        borderRadius={0}
+                        px={2}
+                        _focus={{ outline: "none" }}
+                        fontWeight="normal"
+                        borderColor="transparent"
+                        appearance="none"
+                        borderBottomWidth={3}
+                        onClick={mobileMenuDisclosure.onClose}
+                      >
+                        {navigation?.actionButton?.label}
+                      </Button>
+                    </NextLink>
                   </VStack>
                 </Accordion>
                 <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
