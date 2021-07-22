@@ -150,60 +150,65 @@ const PostDetail = ({ post, setting, page }) => {
       <Container
         pt={16}
         pb={32}
-        // maxW={["100%", "100%", 600, 576, 600]}
-        maxW={["100%", "100%", "container.lg", "container.lg", "container.lg"]}
+        maxW={["100%", "100%", 600, 576, 600]}
         d="flex"
+        position="relative"
       >
-        <HoverCard
-          desktopProps={{
-            top: "160px",
-            left: "0px",
-            mr: 12,
-          }}
-          isMobileBreakPointValue={[true, true, true, false]}
-        >
-          {({ isMobile }) =>
-            isMobile ? null : (
-              <VStack w={48}>
-                <Box pl={8} position="relative" mb={4}>
-                  <ApostropheHeadline color="#eee">
-                    <Text fontSize="lg">
-                      {wordExtractor(page?.content?.wordings, "furthurReading")}
-                    </Text>
-                  </ApostropheHeadline>
-                </Box>
-                {relatedArticles.map(
-                  ({ category, title, excerpt, slug }, index) => {
-                    return (
-                      <VStack
-                        align="start"
-                        key={index}
-                        cursor="pointer"
-                        onClick={() => router.push(`/sharing/${slug}`)}
-                      >
-                        <CategoryTag
-                          size="sm"
-                          withIcon={false}
-                          category={getCategoryData(category)}
-                        />
-                        <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
-                          {title}
-                        </Text>
-                        {excerpt && (
-                          <Text fontSize="md" noOfLines={3} color="#1E1E1E">
-                            {excerpt}
-                          </Text>
+        <Box position="absolute" left={-56} bottom={32} height="100%">
+          <HoverCard
+            desktopProps={{
+              top: "160px",
+              left: "0px",
+              mr: 12,
+            }}
+            isMobileBreakPointValue={[true, true, true, false]}
+          >
+            {({ isMobile }) =>
+              isMobile ? null : (
+                <VStack w={48}>
+                  <Box pl={8} position="relative" mb={4}>
+                    <ApostropheHeadline color="#eee">
+                      <Text fontSize="lg">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "furthurReading"
                         )}
-                        <br />
-                        <Divider />
-                      </VStack>
-                    );
-                  }
-                )}
-              </VStack>
-            )
-          }
-        </HoverCard>
+                      </Text>
+                    </ApostropheHeadline>
+                  </Box>
+                  {relatedArticles.map(
+                    ({ category, title, excerpt, slug }, index) => {
+                      return (
+                        <VStack
+                          align="start"
+                          key={index}
+                          cursor="pointer"
+                          onClick={() => router.push(`/sharing/${slug}`)}
+                        >
+                          <CategoryTag
+                            size="sm"
+                            withIcon={false}
+                            category={getCategoryData(category)}
+                          />
+                          <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
+                            {title}
+                          </Text>
+                          {excerpt && (
+                            <Text fontSize="md" noOfLines={3} color="#1E1E1E">
+                              {excerpt}
+                            </Text>
+                          )}
+                          <br />
+                          <Divider />
+                        </VStack>
+                      );
+                    }
+                  )}
+                </VStack>
+              )
+            }
+          </HoverCard>
+        </Box>
 
         <VStack align="stretch" textAlign="left" spacing={2}>
           {post?.excerpt && (
