@@ -53,8 +53,8 @@
     "react-responsive-carousel": "^3.2.18",
     "react-select": "^4.3.1",
     "react-slick": "^0.28.1",
-    "react-tinacms-editor": "^0.41.1",
-    "react-tinacms-inline": "^0.41.1",
+    "react-tinacms-editor": "^0.43.2",
+    "react-tinacms-inline": "^0.43.2",
     "react-visibility-sensor": "^5.1.1",
     "requests": "^0.3.0",
     "sharp": "^0.28.3",
@@ -62,7 +62,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.0",
     "swiper": "^6.7.5",
-    "tinacms": "^0.41.0",
+    "tinacms": "^0.43.0",
     "twilio": "^3.65.0"
   },
   "devDependencies": {

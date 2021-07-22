@@ -166,6 +166,11 @@ export default [
             component: "text",
           },
           {
+            name: "remark",
+            label: "多元人才備註 PWD Remark",
+            component: "textarea",
+          },
+          {
             name: "description",
             label: "多元人才描述 PWD Description",
             component: "blocks",
@@ -288,34 +293,90 @@ export default [
                 component: "text",
               },
               {
-                name: "traits",
-                label: "特點 Traits",
-                component: "group-list",
-                itemProps: ({ id: key, text: label }) => ({
-                  key,
-                  label,
-                }),
-                defaultItem: () => ({
-                  id: Math.random().toString(36).substr(2, 9),
-                }),
+                name: "prosSection",
+                label: "優點 Pros",
+                component: "group",
                 fields: [
                   {
-                    name: "captionTop",
-                    label: "顯示文字 Caption Top",
+                    name: "title",
+                    label: "標題 Title",
                     component: "text",
                   },
                   {
-                    name: "text",
-                    label: "顯示文字 Text",
-                    component: "text",
+                    name: "icon",
+                    label: "優點 Icon",
+                    component: "image",
+                    uploadDir: () => "/pwd",
+                    parse: ({ previewSrc }) => previewSrc,
+                    previewSrc: (src) => src,
                   },
                   {
-                    name: "color",
-                    label: "Color of Trait(Yellow/White)",
-                    component: "color",
+                    name: "list",
+                    label: "優點 List",
+                    component: "list",
+                    field: {
+                      component: "text",
+                    },
                   },
                 ],
               },
+              {
+                name: "consSection",
+                label: "限制 Cons",
+                component: "group",
+                fields: [
+                  {
+                    name: "title",
+                    label: "標題 Title",
+                    component: "text",
+                  },
+                  {
+                    name: "icon",
+                    label: "限制 Icon",
+                    component: "image",
+                    uploadDir: () => "/pwd",
+                    parse: ({ previewSrc }) => previewSrc,
+                    previewSrc: (src) => src,
+                  },
+                  {
+                    name: "list",
+                    label: "限制 List",
+                    component: "list",
+                    field: {
+                      component: "text",
+                    },
+                  },
+                ],
+              },
+              // {
+              //   name: "traits",
+              //   label: "特點 Traits (Deprecated)",
+              //   component: "group-list",
+              //   itemProps: ({ id: key, text: label }) => ({
+              //     key,
+              //     label,
+              //   }),
+              //   defaultItem: () => ({
+              //     id: Math.random().toString(36).substr(2, 9),
+              //   }),
+              //   fields: [
+              //     {
+              //       name: "captionTop",
+              //       label: "顯示文字 Caption Top",
+              //       component: "text",
+              //     },
+              //     {
+              //       name: "text",
+              //       label: "顯示文字 Text",
+              //       component: "text",
+              //     },
+              //     {
+              //       name: "color",
+              //       label: "Color of Trait(Yellow/White)",
+              //       component: "color",
+              //     },
+              //   ],
+              // },
               {
                 name: "extraInfo",
                 label: "額外資料 Extra Information",
