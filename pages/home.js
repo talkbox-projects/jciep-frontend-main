@@ -502,10 +502,11 @@ const Home = ({ setting, page }) => {
                       >
                         {(features ?? []).map(
                           ({ id, icon, title, link="/", caption, remark }) => (
-                            <Link href={link}>
+                            <Link height="100%" href={link}>
                             <GridItem
                               as={VStack}
                               borderWidth={2}
+                              height="100%"
                               bg={[
                                 "white",
                                 "white",
