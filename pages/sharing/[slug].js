@@ -66,7 +66,7 @@ const PostHeader = ({ categories, post }) => {
             ratio={4 / 3}
             overflow="hidden"
           >
-            <Image src={post.coverImage} objectFit="fill !important" />
+            <Image src={post.coverImage} />
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px"></Box>
