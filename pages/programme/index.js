@@ -335,6 +335,8 @@ const Programme = ({ page }) => {
                         w={["75%"]}
                         src={contact?.watermark}
                         position="absolute"
+                        bottom={0}
+                        right={0}
                       ></Image>
                     </WrapItem>
                   </NextLink>
