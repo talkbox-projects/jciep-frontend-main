@@ -79,14 +79,9 @@ export default [
             component: "text",
           },
           {
-            name: "facebookPage",
-            label: "Facebook Page",
-            component: "text",
-          },
-          {
-            name: "addres",
+            name: "address",
             label: "地址 Address",
-            component: "text",
+            component: "textarea",
           },
           {
             name: "email",
@@ -101,6 +96,11 @@ export default [
           {
             name: "fax",
             label: "傳真 Fax",
+            component: "text",
+          },
+          {
+            name: "facebookPage",
+            label: "Facebook Page",
             component: "text",
           },
         ],
