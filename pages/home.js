@@ -120,7 +120,7 @@ const Home = ({ setting, page }) => {
             <Video
               h="100%"
               src={page?.content?.banner?.video}
-              autoPlay="true"
+              autoPlay
               loop
               playsInline
             ></Video>
@@ -128,7 +128,7 @@ const Home = ({ setting, page }) => {
             <Video
               h="100%"
               src={"/banner_video.mp4"}
-              autoPlay="true"
+              autoPlay
               loop
               playsInline
             ></Video>
