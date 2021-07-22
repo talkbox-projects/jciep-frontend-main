@@ -25,10 +25,12 @@ const TextTool = ({
   hover,
   share,
   bold,
+  className= "",
+  minHeight="auto",
   small,
 }) => {
   return (
-    <Text pt={pt} color="#1E1E1E" whiteSpace="pre-line">
+    <Text pt={pt} className={className} color="#1E1E1E" whiteSpace="pre-line" minHeight={minHeight}>
       {link && (
         <chakra.span
           _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
@@ -97,9 +99,9 @@ const Card = ({
       mb="8px"
       mr={["", "", "24px"]}
     >
-      <Box minH="620px" borderRadius="10px" bg="#FFFFFF">
+      <Box minH="705px" borderRadius="10px" bg="#FFFFFF">
         <VStack borderRadius="10px" alignItems="start" px="16px" w="100%">
-          <VStack w="100%" minH="577px" alignItems="start">
+          <VStack w="100%" minH="710px" alignItems="start">
             <Text pt="40px" h="58px" color={topColor}>
               {wordExtractor(
                 page?.content?.wordings,
@@ -114,7 +116,9 @@ const Card = ({
               description={name?.description}
               pt="8px"
               hover
+              className="carousel-card-header"
               bold
+              
               share={true}
             />
             <Divider />
@@ -149,7 +153,7 @@ const Card = ({
               />
             </HStack>
             <Divider />
-            <Box w="100%" minH="281px">
+            <Box w="100%" minH="350px">
               <UnorderedList m={0} pt="8px">
                 <HStack spacing="5px">
                   <Image
@@ -308,7 +312,7 @@ const Card = ({
                   {contact?.description}
                 </Text>
                 <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
-                  <chakra.a href={contact?.url} target="_blank">
+                  <chakra.a href={contact?.link} target="_blank">
                     {contact?.linkName}
                     <Icon pl={1} size="sm" as={FaShareSquare} />
                   </chakra.a>
@@ -351,7 +355,11 @@ const Card = ({
             mt="10px"
             fontSize="16px"
           >
-            {wordExtractor(page?.content?.wordings, "showMore")}
+            {
+              show  ? 
+              wordExtractor(page?.content?.wordings, "showLess")
+              : wordExtractor(page?.content?.wordings, "showMore")
+            }
           </Text>
         </Box>
       </Box>
