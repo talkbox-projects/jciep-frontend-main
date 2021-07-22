@@ -97,9 +97,9 @@ const Card = ({
       mb="8px"
       mr={["", "", "24px"]}
     >
-      <Box minH="571px" borderRadius="10px" bg="#FFFFFF">
+      <Box minH="620px" borderRadius="10px" bg="#FFFFFF">
         <VStack borderRadius="10px" alignItems="start" px="16px" w="100%">
-          <VStack w="100%" minH="520px" alignItems="start">
+          <VStack w="100%" minH="577px" alignItems="start">
             <Text pt="40px" h="58px" color={topColor}>
               {wordExtractor(
                 page?.content?.wordings,

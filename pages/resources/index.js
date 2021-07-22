@@ -321,7 +321,7 @@ const Resources = ({ page }) => {
                   reminder,
                 } = resource;
                 return (
-                  <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
+                  <Box key={resource?.id} px={1} minHeight="630px" h="100%" maxW={"336px"}>
                     <Card
                       name={name}
                       topColor={topColor}
