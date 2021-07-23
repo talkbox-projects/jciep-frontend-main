@@ -399,10 +399,11 @@ const LoginModal = () => {
               <AppleLogin
                 clientId="com.talkboxapp.teamwork.service.hku"
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
-                responseType={"code"}
-                responseMode={"query"}
-                nonce="NONCE"
+                responseType={"code id_token"}
+                responseMode={"form_post"}
+                scope="email name"
                 usePopup={false}
+                nonce="NONCE"
                 render={(renderProps) => {
                   return (
                     <Button

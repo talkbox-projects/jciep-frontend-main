@@ -271,6 +271,7 @@ const RegisterModal = () => {
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
+                redirectUri={`/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
