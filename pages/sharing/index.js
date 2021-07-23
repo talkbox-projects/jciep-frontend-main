@@ -281,6 +281,7 @@ const Sharing = ({ page, setting, lang }) => {
             bottom={0}
             position="absolute"
             zIndex={300}
+            w="100%"
           >
             <Icon as={VscQuote} fontSize={56} color="white" fontWeight="bold" />
             <VStack
