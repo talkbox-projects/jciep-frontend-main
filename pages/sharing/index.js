@@ -19,7 +19,6 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
 import { getPage } from "../../utils/page/getPage";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { VscQuote } from "react-icons/vsc";
@@ -82,7 +81,7 @@ const Sharing = ({ page, setting, lang }) => {
     } catch (err) {
       console.log("***** error", err);
     }
-  }, [router.query]);
+  }, [page?.content?.latestSection?.numOfPostsPerPage, router.query.category]);
 
   useEffect(() => {
     totalRef.current = 0;
@@ -90,7 +89,7 @@ const Sharing = ({ page, setting, lang }) => {
     fetchPosts();
   }, [fetchPosts]);
 
-  const fetchHottestPosts = async () => {
+  const fetchHottestPosts = useCallback(async () => {
     try {
       const data = await getHottestPosts({
         limit: page?.content?.hotestSection?.numOfPosts,
@@ -99,22 +98,25 @@ const Sharing = ({ page, setting, lang }) => {
     } catch (err) {
       console.log("***** error", err);
     }
-  };
+  }, [page?.content?.hotestSection?.numOfPosts]);
 
-  const fetchFeaturedArticle = async (slug) => {
-    const post = await getPost({
-      idOrSlug: slug,
-      lang: lang,
-    });
-    setFeaturedArticle(post);
-  };
+  const fetchFeaturedArticle = useCallback(
+    async (slug) => {
+      const post = await getPost({
+        idOrSlug: slug,
+        lang: lang,
+      });
+      setFeaturedArticle(post);
+    },
+    [lang]
+  );
 
   React.useEffect(() => {
     if (page?.content?.featured) {
       fetchFeaturedArticle(page?.content?.featured);
     }
     fetchHottestPosts();
-  }, []);
+  }, [fetchFeaturedArticle, fetchHottestPosts, page?.content?.featured]);
 
   const featuredArticleCategory = getCategoryData(featuredArticle?.category);
 
@@ -357,21 +359,21 @@ const Sharing = ({ page, setting, lang }) => {
               </Text>
             </Box>
             {router?.query?.category && (
-              <HStack align="center" p={1}>
-                <Text>
+              <HStack align="center" spacing={4} p={1} my={4}>
+                <Text fontSize="xl">
                   {wordExtractor(
                     page?.content?.wordings,
                     "selected_category_label"
                   )}
                 </Text>
                 <CategoryTag
-                  size="sm"
+                  size="lg"
                   category={categories?.find(
                     (category) => category.key === router.query.category
                   )}
                 />
                 <Button
-                  size="sm"
+                  size="lg"
                   colorScheme="red"
                   variant="link"
                   onClick={() => {
@@ -391,9 +393,6 @@ const Sharing = ({ page, setting, lang }) => {
                 </Button>
               </HStack>
             )}
-            <Box>
-              {latestPosts.length} {totalRef.current}
-            </Box>
 
             <InfiniteScroll
               dataLength={latestPosts.length}
