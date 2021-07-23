@@ -307,7 +307,7 @@ const JobOpportunities = ({ page }) => {
               </Text>
               <Text fontSize="xl">
                 {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
-                <Link decoration="underline">
+                <Link decoration="underline" href={wordExtractor(page?.content?.wordings, "page_subtitle_url")}>
                   {wordExtractor(page?.content?.wordings, "page_subtitle_link")}
                 </Link>
               </Text>
