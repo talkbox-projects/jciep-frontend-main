@@ -238,10 +238,10 @@ const Home = ({ setting, page }) => {
       <Box bg="#F6D644" position="relative">
         <Container>
           <Box py={32}>
-            <SimpleGrid gap={4} align="center" py={16} columns={[1, 2, 2, 4]}>
+            <SimpleGrid gap={4} align="center" py={[8,16]} columns={[1, 2, 2, 4]}>
               {(page?.content?.transitionBanner?.slides ?? []).map(
                 ({ caption, image }, index) => (
-                  <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: 12 }}>
+                  <Box key={index} {...{ [index % 2 ? "pt" : "pb"]: [4, 12] }}>
                     <Box textAlign="center">
                       {caption && (
                         <Box h={8} mb={8}>
