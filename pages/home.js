@@ -124,6 +124,7 @@ const Home = ({ setting, page }) => {
               autoPlay
               loop
               playsInline
+              muted
             ></Video>
           ) : (
             <Video
@@ -132,6 +133,7 @@ const Home = ({ setting, page }) => {
               autoPlay
               loop
               playsInline
+              muted
             ></Video>
           )}
         </AspectRatio>
@@ -564,52 +566,59 @@ const Home = ({ setting, page }) => {
                         gap={[4, 4, 4, 4]}
                       >
                         {(features ?? []).map(
-                          ({ id, icon, title, link="/", caption, remark }) => (
-                            <Link height="100%" href={link}>
-                            <GridItem
-                              as={VStack}
-                              borderWidth={2}
-                              height="100%"
-                              bg={[
-                                "white",
-                                "white",
-                                "white",
-                                "rgb(250,250,250)",
-                              ]}
-                              boxShadow={["lg", "lg", "lg", "none"]}
-                              borderColor={[
-                                "transparent",
-                                "transparent",
-                                "transparent",
-                                "gray.300",
-                              ]}
-                              transition="all 0.2s"
-                              _hover={{
-                                boxShadow: "lg",
-                                bg: "white",
-                                borderColor: "transparent",
-                              }}
-                              borderRadius={16}
-                              key={id}
-                              px={8}
-                              pt={12}
-                              pb={8}
-                              align="center"
-                              textAlign="center"
-                              cursor="default"
-                            >
-                              <Image w={16} src={icon}></Image>
-                              <Text fontSize={"2xl"} fontWeight="bold">
-                                {title}
-                              </Text>
-                              <Text fontSize="lg" fontWeight="semibold">
-                                {caption}
-                              </Text>
-                              <Box flex={1} minH={8} h="100%" />
-                              <Text fontSize="md" color="gray.500">
-                                {remark}
-                              </Text>
-                            </GridItem>
+                          ({
+                            id,
+                            icon,
+                            title,
+                            link = "/",
+                            caption,
+                            remark,
+                          }) => (
+                            <Link height="100%" href={link} key={id}>
+                              <GridItem
+                                as={VStack}
+                                borderWidth={2}
+                                height="100%"
+                                bg={[
+                                  "white",
+                                  "white",
+                                  "white",
+                                  "rgb(250,250,250)",
+                                ]}
+                                boxShadow={["lg", "lg", "lg", "none"]}
+                                borderColor={[
+                                  "transparent",
+                                  "transparent",
+                                  "transparent",
+                                  "gray.300",
+                                ]}
+                                transition="all 0.2s"
+                                _hover={{
+                                  boxShadow: "lg",
+                                  bg: "white",
+                                  borderColor: "transparent",
+                                }}
+                                borderRadius={16}
+                                key={id}
+                                px={8}
+                                pt={12}
+                                pb={8}
+                                align="center"
+                                textAlign="center"
+                                cursor="default"
+                              >
+                                <Image w={16} src={icon}></Image>
+                                <Text fontSize={"2xl"} fontWeight="bold">
+                                  {title}
+                                </Text>
+                                <Text fontSize="lg" fontWeight="semibold">
+                                  {caption}
+                                </Text>
+                                <Box flex={1} minH={8} h="100%" />
+                                <Text fontSize="md" color="gray.500">
+                                  {remark}
+                                </Text>
+                              </GridItem>
                             </Link>
                           )
                         )}
@@ -954,7 +963,7 @@ export default withPageCMS(Home, {
               templates: metaTextTemplates,
               label: "描述 description",
             },
-            
+
             {
               name: "features",
               component: "group-list",
@@ -984,7 +993,7 @@ export default withPageCMS(Home, {
                   name: "link",
                   label: "關聯 Link",
                   component: "text",
-                  placeholder:"https://"
+                  placeholder: "https://",
                 },
                 {
                   name: "caption",
