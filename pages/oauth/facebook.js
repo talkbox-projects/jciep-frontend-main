@@ -68,6 +68,7 @@ const FacebookLogin = ({ page }) => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -120,6 +121,7 @@ const FacebookLogin = ({ page }) => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present

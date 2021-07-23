@@ -414,6 +414,7 @@ export default {
         interestedIndustryOther: input?.interestedIndustryOther,
         interestedIndustry: input?.interestedIndustry,
         industry: input?.industry,
+        industryOther: input?.industryOther,
         tncAccept: input.tncAccept,
         profilePic: input?.profilePic,
         bannerMedia: input?.bannerMedia,

@@ -114,6 +114,7 @@ const LoginModal = () => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -166,6 +167,7 @@ const LoginModal = () => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present

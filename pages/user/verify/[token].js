@@ -90,6 +90,7 @@ const VerifyToken = () => {
                 interestedEmploymentMode
                 interestedIndustry
                 industry
+                industryOther
                 tncAccept
                 published
                 email
@@ -142,6 +143,7 @@ const VerifyToken = () => {
                   companyName
                   jobTitle
                   industry
+                  industryOther
                   startDatetime
                   endDatetime
                   present

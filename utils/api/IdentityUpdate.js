@@ -17,6 +17,7 @@ const identityUpdate = async ({ input }, context) => {
         interestedIndustry
         interestedIndustryOther
         industry
+        industryOther
         tncAccept
         published
         email
@@ -73,6 +74,7 @@ const identityUpdate = async ({ input }, context) => {
           companyName
           jobTitle
           industry
+          industryOther
           startDatetime
           endDatetime
           present

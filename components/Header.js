@@ -141,6 +141,7 @@ const Header = ({
                 interestedIndustry
                 interestedIndustryOther
                 industry
+                industryOther
                 tncAccept
                 published
                 email
@@ -193,6 +194,7 @@ const Header = ({
                   companyName
                   jobTitle
                   industry
+                  industryOther
                   startDatetime
                   endDatetime
                   present

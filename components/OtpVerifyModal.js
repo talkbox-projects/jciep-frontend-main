@@ -72,6 +72,7 @@ const OtpVerifyModal = () => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -124,6 +125,7 @@ const OtpVerifyModal = () => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present

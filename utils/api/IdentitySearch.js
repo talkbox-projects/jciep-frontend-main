@@ -34,6 +34,7 @@ const identitySearch = async (
         interestedIndustry
         interestedIndustryOther
         industry
+        industryOther
         tncAccept
         published
         email
@@ -90,6 +91,7 @@ const identitySearch = async (
           companyName
           jobTitle
           industry
+          industryOther
           startDatetime
           endDatetime
           present

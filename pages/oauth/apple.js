@@ -68,6 +68,7 @@ const AppleLogin = ({ id_token: accessToken }) => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -120,6 +121,7 @@ const AppleLogin = ({ id_token: accessToken }) => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present

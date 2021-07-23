@@ -24,6 +24,7 @@ const EmploymentSubSectionViewer = () => {
               jobTitle,
               companyName,
               industry,
+              industryOther,
               employmentType,
             },
             index
@@ -60,10 +61,11 @@ const EmploymentSubSectionViewer = () => {
                   )}
                   <Wrap color="#666666">
                     <Tag size="sm" fontWeight="normal">
-                      {
-                        enums?.EnumIndustryList?.find((x) => x.key === industry)
-                          ?.value?.[router.locale]
-                      }
+                      {industry === "other" && industryOther
+                        ? industryOther
+                        : enums?.EnumIndustryList?.find(
+                            (x) => x.key === industry
+                          )?.value?.[router.locale]}
                     </Tag>
                     <Text>
                       {startDatetime &&

@@ -97,6 +97,7 @@ export default gql`
     website: String
     businessRegistration: [FileInput]
     industry: [EnumIndustry]
+    industryOther: String
     description: String
     district: EnumDistrict
     companyBenefit: String

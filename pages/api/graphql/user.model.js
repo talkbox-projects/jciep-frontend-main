@@ -139,6 +139,9 @@ const identitySchema = Schema({
       enum: Object.keys(industries),
     },
   ],
+  industryOther: {
+    type: String,
+  },
   biography: {
     type: Object,
   },
@@ -199,6 +202,7 @@ const identitySchema = Schema({
       companyName: String,
       jobTitle: String,
       industry: Object,
+      industryOther: String,
       startDatetime: Date,
       endDatetime: Date,
       present: Boolean,

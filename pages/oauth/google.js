@@ -68,6 +68,7 @@ const GoogleLogin = ({ page }) => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -120,6 +121,7 @@ const GoogleLogin = ({ page }) => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present
