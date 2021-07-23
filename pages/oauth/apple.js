@@ -149,9 +149,9 @@ const AppleLogin = ({ id_token: accessToken }) => {
         if (data?.UserLogin) {
           const user = data?.UserLogin?.user;
           if (user?.identities?.length === 0) {
-            router.push("/user/identity/select");
+            router.replace("/user/identity/select");
           } else {
-            router.push("/");
+            router.replace("/");
           }
         }
       } catch (e) {

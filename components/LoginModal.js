@@ -75,12 +75,12 @@ const LoginModal = () => {
   );
 
   const responseFacebook = (response) => {
-    router.push(`/oauth/facebook/?accessToken=${response.accessToken}`);
+    router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
   };
 
   const responseGoogle = (response) => {
-    router.push(`/oauth/google/?accessToken=${response.accessToken}`);
+    router.replace(`/oauth/google/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
   };
 

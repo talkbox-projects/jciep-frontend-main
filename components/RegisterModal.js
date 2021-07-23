@@ -90,12 +90,12 @@ const RegisterModal = () => {
 
   const responseFacebook = (response) => {
     registerModalDisclosure.onClose();
-    router.push(`/oauth/facebook/?accessToken=${response.accessToken}`);
+    router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
   };
 
   const responseGoogle = (response) => {
     registerModalDisclosure.onClose();
-    router.push(`/oauth/google/?accessToken=${response.accessToken}`);
+    router.replace(`/oauth/google/?accessToken=${response.accessToken}`);
   };
 
   const onEmailRegister = useCallback(async ({ e, email }) => {

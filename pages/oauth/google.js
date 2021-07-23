@@ -150,9 +150,9 @@ const GoogleLogin = ({ page }) => {
         if (data?.UserLogin) {
           const user = data?.UserLogin?.user;
           if (user?.identities?.length === 0) {
-            router.push("/user/identity/select");
+            router.replace("/user/identity/select");
           } else {
-            router.push("/");
+            router.replace("/");
           }
         }
       } catch (e) {
