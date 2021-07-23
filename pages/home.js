@@ -1,5 +1,12 @@
 import React, { useRef } from "react";
-import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
+import {
+  Stack,
+  Box,
+  Text,
+  VStack,
+  LinkOverlay,
+  LinkBox,
+} from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -574,52 +581,54 @@ const Home = ({ setting, page }) => {
                             caption,
                             remark,
                           }) => (
-                            <Link height="100%" href={link} key={id}>
-                              <GridItem
-                                as={VStack}
-                                borderWidth={2}
-                                height="100%"
-                                bg={[
-                                  "white",
-                                  "white",
-                                  "white",
-                                  "rgb(250,250,250)",
-                                ]}
-                                boxShadow={["lg", "lg", "lg", "none"]}
-                                borderColor={[
-                                  "transparent",
-                                  "transparent",
-                                  "transparent",
-                                  "gray.300",
-                                ]}
-                                transition="all 0.2s"
-                                _hover={{
-                                  boxShadow: "lg",
-                                  bg: "white",
-                                  borderColor: "transparent",
-                                }}
-                                borderRadius={16}
-                                key={id}
-                                px={8}
-                                pt={12}
-                                pb={8}
-                                align="center"
-                                textAlign="center"
-                                cursor="default"
-                              >
-                                <Image w={16} src={icon}></Image>
-                                <Text fontSize={"2xl"} fontWeight="bold">
-                                  {title}
-                                </Text>
-                                <Text fontSize="lg" fontWeight="semibold">
-                                  {caption}
-                                </Text>
-                                <Box flex={1} minH={8} h="100%" />
-                                <Text fontSize="md" color="gray.500">
-                                  {remark}
-                                </Text>
-                              </GridItem>
-                            </Link>
+                            <NextLink passHref href={link} key={id}>
+                              <LinkBox height="100%">
+                                <GridItem
+                                  as={VStack}
+                                  borderWidth={2}
+                                  height="100%"
+                                  bg={[
+                                    "white",
+                                    "white",
+                                    "white",
+                                    "rgb(250,250,250)",
+                                  ]}
+                                  boxShadow={["lg", "lg", "lg", "none"]}
+                                  borderColor={[
+                                    "transparent",
+                                    "transparent",
+                                    "transparent",
+                                    "gray.300",
+                                  ]}
+                                  transition="all 0.2s"
+                                  _hover={{
+                                    boxShadow: "lg",
+                                    bg: "white",
+                                    borderColor: "transparent",
+                                  }}
+                                  borderRadius={16}
+                                  key={id}
+                                  px={8}
+                                  pt={12}
+                                  pb={8}
+                                  align="center"
+                                  textAlign="center"
+                                  cursor="pointer"
+                                >
+                                  <Image w={16} src={icon}></Image>
+                                  <Text fontSize={"2xl"} fontWeight="bold">
+                                    {title}
+                                  </Text>
+                                  <Text fontSize="lg" fontWeight="semibold">
+                                    {caption}
+                                  </Text>
+                                  <Box flex={1} minH={8} h="100%" />
+                                  <Text fontSize="md" color="gray.500">
+                                    {remark}
+                                  </Text>
+                                </GridItem>
+                              </LinkBox>
+                            </NextLink>
                           )
                         )}
                       </Grid>
