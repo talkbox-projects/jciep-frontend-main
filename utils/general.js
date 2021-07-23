@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 
 export const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -71,4 +71,26 @@ export const useInjectParams = () => {
         return typeof x === "string" ? <Text m={0}>{x}</Text> : x;
       });
   }, []);
+};
+
+export const htmlStyles = {
+  a: {
+    color: "green.500",
+    textDecor: "underline",
+  },
+  table: {
+    w: "100%",
+    th: {
+      borderWidth: "1px",
+      borderColor: "gray.500",
+      bg: "gray.100",
+    },
+    td: {
+      borderWidth: "1px",
+      borderColor: "gray.500",
+    },
+  },
+  "ul, ol": {
+    px: 4,
+  },
 };

@@ -308,6 +308,9 @@ const Header = ({
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
+            <Link href="/text-size" fontSize="sm">
+              {getWording("header.font_size_level_label")}
+            </Link>
             <Text>
               {(navigation.social ?? []).map(({ icon, url }, i) => {
                 return (
@@ -704,7 +707,7 @@ const Header = ({
                   </VStack>
                 </Accordion>
                 <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
-                  <Link href="/web-accessibility" fontSize="sm">
+                  <Link href="/text-size" fontSize="sm">
                     {getWording("header.font_size_level_label")}
                   </Link>
                   <Box flex={1} minW={0} w="100%" />

@@ -28,7 +28,7 @@ import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import { getYoutubeLink } from "../../utils/general";
+import { getYoutubeLink, htmlStyles } from "../../utils/general";
 import HoverCard from "../../components/HoverCard";
 const PAGE_KEY = "sharing";
 
@@ -229,24 +229,7 @@ const PostDetail = ({ post, setting, page }) => {
                   case "content-block":
                     return (
                       <Box
-                        sx={{
-                          a: {
-                            color: "green.500",
-                            textDecor: "underline",
-                          },
-                          table: {
-                            w: "100%",
-                            th: {
-                              borderWidth: "1px",
-                              borderColor: "gray.500",
-                              bg: "gray.100",
-                            },
-                            td: {
-                              borderWidth: "1px",
-                              borderColor: "gray.500",
-                            },
-                          },
-                        }}
+                        sx={htmlStyles}
                         w="100%"
                         pt="40px"
                         dangerouslySetInnerHTML={{
