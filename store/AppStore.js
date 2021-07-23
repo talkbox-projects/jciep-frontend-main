@@ -4,9 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCMS } from "tinacms";
 import { updateIf } from "../utils/general";
+import { useRouter } from "next/router";
 
-export const useDisclosureWithParams = () => {
-  const disclosure = useDisclosure();
+export const useDisclosureWithParams = (props) => {
+  const disclosure = useDisclosure(props);
   const [params, setParams] = useState({});
 
   const onOpen = useCallback(
@@ -25,6 +26,7 @@ export const useDisclosureWithParams = () => {
 };
 
 const [AppProvider, useAppContext] = constate((props) => {
+  const router = useRouter();
   const _wordings = useWordingLists({
     lists: [
       {
@@ -76,8 +78,12 @@ const [AppProvider, useAppContext] = constate((props) => {
     );
   }, [_wordings]);
 
-  const loginModalDisclosure = useDisclosureWithParams();
-  const registerModalDisclosure = useDisclosureWithParams();
+  const loginModalDisclosure = useDisclosureWithParams({
+    defaultIsOpen: !!router?.query?.login,
+  });
+  const registerModalDisclosure = useDisclosureWithParams({
+    defaultIsOpen: !!router?.query?.register,
+  });
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
   const resetPasswordModalDisclosure = useDisclosureWithParams();
