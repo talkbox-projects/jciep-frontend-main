@@ -15,7 +15,13 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { RiCloseCircleFill } from "react-icons/ri";
 
-const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
+const ProfileDropzone = ({
+  multiple = false,
+  page,
+  value,
+  onChange,
+  isUpload = true,
+}) => {
   const toast = useToast();
 
   const getDropErrorCodeMsg = (errCode) => {
@@ -45,22 +51,24 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
     onDrop: async (files) => {
       try {
         if (files?.length === 0) return;
-        const mutation = gql`
-          mutation FileUpload($files: FileUpload!) {
-            FileUpload(files: $files) {
-              id
-              url
-              contentType
-              fileSize
+        if (isUpload) {
+          const mutation = gql`
+            mutation FileUpload($files: FileUpload!) {
+              FileUpload(files: $files) {
+                id
+                url
+                contentType
+                fileSize
+              }
             }
-          }
-        `;
-        const variables = {
-          files,
-        };
+          `;
+          const variables = {
+            files,
+          };
 
-        const data = await getGraphQLClient().request(mutation, variables);
-        onChange(data?.FileUpload?.[0]);
+          const data = await getGraphQLClient().request(mutation, variables);
+          onChange(data?.FileUpload?.[0]);
+        } else onChange(files);
       } catch (e) {
         console.error(e);
       }
@@ -110,7 +118,7 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
           </>
         ) : (value?.contentType ?? "").startsWith("image") ? (
           <>
-            <Image src={value?.url} />
+            <Image src={value?.url} w="100%" />
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
