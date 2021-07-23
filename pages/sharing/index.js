@@ -112,11 +112,14 @@ const Sharing = ({ page, setting, lang }) => {
   );
 
   React.useEffect(() => {
-    if (page?.content?.featured) {
-      fetchFeaturedArticle(page?.content?.featured);
-    }
     fetchHottestPosts();
-  }, [fetchFeaturedArticle, fetchHottestPosts, page?.content?.featured]);
+  }, [fetchHottestPosts]);
+
+  React.useEffect(() => {
+    if (page?.content?.featured || hottestPosts.length > 0) {
+      fetchFeaturedArticle(page?.content?.featured || hottestPosts[0]?.slug);
+    }
+  }, [fetchFeaturedArticle, hottestPosts, page?.content?.featured]);
 
   const featuredArticleCategory = getCategoryData(featuredArticle?.category);
 
@@ -181,7 +184,7 @@ const Sharing = ({ page, setting, lang }) => {
         >
           <VStack
             align="stretch"
-            pt={76}
+            pt="128px"
             w="100%"
             d={["none", "none", "block"]}
           >
@@ -209,6 +212,14 @@ const Sharing = ({ page, setting, lang }) => {
               onClick={() => {
                 router.push(`/sharing/${featuredArticle?.slug}`);
               }}
+              cursor="pointer"
+              // p={4}
+              // _hover={{
+              //   bg: "rgba(255,255,255,0.9)",
+              //   boxShadow: "md",
+              //   borderRadius: "xl",
+              //   transition: "all 0.2s",
+              // }}
             >
               <AspectRatio
                 w={"40%"}
