@@ -289,7 +289,7 @@ const Header = ({
         h={12}
       >
         <Container>
-          <HStack py={2} fontSize="sm" alignItems="center">
+          <HStack py={2} fontSize="sm" alignItems="center" spacing={4}>
             {identity?.type === "admin" && (
               <Menu>
                 <MenuButton>
@@ -308,20 +308,6 @@ const Header = ({
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
-            <NextLink href="/text-size" passHref>
-              <Link fontSize="sm">
-                {getWording("header.font_size_level_label")}
-              </Link>
-            </NextLink>
-            <Text>
-              {(navigation.social ?? []).map(({ icon, url }, i) => {
-                return (
-                  <a key={i} href={url}>
-                    <Image display="inline-flex" height="25px" src={icon} />
-                  </a>
-                );
-              })}
-            </Text>
             {isShowLangSwitcher && (
               <Select
                 border="none"
@@ -343,6 +329,20 @@ const Header = ({
                 <option value="en">EN</option>
               </Select>
             )}
+            <NextLink href="/text-size" passHref>
+              <Link fontSize="sm">
+                {getWording("header.font_size_level_label")}
+              </Link>
+            </NextLink>
+            <Text>
+              {(navigation.social ?? []).map(({ icon, url }, i) => {
+                return (
+                  <a key={i} href={url}>
+                    <Image display="inline-flex" height="25px" src={icon} />
+                  </a>
+                );
+              })}
+            </Text>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 <Avatar size="xs"></Avatar>
@@ -709,25 +709,6 @@ const Header = ({
                   </VStack>
                 </Accordion>
                 <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
-                  <NextLink href="/text-size" passHref>
-                    <Link fontSize="sm">
-                      {getWording("header.font_size_level_label")}
-                    </Link>
-                  </NextLink>
-                  <Box flex={1} minW={0} w="100%" />
-                  <Text>
-                    {(navigation.social ?? []).map(({ icon, url }, i) => {
-                      return (
-                        <a key={i} href={url}>
-                          <Image
-                            display="inline-flex"
-                            height="25px"
-                            src={icon}
-                          />
-                        </a>
-                      );
-                    })}
-                  </Text>
                   {isShowLangSwitcher && (
                     <Select
                       border="none"
@@ -749,6 +730,25 @@ const Header = ({
                       <option value="en">EN</option>
                     </Select>
                   )}
+                  <NextLink href="/text-size" passHref>
+                    <Link fontSize="sm">
+                      {getWording("header.font_size_level_label")}
+                    </Link>
+                  </NextLink>
+                  <Box flex={1} minW={0} w="100%" />
+                  <Text>
+                    {(navigation.social ?? []).map(({ icon, url }, i) => {
+                      return (
+                        <a key={i} href={url}>
+                          <Image
+                            display="inline-flex"
+                            height="25px"
+                            src={icon}
+                          />
+                        </a>
+                      );
+                    })}
+                  </Text>
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
                       <Avatar size="xs"></Avatar>
