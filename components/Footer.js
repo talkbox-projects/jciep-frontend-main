@@ -70,7 +70,8 @@ const Footer = ({ footer }) => {
               minW={0}
               w="100%"
               columns={[2, 2, 3, 5, 5]}
-              gap={12}
+              gap={[8,12]}
+              padding="0 2%"
             >
               {(footer?.sitemap ?? []).map(({ id, links = [], title, url = "/", social= [] }) => (
                 <VStack key={id} align="start">
