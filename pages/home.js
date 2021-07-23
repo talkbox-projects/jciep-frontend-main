@@ -211,7 +211,7 @@ const Home = ({ setting, page }) => {
                     case "textBlock":
                       return (
                         <Text
-                          d="inline"
+                          d={["block", "inline"]}
                           key={index}
                           textColor={textcolor}
                           {...(bold && { fontWeight: "bold" })}
