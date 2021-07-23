@@ -18,21 +18,18 @@ export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const form = formidable({ multiples: true });
 
-  console.log(context.query);
-
   const body = await new Promise((r) => {
     form.parse(context.req, (err, fields) => {
       r(fields);
     });
   });
-  console.log(body);
 
   return {
     props: {
       page,
       id_token: body?.id_token || context.query.id_token,
       isLangAvailable: context.locale === page.lang,
-      ...getSharedServerSideProps(context)?.props,
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };

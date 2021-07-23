@@ -1,11 +1,9 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import nookies, { destroyCookie, setCookie } from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
-import { useCredential } from "../utils/user";
-import { updateIf } from "../utils/general";
 import { useCMS } from "tinacms";
+import { updateIf } from "../utils/general";
 
 export const useDisclosureWithParams = () => {
   const disclosure = useDisclosure();
@@ -16,12 +14,12 @@ export const useDisclosureWithParams = () => {
       setParams(params);
       disclosure.onOpen();
     },
-    [disclosure.onOpen]
+    [disclosure]
   );
   const onClose = useCallback(() => {
     setParams({});
     disclosure.onClose();
-  }, [disclosure.onClose]);
+  }, [disclosure]);
 
   return { ...disclosure, onOpen, onClose, params };
 };
@@ -102,7 +100,7 @@ const [AppProvider, useAppContext] = constate((props) => {
       cms.enable();
       // cms.disable();
     }
-  }, [identity]);
+  }, [cms, identity]);
 
   const updateIdentity = useCallback((id, updater) => {
     setUser((user) => {
