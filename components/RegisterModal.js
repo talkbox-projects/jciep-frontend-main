@@ -271,7 +271,11 @@ const RegisterModal = () => {
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={`/oauth/facebook`}
+                redirectUri={`${
+                  process.env.HOST_URL
+                    ? process.env.HOST_URL
+                    : "http://localhost:3000"
+                }/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
