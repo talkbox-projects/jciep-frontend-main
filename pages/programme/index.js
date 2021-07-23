@@ -140,11 +140,13 @@ const Programme = ({ page }) => {
               </VStack>
             </Box>
           </Container>
-          <DividerTriple
-            primaryColor="#00BFBA"
-            secondaryColor="white"
-            nextColor="#F6D644"
-          />
+          <Box pos="absolute" bottom="-1px" w="100%">
+            <DividerTriple
+              primaryColor="#00BFBA"
+              secondaryColor="white"
+              nextColor="#F6D644"
+            />
+          </Box>
         </VStack>
       </Box>
 
