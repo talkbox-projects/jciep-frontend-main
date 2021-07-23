@@ -24,6 +24,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isShowLangSwitcher: true,
       isLangAvailable: context.locale === page.lang,
       wordings: await getConfiguration({
         key: "wordings",
