@@ -222,7 +222,7 @@ const PostDetail = ({ post, setting, page }) => {
               {post?.excerpt}
             </Text>
           )}
-          <VStack align="stretch" spacing={4}>
+          <VStack align="stretch" spacing={4} maxW="100%">
             {(post?.content?.blocks ?? []).map(
               ({ _template, content, caption, image, link }, index) => {
                 switch (_template) {
