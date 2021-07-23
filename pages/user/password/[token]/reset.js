@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -12,7 +13,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
 import Container from "../../../../components/Container";
 import { useGetWording } from "../../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
@@ -24,6 +24,7 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import { useAppContext } from "../../../../store/AppStore";
 import { useCredential } from "../../../../utils/user";
 import UserPasswordReset from "../../../../utils/api/UserPasswordReset";
+import { passwordRegex } from "../../../../utils/general";
 
 const PAGE_KEY = "verify_email";
 
@@ -77,7 +78,7 @@ const VerifyToken = () => {
         console.log(e);
       }
     },
-    [getWording, resetPasswordToken]
+    [getWording, removeCredential, resetPasswordToken, router, toast]
   );
 
   useEffect(() => {
@@ -96,7 +97,9 @@ const VerifyToken = () => {
           token: resetPasswordToken,
         });
         setEmailVerify(data?.UserEmailValidityCheck);
-      } catch (e) {}
+      } catch (e) {
+        // console.error(e)
+      }
     })();
   }, [resetPasswordToken]);
 
@@ -150,6 +153,10 @@ const VerifyToken = () => {
                 type="password"
                 {...register("password", {
                   required: getWording("emailVerify.password_error_message"),
+                  pattern: {
+                    value: passwordRegex,
+                    message: getWording("register.register_password_pattern"),
+                  },
                 })}
               />
             </FormControl>

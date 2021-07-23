@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -11,7 +12,6 @@ import {
   Box,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
 import Container from "../../../components/Container";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
 import { useLoginHook, useCredential } from "../../../utils/user";
+import { passwordRegex } from "../../../utils/general";
 
 const PAGE_KEY = "verify_email";
 
@@ -248,6 +249,10 @@ const VerifyToken = () => {
                 type="password"
                 {...register("password", {
                   required: getWording("emailVerify.password_error_message"),
+                  pattern: {
+                    value: passwordRegex,
+                    message: getWording("register.register_password_pattern"),
+                  },
                 })}
               />
 
