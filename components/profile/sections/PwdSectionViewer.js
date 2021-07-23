@@ -102,7 +102,7 @@ const PwdSectionViewer = () => {
             wordExtractor(page?.content?.wordings, "empty_text_label")}
         </Text>
       </VStack>
-      <VStack px={8} py={4} align="stretch" spacing={4}>
+      <VStack px={8} py={4} align="stretch" spacing={6}>
         {userFieldVisible && (
           <>
             <Stack direction={["column", "column", "row"]}>

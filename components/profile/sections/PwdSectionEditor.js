@@ -98,7 +98,7 @@ const PwdSectionEditor = () => {
           </FormHelperText>
         </FormControl>
       </VStack>
-      <VStack px={8} py={4} align="stretch" spacing={4}>
+      <VStack px={8} py={4} align="stretch" spacing={6}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl
             isRequired={true}
