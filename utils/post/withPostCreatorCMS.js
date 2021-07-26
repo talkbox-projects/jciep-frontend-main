@@ -39,6 +39,7 @@ const withPostCreatorCMS = (Component) => (props) => {
         label: "後綴路由 Slug",
         component: "text",
         description: "This post route would be /sharing/{slug}",
+        validate: (value) => !!value || "Please enter 後綴路由 Slug",
       },
     ],
     onSubmit: async (values) => {
@@ -49,7 +50,9 @@ const withPostCreatorCMS = (Component) => (props) => {
           }
         }
       `;
-      values.publishDate = values.publishDate? moment(values.publishDate).toDate() : moment().toDate();
+      values.publishDate = values.publishDate
+        ? moment(values.publishDate).toDate()
+        : moment().toDate();
       const variables = {
         input: values,
       };
@@ -57,10 +60,9 @@ const withPostCreatorCMS = (Component) => (props) => {
         await getGraphQLClient().request(mutation, variables);
         router.push(`/sharing/${values.slug}`);
       } catch (err) {
-        cms.alerts.error("Error creating Post: " + err)
+        cms.alerts.error("Error creating Post: " + err);
         console.log("Error creating Post", err);
       }
-
     },
   };
 
