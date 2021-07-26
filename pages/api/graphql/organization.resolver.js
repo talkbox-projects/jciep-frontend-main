@@ -63,7 +63,7 @@ export default {
         ...(type?.length && { organizationType: { $in: type } }),
         ...(days && {createdAt: {$gte: date}}),
         ...(name &&  {
-          $or: [{ chineseCompanyName: name }, { englishCompanyName: name }, {contactName: name}],
+          $or: [{ chineseCompanyName: /name/ }, { englishCompanyName: /name/ }],
         }),
       }).populate("submission").sort({createdAt: -1});
 
