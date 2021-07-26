@@ -63,9 +63,9 @@ export default {
         ...(type?.length && { organizationType: { $in: type } }),
         ...(days && {createdAt: {$gte: date}}),
         ...(name &&  {
-          $or: [{ chineseCompanyName: /name/ }, { englishCompanyName: /name/ }],
+          $or: [{ chineseCompanyName: { $regex: name , $options: 'i'} }, { englishCompanyName: { $regex: name,$options: 'i' } }],
         }),
-      }).populate("submission").sort({createdAt: -1});
+      }).populate("submission").sort({createdAt: -1});    
 
       const identities = await Identity.find({
         _id: {
