@@ -44,6 +44,7 @@ const AdminOrganization = ({ enums }) => {
   const [organizations, setOrganizations] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const days = [ "7 days", "1 month", "3 months"]
   const [params, setParams] = useState({
     status: enums?.EnumOrganizationStatusList.map((x) => x.key),
     type: enums?.EnumOrganizationTypeList.map((x) => x.key),
@@ -120,15 +121,22 @@ const AdminOrganization = ({ enums }) => {
   }, [enums, params]);
 
   const getDaysFilter = useCallback(() => {
-    return  <Box>
-          <Input
-            type="number"
-            value={params?.days}
-            onChange={(e) =>
-              setParams((_) => ({ ...params, days: e.target.value }))
-            }
-          ></Input>
-        </Box>
+    const options = [
+      { value: "All", label: 'All' },
+      { value: "7 Days", label: '7 Days' },
+      { value: "1 Month", label: '1 Month' },
+      { value: "3 Months", label: '3 Months' }
+    ]
+    
+    return  <MultiSelect
+    placeholder="選擇"
+    width="100%"
+    onChange={(options) =>
+      setParams((_) => ({ ..._, days: options.value}))
+    }
+    options={options}
+  ></MultiSelect>
+        
   })
 
   return (
@@ -164,7 +172,7 @@ const AdminOrganization = ({ enums }) => {
           </GridItem>
           <GridItem>
             <FormControl>
-              <FormLabel mb={0.5}>天</FormLabel>
+              <FormLabel mb={0.5}>登記日期</FormLabel>
               {getDaysFilter()}
             </FormControl>
           </GridItem>

@@ -47,17 +47,27 @@ export default {
        * other identity can only access to approved organization
        */      
       let date =  new Date()
-      date.setDate(date. getDate() - days);
+      if (days === "7 Days") {
+        date.setDate(date.getDate() - 7);
+      } else if (days === "1 Month" ) {
+        date.setMonth(date.getMonth() - 1);
+      } else if (days === "3 Months" ) {
+        date.setMonth(date.getMonth() - 3);
+      } else {
+        days = undefined
+      }
+
       
+      console.log(date)
       const organizations = await Organization.find({
         ...(published !== undefined && { published }),
         ...(status?.length && { status: { $in: status } }),
         ...(type?.length && { organizationType: { $in: type } }),
         ...(days && {createdAt: {$gte: date}}),
-        ...(name && {
-          $or: [{ chineseCompanyName: name }, { englishCompanyName: name }],
+        ...(name &&  {
+          $or: [{ chineseCompanyName: name }, { englishCompanyName: name }, {contactName: name}],
         }),
-      }).populate("submission");
+      }).populate("submission").sort({createdAt: -1});
 
       const identities = await Identity.find({
         _id: {
