@@ -2,15 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   FormControl,
-  FormHelperText,
   FormLabel,
   Heading,
   Input,
   Text,
   VStack,
-  Image,
   Box,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Container from "../../../../components/Container";
@@ -21,7 +20,6 @@ import { getPage } from "../../../../utils/page/getPage";
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
-import { useAppContext } from "../../../../store/AppStore";
 import { useCredential } from "../../../../utils/user";
 import UserPasswordReset from "../../../../utils/api/UserPasswordReset";
 import { passwordRegex } from "../../../../utils/general";
@@ -60,6 +58,7 @@ const VerifyToken = () => {
     handleSubmit,
     setError,
     register,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
   const toast = useToast();
@@ -146,22 +145,26 @@ const VerifyToken = () => {
               {getWording("emailVerify.heading")}
             </Text>
 
-            <FormControl>
+            <FormControl isInvalid={!!errors?.password?.message}>
               <FormLabel>{getWording("emailVerify.password_label")}</FormLabel>
               <Input
                 backgroundColor="#fff !important"
                 type="password"
                 {...register("password", {
-                  required: getWording("emailVerify.password_error_message"),
+                  required: {
+                    value: true,
+                    message: getWording("emailVerify.password_error_message"),
+                  },
                   pattern: {
                     value: passwordRegex,
                     message: getWording("register.register_password_pattern"),
                   },
                 })}
               />
+              <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={!!errors?.password_confirm}>
               <FormLabel>
                 {getWording("emailVerify.password_confirm_label")}
               </FormLabel>
@@ -169,14 +172,20 @@ const VerifyToken = () => {
                 backgroundColor="#fff !important"
                 type="password"
                 {...register("password_confirm", {
-                  required: getWording(
-                    "emailVerify.password_confirm_error_message"
-                  ),
+                  required: {
+                    value: true,
+                    message: getWording(
+                      "emailVerify.password_confirm_error_message"
+                    ),
+                  },
+                  validate: (v) =>
+                    v === getValues("password") ||
+                    getWording("emailVerify.password_confirm_not_same")[0],
                 })}
               />
-              <FormHelperText color={errors?.password_confirm ? "red" : ""}>
+              <FormErrorMessage>
                 {errors?.password_confirm?.message}
-              </FormHelperText>
+              </FormErrorMessage>
             </FormControl>
             <FormControl textAlign="center">
               <Button
