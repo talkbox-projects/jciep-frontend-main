@@ -48,6 +48,7 @@ const GoogleLogin = ({ page }) => {
               user {
                 id
                 email
+                phone
                 facebookId
                 googleId
                 appleId

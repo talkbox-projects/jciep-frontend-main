@@ -48,6 +48,7 @@ const AppleLogin = ({ id_token: accessToken }) => {
               user {
                 id
                 email
+                phone
                 facebookId
                 googleId
                 appleId

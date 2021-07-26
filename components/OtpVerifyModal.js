@@ -51,6 +51,7 @@ const OtpVerifyModal = () => {
               token
               user {
                 id
+                email
                 phone
                 facebookId
                 googleId

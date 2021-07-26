@@ -94,6 +94,7 @@ const LoginModal = () => {
               user {
                 id
                 email
+                phone
                 facebookId
                 googleId
                 appleId
