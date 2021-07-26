@@ -209,7 +209,7 @@ const PostDetail = ({ post, setting, page }) => {
           </HoverCard>
         </Box>
 
-        <VStack align="stretch" textAlign="left" spacing={2}>
+        <VStack align="stretch" textAlign="left" spacing={2} maxW="100%">
           {post?.excerpt && (
             <Text
               bgColor="gray.50"
