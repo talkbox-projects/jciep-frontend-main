@@ -56,9 +56,7 @@ export default {
       } else {
         days = undefined
       }
-
       
-      console.log(date)
       const organizations = await Organization.find({
         ...(published !== undefined && { published }),
         ...(status?.length && { status: { $in: status } }),
