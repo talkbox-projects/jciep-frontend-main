@@ -354,6 +354,7 @@ export default {
         employment: input?.employment,
         activity: input?.activity,
         published: input?.published || false,
+        createdAt: new Date()
       }).save();
 
       if (input?.invitationCode) {

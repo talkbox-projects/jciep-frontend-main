@@ -107,7 +107,7 @@ const PwdSectionEditor = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_chineseName"
+                "field_label_chineseName"    
               )}
             </FormLabel>
             <Input

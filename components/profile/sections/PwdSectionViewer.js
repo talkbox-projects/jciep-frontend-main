@@ -38,7 +38,7 @@ const PwdSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) && (
+        {(isAdmin ) && (
           <Button
             variant="outline"
             isActive={!!identity?.published}
