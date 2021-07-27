@@ -74,6 +74,7 @@ const OrganizationSubmissionSection = () => {
                 <HStack
                   onClick={() => {
                     submissionDetailDisclosure.onOpen({
+                      organization,
                       submission,
                       isLatest: index === 0,
                       onRefresh: refreshOrganization,

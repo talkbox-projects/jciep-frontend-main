@@ -10,6 +10,8 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 
+
+
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
