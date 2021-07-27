@@ -1,10 +1,9 @@
+import React from "react";
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
 import OrganizationBiographySection from "./sections/OrganizationBiographySection";
 import EmploymentSection from "./sections/EmploymentSection";
-import OrganizationPortfolioSection from "./sections/OrganizationPortfolioSection";
 import OrganizationMemberListSection from "./sections/OrganizationMemberListSection";
-import InvitationCodeSection from "./sections/InvitationCodeSection";
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 import OrganizationOperationSection from "./sections/OrganizationOperationSection";
 import OrganizationProfileStore from "../../store/OrganizationProfileStore";

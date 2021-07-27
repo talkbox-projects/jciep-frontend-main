@@ -63,19 +63,10 @@ const VerifyToken = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-<<<<<<< Updated upstream
   const onUserCreate = useCallback(
     async ({ password }) => {
       try {
         const mutation = gql`
-          mutation UserLogin($input: LoginInput!) {
-            UserLogin(input: $input) {
-              token
-              user {
-=======
-  const onUserCreate = useCallback(async ({ password }) => {
-    try {
-      const mutation = gql`
         mutation UserLogin($input: LoginInput!) {
           UserLogin(input: $input) {
             token
@@ -91,7 +82,6 @@ const VerifyToken = () => {
                 displayName
               }
               identities {
->>>>>>> Stashed changes
                 id
                 email
                 facebookId
