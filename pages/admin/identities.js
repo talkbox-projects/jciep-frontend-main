@@ -224,7 +224,7 @@ const AdminIdentity = ({ enums }) => {
                     </GridItem>
                     <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px">
                     <Text ver>
-                        {moment(identity?.createdAt).format("YYYY-MM-DD")}
+                        {moment(identity?.createdAt).format("YYYY-MM-DD hh:mm a")}
 
                     </Text>
                     </GridItem>

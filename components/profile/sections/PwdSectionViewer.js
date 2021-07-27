@@ -51,7 +51,7 @@ const PwdSectionViewer = () => {
         role.organization.id === currIdentity.organizationRole[0].organization.id
         && currIdentity.organizationRole[0].role === "staff" 
         && currIdentity.organizationRole[0].status === "joined" 
-        )[0]
+      )[0]
        
      if(hasStaffAccess) {
       setStaffAccess(true)

@@ -198,7 +198,7 @@ const AdminOrganization = ({ enums }) => {
                     </GridItem>
                     <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px">
                     <Text ver>
-                        {moment(organization?.createdAt).format("YYYY-MM-DD")}
+                        {moment(organization?.createdAt).format("YYYY-MM-DD hh:mm a")}
 
                     </Text>
                     </GridItem>

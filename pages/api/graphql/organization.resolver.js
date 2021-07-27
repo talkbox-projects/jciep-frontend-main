@@ -4,9 +4,6 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
 
-
-
- 
 export default {
   Query: {
     OrganizationGet: async (_parent, { id }) => {
