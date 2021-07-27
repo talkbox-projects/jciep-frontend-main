@@ -1,4 +1,58 @@
+// import { getEnums } from "../enums/getEnums";
+import React from "react";
+import ReactSelect from "react-select";
 import metaTextTemplates from "./metaTextTemplates";
+
+// const getServiceTargetList = async () =>
+//   (await getEnums({
+//     keys: ["EnumServiceTargetList"],
+//     lang: "zh",
+//   }).then((data) =>
+//     data?.EnumServiceTargetList?.map((target) => ({
+//       value: target.key,
+//       label: target.value.zh,
+//     }))
+//   )) ?? [];
+
+const renderReactSelect = ({ field, input }) => (
+  <>
+    <div>
+      <label htmlFor={field.name}>{field.label}</label>
+    </div>
+    <div>
+      <ReactSelect
+        options={serviceTargetList}
+        isMulti
+        closeMenuOnSelect={false}
+        name={field.name}
+        {...input}
+      />
+    </div>
+  </>
+);
+
+const serviceTargetList = [
+  { value: "employer", label: "僱主" },
+  {
+    value: "attentionDeficitHyperactivityDisorder",
+    label: "注意力不足/過度活躍症",
+  },
+  { value: "autism", label: "自閉症譜系障礙" },
+  { value: "hearingImpairment", label: "聽力障礙" },
+  { value: "intellectualDisability", label: "智能障礙" },
+  { value: "mentalIllnessMoodDisorder", label: "精神病/情緒病" },
+  { value: "physicalImpairment", label: "肢體傷殘" },
+  { value: "specificLearningDifficulties", label: "特殊學習困難" },
+  { value: "speechImpairment", label: "言語障礙" },
+  {
+    value: "visceralDisabilityPersonswithChronicDiseases",
+    label: "器官殘障/長期病患",
+  },
+  { value: "visualImpairment", label: "視力障礙" },
+  { value: "moderateDisabilities", label: "指定的中度殘疾人士" },
+  { value: "mildIntellectualDisability", label: "輕度智障人士" },
+  { value: "specialEducationalNeeds", label: "特殊教育需要人士" },
+];
 
 const textLinkWithTooltip = [
   {
@@ -57,45 +111,64 @@ const textareaWithTooltip = [
   },
   {
     name: "description",
-    component: "text",
+    component: "textarea",
     label: "描述 Tooltip description",
   },
 ];
 
-const equipBlockFields = [
+const equipBlockFields = ({ setting }) => [
+  {
+    name: "category",
+    label: "分類 Category",
+    component: "select",
+    defaultValue: "",
+    options: [
+      { value: "notSpecified", label: "無 N/A" },
+      ...(setting?.value?.categories ?? []).map(({ key, label }) => ({
+        value: key,
+        label: label,
+      })),
+    ],
+  },
   {
     name: "content",
     label: "內容 content",
     component: "blocks",
     templates: metaTextTemplates,
   },
+
   {
-    name: "links",
-    label: "鏈結 Links",
-    component: "group-list",
-    itemProps: ({ id: key, label }) => ({
-      key,
-      label,
-    }),
-    defaultItem: () => ({
-      id: Math.random().toString(36).substr(2, 9),
-    }),
-    fields: [
-      {
-        name: "url",
-        label: "URL",
-        component: "text",
-      },
-      {
-        name: "label",
-        label: "標籤 Label",
-        component: "text",
-      },
-    ],
+    name: "link",
+    label: "鏈結 Link",
+    component: "text",
   },
+  // {
+  //   name: "links",
+  //   label: "鏈結 Links",
+  //   component: "group-list",
+  //   itemProps: ({ id: key, label }) => ({
+  //     key,
+  //     label,
+  //   }),
+  //   defaultItem: () => ({
+  //     id: Math.random().toString(36).substr(2, 9),
+  //   }),
+  //   fields: [
+  //     {
+  //       name: "url",
+  //       label: "URL",
+  //       component: "text",
+  //     },
+  //     {
+  //       name: "label",
+  //       label: "標籤 Label",
+  //       component: "text",
+  //     },
+  //   ],
+  // },
 ];
 
-export default [
+export default (props) => [
   {
     name: "heroBannerSection",
     label: "頁面橫幅區塊 Hero Banner Setion",
@@ -392,7 +465,14 @@ export default [
             name: "serviceTarget",
             label: "服務對象 ServiceTarget",
             component: "group",
-            fields: textareaWithTooltip,
+            fields: [
+              ...textareaWithTooltip,
+              {
+                name: "tags",
+                label: "標籤 Tags",
+                component: renderReactSelect,
+              },
+            ],
           },
           {
             name: "contact",
@@ -516,7 +596,7 @@ export default [
         name: "left",
         label: "左方區塊 Left Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
       {
         label: "Background Image 圖片",
@@ -530,13 +610,13 @@ export default [
         name: "topRight",
         label: "右上區塊 Top Right Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
       {
         name: "bottomRight",
         label: "右下區塊 Bottom Right Block",
         component: "group",
-        fields: equipBlockFields,
+        fields: equipBlockFields(props),
       },
     ],
   },

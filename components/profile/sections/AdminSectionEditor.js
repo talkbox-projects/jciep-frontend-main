@@ -146,7 +146,7 @@ const AdminSectionEditor = () => {
           </FormControl>
         </Stack>
         <Stack direction={["column", "column", "row"]}>
-          <FormControl isRequired isInvalid={errors?.email?.message}>
+          <FormControl isInvalid={errors?.email?.message}>
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
@@ -173,7 +173,7 @@ const AdminSectionEditor = () => {
               {errors?.email?.message}
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired isInvalid={errors?.phone?.message}>
+          <FormControl isInvalid={errors?.phone?.message}>
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>

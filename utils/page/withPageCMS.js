@@ -1,14 +1,15 @@
+import React from "react";
 import { useForm, usePlugin } from "@tinacms/react-core";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import wordListFieldsForCMS from "../tina/wordListFieldsForCMS";
 const withPageCMS =
   (Component, { key, fields = [], propName = "page" }) =>
   (props) => {
     const router = useRouter();
     const _page = props?.[propName] ?? {};
+
     const [page, form] = useForm(
       {
         key,
@@ -40,7 +41,23 @@ const withPageCMS =
             name: "content",
             label: "頁面內容 Page Content",
             component: "group",
-            fields: [...fields, wordListFieldsForCMS({ name: "wordings" })],
+            fields: [
+              ...(typeof fields === "function" ? fields(props) : fields),
+              wordListFieldsForCMS({ name: "wordings" }),
+            ],
+          },
+          {
+            name: "lang",
+            label: "語言 Language",
+            // eslint-disable-next-line react/display-name
+            component: ({ field }) => (
+              <>
+                <label htmlFor={field.name}>{field.label}</label>
+                <h5 id={field.name} name={field.name}>
+                  {router?.locale}
+                </h5>
+              </>
+            ),
           },
         ],
         onSubmit: async (values) => {
@@ -56,8 +73,8 @@ const withPageCMS =
           const variables = {
             input: {
               key,
-              lang: router.locale,
               ...values,
+              lang: router.locale, // FIXME
             },
           };
           await getGraphQLClient().request(mutation, variables);

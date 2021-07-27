@@ -1,4 +1,4 @@
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
+import React from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -7,15 +7,12 @@ import {
   HStack,
   Image,
   VStack,
-  SimpleGrid,
-  GridItem,
   Tag,
   Box,
   Text,
   Wrap,
   Link,
   Button,
-  Stack,
   Avatar,
   Select,
 } from "@chakra-ui/react";
@@ -23,7 +20,6 @@ import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
-import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useCallback } from "react";
 import identitySearch from "../../utils/api/IdentitySearch";
@@ -35,6 +31,7 @@ import ExperienceSection from "../../components/profile/sections/ExperienceSecti
 import ActivitySection from "../../components/profile/sections/ActivitySection";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import organizationSearch from "../../utils/api/OrganizationSearch";
+import ConnectedOrganization from "../../components/profile/sections/ConnectedOrganization";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -100,6 +97,7 @@ const IdentityOpportunities = ({
       editable={false}
     >
       <VStack align="stretch" flex={1} minW={0} w="100%">
+        <ConnectedOrganization />
         <PwdSection />
         <IdentityPortfolioSection />
         <IdentityBiographySection />
@@ -123,7 +121,10 @@ const IdentityOpportunities = ({
       {" "}
       {(identities ?? []).map((identity) => (
         <NextLink
-          href={`/talants/individuals?identityId=${identity?.id}`}
+          href={generateUrlParameter({
+            identityId: identity?.id,
+            organizationId: router?.query?.organizationId,
+          })}
           key={identity?.id}
         >
           <VStack
@@ -258,7 +259,10 @@ const IdentityOpportunities = ({
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
                   router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
+                    generateUrlParameter({
+                      identityId: "",
+                      organizationId: e.target.value,
+                    })
                   )
                 }
                 variant="flushed"
@@ -308,7 +312,10 @@ const IdentityOpportunities = ({
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
                   router.push(
-                    generateUrlParameter({ organizationId: e.target.value })
+                    generateUrlParameter({
+                      identityId: "",
+                      organizationId: e.target.value,
+                    })
                   )
                 }
                 variant="flushed"

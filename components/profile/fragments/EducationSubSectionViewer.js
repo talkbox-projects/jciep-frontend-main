@@ -1,11 +1,14 @@
+import React from "react";
 import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
 import moment from "moment";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
+import { useRouter } from "next/router";
 
 const EducationSubSectionViewer = () => {
-  const { identity, page } = IdentityProfileStore.useContext();
+  const router = useRouter();
+  const { identity, page, enums } = IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={4} width={["100%", "50%"]} align="stretch">
@@ -15,7 +18,14 @@ const EducationSubSectionViewer = () => {
       <VStack pl={2} spacing={0} align="stretch">
         {(identity?.education ?? []).map(
           (
-            { present, startDatetime, endDatetime, school, fieldOfStudy },
+            {
+              present,
+              startDatetime,
+              endDatetime,
+              school,
+              fieldOfStudy,
+              degree,
+            },
             index
           ) => {
             const borderColor = present ? "#00BFBA" : "#eee";
@@ -41,7 +51,6 @@ const EducationSubSectionViewer = () => {
                   mb={8}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   {present && (
@@ -49,14 +58,30 @@ const EducationSubSectionViewer = () => {
                       {wordExtractor(page?.content?.wordings, "present_label")}
                     </Text>
                   )}
-                  <Text color="#666666">
-                    {moment(startDatetime).format("MM/YYYY")} -{" "}
-                    {present
-                      ? moment(endDatetime).format("MM/YYYY")
-                      : wordExtractor(page?.content?.wordings, "present_label")}
+                  <Wrap color="#666666">
+                    <Tag size="sm" fontWeight="normal">
+                      {
+                        enums?.EnumDegreeList?.find((x) => x.key === degree)
+                          ?.value?.[router.locale]
+                      }
+                    </Tag>
+                    <Text>
+                      {startDatetime &&
+                        `${moment(startDatetime).format("YYYY/MM")} - `}
+                      {present
+                        ? wordExtractor(
+                            page?.content?.wordings,
+                            "present_label"
+                          )
+                        : endDatetime && moment(endDatetime).format("YYYY/MM")}
+                    </Text>
+                  </Wrap>
+                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
+                    {fieldOfStudy}
                   </Text>
-                  <Text fontSize={"md"} fontFamily="SFNSDisplay">{fieldOfStudy}</Text>
-                  <Text fontSize={"md"} color="#666666">{school}</Text>
+                  <Text fontSize={"md"} color="#666666">
+                    {school}
+                  </Text>
                 </VStack>
               </Box>
             );

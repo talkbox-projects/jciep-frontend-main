@@ -1,8 +1,7 @@
-const { default: axios } = require("axios");
-const request = require("requests");
+import axios from "axios";
 
-exports.getProfile = async (accessToken) => {
-  try {
+export default {
+  getProfile: async (accessToken) => {
     const { data: response } = await axios.get(
       `https://www.googleapis.com/oauth2/v2/userinfo`,
       {
@@ -19,9 +18,5 @@ exports.getProfile = async (accessToken) => {
       
     };
     return snsMeta;
-  } catch (e) {
-    throw e;
-  }
+  },
 };
-
-//uri: `https://www.googleapis.com/plus/v1/people/me?access_token=${accessToken}`

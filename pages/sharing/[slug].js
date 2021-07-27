@@ -1,6 +1,5 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPost, getRelatedPosts } from "../../utils/post/getPost";
@@ -19,7 +18,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { ImShare } from "react-icons/im";
-import { Box, VStack, Wrap, HStack, WrapItem, Link } from "@chakra-ui/layout";
+import { Box, VStack, Wrap, WrapItem } from "@chakra-ui/layout";
 import moment from "moment";
 import wordExtractor from "../../utils/wordExtractor";
 import DividerSimple from "../../components/DividerSimple";
@@ -28,9 +27,9 @@ import Container from "../../components/Container";
 import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import NextLink from "next/link";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import { getYoutubeLink } from "../../utils/general";
+import { getYoutubeLink, htmlStyles } from "../../utils/general";
+import HoverCard from "../../components/HoverCard";
 const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {
@@ -67,7 +66,7 @@ const PostHeader = ({ categories, post }) => {
             ratio={4 / 3}
             overflow="hidden"
           >
-            <Image src={post.coverImage} objectFit="fill !important"/>
+            <Image src={post.coverImage} />
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px"></Box>
@@ -77,7 +76,7 @@ const PostHeader = ({ categories, post }) => {
       </Box>
       <Box mt={16} d={["block", "block", "none"]} position="relative">
         <AspectRatio w="100%" ratio={4 / 3}>
-          <Image src={post.coverImage}/>
+          <Image src={post.coverImage} />
         </AspectRatio>
         <Box w="100%" position="absolute" bottom={0}>
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
@@ -124,17 +123,17 @@ const PostDetail = ({ post, setting, page }) => {
     if (post?.id) {
       const posts = await getRelatedPosts({
         limit: 3,
-        category: post.category,
+        category: post?.category,
         id: post.id,
       });
       setRelatedArticles(posts);
     }
-  }, [post?.id]);
+  }, [post?.category, post.id]);
 
   useEffect(() => {
     updateReadCount(post.id);
     fetchRelatedPosts();
-  }, [fetchRelatedPosts]);
+  }, [fetchRelatedPosts, post.id]);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
@@ -147,54 +146,70 @@ const PostDetail = ({ post, setting, page }) => {
     <VStack w="100%" spacing={0} align="center" pb={16} bgColor="#fafafa">
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
+
       <Container
         pt={16}
         pb={32}
         maxW={["100%", "100%", 600, 576, 600]}
+        d="flex"
         position="relative"
       >
-        <VStack
-          position="absolute"
-          left={-56}
-          bottom={32}
-          display={["none", "none", "none", "block"]}
-          w={48}
-        >
-          <Box pl={8} position="relative" mb={4}>
-            <ApostropheHeadline color="#eee">
-              <Text fontSize="lg">
-                {wordExtractor(page?.content?.wordings, "furthurReading")}
-              </Text>
-            </ApostropheHeadline>
-          </Box>
-          {relatedArticles.map(({ category, title, excerpt, slug }, index) => {
-            return (
-              <VStack
-                align="start"
-                key={index}
-                cursor="pointer"
-                onClick={() => router.push(`/sharing/${slug}`)}
-              >
-                <CategoryTag
-                  size="sm"
-                  withIcon={false}
-                  category={getCategoryData(category)}
-                />
-                <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
-                  {title}
-                </Text>
-                {excerpt && (
-                  <Text fontSize="md" noOfLines={3} color="#1E1E1E">
-                    {excerpt}
-                  </Text>
-                )}
-                <br />
-                <Divider />
-              </VStack>
-            );
-          })}
-        </VStack>
-        <VStack align="stretch" textAlign="left" spacing={2}>
+        <Box position="absolute" left={-56} bottom={32} height="100%">
+          <HoverCard
+            desktopProps={{
+              top: "160px",
+              left: "0px",
+            }}
+            isMobileBreakPointValue={[true, true, true, false]}
+          >
+            {({ isMobile }) =>
+              isMobile ? null : (
+                <VStack w={48}>
+                  <Box pl={8} position="relative" mb={4}>
+                    <ApostropheHeadline color="#eee">
+                      <Text fontSize="lg">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "furthurReading"
+                        )}
+                      </Text>
+                    </ApostropheHeadline>
+                  </Box>
+                  {relatedArticles.map(
+                    ({ category, title, excerpt, slug }, index) => {
+                      return (
+                        <VStack
+                          align="start"
+                          key={index}
+                          cursor="pointer"
+                          onClick={() => router.push(`/sharing/${slug}`)}
+                        >
+                          <CategoryTag
+                            size="sm"
+                            withIcon={false}
+                            category={getCategoryData(category)}
+                          />
+                          <Text fontSize="lg" fontWeight="bold" color="#1E1E1E">
+                            {title}
+                          </Text>
+                          {excerpt && (
+                            <Text fontSize="md" noOfLines={3} color="#1E1E1E">
+                              {excerpt}
+                            </Text>
+                          )}
+                          <br />
+                          <Divider />
+                        </VStack>
+                      );
+                    }
+                  )}
+                </VStack>
+              )
+            }
+          </HoverCard>
+        </Box>
+
+        <VStack align="stretch" textAlign="left" spacing={2} maxW="100%">
           {post?.excerpt && (
             <Text
               bgColor="gray.50"
@@ -207,13 +222,14 @@ const PostDetail = ({ post, setting, page }) => {
               {post?.excerpt}
             </Text>
           )}
-          <VStack align="stretch" spacing={4}>
+          <VStack align="stretch" spacing={4} maxW="100%">
             {(post?.content?.blocks ?? []).map(
               ({ _template, content, caption, image, link }, index) => {
                 switch (_template) {
                   case "content-block":
                     return (
                       <Box
+                        sx={htmlStyles}
                         w="100%"
                         pt="40px"
                         dangerouslySetInnerHTML={{
@@ -226,18 +242,16 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <AspectRatio ratio={1}>
-                          <Image
-                            fit="contain"
-                            title="postImage"
-                            src={image}
-                            allowFullScreen
-                          />
-                        </AspectRatio>
+                        <Image
+                          fit="contain"
+                          title="postImage"
+                          src={image}
+                          allowFullScreen
+                        />
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );
-                  case "video-block":
+                  case "video-block": {
                     const youtubeLink = getYoutubeLink(link);
                     return (
                       <VStack align="stretch">
@@ -251,63 +265,66 @@ const PostDetail = ({ post, setting, page }) => {
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );
-
+                  }
                   default:
                 }
               }
             )}
           </VStack>
-          {post?.tags?.length > 0 && (
-            <VStack align="start" pt={12}>
-              <Divider />
-              <Text pt={8} textAlign="left">
-                {wordExtractor(page?.content?.wordings, "tagsHeading")}
-              </Text>
-              <Wrap mt={6} spacing={8}>
-                {(post?.tags ?? []).map((tag, i) => {
-                  return (
-                    <WrapItem key={i}>
-                      <Tag
-                        p={3}
-                        size="lg"
-                        fontSize="lg"
-                        borderRadius={16}
-                        bg="gray.50"
-                        key={i}
-                      >
-                        {tag}
-                      </Tag>
-                    </WrapItem>
-                  );
-                })}
-              </Wrap>
-            </VStack>
-          )}
+        </VStack>
+      </Container>
 
-          {post?.references?.length > 0 && (
-            <VStack align="start" pt={8}>
-              <Divider />
-              <Text pt={8} textAlign="left">
-                {wordExtractor(page?.content?.wordings, "referenceHeading")}
-              </Text>
-              {(post?.references ?? []).map(({ label, url = "#" }, index) => {
+      <Container maxW={["100%", "100%", 600, 576, 600]} position="relative">
+        {post?.tags?.length > 0 && (
+          <VStack align="start" pt={12}>
+            <Divider />
+            <Text pt={8} textAlign="left">
+              {wordExtractor(page?.content?.wordings, "tagsHeading")}
+            </Text>
+            <Wrap mt={6} spacing={8}>
+              {(post?.tags ?? []).map((tag, i) => {
                 return (
-                  <chakra.a href={url} target="_blank" key={index}>
-                    <Button
-                      rightIcon={<ImShare />}
-                      fontWeight="normal"
-                      variant="link"
-                      size="sm"
-                      color="#1E1E1E"
+                  <WrapItem key={i}>
+                    <Tag
+                      p={3}
+                      size="lg"
+                      fontSize="lg"
+                      borderRadius={16}
+                      bg="gray.50"
+                      key={i}
                     >
-                      {label}
-                    </Button>
-                  </chakra.a>
+                      {tag}
+                    </Tag>
+                  </WrapItem>
                 );
               })}
-            </VStack>
-          )}
-        </VStack>
+            </Wrap>
+          </VStack>
+        )}
+
+        {post?.references?.length > 0 && (
+          <VStack align="start" pt={8}>
+            <Divider />
+            <Text pt={8} textAlign="left">
+              {wordExtractor(page?.content?.wordings, "referenceHeading")}
+            </Text>
+            {(post?.references ?? []).map(({ label, url = "#" }, index) => {
+              return (
+                <chakra.a href={url} target="_blank" key={index}>
+                  <Button
+                    rightIcon={<ImShare />}
+                    fontWeight="normal"
+                    variant="link"
+                    size="sm"
+                    color="#1E1E1E"
+                  >
+                    {label}
+                  </Button>
+                </chakra.a>
+              );
+            })}
+          </VStack>
+        )}
       </Container>
 
       <Box w="100%">

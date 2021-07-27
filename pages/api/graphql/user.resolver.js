@@ -9,6 +9,7 @@ import { Types } from "mongoose";
 import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
+import apple from "../services/apple";
 
 
 
@@ -100,16 +101,16 @@ export default {
         member: { $elemMatch: { identityId: id } },
       });
 
-      // identity.organizationRole = (organizations ?? []).map((organization) => {
-      //   const member = organization.member.find(
-      //     ({ identityId }) => String(identityId) === String(id)
-      //   );
-      //   return {
-      //     organization,
-      //     status: member.status,
-      //     role: member.role,
-      //   };
-      // });
+      identity.organizationRole = (organizations ?? []).map((organization) => {
+        const member = organization.member.find(
+          ({ identityId }) => String(identityId) === String(id)
+        );
+        return {
+          organization,
+          status: member.status,
+          role: member.role,
+        };
+      });
 
       return identity;
     },
@@ -140,8 +141,10 @@ export default {
        * Send an email with a verification link (md5 token) to inbox.
        */
       try {
-        const emailVerify = await EmailVerify.create({ email });
-        console.log(emailVerify);
+        const emailVerify = await EmailVerify.create({
+          email,
+          meta: { type: "register" },
+        });
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -287,11 +290,28 @@ export default {
           throw new Error("failed to login via google");
         }
 
-        let user = await User.findOne({ facebookId: snsMeta.id }).populate(
+        let user = await User.findOne({ googleId: snsMeta.id }).populate(
           "identities"
         );
         if (!user) {
-          user = await new User({ facebookId: snsMeta.id }).save();
+          user = await new User({ googleId: snsMeta.id }).save();
+        }
+        const { identities, ..._user } = user.toObject();
+        const token = jwt.sign(_user, "shhhhh").toString();
+        user.snsMeta = snsMeta;
+        await user.save();
+        return { token, user };
+      } else if (input.appleToken) {
+        let snsMeta = await apple.getProfile(input.appleToken);
+        if (!snsMeta) {
+          throw new Error("failed to login via apple");
+        }
+
+        let user = await User.findOne({ appleId: snsMeta.id }).populate(
+          "identities"
+        );
+        if (!user) {
+          user = await new User({ appleId: snsMeta.id }).save();
         }
         const { identities, ..._user } = user.toObject();
         const token = jwt.sign(_user, "shhhhh").toString();
@@ -317,17 +337,76 @@ export default {
       return true;
     },
 
-    UserPasswordResetEmailSend: (_parent, { email }) => {
+    UserPasswordResetEmailSend: async (_parent, { email }) => {
       /**
        * Send password reset email with reset link + md5_token
        */
+      try {
+        const emailVerify = await EmailVerify.create({
+          email,
+          meta: { type: "resetPassword" },
+        });
+        let host = process.env.HOST_URL
+          ? process.env.HOST_URL
+          : "http://localhost:3000";
+        await send(
+          email,
+          {
+            url: `${host}/user/password/${emailVerify.token}/reset`,
+            description: "請點擊下列按鈕重設密碼",
+            button_text: "重設密碼",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     },
 
-    UserPasswordReset: (_parent, { token, password }) => {
+    UserPasswordReset: async (_parent, { token, password }) => {
       /**
        * email is decoded from token
        * Verify token and reset password
        */
+      try {
+        const emailVerify = await EmailVerify.findOne({
+          token,
+        });
+
+        console.log(emailVerify);
+
+        const { type } = emailVerify?.meta || {};
+
+        if (type === "resetPassword") {
+          await emailVerify.delete();
+          const user = await User.findOneAndUpdate(
+            { email: emailVerify?.email },
+            {
+              email: emailVerify?.email,
+              password: await User.generateHash(password),
+            },
+            { upsert: true, new: true }
+          );
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
 
     IdentityCreate: async (_parent, { input }) => {
@@ -350,6 +429,7 @@ export default {
         interestedIndustryOther: input?.interestedIndustryOther,
         interestedIndustry: input?.interestedIndustry,
         industry: input?.industry,
+        industryOther: input?.industryOther,
         tncAccept: input.tncAccept,
         profilePic: input?.profilePic,
         bannerMedia: input?.bannerMedia,

@@ -1,4 +1,5 @@
-import { Text, Box, VStack, Wrap, Tag } from "@chakra-ui/react";
+import React from "react";
+import { Text, Box, VStack, Wrap, Tag, Flex, HStack } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -20,8 +21,10 @@ const EmploymentSubSectionViewer = () => {
               present,
               startDatetime,
               endDatetime,
+              jobTitle,
               companyName,
               industry,
+              industryOther,
               employmentType,
             },
             index
@@ -49,7 +52,6 @@ const EmploymentSubSectionViewer = () => {
                   mb={8}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   {present && (
@@ -59,29 +61,40 @@ const EmploymentSubSectionViewer = () => {
                   )}
                   <Wrap color="#666666">
                     <Tag size="sm" fontWeight="normal">
-                      {
-                        enums?.EnumIndustryList?.find((x) => x.key === industry)
-                          ?.value?.[router.locale]
-                      }
+                      {industry === "other" && industryOther
+                        ? industryOther
+                        : enums?.EnumIndustryList?.find(
+                            (x) => x.key === industry
+                          )?.value?.[router.locale]}
                     </Tag>
                     <Text>
-                      {moment(startDatetime).format("MM/YYYY")} -{" "}
+                      {startDatetime &&
+                        `${moment(startDatetime).format("YYYY/MM")} - `}
                       {present
-                        ? moment(endDatetime).format("MM/YYYY")
-                        : wordExtractor(
+                        ? wordExtractor(
                             page?.content?.wordings,
                             "present_label"
-                          )}
+                          )
+                        : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>
-                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">{companyName}</Text>
-                  <Text fontSize={"md"} color="#666666">
-                    {
-                      enums?.EnumEmploymentModeList?.find(
-                        (x) => x.key === employmentType
-                      )?.value?.[router.locale]
-                    }
+                  <Text pt={2} fontSize={"md"} fontFamily="SFNSDisplay">
+                    {jobTitle}
                   </Text>
+                  <HStack>
+                    <Text fontSize={"md"} color="#666666">
+                      {companyName}
+                    </Text>
+                    {employmentType !== "unselected" && (
+                      <Tag size="sm" fontWeight="normal">
+                        {
+                          enums?.EnumEmploymentModeList?.find(
+                            (x) => x.key === employmentType
+                          )?.value?.[router.locale]
+                        }
+                      </Tag>
+                    )}
+                  </HStack>
                 </VStack>
               </Box>
             );

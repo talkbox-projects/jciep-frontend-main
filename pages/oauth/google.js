@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { useEffect } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
@@ -32,7 +33,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const googleLogin = ({ page }) => {
+const GoogleLogin = ({ page }) => {
   const router = useRouter();
   const { accessToken } = router.query;
   const [setCredential] = useCredential();
@@ -47,6 +48,10 @@ const googleLogin = ({ page }) => {
               user {
                 id
                 email
+                phone
+                facebookId
+                googleId
+                appleId
                 snsMeta {
                   profilePicUrl
                   displayName
@@ -64,6 +69,7 @@ const googleLogin = ({ page }) => {
                   interestedIndustry
                   interestedIndustryOther
                   industry
+                  industryOther
                   tncAccept
                   published
                   email
@@ -116,6 +122,7 @@ const googleLogin = ({ page }) => {
                     companyName
                     jobTitle
                     industry
+                    industryOther
                     startDatetime
                     endDatetime
                     present
@@ -144,9 +151,9 @@ const googleLogin = ({ page }) => {
         if (data?.UserLogin) {
           const user = data?.UserLogin?.user;
           if (user?.identities?.length === 0) {
-            router.push("/user/identity/select");
+            router.replace("/user/identity/select");
           } else {
-            router.push("/");
+            router.replace("/");
           }
         }
       } catch (e) {
@@ -155,7 +162,7 @@ const googleLogin = ({ page }) => {
     })();
 
     console.log(accessToken);
-  }, [accessToken]);
+  }, [accessToken, router, setCredential]);
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
@@ -177,6 +184,6 @@ const googleLogin = ({ page }) => {
   );
 };
 
-export default withPageCMS(googleLogin, {
+export default withPageCMS(GoogleLogin, {
   key: PAGE_KEY,
 });

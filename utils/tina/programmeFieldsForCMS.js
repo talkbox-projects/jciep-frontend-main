@@ -6,13 +6,35 @@ export default [
     label: "頁面橫幅區塊 Hero Banner Setion",
     component: "group",
     fields: [
+      // {
+      //   label: "Hero Image 圖片",
+      //   name: "image",
+      //   component: "image",
+      //   uploadDir: () => "/programme",
+      //   parse: ({ previewSrc }) => previewSrc,
+      //   previewSrc: (src) => src,
+      // },
       {
-        label: "Hero Image 圖片",
-        name: "image",
-        component: "image",
-        uploadDir: () => "/programme",
-        parse: ({ previewSrc }) => previewSrc,
-        previewSrc: (src) => src,
+        label: "Slider Image 圖片",
+        name: "sliderImage",
+        component: "group-list",
+        itemProps: ({ id: key, name: label }) => ({
+          key,
+          label,
+        }),
+        defaultItem: () => ({
+          id: Math.random().toString(36).substr(2, 9),
+        }),
+        fields: [
+          {
+            label: "Image 圖片",
+            name: "image",
+            component: "image",
+            uploadDir: () => "/programme",
+            parse: ({ previewSrc }) => previewSrc,
+            previewSrc: (src) => src,
+          },
+        ],
       },
       {
         name: "title 標題",
@@ -107,6 +129,30 @@ export default [
         uploadDir: () => "/programme",
         parse: ({ previewSrc }) => previewSrc,
         previewSrc: (src) => src,
+      },
+      {
+        name: "planSection",
+        label: "計晝目標 Plan Section",
+        component: "group",
+        fields: [
+          {
+            name: "title",
+            label: "Title 標題",
+            component: "text",
+          },
+        ],
+      },
+      {
+        name: "serviceTarget",
+        label: "服務對象 Service Target Section",
+        component: "group",
+        fields: [
+          {
+            name: "title",
+            label: "Title 標題",
+            component: "text",
+          },
+        ],
       },
       {
         name: "serviceSection",
@@ -288,6 +334,14 @@ export default [
               {
                 label: "圖標 Logo",
                 name: "logo",
+                component: "image",
+                uploadDir: () => "/programme",
+                parse: ({ previewSrc }) => previewSrc,
+                previewSrc: (src) => src,
+              },
+              {
+                label: "水印 Watermark",
+                name: "watermark",
                 component: "image",
                 uploadDir: () => "/programme",
                 parse: ({ previewSrc }) => previewSrc,

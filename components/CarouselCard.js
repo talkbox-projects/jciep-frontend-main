@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import {
   Box,
@@ -25,12 +26,18 @@ const TextTool = ({
   hover,
   share,
   bold,
-  className= "",
-  minHeight="auto",
+  className = "",
+  minHeight = "auto",
   small,
 }) => {
   return (
-    <Text pt={pt} className={className} color="#1E1E1E" whiteSpace="pre-line" minHeight={minHeight}>
+    <Text
+      pt={pt}
+      className={className}
+      color="#1E1E1E"
+      whiteSpace="pre-line"
+      minHeight={minHeight}
+    >
       {link && (
         <chakra.span
           _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
@@ -118,7 +125,6 @@ const Card = ({
               hover
               className="carousel-card-header"
               bold
-              
               share={true}
             />
             <Divider />
@@ -153,7 +159,7 @@ const Card = ({
               />
             </HStack>
             <Divider />
-            <Box w="100%" minH="350px">
+            <Box w="100%">
               <UnorderedList m={0} pt="8px">
                 <HStack spacing="5px">
                   <Image
@@ -232,59 +238,62 @@ const Card = ({
                   />
                 </HStack>
               )}
-              <UnorderedList pt="8px" m={0} listStyleType="none">
-                <HStack spacing="5px">
-                  <Image
-                    w="24px"
-                    h="24px"
-                    src={
-                      page?.content?.resourceSection?.resourceListIcons?.tick
-                    }
-                  />
+              {subsidy?.length > 0 && (
+                <UnorderedList pt="8px" m={0} listStyleType="none">
+                  <HStack spacing="5px">
+                    <Image
+                      w="24px"
+                      h="24px"
+                      src={
+                        page?.content?.resourceSection?.resourceListIcons?.tick
+                      }
+                    />
 
-                  <TextTool
-                    text={wordExtractor(
-                      page?.content?.wordings,
-                      "fundingHeading"
-                    )}
-                    fontSize="16px"
-                  />
-                </HStack>
-                {(subsidy ?? []).map(({ target, description }, index) => {
-                  return (
-                    <ListItem
-                      display="flex"
-                      _before={{
-                        content: '"."',
-                        color: "black",
-                        pr: "6px",
-                        fontWeight: "bold",
-                        fontSize: "12px",
-                      }}
-                      key={index}
-                      ml="40px"
-                    >
-                      <TextTool
-                        text={wordExtractor(
-                          page?.content?.wordings,
-                          "target_" + target
-                        )}
-                        description={description}
-                        fontSize="12px"
-                        small
-                      />
-                    </ListItem>
-                  );
-                })}
-              </UnorderedList>
+                    <TextTool
+                      text={wordExtractor(
+                        page?.content?.wordings,
+                        "fundingHeading"
+                      )}
+                      fontSize="16px"
+                    />
+                  </HStack>
+                  {(subsidy ?? []).map(({ target, description }, index) => {
+                    return (
+                      <ListItem
+                        display="flex"
+                        _before={{
+                          content: '"."',
+                          color: "black",
+                          pr: "6px",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                        key={index}
+                        ml="40px"
+                      >
+                        <TextTool
+                          text={wordExtractor(
+                            page?.content?.wordings,
+                            "target_" + target
+                          )}
+                          description={description}
+                          fontSize="12px"
+                          small
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </UnorderedList>
+              )}
             </Box>
             <MotionBox
               overflow="hidden"
-              animate={{ height: show ? "auto" : 0 }}
+              height={0}
               transition={{ duration: 0.5 }}
               alignItems="start"
               spacing={0}
               w="100%"
+              {...(show && { animate: { height: "auto" } })}
             >
               <Divider />
               <HStack pt="8px" spacing="5px" align="start">
@@ -355,11 +364,9 @@ const Card = ({
             mt="10px"
             fontSize="16px"
           >
-            {
-              show  ? 
-              wordExtractor(page?.content?.wordings, "showLess")
-              : wordExtractor(page?.content?.wordings, "showMore")
-            }
+            {show
+              ? wordExtractor(page?.content?.wordings, "showLess")
+              : wordExtractor(page?.content?.wordings, "showMore")}
           </Text>
         </Box>
       </Box>

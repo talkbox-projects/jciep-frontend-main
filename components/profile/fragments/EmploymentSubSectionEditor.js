@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Box,
@@ -11,7 +12,7 @@ import {
   FormHelperText,
   Button,
   SimpleGrid,
-  GridItem
+  GridItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Controller, useFieldArray } from "react-hook-form";
@@ -21,7 +22,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
 import MonthPicker from "./MonthPicker";
 
-const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
+const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
   const router = useRouter();
   const { page, enums } = IdentityProfileStore.useContext();
   const { fields, append, remove, insert } = useFieldArray({
@@ -43,6 +44,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
               companyName,
               employmentType,
               industry,
+              industryOther,
               present,
               startDatetime,
               endDatetime,
@@ -55,19 +57,23 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
               companyName,
               employmentType,
               industry,
+              industryOther,
               present,
               startDatetime,
               endDatetime,
             });
-            const errors = {}
+            const errors = {};
             errors?.employment?.[index];
             const prefix = `employment[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
+
+            const isCurrent = watch(`${prefix}.present`);
+            const isIndustryOther = watch(`${prefix}.industry`) === "other";
             return (
               <Box
-                pl={[0,2]}
+                pl={[0, 2]}
                 key={id}
-                borderLeftColor={["transparent","#eee"]}
+                borderLeftColor={["transparent", "#eee"]}
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -77,15 +83,14 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                   left={"-5px"}
                   h={"8px"}
                   w={"8px"}
-                  bgColor={["transparent",borderColor]}
+                  bgColor={["transparent", borderColor]}
                 />
                 <VStack
-                  pl={[0,2]}
+                  pl={[0, 2]}
                   mt={-3}
                   mb={12}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   <HStack alignSelf="flex-end" pt={2}>
@@ -150,12 +155,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                       {...register(`${prefix}.industry`, {})}
                       defaultValue={industry}
                     >
-                      <option key={"unselected"} value={""}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                      </option>
                       {(enums?.EnumIndustryList ?? []).map(
                         ({
                           key: value,
@@ -173,6 +172,32 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                       {errors?.industry?.message}
                     </FormHelperText>
                   </FormControl>
+                  {isIndustryOther && (
+                    <FormControl
+                      as={HStack}
+                      align="center"
+                      isInvalid={errors?.industryOther?.message}
+                    >
+                      <FormLabel
+                        w={24}
+                        fontSize="sm"
+                        color="#999"
+                        mb={0}
+                      ></FormLabel>
+                      <Input
+                        variant="flushed"
+                        {...register(`${prefix}.industryOther`, {})}
+                        defaultValue={industryOther}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "employment_industry_other_placeholder"
+                        )}
+                      />
+                      <FormHelperText color="red">
+                        {errors?.industryOther?.message}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
                   <FormControl
                     as={HStack}
                     align="center"
@@ -189,12 +214,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                       {...register(`${prefix}.employmentType`, {})}
                       defaultValue={employmentType}
                     >
-                      <option key={"unselected"} value={""}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                      </option>
                       {(enums?.EnumEmploymentModeList ?? []).map(
                         ({
                           key: value,
@@ -235,12 +254,16 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                   <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
                     <GridItem>
                       <FormControl
-
                         as={HStack}
                         align="center"
                         isInvalid={errors?.industry?.message}
                       >
-                        <FormLabel w={[24, 24, 32]} fontSize="sm" color="#999" mb={0}>
+                        <FormLabel
+                          w={[24, 24, 32]}
+                          fontSize="sm"
+                          color="#999"
+                          mb={0}
+                        >
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_employment_startDatetime"
@@ -276,17 +299,19 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
                           control={control}
                           defaultValue={endDatetime}
                           render={({ field }) => (
-                            <MonthPicker page={page} {...field} />
+                            <MonthPicker
+                              page={page}
+                              {...field}
+                              isDisabled={isCurrent}
+                            />
                           )}
                         />
                         <FormHelperText color="red">
                           {errors?.endDatetime?.message}
                         </FormHelperText>
                       </FormControl>
-
                     </GridItem>
                   </SimpleGrid>
-
 
                   <FormControl
                     pt={2}
@@ -316,7 +341,11 @@ const EmploymentSubSectionEditor = ({ form: { register, control } }) => {
           }
         )}
         {
-          <Box pl={[0,2]} borderLeftColor={["transparent","#eee"]} borderLeftWidth={2}>
+          <Box
+            pl={[0, 2]}
+            borderLeftColor={["transparent", "#eee"]}
+            borderLeftWidth={2}
+          >
             <Button
               my={4}
               px={2}

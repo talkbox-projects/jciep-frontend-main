@@ -23,7 +23,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 const OrganizationMemberJoinModal = ({
   isOpen,
   onClose,
-  params: { onSubmit, page } = {},
+  params: { onSubmit, page, organizationType } = {},
 }) => {
   const {
     formState: { errors, isSubmitting },
@@ -68,7 +68,7 @@ const OrganizationMemberJoinModal = ({
                     try {
                       const valid = await OrganizationInvitationCodeValidity({
                         invitationCode,
-                        organizationType: "employment",
+                        organizationType,
                       });
                       if (!valid) {
                         return wordExtractor(

@@ -12,6 +12,7 @@ import {
   IconButton,
   Box,
 } from "@chakra-ui/react";
+import React from "react";
 import { useRouter } from "next/router";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -64,7 +65,7 @@ const OrganizationMemberListSection = () => {
                         page,
                         onSubmit: async (e) => {
                           try {
-                            const data = await OrganizationMemberRemove({
+                            await OrganizationMemberRemove({
                               organizationId: organization?.id,
                               identityId: identityId,
                             });
@@ -92,7 +93,7 @@ const OrganizationMemberListSection = () => {
                         page,
                         onSubmit: async (e) => {
                           try {
-                            const data = await OrganizationMemberApprove({
+                            await OrganizationMemberApprove({
                               organizationId: organization?.id,
                               identityId: identityId,
                             });
@@ -125,7 +126,7 @@ const OrganizationMemberListSection = () => {
                         page,
                         onSubmit: async (e) => {
                           try {
-                            const data = await OrganizationMemberRemove({
+                            await OrganizationMemberRemove({
                               organizationId: organization?.id,
                               identityId: identityId,
                             });
@@ -149,9 +150,16 @@ const OrganizationMemberListSection = () => {
 
             return (
               <HStack
+                key={identity?.id}
                 {...(identity?.id && {
                   onClick: () => {
-                    router.push(`/user/identity/${identity.id}`);
+                    if (editable) {
+                      router.push(`/user/identity/${identity.id}`);
+                    } else {
+                      router.push(
+                        `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
+                      );
+                    }
                   },
                   _hover: {
                     bg: "#fafafa",
@@ -196,7 +204,6 @@ const OrganizationMemberListSection = () => {
                           variant="link"
                           as={IoEllipsisVertical}
                           size="xs"
-                          fontSize="xs"
                         />
                       </MenuButton>
                       <MenuList>{availableOperations}</MenuList>

@@ -1,9 +1,9 @@
 export default {
+  unselected: { en: "(N/A)", zh: "沒指定" },
   graphicDesign: { en: "Graphic design", zh: "平面設計" },
   illustrationDrawing: { en: "Illustration drawing", zh: "插畫繪製" },
   animationDesign: { en: "Animation design", zh: "動畫設計" },
   webDesign: { en: "Web Design", zh: "網頁設計" },
-  other: { en: "Other", zh: "其他" },
   photography: { en: "Photography", zh: "攝影" },
   filmmaking: { en: "Filmmaking", zh: "影片製作" },
   musicSoundDesign: { en: "Music/sound design", zh: "音樂/音效設計" },
@@ -69,4 +69,5 @@ export default {
   beautyService: { en: "Beauty service", zh: "美容服務" },
   professionalGrade: { en: "Professional grade", zh: "專業職系" },
   medicalAssistant: { en: "Medical assistant", zh: "醫務助理" },
+  other: { en: "Other", zh: "其他" },
 };

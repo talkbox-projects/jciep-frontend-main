@@ -37,6 +37,7 @@ export default gql`
     companyName: String
     jobTitle: String
     industry: EnumIndustry
+    industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -63,6 +64,7 @@ export default gql`
     companyName: String
     jobTitle: String
     industry: EnumIndustry
+    industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
     present: Boolean
@@ -88,6 +90,7 @@ export default gql`
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
     industry: [EnumIndustry]
+    industryOther: String
     tncAccept: Boolean
     published: Boolean
 
@@ -130,6 +133,7 @@ export default gql`
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
     industry: [EnumIndustry]
+    industryOther: String
     tncAccept: Boolean
     published: Boolean
     email: String
@@ -171,6 +175,7 @@ export default gql`
     interestedIndustry: [EnumIndustry]
     interestedIndustryOther: String
     industry: [EnumIndustry]
+    industryOther: String
     tncAccept: Boolean
     published: Boolean
     email: String

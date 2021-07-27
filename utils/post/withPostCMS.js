@@ -22,6 +22,7 @@ const withPostCMS =
             label: "後綴路由 Slug",
             component: "text",
             description: "This post route would be /sharing/{slug}",
+            validate: (value) => !!value || "Please enter 後綴路由 Slug",
           },
           {
             name: "lang",
@@ -158,6 +159,11 @@ const withPostCMS =
               {
                 name: "persona",
                 label: "人物/機構 Person/Organization",
+                component: "text",
+              },
+              {
+                name: "tagline",
+                label: "標題 Tagline",
                 component: "text",
               },
             ],

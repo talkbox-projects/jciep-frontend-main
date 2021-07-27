@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import DividerSimple from "../../../components/DividerSimple";
 import { useRouter } from "next/router";
 import { getConfiguration } from "../../../utils/configuration/getConfiguration";
@@ -9,8 +9,6 @@ import {
   Box,
   Text,
   Image,
-  chakra,
-  Heading,
   Accordion,
   AccordionItem,
   AccordionButton,
@@ -18,13 +16,12 @@ import {
   Icon,
   Tooltip,
   Divider,
-  IconButton,
+  Button,
+  Wrap,
 } from "@chakra-ui/react";
 import { SimpleGrid, GridItem } from "@chakra-ui/layout";
-import { VStack, Flex, HStack, Stack } from "@chakra-ui/layout";
+import { VStack, HStack, Stack } from "@chakra-ui/layout";
 import MultiTextRenderer from "../../../components/MultiTextRenderer";
-import Accordian from "./../../../components/Acordian";
-import wordExtractor from "../../../utils/wordExtractor";
 import {
   AiOutlineInfoCircle,
   AiOutlineMinus,
@@ -33,10 +30,11 @@ import {
 import Container from "../../../components/Container";
 import ApostropheHeadline from "../../../components/ApostropheHeadline";
 import HighlightHeadline from "../../../components/HighlightHeadline";
-import DividerTriple from "../../../components/DividerTriple";
 import DividerA from "../../../components/DividerA";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import Slider from "react-slick";
+import { SRLWrapper, useLightbox } from "simple-react-lightbox";
+import { useCMS } from "tinacms";
+import wordExtractor from "../../../utils/wordExtractor";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -46,6 +44,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      isShowLangSwitcher: true,
       wordings: await getConfiguration({
         key: "wordings",
         lang: context.locale,
@@ -61,7 +60,9 @@ export const getServerSideProps = async (context) => {
 };
 
 const Partner = ({ page }) => {
+  const cms = useCMS();
   const router = useRouter();
+  const { openLightbox } = useLightbox();
   const slug = router.query.slug;
   const partner = (page?.content?.partnerSection?.partners ?? [])?.find(
     (x) => x.slug === slug
@@ -74,7 +75,11 @@ const Partner = ({ page }) => {
     dots: false,
     speed: 500,
     slidesToShow: 1,
+    beforeChange: (oldIndex, newIndex) => setSliderIndex(newIndex),
   };
+
+  const [sliderIndex, setSliderIndex] = useState(0);
+
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
       {/* First Section */}
@@ -86,6 +91,11 @@ const Partner = ({ page }) => {
         position="relative"
         overflow="hidden"
       >
+        <SRLWrapper
+          elements={(partner?.sliderImage ?? []).map(({ image }) => ({
+            src: image,
+          }))}
+        />
         <Slider {...settings}>
           {(partner?.sliderImage ?? []).map(({ image }, index) => {
             return (
@@ -107,29 +117,80 @@ const Partner = ({ page }) => {
           w="100%"
         >
           <Container>
-            <Box pb={16}>
+            <Box pb={[0, 16]}>
               <VStack mx={8} align="start" spacing={0}>
                 <Box>
                   <Text
                     fontWeight={900}
                     bgColor="#F6D644"
-                    fontSize={["24px", "40px"]}
-                    children={partner?.agencyName}
-                  />
+                    fontSize={["24px", "56px"]}
+                  >
+                    {partner?.agencyName}
+                  </Text>
                 </Box>
-                {/* <Box>
-                  <Text
-                    bgColor="#F6D644"
-                    fontSize={["24px", "40px"]}
-                    children={partner?.projectName}
-                  />
-                </Box> */}
+                <Box pt={4}>
+                  <Button
+                    borderRadius="full"
+                    bg="black"
+                    color="white"
+                    _hover={{ bg: "#333333" }}
+                    _active={{ bg: "#666666" }}
+                    onClick={() => openLightbox(sliderIndex)}
+                  >
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "banner_showImages"
+                    )}
+                  </Button>
+                </Box>
               </VStack>
             </Box>
           </Container>
           <DividerSimple />
         </VStack>
       </Box>
+
+      {/* <Box bgColor="#fafafa" w="100%">
+        <Container>
+          <Flex w="100%" justify="flex-end">
+            {router.locale === "zh" ? (
+              <Button
+                value={"en"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                Display english version
+              </Button>
+            ) : (
+              <Button
+                value={"zh"}
+                onClick={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+                variant="link"
+                color="black"
+              >
+                顯示為中文
+              </Button>
+            )}
+          </Flex>
+        </Container>
+      </Box> */}
 
       {/* Plan Section */}
       <Box
@@ -148,28 +209,22 @@ const Partner = ({ page }) => {
           pb={[16, 16, 16, 24]}
         >
           <VStack spacing={8}>
-         
             <HighlightHeadline bgColor={"#F6D644"}>
-                {partner?.projectName}
-              </HighlightHeadline>
-            <Text 
-            
-              fontWeight={900}
-              fontSize={["24px", "40px"]}
-              children={partner?.agencyName}>
-            
+              {partner?.projectName}
+            </HighlightHeadline>
+            <Text fontWeight={900} fontSize={["24px", "40px"]}>
               {page?.content?.partnerSection?.planSection?.title}
             </Text>
             <SimpleGrid
               px={[1, 8, 4, 4]}
               py={[4, 16]}
               justifyContent="center"
-              columns={[1, 1, 4, 4]}
+              columns={[1, 1, 1, 2]}
               spacing={8}
             >
               {(partner?.projectObjective ?? []).map(({ content }, index) => {
                 return (
-                  <GridItem  key={index}>
+                  <GridItem key={index}>
                     <Stack
                       w="100%"
                       spacing={[8, 8, 4]}
@@ -333,12 +388,12 @@ const Partner = ({ page }) => {
                 {page?.content?.partnerSection?.serviceTarget?.title}
               </HighlightHeadline>
             </Box>
-            <SimpleGrid justifyContent="center"  gap={12} columns={[2, 2, 4, 4]}>
+            <Wrap justify="center" spacing={12}>
               {(partner?.serviceTargets ?? []).map(
                 ({ label, description, image }, index) => {
                   return (
-                    <VStack key={index}>
-                      <Image w="200px" src={image} />
+                    <VStack key={index} maxW={["35%", "35%", "35%", "20%"]}>
+                      <Image minW={["100px", "200px"]} src={image} />
                       <Text
                         textAlign="center"
                         w={["100%", "100%", "150px"]}
@@ -358,7 +413,7 @@ const Partner = ({ page }) => {
                   );
                 }
               )}
-            </SimpleGrid>
+            </Wrap>
           </VStack>
         </Container>
       </Box>

@@ -116,6 +116,7 @@ export default {
       { invitationCode, organizationType }
     ) => {
       try {
+        console.log({ invitationCode, organizationType });
         return await Organization.exists({
           invitationCode,
           organizationType,
@@ -240,6 +241,8 @@ export default {
        */
 
       input.updateAt = new Date();
+
+      const submission = await OrganizationSubmission.findById(input?.id);
 
       if (["approved", "rejected"].includes(input?.status)) {
         input.vettedAt = new Date();

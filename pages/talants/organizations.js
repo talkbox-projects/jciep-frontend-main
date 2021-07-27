@@ -51,13 +51,11 @@ export const getServerSideProps = async (context) => {
 const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
   const router = useRouter();
 
-  const organizationId = router.query.organizationId ?? organizations?.[0].id;
+  const organizationId = router.query.organizationId ?? organizations?.[0]?.id;
 
   const organization = organizations?.find((x) => {
     return x.id === organizationId;
   });
-
-  console.log(organization);
 
   const details = (
     <OrganizationProfileStore.Provider

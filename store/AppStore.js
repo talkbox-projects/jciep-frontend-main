@@ -1,14 +1,13 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import nookies, { destroyCookie, setCookie } from "nookies";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
-import { useCredential } from "../utils/user";
-import { updateIf } from "../utils/general";
 import { useCMS } from "tinacms";
+import { updateIf } from "../utils/general";
+import { useRouter } from "next/router";
 
-export const useDisclosureWithParams = () => {
-  const disclosure = useDisclosure();
+export const useDisclosureWithParams = (props) => {
+  const disclosure = useDisclosure(props);
   const [params, setParams] = useState({});
 
   const onOpen = useCallback(
@@ -16,17 +15,18 @@ export const useDisclosureWithParams = () => {
       setParams(params);
       disclosure.onOpen();
     },
-    [disclosure.onOpen]
+    [disclosure]
   );
   const onClose = useCallback(() => {
     setParams({});
     disclosure.onClose();
-  }, [disclosure.onClose]);
+  }, [disclosure]);
 
   return { ...disclosure, onOpen, onClose, params };
 };
 
 const [AppProvider, useAppContext] = constate((props) => {
+  const router = useRouter();
   const _wordings = useWordingLists({
     lists: [
       {
@@ -53,6 +53,10 @@ const [AppProvider, useAppContext] = constate((props) => {
         name: "emailVerifySent",
         label: "Email Verify Sent Modal (emailVerifySent)",
       },
+      {
+        name: "resentPassword",
+        label: "Reset Password Modal (resentPassword)",
+      },
     ],
     key: "wordings",
     initialValue: props?.wordings?.value,
@@ -74,10 +78,15 @@ const [AppProvider, useAppContext] = constate((props) => {
     );
   }, [_wordings]);
 
-  const loginModalDisclosure = useDisclosureWithParams();
-  const registerModalDisclosure = useDisclosureWithParams();
+  const loginModalDisclosure = useDisclosureWithParams({
+    defaultIsOpen: !!router?.query?.login,
+  });
+  const registerModalDisclosure = useDisclosureWithParams({
+    defaultIsOpen: !!router?.query?.register,
+  });
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
+  const resetPasswordModalDisclosure = useDisclosureWithParams();
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
@@ -97,7 +106,7 @@ const [AppProvider, useAppContext] = constate((props) => {
       cms.enable();
       // cms.disable();
     }
-  }, [identity]);
+  }, [cms, identity]);
 
   const updateIdentity = useCallback((id, updater) => {
     setUser((user) => {
@@ -122,6 +131,7 @@ const [AppProvider, useAppContext] = constate((props) => {
     registerModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
+    resetPasswordModalDisclosure,
     user,
     setUser,
     isLoggedIn,

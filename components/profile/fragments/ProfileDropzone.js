@@ -1,6 +1,6 @@
+import React from "react";
 import {
   Image,
-  AspectRatio,
   Icon,
   Text,
   VStack,
@@ -15,23 +15,32 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { RiCloseCircleFill } from "react-icons/ri";
 
-const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
+const ProfileDropzone = ({
+  multiple = false,
+  page,
+  value,
+  onChange,
+  isUpload = true,
+}) => {
   const toast = useToast();
 
   const getDropErrorCodeMsg = (errCode) => {
     switch (errCode) {
       case "file-invalid-type":
-        return wordExtractor(
-          page?.content?.wordings,
-          "dropzone_error_invalid_type"
-        );
+        return "不支援的檔案類別，請上載PNG、JPG、PDF";
+      // return wordExtractor(
+      //   page?.content?.wordings,
+      //   "dropzone_error_invalid_type"
+      // );
       case "file-too-large":
-        return wordExtractor(
-          page?.content?.wordings,
-          "dropzone_error_file_too_large"
-        );
+        // return wordExtractor(
+        //   page?.content?.wordings,
+        //   "dropzone_error_file_too_large"
+        // );
+        return "檔案大小不能超過 1 MB";
       default:
-        return wordExtractor(page?.content?.wordings, "dropzone_error_general");
+        // return wordExtractor(page?.content?.wordings, "dropzone_error_general");
+        return "不支援的檔案類別";
     }
   };
 
@@ -42,22 +51,24 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
     onDrop: async (files) => {
       try {
         if (files?.length === 0) return;
-        const mutation = gql`
-          mutation FileUpload($files: FileUpload!) {
-            FileUpload(files: $files) {
-              id
-              url
-              contentType
-              fileSize
+        if (isUpload) {
+          const mutation = gql`
+            mutation FileUpload($files: FileUpload!) {
+              FileUpload(files: $files) {
+                id
+                url
+                contentType
+                fileSize
+              }
             }
-          }
-        `;
-        const variables = {
-          files,
-        };
+          `;
+          const variables = {
+            files,
+          };
 
-        const data = await getGraphQLClient().request(mutation, variables);
-        onChange(data?.FileUpload?.[0]);
+          const data = await getGraphQLClient().request(mutation, variables);
+          onChange(data?.FileUpload?.[0]);
+        } else onChange(files);
       } catch (e) {
         console.error(e);
       }
@@ -107,7 +118,7 @@ const ProfileDropzone = ({ multiple = false, page, value, onChange }) => {
           </>
         ) : (value?.contentType ?? "").startsWith("image") ? (
           <>
-            <Image src={value?.url} />
+            <Image src={value?.url} w="100%" />
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();

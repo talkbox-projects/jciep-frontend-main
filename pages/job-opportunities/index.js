@@ -1,3 +1,4 @@
+import React, { useCallback } from "react";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
@@ -19,13 +20,14 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
-const PAGE_KEY = "jobOpportunities";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { useCallback } from "react";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { htmlStyles } from "../../utils/general";
+
+const PAGE_KEY = "jobOpportunities";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -57,7 +59,7 @@ const JobOpportunities = ({ page }) => {
         (location, index, arr) =>
           `${location}${index === arr.length - 1 ? "" : "，"}` // FIXME: comma for chinese / eng
       ),
-    [page, wordExtractor]
+    [page]
   );
 
   const jobFunctionRenderer = useCallback(
@@ -67,8 +69,12 @@ const JobOpportunities = ({ page }) => {
           wordExtractor(page?.content?.wordings, `jobFunction_${key}`)
         ),
         ...(job?.otherJobFunction ? [job?.otherJobFunction] : []),
-      ].map((jobFunction) => <Tag rounded="full">{jobFunction}</Tag>),
-    [page, wordExtractor]
+      ].map((jobFunction, i) => (
+        <Tag key={i} rounded="full">
+          {jobFunction}
+        </Tag>
+      )),
+    [page]
   );
 
   const jobIndustryRenderer = useCallback(
@@ -131,9 +137,7 @@ const JobOpportunities = ({ page }) => {
         <Wrap>{jobFunctionRenderer(job)}</Wrap>
         <Box
           sx={{
-            "ul, ol": {
-              px: 4,
-            },
+            ...htmlStyles,
             li: {
               listStyle: "none",
               pb: 2,
@@ -195,9 +199,7 @@ const JobOpportunities = ({ page }) => {
         </Box>
         <Box
           sx={{
-            "ul, ol": {
-              px: 4,
-            },
+            ...htmlStyles,
             li: {
               listStyle: "none",
               pb: 2,

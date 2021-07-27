@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, HStack } from "@chakra-ui/layout";
 import wordListFieldsForCMS from "../utils/tina/wordListFieldsForCMS";
 import NextLink from "next/link";
@@ -26,13 +27,10 @@ import {
   DrawerOverlay,
   PopoverBody,
   LinkOverlay,
-  Stack,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  CloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
@@ -50,9 +48,14 @@ import { gql } from "graphql-request";
 import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
-import { IoWarning } from "react-icons/io5";
+// import { IoWarning } from "react-icons/io5";
+import ResetPasswordModal from "./ResetPasswordModal";
 
-const Header = ({ navigation, isLangAvailable }) => {
+const Header = ({
+  navigation,
+  isLangAvailable,
+  isShowLangSwitcher = false,
+}) => {
   const getWording = useGetWording();
   const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
 
@@ -69,9 +72,9 @@ const Header = ({ navigation, isLangAvailable }) => {
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
 
-  const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
-    !isLangAvailable
-  );
+  // const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
+  //   !isLangAvailable
+  // );
 
   const tabIndex = useMemo(() => {
     const kv = {
@@ -129,6 +132,7 @@ const Header = ({ navigation, isLangAvailable }) => {
             UserGet(token: $token) {
               id
               email
+              phone
               facebookId
               googleId
               appleId
@@ -149,6 +153,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                 interestedIndustry
                 interestedIndustryOther
                 industry
+                industryOther
                 tncAccept
                 published
                 email
@@ -201,6 +206,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                   companyName
                   jobTitle
                   industry
+                  industryOther
                   startDatetime
                   endDatetime
                   present
@@ -254,13 +260,13 @@ const Header = ({ navigation, isLangAvailable }) => {
     router.push("/");
   }, [router, removeCredential]);
 
-  useEffect(() => {
-    if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
-  }, [router, setIsShowLangUnavailable, isLangAvailable]);
+  // useEffect(() => {
+  //   if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
+  // }, [router, setIsShowLangUnavailable, isLangAvailable]);
 
   return (
     <Box>
-      {!isLangAvailable && isShowLangUnavailable && (
+      {/* {!isLangAvailable && isShowLangUnavailable && (
         <Box
           borderBottom="1px"
           borderColor="rgb(239,239,239)"
@@ -286,18 +292,18 @@ const Header = ({ navigation, isLangAvailable }) => {
             </HStack>
           </Container>
         </Box>
-      )}
+      )} */}
       <Box
-        d={["none", "none", "block", "block"]}
+        d={["none", "none", "none", "block"]}
         bg="white"
         position="fixed"
-        top={isShowLangUnavailable ? 20 : 0}
+        // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         zIndex={100}
         h={12}
       >
         <Container>
-          <HStack py={2} fontSize="sm" alignItems="center">
+          <HStack py={2} fontSize="sm" alignItems="center" spacing={4}>
             {identity?.type === "admin" && (
               <Menu>
                 <MenuButton>
@@ -316,32 +322,41 @@ const Header = ({ navigation, isLangAvailable }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
+            {isShowLangSwitcher && (
+              <Select
+                border="none"
+                size="sm"
+                w={16}
+                variant="flushed"
+                value={router.locale}
+                onChange={(e) => {
+                  if (cms.enabled) {
+                    window.location.href = `/${e.target.value}${router.asPath}`;
+                  } else {
+                    router.push(router.pathname, router.pathname, {
+                      locale: e.target.value,
+                    });
+                  }
+                }}
+              >
+                <option value="zh">繁</option>
+                <option value="en">EN</option>
+              </Select>
+            )}
+            <NextLink href="/text-size" passHref>
+              <Link fontSize="sm">
+                {getWording("header.font_size_level_label")}
+              </Link>
+            </NextLink>
             <Text>
-              {
-                (navigation.social ?? []).map(({icon, url}) => {
-                  return <a href={url}><Image display="inline-flex" height="25px" src={icon}/></a>
-                })
-              }
+              {(navigation.social ?? []).map(({ icon, url }, i) => {
+                return (
+                  <a key={i} href={url}>
+                    <Image display="inline-flex" height="25px" src={icon} />
+                  </a>
+                );
+              })}
             </Text>
-            <Select
-              border="none"
-              size="sm"
-              w={16}
-              variant="flushed"
-              value={router.locale}
-              onChange={(e) => {
-                if (cms.enabled) {
-                  window.location.href = `/${e.target.value}${router.asPath}`;
-                } else {
-                  router.push(router.pathname, router.pathname, {
-                    locale: e.target.value,
-                  });
-                }
-              }}
-            >
-              <option value="zh">繁</option>
-              <option value="en">EN</option>
-            </Select>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 <Avatar size="xs"></Avatar>
@@ -418,9 +433,11 @@ const Header = ({ navigation, isLangAvailable }) => {
                         </Link>
                         <Divider />
                         <VStack mt={2} align="stretch" spacing={2}>
-                          <Link onClick={registerModalDisclosure.onOpen}>
-                            {getWording("header.account_setting_label")}
-                          </Link>
+                          <NextLink passHref href="/user/account">
+                            <Link>
+                              {getWording("header.account_setting_label")}
+                            </Link>
+                          </NextLink>
                           <Link onClick={onLogout}>
                             {getWording("header.logout_label")}
                           </Link>
@@ -444,9 +461,11 @@ const Header = ({ navigation, isLangAvailable }) => {
             borderWidth={1}
             pr={6}
           >
-            <LinkOverlay as={NextLink} href="/home">
-              <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
-            </LinkOverlay>
+            <Box>
+              <LinkOverlay as={NextLink} href="/home">
+                <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
+              </LinkOverlay>
+            </Box>
             <Box flex={1} minW={0} w="100%" />
             <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
@@ -552,13 +571,14 @@ const Header = ({ navigation, isLangAvailable }) => {
       <RegisterModal />
       <OtpVerifyModal />
       <EmailVerifySentModal />
+      <ResetPasswordModal />
       <Box
         position="fixed"
         zIndex={100}
-        top={isShowLangUnavailable ? 20 : 0}
+        // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         bg="white"
-        d={["block", "block", "none", "none"]}
+        d={["block", "block", "block", "none"]}
       >
         <HStack align="center" h={16} p={3}>
           <LinkOverlay as={NextLink} href="/home">
@@ -584,7 +604,6 @@ const Header = ({ navigation, isLangAvailable }) => {
             <DrawerBody>
               <VStack minH="100%" align="stretch">
                 <Accordion
-                  allowToggle={true}
                   defaultIndex={[0, 1, 2, 3, 4, 5, 6, 7]}
                   flex={1}
                   minH={0}
@@ -648,6 +667,7 @@ const Header = ({ navigation, isLangAvailable }) => {
                                       fontWeight="normal"
                                       borderColor="transparent"
                                       appearance="none"
+                                      onClick={mobileMenuDisclosure.onClose}
                                     >
                                       {label}
                                     </Button>
@@ -680,39 +700,69 @@ const Header = ({ navigation, isLangAvailable }) => {
                           </NextLink>
                         )
                     )}
+                    <NextLink
+                      href={navigation?.actionButton?.path ?? "/"}
+                      target="_blank"
+                    >
+                      <Button
+                        fontSize="2xl"
+                        textAlign="left"
+                        variant="unstyled"
+                        borderRadius={0}
+                        px={2}
+                        _focus={{ outline: "none" }}
+                        fontWeight="normal"
+                        borderColor="transparent"
+                        appearance="none"
+                        borderBottomWidth={3}
+                        onClick={mobileMenuDisclosure.onClose}
+                      >
+                        {navigation?.actionButton?.label}
+                      </Button>
+                    </NextLink>
                   </VStack>
                 </Accordion>
                 <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
-                  <Link href="/web-accessibility" fontSize="sm">
-                    {getWording("header.font_size_level_label")}
-                  </Link>
+                  {isShowLangSwitcher && (
+                    <Select
+                      border="none"
+                      size="sm"
+                      w={16}
+                      variant="flushed"
+                      value={router.locale}
+                      onChange={(e) => {
+                        if (cms.enabled) {
+                          window.location.href = `/${e.target.value}${router.asPath}`;
+                        } else {
+                          router.push(router.pathname, router.pathname, {
+                            locale: e.target.value,
+                          });
+                        }
+                      }}
+                    >
+                      <option value="zh">繁</option>
+                      <option value="en">EN</option>
+                    </Select>
+                  )}
+                  <NextLink href="/text-size" passHref>
+                    <Link fontSize="sm">
+                      {getWording("header.font_size_level_label")}
+                    </Link>
+                  </NextLink>
                   <Box flex={1} minW={0} w="100%" />
                   <Text>
-                    {
-                      (navigation.social ?? []).map(({icon, url}) => {
-                        return <a href={url}><Image display="inline-flex" height="25px" src={icon}/></a>
-                      })
-                    }
+                    {(navigation.social ?? []).map(({ icon, url }, i) => {
+                      return (
+                        <a key={i} href={url}>
+                          <Image
+                            display="inline-flex"
+                            height="25px"
+                            src={icon}
+                          />
+                        </a>
+                      );
+                    })}
                   </Text>
-                  <Select
-                    border="none"
-                    size="sm"
-                    w={16}
-                    variant="flushed"
-                    value={router.locale}
-                    onChange={(e) => {
-                      if (cms.enabled) {
-                        window.location.href = `/${e.target.value}${router.asPath}`;
-                      } else {
-                        router.push(router.pathname, router.pathname, {
-                          locale: e.target.value,
-                        });
-                      }
-                    }}
-                  >
-                    <option value="zh">繁</option>
-                    <option value="en">EN</option>
-                  </Select>
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
                       <Avatar size="xs"></Avatar>
@@ -805,14 +855,11 @@ const Header = ({ navigation, isLangAvailable }) => {
                               </Link>
                               <Divider />
                               <VStack mt={2} align="stretch" spacing={2}>
-                                <Link
-                                  onClick={() => {
-                                    mobileMenuDisclosure.onClose();
-                                    registerModalDisclosure.onOpen();
-                                  }}
-                                >
-                                  {getWording("header.account_setting_label")}
-                                </Link>
+                                <NextLink passHref href="/user/account">
+                                  <Link>
+                                    {getWording("header.account_setting_label")}
+                                  </Link>
+                                </NextLink>
                                 <Link onClick={onLogout}>
                                   {getWording("header.logout_label")}
                                 </Link>

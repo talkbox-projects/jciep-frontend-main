@@ -1,7 +1,7 @@
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   FormControl,
-  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -9,9 +9,9 @@ import {
   VStack,
   Image,
   Box,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
 import Container from "../../../components/Container";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,8 @@ import { getConfiguration } from "../../../utils/configuration/getConfiguration"
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
-import { useLoginHook, useCredential } from "../../../utils/user";
+import { useCredential } from "../../../utils/user";
+import { passwordRegex } from "../../../utils/general";
 
 const PAGE_KEY = "verify_email";
 
@@ -58,9 +59,20 @@ const VerifyToken = () => {
     handleSubmit,
     setError,
     register,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
 
+<<<<<<< Updated upstream
+  const onUserCreate = useCallback(
+    async ({ password }) => {
+      try {
+        const mutation = gql`
+          mutation UserLogin($input: LoginInput!) {
+            UserLogin(input: $input) {
+              token
+              user {
+=======
   const onUserCreate = useCallback(async ({ password }) => {
     try {
       const mutation = gql`
@@ -70,110 +82,136 @@ const VerifyToken = () => {
             user {
               id
               email
+              phone
+              facebookId
+              googleId
+              appleId
               snsMeta {
                 profilePicUrl
                 displayName
               }
               identities {
+>>>>>>> Stashed changes
                 id
-                type
-                chineseName
-                englishName
-                dob
-                gender
-                district
-                pwdType
-                interestedEmploymentMode
-                interestedIndustry
-                industry
-                tncAccept
-                published
                 email
-                phone
-                profilePic {
+                facebookId
+                googleId
+                appleId
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
+                identities {
                   id
-                  url
-                  contentType
-                  fileSize
-                }
-                bannerMedia {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                yearOfExperience
-                biography
-                portfolio {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                writtenLanguage
-                writtenLanguageOther
-                oralLanguage
-                oralLanguageOther
-                hobby
-                education {
-                  school
-                  degree
-                  fieldOfStudy
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                employment {
-                  employmentType
-                  companyName
-                  jobTitle
+                  type
+                  chineseName
+                  englishName
+                  dob
+                  gender
+                  district
+                  pwdType
+                  interestedEmploymentMode
+                  interestedIndustry
                   industry
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                activity {
-                  name
-                  description
-                  startDatetime
-                  endDatetime
+                  industryOther
+                  tncAccept
+                  published
+                  email
+                  phone
+                  profilePic {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  bannerMedia {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  yearOfExperience
+                  biography
+                  portfolio {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  writtenLanguage
+                  writtenLanguageOther
+                  oralLanguage
+                  oralLanguageOther
+                  hobby
+                  education {
+                    school
+                    degree
+                    fieldOfStudy
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  employment {
+                    employmentType
+                    companyName
+                    jobTitle
+                    industry
+                    industryOther
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  activity {
+                    name
+                    description
+                    startDatetime
+                    endDatetime
+                  }
                 }
               }
             }
           }
-        }
-      `;
+        `;
 
-      const data = await getGraphQLClient().request(mutation, {
-        input: {
-          emailVerificationToken,
-          password,
-        },
-      });
+        const data = await getGraphQLClient().request(mutation, {
+          input: {
+            emailVerificationToken,
+            password,
+          },
+        });
 
-      setCredential({
-        token: data?.UserLogin?.token,
-        user: data?.UserLogin?.user,
-      });
-      setIdentityId(data?.UserLogin?.user?.identities?.[0]?.id ?? null);
-      router.push("/user/identity/select");
-    } catch (e) {
-      console.log(e);
-      setError("password_confirm", {
-        message: getWording("emailVerify.user_create_error_message"),
-      });
-    }
-  }, []);
+        setCredential({
+          token: data?.UserLogin?.token,
+          user: data?.UserLogin?.user,
+        });
+        setIdentityId(data?.UserLogin?.user?.identities?.[0]?.id ?? null);
+        router.push("/user/identity/select");
+      } catch (e) {
+        console.log(e);
+        setError("password_confirm", {
+          message: getWording("emailVerify.user_create_error_message"),
+        });
+      }
+    },
+    [
+      emailVerificationToken,
+      getWording,
+      router,
+      setCredential,
+      setError,
+      setIdentityId,
+    ]
+  );
 
   useEffect(() => {
     (async () => {
@@ -238,13 +276,20 @@ const VerifyToken = () => {
               {getWording("emailVerify.heading")}
             </Text>
 
-            <FormControl>
+            <FormControl isInvalid={!!errors?.password?.message}>
               <FormLabel>{getWording("emailVerify.password_label")}</FormLabel>
               <Input
                 backgroundColor="#fff !important"
                 type="password"
                 {...register("password", {
-                  required: getWording("emailVerify.password_error_message"),
+                  required: {
+                    value: true,
+                    message: getWording("emailVerify.password_error_message"),
+                  },
+                  pattern: {
+                    value: passwordRegex,
+                    message: getWording("register.register_password_pattern"),
+                  },
                 })}
               />
 
@@ -259,9 +304,10 @@ const VerifyToken = () => {
                   },
                 })}
               </Text>
+              <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={!!errors?.password_confirm?.message}>
               <FormLabel>
                 {getWording("emailVerify.password_confirm_label")}
               </FormLabel>
@@ -269,14 +315,20 @@ const VerifyToken = () => {
                 backgroundColor="#fff !important"
                 type="password"
                 {...register("password_confirm", {
-                  required: getWording(
-                    "emailVerify.password_confirm_error_message"
-                  ),
+                  required: {
+                    value: true,
+                    message: getWording(
+                      "emailVerify.password_confirm_error_message"
+                    ),
+                  },
+                  validate: (v) =>
+                    v === getValues("password") ||
+                    getWording("emailVerify.password_confirm_not_same")[0],
                 })}
               />
-              <FormHelperText color={errors?.password_confirm ? "red" : ""}>
+              <FormErrorMessage>
                 {errors?.password_confirm?.message}
-              </FormHelperText>
+              </FormErrorMessage>
             </FormControl>
             <FormControl textAlign="center">
               <Button

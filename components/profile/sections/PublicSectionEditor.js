@@ -172,7 +172,7 @@ const PublicSectionEditor = () => {
               {errors?.email?.message}
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired isInvalid={errors?.phone?.message}>
+          <FormControl isInvalid={errors?.phone?.message}>
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>

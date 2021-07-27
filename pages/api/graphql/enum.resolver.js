@@ -13,6 +13,7 @@ import pwdTypes from "./enum/pwdTypes";
 import skills from "./enum/skills";
 import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
+import serviceTarget from "./enum/serviceTarget";
 
 const properize = (text) => {
   return text
@@ -47,5 +48,6 @@ export default {
     ...generateEnumResolver("organizationStatus", organizationStatus),
     ...generateEnumResolver("joinRole", joinRoles),
     ...generateEnumResolver("joinStatus", joinStatus),
+    ...generateEnumResolver("serviceTarget", serviceTarget),
   },
 };

@@ -1,3 +1,4 @@
+import React from "react";
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
@@ -12,7 +13,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  useToast,
   Button,
   VStack,
   HStack,
@@ -40,6 +40,7 @@ const LoginModal = () => {
     loginModalDisclosure,
     registerModalDisclosure,
     otpVerifyModalDisclosure,
+    resetPasswordModalDisclosure,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -53,149 +54,163 @@ const LoginModal = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const toast = useToast();
-
-  const onPhoneLogin = useCallback(async ({ phone }) => {
-    const mutation = gql`
-      mutation UserPhoneVerify($phone: String!) {
-        UserPhoneVerify(phone: $phone)
+  const onPhoneLogin = useCallback(
+    async ({ phone }) => {
+      const mutation = gql`
+        mutation UserPhoneVerify($phone: String!) {
+          UserPhoneVerify(phone: $phone)
+        }
+      `;
+      let result = await getGraphQLClient().request(mutation, { phone });
+      if (result.UserPhoneVerify) {
+        otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
+        loginModalDisclosure.onClose();
+      } else {
+        setError("phone", {
+          message: getWording("login.login_error_message"),
+        });
       }
-    `;
-    let result = await getGraphQLClient().request(mutation, { phone });
-    if (result.UserPhoneVerify) {
-      otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
-      loginModalDisclosure.onClose();
-    } else {
-      setError("phone", {
-        message: getWording("login.login_error_message"),
-      });
-    }
-  }, []);
+    },
+    [getWording, loginModalDisclosure, otpVerifyModalDisclosure, setError]
+  );
 
   const responseFacebook = (response) => {
+    router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
-    router.push(`/oauth/facebook/?accessToken=${response.accessToken}`);
   };
 
   const responseGoogle = (response) => {
+    router.replace(`/oauth/google/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
-    router.push(`/oauth/google/?accessToken=${response.accessToken}`);
   };
 
-  const onEmailLogin = useCallback(async ({ email, password }) => {
-    try {
-      const mutation = gql`
-        mutation UserLogin($input: LoginInput) {
-          UserLogin(input: $input) {
-            token
-            user {
-              id
-              email
-              facebookId
-              googleId
-              appleId
-              snsMeta {
-                profilePicUrl
-                displayName
-              }
-              identities {
+  const onEmailLogin = useCallback(
+    async ({ email, password }) => {
+      try {
+        const mutation = gql`
+          mutation UserLogin($input: LoginInput) {
+            UserLogin(input: $input) {
+              token
+              user {
                 id
-                type
-                chineseName
-                englishName
-                dob
-                gender
-                district
-                pwdType
-                interestedEmploymentMode
-                interestedIndustry
-                interestedIndustryOther
-                industry
-                tncAccept
-                published
                 email
                 phone
-                profilePic {
+                facebookId
+                googleId
+                appleId
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
+                identities {
                   id
-                  url
-                  contentType
-                  fileSize
-                }
-                bannerMedia {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                yearOfExperience
-                biography
-                portfolio {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                writtenLanguage
-                writtenLanguageOther
-                oralLanguage
-                oralLanguageOther
-                hobby
-                education {
-                  school
-                  degree
-                  fieldOfStudy
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                employment {
-                  employmentType
-                  companyName
-                  jobTitle
+                  type
+                  chineseName
+                  englishName
+                  dob
+                  gender
+                  district
+                  pwdType
+                  interestedEmploymentMode
+                  interestedIndustry
+                  interestedIndustryOther
                   industry
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                activity {
-                  name
-                  description
-                  startDatetime
-                  endDatetime
+                  industryOther
+                  tncAccept
+                  published
+                  email
+                  phone
+                  profilePic {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  bannerMedia {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  yearOfExperience
+                  biography
+                  portfolio {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  writtenLanguage
+                  writtenLanguageOther
+                  oralLanguage
+                  oralLanguageOther
+                  hobby
+                  education {
+                    school
+                    degree
+                    fieldOfStudy
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  employment {
+                    employmentType
+                    companyName
+                    jobTitle
+                    industry
+                    industryOther
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  activity {
+                    name
+                    description
+                    startDatetime
+                    endDatetime
+                  }
                 }
               }
             }
           }
+        `;
+
+        const variables = {
+          input: {
+            email,
+            password,
+          },
+        };
+
+        const data = await getGraphQLClient().request(mutation, variables);
+        setCredential(data?.UserLogin);
+        loginModalDisclosure.onClose();
+        if (data?.UserLogin) {
+          const user = data?.UserLogin?.user;
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
         }
-      `;
-
-      const variables = {
-        input: {
-          email,
-          password,
-        },
-      };
-
-      const data = await getGraphQLClient().request(mutation, variables);
-      setCredential(data?.UserLogin);
-      loginModalDisclosure.onClose();
-      router.push("/");
-    } catch (e) {
-      setError("password", {
-        message: getWording("login.login_error_message"),
-      });
-    }
-  }, []);
+      } catch (e) {
+        setError("password", {
+          message: getWording("login.login_error_message"),
+        });
+      }
+    },
+    [getWording, loginModalDisclosure, setCredential, setError]
+  );
 
   return (
     <Modal
@@ -224,12 +239,28 @@ const LoginModal = () => {
                   <FormLabel>
                     {getWording("login.login_password_label")}
                   </FormLabel>
-                  <Input type="password" 
+                  <Input
+                    type="password"
                     placeholder={getWording("login.login_password_placeholder")}
-                  {...register("password")} />
+                    {...register("password")}
+                  />
                   <FormHelperText color="red.500">
                     {errors?.password?.message}
                   </FormHelperText>
+                </FormControl>
+                <FormControl as={VStack} align="end">
+                  <Button
+                    onClick={() => {
+                      loginModalDisclosure.onClose();
+                      resetPasswordModalDisclosure.onOpen();
+                    }}
+                    fontWeight="normal"
+                    variant="link"
+                    textDecor="underline"
+                    color="black"
+                  >
+                    {getWording("login.forget_password_label")}
+                  </Button>
                 </FormControl>
                 <FormControl>
                   <Button
@@ -304,7 +335,7 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <IoMdPhonePortrait size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Phone
+                      {getWording("login.sign_in_with_phone")}
                     </Text>
                   </HStack>
                 </Button>
@@ -320,23 +351,16 @@ const LoginModal = () => {
                   <HStack w="100%">
                     <AiOutlineMail size={18} />
                     <Text flex={1} minW={0} w="100%">
-                      Sign In With Email
+                      {getWording("login.sign_in_with_email")}
                     </Text>
                   </HStack>
                 </Button>
               )}
-              {/* <Button colorScheme="facebook" color="white" >
-                <HStack w="100%">
-                  <IoLogoFacebook size={18} color="white" />
-                  <Text flex={1} minW={0} w="100%">
-                    Sign In With Facebook
-                  </Text>
-                </HStack>
-              </Button> */}
               <FacebookLogin
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
+                redirectUri={`/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
@@ -346,7 +370,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoFacebook size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign In With Facebook
+                        {getWording("login.sign_in_with_facebook")}
                       </Text>
                     </HStack>
                   </Button>
@@ -365,7 +389,7 @@ const LoginModal = () => {
                     <HStack w="100%">
                       <IoLogoGoogle size={18} color="white" />
                       <Text flex={1} minW={0} w="100%">
-                        Sign In With Google
+                        {getWording("login.sign_in_with_google")}
                       </Text>
                     </HStack>
                   </Button>
@@ -378,9 +402,11 @@ const LoginModal = () => {
               <AppleLogin
                 clientId="com.talkboxapp.teamwork.service.hku"
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
-                responseType={"code"}
-                responseMode={"query"}
-                usePopup={true}
+                responseType={"code id_token"}
+                responseMode={"form_post"}
+                scope="email name"
+                usePopup={false}
+                nonce="NONCE"
                 render={(renderProps) => {
                   return (
                     <Button
@@ -393,7 +419,7 @@ const LoginModal = () => {
                       <HStack w="100%">
                         <IoLogoApple size={18} color="white" />
                         <Text flex={1} minW={0} w="100%">
-                          Sign In With Apple
+                          {getWording("login.sign_in_with_apple")}
                         </Text>
                       </HStack>
                     </Button>

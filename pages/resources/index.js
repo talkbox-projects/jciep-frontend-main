@@ -1,68 +1,132 @@
-import { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
 import Slider from "react-slick";
+import CategoryTag from "../../components/CategoryTag";
+import NextLink from "next/link";
 import {
   Divider,
-  Icon,
-  Accordion,
-  AccordionItem,
-  AccordionPanel,
-  AccordionButton,
   Heading,
   Text,
   Image,
   Box,
-  Stack,
-  UnorderedList,
-  ListItem,
   Button,
   Grid,
   GridItem,
   IconButton,
-  Link,
+  Portal,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
 } from "@chakra-ui/react";
-import { VStack, HStack, Flex } from "@chakra-ui/layout";
-import Carousel from "react-multi-carousel";
+import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import Card from "../../components/CarouselCard";
-import ButtonGroup from "../../components/CarouselButtons";
 import Container from "../../components/Container";
 import DividerSimple from "../../components/DividerSimple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import { FaArrowLeft, FaArrowRight, FaShareSquare } from "react-icons/fa";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import Anchor from "../../components/Anchor";
+import { useRouter } from "next/router";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const PAGE_KEY = "resources";
 
+const serviceOrgList = [
+  { value: "gov", label: "政府主導的計劃" },
+  { value: "non-gov", label: "非政府組織提供的服務" },
+];
+
+const serviceDetailList = [
+  {
+    value: "assessment",
+    label: "為殘疾人士提供的就業支援服務 (工作/就業評估)",
+  },
+  {
+    value: "counseling",
+    label: "為殘疾人士提供的就業支援服務 (工作/就業輔導)",
+  },
+  { value: "matching", label: "為殘疾人士提供的就業支援服務 (工作配對)" },
+  { value: "followUp", label: "為殘疾人士提供的就業支援服務 (就業後跟進)" },
+  {
+    value: "training",
+    label: "為殘疾人士提供的就業支援服務 (職業訓練/就業培訓)",
+  },
+  {
+    value: "instruction",
+    label: "為殘疾人士提供的就業支援服務 (職場督導/指導)",
+  },
+  {
+    value: "guidance",
+    label: "為殘疾人士提供的就業支援服務 (為僱主和職員提供培訓/指導)",
+  },
+  { value: "internship", label: "實習機會" },
+  { value: "probationOrReferral", label: "在職試用和/或工作轉介" },
+  { value: "employer", label: "為僱主提供的津貼" },
+  { value: "trainee", label: "為僱員/實習生/訓練生提供的津貼" },
+];
+
+const ServiceFilter = ({
+  label,
+  value = [],
+  onChange = () => undefined,
+  list = [],
+}) => (
+  <Menu closeOnSelect={false}>
+    <MenuButton
+      as={Button}
+      variant="outline"
+      rightIcon={<ChevronDownIcon />}
+      borderWidth={0}
+      borderBottomWidth="2px"
+      size="lg"
+      borderRadius={0}
+      _hover={{}}
+      _focus={{}}
+      _active={{}}
+      px={0}
+      minW={["120px", "120px", "180px", "240px"]}
+      textAlign="left"
+    >
+      {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+      {label}
+    </MenuButton>
+    <Portal>
+      <MenuList maxW="100vw" minWidth="240px">
+        <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
+          {list?.map((target, i) => (
+            <MenuItemOption key={i} value={target.value}>
+              {target.label}
+            </MenuItemOption>
+          ))}
+        </MenuOptionGroup>
+      </MenuList>
+    </Portal>
+  </Menu>
+);
+
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
 
-const Resources = ({ page }) => {
+const Resources = ({ page, enums, setting }) => {
+  const router = useRouter();
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
   const settings = {
@@ -74,6 +138,70 @@ const Resources = ({ page }) => {
     infinite: false,
   };
 
+  const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
+  const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
+  const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
+
+  const serviceTargetList = useMemo(
+    () =>
+      enums?.EnumServiceTargetList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumServiceTargetList, router.locale]
+  );
+
+  const filteredResourceList = useMemo(() => {
+    if (
+      serviceOrgFilter.length === 0 &&
+      serviceTargetFilter.length === 0 &&
+      serviceDetailFilter.length === 0
+    )
+      return page?.content?.resourceSection?.resources;
+
+    return page?.content?.resourceSection?.resources.filter((resource) => {
+      const isServiceOrgMatched =
+        serviceOrgFilter.length === 0 ||
+        serviceOrgFilter?.includes(resource?.category);
+
+      const isServiceTarget =
+        serviceTargetFilter.length === 0 ||
+        !!resource?.serviceTarget?.tags?.find(({ value }) =>
+          serviceTargetFilter?.includes(value)
+        );
+
+      const isServiceDetail = (() => {
+        if (serviceDetailFilter.length === 0) return true;
+        const isSupport = !!resource?.services?.find(({ category }) =>
+          serviceDetailFilter?.includes(category)
+        );
+        const isInternship =
+          serviceDetailFilter?.includes("internship") &&
+          resource?.internship?.value === true;
+        const isProbationOrReferral =
+          serviceDetailFilter?.includes("probationOrReferral") &&
+          resource?.probationOrReferral?.value === true;
+        const isSubsidy = !!resource?.subsidy?.find(({ target }) =>
+          serviceDetailFilter?.includes(target)
+        );
+
+        return isSupport || isInternship || isProbationOrReferral || isSubsidy;
+      })();
+
+      return isServiceOrgMatched && isServiceTarget && isServiceDetail;
+    });
+  }, [
+    page?.content?.resourceSection?.resources,
+    serviceDetailFilter,
+    serviceOrgFilter,
+    serviceTargetFilter,
+  ]);
+
+  const categories = setting?.value?.categories;
+  const getCategoryData = (key) => {
+    return (categories ?? []).find((c) => c.key === key);
+  };
+
   return (
     <VStack w="100%" spacing={0} align="stretch">
       {page?.content?.seo?.title && (
@@ -83,7 +211,6 @@ const Resources = ({ page }) => {
         ></NextSeo>
       )}
       {/* Banner Section */}
-      {/* <Text>fdsa</Text> */}
       <Box
         bgImg={`url(${page?.content?.heroBannerSection?.image})`}
         bgSize="cover"
@@ -291,20 +418,152 @@ const Resources = ({ page }) => {
         </Container>
       </Box>
       <Box bg="#FEB534">
-        <DividerSimple nextColor="#FAFAFA" />
+        <DividerSimple nextColor="#F3F3F3" />
       </Box>
       {/* resource Section */}
 
-      <Box bg="#fafafa">
+      <Box bg="#F3F3F3">
+        <Anchor id="list" />
         <Container>
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
           </Text>
+          <Stack direction={["column", "row"]} spacing={8} pb={4}>
+            <ServiceFilter
+              label="服務提供機構"
+              value={serviceOrgFilter}
+              onChange={setServiceOrgFilter}
+              list={serviceOrgList}
+            />
+            <ServiceFilter
+              label="服務對象"
+              value={serviceTargetFilter}
+              onChange={setServiceTargetFilter}
+              list={serviceTargetList}
+            />
+            <ServiceFilter
+              label="服務內容"
+              value={serviceDetailFilter}
+              onChange={setServiceDetailFilter}
+              list={serviceDetailList}
+            />
+          </Stack>
+          <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
         </Container>
 
-        <Box d={["none", "none", "block"]} p={4} pos="relative" w="100vw">
-          <Slider {...settings}>
-            {(page?.content?.resourceSection?.resources ?? []).map(
+        <Box
+          d={["none", "none", "block"]}
+          p={4}
+          pos="relative"
+          w="100vw"
+          minH="600px"
+        >
+          <Slider {...settings} initialSlide={0} draggable={false}>
+            <Box minW="150px" />
+            {(filteredResourceList ?? []).map((resource, index) => {
+              const {
+                name,
+                category,
+                organization,
+                serviceTarget,
+                services,
+                internship,
+                probationOrReferral,
+                subsidy,
+                remark,
+                topColor,
+                contact,
+                reminder,
+              } = resource;
+              return (
+                <Box
+                  key={resource?.id}
+                  px={1}
+                  h="100%"
+                  maxW={"336px"}
+                >
+                  <Card
+                    name={name}
+                    topColor={topColor}
+                    organization={organization}
+                    category={category}
+                    serviceTarget={serviceTarget}
+                    services={services}
+                    internship={internship}
+                    probationOrReferral={probationOrReferral}
+                    subsidy={subsidy}
+                    remark={remark}
+                    contact={contact}
+                    reminder={reminder}
+                    page={page}
+                  />
+                </Box>
+              );
+            })}
+          </Slider>
+          <HStack
+            pos="absolute"
+            zIndex={1}
+            left={0}
+            top="35%"
+            // h="100%"
+            align="center"
+            m={12}
+          >
+            <Box
+              _hover={{
+                color: "white",
+                bg: "black",
+              }}
+              boxShadow="lg"
+              bg="white"
+              p={4}
+              borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickPrev()}
+            >
+              <IconButton variant="unstyled" as={FaArrowLeft} size="md" />
+            </Box>
+          </HStack>
+          <HStack
+            pos="absolute"
+            zIndex={1}
+            right={0}
+            top="35%"
+            // h="100%"
+            align="center"
+            m={12}
+          >
+            <Box
+              _hover={{
+                color: "white",
+                bg: "black",
+              }}
+              boxShadow="lg"
+              bg="white"
+              p={4}
+              borderRadius="50%"
+              cursor="pointer"
+              onClick={() => sliderRef.current.slickNext()}
+            >
+              <IconButton
+                borderRadius="50%"
+                variant="unstyled"
+                round={true}
+                size="md"
+                as={FaArrowRight}
+              />
+            </Box>
+          </HStack>
+        </Box>
+        <VStack
+          w="100%"
+          p={[2, 4]}
+          justifyContent="center"
+          d={["block", "block", "none"]}
+        >
+          <Box>
+            {(filteredResourceList?.slice(0, showItems) ?? []).map(
               (resource, index) => {
                 const {
                   name,
@@ -321,7 +580,7 @@ const Resources = ({ page }) => {
                   reminder,
                 } = resource;
                 return (
-                  <Box key={resource?.id} px={1} minHeight="630px" h="100%" maxW={"336px"}>
+                  <VStack key={index} px={2} alignItems="stretch">
                     <Card
                       name={name}
                       topColor={topColor}
@@ -337,146 +596,41 @@ const Resources = ({ page }) => {
                       reminder={reminder}
                       page={page}
                     />
-                  </Box>
+                  </VStack>
                 );
               }
             )}
-          </Slider>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            left={0}
-            top={0}
-            h="100%"
-            align="center"
-            p={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-            >
-              <IconButton
-                cursor="pointer"
-                onClick={() => sliderRef.current.slickPrev()}
-                variant="unstyled"
-                as={FaArrowLeft}
-                size="md"
-              />
-            </Box>
-          </HStack>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            top={0}
-            right={0}
-            h="100%"
-            align="center"
-            p={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-            >
-              <IconButton
-                cursor="pointer"
-                borderRadius="50%"
-                onClick={() => sliderRef.current.slickNext()}
-                variant="unstyled"
-                round={true}
-                size="md"
-                as={FaArrowRight}
-              />
-            </Box>
-          </HStack>
-        </Box>
-        <VStack
-          w="100%"
-          px={[2, 4]}
-          justifyContent="center"
-          d={["block", "block", "none"]}
-        >
-          <Box>
-            {(
-              page?.content?.resourceSection?.resources?.slice(0, showItems) ??
-              []
-            ).map((resource, index) => {
-              const {
-                name,
-                category,
-                organization,
-                serviceTarget,
-                services,
-                internship,
-                probationOrReferral,
-                subsidy,
-                remark,
-                topColor,
-                contact,
-                reminder,
-              } = resource;
-              return (
-                <VStack key={index} px={2} alignItems="stretch">
-                  <Card
-                    name={name}
-                    topColor={topColor}
-                    organization={organization}
-                    category={category}
-                    serviceTarget={serviceTarget}
-                    services={services}
-                    internship={internship}
-                    probationOrReferral={probationOrReferral}
-                    subsidy={subsidy}
-                    remark={remark}
-                    contact={contact}
-                    reminder={reminder}
-                    page={page}
-                  />
-                </VStack>
-              );
-            })}
-            <VStack mt={6} w="100%" align="center">
-              <Button
-                variant="outline"
-                borderColor="black"
-                borderWidth={2}
-                p={3}
-                size="xl"
-                borderRadius="2em"
-                onClick={() =>
-                  setShowItems((i) =>
-                    Math.min(
-                      i + 3,
-                      page?.content?.resourceSection?.resources?.length
+            {showItems < filteredResourceList?.length && (
+              <VStack mt={6} w="100%" align="center">
+                <Button
+                  variant="outline"
+                  borderColor="black"
+                  borderWidth={2}
+                  p={3}
+                  size="xl"
+                  borderRadius="2em"
+                  onClick={() =>
+                    setShowItems((i) =>
+                      Math.min(i + 3, filteredResourceList?.length)
                     )
-                  )
-                }
-                outline="none"
-                appearance="none"
-              >
-                {wordExtractor(page?.content?.wordings, "showMore")}
-              </Button>
-            </VStack>
+                  }
+                  outline="none"
+                  appearance="none"
+                >
+                  {wordExtractor(page?.content?.wordings, "showMore")}
+                </Button>
+              </VStack>
+            )}
           </Box>
         </VStack>
       </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
+        <Anchor id="equip" top="0" />
         <Box
           pb={["46px", "46px", "72px"]}
           pt={["", "", "50px"]}
-          background="#FAFAFA"
+          background="#F3F3F3"
         >
           <Box
             display="flex"
@@ -505,159 +659,126 @@ const Resources = ({ page }) => {
             mx="auto"
           >
             <GridItem rowSpan="2" colSpan={[6, 6, 3, 3]}>
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                h={["100%", "100%", "571px"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.left?.content}
-                />
-                {page?.content?.equipSection?.left?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.left?.links ?? []).map(
-                        ({ label, url }, index) => {
-                          return (
-                            <ListItem
-                              display="flex"
-                              _before={{
-                                content: '"."',
-                                color: "black",
-                                pr: "6px",
-                                fontWeight: "bold",
-                                fontSize: "20px",
-                              }}
-                              fontSize="16px"
-                            >
-                              <Link
-                                pt="8px"
-                                isExternal
-                                textDecoration="underline"
-                                href={url}
-                              >
-                                {label}
-                              </Link>
-                            </ListItem>
-                          );
-                        }
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.left?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.left?.category
                       )}
-                    </UnorderedList>
-                  </Box>
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.left?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.left?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={page?.content?.equipSection?.left?.link ?? ""}
+                    >
+                      <Button
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
             <GridItem colSpan={[6, 6, 3, 3]}>
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                minH={["300px", "300px", "100%"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.topRight?.content}
-                />
-                {page?.content?.equipSection?.topRight?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList m={0}>
-                      {(page?.content?.equipSection?.topRight?.links ?? []).map(
-                        ({ label, url }, index) => {
-                          return (
-                            <ListItem
-                              display="flex"
-                              _before={{
-                                content: '"."',
-                                color: "black",
-                                pr: "6px",
-                                fontWeight: "bold",
-                                fontSize: "20px",
-                              }}
-                              fontSize="16px"
-                            >
-                              <Link
-                                pt="8px"
-                                isExternal
-                                textDecoration="underline"
-                                href={url}
-                              >
-                                {label}
-                              </Link>
-                            </ListItem>
-                          );
-                        }
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.topRight?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.topRight?.category
                       )}
-                    </UnorderedList>
-                  </Box>
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.topRight?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.topRight?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={page?.content?.equipSection?.topRight?.link ?? ""}
+                    >
+                      <Button
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
             {/* temp hidden */}
-            <GridItem colSpan={[6, 6, 3, 3]} d="none">
-              <Box
-                background="#FFFFFF"
-                borderRadius="10"
-                minH={["300px", "300px", "100%"]}
-                py={["16px", "16px", "36px"]}
-                px={["16px", "16px", "24px"]}
-                display="flex"
-                flexDirection="column"
-              >
-                <MultiTextRenderer
-                  fontSize={["24px", "24px", "30px", "36px"]}
-                  data={page?.content?.equipSection?.bottomRight?.content}
-                />
-                {page?.content?.equipSection?.bottomRight?.links && (
-                  <Box py={["48px", "48px", "84px"]}>
-                    <Text fontSize={["16px", "16px", "24px"]}>
-                      {wordExtractor(page?.content?.wordings, "relatedLinks")}
-                    </Text>
-                    <UnorderedList>
-                      {(
-                        page?.content?.equipSection?.bottomRight?.links ?? []
-                      ).map(({ label, url }, index) => {
-                        return (
-                          <ListItem
-                            display="flex"
-                            _before={{
-                              content: '"."',
-                              color: "black",
-                              mr: "6px",
-                              fontWeight: "bold",
-                              fontSize: "20px",
-                            }}
-                            fontSize="16px"
-                          >
-                            {" "}
-                            <Link
-                              pt="8px"
-                              isExternal
-                              textDecoration="underline"
-                              href={url}
-                            >
-                              {label}
-                            </Link>
-                          </ListItem>
-                        );
-                      })}
-                    </UnorderedList>
-                  </Box>
+            <GridItem colSpan={[6, 6, 3, 3]}>
+              <Anchor id="tips" top="-140px" />
+              <VStack spacing={0} bg="#FFFFFF" borderRadius={8}>
+                {page?.content?.equipSection?.bottomRight?.category && (
+                  <HStack p={8} align="start" w="100%">
+                    <CategoryTag
+                      size="lg"
+                      category={getCategoryData(
+                        page?.content?.equipSection?.bottomRight?.category
+                      )}
+                    />
+                  </HStack>
                 )}
-              </Box>
+                <Box p={[4, 4, 8]}>
+                  <MultiTextRenderer
+                    fontSize={["xl", "2xl", "2xl", "3xl"]}
+                    data={page?.content?.equipSection?.bottomRight?.content}
+                  />
+                </Box>
+                <Divider />
+                {page?.content?.equipSection?.bottomRight?.link && (
+                  <HStack w="100%" p={4} justifyContent="flex-end">
+                    <NextLink
+                      passHref={true}
+                      href={
+                        page?.content?.equipSection?.bottomRight?.link ?? ""
+                      }
+                    >
+                      <Button
+                        p={2}
+                        variant="ghost"
+                        rightIcon={<AiOutlineArrowRight />}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "understand_more_label"
+                        )}
+                      </Button>
+                    </NextLink>
+                  </HStack>
+                )}
+              </VStack>
             </GridItem>
           </Grid>
         </Box>
@@ -735,5 +856,5 @@ const Resources = ({ page }) => {
 
 export default withPageCMS(Resources, {
   key: PAGE_KEY,
-  fields: resourceFieldsForCMS,
+  fields: (props) => resourceFieldsForCMS(props),
 });
