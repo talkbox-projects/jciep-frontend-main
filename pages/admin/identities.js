@@ -13,6 +13,8 @@ import {
   VStack,
   IconButton,
 } from "@chakra-ui/react";
+import moment from "moment";
+
 import Container from "../../components/Container";
 import identitySearch from "../../utils/api/IdentitySearch";
 import { getPage } from "../../utils/page/getPage";
@@ -183,7 +185,7 @@ const AdminIdentity = ({ enums }) => {
                 (identity?.submission ?? [])?.[0]?.status === "pendingApproval";
               return (
                 <NextLink href={`/user/identity/${identity.id}`}>
-                  <HStack
+                  {/* <HStack
                     borderBottomWidth={1}
                     borderColor="#eee"
                     spacing={4}
@@ -210,7 +212,33 @@ const AdminIdentity = ({ enums }) => {
                       }
                     </Tag>
                     {hasPendingApproval && <Tag>待處理申請</Tag>}
-                  </HStack>
+                  </HStack> */}
+                  <SimpleGrid columns={3} marginTop="0px">
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px"   >
+                    <Avatar size="sm" src={identity?.logo?.url}></Avatar>
+                    <Text display="inline-block" marginLeft="10px">
+                      {router.locale === "zh"
+                        ? identity?.chineseName
+                        : identity?.englishName}
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px">
+                    <Text ver>
+                        {moment(identity?.createdAt).format("YYYY-MM-DD")}
+
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px" textAlign="right">
+                    <Tag>
+                      {
+                        enums.EnumIdentityTypeList.find(
+                          (data) => data.key === identity.type
+                        )?.value[router.locale]
+                      }
+                    </Tag>
+                    {hasPendingApproval && <Tag>待處理申請</Tag>}
+                    </GridItem>
+                    </SimpleGrid>
                 </NextLink>
               );
             })}
