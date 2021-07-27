@@ -50,6 +50,7 @@ const OrganizationSubmissionFormModal = ({
     reset();
   }, []);
 
+
   const onSubmissionCreate = useCallback(
     async (values) => {
       try {
@@ -319,7 +320,9 @@ const OrganizationSubmissionFormModal = ({
               </FormControl>
             </Stack>
 
-            <Stack direction={["column", "column", "row"]}>
+            {
+              organization?.organizationType !== "ngo" ?
+<Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.contactPhone?.message}>
                 <FormLabel color="#999" mb={0}>
                   {wordExtractor(
@@ -347,6 +350,9 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
             </Stack>
+            : null
+            }
+            
             <Button
               alignSelf="center"
               minW={24}
