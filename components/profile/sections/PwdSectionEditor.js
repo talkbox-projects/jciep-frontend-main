@@ -99,7 +99,7 @@ const PwdSectionEditor = () => {
           </FormHelperText>
         </FormControl>
       </VStack>
-      <VStack px={8} py={4} align="stretch" spacing={4}>
+      <VStack px={8} py={4} align="stretch" spacing={6}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl
             isRequired={true}
@@ -108,7 +108,7 @@ const PwdSectionEditor = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_chineseName"
+                "field_label_chineseName"    
               )}
             </FormLabel>
             <Input

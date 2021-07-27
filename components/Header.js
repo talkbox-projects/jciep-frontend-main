@@ -112,9 +112,20 @@ const Header = ({
   );
 
   useEffect(() => {
+    if(router && router.query){
+      if(router.query.login){
+        loginModalDisclosure.onOpen()
+      } else if (router.query.register) {
+        registerModalDisclosure.onOpen()
+      }
+    }
+  }, [router])
+
+  useEffect(() => {
     (async () => {
       try {
         const token = nookies.get("jciep-token")?.["jciep-token"];
+
 
         const mutation = gql`
           mutation UserGet($token: String!) {

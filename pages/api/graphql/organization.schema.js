@@ -63,6 +63,7 @@ export default gql`
     tncAccept: Boolean
     invitationCode: String
     published: Boolean
+    createdAt: Timestamp
   }
 
   input OrganizationSubmissionCreateInput {
@@ -146,6 +147,7 @@ export default gql`
     ): Boolean
     OrganizationSearch(
       name: String
+      days: String
       status: [EnumOrganizationStatus]
       type: [EnumOrganizationType]
       published: Boolean

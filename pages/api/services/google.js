@@ -10,10 +10,12 @@ export default {
         },
       }
     );
+    
     const snsMeta = {
       id: response.id,
       displayName: response.name,
       profilePicUrl: response.picture,
+      
     };
     return snsMeta;
   },

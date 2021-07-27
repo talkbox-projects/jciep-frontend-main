@@ -39,22 +39,33 @@ export default {
     },
     OrganizationSearch: async (
       _parent,
-      { status = [], type = [], name, published = undefined }
+      { status = [], type = [], name, published = undefined , days}
     ) => {
       /**
        * Search Organization
        * Admin can access to all organization
        * other identity can only access to approved organization
-       */
-
+       */      
+      let date =  new Date()
+      if (days === "7 Days") {
+        date.setDate(date.getDate() - 7);
+      } else if (days === "1 Month" ) {
+        date.setMonth(date.getMonth() - 1);
+      } else if (days === "3 Months" ) {
+        date.setMonth(date.getMonth() - 3);
+      } else {
+        days = undefined
+      }
+      
       const organizations = await Organization.find({
         ...(published !== undefined && { published }),
         ...(status?.length && { status: { $in: status } }),
         ...(type?.length && { organizationType: { $in: type } }),
-        ...(name && {
-          $or: [{ chineseCompanyName: name }, { englishCompanyName: name }],
+        ...(days && {createdAt: {$gte: date}}),
+        ...(name &&  {
+          $or: [{ chineseCompanyName: { $regex: name , $options: 'i'} }, { englishCompanyName: { $regex: name,$options: 'i' } }],
         }),
-      }).populate("submission");
+      }).populate("submission").sort({createdAt: -1});    
 
       const identities = await Identity.find({
         _id: {
@@ -130,7 +141,7 @@ export default {
           );
 
           if (!organization) {
-            throw new Error("Organiazation not exists!");
+            throw new Error("Organization not exists!");
           }
 
           resolve(organization);
@@ -160,6 +171,7 @@ export default {
               logo: params.input?.logo,
               tncAccept: params?.input?.tncAccept,
               invitationCode: Math.floor(100000 + Math.random() * 900000),
+              createdAt: new Date()
             })
           );
         }

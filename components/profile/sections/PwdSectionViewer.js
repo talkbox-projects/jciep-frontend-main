@@ -38,7 +38,7 @@ const PwdSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) && (
+        {(isAdmin ) && (
           <Button
             variant="outline"
             isActive={!!identity?.published}
@@ -102,7 +102,7 @@ const PwdSectionViewer = () => {
             wordExtractor(page?.content?.wordings, "empty_text_label")}
         </Text>
       </VStack>
-      <VStack px={8} py={4} align="stretch" spacing={4}>
+      <VStack px={8} py={4} align="stretch" spacing={6}>
         {userFieldVisible && (
           <>
             <Stack direction={["column", "column", "row"]}>

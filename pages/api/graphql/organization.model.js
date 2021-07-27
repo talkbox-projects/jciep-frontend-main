@@ -125,6 +125,9 @@ const organizationSchema = Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type: Date
+  }
 });
 
 const organizationSubmissionSchema = Schema({

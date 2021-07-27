@@ -10,6 +10,7 @@ import {
   Checkbox,
   FormHelperText,
   FormLabel,
+  Link
 } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -300,7 +301,7 @@ const IdentityPublicAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-               <a target="_blank" href={page?.content?.form?.terms?.link}> {page?.content?.form?.terms?.text} </a>
+               {page?.content?.form?.terms?.text} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -506,6 +507,11 @@ export default withPageCMS(IdentityPublicAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "url",
+              label: "關聯 Url",
               component: "text",
               placeholder:"https://"
             }

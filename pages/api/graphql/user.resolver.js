@@ -42,8 +42,8 @@ export default {
       }
       if (input.name)
         keys["$or"] = [
-          { chineseName: input?.name },
-          { englishName: input?.name },
+          { chineseName:  { $regex: input?.name , $options: 'i'}},
+          { englishName: { $regex: input?.name, $options: 'i' }},
         ];
 
       const organizations = await Organization.find();
@@ -72,7 +72,6 @@ export default {
         );
       });
 
-      console.log(identities);
       return identities;
     },
 
@@ -434,6 +433,7 @@ export default {
         employment: input?.employment,
         activity: input?.activity,
         published: input?.published || false,
+        createdAt: new Date()
       }).save();
 
       if (input?.invitationCode) {
