@@ -96,7 +96,7 @@ export default gql`
 
     email: String
     phone: String
-
+    createdAt: Timestamp
     profilePic: File
     bannerMedia: FileMeta
     caption: String
@@ -250,6 +250,8 @@ export default gql`
       published: Boolean
       limit: Int!
       page: Int!
+      days: String
+
     ): [Identity]
 
     IdentityGet(id: ID!): Identity

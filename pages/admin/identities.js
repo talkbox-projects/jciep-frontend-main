@@ -13,6 +13,8 @@ import {
   VStack,
   IconButton,
 } from "@chakra-ui/react";
+import moment from "moment";
+
 import Container from "../../components/Container";
 import identitySearch from "../../utils/api/IdentitySearch";
 import { getPage } from "../../utils/page/getPage";
@@ -51,14 +53,15 @@ const AdminIdentity = ({ enums }) => {
     page: 1,
     identityType: enums?.EnumIdentityTypeList.map((x) => x.key),
     name: "",
+    days: ""
   });
 
   const fetchIdentities = useCallback(
-    async ({ identityType, name, limit, page }) => {
+    async ({ identityType, name, limit, page , days}) => {
       try {
         setIsLoading(true);
         setIdentities(
-          await identitySearch({ limit, page, identityType, name })
+          await identitySearch({ limit, page, identityType, name, days })
         );
       } catch (error) {
         console.error(error);
@@ -74,6 +77,7 @@ const AdminIdentity = ({ enums }) => {
       name: params?.name,
       limit: params?.limit,
       page: params?.page,
+      days: params?.days
     });
   }, [fetchIdentities, params]);
 
@@ -102,6 +106,25 @@ const AdminIdentity = ({ enums }) => {
       ></MultiSelect>
     );
   }, [enums, params]);
+
+  const getDaysFilter = useCallback(() => {
+    const options = [
+      { value: "All", label: 'All' },
+      { value: "7 Days", label: '7 Days' },
+      { value: "1 Month", label: '1 Month' },
+      { value: "3 Months", label: '3 Months' }
+    ]
+    
+    return  <MultiSelect
+    placeholder="選擇"
+    width="100%"
+    onChange={(options) =>
+      setParams((_) => ({ ..._, days: options.value}))
+    }
+    options={options}
+  ></MultiSelect>
+        
+  })
 
   const onPrev = useCallback(() => {
     setParams((_) => ({
@@ -146,6 +169,12 @@ const AdminIdentity = ({ enums }) => {
               {getTypeFilter()}
             </FormControl>
           </GridItem>
+          <GridItem>
+            <FormControl>
+              <FormLabel mb={0.5}>登記日期</FormLabel>
+              {getDaysFilter()}
+            </FormControl>
+          </GridItem>
         </SimpleGrid>
 
         <VStack align="stretch" mt={12}>
@@ -156,7 +185,7 @@ const AdminIdentity = ({ enums }) => {
                 (identity?.submission ?? [])?.[0]?.status === "pendingApproval";
               return (
                 <NextLink href={`/user/identity/${identity.id}`}>
-                  <HStack
+                  {/* <HStack
                     borderBottomWidth={1}
                     borderColor="#eee"
                     spacing={4}
@@ -183,7 +212,33 @@ const AdminIdentity = ({ enums }) => {
                       }
                     </Tag>
                     {hasPendingApproval && <Tag>待處理申請</Tag>}
-                  </HStack>
+                  </HStack> */}
+                  <SimpleGrid columns={3} marginTop="0px">
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px"   >
+                    <Avatar size="sm" src={identity?.logo?.url}></Avatar>
+                    <Text display="inline-block" marginLeft="10px">
+                      {router.locale === "zh"
+                        ? identity?.chineseName
+                        : identity?.englishName}
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px">
+                    <Text ver>
+                        {moment(identity?.createdAt).format("YYYY-MM-DD")}
+
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px" textAlign="right">
+                    <Tag>
+                      {
+                        enums.EnumIdentityTypeList.find(
+                          (data) => data.key === identity.type
+                        )?.value[router.locale]
+                      }
+                    </Tag>
+                    {hasPendingApproval && <Tag>待處理申請</Tag>}
+                    </GridItem>
+                    </SimpleGrid>
                 </NextLink>
               );
             })}
