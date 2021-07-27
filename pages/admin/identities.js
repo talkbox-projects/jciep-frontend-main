@@ -51,14 +51,15 @@ const AdminIdentity = ({ enums }) => {
     page: 1,
     identityType: enums?.EnumIdentityTypeList.map((x) => x.key),
     name: "",
+    days: ""
   });
 
   const fetchIdentities = useCallback(
-    async ({ identityType, name, limit, page }) => {
+    async ({ identityType, name, limit, page , days}) => {
       try {
         setIsLoading(true);
         setIdentities(
-          await identitySearch({ limit, page, identityType, name })
+          await identitySearch({ limit, page, identityType, name, days })
         );
       } catch (error) {
         console.error(error);
@@ -74,6 +75,7 @@ const AdminIdentity = ({ enums }) => {
       name: params?.name,
       limit: params?.limit,
       page: params?.page,
+      days: params?.days
     });
   }, [fetchIdentities, params]);
 
@@ -102,6 +104,25 @@ const AdminIdentity = ({ enums }) => {
       ></MultiSelect>
     );
   }, [enums, params]);
+
+  const getDaysFilter = useCallback(() => {
+    const options = [
+      { value: "All", label: 'All' },
+      { value: "7 Days", label: '7 Days' },
+      { value: "1 Month", label: '1 Month' },
+      { value: "3 Months", label: '3 Months' }
+    ]
+    
+    return  <MultiSelect
+    placeholder="選擇"
+    width="100%"
+    onChange={(options) =>
+      setParams((_) => ({ ..._, days: options.value}))
+    }
+    options={options}
+  ></MultiSelect>
+        
+  })
 
   const onPrev = useCallback(() => {
     setParams((_) => ({
@@ -144,6 +165,12 @@ const AdminIdentity = ({ enums }) => {
             <FormControl>
               <FormLabel mb={0.5}>用戶類別</FormLabel>
               {getTypeFilter()}
+            </FormControl>
+          </GridItem>
+          <GridItem>
+            <FormControl>
+              <FormLabel mb={0.5}>登記日期</FormLabel>
+              {getDaysFilter()}
             </FormControl>
           </GridItem>
         </SimpleGrid>
