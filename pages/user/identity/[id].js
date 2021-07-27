@@ -39,7 +39,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
 
   switch (identity?.type) {
     case "pwd":
-      comp = <IdentityPwdProfile />;
+      comp = <IdentityPwdProfile  />;
       break;
     case "public":
       comp = <IdentityPublicProfile />;

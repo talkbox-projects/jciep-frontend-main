@@ -5,13 +5,6 @@ import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
 
 
- Organization.find()
- .then((o) => {
-  console.log(o)
- })
- .catch(e => {
-   console.log(e)
- })
 
  
 export default {

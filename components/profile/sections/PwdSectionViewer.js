@@ -18,6 +18,10 @@ import { AiOutlineEdit } from "react-icons/ai";
 import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
 import { MdRadioButtonUnchecked, MdRadioButtonChecked } from "react-icons/md";
+import {useEffect, useState} from 'react';
+import { useAppContext } from "../../../store/AppStore";
+import identityGet from "../../../utils/api/IdentityGet";
+
 
 const PwdSectionViewer = () => {
   const router = useRouter();
@@ -34,11 +38,34 @@ const PwdSectionViewer = () => {
   } = IdentityProfileStore.useContext();
 
   const toast = useToast();
+  const { identity: { id, type} = {} } = useAppContext();
+  const [staffAccess, setStaffAccess] = useState(false) 
+  
+
+  useEffect(async () => {
+    if (type === "staff" && identity?.organizationRole?.length> 0) {
+      let IdentityRole = (identity.organizationRole)
+      let currIdentity = await identityGet({id})
+
+     let hasStaffAccess =  IdentityRole.filter(role =>  
+        role.organization.id === currIdentity.organizationRole[0].organization.id
+        && currIdentity.organizationRole[0].role === "staff" 
+        && currIdentity.organizationRole[0].status === "joined" 
+        )[0]
+       
+     if(hasStaffAccess) {
+      setStaffAccess(true)
+     } else {
+      setStaffAccess(false)
+     }   
+    }
+
+  }, [type, identity])
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin ) && (
+        {(isAdmin || staffAccess  ) && (
           <Button
             variant="outline"
             isActive={!!identity?.published}
