@@ -290,29 +290,7 @@ export default withPageCMS(OrganizationNgoAdd, {
           label: "公司描述標籤 NGO/ Organization/ School Description Label",
           component: "text",
         },
-        {
-          name: "terms",
-          label: "條款和條件 T&C Label",
-          component: "group",
-          fields: [
-            {
-              name: "text",
-              label: "文本 text",
-              component: "text",
-            },
-            {
-              name: "link",
-              label: "關聯 Link",
-              component: "text",
-            },
-            {
-              name: "url",
-              label: "關聯 Url",
-              component: "text",
-              placeholder:"https://"
-            },
-          ],
-        },
+        
         {
           name: "continue",
           label: "繼續標籤 Button text",
