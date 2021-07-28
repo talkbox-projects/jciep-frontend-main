@@ -40,6 +40,7 @@ const OrganizationMemberListSection = ({ path }) => {
   useEffect(() => {
     if (path !== undefined && id) {
 
+      console.log(organization.member)
       if (type === "admin") {
         setHasStaffAccess(true)
         return
@@ -53,6 +54,7 @@ const OrganizationMemberListSection = ({ path }) => {
 
     }
   }, [path, id])
+
 
   const hasOnlyOneStaff =
     (organization?.member ?? []).filter(
@@ -73,7 +75,8 @@ const OrganizationMemberListSection = ({ path }) => {
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {(organization?.member ?? [])
-          .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
+          .filter((m) => (!(isAdmin || hasStaffAccess || editable)) ? m.role === "member" &&  m.status === "joined" : true)
+        //  .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
           .map(({ identityId, identity, email, role, status }) => {
             const availableOperations = [];
 
@@ -173,10 +176,8 @@ const OrganizationMemberListSection = ({ path }) => {
 
             return (
               <div>
-                {
-                  path === "talants" ?
-
-                    (<HStack
+               
+                    <HStack
                       key={identity?.id}
                       {...(identity?.id && {
                         onClick: () => {
@@ -217,15 +218,23 @@ const OrganizationMemberListSection = ({ path }) => {
                         </Text>
                       </VStack>
                       {
-                        hasStaffAccess ?
-                        <Tag>
-                        {
-                          enums?.EnumJoinStatusList?.find((x) => x.key === status)
-                            ?.value?.[router?.locale]
-                        }
-                      </Tag>
-                        : null
+                        (path === "talants" && hasStaffAccess) ? 
+                          <Tag>
+                          {
+                            enums?.EnumJoinStatusList?.find((x) => x.key === status)
+                              ?.value?.[router?.locale]
+                          }
+                        </Tag>
+                        : (path !== "talants") ? 
+                          <Tag>
+                            {
+                              enums?.EnumJoinStatusList?.find((x) => x.key === status)
+                                ?.value?.[router?.locale]
+                            }
+                          </Tag>
+                          : null
                       }
+
                       
                       {availableOperations.length > 0 && (
                         <Box>
@@ -242,72 +251,8 @@ const OrganizationMemberListSection = ({ path }) => {
                           </Menu>
                         </Box>
                       )}
-                    </HStack>)
-
-                    :
-                    (<HStack
-                      key={identity?.id}
-                      {...(identity?.id && {
-                        onClick: () => {
-                          if (isAdmin || editable) {
-                            router.push(`/user/identity/${identity.id}`);
-                          } else {
-                            router.push(
-                              `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
-                            );
-                          }
-                        },
-                        _hover: {
-                          bg: "#fafafa",
-                          [Button]: {
-                            d: "none",
-                          },
-                        },
-                        cursor: "pointer",
-                      })}
-                      pl={4}
-                      pr={2}
-                      py={2}
-                    >
-                      <Avatar
-                        {...(identity?.profilePic?.url && { bgColor: "white" })}
-                        size="sm"
-                        src={identity?.profilePic?.url}
-                      ></Avatar>
-                      <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
-                        <Text textOverflow="ellipsis">
-                          {identity?.chineseName ?? email}
-                        </Text>
-                        <Text color="#999" fontSize="sm">
-                          {
-                            enums?.EnumJoinRoleList?.find((x) => x.key === role)
-                              ?.value?.[router?.locale]
-                          }
-                        </Text>
-                      </VStack>
-                      <Tag>
-                        {
-                          enums?.EnumJoinStatusList?.find((x) => x.key === status)
-                            ?.value?.[router?.locale]
-                        }
-                      </Tag>
-                      {availableOperations.length > 0 && (
-                        <Box>
-                          <Menu size="sm">
-                            <MenuButton onClick={(e) => e.stopPropagation()}>
-                              <IconButton
-                                fontSize="xs"
-                                variant="link"
-                                as={IoEllipsisVertical}
-                                size="xs"
-                              />
-                            </MenuButton>
-                            <MenuList>{availableOperations}</MenuList>
-                          </Menu>
-                        </Box>
-                      )}
-                    </HStack>)
-                }
+                    </HStack>
+                
               </div>
 
             );
