@@ -142,7 +142,7 @@ const IdentityOpportunities = ({
             {...(identity?.id === identityId && {
               borderColor: "#F6D644",
               borderWidth: 2,
-              borderTopWidth: 8,
+              borderTopWidth: 3,
             })}
             borderRadius={8}
           >

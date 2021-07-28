@@ -6,4 +6,5 @@ export default {
   associateDegree: { en: "Associate Degree", zh: "副學士學位" },
   degree: { en: "Degree", zh: "學士學位" },
   masterOrAbove: { en: "Master or above", zh: "碩士學位或以上" },
+  notSpecified: { en: "Master or above", zh: "碩士學位或以上" }
 };
