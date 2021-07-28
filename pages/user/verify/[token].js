@@ -64,16 +64,6 @@ const VerifyToken = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-<<<<<<< HEAD
-  const onUserCreate = useCallback(
-    async ({ password }) => {
-      try {
-        const mutation = gql`
-          mutation UserLogin($input: LoginInput!) {
-            UserLogin(input: $input) {
-              token
-              user {
-=======
   const onUserCreate = useCallback(async ({ password }) => {
     try {
       const mutation = gql`
@@ -92,7 +82,6 @@ const VerifyToken = ({ page }) => {
                 displayName
               }
               identities {
->>>>>>> profile-fixes
                 id
                 email
                 facebookId
