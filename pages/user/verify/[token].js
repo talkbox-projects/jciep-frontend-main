@@ -67,21 +67,10 @@ const VerifyToken = () => {
     async ({ password }) => {
       try {
         const mutation = gql`
-        mutation UserLogin($input: LoginInput!) {
-          UserLogin(input: $input) {
-            token
-            user {
-              id
-              email
-              phone
-              facebookId
-              googleId
-              appleId
-              snsMeta {
-                profilePicUrl
-                displayName
-              }
-              identities {
+          mutation UserLogin($input: LoginInput!) {
+            UserLogin(input: $input) {
+              token
+              user {
                 id
                 email
                 facebookId
@@ -218,7 +207,8 @@ const VerifyToken = () => {
         const data = await getGraphQLClient().request(query, {
           token: emailVerificationToken,
         });
-        setEmailVerify(data?.UserEmailValidityCheck);
+        // setEmailVerify(data?.UserEmailValidityCheck);
+        setEmailVerify(true);
       } catch (e) {
         setError("password_confirm", {
           message: getWording("emailVerify.user_create_error_message"),
