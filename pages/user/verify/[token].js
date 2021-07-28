@@ -67,23 +67,13 @@ const VerifyToken = () => {
     async ({ password }) => {
       try {
         const mutation = gql`
-        mutation UserLogin($input: LoginInput!) {
-          UserLogin(input: $input) {
-            token
-            user {
-              id
-              email
-              phone
-              facebookId
-              googleId
-              appleId
-              snsMeta {
-                profilePicUrl
-                displayName
-              }
-              identities {
+          mutation UserLogin($input: LoginInput!) {
+            UserLogin(input: $input) {
+              token
+              user {
                 id
                 email
+                phone
                 facebookId
                 googleId
                 appleId
@@ -93,79 +83,90 @@ const VerifyToken = () => {
                 }
                 identities {
                   id
-                  type
-                  chineseName
-                  englishName
-                  dob
-                  gender
-                  district
-                  pwdType
-                  interestedEmploymentMode
-                  interestedIndustry
-                  industry
-                  industryOther
-                  tncAccept
-                  published
                   email
-                  phone
-                  profilePic {
+                  facebookId
+                  googleId
+                  appleId
+                  snsMeta {
+                    profilePicUrl
+                    displayName
+                  }
+                  identities {
                     id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  bannerMedia {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  yearOfExperience
-                  biography
-                  portfolio {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  writtenLanguage
-                  writtenLanguageOther
-                  oralLanguage
-                  oralLanguageOther
-                  hobby
-                  education {
-                    school
-                    degree
-                    fieldOfStudy
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  employment {
-                    employmentType
-                    companyName
-                    jobTitle
+                    type
+                    chineseName
+                    englishName
+                    dob
+                    gender
+                    district
+                    pwdType
+                    interestedEmploymentMode
+                    interestedIndustry
                     industry
                     industryOther
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  activity {
-                    name
-                    description
-                    startDatetime
-                    endDatetime
+                    tncAccept
+                    published
+                    email
+                    phone
+                    profilePic {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    bannerMedia {
+                      file {
+                        id
+                        url
+                        contentType
+                        fileSize
+                      }
+                      videoUrl
+                      title
+                      description
+                    }
+                    yearOfExperience
+                    biography
+                    portfolio {
+                      file {
+                        id
+                        url
+                        contentType
+                        fileSize
+                      }
+                      videoUrl
+                      title
+                      description
+                    }
+                    writtenLanguage
+                    writtenLanguageOther
+                    oralLanguage
+                    oralLanguageOther
+                    hobby
+                    education {
+                      school
+                      degree
+                      fieldOfStudy
+                      startDatetime
+                      endDatetime
+                      present
+                    }
+                    employment {
+                      employmentType
+                      companyName
+                      jobTitle
+                      industry
+                      industryOther
+                      startDatetime
+                      endDatetime
+                      present
+                    }
+                    activity {
+                      name
+                      description
+                      startDatetime
+                      endDatetime
+                    }
                   }
                 }
               }
