@@ -3,10 +3,37 @@ import wordExtractor from "../../../utils/wordExtractor";
 import { RiEdit2Line } from "react-icons/ri";
 import ActvitySubSectionViewer from "../fragments/ActvitySubSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import { useAppContext } from "../../../store/AppStore";
+import {useEffect, useState} from "react";
 
 const ActivitySectionViewer = () => {
-  const { page, editSection, setEditSection, isAdmin, editable } =
+  const { page, editSection, setEditSection, isAdmin, editable, identity } =
     IdentityProfileStore.useContext();
+
+    
+    const { identity: { id, type, organizationRole} = {} } = useAppContext();
+  const [staffAccess, setStaffAccess] = useState(false) 
+  
+  useEffect(async () => {
+    if (type === "staff" && organizationRole?.length> 0) {
+      let IdentityRole = (identity.organizationRole)
+      
+     let hasStaffAccess =  IdentityRole.filter(role =>  
+        role.organization.id === organizationRole[0].organization.id
+        && organizationRole[0].role === "staff" 
+        && organizationRole[0].status === "joined" 
+      )[0]
+       
+     if(hasStaffAccess) {
+      setStaffAccess(true)
+     } else {
+      setStaffAccess(false)
+     }   
+    }
+
+  }, [type, identity])
+
+
 
   return (
     <VStack spacing={1} align="stretch">
@@ -14,7 +41,7 @@ const ActivitySectionViewer = () => {
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "activity_header_label")}
         </Text>
-        {(isAdmin || editable) && !editSection && (
+        {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("activity")}
             variant="link"

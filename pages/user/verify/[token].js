@@ -64,6 +64,7 @@ const VerifyToken = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+<<<<<<< HEAD
   const onUserCreate = useCallback(
     async ({ password }) => {
       try {
@@ -72,6 +73,26 @@ const VerifyToken = ({ page }) => {
             UserLogin(input: $input) {
               token
               user {
+=======
+  const onUserCreate = useCallback(async ({ password }) => {
+    try {
+      const mutation = gql`
+        mutation UserLogin($input: LoginInput!) {
+          UserLogin(input: $input) {
+            token
+            user {
+              id
+              email
+              phone
+              facebookId
+              googleId
+              appleId
+              snsMeta {
+                profilePicUrl
+                displayName
+              }
+              identities {
+>>>>>>> profile-fixes
                 id
                 email
                 facebookId
@@ -140,6 +161,13 @@ const VerifyToken = ({ page }) => {
                     startDatetime
                     endDatetime
                     present
+                  }
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
                   }
                   employment {
                     employmentType

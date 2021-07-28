@@ -12,7 +12,7 @@ import {
   IconButton,
   Box,
 } from "@chakra-ui/react";
-import React from "react";
+import React, {useEffect} from "react";
 import { useRouter } from "next/router";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -24,7 +24,7 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import OrganizationMemberApproveModal from "../fragments/OrganizationMemberApproveModal";
 import OrganizationMemberApprove from "../../../utils/api/OrganizationMemberApprove";
 
-const OrganizationMemberListSection = () => {
+const OrganizationMemberListSection = ({path}) => {
   const { organization, page, enums, editable, refreshOrganization, isAdmin } =
     OrganizationProfileStore.useContext();
 
@@ -33,12 +33,23 @@ const OrganizationMemberListSection = () => {
   const removeDisclosure = useDisclosureWithParams();
   const approveDisclosure = useDisclosureWithParams();
 
+
+  useEffect(() => {
+    if(path !== undefined) {
+      (organization?.member ?? []).map((m) => {
+
+      })
+    }
+  }, [path])
+  
   const hasOnlyOneStaff =
     (organization?.member ?? []).filter(
       (m) => m?.role === "staff" && m?.status === "joined"
     )?.length === 1;
 
-    console.log(organization)
+  console.log(organization)
+  
+
   return (
     <SectionCard>
       <HStack px={4} py={4} align="center">

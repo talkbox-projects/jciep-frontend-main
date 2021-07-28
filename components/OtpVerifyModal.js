@@ -95,6 +95,13 @@ const OtpVerifyModal = () => {
                     title
                     description
                   }
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
+                  }
                   yearOfExperience
                   biography
                   portfolio {

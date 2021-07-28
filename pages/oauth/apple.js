@@ -91,6 +91,13 @@ const AppleLogin = ({ id_token: accessToken }) => {
                     title
                     description
                   }
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
+                  }
                   yearOfExperience
                   biography
                   portfolio {

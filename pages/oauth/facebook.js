@@ -91,6 +91,13 @@ const FacebookLogin = ({ page }) => {
                     title
                     description
                   }
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
+                  }
                   yearOfExperience
                   biography
                   portfolio {

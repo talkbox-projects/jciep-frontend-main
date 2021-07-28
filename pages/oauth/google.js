@@ -117,6 +117,13 @@ const GoogleLogin = ({ page }) => {
                     endDatetime
                     present
                   }
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
+                  }
                   employment {
                     employmentType
                     companyName

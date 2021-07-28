@@ -10,6 +10,7 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
+import identityUpdate from "../../../utils/api/IdentityUpdate";
 
 
 
@@ -145,6 +146,8 @@ export default {
           email,
           meta: { type: "register" },
         });
+
+        console.log(emailVerify)
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -170,6 +173,7 @@ export default {
             },
           ]
         );
+
         return true;
       } catch (error) {
         console.error(error);
@@ -325,8 +329,39 @@ export default {
 
     UserGet: async (_parent, { token }) => {
       try {
-        let user = jwt.decode(token, "shhhhh");
-        return await User.findById(user._id).populate("identities");
+        let decorderUser = jwt.decode(token, "shhhhh");
+        let user = await User.findById(decorderUser._id).populate("identities")
+
+
+        let identities =  (user.identities).map(async (identity) => {
+          
+          const organizations = await Organization.find({
+            member: { $elemMatch: { identityId: identity._id } },
+          });
+          
+          let organizationRole = await  (organizations ?? []).map((organization) => {
+            const member = organization.member.find(
+              ({ identityId }) => String(identityId) === String(identity._id)
+            );
+            return {
+              organization,
+              status: member.status,
+              role: member.role,
+            };
+          });
+
+          identity = identity.toObject()
+          identity.organizationRole = organizationRole
+          identity.id = identity._id
+          return identity
+        })
+
+        user = user.toObject()
+        user.id = user._id
+        user.identities = await Promise.all(identities)
+        return user
+        
+        
       } catch (error) {
         console.log(error);
         return null;

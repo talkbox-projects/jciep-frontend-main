@@ -38,19 +38,17 @@ const PwdSectionViewer = () => {
   } = IdentityProfileStore.useContext();
 
   const toast = useToast();
-  const { identity: { id, type} = {} } = useAppContext();
+  const { identity: { id, type, organizationRole} = {} } = useAppContext();
   const [staffAccess, setStaffAccess] = useState(false) 
   
-
   useEffect(async () => {
-    if (type === "staff" && identity?.organizationRole?.length> 0) {
+    if (type === "staff" && organizationRole?.length> 0) {
       let IdentityRole = (identity.organizationRole)
-      let currIdentity = await identityGet({id})
-
+      
      let hasStaffAccess =  IdentityRole.filter(role =>  
-        role.organization.id === currIdentity.organizationRole[0].organization.id
-        && currIdentity.organizationRole[0].role === "staff" 
-        && currIdentity.organizationRole[0].status === "joined" 
+        role.organization.id === organizationRole[0].organization.id
+        && organizationRole[0].role === "staff" 
+        && organizationRole[0].status === "joined" 
       )[0]
        
      if(hasStaffAccess) {
@@ -100,7 +98,7 @@ const PwdSectionViewer = () => {
             )}
           </Button>
         )}
-        {(isAdmin || editable) && !editSection && (
+        {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}

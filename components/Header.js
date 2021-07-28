@@ -50,6 +50,7 @@ import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
 // import { IoWarning } from "react-icons/io5";
 import ResetPasswordModal from "./ResetPasswordModal";
+import userGet from "../utils/api/UserGet";
 
 const Header = ({
   navigation,
@@ -126,103 +127,9 @@ const Header = ({
       try {
         const token = nookies.get("jciep-token")?.["jciep-token"];
 
-        const mutation = gql`
-          mutation UserGet($token: String!) {
-            UserGet(token: $token) {
-              id
-              email
-              phone
-              facebookId
-              googleId
-              appleId
-              snsMeta {
-                profilePicUrl
-                displayName
-              }
-              identities {
-                id
-                type
-                chineseName
-                englishName
-                dob
-                gender
-                district
-                pwdType
-                interestedEmploymentMode
-                interestedIndustry
-                interestedIndustryOther
-                industry
-                industryOther
-                tncAccept
-                published
-                email
-                phone
-                profilePic {
-                  id
-                  url
-                  contentType
-                  fileSize
-                }
-                bannerMedia {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                yearOfExperience
-                biography
-                portfolio {
-                  file {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  videoUrl
-                  title
-                  description
-                }
-                writtenLanguage
-                writtenLanguageOther
-                oralLanguage
-                oralLanguageOther
-                hobby
-                education {
-                  school
-                  degree
-                  fieldOfStudy
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                employment {
-                  employmentType
-                  companyName
-                  jobTitle
-                  industry
-                  industryOther
-                  startDatetime
-                  endDatetime
-                  present
-                }
-                activity {
-                  name
-                  description
-                  startDatetime
-                  endDatetime
-                }
-              }
-            }
-          }
-        `;
+        const data = await userGet({ token: token });
 
-        const data = await getGraphQLClient().request(mutation, { token });
-        setCredential({ token, user: data?.UserGet });
+        setCredential({ token, user: data });
       } catch (e) {
         console.log(e);
         removeCredential();
