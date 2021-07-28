@@ -75,8 +75,8 @@ const LoginModal = () => {
   );
 
   const responseFacebook = (response) => {
-    router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
+    router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
   };
 
   const responseGoogle = (response) => {
