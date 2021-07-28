@@ -66,21 +66,30 @@ const AccountInfoPage = ({ page }) => {
         case "facebook":
           loginMethodDisplay = (
             <HStack color="facebook.500">
-              <Icon fontSize="lg" as={IoLogoFacebook} /> <Text>Facebook</Text>
+              <Icon fontSize="lg" as={IoLogoFacebook} />{" "}
+              <Text>
+                {wordExtractor(page?.content?.wordings, "facebook_label")}
+              </Text>
             </HStack>
           );
           break;
         case "google":
           loginMethodDisplay = (
             <HStack color="google.500">
-              <Icon fontSize="lg" as={IoLogoGoogle} /> <Text>Google</Text>
+              <Icon fontSize="lg" as={IoLogoGoogle} />{" "}
+              <Text>
+                {wordExtractor(page?.content?.wordings, "google_label")}
+              </Text>
             </HStack>
           );
           break;
         case "apple":
           loginMethodDisplay = (
             <HStack color="gray.500">
-              <Icon fontSize="lg" as={IoLogoApple} /> <Text>Facebook</Text>
+              <Icon fontSize="lg" as={IoLogoApple} />{" "}
+              <Text>
+                {wordExtractor(page?.content?.wordings, "apple_label")}
+              </Text>
             </HStack>
           );
           break;
@@ -89,14 +98,19 @@ const AccountInfoPage = ({ page }) => {
           loginMethodDisplay = (
             <HStack color="gray.500">
               <Icon fontSize="lg" as={IoPhoneLandscapeOutline} />{" "}
-              <Text>Phone</Text>
+              <Text>
+                {wordExtractor(page?.content?.wordings, "phone_label")}
+              </Text>
             </HStack>
           );
           break;
         default:
           loginMethodDisplay = (
             <HStack color="gray.500">
-              <Icon fontSize="lg" as={IoMail} /> <Text>Email</Text>
+              <Icon fontSize="lg" as={IoMail} />{" "}
+              <Text>
+                {wordExtractor(page?.content?.wordings, "email_label")}
+              </Text>
             </HStack>
           );
       }
@@ -138,13 +152,18 @@ const AccountInfoPage = ({ page }) => {
           colorScheme="gray"
           rightIcon={<RiArrowRightLine />}
         >
-          重設密碼
+          {wordExtractor(page?.content?.wordings, "reset_password_label")}
         </Button>
       );
     } else {
       return null;
     }
-  }, [getLoginMethod, user]);
+  }, [
+    getLoginMethod,
+    page?.content?.wordings,
+    resetPasswordModalDisclosure,
+    user,
+  ]);
 
   return (
     <VStack py={[24, 40]}>
@@ -163,4 +182,7 @@ const AccountInfoPage = ({ page }) => {
   );
 };
 
-export default withPageCMS(AccountInfoPage, { key: PAGE_KEY });
+export default withPageCMS(AccountInfoPage, {
+  key: PAGE_KEY,
+  fields: [],
+});
