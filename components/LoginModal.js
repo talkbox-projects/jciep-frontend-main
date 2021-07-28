@@ -360,7 +360,7 @@ const LoginModal = () => {
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={`/oauth/facebook`}
+                redirectUri={`https://jciep.uat.talkbox.net/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
