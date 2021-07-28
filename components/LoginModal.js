@@ -30,7 +30,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 import { useCredential } from "../utils/user";
-import FacebookLogin from "react-facebook-login";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import router from "next/router";
 import GoogleLogin from "react-google-login";
 import AppleLogin from "react-apple-login";
