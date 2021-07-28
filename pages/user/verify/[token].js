@@ -73,7 +73,6 @@ const VerifyToken = () => {
               user {
                 id
                 email
-                phone
                 facebookId
                 googleId
                 appleId
@@ -83,90 +82,79 @@ const VerifyToken = () => {
                 }
                 identities {
                   id
+                  type
+                  chineseName
+                  englishName
+                  dob
+                  gender
+                  district
+                  pwdType
+                  interestedEmploymentMode
+                  interestedIndustry
+                  industry
+                  industryOther
+                  tncAccept
+                  published
                   email
-                  facebookId
-                  googleId
-                  appleId
-                  snsMeta {
-                    profilePicUrl
-                    displayName
-                  }
-                  identities {
+                  phone
+                  profilePic {
                     id
-                    type
-                    chineseName
-                    englishName
-                    dob
-                    gender
-                    district
-                    pwdType
-                    interestedEmploymentMode
-                    interestedIndustry
-                    industry
-                    industryOther
-                    tncAccept
-                    published
-                    email
-                    phone
-                    profilePic {
+                    url
+                    contentType
+                    fileSize
+                  }
+                  bannerMedia {
+                    file {
                       id
                       url
                       contentType
                       fileSize
                     }
-                    bannerMedia {
-                      file {
-                        id
-                        url
-                        contentType
-                        fileSize
-                      }
-                      videoUrl
-                      title
-                      description
+                    videoUrl
+                    title
+                    description
+                  }
+                  yearOfExperience
+                  biography
+                  portfolio {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
                     }
-                    yearOfExperience
-                    biography
-                    portfolio {
-                      file {
-                        id
-                        url
-                        contentType
-                        fileSize
-                      }
-                      videoUrl
-                      title
-                      description
-                    }
-                    writtenLanguage
-                    writtenLanguageOther
-                    oralLanguage
-                    oralLanguageOther
-                    hobby
-                    education {
-                      school
-                      degree
-                      fieldOfStudy
-                      startDatetime
-                      endDatetime
-                      present
-                    }
-                    employment {
-                      employmentType
-                      companyName
-                      jobTitle
-                      industry
-                      industryOther
-                      startDatetime
-                      endDatetime
-                      present
-                    }
-                    activity {
-                      name
-                      description
-                      startDatetime
-                      endDatetime
-                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  writtenLanguage
+                  writtenLanguageOther
+                  oralLanguage
+                  oralLanguageOther
+                  hobby
+                  education {
+                    school
+                    degree
+                    fieldOfStudy
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  employment {
+                    employmentType
+                    companyName
+                    jobTitle
+                    industry
+                    industryOther
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  activity {
+                    name
+                    description
+                    startDatetime
+                    endDatetime
                   }
                 }
               }
@@ -219,7 +207,8 @@ const VerifyToken = () => {
         const data = await getGraphQLClient().request(query, {
           token: emailVerificationToken,
         });
-        setEmailVerify(data?.UserEmailValidityCheck);
+        // setEmailVerify(data?.UserEmailValidityCheck);
+        setEmailVerify(true);
       } catch (e) {
         setError("password_confirm", {
           message: getWording("emailVerify.user_create_error_message"),
