@@ -86,6 +86,7 @@ const OrganizationSubmissionFormModal = ({
                 isInvalid={errors?.chineseCompanyName?.message}
               >
                 <FormLabel color="#999" mb={0}>
+
                   {
                     organization?.organizationType !== "ngo" ?
                     wordExtractor(
@@ -121,17 +122,18 @@ const OrganizationSubmissionFormModal = ({
                 <FormLabel color="#999" mb={0}>
 
                   {
-                    organization?.organizationType !== "ngo" ?
-                    wordExtractor(
-                      page?.content?.wordings,
-                      "field_label_englishCompanyName"
-                    )
-                    : 
-                    wordExtractor(
-                      page?.content?.wordings,
-                      "field_label_englishOrganizationName"
-                    )
+                   organization?.organizationType !== "ngo" ?
+                   wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_englishCompanyName"
+                  )
+                  : 
+                  wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_englishOrganizationName"
+                  )
                   }
+                  
                 </FormLabel>
                 <Input
                   variant="flushed"
@@ -248,10 +250,8 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
             </Stack>
-
             {
               organization?.organizationType !== "ngo" ?
-              
               <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.skill?.message}>
                 <FormLabel color="#999" mb={0}>
@@ -323,9 +323,8 @@ const OrganizationSubmissionFormModal = ({
             </Stack>
             : null
             }
-           {
-              organization?.organizationType !== "ngo" ?
-              <Stack direction={["column", "column", "row"]}>
+            
+            <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.description?.message}>
                 <FormLabel color="#999" mb={0}>
                   {wordExtractor(
@@ -345,13 +344,10 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
             </Stack>
-            : null
-           }
-            
 
             {
               organization?.organizationType !== "ngo" ?
-              <Stack direction={["column", "column", "row"]}>
+                <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.contactPhone?.message}>
                 <FormLabel color="#999" mb={0}>
                   {wordExtractor(
