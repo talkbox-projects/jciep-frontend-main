@@ -108,24 +108,23 @@ const Header = ({
       nookies.set(null, "jciep-identityId", identityId, { path: "/" });
       router.push(`/user/identity/${identityId}`);
     },
-    [router]
+    [router, setIdentityId]
   );
 
   useEffect(() => {
-    if(router && router.query){
-      if(router.query.login){
-        loginModalDisclosure.onOpen()
+    if (router && router.query) {
+      if (router.query.login) {
+        loginModalDisclosure.onOpen();
       } else if (router.query.register) {
-        registerModalDisclosure.onOpen()
+        registerModalDisclosure.onOpen();
       }
     }
-  }, [router])
+  }, [loginModalDisclosure, registerModalDisclosure, router]);
 
   useEffect(() => {
     (async () => {
       try {
         const token = nookies.get("jciep-token")?.["jciep-token"];
-
 
         const mutation = gql`
           mutation UserGet($token: String!) {
@@ -603,125 +602,6 @@ const Header = ({
           <DrawerContent>
             <DrawerBody>
               <VStack minH="100%" align="stretch">
-                <Accordion
-                  defaultIndex={[0, 1, 2, 3, 4, 5, 6, 7]}
-                  flex={1}
-                  minH={0}
-                  h="100%"
-                >
-                  <VStack my={12} align="start" spacing={8} overflow="auto">
-                    {(navigation.menu ?? []).map(
-                      ({ id, submenu = [], label, path = "/" }, index) =>
-                        submenu?.length > 0 ? (
-                          <AccordionItem
-                            w="100%"
-                            key={id}
-                            trigger="hover"
-                            gutter={20}
-                            border={0}
-                          >
-                            <AccordionButton
-                              p={0}
-                              appearance="none"
-                              bg="transparent"
-                              textAlign="left"
-                              _hover={{ bg: "transparent" }}
-                              _focus={{ outline: "none" }}
-                              h="100%"
-                            >
-                              <Button
-                                variant="unstyled"
-                                _hover={{ bg: "transparent" }}
-                                _focus={{ outline: "none" }}
-                                fontSize="2xl"
-                                p={0}
-                                bg="transparent"
-                                borderRadius={0}
-                                fontWeight="normal"
-                                borderColor="transparent"
-                                borderBottomWidth={3}
-                                {...(Number(tabIndex) === index && {
-                                  borderColor: "green",
-                                  fontWeight: "bold",
-                                })}
-                              >
-                                {label}
-                              </Button>
-                            </AccordionButton>
-                            <AccordionPanel>
-                              <VStack
-                                my={4}
-                                fontSize="2xl"
-                                align="start"
-                                w="100%"
-                                spacing={2}
-                              >
-                                {submenu.map(({ id: _id, label, path }) => (
-                                  <NextLink key={_id} href={path}>
-                                    <Button
-                                      fontSize="xl"
-                                      h="100%"
-                                      variant="unstyled"
-                                      borderRadius={0}
-                                      _focus={{ outline: "none" }}
-                                      fontWeight="normal"
-                                      borderColor="transparent"
-                                      appearance="none"
-                                      onClick={mobileMenuDisclosure.onClose}
-                                    >
-                                      {label}
-                                    </Button>
-                                  </NextLink>
-                                ))}
-                              </VStack>
-                            </AccordionPanel>
-                          </AccordionItem>
-                        ) : (
-                          <NextLink key={id} href={path}>
-                            <Button
-                              fontSize="2xl"
-                              textAlign="left"
-                              variant="unstyled"
-                              borderRadius={0}
-                              px={2}
-                              _focus={{ outline: "none" }}
-                              fontWeight="normal"
-                              borderColor="transparent"
-                              {...(Number(tabIndex) === index && {
-                                borderColor: "green",
-                                fontWeight: "bold",
-                              })}
-                              appearance="none"
-                              borderBottomWidth={3}
-                              onClick={mobileMenuDisclosure.onClose}
-                            >
-                              {label}
-                            </Button>
-                          </NextLink>
-                        )
-                    )}
-                    <NextLink
-                      href={navigation?.actionButton?.path ?? "/"}
-                      target="_blank"
-                    >
-                      <Button
-                        fontSize="2xl"
-                        textAlign="left"
-                        variant="unstyled"
-                        borderRadius={0}
-                        px={2}
-                        _focus={{ outline: "none" }}
-                        fontWeight="normal"
-                        borderColor="transparent"
-                        appearance="none"
-                        borderBottomWidth={3}
-                        onClick={mobileMenuDisclosure.onClose}
-                      >
-                        {navigation?.actionButton?.label}
-                      </Button>
-                    </NextLink>
-                  </VStack>
-                </Accordion>
                 <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
                   {isShowLangSwitcher && (
                     <Select
@@ -871,6 +751,126 @@ const Header = ({
                     )}
                   </Popover>
                 </HStack>
+
+                <Accordion
+                  defaultIndex={[0, 1, 2, 3, 4, 5, 6, 7]}
+                  flex={1}
+                  minH={0}
+                  h="100%"
+                >
+                  <VStack my={12} align="start" spacing={8} overflow="auto">
+                    {(navigation.menu ?? []).map(
+                      ({ id, submenu = [], label, path = "/" }, index) =>
+                        submenu?.length > 0 ? (
+                          <AccordionItem
+                            w="100%"
+                            key={id}
+                            trigger="hover"
+                            gutter={20}
+                            border={0}
+                          >
+                            <AccordionButton
+                              p={0}
+                              appearance="none"
+                              bg="transparent"
+                              textAlign="left"
+                              _hover={{ bg: "transparent" }}
+                              _focus={{ outline: "none" }}
+                              h="100%"
+                            >
+                              <Button
+                                variant="unstyled"
+                                _hover={{ bg: "transparent" }}
+                                _focus={{ outline: "none" }}
+                                fontSize="2xl"
+                                p={0}
+                                bg="transparent"
+                                borderRadius={0}
+                                fontWeight="normal"
+                                borderColor="transparent"
+                                borderBottomWidth={3}
+                                {...(Number(tabIndex) === index && {
+                                  borderColor: "green",
+                                  fontWeight: "bold",
+                                })}
+                              >
+                                {label}
+                              </Button>
+                            </AccordionButton>
+                            <AccordionPanel>
+                              <VStack
+                                my={4}
+                                fontSize="2xl"
+                                align="start"
+                                w="100%"
+                                spacing={2}
+                              >
+                                {submenu.map(({ id: _id, label, path }) => (
+                                  <NextLink key={_id} href={path}>
+                                    <Button
+                                      fontSize="xl"
+                                      h="100%"
+                                      variant="unstyled"
+                                      borderRadius={0}
+                                      _focus={{ outline: "none" }}
+                                      fontWeight="normal"
+                                      borderColor="transparent"
+                                      appearance="none"
+                                      onClick={mobileMenuDisclosure.onClose}
+                                    >
+                                      {label}
+                                    </Button>
+                                  </NextLink>
+                                ))}
+                              </VStack>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        ) : (
+                          <NextLink key={id} href={path}>
+                            <Button
+                              fontSize="2xl"
+                              textAlign="left"
+                              variant="unstyled"
+                              borderRadius={0}
+                              px={2}
+                              _focus={{ outline: "none" }}
+                              fontWeight="normal"
+                              borderColor="transparent"
+                              {...(Number(tabIndex) === index && {
+                                borderColor: "green",
+                                fontWeight: "bold",
+                              })}
+                              appearance="none"
+                              borderBottomWidth={3}
+                              onClick={mobileMenuDisclosure.onClose}
+                            >
+                              {label}
+                            </Button>
+                          </NextLink>
+                        )
+                    )}
+                    <NextLink
+                      href={navigation?.actionButton?.path ?? "/"}
+                      target="_blank"
+                    >
+                      <Button
+                        fontSize="2xl"
+                        textAlign="left"
+                        variant="unstyled"
+                        borderRadius={0}
+                        px={2}
+                        _focus={{ outline: "none" }}
+                        fontWeight="normal"
+                        borderColor="transparent"
+                        appearance="none"
+                        borderBottomWidth={3}
+                        onClick={mobileMenuDisclosure.onClose}
+                      >
+                        {navigation?.actionButton?.label}
+                      </Button>
+                    </NextLink>
+                  </VStack>
+                </Accordion>
               </VStack>
             </DrawerBody>
           </DrawerContent>
