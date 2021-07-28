@@ -120,6 +120,13 @@ const LoginModal = () => {
                   published
                   email
                   phone
+                  organizationRole {
+                    organization {
+                      id
+                    },
+                    status
+                    role
+                  }
                   profilePic {
                     id
                     url

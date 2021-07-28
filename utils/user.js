@@ -24,6 +24,7 @@ export const useCredential = () => {
       setCookie(null, "jciep-identityId", firstIdentityId, { path: "/" });
     }
 
+    console.log(user)
     setUser(user);
     setIdentityId(defaultIdentity?.id ?? firstIdentityId ?? null);
   }, []);
