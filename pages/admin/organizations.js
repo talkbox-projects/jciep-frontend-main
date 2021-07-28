@@ -11,7 +11,10 @@ import {
   SimpleGrid,
   Text,
   VStack,
+  Button,
 } from "@chakra-ui/react";
+import moment from "moment";
+
 import Container from "../../components/Container";
 import organizationSearch from "../../utils/api/OrganizationSearch";
 import { getPage } from "../../utils/page/getPage";
@@ -41,17 +44,22 @@ const AdminOrganization = ({ enums }) => {
   const [organizations, setOrganizations] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const days = [ "7 days", "1 month", "3 months"]
   const [params, setParams] = useState({
     status: enums?.EnumOrganizationStatusList.map((x) => x.key),
     type: enums?.EnumOrganizationTypeList.map((x) => x.key),
     name: "",
+    days: "",
+
   });
 
   const fetchOrganizations = useCallback(
-    async ({ status, type, name }) => {
+    async ({ status, type, name , days}) => {
+
       try {
         setIsLoading(true);
-        setOrganizations(await organizationSearch({ status, type, name }));
+        console.log(await organizationSearch({ status, type, name, days}))
+        setOrganizations(await organizationSearch({ status, type, name, days }));
       } catch (error) {
         console.error(error);
       }
@@ -65,6 +73,8 @@ const AdminOrganization = ({ enums }) => {
       status: params?.status,
       type: params?.type,
       name: params?.name,
+      days: params?.days,
+      
     });
   }, [fetchOrganizations, params]);
 
@@ -109,6 +119,26 @@ const AdminOrganization = ({ enums }) => {
       ></MultiSelect>
     );
   }, [enums, params]);
+
+  const getDaysFilter = useCallback(() => {
+    const options = [
+      { value: "All", label: 'All' },
+      { value: "7 Days", label: '7 Days' },
+      { value: "1 Month", label: '1 Month' },
+      { value: "3 Months", label: '3 Months' }
+    ]
+    
+    return  <MultiSelect
+    placeholder="選擇"
+    width="100%"
+    onChange={(options) =>
+      setParams((_) => ({ ..._, days: options.value}))
+    }
+    options={options}
+  ></MultiSelect>
+        
+  })
+
   return (
     <VStack align="stretch" pt={[24, 48]}>
       <Container>
@@ -140,6 +170,12 @@ const AdminOrganization = ({ enums }) => {
               {getStatusFilter()}
             </FormControl>
           </GridItem>
+          <GridItem>
+            <FormControl>
+              <FormLabel mb={0.5}>登記日期</FormLabel>
+              {getDaysFilter()}
+            </FormControl>
+          </GridItem>
         </SimpleGrid>
 
         <VStack align="stretch" mt={12}>
@@ -151,7 +187,26 @@ const AdminOrganization = ({ enums }) => {
                 "pendingApproval";
               return (
                 <NextLink href={`/user/organization/${organization.id}`}>
-                  <HStack
+                  <SimpleGrid columns={3} marginTop="0px">
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px"   >
+                    <Avatar size="sm" src={organization?.logo?.url}></Avatar>
+                    <Text display="inline-block" marginLeft="10px">
+                      {router.locale === "zh"
+                        ? organization?.chineseCompanyName
+                        : organization?.englishCompanyName}
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px">
+                    <Text ver>
+                        {moment(organization?.createdAt).format("YYYY-MM-DD")}
+
+                    </Text>
+                    </GridItem>
+                    <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px" textAlign="right">
+                    {hasPendingApproval && <Tag>待處理申請</Tag>}
+                    </GridItem>
+                  </SimpleGrid>
+                  {/* <HStack
                     borderBottomWidth={1}
                     borderColor="#eee"
                     spacing={4}
@@ -169,9 +224,17 @@ const AdminOrganization = ({ enums }) => {
                         ? organization?.chineseCompanyName
                         : organization?.englishCompanyName}
                     </Text>
-                    <Box flex={1} minW={0} w="100%"></Box>
+
+                    
+                    <Box flex={1} minW={0} w="75%"></Box>
+                    <Text>
+                        {moment(organization?.createdAt).format("YYYY-MM-DD")}
+
+                    </Text>
+                    
+
                     {hasPendingApproval && <Tag>待處理申請</Tag>}
-                  </HStack>
+                  </HStack> */}
                 </NextLink>
               );
             })}

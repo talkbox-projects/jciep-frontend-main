@@ -240,6 +240,9 @@ const identitySchema = Schema({
     type: Boolean,
     default: false,
   },
+  createdAt: {
+    type: Date
+  }
 });
 
 userSchema.virtual("member.identity", {

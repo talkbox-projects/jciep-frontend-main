@@ -10,6 +10,7 @@ import {
   // Select,
   Checkbox,
   FormHelperText,
+  Link, 
   FormLabel,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
@@ -466,10 +467,10 @@ const IdentityPwdAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-                <a target="_blank" href={page?.content?.form?.terms?.link}>
+                <Text>
                   {" "}
-                  {page?.content?.form?.terms?.text}
-                </a>
+                  {page?.content?.form?.terms?.text} {" "} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
+                </Text>
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
@@ -754,6 +755,11 @@ export default withPageCMS(IdentityPwdAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "url",
+              label: "關聯 Url",
               component: "text",
               placeholder:"https://"
             },

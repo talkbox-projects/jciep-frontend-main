@@ -48,6 +48,7 @@ import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
 import { getNullableType } from "graphql";
+import { useAppContext } from "../store/AppStore";
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
@@ -101,6 +102,21 @@ const Home = ({ setting, page }) => {
   useEffect(() => {
     if (isMobile || !isMobile) setHasVideoEnded(false);
   }, [isMobile]);
+
+  const { registerModalDisclosure, loginModalDisclosure } = useAppContext();
+  useEffect(() => {
+    if (router?.query?.register) {
+      registerModalDisclosure.onOpen();
+      router.push("/home");
+    }
+  }, [registerModalDisclosure, router, router?.query?.register]);
+
+  useEffect(() => {
+    if (router?.query?.login) {
+      loginModalDisclosure.onOpen();
+      router.push("/home");
+    }
+  }, [loginModalDisclosure, router, router?.query?.login]);
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>

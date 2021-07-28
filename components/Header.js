@@ -112,15 +112,27 @@ const Header = ({
   );
 
   useEffect(() => {
+    if(router && router.query){
+      if(router.query.login){
+        loginModalDisclosure.onOpen()
+      } else if (router.query.register) {
+        registerModalDisclosure.onOpen()
+      }
+    }
+  }, [router])
+
+  useEffect(() => {
     (async () => {
       try {
         const token = nookies.get("jciep-token")?.["jciep-token"];
+
 
         const mutation = gql`
           mutation UserGet($token: String!) {
             UserGet(token: $token) {
               id
               email
+              phone
               facebookId
               googleId
               appleId
@@ -843,14 +855,11 @@ const Header = ({
                               </Link>
                               <Divider />
                               <VStack mt={2} align="stretch" spacing={2}>
-                                <Link
-                                  onClick={() => {
-                                    mobileMenuDisclosure.onClose();
-                                    registerModalDisclosure.onOpen();
-                                  }}
-                                >
-                                  {getWording("header.account_setting_label")}
-                                </Link>
+                                <NextLink passHref href="/user/account">
+                                  <Link>
+                                    {getWording("header.account_setting_label")}
+                                  </Link>
+                                </NextLink>
                                 <Link onClick={onLogout}>
                                   {getWording("header.logout_label")}
                                 </Link>

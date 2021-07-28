@@ -28,10 +28,24 @@ export default {
 
       let keys = {};
 
+      console.log(input)
+
+      let date =  new Date()
+      if (input.days === "7 Days") {
+        date.setDate(date.getDate() - 7);
+      } else if (input.days === "1 Month" ) {
+        date.setMonth(date.getMonth() - 1);
+      } else if (input.days === "3 Months" ) {
+        date.setMonth(date.getMonth() - 3);
+      } else {
+        input.days = undefined
+      }
+
       if (input.published) keys["published"] = input.published;
       if (input.phone) keys["phone"] = input.phone;
       if (input.email) keys["email"] = input.email;
       if (input.identityType) keys["type"] = { $in: input.identityType };
+      if (input.days) { keys['createdAt'] = {$gte: date}}
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
         keys["_id"] = {
@@ -42,8 +56,8 @@ export default {
       }
       if (input.name)
         keys["$or"] = [
-          { chineseName: input?.name },
-          { englishName: input?.name },
+          { chineseName:  { $regex: input?.name , $options: 'i'}},
+          { englishName: { $regex: input?.name, $options: 'i' }},
         ];
 
       const organizations = await Organization.find();
@@ -72,7 +86,6 @@ export default {
         );
       });
 
-      console.log(identities);
       return identities;
     },
 
@@ -434,6 +447,7 @@ export default {
         employment: input?.employment,
         activity: input?.activity,
         published: input?.published || false,
+        createdAt: new Date()
       }).save();
 
       if (input?.invitationCode) {

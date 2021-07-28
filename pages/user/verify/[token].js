@@ -67,10 +67,21 @@ const VerifyToken = () => {
     async ({ password }) => {
       try {
         const mutation = gql`
-          mutation UserLogin($input: LoginInput!) {
-            UserLogin(input: $input) {
-              token
-              user {
+        mutation UserLogin($input: LoginInput!) {
+          UserLogin(input: $input) {
+            token
+            user {
+              id
+              email
+              phone
+              facebookId
+              googleId
+              appleId
+              snsMeta {
+                profilePicUrl
+                displayName
+              }
+              identities {
                 id
                 email
                 facebookId

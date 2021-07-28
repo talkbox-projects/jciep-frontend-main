@@ -10,6 +10,7 @@ import {
   Select,
   Checkbox,
   FormHelperText,
+  Link,
   FormLabel,
 } from "@chakra-ui/react";
 import { useCallback, useEffect } from "react";
@@ -19,7 +20,7 @@ import { useRouter } from "next/router";
 import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
-import Link from "next/link";
+
 import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
@@ -275,10 +276,12 @@ const IdentityStaffAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                <a target="_blank" href={page?.content?.form?.terms?.link}>
-                  {" "}
-                  {page?.content?.form?.terms?.text}
-                </a>
+                {page?.content?.form?.terms?.text}
+
+                <Link target="_blank" href={page?.content?.form?.terms?.url}>
+                 
+                  {page?.content?.form?.terms?.link}
+                </Link>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -364,6 +367,11 @@ export default withPageCMS(IdentityStaffAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "url",
+              label: "關聯 Url",
               component: "text",
               placeholder:"https://"
             },

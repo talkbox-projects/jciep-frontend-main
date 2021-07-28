@@ -11,12 +11,12 @@ import {
   FormLabel,
   Textarea,
   Checkbox,
+  Link
 } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import Link from "next/link";
 import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
@@ -211,9 +211,9 @@ const OrganizationNgoAdd = ({ page }) => {
                   required: true,
                 })}
               >
-                <a target="_blank" href={page?.content?.form?.terms?.link}>
-                  {" "}
-                  {page?.content?.form?.terms?.text}
+                {page?.content?.form?.terms?.text}
+                <a target="_blank" href={page?.content?.form?.terms?.url}>
+                  {page?.content?.form?.terms?.link}
                 </a>
               </Checkbox>
               <FormHelperText>
@@ -306,6 +306,11 @@ export default withPageCMS(OrganizationNgoAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "url",
+              label: "關聯 Url",
               component: "text",
               placeholder:"https://"
             },
