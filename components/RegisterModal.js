@@ -1,7 +1,7 @@
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useEffect, useState } from "react";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 import React from "react";
 
@@ -268,6 +268,7 @@ const RegisterModal = () => {
                 </Button>
               )}
               <FacebookLogin
+                isMobile={false}
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
