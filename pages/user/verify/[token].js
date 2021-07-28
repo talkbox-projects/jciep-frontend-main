@@ -23,6 +23,7 @@ import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
 import { useCredential } from "../../../utils/user";
 import { passwordRegex } from "../../../utils/general";
+import withPageCMS from "../../../utils/page/withPageCMS";
 
 const PAGE_KEY = "verify_email";
 
@@ -47,7 +48,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const VerifyToken = () => {
+const VerifyToken = ({ page }) => {
   const router = useRouter();
   const emailVerificationToken = router.query.token;
   const getWording = useGetWording();
@@ -207,8 +208,7 @@ const VerifyToken = () => {
         const data = await getGraphQLClient().request(query, {
           token: emailVerificationToken,
         });
-        // setEmailVerify(data?.UserEmailValidityCheck);
-        setEmailVerify(true);
+        setEmailVerify(data?.UserEmailValidityCheck);
       } catch (e) {
         setError("password_confirm", {
           message: getWording("emailVerify.user_create_error_message"),
@@ -326,16 +326,32 @@ const VerifyToken = () => {
             </FormControl>
           </VStack>
         </Container>
-        <Container maxWidth="1100px" width="100%">
-          <Image
-            height="450px"
-            width="100%"
-            src="https://resources-live.sketch.cloud/files/ba4afda5-647f-4d23-9b6d-2950c863a289.png?Expires=1626606000&Signature=udUf7nincAEVRE6f77C6ib0LVf9MFOk6LwpuABHckzO75dpswmDgXyVZGYPWLDMdC79xcVh-b2in7xJT9KQPzoUAQrQGAuo8-MA0ejQFLriITSlKfoT0ayeL1egoOIAFjXXJT11sN1gQ7i~5oAZE8mwI8QUJc0LxonmwOfi1s4o_&Key-Pair-Id=APKAJOITMW3RWOLNNPYA"
-          ></Image>
+        <Container mt={4} minHeight="450px" maxWidth="1100px" width="100%">
+          {page?.content?.bgImage && (
+            <Image
+              height="450px"
+              width="100%"
+              objectFit="cover"
+              objectPosition="center bottom"
+              src={page?.content?.bgImage}
+            ></Image>
+          )}
         </Container>
       </Box>
     </VStack>
   );
 };
 
-export default VerifyToken;
+export default withPageCMS(VerifyToken, {
+  key: PAGE_KEY,
+  fields: [
+    {
+      label: "Background Image 背景圖片",
+      name: "bgImage",
+      component: "image",
+      uploadDir: () => "/verifyEmail",
+      parse: ({ previewSrc }) => previewSrc,
+      previewSrc: (src) => src,
+    },
+  ],
+});
