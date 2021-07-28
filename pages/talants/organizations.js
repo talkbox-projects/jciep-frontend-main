@@ -108,7 +108,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             {...(organization?.id === organizationId && {
               borderColor: "#F6D644",
               borderWidth: 2,
-              borderTopWidth: 8,
+              borderTopWidth: 3,
             })}
             borderRadius={8}
           >
