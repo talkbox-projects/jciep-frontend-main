@@ -24,6 +24,7 @@ import SectionCard from "../fragments/SectionCard";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { AiFillFilePdf, AiFillYoutube } from "react-icons/ai";
 import PortfolioGallery from "../fragments/PortfolioGallery";
+import { useAppContext } from "../../../store/AppStore";
 
 const IdentityPortfolioSection = () => {
   const {
@@ -46,6 +47,8 @@ const IdentityPortfolioSection = () => {
   const galleryDisclosure = useDisclosureWithParams();
 
   const isEditable = useMemo(() => editSection === "portfolio", [editSection]);
+  const { identity: { id, type, organizationRole} = {} } = useAppContext();
+  const [staffAccess, setStaffAccess] = useState(false) 
 
   const onItemRemove = useCallback(
     (index) => {
@@ -80,6 +83,26 @@ const IdentityPortfolioSection = () => {
     },
     [medias, galleryDisclosure, portfolioMediaDisclosure, isEditable]
   );
+
+  useEffect(async () => {
+    if (type === "staff" && organizationRole?.length> 0) {
+      let IdentityRole = (identity.organizationRole)
+      
+     let hasStaffAccess =  IdentityRole.filter(role =>  
+        role.organization.id === organizationRole[0].organization.id
+        && organizationRole[0].role === "staff" 
+        && organizationRole[0].status === "joined" 
+      )[0]
+       
+      console.log(hasStaffAccess)
+     if(hasStaffAccess) {
+      setStaffAccess(true)
+     } else {
+      setStaffAccess(false)
+     }   
+    }
+
+  }, [type, identity])
 
   const onSave = useCallback(async () => {
     try {
@@ -119,7 +142,7 @@ const IdentityPortfolioSection = () => {
               </HStack>
             </VStack>
           ) : (
-            (isAdmin || editable) &&
+            (isAdmin || editable || staffAccess) &&
             !editSection && (
               <Button
                 w="fit-content"

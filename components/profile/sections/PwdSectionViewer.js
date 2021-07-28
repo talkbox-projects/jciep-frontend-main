@@ -45,14 +45,12 @@ const PwdSectionViewer = () => {
     if (type === "staff" && organizationRole?.length> 0) {
       let IdentityRole = (identity.organizationRole)
       
-      console.log(organizationRole)
      let hasStaffAccess =  IdentityRole.filter(role =>  
         role.organization.id === organizationRole[0].organization.id
         && organizationRole[0].role === "staff" 
         && organizationRole[0].status === "joined" 
       )[0]
        
-      console.log(hasStaffAccess)
      if(hasStaffAccess) {
       setStaffAccess(true)
      } else {
@@ -100,7 +98,7 @@ const PwdSectionViewer = () => {
             )}
           </Button>
         )}
-        {(isAdmin || editable) && !editSection && (
+        {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}
