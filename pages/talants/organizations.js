@@ -69,7 +69,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
         <NgoSection />
         <OrganizationBiographySection />
         <OrganizationPortfolioSection />
-        <OrganizationMemberListSection />
+        <OrganizationMemberListSection path="talants"/>
       </VStack>
     </OrganizationProfileStore.Provider>
   );

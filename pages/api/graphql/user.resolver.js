@@ -357,6 +357,7 @@ export default {
         })
 
         user = user.toObject()
+        user.id = user._id
         user.identities = await Promise.all(identities)
         return user
         
