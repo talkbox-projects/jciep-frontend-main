@@ -250,7 +250,13 @@ const VerifyToken = ({ page }) => {
   return (
     <VStack>
       <Box width="100%" background="#eeeeee">
-        <Container paddingTop="15rem" maxWidth="400px" width="100%">
+        <Container
+          pos="relative"
+          zIndex={10}
+          paddingTop="15rem"
+          maxWidth="400px"
+          width="100%"
+        >
           <VStack spacing={8} as="form" onSubmit={handleSubmit(onUserCreate)}>
             <Text fontSize="36px" letterSpacing="1.5px">
               {getWording("emailVerify.heading")}
@@ -326,13 +332,19 @@ const VerifyToken = ({ page }) => {
             </FormControl>
           </VStack>
         </Container>
-        <Container mt={4} minHeight="450px" maxWidth="1100px" width="100%">
+        <Container
+          h="450px"
+          pos="relative"
+          mt={4}
+          maxWidth="1100px"
+          width="100%"
+        >
           {page?.content?.bgImage && (
             <Image
-              height="450px"
+              pos="absolute"
+              bottom="0"
+              left="0"
               width="100%"
-              objectFit="cover"
-              objectPosition="center bottom"
               src={page?.content?.bgImage}
             ></Image>
           )}

@@ -10,6 +10,7 @@ import {
   Box,
   useToast,
   FormErrorMessage,
+  Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Container from "../../../../components/Container";
@@ -23,8 +24,9 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import { useCredential } from "../../../../utils/user";
 import UserPasswordReset from "../../../../utils/api/UserPasswordReset";
 import { passwordRegex } from "../../../../utils/general";
+import withPageCMS from "../../../../utils/page/withPageCMS";
 
-const PAGE_KEY = "verify_email";
+const PAGE_KEY = "password_reset";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -47,7 +49,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const VerifyToken = () => {
+const VerifyToken = ({ page }) => {
   const router = useRouter();
   const resetPasswordToken = router.query.token;
   const getWording = useGetWording();
@@ -135,7 +137,13 @@ const VerifyToken = () => {
   return (
     <VStack>
       <Box width="100%" background="#eeeeee">
-        <Container py={72} maxWidth="400px" width="100%">
+        <Container
+          pos="relative"
+          zIndex={10}
+          paddingTop="15rem"
+          maxWidth="400px"
+          width="100%"
+        >
           <VStack
             spacing={8}
             as="form"
@@ -203,9 +211,38 @@ const VerifyToken = () => {
             </FormControl>
           </VStack>
         </Container>
+        <Container
+          h="450px"
+          pos="relative"
+          mt={4}
+          maxWidth="1100px"
+          width="100%"
+        >
+          {page?.content?.bgImage && (
+            <Image
+              pos="absolute"
+              bottom="0"
+              left="0"
+              width="100%"
+              src={page?.content?.bgImage}
+            ></Image>
+          )}
+        </Container>
       </Box>
     </VStack>
   );
 };
 
-export default VerifyToken;
+export default withPageCMS(VerifyToken, {
+  key: PAGE_KEY,
+  fields: [
+    {
+      label: "Background Image 背景圖片",
+      name: "bgImage",
+      component: "image",
+      uploadDir: () => "/passwordReset",
+      parse: ({ previewSrc }) => previewSrc,
+      previewSrc: (src) => src,
+    },
+  ],
+});
