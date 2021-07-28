@@ -34,11 +34,12 @@ import OrganizationSubmissionUpdate from "../../../utils/api/OrganizationSubmiss
 const OrganizationSubmissionDetailModal = ({
   isOpen,
   onClose,
-  params: { submission, isLatest } = {},
+  params: { submission, organization, isLatest } = {},
 }) => {
   const { page, enums, refreshOrganization, isAdmin } =
     OrganizationProfileStore.useContext();
   const router = useRouter();
+
 
   const { reset, handleSubmit, register } = useForm({
     defaultValues: {
@@ -161,7 +162,9 @@ const OrganizationSubmissionDetailModal = ({
                   wordExtractor(page?.content?.wordings, "empty_text_label")}
               </Text>
             </GridItem>
-            <GridItem w="100%">
+            {
+              organization?.organizationType !== "ngo" ?
+              <GridItem w="100%">
               <Text color="#999">
                 {wordExtractor(
                   page?.content?.wordings,
@@ -178,6 +181,10 @@ const OrganizationSubmissionDetailModal = ({
                 })}
               </SimpleGrid>
             </GridItem>
+            : null
+            }
+            
+
             <GridItem>
               <Text color="#999">
                 {wordExtractor(

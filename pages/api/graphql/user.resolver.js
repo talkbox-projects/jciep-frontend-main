@@ -11,6 +11,8 @@ import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 
+
+
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {

@@ -232,11 +232,15 @@ const IdentityStaffAdd = ({ page }) => {
                         validity: async (invitationCode) => {
                           try {
                             if (!invitationCode) return true;
+                            console.log(invitationCode)
+
                             const valid =
                               await OrganizationInvitationCodeValidity({
                                 invitationCode,
                                 organizationType: "ngo",
                               });
+
+                              console.log(valid)
                             if (!valid) {
                               return wordExtractor(
                                 page?.content?.wordings,

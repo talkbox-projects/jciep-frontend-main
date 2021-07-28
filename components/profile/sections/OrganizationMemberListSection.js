@@ -38,6 +38,7 @@ const OrganizationMemberListSection = () => {
       (m) => m?.role === "staff" && m?.status === "joined"
     )?.length === 1;
 
+    console.log(organization)
   return (
     <SectionCard>
       <HStack px={4} py={4} align="center">
