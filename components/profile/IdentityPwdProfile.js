@@ -1,3 +1,4 @@
+import React from "react";
 import { Stack, VStack, Box } from "@chakra-ui/react";
 import Container from "../Container";
 import IdentityBiographySection from "./sections/IdentityBiographySection";

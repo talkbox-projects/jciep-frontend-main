@@ -23,6 +23,7 @@ import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
 import { useCredential } from "../../../utils/user";
 import { passwordRegex } from "../../../utils/general";
+import withPageCMS from "../../../utils/page/withPageCMS";
 
 const PAGE_KEY = "verify_email";
 
@@ -47,7 +48,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const VerifyToken = () => {
+const VerifyToken = ({ page }) => {
   const router = useRouter();
   const emailVerificationToken = router.query.token;
   const getWording = useGetWording();
@@ -63,6 +64,16 @@ const VerifyToken = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+<<<<<<< HEAD
+  const onUserCreate = useCallback(
+    async ({ password }) => {
+      try {
+        const mutation = gql`
+          mutation UserLogin($input: LoginInput!) {
+            UserLogin(input: $input) {
+              token
+              user {
+=======
   const onUserCreate = useCallback(async ({ password }) => {
     try {
       const mutation = gql`
@@ -81,6 +92,7 @@ const VerifyToken = () => {
                 displayName
               }
               identities {
+>>>>>>> profile-fixes
                 id
                 email
                 facebookId
@@ -266,7 +278,13 @@ const VerifyToken = () => {
   return (
     <VStack>
       <Box width="100%" background="#eeeeee">
-        <Container paddingTop="15rem" maxWidth="400px" width="100%">
+        <Container
+          pos="relative"
+          zIndex={10}
+          paddingTop="15rem"
+          maxWidth="400px"
+          width="100%"
+        >
           <VStack spacing={8} as="form" onSubmit={handleSubmit(onUserCreate)}>
             <Text fontSize="36px" letterSpacing="1.5px">
               {getWording("emailVerify.heading")}
@@ -342,16 +360,38 @@ const VerifyToken = () => {
             </FormControl>
           </VStack>
         </Container>
-        <Container maxWidth="1100px" width="100%">
-          <Image
-            height="450px"
-            width="100%"
-            src="https://resources-live.sketch.cloud/files/ba4afda5-647f-4d23-9b6d-2950c863a289.png?Expires=1626606000&Signature=udUf7nincAEVRE6f77C6ib0LVf9MFOk6LwpuABHckzO75dpswmDgXyVZGYPWLDMdC79xcVh-b2in7xJT9KQPzoUAQrQGAuo8-MA0ejQFLriITSlKfoT0ayeL1egoOIAFjXXJT11sN1gQ7i~5oAZE8mwI8QUJc0LxonmwOfi1s4o_&Key-Pair-Id=APKAJOITMW3RWOLNNPYA"
-          ></Image>
+        <Container
+          h="450px"
+          pos="relative"
+          mt={4}
+          maxWidth="1100px"
+          width="100%"
+        >
+          {page?.content?.bgImage && (
+            <Image
+              pos="absolute"
+              bottom="0"
+              left="0"
+              width="100%"
+              src={page?.content?.bgImage}
+            ></Image>
+          )}
         </Container>
       </Box>
     </VStack>
   );
 };
 
-export default VerifyToken;
+export default withPageCMS(VerifyToken, {
+  key: PAGE_KEY,
+  fields: [
+    {
+      label: "Background Image 背景圖片",
+      name: "bgImage",
+      component: "image",
+      uploadDir: () => "/verifyEmail",
+      parse: ({ previewSrc }) => previewSrc,
+      previewSrc: (src) => src,
+    },
+  ],
+});

@@ -268,14 +268,11 @@ const RegisterModal = () => {
                 </Button>
               )}
               <FacebookLogin
+                isMobile={false}
                 appId="1091464314720526"
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={`${
-                  process.env.HOST_URL
-                    ? process.env.HOST_URL
-                    : "http://localhost:3000"
-                }/oauth/facebook`}
+                redirectUri={`https://jciep.uat.talkbox.net/oauth/facebook`}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"

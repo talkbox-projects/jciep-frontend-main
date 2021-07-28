@@ -2,7 +2,7 @@ import { useForm, usePlugin } from "@tinacms/react-core";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React from "react";
 import moment from "moment";
 
 const withPostCMS =
@@ -22,7 +22,10 @@ const withPostCMS =
             label: "後綴路由 Slug",
             component: "text",
             description: "This post route would be /sharing/{slug}",
-            validate: (value) => !!value || "Please enter 後綴路由 Slug",
+            validate: (value) => {
+              if (!value) return "Please enter 後綴路由 Slug";
+              return false;
+            },
           },
           {
             name: "lang",

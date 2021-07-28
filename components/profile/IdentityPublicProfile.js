@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
 import PublicSection from "./sections/PublicSection";

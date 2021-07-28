@@ -165,7 +165,7 @@ const OrganizationMemberListSection = ({path}) => {
                 key={identity?.id}
                 {...(identity?.id && {
                   onClick: () => {
-                    if (editable) {
+                    if (isAdmin || editable) {
                       router.push(`/user/identity/${identity.id}`);
                     } else {
                       router.push(

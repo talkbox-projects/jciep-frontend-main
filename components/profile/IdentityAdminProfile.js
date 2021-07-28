@@ -1,10 +1,9 @@
+import React from "react";
 import { Box, Stack, VStack } from "@chakra-ui/react";
 import Container from "../Container";
 import AdminSection from "./sections/AdminSection";
-import IdentityProfileStore from "../../store/IdentityProfileStore";
 
 const IdentityAdminProfile = () => {
-  const { isAdmin, editable } = IdentityProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
