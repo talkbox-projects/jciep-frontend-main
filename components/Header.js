@@ -602,7 +602,7 @@ const Header = ({
           <DrawerContent>
             <DrawerBody>
               <VStack minH="100%" align="stretch">
-                <HStack borderTopWidth={1} borderColor="#ddd" p={4}>
+                <HStack borderBottomWidth={1} borderColor="#ddd" p={4}>
                   {isShowLangSwitcher && (
                     <Select
                       border="none"

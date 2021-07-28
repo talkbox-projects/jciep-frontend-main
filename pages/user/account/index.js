@@ -14,8 +14,8 @@ import {
   IoLogoFacebook,
   IoLogoGoogle,
   IoMail,
-  IoPhoneLandscapeOutline,
 } from "react-icons/io5";
+import { MdPhoneAndroid } from "react-icons/md";
 import { RiArrowRightLine } from "react-icons/ri";
 import Container from "../../../components/Container";
 import { useAppContext } from "../../../store/AppStore";
@@ -97,7 +97,7 @@ const AccountInfoPage = ({ page }) => {
         case "phone":
           loginMethodDisplay = (
             <HStack color="gray.500">
-              <Icon fontSize="lg" as={IoPhoneLandscapeOutline} />{" "}
+              <Icon fontSize="lg" as={MdPhoneAndroid} />{" "}
               <Text>
                 {wordExtractor(page?.content?.wordings, "phone_label")}
               </Text>
