@@ -57,7 +57,6 @@ const OrganizationNgoAdd = ({ page }) => {
       englishOrganizationName,
       ngoWebsite,
       ngoDescription,
-      terms,
     }) => {
       try {
         const mutation = gql`
@@ -77,7 +76,6 @@ const OrganizationNgoAdd = ({ page }) => {
             englishCompanyName: englishOrganizationName,
             website: ngoWebsite,
             description: ngoDescription,
-            tncAccept: terms,
             identityId: id,
           },
         });
@@ -204,7 +202,7 @@ const OrganizationNgoAdd = ({ page }) => {
               <FormHelperText></FormHelperText>
             </FormControl>
 
-            <FormControl marginTop="20px !important">
+            {/* <FormControl marginTop="20px !important">
               <Checkbox
                 colorScheme="green"
                 {...register("terms", {
@@ -219,7 +217,6 @@ const OrganizationNgoAdd = ({ page }) => {
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
                   <Text color="red">
-                    {/* 請接受條款和條件 Please accept T&C! */}
                     {wordExtractor(
                       page?.content?.wordings,
                       "tnc_required"
@@ -227,7 +224,7 @@ const OrganizationNgoAdd = ({ page }) => {
                   </Text>
                 )}
               </FormHelperText>
-            </FormControl>
+            </FormControl> */}
 
             <FormControl textAlign="center">
               <Button
