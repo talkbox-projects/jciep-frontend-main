@@ -506,8 +506,8 @@ const Header = ({
           onClose={mobileMenuDisclosure.onClose}
         >
           <DrawerOverlay />
-          <DrawerContent>
-            <DrawerBody>
+          <DrawerContent width="90% !important">
+            <DrawerBody >
               <VStack minH="100%" align="stretch">
                 <HStack borderBottomWidth={1} borderColor="#ddd" p={4}>
                   {isShowLangSwitcher && (

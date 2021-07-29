@@ -142,7 +142,7 @@ const IdentityOpportunities = ({
             {...(identity?.id === identityId && {
               borderColor: "#F6D644",
               borderWidth: 2,
-              borderTopWidth: 3,
+              borderTopWidth: 8,
             })}
             borderRadius={8}
           >
@@ -254,7 +254,7 @@ const IdentityOpportunities = ({
 
         <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
           <Container>
-            <Box w={["100%", "100%", "250px", "330px"]}>
+            <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
               <Select
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
@@ -307,7 +307,7 @@ const IdentityOpportunities = ({
           </Box>
         ) : (
           <Box p={4}>
-            <Box w={["100%", "100%", "250px", "330px"]}>
+            <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
               <Select
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
