@@ -26,6 +26,7 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useCredential } from "../utils/user";
 import { useRouter } from "next/router";
+import userLogin from "../utils/api/UserLogin";
 
 const OtpVerifyModal = () => {
   const { otpVerifyModalDisclosure } = useAppContext();
@@ -45,121 +46,19 @@ const OtpVerifyModal = () => {
   const onOtpVerify = useCallback(
     async ({ otp }) => {
       try {
-        const mutation = gql`
-          mutation UserLogin($input: LoginInput!) {
-            UserLogin(input: $input) {
-              token
-              user {
-                id
-                email
-                phone
-                facebookId
-                googleId
-                appleId
-                snsMeta {
-                  profilePicUrl
-                  displayName
-                }
-                identities {
-                  id
-                  type
-                  chineseName
-                  englishName
-                  dob
-                  gender
-                  district
-                  pwdType
-                  interestedEmploymentMode
-                  interestedIndustry
-                  interestedIndustryOther
-                  industry
-                  industryOther
-                  tncAccept
-                  published
-                  email
-                  phone
-                  profilePic {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  bannerMedia {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  organizationRole {
-                    organization {
-                      id
-                    },
-                    status
-                    role
-                  }
-                  yearOfExperience
-                  biography
-                  portfolio {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  writtenLanguage
-                  writtenLanguageOther
-                  oralLanguage
-                  oralLanguageOther
-                  hobby
-                  education {
-                    school
-                    degree
-                    fieldOfStudy
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  employment {
-                    employmentType
-                    companyName
-                    jobTitle
-                    industry
-                    industryOther
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  activity {
-                    name
-                    description
-                    startDatetime
-                    endDatetime
-                  }
-                }
-              }
-            }
-          }
-        `;
-        const data = await getGraphQLClient().request(mutation, {
+       
+        let variables =  {
           input: {
             phone,
             otp,
           },
-        });
-
-        setCredential(data?.UserLogin);
+        }
+        
+        const data = await userLogin(variables);
+        setCredential(data);
         otpVerifyModalDisclosure.onClose();
-        if (data?.UserLogin) {
-          const user = data?.UserLogin?.user;
+        if (data) {
+          const user = data?.user;
           if (user?.identities?.length === 0) {
             router.push("/user/identity/select");
           } else {

@@ -34,6 +34,7 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 import router from "next/router";
 import GoogleLogin from "react-google-login";
 import AppleLogin from "react-apple-login";
+import userLogin from "../utils/api/UserLogin";
 
 const LoginModal = () => {
   const {
@@ -87,110 +88,7 @@ const LoginModal = () => {
   const onEmailLogin = useCallback(
     async ({ email, password }) => {
       try {
-        const mutation = gql`
-          mutation UserLogin($input: LoginInput) {
-            UserLogin(input: $input) {
-              token
-              user {
-                id
-                email
-                phone
-                facebookId
-                googleId
-                appleId
-                snsMeta {
-                  profilePicUrl
-                  displayName
-                }
-                identities {
-                  id
-                  type
-                  chineseName
-                  englishName
-                  dob
-                  gender
-                  district
-                  pwdType
-                  interestedEmploymentMode
-                  interestedIndustry
-                  interestedIndustryOther
-                  industry
-                  industryOther
-                  tncAccept
-                  published
-                  email
-                  phone
-                  organizationRole {
-                    organization {
-                      id
-                    },
-                    status
-                    role
-                  }
-                  profilePic {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  bannerMedia {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  yearOfExperience
-                  biography
-                  portfolio {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  writtenLanguage
-                  writtenLanguageOther
-                  oralLanguage
-                  oralLanguageOther
-                  hobby
-                  education {
-                    school
-                    degree
-                    fieldOfStudy
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  employment {
-                    employmentType
-                    companyName
-                    jobTitle
-                    industry
-                    industryOther
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  activity {
-                    name
-                    description
-                    startDatetime
-                    endDatetime
-                  }
-                }
-              }
-            }
-          }
-        `;
+        
 
         const variables = {
           input: {
@@ -199,11 +97,12 @@ const LoginModal = () => {
           },
         };
 
-        const data = await getGraphQLClient().request(mutation, variables);
-        setCredential(data?.UserLogin);
+        const data = await userLogin(variables)
+
+        setCredential(data);
         loginModalDisclosure.onClose();
-        if (data?.UserLogin) {
-          const user = data?.UserLogin?.user;
+        if (data) {
+          const user = data.user;
           if (user?.identities?.length === 0) {
             router.push("/user/identity/select");
           } else {

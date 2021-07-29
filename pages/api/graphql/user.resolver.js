@@ -217,6 +217,8 @@ export default {
 
        */
 
+
+      console.log(input)
       if (input?.emailVerificationToken) {
         const emailVerify = await EmailVerify.findOne({
           token: input?.emailVerificationToken,
