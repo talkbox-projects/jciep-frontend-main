@@ -106,7 +106,7 @@ const NgoSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_chineseCompanyName"
+                "field_label_chineseOrganizationName"
               )}
             </FormLabel>
             <Text>
@@ -118,7 +118,7 @@ const NgoSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
-                "field_label_englishCompanyName"
+                "field_label_englishOrganizationName"
               )}
             </FormLabel>
             <Text>
