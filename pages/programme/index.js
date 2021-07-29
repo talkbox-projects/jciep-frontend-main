@@ -26,6 +26,8 @@ import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import {BsPlus } from "react-icons/bs";
+
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import HighlightHeadline from "../../components/HighlightHeadline";
@@ -415,7 +417,7 @@ const Programme = ({ page }) => {
                       alignItems={["center", "center", "start", "start"]}
                     >
                       <Image
-                        w={["130px", "120px", "110px", "100px"]}
+                        w={["80px", "120px", "110px", "100px"]}
                         src={icon}
                       />
                       <Heading
@@ -455,7 +457,7 @@ const Programme = ({ page }) => {
                                           as={
                                             isExpanded
                                               ? AiOutlineMinus
-                                              : AiOutlinePlus
+                                              : BsPlus
                                           }
                                           fontSize="2xl"
                                         />
@@ -475,6 +477,13 @@ const Programme = ({ page }) => {
                                                 color="#007878"
                                               >
                                                 {label}
+
+                                                <Image
+                                                  display="inline-flex"
+                                                  src={page?.content?.icon?.extrenalLinkIcon}
+                                                  marginLeft="10px"
+                                                  height="25px"
+                                                ></Image>
                                               </Link>
                                             );
                                           }

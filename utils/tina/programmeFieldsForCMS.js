@@ -44,6 +44,21 @@ export default [
     ],
   },
   {
+    name: "icon",
+    label: "圖示 Icon",
+    component: "group",
+    fields: [
+      {
+        label: "工作類型圖標 External link icon",
+        name: "extrenalLinkIcon",
+        component: "image",
+        uploadDir: () => "/programme",
+        parse: ({ previewSrc }) => previewSrc,
+        previewSrc: (src) => src,
+      },
+    ],
+  },
+  {
     name: "visionSection",
     label: "願景區塊 Vision Section",
     component: "group",
