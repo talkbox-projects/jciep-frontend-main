@@ -442,6 +442,7 @@ const Sharing = ({ page, setting, lang }) => {
                           px="9px"
                           mr="9px"
                           display="inline"
+                          fontWeight="700"
                         >
                           {getCategoryData(post.category)?.label}
                         </Box>
@@ -457,9 +458,9 @@ const Sharing = ({ page, setting, lang }) => {
                       >
                         {post.title}
                       </Text>
-                      <Text
+                      <Text 
                         fontSize={{ base: "16px", lg: "16px" }}
-                        h="70px"
+                        maxH="70px"
                         overflow="hidden"
                         position="relative"
                       >
@@ -477,7 +478,7 @@ const Sharing = ({ page, setting, lang }) => {
                             fontSize="16px"
                             fontWeight="bold"
                           >
-                            More
+                            More 
                           </chakra.span>
                         </Box>
                       </Text>
@@ -492,7 +493,7 @@ const Sharing = ({ page, setting, lang }) => {
           <Box w={["100%", "100%", "33%"]}>
             <Box textAlign="left" fontSize="36px" pb="15px">
               <Text pos="relative" display="inline-block" pl="8px">
-                <Box zIndex={1} pos="relative">
+                <Box zIndex={1} fontSize="20px" fontWeight="700"  pos="relative">
                   {page?.content?.hotestSection?.title}
                 </Box>
                 <Box
@@ -546,10 +547,11 @@ const Sharing = ({ page, setting, lang }) => {
                         px="9px"
                         mr="9px"
                         display="inline"
+                        fontWeight="700"
                       >
                         {getCategoryData(post.category)?.label}
                       </Box>
-                      <Text fontSize="12px" display="inline-block">
+                      <Text fontSize="12px"  display="inline-block">
                         {moment(post.publishDate).format("D MMM, hh:mm a")}
                       </Text>
                     </Flex>
@@ -567,7 +569,7 @@ const Sharing = ({ page, setting, lang }) => {
                       overflow="hidden"
                       position="relative"
                     >
-                      {post.excerpt}
+                      {post.excerpt} 
                       <Box
                         textAlign="right"
                         position="absolute"
@@ -594,7 +596,7 @@ const Sharing = ({ page, setting, lang }) => {
               <Box mt="70px" mb={4}>
                 <Box textAlign="left" fontSize="36px">
                   <Text pos="relative" display="inline-block" pl="8px">
-                    <Box zIndex={1} pos="relative">
+                    <Box zIndex={1} fontSize="20px" fontWeight="700" pos="relative">
                       {page?.content?.categorySection?.title}
                     </Box>
                     <Box

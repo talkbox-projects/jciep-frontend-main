@@ -392,7 +392,7 @@ const PwdDetail = ({ page }) => {
               const active = activeJob ? activeJob === section.id : i === 0;
               return (
                 <Button
-                  bg={active ? "#000" : "transparent"}
+                  bg={active ? "#000 !important" : "transparent"}
                   color={active ? "#fff" : "#000"}
                   borderColor={active ? "#000" : "#000"}
                   borderWidth={2}

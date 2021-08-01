@@ -697,7 +697,7 @@ const Header = ({
                                 borderColor="transparent"
                                 borderBottomWidth={3}
                                 {...(Number(tabIndex) === index && {
-                                  borderColor: "green",
+                                  borderColor: "#00BFBA",
                                   fontWeight: "bold",
                                 })}
                               >
@@ -744,7 +744,7 @@ const Header = ({
                               fontWeight="normal"
                               borderColor="transparent"
                               {...(Number(tabIndex) === index && {
-                                borderColor: "green",
+                                borderColor: "#00BFBA",
                                 fontWeight: "bold",
                               })}
                               appearance="none"
