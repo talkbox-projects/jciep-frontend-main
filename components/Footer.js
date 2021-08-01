@@ -17,7 +17,7 @@ import NextLink from "next/link";
 
 const Footer = ({ footer }) => {
   return (
-    <Box py={8}>
+    <Box py={8} backgroundColor="#FAFAFA">
       <Container>
         <VStack align="stretch">
           <VStack align="stretch" spacing={8}>
@@ -54,7 +54,7 @@ const Footer = ({ footer }) => {
               );
             })}
           </VStack>
-          <Divider pt={8} />
+          <Divider pt={8}  borderColor="#EFEFEF"/>
           <Stack
             pt={8}
             spacing={8}

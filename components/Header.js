@@ -704,7 +704,7 @@ const Header = ({
                                 {label}
                               </Button>
                             </AccordionButton>
-                            <AccordionPanel>
+                            <AccordionPanel padding="0px 0px 0px 20px">
                               <VStack
                                 my={4}
                                 fontSize="2xl"
