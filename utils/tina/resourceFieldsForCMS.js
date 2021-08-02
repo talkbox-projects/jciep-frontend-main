@@ -49,9 +49,7 @@ const serviceTargetList = [
     label: "器官殘障/長期病患",
   },
   { value: "visualImpairment", label: "視力障礙" },
-  { value: "moderateDisabilities", label: "指定的中度殘疾人士" },
-  { value: "mildIntellectualDisability", label: "輕度智障人士" },
-  { value: "specialEducationalNeeds", label: "特殊教育需要人士" },
+  
 ];
 
 const textLinkWithTooltip = [

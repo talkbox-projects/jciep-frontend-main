@@ -30,6 +30,8 @@ import wordExtractor from "../../utils/wordExtractor";
 import Card from "../../components/CarouselCard";
 import Container from "../../components/Container";
 import DividerSimple from "../../components/DividerSimple";
+import DividerA from "../../components/DividerA";
+
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -126,6 +128,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const Resources = ({ page, enums, setting }) => {
+
   const router = useRouter();
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
@@ -243,7 +246,7 @@ const Resources = ({ page, enums, setting }) => {
               </HighlightHeadline>
             </Box>
 
-            <VStack pt={16} align="start" position="relative" spacing={4}>
+            <VStack pt={16} align="start" position="relative" spacing={4} >
               {(page?.content?.dialogue?.left?.dialogue ?? []).map(
                 ({ message }, index) => {
                   if (index == 0) {
@@ -334,14 +337,17 @@ const Resources = ({ page, enums, setting }) => {
           </VStack>
         </Container>
       </Box>
+      <Box border="0px" backgroundColor="#F6D644">
+          <DividerA primaryColor="#F6D644" secondaryColor="F6D644" nextColor="#FEB534"></DividerA>
+      </Box>
       <Box bg="#FEB534" pb={48}>
-        <Container mt={"-150px"} pos="relative">
-          <VStack alignItems="flex-end" position="relative" spacing={4}>
+        <Container mt={["-150px", "-210px"]} pos="relative">
+          <VStack alignItems="flex-end" position="relative" spacing={4} height={["320px", "auto"]}>
             {(page?.content?.dialogue?.right?.dialogue ?? []).map(
               ({ message }, index) => {
                 if (index == 0) {
                   return (
-                    <HStack justifyContent="flex-end" position="relative">
+                    <HStack justifyContent="flex-end" position={["absolute", "relative"]} bottom="10%">
                       <Image
                         h="120%"
                         src={page?.content?.dialogue?.rightQuoteImage}
@@ -381,7 +387,7 @@ const Resources = ({ page, enums, setting }) => {
                 }
               }
             )}
-            <Text mt={3} fontSize="lg" mr={-6}>
+            <Text mt={3} fontSize="lg" mr={-6} position={["absolute", "relative"]} bottom="0px">
               {page?.content?.dialogue?.right?.role}
             </Text>
             <Box mr={["", "", "", "", "-125px !important"]}>
