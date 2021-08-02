@@ -54,8 +54,8 @@ const VerifyToken = ({ page }) => {
   const emailVerificationToken = router.query.token;
   const getWording = useGetWording();
   const [emailVerify, setEmailVerify] = useState(null);
-  const [setCredential, removeCredential] = useCredential();
-  const { setUser, setIdentityId } = useAppContext();
+  const [setCredential] = useCredential();
+  const { setIdentityId } = useAppContext();
 
   const {
     handleSubmit,
@@ -65,10 +65,114 @@ const VerifyToken = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onUserCreate = useCallback(async ({ password }) => {
-    try {
-      
-        const variables = {
+  const onUserCreate = useCallback(
+    async ({ password }) => {
+      try {
+        const mutation = gql`
+          mutation UserLogin($input: LoginInput!) {
+            UserLogin(input: $input) {
+              token
+              user {
+                id
+                email
+                phone
+                facebookId
+                googleId
+                appleId
+                snsMeta {
+                  profilePicUrl
+                  displayName
+                }
+                identities {
+                  id
+                  type
+                  chineseName
+                  englishName
+                  dob
+                  gender
+                  district
+                  pwdType
+                  interestedEmploymentMode
+                  interestedIndustry
+                  industry
+                  industryOther
+                  tncAccept
+                  published
+                  email
+                  phone
+                  profilePic {
+                    id
+                    url
+                    contentType
+                    fileSize
+                  }
+                  bannerMedia {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  yearOfExperience
+                  biography
+                  portfolio {
+                    file {
+                      id
+                      url
+                      contentType
+                      fileSize
+                    }
+                    videoUrl
+                    title
+                    description
+                  }
+                  writtenLanguage
+                  writtenLanguageOther
+                  oralLanguage
+                  oralLanguageOther
+                  hobby
+                  education {
+                    school
+                    degree
+                    fieldOfStudy
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  organizationRole {
+                    organization {
+                      id
+                    }
+                    status
+                    role
+                  }
+                  employment {
+                    employmentType
+                    companyName
+                    jobTitle
+                    industry
+                    industryOther
+                    startDatetime
+                    endDatetime
+                    present
+                  }
+                  activity {
+                    name
+                    description
+                    startDatetime
+                    endDatetime
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        const data = await getGraphQLClient().request(mutation, {
           input: {
             emailVerificationToken,
             password,
