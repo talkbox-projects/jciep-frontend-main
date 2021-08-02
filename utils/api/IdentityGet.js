@@ -7,6 +7,7 @@ const identityGet = async ({ id }, context) => {
       IdentityGet(id: $id) {
         id
         type
+        publishStatus
         chineseName
         englishName
         dob

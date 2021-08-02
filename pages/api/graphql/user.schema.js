@@ -80,6 +80,7 @@ export default gql`
   type Identity {
     id: ID
     type: EnumIdentityType!
+    publishStatus: EnumPublishStatus!
     chineseName: String!
     englishName: String!
     dob: Timestamp
@@ -275,6 +276,6 @@ export default gql`
     PortfolioPublishRequest(id: ID!): Boolean
     PortfolioPublishApprove(id: ID!): Boolean
     PortfolioPublishReject(id: ID!): Boolean
-    PortfolioUnpublishRequest(id: ID!): Boolean
+    PortfolioUnpublish(id: ID!): Boolean
   }
 `;

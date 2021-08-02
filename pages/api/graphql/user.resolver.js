@@ -549,13 +549,6 @@ export default {
     IdentityRemove: async (_parent, { id }) => {
       try {
         await Identity.findByIdAndDelete(id);
-        await Organization.findByIdAndUpdate(
-          organizationId,
-          {
-            $pull: { member: { identityId } },
-          },
-          { new: true }
-        );
         return true;
       } catch (error) {
         console.error(error);
@@ -565,52 +558,56 @@ export default {
 
     PortfolioPublishRequest: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
-      if (identity?.type === "pwd") {
+      if (identity?.type !== "pwd") {
         return false;
       }
-      if (identity?.publishedStatus !== "draft") {
+      if (!["draft", "rejected"].includes(identity?.publishStatus)) {
         return false;
       }
       identity.publishStatus = "pending";
+      identity.published = false;
       await identity.save();
       return true;
     },
 
     PortfolioPublishApprove: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
-      if (identity?.type === "pwd") {
+      if (identity?.type !== "pwd") {
         return false;
       }
-      if (identity?.publishStatus !== "draft") {
+      if (identity?.publishStatus !== "pending") {
         return false;
       }
       identity.publishStatus = "approved";
+      identity.published = true;
       await identity.save();
       return true;
     },
 
     PortfolioPublishReject: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
-      if (identity?.type === "pwd") {
+      if (identity?.type !== "pwd") {
         return false;
       }
-      if (identity?.publishedStatus !== "pending") {
+      if (identity?.publishStatus !== "pending") {
         return false;
       }
       identity.publishStatus = "rejected";
+      identity.published = false;
       await identity.save();
       return true;
     },
 
-    PortfolioUnpublishRequest: async (_parent, { id }) => {
+    PortfolioUnpublish: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
-      if (identity?.type === "pwd") {
+      if (identity?.type !== "pwd") {
         return false;
       }
-      if (identity?.publishedStatus !== "approved") {
+      if (["rejected", "draft"].includes(identity?.publishStatus)) {
         return false;
       }
       identity.publishStatus = "draft";
+      identity.published = false;
       await identity.save();
       return true;
     },

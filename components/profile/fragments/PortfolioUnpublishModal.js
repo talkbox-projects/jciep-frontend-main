@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 
-const OrganizationMemberApproveModal = ({
+const PortfolioUnpublishModal = ({
   isOpen,
   onClose,
   params: { page, onSubmit },
@@ -21,20 +21,17 @@ const OrganizationMemberApproveModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {wordExtractor(page?.content?.wordings, "approve_confirmation_title")}
+          {wordExtractor(page?.content?.wordings, "unpublish_request_title")}
         </ModalHeader>
         <ModalBody>
-          {wordExtractor(
-            page?.content?.wordings,
-            "approve_confirmation_message"
-          )}
+          {wordExtractor(page?.content?.wordings, "unpublish_request_message")}
         </ModalBody>
         <ModalFooter as={HStack} justifyContent="flex-end">
           <Button variant="ghost" onClick={onClose}>
             {wordExtractor(page?.content?.wordings, "cancel_button_label")}
           </Button>
           <Button colorScheme="green" onClick={onSubmit}>
-            {wordExtractor(page?.content?.wordings, "approve_button_label")}
+            {wordExtractor(page?.content?.wordings, "ok_button_label")}
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -42,4 +39,4 @@ const OrganizationMemberApproveModal = ({
   );
 };
 
-export default OrganizationMemberApproveModal;
+export default PortfolioUnpublishModal;

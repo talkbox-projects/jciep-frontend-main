@@ -24,7 +24,7 @@ import { useAppContext } from "../../../store/AppStore";
 import { useCredential } from "../../../utils/user";
 import { passwordRegex } from "../../../utils/general";
 import withPageCMS from "../../../utils/page/withPageCMS";
-import userLogin from "../../../utils/api/UserLogin"
+import userLogin from "../../../utils/api/UserLogin";
 
 const PAGE_KEY = "verify_email";
 
@@ -173,14 +173,12 @@ const VerifyToken = ({ page }) => {
           }
         `;
 
-        const data = await getGraphQLClient().request(mutation, {
+        const data = await userLogin({
           input: {
             emailVerificationToken,
             password,
           },
-        }
-
-        const data = await userLogin(variables)
+        });
         setCredential({
           token: data?.token,
           user: data?.user,

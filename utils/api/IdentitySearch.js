@@ -26,6 +26,7 @@ const identitySearch = async (
       ) {
         id
         type
+        publishStatus
         chineseName
         englishName
         dob
@@ -128,7 +129,7 @@ const identitySearch = async (
     identityType,
     name,
     published,
-    days
+    days,
   });
 
   return data?.IdentitySearch;
