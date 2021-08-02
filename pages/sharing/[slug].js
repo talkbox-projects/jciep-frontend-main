@@ -53,8 +53,8 @@ const PostHeader = ({ categories, post }) => {
     return (categories ?? []).find((c) => c.key === key);
   };
   return (
-    <Box w="100%">
-      <Box d={["none", "none", "block"]} pb={32} w="100%" position="relative">
+    <Box w="100%" >
+      <Box  d={["none", "none", "block"]} pb={32} w="100%" position="relative">
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}
@@ -66,7 +66,7 @@ const PostHeader = ({ categories, post }) => {
             ratio={4 / 3}
             overflow="hidden"
           >
-            <Image src={post.coverImage} />
+            <Image  src={post.coverImage} />
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px"></Box>
@@ -74,7 +74,7 @@ const PostHeader = ({ categories, post }) => {
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
       </Box>
-      <Box mt={16} d={["block", "block", "none"]} position="relative">
+      <Box  d={["block", "block", "none"]} position="relative">
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image src={post.coverImage} />
         </AspectRatio>
@@ -143,7 +143,7 @@ const PostDetail = ({ post, setting, page }) => {
   const nextPost = useMemo(() => relatedArticles?.[0], [relatedArticles]);
 
   return (
-    <VStack w="100%" spacing={0} align="center" pb={16} bgColor="#fafafa">
+    <VStack w="100%" spacing={0} align="center" pb={16} mt={[16, 16, 0 ]} bgColor="#fafafa">
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
 

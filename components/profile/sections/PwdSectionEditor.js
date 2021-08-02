@@ -148,7 +148,7 @@ const PwdSectionEditor = () => {
           </FormControl>
         </Stack>
         <Stack direction={["column", "column", "row"]}>
-          <FormControl isRequired isInvalid={errors?.email?.message}>
+          <FormControl isInvalid={errors?.email?.message}>
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
@@ -156,20 +156,21 @@ const PwdSectionEditor = () => {
               type="email"
               variant="flushed"
               defaultValue={identity?.email}
-              {...register("email", {
-                pattern: {
-                  value:
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  message: wordExtractor(
-                    page?.content?.wordings,
-                    "field_error_message_invalid_email"
-                  ),
-                },
-                required: wordExtractor(
-                  page?.content?.wordings,
-                  "field_error_message_required"
-                ),
-              })}
+              // {...register("email", {
+              //   pattern: {
+              //     value:
+              //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              //     message: wordExtractor(
+              //       page?.content?.wordings,
+              //       "field_error_message_invalid_email"
+              //     ),
+              //   },
+              //   required: wordExtractor(
+              //     page?.content?.wordings,
+              //     "field_error_message_required"
+              //   ),
+              // }
+              // )}
             ></Input>
             <FormHelperText color="red">
               {errors?.email?.message}
