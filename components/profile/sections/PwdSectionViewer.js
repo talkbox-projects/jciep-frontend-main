@@ -37,6 +37,8 @@ const PwdSectionViewer = () => {
     userFieldVisible,
   } = IdentityProfileStore.useContext();
 
+
+  console.log(identity)
   const toast = useToast();
   const { identity: { id, type, organizationRole} = {} } = useAppContext();
   const [staffAccess, setStaffAccess] = useState(false) 
@@ -163,7 +165,7 @@ const PwdSectionViewer = () => {
                 </FormLabel>
                 <Text>
                   {identity?.email ??
-                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                    identity?.email}
                 </Text>
               </FormControl>
               <FormControl>
@@ -172,7 +174,7 @@ const PwdSectionViewer = () => {
                 </FormLabel>
                 <Text>
                   {identity?.phone ??
-                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                    identity?.phone}
                 </Text>
               </FormControl>
             </Stack>
