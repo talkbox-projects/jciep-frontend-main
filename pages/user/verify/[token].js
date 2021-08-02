@@ -86,6 +86,7 @@ const VerifyToken = ({ page }) => {
                 identities {
                   id
                   type
+                  publishStatus
                   chineseName
                   englishName
                   dob
