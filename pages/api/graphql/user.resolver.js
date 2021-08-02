@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
 import nookies from "nookies";

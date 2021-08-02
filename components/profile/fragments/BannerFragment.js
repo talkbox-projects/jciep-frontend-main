@@ -1,14 +1,5 @@
-import {
-  AspectRatio,
-  Text,
-  Avatar,
-  Box,
-  Button,
-  chakra,
-  Image,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import React from "react";
+import { AspectRatio, Avatar, Button, Image, VStack } from "@chakra-ui/react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import { getYoutubeLink } from "../../../utils/general";

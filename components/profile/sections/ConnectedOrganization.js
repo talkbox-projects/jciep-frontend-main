@@ -9,7 +9,7 @@ const ConnectedOrganization = () => {
   const approvedOrgRole = useMemo(
     () =>
       (identity?.organizationRole ?? [])?.filter(
-        (orgRole) => orgRole?.status === "approved"
+        (orgRole) => orgRole?.status === "joined"
       ),
     [identity?.organizationRole]
   );
@@ -17,12 +17,12 @@ const ConnectedOrganization = () => {
   if (approvedOrgRole?.length === 0) return null;
 
   return (
-    <VStack spacing={1} align="stretch">
+    <VStack align="stretch" mb={4}>
       <Text>這名人材已連繫</Text>
       {approvedOrgRole?.map((orgRole, i) => (
         <HStack key={i} p={1}>
-          <Avatar src={orgRole?.organization?.logo?.url} />
-          <Heading size="lg">
+          <Avatar bg="white" src={orgRole?.organization?.logo?.url} />
+          <Heading fontWeight="normal" size="lg">
             {orgRole?.organization?.chineseCompanyName}
           </Heading>
         </HStack>
