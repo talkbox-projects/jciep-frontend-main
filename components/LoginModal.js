@@ -88,9 +88,6 @@ const LoginModal = () => {
   const onEmailLogin = useCallback(
     async ({ email, password }) => {
       try {
-<<<<<<< Updated upstream
-        
-=======
         const mutation = gql`
           mutation UserLogin($input: LoginInput) {
             UserLogin(input: $input) {
@@ -109,6 +106,7 @@ const LoginModal = () => {
                 identities {
                   id
                   type
+                  publishStatus
                   chineseName
                   englishName
                   dob
@@ -195,7 +193,6 @@ const LoginModal = () => {
             }
           }
         `;
->>>>>>> Stashed changes
 
         const variables = {
           input: {
@@ -204,7 +201,7 @@ const LoginModal = () => {
           },
         };
 
-        const data = await userLogin(variables)
+        const data = await userLogin(variables);
 
         setCredential(data);
         loginModalDisclosure.onClose();

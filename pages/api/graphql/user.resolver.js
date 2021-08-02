@@ -12,8 +12,6 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import identityUpdate from "../../../utils/api/IdentityUpdate";
 
-
-
 export default {
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
@@ -31,24 +29,26 @@ export default {
 
       let keys = {};
 
-      console.log(input)
+      console.log(input);
 
-      let date =  new Date()
+      let date = new Date();
       if (input.days === "7 Days") {
         date.setDate(date.getDate() - 7);
-      } else if (input.days === "1 Month" ) {
+      } else if (input.days === "1 Month") {
         date.setMonth(date.getMonth() - 1);
-      } else if (input.days === "3 Months" ) {
+      } else if (input.days === "3 Months") {
         date.setMonth(date.getMonth() - 3);
       } else {
-        input.days = undefined
+        input.days = undefined;
       }
 
       if (input.published) keys["published"] = input.published;
       if (input.phone) keys["phone"] = input.phone;
       if (input.email) keys["email"] = input.email;
       if (input.identityType) keys["type"] = { $in: input.identityType };
-      if (input.days) { keys['createdAt'] = {$gte: date}}
+      if (input.days) {
+        keys["createdAt"] = { $gte: date };
+      }
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
         keys["_id"] = {
@@ -59,8 +59,8 @@ export default {
       }
       if (input.name)
         keys["$or"] = [
-          { chineseName:  { $regex: input?.name , $options: 'i'}},
-          { englishName: { $regex: input?.name, $options: 'i' }},
+          { chineseName: { $regex: input?.name, $options: "i" } },
+          { englishName: { $regex: input?.name, $options: "i" } },
         ];
 
       const organizations = await Organization.find();
@@ -147,7 +147,7 @@ export default {
           meta: { type: "register" },
         });
 
-        console.log(emailVerify)
+        console.log(emailVerify);
         let host = process.env.HOST_URL
           ? process.env.HOST_URL
           : "http://localhost:3000";
@@ -217,8 +217,7 @@ export default {
 
        */
 
-
-      console.log(input)
+      console.log(input);
       if (input?.emailVerificationToken) {
         const emailVerify = await EmailVerify.findOne({
           token: input?.emailVerificationToken,
@@ -332,38 +331,36 @@ export default {
     UserGet: async (_parent, { token }) => {
       try {
         let decorderUser = jwt.decode(token, "shhhhh");
-        let user = await User.findById(decorderUser._id).populate("identities")
+        let user = await User.findById(decorderUser._id).populate("identities");
 
-
-        let identities =  (user.identities).map(async (identity) => {
-          
+        let identities = user.identities.map(async (identity) => {
           const organizations = await Organization.find({
             member: { $elemMatch: { identityId: identity._id } },
           });
-          
-          let organizationRole = await  (organizations ?? []).map((organization) => {
-            const member = organization.member.find(
-              ({ identityId }) => String(identityId) === String(identity._id)
-            );
-            return {
-              organization,
-              status: member.status,
-              role: member.role,
-            };
-          });
 
-          identity = identity.toObject()
-          identity.organizationRole = organizationRole
-          identity.id = identity._id
-          return identity
-        })
+          let organizationRole = await (organizations ?? []).map(
+            (organization) => {
+              const member = organization.member.find(
+                ({ identityId }) => String(identityId) === String(identity._id)
+              );
+              return {
+                organization,
+                status: member.status,
+                role: member.role,
+              };
+            }
+          );
 
-        user = user.toObject()
-        user.id = user._id
-        user.identities = await Promise.all(identities)
-        return user
-        
-        
+          identity = identity.toObject();
+          identity.organizationRole = organizationRole;
+          identity.id = identity._id;
+          return identity;
+        });
+
+        user = user.toObject();
+        user.id = user._id;
+        user.identities = await Promise.all(identities);
+        return user;
       } catch (error) {
         console.log(error);
         return null;
@@ -486,7 +483,7 @@ export default {
         employment: input?.employment,
         activity: input?.activity,
         published: input?.published || false,
-        createdAt: new Date()
+        createdAt: new Date(),
       }).save();
 
       if (input?.invitationCode) {
@@ -564,6 +561,58 @@ export default {
         console.error(error);
         return false;
       }
+    },
+
+    PortfolioPublishRequest: async (_parent, { id }) => {
+      const identity = await Identity.findById(id);
+      if (identity?.type === "pwd") {
+        return false;
+      }
+      if (identity?.publishedStatus !== "draft") {
+        return false;
+      }
+      identity.publishStatus = "pending";
+      await identity.save();
+      return true;
+    },
+
+    PortfolioPublishApprove: async (_parent, { id }) => {
+      const identity = await Identity.findById(id);
+      if (identity?.type === "pwd") {
+        return false;
+      }
+      if (identity?.publishStatus !== "draft") {
+        return false;
+      }
+      identity.publishStatus = "approved";
+      await identity.save();
+      return true;
+    },
+
+    PortfolioPublishReject: async (_parent, { id }) => {
+      const identity = await Identity.findById(id);
+      if (identity?.type === "pwd") {
+        return false;
+      }
+      if (identity?.publishedStatus !== "pending") {
+        return false;
+      }
+      identity.publishStatus = "rejected";
+      await identity.save();
+      return true;
+    },
+
+    PortfolioUnpublishRequest: async (_parent, { id }) => {
+      const identity = await Identity.findById(id);
+      if (identity?.type === "pwd") {
+        return false;
+      }
+      if (identity?.publishedStatus !== "approved") {
+        return false;
+      }
+      identity.publishStatus = "draft";
+      await identity.save();
+      return true;
     },
   },
 };

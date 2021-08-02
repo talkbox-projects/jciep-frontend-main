@@ -14,6 +14,7 @@ import skills from "./enum/skills";
 import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
 import serviceTarget from "./enum/serviceTarget";
+import publishStatus from "./enum/publishStatus";
 
 const properize = (text) => {
   return text
@@ -49,5 +50,6 @@ export default {
     ...generateEnumResolver("joinRole", joinRoles),
     ...generateEnumResolver("joinStatus", joinStatus),
     ...generateEnumResolver("serviceTarget", serviceTarget),
+    ...generateEnumResolver("publishStatus", publishStatus),
   },
 };

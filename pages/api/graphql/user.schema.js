@@ -251,7 +251,6 @@ export default gql`
       limit: Int!
       page: Int!
       days: String
-
     ): [Identity]
 
     IdentityGet(id: ID!): Identity
@@ -272,5 +271,10 @@ export default gql`
     IdentityUpdate(input: IdentityUpdateInput!): Identity
 
     IdentityRemove(id: ID!): Boolean
+
+    PortfolioPublishRequest(id: ID!): Boolean
+    PortfolioPublishApprove(id: ID!): Boolean
+    PortfolioPublishReject(id: ID!): Boolean
+    PortfolioUnpublishRequest(id: ID!): Boolean
   }
 `;
