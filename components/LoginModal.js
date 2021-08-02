@@ -262,7 +262,7 @@ const LoginModal = () => {
               )}
               <FacebookLogin
                 isMobile={false}
-                appId="1091464314720526"
+                appId={process.env.FACEBOOK_APP_ID}
                 fields="name,email,picture"
                 callback={responseFacebook}
                 redirectUri={`https://jciep.uat.talkbox.net/oauth/facebook`}
@@ -284,7 +284,7 @@ const LoginModal = () => {
 
               <GoogleLogin
                 autoLoad={false}
-                clientId="452094479729-ra8prl39vh78qc4rucrpdu5p0l15e1rb.apps.googleusercontent.com"
+                appId={process.env.GOOGLE_CLIENT_ID}
                 render={(renderProps) => (
                   <Button
                     colorScheme="google"

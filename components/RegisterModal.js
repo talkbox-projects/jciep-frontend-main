@@ -269,7 +269,7 @@ const RegisterModal = () => {
               )}
               <FacebookLogin
                 isMobile={false}
-                appId="1091464314720526"
+                appId={process.env.facebookAppId}
                 fields="name,email,picture"
                 callback={responseFacebook}
                 redirectUri={`https://jciep.uat.talkbox.net/oauth/facebook`}
