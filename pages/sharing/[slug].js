@@ -143,7 +143,7 @@ const PostDetail = ({ post, setting, page }) => {
   const nextPost = useMemo(() => relatedArticles?.[0], [relatedArticles]);
 
   return (
-    <VStack w="100%" spacing={0} align="center" pb={16} mt={[16, 16, 0 ]} bgColor="#fafafa">
+    <VStack w="100%" spacing={0} align="center" pb={16} mt={[16, 16, 16 ]} bgColor="#fafafa">
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
 

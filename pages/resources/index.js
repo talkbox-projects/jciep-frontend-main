@@ -691,6 +691,7 @@ const Resources = ({ page, enums, setting }) => {
                     >
                       <Button
                         variant="ghost"
+                        
                         rightIcon={<AiOutlineArrowRight />}
                       >
                         {wordExtractor(
@@ -848,7 +849,7 @@ const Resources = ({ page, enums, setting }) => {
           )}
         </Flex>
         <Image
-          right="15%"
+          
           top="0"
           src={page?.content?.jobOpportunitySection?.image}
           pos="absolute"

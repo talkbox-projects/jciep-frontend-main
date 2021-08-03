@@ -30,6 +30,9 @@ const TextTool = ({
   minHeight = "auto",
   small,
 }) => {
+
+  const [isLabelOpen, setIsLabelOpen] = useState(false)
+
   return (
     <Text
       pt={pt}
@@ -61,20 +64,26 @@ const TextTool = ({
       )}
       {share && (
         <chakra.span pl="3px">
-          <Icon w="15px" h="13px">
+          <Icon w="24px" h="24px">
             <FaShareSquare />
           </Icon>
         </chakra.span>
       )}
       {description && description !== "" && (
         <chakra.span pl="6px">
-          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
+          <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
+            
             <Icon
+              onMouseEnter={() => setIsLabelOpen(true)}
+              onMouseLeave={() => setIsLabelOpen(false)}
+              onClick={() => setIsLabelOpen(true)}
               mt={small ? "5px" : "5px"}
               w={small ? "16px" : "24px"}
               h={small ? "16px" : "24px"}
             >
-              <AiOutlineInfoCircle />
+              <AiOutlineInfoCircle 
+                
+              />
             </Icon>
           </Tooltip>
         </chakra.span>
