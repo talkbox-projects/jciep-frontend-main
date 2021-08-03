@@ -2,6 +2,8 @@ import React from "react";
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
+import getConfig from "next/config";
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 import {
   Box,
   FormControl,
@@ -262,10 +264,12 @@ const LoginModal = () => {
               )}
               <FacebookLogin
                 isMobile={false}
-                appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}
+                appId={publicRuntimeConfig.NEXT_PUBLIC_FACEBOOK_APP_ID}
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={process.env.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI}
+                redirectUri={
+                  publicRuntimeConfig.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI
+                }
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
@@ -284,7 +288,7 @@ const LoginModal = () => {
 
               <GoogleLogin
                 autoLoad={false}
-                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                clientId={publicRuntimeConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
                 render={(renderProps) => (
                   <Button
                     colorScheme="google"

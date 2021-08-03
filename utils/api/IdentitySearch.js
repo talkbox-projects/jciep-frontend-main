@@ -2,7 +2,16 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
 const identitySearch = async (
-  { limit, page, organizationId, identityType, published, name, days },
+  {
+    limit,
+    page,
+    organizationId,
+    identityType,
+    publishStatus,
+    published,
+    name,
+    days,
+  },
   context
 ) => {
   const query = gql`
@@ -11,6 +20,7 @@ const identitySearch = async (
       $page: Int!
       $organizationId: ID
       $identityType: [EnumIdentityType]
+      $publishStatus: [EnumPublishStatus]
       $name: String
       $days: String
       $published: Boolean
@@ -20,6 +30,7 @@ const identitySearch = async (
         page: $page
         organizationId: $organizationId
         identityType: $identityType
+        publishStatus: $publishStatus
         published: $published
         name: $name
         days: $days
@@ -127,6 +138,7 @@ const identitySearch = async (
     limit,
     organizationId,
     identityType,
+    publishStatus,
     name,
     published,
     days,
