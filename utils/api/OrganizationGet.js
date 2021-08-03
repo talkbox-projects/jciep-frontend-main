@@ -43,6 +43,7 @@ const organizationGet = async ({ id }, context) => {
           identityId
           identity {
             id
+            publishStatus
             chineseName
             englishName
             profilePic {
