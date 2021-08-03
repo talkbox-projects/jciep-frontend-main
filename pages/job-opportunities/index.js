@@ -313,22 +313,22 @@ const JobOpportunities = ({ page }) => {
                   {wordExtractor(page?.content?.wordings, "page_subtitle_link")}
                 </Link>
               </Text>
-              <Text textAlign="center" width={["100%", "380px"]} mt={3}>
               <Link href="/contact-us">
               <Button
+                mt={3}
                 borderRadius="full"
-                color="white"
+                color="#000"
                 bg="transparent"
                 variant="outline"
                 _hover={{
                   bg: "rgba(255,255,255, 0.3)",
                 }}
+                borderColor="#000"
                 
               >
                 {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
               </Button>
               </Link>
-              </Text>
               
             </Box>
             <Image
