@@ -80,6 +80,7 @@ export default gql`
   type Identity {
     id: ID
     type: EnumIdentityType!
+    publishStatus: EnumPublishStatus!
     chineseName: String!
     englishName: String!
     dob: Timestamp
@@ -251,7 +252,6 @@ export default gql`
       limit: Int!
       page: Int!
       days: String
-
     ): [Identity]
 
     IdentityGet(id: ID!): Identity
@@ -272,5 +272,10 @@ export default gql`
     IdentityUpdate(input: IdentityUpdateInput!): Identity
 
     IdentityRemove(id: ID!): Boolean
+
+    PortfolioPublishRequest(id: ID!): Boolean
+    PortfolioPublishApprove(id: ID!): Boolean
+    PortfolioPublishReject(id: ID!): Boolean
+    PortfolioUnpublish(id: ID!): Boolean
   }
 `;

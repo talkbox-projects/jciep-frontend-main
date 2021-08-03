@@ -58,6 +58,7 @@ const organizationSearch = async (
           identityId
           identity {
             id
+            publishStatus
             chineseName
             englishName
             profilePic {
@@ -108,7 +109,7 @@ const organizationSearch = async (
     status,
     type,
     published,
-    days
+    days,
   });
 
   return data?.OrganizationSearch;

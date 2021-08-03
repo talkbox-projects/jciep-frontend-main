@@ -7,6 +7,7 @@ const identityUpdate = async ({ input }, context) => {
       IdentityUpdate(input: $input) {
         id
         type
+        publishStatus
         chineseName
         englishName
         dob

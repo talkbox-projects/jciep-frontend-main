@@ -15,6 +15,7 @@ import skills from "./enum/skills";
 import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
 import serviceTarget from "./enum/serviceTarget";
+import publishStatus from "./enum/publishStatus";
 
 const properize = (text) => {
   return text
@@ -62,4 +63,5 @@ export default gql`
   ${generateEnumSchema("joinRole", joinRoles)}
   ${generateEnumSchema("joinStatus", joinStatus)}
   ${generateEnumSchema("serviceTarget", serviceTarget)}
+  ${generateEnumSchema("publishStatus", publishStatus)}
 `;

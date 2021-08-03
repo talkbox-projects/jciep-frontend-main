@@ -42,8 +42,13 @@ const organizationUpdate = async ({ input }, context) => {
         member {
           identityId
           identity {
+            id
+            publishStatus
             chineseName
             englishName
+            profilePic {
+              url
+            }
           }
           email
           status

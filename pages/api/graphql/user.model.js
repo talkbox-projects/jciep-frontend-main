@@ -7,6 +7,7 @@ import identityTypes from "./enum/identityTypes";
 import employmentModes from "./enum/employmentModes";
 import industries from "./enum/industries";
 import pwdTypes from "./enum/pwdTypes";
+import publishStatus from "./enum/publishStatus";
 
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
@@ -84,6 +85,11 @@ const identitySchema = Schema({
     type: String,
     enum: Object.keys(identityTypes),
     required: true,
+  },
+  publishStatus: {
+    type: String,
+    enum: Object.keys(publishStatus),
+    default: "draft",
   },
   chineseName: String,
   englishName: String,
@@ -241,8 +247,8 @@ const identitySchema = Schema({
     default: false,
   },
   createdAt: {
-    type: Date
-  }
+    type: Date,
+  },
 });
 
 userSchema.virtual("member.identity", {

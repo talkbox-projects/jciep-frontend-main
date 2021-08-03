@@ -11,6 +11,8 @@ import {
   MenuItem,
   IconButton,
   Box,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -20,7 +22,7 @@ import SectionCard from "../fragments/SectionCard";
 import OrganizationMemberRemove from "../../../utils/api/OrganizationMemberRemove";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import OrganizationMemberRemoveModal from "../fragments/OrganizationMemberRemoveModal";
-import { IoEllipsisVertical } from "react-icons/io5";
+import { IoEllipsisVertical, IoWarning } from "react-icons/io5";
 import OrganizationMemberApproveModal from "../fragments/OrganizationMemberApproveModal";
 import OrganizationMemberApprove from "../../../utils/api/OrganizationMemberApprove";
 import { useAppContext } from "../../../store/AppStore";
@@ -29,32 +31,32 @@ const OrganizationMemberListSection = ({ path }) => {
   const { organization, page, enums, editable, refreshOrganization, isAdmin } =
     OrganizationProfileStore.useContext();
 
-  const { identity: { id, type} = {} } = useAppContext();
+  const { identity: { id, type } = {} } = useAppContext();
 
   const router = useRouter();
 
   const removeDisclosure = useDisclosureWithParams();
   const approveDisclosure = useDisclosureWithParams();
-  const [hasStaffAccess, setHasStaffAccess] = useState(false)
+  const [hasStaffAccess, setHasStaffAccess] = useState(false);
 
   useEffect(() => {
     if (path !== undefined && id) {
-
-      console.log(organization.member)
+      console.log(organization.member);
       if (type === "admin") {
-        setHasStaffAccess(true)
-        return
+        setHasStaffAccess(true);
+        return;
       }
 
-     let hasStaff = (organization?.member ?? []).filter((m) => {
-        return (m.identityId === id && m.role === "staff" && m.status === "joined" )
-      }).length === 1;
+      let hasStaff =
+        (organization?.member ?? []).filter((m) => {
+          return (
+            m.identityId === id && m.role === "staff" && m.status === "joined"
+          );
+        }).length === 1;
 
-      setHasStaffAccess(hasStaff)
-
+      setHasStaffAccess(hasStaff);
     }
-  }, [path, id])
-
+  }, [path, id, organization.member, type]);
 
   const hasOnlyOneStaff =
     (organization?.member ?? []).filter(
@@ -62,8 +64,6 @@ const OrganizationMemberListSection = ({ path }) => {
     )?.length === 1;
 
   return (
-
-
     <SectionCard>
       <HStack px={4} py={4} align="center">
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
@@ -75,9 +75,13 @@ const OrganizationMemberListSection = ({ path }) => {
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {(organization?.member ?? [])
-          .filter((m) => (!(isAdmin || hasStaffAccess || editable)) ? m.role === "member" &&  m.status === "joined" : true)
-        //  .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
-          .map(({ identityId, identity, email, role, status }) => {
+          .filter((m) =>
+            !(isAdmin || hasStaffAccess || editable)
+              ? m.role === "member" && m.status === "joined"
+              : true
+          )
+          //  .filter((m) => (!(isAdmin || editable) ? m?.role === "member" : true))
+          .map(({ identityId, identity, role, status }) => {
             const availableOperations = [];
 
             if (isAdmin || editable) {
@@ -89,7 +93,7 @@ const OrganizationMemberListSection = ({ path }) => {
                       e.stopPropagation();
                       removeDisclosure.onOpen({
                         page,
-                        onSubmit: async (e) => {
+                        onSubmit: async () => {
                           try {
                             await OrganizationMemberRemove({
                               organizationId: organization?.id,
@@ -175,86 +179,89 @@ const OrganizationMemberListSection = ({ path }) => {
             }
 
             return (
-              <div>
-               
-                    <HStack
-                      key={identity?.id}
-                      {...(identity?.id && {
-                        onClick: () => {
-                          if (isAdmin || editable) {
-                            router.push(`/user/identity/${identity.id}`);
-                          } else {
-                            router.push(
-                              `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
-                            );
-                          }
-                        },
-                        _hover: {
-                          bg: "#fafafa",
-                          [Button]: {
-                            d: "none",
-                          },
-                        },
-                        cursor: "pointer",
-                      })}
-                      pl={4}
-                      pr={2}
-                      py={2}
-                    >
-                      <Avatar
-                        {...(identity?.profilePic?.url && { bgColor: "white" })}
-                        size="sm"
-                        src={identity?.profilePic?.url}
-                      ></Avatar>
-                      <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
-                        <Text textOverflow="ellipsis">
-                          {identity?.chineseName ?? email}
-                        </Text>
-                        <Text color="#999" fontSize="sm">
-                          {
-                            enums?.EnumJoinRoleList?.find((x) => x.key === role)
-                              ?.value?.[router?.locale]
-                          }
-                        </Text>
-                      </VStack>
-                      {
-                        (path === "talants" && hasStaffAccess) ? 
-                          <Tag>
-                          {
-                            enums?.EnumJoinStatusList?.find((x) => x.key === status)
-                              ?.value?.[router?.locale]
-                          }
-                        </Tag>
-                        : (path !== "talants") ? 
-                          <Tag>
-                            {
-                              enums?.EnumJoinStatusList?.find((x) => x.key === status)
-                                ?.value?.[router?.locale]
-                            }
-                          </Tag>
-                          : null
-                      }
-
-                      
-                      {availableOperations.length > 0 && (
-                        <Box>
-                          <Menu size="sm">
-                            <MenuButton onClick={(e) => e.stopPropagation()}>
-                              <IconButton
-                                fontSize="xs"
-                                variant="link"
-                                as={IoEllipsisVertical}
-                                size="xs"
-                              />
-                            </MenuButton>
-                            <MenuList>{availableOperations}</MenuList>
-                          </Menu>
+              <HStack
+                key={identity?.id}
+                {...(identity?.id && {
+                  onClick: () => {
+                    if (isAdmin || editable) {
+                      router.push(`/user/identity/${identity.id}`);
+                    } else {
+                      router.push(
+                        `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
+                      );
+                    }
+                  },
+                  _hover: {
+                    bg: "#fafafa",
+                    [Button]: {
+                      d: "none",
+                    },
+                  },
+                  cursor: "pointer",
+                })}
+                pl={4}
+                pr={2}
+                py={2}
+              >
+                <Avatar
+                  {...(identity?.profilePic?.url && { bgColor: "white" })}
+                  size="sm"
+                  src={identity?.profilePic?.url}
+                ></Avatar>
+                <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
+                  <Text textOverflow="ellipsis">{identity?.chineseName}</Text>
+                  <Text color="#999" fontSize="sm">
+                    {
+                      enums?.EnumJoinRoleList?.find((x) => x.key === role)
+                        ?.value?.[router?.locale]
+                    }
+                    {identity?.publishStatus === "pending" && (
+                      <Tooltip
+                        hasArrow
+                        label={wordExtractor(
+                          page?.content?.wordings,
+                          "request_publish_alert_label"
+                        )}
+                      >
+                        <Box d="inline" fontSize="lg">
+                          <Icon color="orange" as={IoWarning} />
                         </Box>
-                      )}
-                    </HStack>
-                
-              </div>
+                      </Tooltip>
+                    )}
+                  </Text>
+                </VStack>
+                {path === "talants" && hasStaffAccess ? (
+                  <Tag>
+                    {
+                      enums?.EnumJoinStatusList?.find((x) => x.key === status)
+                        ?.value?.[router?.locale]
+                    }
+                  </Tag>
+                ) : path !== "talants" ? (
+                  <Tag>
+                    {
+                      enums?.EnumJoinStatusList?.find((x) => x.key === status)
+                        ?.value?.[router?.locale]
+                    }
+                  </Tag>
+                ) : null}
 
+                {availableOperations.length > 0 && (
+                  <Box>
+                    <Menu size="sm">
+                      <MenuButton onClick={(e) => e.stopPropagation()}>
+                        <IconButton
+                          fontSize="xs"
+                          variant="link"
+                          as={IoEllipsisVertical}
+                          size="xs"
+                        />
+                      </MenuButton>
+                      <MenuList>{availableOperations}</MenuList>
+                    </Menu>
+                  </Box>
+                )}
+              </HStack>
             );
           })}
       </VStack>

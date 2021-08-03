@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import {
   Text,
   Button,
@@ -10,6 +11,12 @@ import {
   Wrap,
   Tag,
   useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Box,
+  Tooltip,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -17,11 +24,24 @@ import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
 import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
-import { MdRadioButtonUnchecked, MdRadioButtonChecked } from "react-icons/md";
-import {useEffect, useState} from 'react';
-import { useAppContext } from "../../../store/AppStore";
-import identityGet from "../../../utils/api/IdentityGet";
-
+import {
+  MdRadioButtonUnchecked,
+  MdRadioButtonChecked,
+  MdArrowDropDown,
+} from "react-icons/md";
+import { useEffect, useState } from "react";
+import {
+  useAppContext,
+  useDisclosureWithParams,
+} from "../../../store/AppStore";
+import PortfolioPublishRequestModal from "../fragments/PortfolioPublishRequestModal";
+import PortfolioPublishRequest from "../../../utils/api/PortfolioPublishRequest";
+import PortfolioUnpublishModal from "../fragments/PortfolioUnpublishModal";
+import PortfolioPublishApproveModal from "../fragments/PortfolioPublishApproveModal";
+import PortfolioPublishRejectModal from "../fragments/PortfolioPublishRejectModal";
+import PortfolioUnpublish from "../../../utils/api/PortfolioUnpublish";
+import PortfolioPublishApprove from "../../../utils/api/PortfolioPublishApprove";
+import PortfolioPublishReject from "../../../utils/api/PortfolioPublishReject";
 
 const PwdSectionViewer = () => {
   const router = useRouter();
@@ -33,39 +53,271 @@ const PwdSectionViewer = () => {
     editSection,
     setEditSection,
     saveIdentity,
+    refreshIdentity,
     editable,
     userFieldVisible,
   } = IdentityProfileStore.useContext();
 
-
-  console.log(identity)
+  console.log(identity);
   const toast = useToast();
-  const { identity: { id, type, organizationRole} = {} } = useAppContext();
-  const [staffAccess, setStaffAccess] = useState(false) 
-  
-  useEffect(async () => {
-    if (type === "staff" && organizationRole?.length> 0) {
-      let IdentityRole = (identity.organizationRole)
-      
-     let hasStaffAccess =  IdentityRole.filter(role =>  
-        role.organization.id === organizationRole[0].organization.id
-        && organizationRole[0].role === "staff" 
-        && organizationRole[0].status === "joined" 
-      )[0]
-       
-     if(hasStaffAccess) {
-      setStaffAccess(true)
-     } else {
-      setStaffAccess(false)
-     }   
-    }
+  const { identity: { id, type, organizationRole } = {} } = useAppContext();
+  const publishRequestDisclosure = useDisclosureWithParams();
+  const publishApproveDisclosure = useDisclosureWithParams();
+  const publishRejectDisclosure = useDisclosureWithParams();
+  const unpublishDisclosure = useDisclosureWithParams();
 
-  }, [type, identity])
+  const staffAccess = useMemo(() => {
+    if (type === "staff" && organizationRole?.length > 0) {
+      return (identity?.organizationRole ?? []).find(
+        (role) =>
+          role.organization.id === organizationRole[0].organization.id &&
+          organizationRole[0].role === "staff" &&
+          organizationRole[0].status === "joined"
+      );
+    }
+    return false;
+  }, [identity?.organizationRole, organizationRole, type]);
+
+  const publishMenu = useMemo(() => {
+    const isGuest = identity.id !== id && !staffAccess && !isAdmin;
+
+    const showMissingEMailAndPhoneTooltip =
+      !identity?.email || !identity?.phone;
+
+    const text =
+      enums?.EnumPublishStatusList?.find(
+        (x) => x.key === identity.publishStatus
+      )?.value?.[router.locale] || "未知狀態";
+
+    if (!isGuest) {
+      let menuItems = [];
+      switch (identity.publishStatus) {
+        case "draft":
+          menuItems = [
+            {
+              key: "pending",
+              color: "gray.500",
+              label: wordExtractor(
+                page?.content?.wordings,
+                "request_approval_portfolio_label"
+              ),
+              onClick: () => {
+                publishRequestDisclosure.onOpen({
+                  page,
+                  onSubmit: async () => {
+                    try {
+                      await PortfolioPublishRequest({
+                        id: identity.id,
+                      });
+                      await refreshIdentity();
+                      publishRequestDisclosure.onClose();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  },
+                });
+              },
+            },
+          ];
+          break;
+        case "pending":
+          if (staffAccess || isAdmin) {
+            menuItems = [
+              {
+                key: "approved",
+                color: "green.500",
+                label: wordExtractor(
+                  page?.content?.wordings,
+                  "approve_portfolio_label"
+                ),
+                onClick: () => {
+                  publishApproveDisclosure.onOpen({
+                    page,
+                    onSubmit: async () => {
+                      try {
+                        await PortfolioPublishApprove({
+                          id: identity.id,
+                        });
+                        await refreshIdentity();
+                        publishApproveDisclosure.onClose();
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    },
+                  });
+                },
+              },
+              {
+                key: "rejected",
+                color: "red.500",
+                label: wordExtractor(
+                  page?.content?.wordings,
+                  "reject_portfolio_label"
+                ),
+                onClick: () => {
+                  unpublishDisclosure.onOpen({
+                    page,
+                    onSubmit: async () => {
+                      try {
+                        await PortfolioUnpublish({
+                          id: identity.id,
+                        });
+                        await refreshIdentity();
+                        unpublishDisclosure.onClose();
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    },
+                  });
+                },
+              },
+            ];
+          } else {
+            menuItems = [
+              {
+                key: "draft",
+                color: "gray.500",
+                label: wordExtractor(
+                  page?.content?.wordings,
+                  "unpublish_portfolio_label"
+                ),
+                onClick: () => {
+                  unpublishDisclosure.onOpen({
+                    page,
+                    onSubmit: async () => {
+                      try {
+                        await PortfolioUnpublish({
+                          id: identity.id,
+                        });
+                        await refreshIdentity();
+                        unpublishDisclosure.onClose();
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    },
+                  });
+                },
+              },
+            ];
+          }
+          break;
+        case "approved":
+          menuItems = [
+            {
+              key: "draft",
+              color: "gray.500",
+              label: wordExtractor(
+                page?.content?.wordings,
+                "unpublish_portfolio_label"
+              ),
+              onClick: () => {
+                unpublishDisclosure.onOpen({
+                  page,
+                  onSubmit: async () => {
+                    try {
+                      await PortfolioUnpublish({
+                        id: identity.id,
+                      });
+                      await refreshIdentity();
+                      unpublishDisclosure.onClose();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  },
+                });
+              },
+            },
+          ];
+          break;
+        case "rejected":
+          menuItems = [
+            {
+              key: "draft",
+              color: "gray.500",
+              label: wordExtractor(
+                page?.content?.wordings,
+                "request_approval_portfolio_label"
+              ),
+              onClick: () => {
+                publishRequestDisclosure.onOpen({
+                  page,
+                  onSubmit: async () => {
+                    try {
+                      await PortfolioPublishRequest({
+                        id: identity.id,
+                      });
+                      await refreshIdentity();
+                      publishRequestDisclosure.onClose();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  },
+                });
+              },
+            },
+          ];
+          break;
+      }
+
+      if (showMissingEMailAndPhoneTooltip) {
+        return (
+          <Tooltip
+            label={wordExtractor(
+              page?.content?.wordings,
+              "missing_mail_or_phone_message"
+            )}
+          >
+            <Box>
+              <Button
+                isDisabled={true}
+                rightIcon={<MdArrowDropDown />}
+                variant="outline"
+              >
+                {text}
+              </Button>
+            </Box>
+          </Tooltip>
+        );
+      } else {
+        return (
+          <Menu placement="bottom-end">
+            <MenuButton>
+              <Button rightIcon={<MdArrowDropDown />} variant="outline">
+                {text}
+              </Button>
+            </MenuButton>
+            <MenuList>
+              {menuItems.map(({ label, key, color, onClick }) => (
+                <MenuItem onClick={onClick} key={key} color={color}>
+                  {label}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        );
+      }
+    }
+  }, [
+    enums?.EnumPublishStatusList,
+    id,
+    identity?.email,
+    identity.id,
+    identity?.phone,
+    identity.publishStatus,
+    isAdmin,
+    page,
+    publishApproveDisclosure,
+    publishRequestDisclosure,
+    refreshIdentity,
+    router.locale,
+    staffAccess,
+    unpublishDisclosure,
+  ]);
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || staffAccess  ) && (
+        {identity.publishStatus === "approved" ? (
           <Button
             variant="outline"
             isActive={!!identity?.published}
@@ -99,6 +351,8 @@ const PwdSectionViewer = () => {
                 : "publish_my_profile_label"
             )}
           </Button>
+        ) : (
+          publishMenu
         )}
         {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
@@ -165,17 +419,14 @@ const PwdSectionViewer = () => {
                 </FormLabel>
                 <Text>
                   {identity?.email ??
-                    identity?.email}
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
                 </Text>
               </FormControl>
               <FormControl>
                 <FormLabel color="#999" mb={0}>
                   {wordExtractor(page?.content?.wordings, "field_label_phone")}
                 </FormLabel>
-                <Text>
-                  {identity?.phone ??
-                    identity?.phone}
-                </Text>
+                <Text>{identity?.phone ?? identity?.phone}</Text>
               </FormControl>
             </Stack>
 
@@ -459,6 +710,10 @@ const PwdSectionViewer = () => {
           </FormControl>
         </Stack>
       </VStack>{" "}
+      <PortfolioPublishRequestModal {...publishRequestDisclosure} />
+      <PortfolioUnpublishModal {...unpublishDisclosure} />
+      <PortfolioPublishApproveModal {...publishApproveDisclosure} />
+      <PortfolioPublishRejectModal {...publishRejectDisclosure} />
     </VStack>
   );
 };
