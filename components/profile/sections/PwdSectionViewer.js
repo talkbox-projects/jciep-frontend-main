@@ -58,8 +58,7 @@ const PwdSectionViewer = () => {
     userFieldVisible,
   } = IdentityProfileStore.useContext();
 
-
-  console.log(identity)
+  console.log(identity);
   const toast = useToast();
   const { identity: { id, type, organizationRole } = {} } = useAppContext();
   const publishRequestDisclosure = useDisclosureWithParams();
@@ -420,17 +419,14 @@ const PwdSectionViewer = () => {
                 </FormLabel>
                 <Text>
                   {identity?.email ??
-                    identity?.email}
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
                 </Text>
               </FormControl>
               <FormControl>
                 <FormLabel color="#999" mb={0}>
                   {wordExtractor(page?.content?.wordings, "field_label_phone")}
                 </FormLabel>
-                <Text>
-                  {identity?.phone ??
-                    identity?.phone}
-                </Text>
+                <Text>{identity?.phone ?? identity?.phone}</Text>
               </FormControl>
             </Stack>
 
