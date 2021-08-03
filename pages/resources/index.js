@@ -341,7 +341,7 @@ const Resources = ({ page, enums, setting }) => {
           <DividerA primaryColor="#F6D644" secondaryColor="F6D644" nextColor="#FEB534"></DividerA>
       </Box>
       <Box bg="#FEB534" pb={48}>
-        <Container mt={["-150px", "-210px"]} pos="relative">
+        <Container mt={["-150px", "-150px", "-260px"]} pos="relative">
           <VStack alignItems="flex-end" position="relative" spacing={4} height={["320px", "auto"]}>
             {(page?.content?.dialogue?.right?.dialogue ?? []).map(
               ({ message }, index) => {
