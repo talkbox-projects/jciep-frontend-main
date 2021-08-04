@@ -40,7 +40,6 @@ import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
-import { getNullableType } from "graphql";
 import { useAppContext } from "../store/AppStore";
 const PAGE_KEY = "home";
 
