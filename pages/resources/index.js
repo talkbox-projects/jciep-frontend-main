@@ -269,6 +269,7 @@ const Resources = ({ page, enums, setting }) => {
                             }}
                             data={message}
                             fontSize={["lg", "xl", "2xl"]}
+                            marginBottom="20px"
                           />
                           <Box
                             w="0px"
@@ -306,6 +307,7 @@ const Resources = ({ page, enums, setting }) => {
                             paddingLeft: "10px",
                           }}
                           fontSize={["lg", "xl", "2xl"]}
+                          marginBottom="20px"
                         />
                         <Box
                           w="0px"
@@ -369,6 +371,7 @@ const Resources = ({ page, enums, setting }) => {
                           }}
                           data={message}
                           fontSize={["lg", "xl", "2xl"]}
+                          marginBottom="20px"
                         />
                         <Box
                           w="0px"
@@ -400,8 +403,8 @@ const Resources = ({ page, enums, setting }) => {
         </Container>
         <Container mt={["", "", "", "", "-200px"]}>
           <VStack>
-            <Box fontSize="2xl">
-              <ApostropheHeadline color="#FFF">
+            <Box fontSize="2xl" marginBottom="20px">
+              <ApostropheHeadline color="#FFF" mb={3}> 
                 {page?.content?.howSection["title 標題"]}
               </ApostropheHeadline>
             </Box>
