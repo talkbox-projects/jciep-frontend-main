@@ -54,7 +54,7 @@ const PostHeader = ({ categories, post }) => {
   };
   return (
     <Box w="100%" >
-      <Box  d={["none", "none", "block"]} pb={32} w="100%" position="relative">
+      <Box  d={["none", "none", "block"]} pb={[40]} w="100%" position="relative">
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}

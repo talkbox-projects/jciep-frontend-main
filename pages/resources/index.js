@@ -22,6 +22,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
+  Link
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
@@ -811,7 +812,7 @@ const Resources = ({ page, enums, setting }) => {
         zIndex="0"
         overflow="hidden"
       >
-        <Heading fontSize={["24px", "24px", "36px"]}>
+        <Heading fontSize={["24px", "24px", "36px"]} zIndex={100}>
           {page?.content?.jobOpportunitySection?.title}
         </Heading>
 
@@ -822,6 +823,7 @@ const Resources = ({ page, enums, setting }) => {
           px={["16px", "16px", "0px"]}
           mx="auto"
           maxW={{ lg: "83%", md: "90%" }}
+          zIndex={100}
         >
           {page?.content?.jobOpportunitySection?.description}
         </Text>
@@ -834,6 +836,7 @@ const Resources = ({ page, enums, setting }) => {
           {(page?.content?.jobOpportunitySection?.buttons ?? []).map(
             ({ label, link }, index) => {
               return (
+                <Link href={link}>
                 <Button
                   zIndex="100"
                   borderRadius="22px"
@@ -847,6 +850,8 @@ const Resources = ({ page, enums, setting }) => {
                 >
                   {label}
                 </Button>
+                </Link>
+
               );
             }
           )}
