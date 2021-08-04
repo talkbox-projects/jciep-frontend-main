@@ -35,6 +35,7 @@ import Slider from "react-slick";
 import { SRLWrapper, useLightbox } from "simple-react-lightbox";
 import { useCMS } from "tinacms";
 import wordExtractor from "../../../utils/wordExtractor";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -45,16 +46,7 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       isShowLangSwitcher: true,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
@@ -398,7 +390,7 @@ const Partner = ({ page }) => {
                         textAlign="center"
                         w={["100%", "100%", "150px"]}
                         fontSize={["xl", "2xl"]}
-                        fontWeight="semibold"     
+                        fontWeight="semibold"
                       >
                         {label}
                         {description && (

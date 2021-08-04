@@ -6,7 +6,7 @@ const environmentSettingGet = async (params = null, context = null) => {
     query {
       EnvironmentSettingGet {
         facebookAppId
-        facebookRedirectUri
+        facebookAppRedirectUri
         googleClientId
       }
     }

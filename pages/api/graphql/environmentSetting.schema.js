@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 export default gql`
   type EnvironmentSetting {
     facebookAppId: String
-    facebookRedirectUri: String
+    facebookAppRedirectUri: String
     googleClientId: String
   }
 

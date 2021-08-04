@@ -41,6 +41,7 @@ import DividerTriple from "../../components/DividerTriple";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import { getYoutubeLink } from "../../utils/general";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "pwd";
 
@@ -51,16 +52,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };

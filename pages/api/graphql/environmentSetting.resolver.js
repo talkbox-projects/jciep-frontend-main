@@ -3,7 +3,8 @@ export default {
     EnvironmentSettingGet: async () => {
       return {
         facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-        facebookRedirectUri: process.env.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI,
+        facebookAppRedirectUri:
+          process.env.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI,
         googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       };
     },

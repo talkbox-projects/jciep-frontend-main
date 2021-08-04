@@ -1,40 +1,47 @@
 import React from "react";
 import { Box, Text, VStack } from "@chakra-ui/layout";
-import {
-  SimpleGrid,
-  chakra,
-  GridItem,
-  Heading,
-  Image,
-} from "@chakra-ui/react";
+import { SimpleGrid, chakra, GridItem, Heading, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 // import { Scroll } from  "framer";
 
 const MotionBox = motion(Box);
 const MotionImage = motion(Image);
 
-const ScrollerAnimation = ({ headline, title, roles, partialLogo, logo, caption, endTitle }) => {
+const ScrollerAnimation = ({
+  headline,
+  title,
+  roles,
+  partialLogo,
+  logo,
+  caption,
+  endTitle,
+}) => {
   let Scroll = () => <div></div>;
   let Frame = () => <div></div>;
-  if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
-    Scroll = require('framer').Scroll;
-    Frame = require('framer').Frame;
-
+  if (
+    typeof window !== "undefined" &&
+    typeof window.navigator !== "undefined"
+  ) {
+    Scroll = require("framer").Scroll;
+    Frame = require("framer").Frame;
   }
 
   const onScroll = (info) => {
-    console.log(info.offset, info.velocity)
-  }
+    console.log(info.offset, info.velocity);
+  };
 
   return (
-    <Scroll width="100%" height="100vh" onScroll={onScroll} direction="vertical">
+    <Scroll
+      width="100%"
+      height="100vh"
+      onScroll={onScroll}
+      direction="vertical"
+    >
       {/* Second Section */}
       <MotionBox bg="#efefef">
         <MotionBox px={(0.5, 0.5, 1, 2)} maxWidth={1024} w="100%" mx="auto">
           <VStack align="center" py={16}>
-            <Heading as="h4">
-              {headline}
-            </Heading>
+            <Heading as="h4">{headline}</Heading>
             <Text
               pt={16}
               textAlign="center"
@@ -62,21 +69,19 @@ const ScrollerAnimation = ({ headline, title, roles, partialLogo, logo, caption,
               )}
             </Text>
             <SimpleGrid pt={16} columns={[2, 2, 2, 4]} spacing={8}>
-              {(roles ?? []).map(
-                ({ icon, name, caption }, index) => {
-                  return (
-                    <GridItem key={index}>
-                      <VStack>
-                        <MotionImage w={100} src={icon}></MotionImage>
-                        <Text fontSize={["lg"]} fontWeight="bold">
-                          {name}
-                        </Text>
-                        <Text textAlign="center">{caption}</Text>
-                      </VStack>
-                    </GridItem>
-                  );
-                }
-              )}
+              {(roles ?? []).map(({ icon, name, caption }, index) => {
+                return (
+                  <GridItem key={index}>
+                    <VStack>
+                      <MotionImage w={100} src={icon}></MotionImage>
+                      <Text fontSize={["lg"]} fontWeight="bold">
+                        {name}
+                      </Text>
+                      <Text textAlign="center">{caption}</Text>
+                    </VStack>
+                  </GridItem>
+                );
+              })}
             </SimpleGrid>
           </VStack>
         </MotionBox>
@@ -86,17 +91,8 @@ const ScrollerAnimation = ({ headline, title, roles, partialLogo, logo, caption,
       <MotionBox bg="#fff">
         <MotionBox px={(0.5, 0.5, 1, 2)} maxWidth={1024} w="100%" mx="auto">
           <VStack align="center" py={32}>
-            <MotionImage
-              maxW="480"
-              w="80%"
-              src={partialLogo}
-              display="none"
-            />
-            <MotionImage
-              maxW="480"
-              w="80%"
-              src={logo}
-            ></MotionImage>
+            <MotionImage maxW="480" w="80%" src={partialLogo} display="none" />
+            <MotionImage maxW="480" w="80%" src={logo}></MotionImage>
             <Heading pt={8} as="h4" fontSize={["2xl", "3xl", "4xl"]}>
               {endTitle}
             </Heading>
@@ -131,7 +127,7 @@ const ScrollerAnimation = ({ headline, title, roles, partialLogo, logo, caption,
         </MotionBox>
       </MotionBox>
     </Scroll>
-  )
-}
+  );
+};
 
 export default ScrollerAnimation;

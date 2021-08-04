@@ -87,6 +87,8 @@ const LoginModal = () => {
     environmentSetting,
   } = useAppContext();
 
+  console.log(environmentSetting);
+
   const [tab, setTab] = useState("email");
   const getWording = useGetWording();
   const [setCredential] = useCredential();
