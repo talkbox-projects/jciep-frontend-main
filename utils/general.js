@@ -45,7 +45,11 @@ export const getYoutubeId = (url) => {
 };
 
 export const getYoutubeLink = (url) => {
-  return `https://youtube.com/embed/${getYoutubeId(url)}`;
+  if((url.match(/youtube.com\/\embed/)).length > 0) {
+    return `https://youtube.com/embed/${getYoutubeId(url)}`;
+  } 
+
+  return url
 };
 
 export const useInjectParams = () => {

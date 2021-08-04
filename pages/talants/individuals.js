@@ -96,6 +96,7 @@ const IdentityOpportunities = ({
       page={page}
       editable={false}
     >
+        
       <VStack align="stretch" flex={1} minW={0} w="100%">
         <ConnectedOrganization />
         <PwdSection />
@@ -144,7 +145,9 @@ const IdentityOpportunities = ({
               borderWidth: 2,
               borderTopWidth: 8,
             })}
-            borderRadius={8}
+            borderRadius={10}
+            paddingBottom="20px"
+            
           >
             <VStack spacing={0} align="start">
               {identity?.profilePic?.url && (

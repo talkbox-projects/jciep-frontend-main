@@ -110,7 +110,8 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               borderWidth: 2,
               borderTopWidth: 8,
             })}
-            borderRadius={8}
+            borderRadius={10}
+            paddingBottom="20px"
           >
             <VStack spacing={0} align="start">
               {organization?.logo?.url && (

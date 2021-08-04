@@ -40,6 +40,7 @@ import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
+import { getYoutubeLink } from "../../utils/general";
 
 const PAGE_KEY = "pwd";
 
@@ -543,7 +544,7 @@ const PwdDetail = ({ page }) => {
               mb={["24px", "24px", "24px"]}
             >
               <iframe
-                src={video.url}
+                src={getYoutubeLink(video.url)}
                 title="PWD Video"
                 frameBorder="0"
                 allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

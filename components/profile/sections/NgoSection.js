@@ -17,7 +17,7 @@ const NgoSection = () => {
   const isEditing = editSection === "profile";
   return (
     <SectionCard>
-      <VStack spacing={1} align="stretch">
+      <VStack spacing={1} align="stretch" overflow="hidden" borderRadius="10px">
         <BannerFragment
           {...{
             enableBannerMedia: false,
