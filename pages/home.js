@@ -1,12 +1,5 @@
 import React, { useRef } from "react";
-import {
-  Stack,
-  Box,
-  Text,
-  VStack,
-  LinkOverlay,
-  LinkBox,
-} from "@chakra-ui/layout";
+import { Stack, Box, Text, VStack, LinkBox } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -47,7 +40,6 @@ import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
-import { getNullableType } from "graphql";
 import { useAppContext } from "../store/AppStore";
 const PAGE_KEY = "home";
 

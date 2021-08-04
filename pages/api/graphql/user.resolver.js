@@ -58,11 +58,32 @@ export default {
             .map((m) => Types.ObjectId(m.identityId)),
         };
       }
+
+      const compoundQuery = [];
       if (input.name)
-        keys["$or"] = [
-          { chineseName: { $regex: input?.name, $options: "i" } },
-          { englishName: { $regex: input?.name, $options: "i" } },
+        compoundQuery.push({
+          $or: [
+            { chineseName: { $regex: input?.name, $options: "i" } },
+            { englishName: { $regex: input?.name, $options: "i" } },
+          ],
+        });
+
+      if (input.publishStatus?.length > 0) {
+        const $or = [
+          { type: { $ne: "pwd" } },
+          { publishStatus: { $in: input.publishStatus } },
         ];
+        if (input.publishStatus?.includes("draft")) {
+          $or.push({ publishStatus: null });
+        }
+        compoundQuery.push({
+          $or,
+        });
+      }
+
+      if (compoundQuery?.length > 0) {
+        keys["$and"] = compoundQuery;
+      }
 
       const organizations = await Organization.find();
 

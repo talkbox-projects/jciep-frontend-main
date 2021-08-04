@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import constate from "constate";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWordingLists } from "../utils/wordings/useWordingLists";
 import { useCMS } from "tinacms";
 import { updateIf } from "../utils/general";
@@ -62,6 +62,11 @@ const [AppProvider, useAppContext] = constate((props) => {
     initialValue: props?.wordings?.value,
   });
 
+  console.log("props.environmentSetting", props);
+
+  const [environmentSetting, setEnvironmentSetting] = useState(
+    props.environmentSetting
+  );
   const wordings = useMemo(() => {
     return Object.entries(_wordings).reduce(
       (o, [cat, arr]) => ({
@@ -141,6 +146,9 @@ const [AppProvider, useAppContext] = constate((props) => {
     identityId,
     setIdentityId,
     updateIdentity,
+
+    environmentSetting,
+    setEnvironmentSetting,
   };
 });
 

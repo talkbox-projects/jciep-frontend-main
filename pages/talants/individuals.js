@@ -232,10 +232,12 @@ const IdentityOpportunities = ({
               </Text>
               <Text fontSize="xl">
                 {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
-                <Link href={wordExtractor(
-                      page?.content?.wordings,
-                      "page_subtitle_url"
-                    )}>
+                <Link
+                  href={wordExtractor(
+                    page?.content?.wordings,
+                    "page_subtitle_url"
+                  )}
+                >
                   <Text d="inline" decoration="underline">
                     {wordExtractor(
                       page?.content?.wordings,
@@ -273,7 +275,6 @@ const IdentityOpportunities = ({
                 <option key="" value="">
                   {/* Organization */}
                   {wordExtractor(page?.content?.wordings, "organization_text")}
-
                 </option>
                 {(organizations ?? []).map(
                   ({ id, chineseCompanyName, enghlishCompanyName }) => (

@@ -15,6 +15,7 @@ import DividerA from "../../components/DividerA";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import contactUsFieldsForCMS from "../../utils/tina/contactUsFieldsForCMS";
 import wordExtractor from "../../utils/wordExtractor";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "contactUs";
 
@@ -26,16 +27,7 @@ export const getServerSideProps = async (context) => {
       page,
       isShowLangSwitcher: true,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };

@@ -10,6 +10,7 @@ import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
 import userLogin from "../../utils/api/UserLogin";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "facebookLogin";
 
@@ -20,16 +21,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
@@ -42,8 +34,6 @@ const FacebookLogin = ({ page }) => {
   useEffect(() => {
     (async () => {
       try {
-       
-
         const variables = {
           input: {
             facebookToken: accessToken,
@@ -51,7 +41,7 @@ const FacebookLogin = ({ page }) => {
         };
 
         // const data = await getGraphQLClient().request(mutation, variables);
-        const data = await userLogin(variables)
+        const data = await userLogin(variables);
         setCredential(data);
         if (data) {
           const user = data?.user;

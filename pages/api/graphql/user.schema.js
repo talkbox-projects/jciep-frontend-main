@@ -248,6 +248,7 @@ export default gql`
       name: String
       organizationId: ID
       identityType: [EnumIdentityType]
+      publishStatus: [EnumPublishStatus]
       published: Boolean
       limit: Int!
       page: Int!

@@ -153,7 +153,6 @@ const Header = ({
         `;
 
         const data = await getGraphQLClient().request(query);
-        console.log(data);
         setEnumIdentityTypeList(data.EnumIdentityTypeList);
       } catch (e) {
         console.log(e);
@@ -507,7 +506,7 @@ const Header = ({
         >
           <DrawerOverlay />
           <DrawerContent width="90% !important">
-            <DrawerBody >
+            <DrawerBody>
               <VStack minH="100%" align="stretch">
                 <HStack borderBottomWidth={1} borderColor="#ddd" p={4}>
                   {isShowLangSwitcher && (

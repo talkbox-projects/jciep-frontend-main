@@ -37,6 +37,7 @@ import Slider from "react-slick";
 import { useRouter } from "next/router";
 import { useCMS } from "tinacms";
 import Anchor from "../../components/Anchor";
+import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "programme";
 
@@ -50,23 +51,12 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       isShowLangSwitcher: true,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
 
 const Programme = ({ page }) => {
-  const router = useRouter();
-  const cms = useCMS();
   const sliderRef = useRef(null);
   const settings = {
     ref: (c) => (sliderRef.current = c),
@@ -457,9 +447,7 @@ const Programme = ({ page }) => {
                                         </Text>
                                         <Icon
                                           as={
-                                            isExpanded
-                                              ? AiOutlineMinus
-                                              : BsPlus
+                                            isExpanded ? AiOutlineMinus : BsPlus
                                           }
                                           fontSize="2xl"
                                         />
@@ -487,7 +475,10 @@ const Programme = ({ page }) => {
                                                 </Text>
                                                 {/* <Image
                                                   display="inline-flex"
-                                                  src={page?.content?.icon?.extrenalLinkIcon}
+                                                  src={
+                                                    page?.content?.icon
+                                                      ?.extrenalLinkIcon
+                                                  }
                                                   marginLeft="10px"
                                                   height="25px"
                                                 ></Image> */}

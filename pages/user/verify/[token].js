@@ -25,6 +25,7 @@ import { useCredential } from "../../../utils/user";
 import { passwordRegex } from "../../../utils/general";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import userLogin from "../../../utils/api/UserLogin";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 
 const PAGE_KEY = "verify_email";
 
@@ -35,16 +36,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      wordings: await getConfiguration({
-        key: "wordings",
-        lang: context.locale,
-      }),
-      header: await getConfiguration({ key: "header", lang: context.locale }),
-      footer: await getConfiguration({ key: "footer", lang: context.locale }),
-      navigation: await getConfiguration({
-        key: "navigation",
-        lang: context.locale,
-      }),
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
