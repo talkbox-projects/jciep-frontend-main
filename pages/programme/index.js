@@ -25,8 +25,10 @@ import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMinus, AiOutlinePlus, AiOutlineArrowRight } from "react-icons/ai";
 import {BsPlus } from "react-icons/bs";
+import { FaShareSquare } from "react-icons/fa";
+
 
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
@@ -476,14 +478,19 @@ const Programme = ({ page }) => {
                                                 fontWeight="bold"
                                                 color="#007878"
                                               >
-                                                {label}
-
-                                                <Image
+                                                
+                                                
+                                                <Text >
+                                                 <chakra.span display="inline-block"> {label} </chakra.span>
+                                                 <chakra.span display="inline-block" ml={3}><FaShareSquare /></chakra.span>
+                                                  
+                                                </Text>
+                                                {/* <Image
                                                   display="inline-flex"
                                                   src={page?.content?.icon?.extrenalLinkIcon}
                                                   marginLeft="10px"
                                                   height="25px"
-                                                ></Image>
+                                                ></Image> */}
                                               </Link>
                                             );
                                           }
