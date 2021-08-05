@@ -82,11 +82,13 @@ const LoginModal = () => {
   );
 
   const responseFacebook = (response) => {
+    if (!response.accessToken) return;
     loginModalDisclosure.onClose();
     router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
   };
 
   const responseGoogle = (response) => {
+    if (!response.accessToken) return;
     router.replace(`/oauth/google/?accessToken=${response.accessToken}`);
     loginModalDisclosure.onClose();
   };

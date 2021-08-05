@@ -97,13 +97,15 @@ const RegisterModal = () => {
   });
 
   const responseFacebook = (response) => {
-    registerModalDisclosure.onClose();
+    if (!response.accessToken) return;
     router.replace(`/oauth/facebook/?accessToken=${response.accessToken}`);
+    registerModalDisclosure.onClose();
   };
 
   const responseGoogle = (response) => {
-    registerModalDisclosure.onClose();
+    if (!response.accessToken) return;
     router.replace(`/oauth/google/?accessToken=${response.accessToken}`);
+    registerModalDisclosure.onClose();
   };
 
   const onEmailRegister = useCallback(async ({ e, email }) => {
