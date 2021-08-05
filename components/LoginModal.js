@@ -268,10 +268,10 @@ const LoginModal = () => {
               )}
               <FacebookLogin
                 isMobile={false}
-                appId={publicRuntimeConfig.facebookAppId}
+                appId={publicRuntimeConfig.FACEBOOK_APP_ID}
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={publicRuntimeConfig.facebookAppRedirectUri}
+                redirectUri={publicRuntimeConfig.FACEBOOK_APP_REDIRECT_URI}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
@@ -290,7 +290,7 @@ const LoginModal = () => {
 
               <GoogleLogin
                 autoLoad={false}
-                clientId={publicRuntimeConfig.googleClientId}
+                clientId={publicRuntimeConfig.GOOGLE_CLIENT_ID}
                 render={(renderProps) => (
                   <Button
                     colorScheme="google"
