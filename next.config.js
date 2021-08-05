@@ -12,9 +12,10 @@ module.exports = {
   },
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
-    FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
-    FACEBOOK_APP_REDIRECT_URI: process.env.FACEBOOK_APP_REDIRECT_URI,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    FACEBOOK_APP_ID: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
+    FACEBOOK_APP_REDIRECT_URI:
+      process.env.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI,
+    GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   },
   i18n: {
     locales: ["zh", "en"],
