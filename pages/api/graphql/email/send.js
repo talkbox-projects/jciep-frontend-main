@@ -1,14 +1,17 @@
 const nodemailer = require("nodemailer");
 const html = require("./templates/activation.js").default;
 
+import getConfig from "next/config";
+const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+
 const transporter = {
   production: nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
+    host: serverRuntimeConfig.SMTP_HOST,
+    port: serverRuntimeConfig.SMTP_PORT,
     secure: false,
     auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD,
+      user: serverRuntimeConfig.SMTP_USERNAME,
+      pass: serverRuntimeConfig.SMTP_PASSWORD,
     },
   }),
   development: nodemailer.createTransport({
@@ -23,9 +26,9 @@ const transporter = {
 };
 
 const sendMail = (receiver, subject, content, attachments = []) => {
-  transporter[process.env.NODE_ENV].sendMail(
+  transporter[publicRuntimeConfig.NODE_ENV].sendMail(
     {
-      from: process.env.SMTP_SENDER,
+      from: serverRuntimeConfig.SMTP_SENDER,
       to: receiver,
       subject: subject,
       html: content,

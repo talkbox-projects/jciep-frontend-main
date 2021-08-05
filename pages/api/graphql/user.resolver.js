@@ -11,7 +11,8 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
-import identityUpdate from "../../../utils/api/IdentityUpdate";
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
 
 export default {
   Query: {
@@ -169,9 +170,8 @@ export default {
           meta: { type: "register" },
         });
 
-        console.log(emailVerify);
-        let host = process.env.HOST_URL
-          ? process.env.HOST_URL
+        let host = publicRuntimeConfig.HOST_URL
+          ? publicRuntimeConfig.HOST_URL
           : "http://localhost:3000";
         await send(
           email,
@@ -402,8 +402,8 @@ export default {
           email,
           meta: { type: "resetPassword" },
         });
-        let host = process.env.HOST_URL
-          ? process.env.HOST_URL
+        let host = publicRuntimeConfig.HOST_URL
+          ? publicRuntimeConfig.HOST_URL
           : "http://localhost:3000";
         await send(
           email,

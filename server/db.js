@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
+import getConfig from "next/config";
 
 const connect = async () => {
+  const { serverRuntimeConfig } = getConfig();
   await mongoose
-    .connect(process.env.MONGODB_URL, {
+    .connect(serverRuntimeConfig.MONGODB_URL, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
