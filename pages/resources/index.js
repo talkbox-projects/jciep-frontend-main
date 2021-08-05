@@ -22,6 +22,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
+  Link
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
@@ -269,6 +270,7 @@ const Resources = ({ page, enums, setting }) => {
                             }}
                             data={message}
                             fontSize={["lg", "xl", "2xl"]}
+                            marginBottom="20px"
                           />
                           <Box
                             w="0px"
@@ -306,6 +308,7 @@ const Resources = ({ page, enums, setting }) => {
                             paddingLeft: "10px",
                           }}
                           fontSize={["lg", "xl", "2xl"]}
+                          marginBottom="20px"
                         />
                         <Box
                           w="0px"
@@ -369,6 +372,7 @@ const Resources = ({ page, enums, setting }) => {
                           }}
                           data={message}
                           fontSize={["lg", "xl", "2xl"]}
+                          marginBottom="20px"
                         />
                         <Box
                           w="0px"
@@ -400,8 +404,8 @@ const Resources = ({ page, enums, setting }) => {
         </Container>
         <Container mt={["", "", "", "", "-200px"]}>
           <VStack>
-            <Box fontSize="2xl">
-              <ApostropheHeadline color="#FFF">
+            <Box fontSize="2xl" marginBottom="20px">
+              <ApostropheHeadline color="#FFF" mb={3}> 
                 {page?.content?.howSection["title 標題"]}
               </ApostropheHeadline>
             </Box>
@@ -808,7 +812,7 @@ const Resources = ({ page, enums, setting }) => {
         zIndex="0"
         overflow="hidden"
       >
-        <Heading fontSize={["24px", "24px", "36px"]}>
+        <Heading fontSize={["24px", "24px", "36px"]} zIndex={100}>
           {page?.content?.jobOpportunitySection?.title}
         </Heading>
 
@@ -819,6 +823,7 @@ const Resources = ({ page, enums, setting }) => {
           px={["16px", "16px", "0px"]}
           mx="auto"
           maxW={{ lg: "83%", md: "90%" }}
+          zIndex={100}
         >
           {page?.content?.jobOpportunitySection?.description}
         </Text>
@@ -831,6 +836,7 @@ const Resources = ({ page, enums, setting }) => {
           {(page?.content?.jobOpportunitySection?.buttons ?? []).map(
             ({ label, link }, index) => {
               return (
+                <Link href={link}>
                 <Button
                   zIndex="100"
                   borderRadius="22px"
@@ -844,6 +850,8 @@ const Resources = ({ page, enums, setting }) => {
                 >
                   {label}
                 </Button>
+                </Link>
+
               );
             }
           )}

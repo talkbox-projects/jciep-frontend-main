@@ -45,9 +45,16 @@ export const getYoutubeId = (url) => {
 };
 
 export const getYoutubeLink = (url) => {
+<<<<<<< HEAD
   if (url.match(youtubeRegex).length > 0) {
     return `https://youtube.com/embed/${getYoutubeId(url)}`;
   }
+=======
+  console.log(url)
+    if((url.match(/youtube.com/)?.length > 0))  {
+      return `https://youtube.com/embed/${getYoutubeId(url)}`;
+    } 
+>>>>>>> profile-fixes
 
   return url;
 };

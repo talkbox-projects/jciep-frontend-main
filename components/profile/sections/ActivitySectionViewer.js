@@ -36,7 +36,7 @@ const ActivitySectionViewer = () => {
 
 
   return (
-    <VStack spacing={1} align="stretch">
+    <VStack spacing={1} paddingBottom="20px" align="stretch">
       <HStack px={8} py={4} align="center">
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
           {wordExtractor(page?.content?.wordings, "activity_header_label")}
