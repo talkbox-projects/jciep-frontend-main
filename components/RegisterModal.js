@@ -5,7 +5,7 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 import GoogleLogin from "react-google-login";
 import React from "react";
 import getConfig from "next/config";
-const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 
 import {
   Box,
@@ -45,6 +45,7 @@ const RegisterModal = () => {
     loginModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
+    environmentSetting,
     setEmail,
   } = useAppContext();
 
@@ -271,12 +272,10 @@ const RegisterModal = () => {
               )}
               <FacebookLogin
                 isMobile={false}
-                appId={publicRuntimeConfig.NEXT_PUBLIC_FACEBOOK_APP_ID}
+                appId={environmentSetting.facebookAppId}
                 fields="name,email,picture"
                 callback={responseFacebook}
-                redirectUri={
-                  publicRuntimeConfig.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI
-                }
+                redirectUri={environmentSetting.facebookAppRedirectUri}
                 render={(renderProps) => (
                   <Button
                     colorScheme="facebook"
@@ -294,7 +293,7 @@ const RegisterModal = () => {
               />
               <GoogleLogin
                 autoLoad={false}
-                clientId={publicRuntimeConfig.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                clientId={environmentSetting.googleClientId}
                 render={(renderProps) => (
                   <Button
                     colorScheme="google"

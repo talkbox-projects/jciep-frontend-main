@@ -1,11 +1,14 @@
+import { getConfig } from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+
 export default {
   Query: {
     EnvironmentSettingGet: async () => {
       return {
-        facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
-        facebookAppRedirectUri:
-          process.env.NEXT_PUBLIC_FACEBOOK_APP_REDIRECT_URI,
-        googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        facebookAppId: publicRuntimeConfig.FACEBOOK_APP_ID,
+        facebookAppRedirectUri: publicRuntimeConfig.FACEBOOK_APP_REDIRECT_URI,
+        googleClientId: publicRuntimeConfig.GOOGLE_CLIENT_ID,
       };
     },
   },

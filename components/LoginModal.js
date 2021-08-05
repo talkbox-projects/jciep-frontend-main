@@ -3,7 +3,7 @@ import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
 import { useCallback, useState } from "react";
 import getConfig from "next/config";
-const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
 import {
   Box,
   FormControl,
