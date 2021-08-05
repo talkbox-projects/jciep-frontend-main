@@ -4,7 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export default {
   Query: {
-    EnvironmentSettingGet: async () => {
+    EnvironmentSettingGet: () => {
       return {
         facebookAppId: publicRuntimeConfig.FACEBOOK_APP_ID,
         facebookAppRedirectUri: publicRuntimeConfig.FACEBOOK_APP_REDIRECT_URI,

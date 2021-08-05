@@ -25,8 +25,6 @@ import enumSchema from "./enum.schema";
 import enumResolver from "./enum.resolver";
 import jwt from "jsonwebtoken";
 import { User } from "./user.model";
-import environmentSettingSchema from "./environmentSetting.schema";
-import environmentSettingResolver from "./environmentSetting.resolver";
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -37,7 +35,6 @@ const apolloServer = new ApolloServer({
     enumSchema,
 
     sharedSchema,
-    environmentSettingSchema,
     mediaSchema,
     fileSchema,
     pageSchema,
@@ -51,7 +48,6 @@ const apolloServer = new ApolloServer({
     /* enum */
     enumResolver,
 
-    environmentSettingResolver,
     mediaResolver,
     fileResolver,
     pageResolver,
