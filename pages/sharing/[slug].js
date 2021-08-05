@@ -28,7 +28,7 @@ import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import { getYoutubeLink, htmlStyles } from "../../utils/general";
+import { getYoutubeLink } from "../../utils/general";
 import HoverCard from "../../components/HoverCard";
 const PAGE_KEY = "sharing";
 
@@ -53,8 +53,8 @@ const PostHeader = ({ categories, post }) => {
     return (categories ?? []).find((c) => c.key === key);
   };
   return (
-    <Box w="100%" >
-      <Box  d={["none", "none", "block"]} pb={[40]} w="100%" position="relative">
+    <Box w="100%">
+      <Box d={["none", "none", "block"]} pb={32} w="100%" position="relative">
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}
@@ -66,7 +66,7 @@ const PostHeader = ({ categories, post }) => {
             ratio={4 / 3}
             overflow="hidden"
           >
-            <Image  src={post.coverImage} />
+            <Image src={post.coverImage} />
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px"></Box>
@@ -74,7 +74,7 @@ const PostHeader = ({ categories, post }) => {
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
       </Box>
-      <Box  d={["block", "block", "none"]} position="relative">
+      <Box mt={16} d={["block", "block", "none"]} position="relative">
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image src={post.coverImage} />
         </AspectRatio>
@@ -143,7 +143,7 @@ const PostDetail = ({ post, setting, page }) => {
   const nextPost = useMemo(() => relatedArticles?.[0], [relatedArticles]);
 
   return (
-    <VStack w="100%" spacing={0} align="center" pb={16} mt={[16, 16, 16 ]} bgColor="#fafafa">
+    <VStack w="100%" spacing={0} align="center" pb={16} bgColor="#fafafa">
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
 
@@ -159,6 +159,7 @@ const PostDetail = ({ post, setting, page }) => {
             desktopProps={{
               top: "160px",
               left: "0px",
+              mr: 12,
             }}
             isMobileBreakPointValue={[true, true, true, false]}
           >
@@ -209,7 +210,7 @@ const PostDetail = ({ post, setting, page }) => {
           </HoverCard>
         </Box>
 
-        <VStack align="stretch" textAlign="left" spacing={2} maxW="100%">
+        <VStack align="stretch" textAlign="left" spacing={2}>
           {post?.excerpt && (
             <Text
               bgColor="gray.50"
@@ -222,14 +223,31 @@ const PostDetail = ({ post, setting, page }) => {
               {post?.excerpt}
             </Text>
           )}
-          <VStack align="stretch" spacing={4} maxW="100%">
+          <VStack align="stretch" spacing={4}>
             {(post?.content?.blocks ?? []).map(
               ({ _template, content, caption, image, link }, index) => {
                 switch (_template) {
                   case "content-block":
                     return (
                       <Box
-                        sx={htmlStyles}
+                        sx={{
+                          a: {
+                            color: "green.500",
+                            textDecor: "underline",
+                          },
+                          table: {
+                            w: "100%",
+                            th: {
+                              borderWidth: "1px",
+                              borderColor: "gray.500",
+                              bg: "gray.100",
+                            },
+                            td: {
+                              borderWidth: "1px",
+                              borderColor: "gray.500",
+                            },
+                          },
+                        }}
                         w="100%"
                         pt="40px"
                         dangerouslySetInnerHTML={{
@@ -242,12 +260,14 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <Image
-                          fit="contain"
-                          title="postImage"
-                          src={image}
-                          allowFullScreen
-                        />
+                        <AspectRatio ratio={1}>
+                          <Image
+                            fit="contain"
+                            title="postImage"
+                            src={image}
+                            allowFullScreen
+                          />
+                        </AspectRatio>
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );

@@ -76,8 +76,7 @@ const theme = extendTheme({
 });
 
 const App = ({ Component, pageProps }) => {
-
-  console.log(pageProps)
+  console.log(pageProps);
   return (
     <SimpleReactLightbox>
       <AppProvider {...pageProps}>
@@ -86,14 +85,12 @@ const App = ({ Component, pageProps }) => {
         </Head>
         <ChakraProvider theme={theme} resetCSS={true}>
           <NextSeo title="賽馬會共融．知行計劃" />
-          <VStack align="stretch" spacing={0} overflowX="hidden">
-
+          <VStack align="stretch" spacing={0}>
             {pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>
               <Component {...pageProps} />
             </Box>
             {pageProps?.footer && <Footer {...pageProps}></Footer>}
-
           </VStack>
         </ChakraProvider>
       </AppProvider>
