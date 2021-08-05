@@ -94,6 +94,11 @@ const App = ({ Component, pageProps }) => {
   );
 };
 
+App.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  return { ...appProps };
+};
+
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [HtmlFieldPlugin],
