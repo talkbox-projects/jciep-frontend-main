@@ -62,10 +62,8 @@ const [AppProvider, useAppContext] = constate((props) => {
     initialValue: props?.wordings?.value,
   });
 
-  console.log("props.environmentSetting", props);
-
   const [environmentSetting, setEnvironmentSetting] = useState(
-    props.environmentSetting
+    {} || props.environmentSetting
   );
   const wordings = useMemo(() => {
     return Object.entries(_wordings).reduce(

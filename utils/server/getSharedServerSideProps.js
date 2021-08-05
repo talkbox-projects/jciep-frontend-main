@@ -48,7 +48,7 @@ const getSharedServerSideProps = async (context) => {
         "navigation",
         "wordings",
       ])),
-      environmentSetting: await environmentSettingGet(),
+      // environmentSetting: await environmentSettingGet(),
     },
   };
 };

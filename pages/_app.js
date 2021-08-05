@@ -12,6 +12,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SimpleReactLightbox from "simple-react-lightbox";
 
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
 const theme = extendTheme({
   colors: {
     secondary: {
@@ -98,10 +101,15 @@ const App = ({ Component, pageProps }) => {
   );
 };
 
+App.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  return { ...appProps };
+};
+
 export default withTina(App, {
   media: new MongooseMediaStore(),
   plugins: [HtmlFieldPlugin],
   // eslint-disable-next-line no-undef
-  enabled: process.env.NODE_ENV === "development",
+  enabled: publicRuntimeConfig.NODE_ENV === "development",
   sidebar: true,
 });

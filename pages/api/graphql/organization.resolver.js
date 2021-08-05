@@ -4,6 +4,9 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { EmailVerify, Identity, User } from "./user.model";
 
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
 export default {
   Query: {
     OrganizationGet: async (_parent, { id }) => {
@@ -39,33 +42,38 @@ export default {
     },
     OrganizationSearch: async (
       _parent,
-      { status = [], type = [], name, published = undefined , days}
+      { status = [], type = [], name, published = undefined, days }
     ) => {
       /**
        * Search Organization
        * Admin can access to all organization
        * other identity can only access to approved organization
-       */      
-      let date =  new Date()
+       */
+      let date = new Date();
       if (days === "7 Days") {
         date.setDate(date.getDate() - 7);
-      } else if (days === "1 Month" ) {
+      } else if (days === "1 Month") {
         date.setMonth(date.getMonth() - 1);
-      } else if (days === "3 Months" ) {
+      } else if (days === "3 Months") {
         date.setMonth(date.getMonth() - 3);
       } else {
-        days = undefined
+        days = undefined;
       }
-      
+
       const organizations = await Organization.find({
         ...(published !== undefined && { published }),
         ...(status?.length && { status: { $in: status } }),
         ...(type?.length && { organizationType: { $in: type } }),
-        ...(days && {createdAt: {$gte: date}}),
-        ...(name &&  {
-          $or: [{ chineseCompanyName: { $regex: name , $options: 'i'} }, { englishCompanyName: { $regex: name,$options: 'i' } }],
+        ...(days && { createdAt: { $gte: date } }),
+        ...(name && {
+          $or: [
+            { chineseCompanyName: { $regex: name, $options: "i" } },
+            { englishCompanyName: { $regex: name, $options: "i" } },
+          ],
         }),
-      }).populate("submission").sort({createdAt: -1});    
+      })
+        .populate("submission")
+        .sort({ createdAt: -1 });
 
       const identities = await Identity.find({
         _id: {
@@ -171,7 +179,7 @@ export default {
               logo: params.input?.logo,
               tncAccept: params?.input?.tncAccept,
               invitationCode: Math.floor(100000 + Math.random() * 900000),
-              createdAt: new Date()
+              createdAt: new Date(),
             })
           );
         }
@@ -346,8 +354,8 @@ export default {
       try {
         const organization = await Organization.findById(id);
 
-        let host = process.env.HOST_URL
-          ? process.env.HOST_URL
+        let host = publicRuntimeConfig.HOST_URL
+          ? publicRuntimeConfig.HOST_URL
           : "http://localhost:3000";
         await send(
           email,
