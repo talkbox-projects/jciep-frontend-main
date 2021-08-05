@@ -318,7 +318,7 @@ const RegisterModal = () => {
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
               />
-              <AppleLogin
+              {/* <AppleLogin
                 clientId="com.talkboxapp.teamwork.service.hku"
                 redirectURI="https://jciep.uat.talkbox.net/oauth/apple"
                 responseType={"code id_token"}
@@ -344,7 +344,7 @@ const RegisterModal = () => {
                     </Button>
                   );
                 }}
-              />
+              /> */}
             </VStack>
             <Button
               alignSelf="start"
