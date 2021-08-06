@@ -142,6 +142,8 @@ export default {
        * status = pendingApproval
        */
 
+      const identity = await Identity.findById(params?.input?.identityId);
+
       let organization = new Promise(async (resolve, reject) => {
         if (params.input.organizationId) {
           let organization = await Organization.findById(
@@ -154,8 +156,6 @@ export default {
 
           resolve(organization);
         } else {
-          const identity = await Identity.findById(params?.input?.identityId);
-
           resolve(
             await new Organization({
               organizationType: params.input.organizationType,
@@ -203,9 +203,9 @@ export default {
           district: params?.input.district,
           companyBenefit: params?.input.companyBenefit,
           logo: params?.input.logo,
-          contactName: params?.input.contactName,
-          contactEmail: params?.input.contactEmail,
-          contactPhone: params?.input.contactPhone,
+          contactName: identity?.chineseName || params?.input.contactName,
+          contactEmail: identity?.email || params?.input.contactEmail,
+          contactPhone: identity?.phone || params?.input.contactPhone,
           tncAccept: params?.input.tncAccept,
           createdAt: new Date(),
           updatedAt: new Date(),
