@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
