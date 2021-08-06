@@ -58,7 +58,6 @@ const PwdSectionViewer = () => {
     userFieldVisible,
   } = IdentityProfileStore.useContext();
 
-  console.log(identity);
   const toast = useToast();
   const { identity: { id, type, organizationRole } = {} } = useAppContext();
   const publishRequestDisclosure = useDisclosureWithParams();

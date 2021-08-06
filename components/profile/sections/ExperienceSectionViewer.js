@@ -5,11 +5,12 @@ import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import EducationSubSectionViewer from "../fragments/EducationSubSectionViewer";
 import EmploymentSubSectionViewer from "../fragments/EmploymentSubSectionViewer";
+import { useAppContext } from "../../../store/AppStore";
 
 export const ExperienceSectionViewer = () => {
   const { page, setEditSection, editable, editSection, isAdmin } =
     IdentityProfileStore.useContext();
-  const { identity: { id, type, organizationRole } = {} } = useAppContext();
+  const { identity: { type, organizationRole } = {} } = useAppContext();
 
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
