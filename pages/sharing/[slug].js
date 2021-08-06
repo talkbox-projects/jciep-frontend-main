@@ -54,7 +54,7 @@ const PostHeader = ({ categories, post }) => {
   };
   return (
     <Box w="100%">
-      <Box d={["none", "none", "block"]} pb={32} w="100%" position="relative">
+      <Box d={["none", "none", "block"]} pb={[56]} w="100%" position="relative">
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}
@@ -166,7 +166,7 @@ const PostDetail = ({ post, setting, page }) => {
             {({ isMobile }) =>
               isMobile ? null : (
                 <VStack w={48}>
-                  <Box pl={8} position="relative" mb={4}>
+                  <Box position="relative" mb={4}>
                     <ApostropheHeadline color="#eee">
                       <Text fontSize="lg">
                         {wordExtractor(
@@ -180,6 +180,7 @@ const PostDetail = ({ post, setting, page }) => {
                     ({ category, title, excerpt, slug }, index) => {
                       return (
                         <VStack
+                          width="100%"
                           align="start"
                           key={index}
                           cursor="pointer"
