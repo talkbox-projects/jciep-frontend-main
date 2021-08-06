@@ -11,6 +11,7 @@ module.exports = {
     SMS_PASSWORD: process.env.SMS_PASSWORD,
   },
   publicRuntimeConfig: {
+    HOST_URL: process.env.HOST_URL,
     NODE_ENV: process.env.NODE_ENV,
     FACEBOOK_APP_ID: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
     FACEBOOK_APP_REDIRECT_URI:
