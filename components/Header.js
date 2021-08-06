@@ -232,6 +232,7 @@ const Header = ({
                 border="none"
                 size="sm"
                 w={16}
+                autoFocus={false}
                 variant="flushed"
                 value={router.locale}
                 onChange={(e) => {
@@ -509,12 +510,19 @@ const Header = ({
             <DrawerBody>
               <VStack minH="100%" align="stretch">
                 <HStack borderBottomWidth={1} borderColor="#ddd" p={4}>
+                  <NextLink href="/text-size" passHref>
+                    <Link fontSize="sm">
+                      {getWording("header.font_size_level_label")}
+                    </Link>
+                  </NextLink>
+                  <Box flex={1} minW={0} w="100%" />
                   {isShowLangSwitcher && (
                     <Select
                       border="none"
                       size="sm"
                       w={16}
                       variant="flushed"
+                      onFocus={(e) => e.target.blur()}
                       value={router.locale}
                       onChange={(e) => {
                         if (cms.enabled) {
@@ -530,12 +538,6 @@ const Header = ({
                       <option value="en">EN</option>
                     </Select>
                   )}
-                  <NextLink href="/text-size" passHref>
-                    <Link fontSize="sm">
-                      {getWording("header.font_size_level_label")}
-                    </Link>
-                  </NextLink>
-                  <Box flex={1} minW={0} w="100%" />
                   <Text>
                     {(navigation.social ?? []).map(({ icon, url }, i) => {
                       return (
