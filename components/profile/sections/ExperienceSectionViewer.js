@@ -10,6 +10,27 @@ export const ExperienceSectionViewer = () => {
   const { page, setEditSection, editable, editSection } =
     IdentityProfileStore.useContext();
 
+  const [staffAccess, setStaffAccess] = useState(false);
+
+  useEffect(async () => {
+    if (type === "staff" && organizationRole?.length > 0) {
+      let IdentityRole = identity.organizationRole;
+
+      let hasStaffAccess = IdentityRole.filter(
+        (role) =>
+          role.organization.id === organizationRole[0].organization.id &&
+          organizationRole[0].role === "staff" &&
+          organizationRole[0].status === "joined"
+      )[0];
+
+      if (hasStaffAccess) {
+        setStaffAccess(true);
+      } else {
+        setStaffAccess(false);
+      }
+    }
+  }, [type, identity]);
+
   return (
     <VStack px={8} pb={8} align="stretch">
       <HStack py={4} align="center">
@@ -17,7 +38,7 @@ export const ExperienceSectionViewer = () => {
           {wordExtractor(page?.content?.wordings, "experience_header_label")}
         </Text>
 
-        {editable && !editSection && (
+        {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("experience")}
             variant="link"
