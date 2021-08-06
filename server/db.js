@@ -3,7 +3,6 @@ import getConfig from "next/config";
 
 const connect = async () => {
   const { serverRuntimeConfig } = getConfig();
-  console.log("testing", serverRuntimeConfig.MONGODB_URL);
   await mongoose
     .connect(serverRuntimeConfig.MONGODB_URL, {
       useNewUrlParser: true,
@@ -23,6 +22,19 @@ const connectDB = (handler) => async (req, res) => {
 };
 
 const db = mongoose.connection;
+
 db.once("ready", () => console.log(`connected to mongo on `));
+
+db.on("connecting", () => console.log("connecting"));
+db.on("connected", () => console.log("connected"));
+db.on("open", () => console.log("open"));
+db.on("disconnecting", () => console.log("disconnecting"));
+db.on("disconnected", () => console.log("disconnected"));
+db.on("close", () => console.log("close"));
+db.on("reconnected", () => console.log("reconnected"));
+db.on("error", () => console.log("error"));
+db.on("fullsetup", () => console.log("fullsetup"));
+db.on("all", () => console.log("all"));
+db.on("reconnectFailed", () => console.log("reconnectFailed"));
 
 export default connectDB;
