@@ -98,6 +98,7 @@ const IdentityOpportunities = ({
     >
       <VStack align="stretch" flex={1} minW={0} w="100%">
         <ConnectedOrganization />
+        <PwdSection />
         <IdentityPortfolioSection />
         <IdentityBiographySection />
         <ExperienceSection />
