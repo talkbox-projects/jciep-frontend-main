@@ -107,6 +107,8 @@ const Card = ({
   page,
 }) => {
   const [show, setShow] = useState(false);
+
+  console.log(organization)
   return (
     <Box
       borderTop={`8px solid ${topColor ? topColor : "#4E7F8E"}`}
@@ -150,6 +152,8 @@ const Card = ({
                 share={true}
                 text={organization?.text}
                 description={organization?.description}
+                link={organization?.link}
+                url={organization?.link}
                 fontSize="16px"
               />
             </HStack>
