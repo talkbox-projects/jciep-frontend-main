@@ -3,6 +3,7 @@ import getConfig from "next/config";
 
 const connect = async () => {
   const { serverRuntimeConfig } = getConfig();
+  console.log(serverRuntimeConfig);
   await mongoose
     .connect(serverRuntimeConfig.MONGODB_URL, {
       useNewUrlParser: true,
