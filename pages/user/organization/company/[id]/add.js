@@ -162,6 +162,8 @@ const OrganizationCompanyAdd = ({ page }) => {
 
   const onRemoveImage = async (index) => {
     let previousFiles = files;
+
+    console.log(previousFiles)
     let newFiles = previousFiles.filter((file, i) => i !== index);
     setFiles(newFiles);
   };
@@ -321,6 +323,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                       multiple={true}
                       display="none"
                       onChange={onFileUpload}
+                      onClick={(event) => event.currentTarget.value = null}
                     />
                     <Text height="100%" display="flex" justifyContent="center" flexDirection="column">
                       <Text as="span"
