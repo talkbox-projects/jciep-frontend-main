@@ -7,9 +7,11 @@ import OrganizationMemberListSection from "./sections/OrganizationMemberListSect
 import OrganizationSubmissionSection from "./sections/OrganizationSubmissionSection";
 import OrganizationOperationSection from "./sections/OrganizationOperationSection";
 import OrganizationProfileStore from "../../store/OrganizationProfileStore";
+import InvitationCodeSection from "./sections/InvitationCodeSection";
 
 const OrganizationEmploymentProfile = () => {
-  const { isAdmin, editable } = OrganizationProfileStore.useContext();
+  const { isAdmin, editable, organization } =
+    OrganizationProfileStore.useContext();
   return (
     <Box pt={[24, 48]} pb={36}>
       <Container>
@@ -25,6 +27,7 @@ const OrganizationEmploymentProfile = () => {
                 <OrganizationSubmissionSection />
               </>
             )}
+            {organization?.status === "approved" && <InvitationCodeSection />}
             <OrganizationMemberListSection />
           </VStack>
         </Stack>
