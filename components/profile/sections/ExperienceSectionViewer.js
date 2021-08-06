@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -7,29 +7,21 @@ import EducationSubSectionViewer from "../fragments/EducationSubSectionViewer";
 import EmploymentSubSectionViewer from "../fragments/EmploymentSubSectionViewer";
 
 export const ExperienceSectionViewer = () => {
-  const { page, setEditSection, editable, editSection } =
+  const { page, setEditSection, editable, editSection, isAdmin } =
     IdentityProfileStore.useContext();
+  const { identity: { id, type, organizationRole } = {} } = useAppContext();
 
-  const [staffAccess, setStaffAccess] = useState(false);
-
-  useEffect(async () => {
+  const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
-      let IdentityRole = identity.organizationRole;
-
-      let hasStaffAccess = IdentityRole.filter(
+      return (organizationRole ?? []).find(
         (role) =>
           role.organization.id === organizationRole[0].organization.id &&
           organizationRole[0].role === "staff" &&
           organizationRole[0].status === "joined"
-      )[0];
-
-      if (hasStaffAccess) {
-        setStaffAccess(true);
-      } else {
-        setStaffAccess(false);
-      }
+      );
     }
-  }, [type, identity]);
+    return false;
+  }, [organizationRole, type]);
 
   return (
     <VStack px={8} pb={8} align="stretch">

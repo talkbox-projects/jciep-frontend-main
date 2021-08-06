@@ -68,7 +68,7 @@ const PwdSectionViewer = () => {
 
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
-      return (identity?.organizationRole ?? []).find(
+      return (organizationRole ?? []).find(
         (role) =>
           role.organization.id === organizationRole[0].organization.id &&
           organizationRole[0].role === "staff" &&
@@ -76,7 +76,7 @@ const PwdSectionViewer = () => {
       );
     }
     return false;
-  }, [identity?.organizationRole, organizationRole, type]);
+  }, [organizationRole, type]);
 
   const publishMenu = useMemo(() => {
     const isGuest = identity.id !== id && !staffAccess && !isAdmin;
