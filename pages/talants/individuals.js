@@ -96,10 +96,8 @@ const IdentityOpportunities = ({
       page={page}
       editable={false}
     >
-        
       <VStack align="stretch" flex={1} minW={0} w="100%">
         <ConnectedOrganization />
-        <PwdSection />
         <IdentityPortfolioSection />
         <IdentityBiographySection />
         <ExperienceSection />
@@ -147,7 +145,6 @@ const IdentityOpportunities = ({
             })}
             borderRadius={10}
             paddingBottom="20px"
-            
           >
             <VStack spacing={0} align="start">
               {identity?.profilePic?.url && (
@@ -288,7 +285,7 @@ const IdentityOpportunities = ({
             <HStack mt={4} align="stretch" spacing={4}>
               {identityList}
               {/* desktop detail page */}
-              {details}
+              {identity && details}
             </HStack>
           </Container>
         </Box>
