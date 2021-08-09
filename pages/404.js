@@ -25,7 +25,7 @@ const Custom404 = () => {
             width="150px"
             marginTop="50px !important"
             margin="auto"
-            src="./images/404.png"
+            src="./images/404.PNG"
           />
 
           <Text marginTop="60px">找不到你想查找的網頁. 很抱歉！</Text>

@@ -67,6 +67,7 @@ const userGet = async ({ token }, context) => {
           organizationRole {
             organization {
               id
+              status
             }
             status
             role

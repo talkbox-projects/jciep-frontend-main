@@ -94,6 +94,7 @@ const identityGet = async ({ id }, context) => {
             }
             chineseCompanyName
             englishCompanyName
+            status
           }
           status
           role

@@ -26,10 +26,15 @@ const StaffSectionViewer = () => {
     editable,
   } = IdentityProfileStore.useContext();
 
+
+  console.log('identity')
+  console.log(identity)
+
+
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) && !editSection && (
+        {(isAdmin || (editable && identity.organizationRole[0]?.organization?.status === "approved")) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
             leftIcon={<AiOutlineEdit />}
