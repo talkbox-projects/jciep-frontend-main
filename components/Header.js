@@ -522,7 +522,6 @@ const Header = ({
                       size="sm"
                       w={16}
                       variant="flushed"
-                      onFocus={(e) => e.target.blur()}
                       value={router.locale}
                       onChange={(e) => {
                         if (cms.enabled) {
