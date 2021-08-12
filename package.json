@@ -23,6 +23,7 @@
     "file-loader": "^6.2.0",
     "formidable": "^1.2.2",
     "framer-motion": "^4.1.17",
+    "ga-4-react": "^0.1.281",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "graphql-tools": "^7.0.5",

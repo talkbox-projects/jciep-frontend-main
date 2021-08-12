@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
 import { withTina } from "tinacms";
 import Header from "../components/Header";
@@ -11,6 +11,7 @@ import Head from "next/head";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SimpleReactLightbox from "simple-react-lightbox";
+import { init } from "../utils/ga";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -76,7 +77,11 @@ const theme = extendTheme({
 });
 
 const App = ({ Component, pageProps }) => {
-  console.log(pageProps);
+  useEffect(() => {
+    const gaCode = "G-PXJQB5QF90";
+    init(publicRuntimeConfig.GA4_CODE || gaCode);
+  }, []);
+
   return (
     <SimpleReactLightbox>
       <AppProvider {...pageProps}>

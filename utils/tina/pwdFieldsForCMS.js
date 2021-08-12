@@ -540,6 +540,11 @@ export default [
                     label: "YouTube Link",
                     component: "text",
                   },
+                  {
+                    name: "caption",
+                    label: "描述 Caption",
+                    component: "text",
+                  },
                 ],
               },
               {

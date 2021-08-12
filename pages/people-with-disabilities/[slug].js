@@ -526,23 +526,24 @@ const PwdDetail = ({ page }) => {
             w={["0", "0", "0", "145px"]}
           />
           {pwd?.videoSection?.videos.map((video, i) => (
-            <AspectRatio
+            <Box
               key={i}
-              border="5px solid #FFFFFF"
               maxW="668px"
-              ratio={668 / 376}
               margin="auto"
-              px={["24px", "24px", "0"]}
               mb={["24px", "24px", "24px"]}
+              px={["24px", "24px", "0"]}
             >
-              <iframe
-                src={getYoutubeLink(video.url)}
-                title="PWD Video"
-                frameBorder="0"
-                allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </AspectRatio>
+              <AspectRatio border="5px solid #FFFFFF" ratio={668 / 376}>
+                <iframe
+                  src={getYoutubeLink(video.url)}
+                  title="PWD Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </AspectRatio>
+              {video.caption && <Text>{video.caption}</Text>}
+            </Box>
           ))}
         </Box>
 
