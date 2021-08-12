@@ -45,7 +45,7 @@ export const getYoutubeId = (url) => {
 };
 
 export const getYoutubeLink = (url = "") => {
-  if (url.match(youtubeRegex).length > 0) {
+  if (url.match(youtubeRegex)?.length || 0) > 0) {
     return `https://youtube.com/embed/${getYoutubeId(url)}`;
   }
 
