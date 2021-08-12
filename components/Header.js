@@ -259,7 +259,9 @@ const Header = ({
             </Text>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
-                <Avatar size="xs"></Avatar>
+                <Button variant="unstyled">
+                  <Avatar size="xs"></Avatar>
+                </Button>
               </PopoverTrigger>
               {!isLoggedIn ? (
                 <PopoverContent p={3} w={48}>
@@ -532,7 +534,9 @@ const Header = ({
                   </Text>
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
-                      <Avatar size="xs"></Avatar>
+                      <Button variant="unstyled">
+                        <Avatar size="xs"></Avatar>
+                      </Button>
                     </PopoverTrigger>
                     {!isLoggedIn ? (
                       <PopoverContent p={3} w={48}>
