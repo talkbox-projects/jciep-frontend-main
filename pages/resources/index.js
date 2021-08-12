@@ -22,7 +22,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
@@ -129,7 +129,6 @@ export const getServerSideProps = async (context) => {
 };
 
 const Resources = ({ page, enums, setting }) => {
-
   const router = useRouter();
   const [showItems, setShowItems] = useState(3);
   const sliderRef = useRef(null);
@@ -247,7 +246,7 @@ const Resources = ({ page, enums, setting }) => {
               </HighlightHeadline>
             </Box>
 
-            <VStack pt={16} align="start" position="relative" spacing={4} >
+            <VStack pt={16} align="start" position="relative" spacing={4}>
               {(page?.content?.dialogue?.left?.dialogue ?? []).map(
                 ({ message }, index) => {
                   if (index == 0) {
@@ -341,16 +340,29 @@ const Resources = ({ page, enums, setting }) => {
         </Container>
       </Box>
       <Box border="0px" backgroundColor="#F6D644">
-          <DividerA primaryColor="#F6D644" secondaryColor="F6D644" nextColor="#FEB534"></DividerA>
+        <DividerA
+          primaryColor="#F6D644"
+          secondaryColor="F6D644"
+          nextColor="#FEB534"
+        ></DividerA>
       </Box>
       <Box bg="#FEB534" pb={48}>
         <Container mt={["-150px", "-150px", "-260px"]} pos="relative">
-          <VStack alignItems="flex-end" position="relative" spacing={4} height={["320px", "auto"]}>
+          <VStack
+            alignItems="flex-end"
+            position="relative"
+            spacing={4}
+            height={["320px", "auto"]}
+          >
             {(page?.content?.dialogue?.right?.dialogue ?? []).map(
               ({ message }, index) => {
                 if (index == 0) {
                   return (
-                    <HStack justifyContent="flex-end" position={["absolute", "relative"]} bottom="10%">
+                    <HStack
+                      justifyContent="flex-end"
+                      position={["absolute", "relative"]}
+                      bottom="10%"
+                    >
                       <Image
                         h="120%"
                         src={page?.content?.dialogue?.rightQuoteImage}
@@ -391,7 +403,13 @@ const Resources = ({ page, enums, setting }) => {
                 }
               }
             )}
-            <Text mt={3} fontSize="lg" mr={-6} position={["absolute", "relative"]} bottom="0px">
+            <Text
+              mt={3}
+              fontSize="lg"
+              mr={-6}
+              position={["absolute", "relative"]}
+              bottom="0px"
+            >
               {page?.content?.dialogue?.right?.role}
             </Text>
             <Box mr={["", "", "", "", "-125px !important"]}>
@@ -405,7 +423,7 @@ const Resources = ({ page, enums, setting }) => {
         <Container mt={["", "", "", "", "-200px"]}>
           <VStack>
             <Box fontSize="2xl" marginBottom="20px">
-              <ApostropheHeadline color="#FFF" mb={3}> 
+              <ApostropheHeadline color="#FFF" mb={3}>
                 {page?.content?.howSection["title 標題"]}
               </ApostropheHeadline>
             </Box>
@@ -486,12 +504,7 @@ const Resources = ({ page, enums, setting }) => {
                 reminder,
               } = resource;
               return (
-                <Box
-                  key={resource?.id}
-                  px={1}
-                  h="100%"
-                  maxW={"336px"}
-                >
+                <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
                   <Card
                     name={name}
                     topColor={topColor}
@@ -624,8 +637,6 @@ const Resources = ({ page, enums, setting }) => {
                       Math.min(i + 3, filteredResourceList?.length)
                     )
                   }
-                  outline="none"
-                  appearance="none"
                 >
                   {wordExtractor(page?.content?.wordings, "showMore")}
                 </Button>
@@ -695,7 +706,6 @@ const Resources = ({ page, enums, setting }) => {
                     >
                       <Button
                         variant="ghost"
-                        
                         rightIcon={<AiOutlineArrowRight />}
                       >
                         {wordExtractor(
@@ -837,27 +847,25 @@ const Resources = ({ page, enums, setting }) => {
             ({ label, link }, index) => {
               return (
                 <Link href={link}>
-                <Button
-                  zIndex="100"
-                  borderRadius="22px"
-                  color="#1E1E1E"
-                  bg="transparent"
-                  key={index}
-                  fontWeight={["normal", "semibold"]}
-                  border="2px solid #1E1E1E"
-                  _hover={{ bg: "#FFFFFF", borderColor: "#FFFFFF" }}
-                  fontSize="23px"
-                >
-                  {label}
-                </Button>
+                  <Button
+                    zIndex="100"
+                    borderRadius="22px"
+                    color="#1E1E1E"
+                    bg="transparent"
+                    key={index}
+                    fontWeight={["normal", "semibold"]}
+                    border="2px solid #1E1E1E"
+                    _hover={{ bg: "#FFFFFF", borderColor: "#FFFFFF" }}
+                    fontSize="23px"
+                  >
+                    {label}
+                  </Button>
                 </Link>
-
               );
             }
           )}
         </Flex>
         <Image
-          
           top="0"
           src={page?.content?.jobOpportunitySection?.image}
           pos="absolute"

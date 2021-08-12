@@ -535,7 +535,6 @@ const Home = ({ setting, page }) => {
                       fontSize={["3xl", "4xl", "5xl"]}
                       fontWeight="bold"
                       px={0}
-                      _focus={{ outline: "none" }}
                       _selected={{
                         color: "black",
                         borderBottomColor: "#FD5F53",

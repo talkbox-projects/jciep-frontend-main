@@ -403,9 +403,7 @@ const Header = ({
                                   h="100%"
                                   variant="unstyled"
                                   borderRadius={0}
-                                  _focus={{ outline: "none" }}
                                   fontWeight="normal"
-                                  appearance="none"
                                 >
                                   {label}
                                 </Button>
@@ -422,10 +420,8 @@ const Header = ({
                                     borderRadius={0}
                                     px={10}
                                     minW={200}
-                                    _focus={{ outline: "none" }}
                                     fontWeight="normal"
                                     borderColor="transparent"
-                                    appearance="none"
                                   >
                                     {label}
                                   </Button>
@@ -440,9 +436,7 @@ const Header = ({
                             h="100%"
                             variant="unstyled"
                             borderRadius={0}
-                            _focus={{ outline: "none" }}
                             fontWeight="normal"
-                            appearance="none"
                           >
                             {label}
                           </Button>
@@ -461,9 +455,7 @@ const Header = ({
                   colorScheme="secondary"
                   borderRadius="2em"
                   py={0.5}
-                  _focus={{ outline: "none" }}
                   fontWeight="normal"
-                  appearance="none"
                   borderWidth={2}
                 >
                   {navigation?.actionButton?.label}
@@ -678,17 +670,14 @@ const Header = ({
                           >
                             <AccordionButton
                               p={0}
-                              appearance="none"
                               bg="transparent"
                               textAlign="left"
                               _hover={{ bg: "transparent" }}
-                              _focus={{ outline: "none" }}
                               h="100%"
                             >
                               <Button
                                 variant="unstyled"
                                 _hover={{ bg: "transparent" }}
-                                _focus={{ outline: "none" }}
                                 fontSize="2xl"
                                 p={0}
                                 bg="transparent"
@@ -719,10 +708,8 @@ const Header = ({
                                       h="100%"
                                       variant="unstyled"
                                       borderRadius={0}
-                                      _focus={{ outline: "none" }}
                                       fontWeight="normal"
                                       borderColor="transparent"
-                                      appearance="none"
                                       onClick={mobileMenuDisclosure.onClose}
                                     >
                                       {label}
@@ -740,14 +727,12 @@ const Header = ({
                               variant="unstyled"
                               borderRadius={0}
                               px={2}
-                              _focus={{ outline: "none" }}
                               fontWeight="normal"
                               borderColor="transparent"
                               {...(Number(tabIndex) === index && {
                                 borderColor: "#00BFBA",
                                 fontWeight: "bold",
                               })}
-                              appearance="none"
                               borderBottomWidth={3}
                               onClick={mobileMenuDisclosure.onClose}
                             >
@@ -766,10 +751,8 @@ const Header = ({
                         variant="unstyled"
                         borderRadius={0}
                         px={2}
-                        _focus={{ outline: "none" }}
                         fontWeight="normal"
                         borderColor="transparent"
-                        appearance="none"
                         borderBottomWidth={3}
                         onClick={mobileMenuDisclosure.onClose}
                       >
