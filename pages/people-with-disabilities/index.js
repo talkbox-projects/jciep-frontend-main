@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { VStack, Box, Text, Grid } from "@chakra-ui/layout";
-import { Image, chakra } from "@chakra-ui/react";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
+import { Image } from "@chakra-ui/react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
@@ -29,6 +28,16 @@ export const getServerSideProps = async (context) => {
 
 const PwdMain = ({ page }) => {
   const router = useRouter();
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
+    }
+  }, [router]);
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>

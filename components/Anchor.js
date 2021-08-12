@@ -1,8 +1,7 @@
 import React from "react";
 const Anchor = ({ id, top = "-80px", left, bottom, right, style = {} }) => (
   <a
-    id={id}
-    name={id}
+    data-tag={id}
     style={{
       display: "block",
       position: "relative",

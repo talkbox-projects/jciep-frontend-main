@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, VStack, GridItem, SimpleGrid } from "@chakra-ui/layout";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
@@ -21,23 +21,20 @@ import {
   Button,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
 import NextLink from "next/link";
 import MultiTextRenderer from "./../../components/MultiTextRenderer";
-import { AiOutlineMinus, AiOutlinePlus, AiOutlineArrowRight } from "react-icons/ai";
-import {BsPlus } from "react-icons/bs";
+import { AiOutlineMinus } from "react-icons/ai";
+import { BsPlus } from "react-icons/bs";
 import { FaShareSquare } from "react-icons/fa";
-
 
 import DividerA from "../../components/DividerA";
 import DividerTriple from "../../components/DividerTriple";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Slider from "react-slick";
-import { useRouter } from "next/router";
-import { useCMS } from "tinacms";
 import Anchor from "../../components/Anchor";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { useRouter } from "next/router";
 
 const PAGE_KEY = "programme";
 
@@ -58,6 +55,7 @@ export const getServerSideProps = async (context) => {
 
 const Programme = ({ page }) => {
   const sliderRef = useRef(null);
+  const router = useRouter();
   const settings = {
     ref: (c) => (sliderRef.current = c),
     autoplay: true,
@@ -65,6 +63,16 @@ const Programme = ({ page }) => {
     speed: 500,
     slidesToShow: 1,
   };
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
+    }
+  }, [router]);
 
   return (
     <VStack
@@ -466,12 +474,17 @@ const Programme = ({ page }) => {
                                                 fontWeight="bold"
                                                 color="#007878"
                                               >
-                                                
-                                                
-                                                <Text >
-                                                 <chakra.span display="inline-block"> {label} </chakra.span>
-                                                 <chakra.span display="inline-block" ml={3}><FaShareSquare /></chakra.span>
-                                                  
+                                                <Text>
+                                                  <chakra.span display="inline-block">
+                                                    {" "}
+                                                    {label}{" "}
+                                                  </chakra.span>
+                                                  <chakra.span
+                                                    display="inline-block"
+                                                    ml={3}
+                                                  >
+                                                    <FaShareSquare />
+                                                  </chakra.span>
                                                 </Text>
                                                 {/* <Image
                                                   display="inline-flex"

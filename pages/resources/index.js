@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -204,6 +204,16 @@ const Resources = ({ page, enums, setting }) => {
   const getCategoryData = (key) => {
     return (categories ?? []).find((c) => c.key === key);
   };
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
+    }
+  }, [router]);
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
