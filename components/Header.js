@@ -236,13 +236,7 @@ const Header = ({
                 variant="flushed"
                 value={router.locale}
                 onChange={(e) => {
-                  if (cms.enabled) {
-                    window.location.href = `/${e.target.value}${router.asPath}`;
-                  } else {
-                    router.push(router.pathname, router.pathname, {
-                      locale: e.target.value,
-                    });
-                  }
+                  window.location.href = `/${e.target.value}${router.asPath}`;
                 }}
               >
                 <option value="zh">繁</option>
@@ -516,13 +510,7 @@ const Header = ({
                       variant="flushed"
                       value={router.locale}
                       onChange={(e) => {
-                        if (cms.enabled) {
-                          window.location.href = `/${e.target.value}${router.asPath}`;
-                        } else {
-                          router.push(router.pathname, router.pathname, {
-                            locale: e.target.value,
-                          });
-                        }
+                        window.location.href = `/${e.target.value}${router.asPath}`;
                       }}
                     >
                       <option value="zh">繁</option>
