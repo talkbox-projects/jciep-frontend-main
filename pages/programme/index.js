@@ -97,6 +97,7 @@ const Programme = ({ page }) => {
         w="100vw"
         position="relative"
         overflowY="visible"
+        overflowX="hidden"
         // backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
         // backgroundSize="cover"
         // backgroundPosition={["center"]}
