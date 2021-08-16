@@ -63,7 +63,6 @@ const LoginModal = () => {
 
   const onPhoneLogin = useCallback(
     async ({ phone }) => {
-      alert();
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
           UserPhoneVerify(phone: $phone)

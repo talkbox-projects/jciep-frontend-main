@@ -192,17 +192,7 @@ const RegisterModal = () => {
                   </FormLabel>
                   <Input
                     placeholder="91234567"
-                    {...register("phone", {
-                      required: getWording(
-                        "register.register_phone_error_message"
-                      ),
-                      pattern: {
-                        value: emailRegex,
-                        message: getWording(
-                          "register.register_phone_error_message"
-                        ),
-                      },
-                    })}
+                    {...register("phone", {})}
                   />
                   <FormHelperText>{errors?.phone?.message}</FormHelperText>
                 </FormControl>
