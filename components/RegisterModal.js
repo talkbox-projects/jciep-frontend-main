@@ -72,7 +72,7 @@ const RegisterModal = () => {
     setPublicRuntimeConfig(getConfig().publicRuntimeConfig);
   }, []);
 
-  const onPhoneRegister = useCallback(async ({ e, phone }) => {
+  const onPhoneRegister = useCallback(async ({ phone }) => {
     try {
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
@@ -83,7 +83,6 @@ const RegisterModal = () => {
       if (result.UserPhoneVerify) {
         otpVerifyModalDisclosure.onOpen({ phone, type: "register" });
         registerModalDisclosure.onClose();
-        e.preventDefault();
       } else {
         setError("phone", {
           message: getWording("register.register_error_message"),

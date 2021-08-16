@@ -54,7 +54,12 @@ const PostHeader = ({ categories, post }) => {
   };
   return (
     <Box w="100%">
-      <Box d={["none", "none", "block"]} pb={[56,56,56,56,56, 40]} w="100%" position="relative">
+      <Box
+        d={["none", "none", "block"]}
+        pb={[56, 56, 56, 56, 56, 40]}
+        w="100%"
+        position="relative"
+      >
         <Box position="absolute" bottom={0} zIndex={50} w="100%">
           <AspectRatio
             borderWidth={8}
@@ -261,14 +266,12 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <AspectRatio ratio={1}>
-                          <Image
-                            fit="contain"
-                            title="postImage"
-                            src={image}
-                            allowFullScreen
-                          />
-                        </AspectRatio>
+                        <Image
+                          w="100%"
+                          title="postImage"
+                          src={image}
+                          allowFullScreen
+                        />
                         <Text color="gray.500">{caption}</Text>
                       </VStack>
                     );

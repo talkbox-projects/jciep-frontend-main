@@ -63,6 +63,7 @@ const LoginModal = () => {
 
   const onPhoneLogin = useCallback(
     async ({ phone }) => {
+      alert();
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
           UserPhoneVerify(phone: $phone)
@@ -196,7 +197,9 @@ const LoginModal = () => {
                 <FormControl>
                   <FormLabel>{getWording("login.login_phone_label")}</FormLabel>
                   <Input placeholder="91234567" {...register("phone")} />
-                  <FormHelperText>{errors?.phone?.message}</FormHelperText>
+                  <FormHelperText color="red">
+                    {errors?.phone?.message}
+                  </FormHelperText>
                 </FormControl>
                 <FormControl>
                   <Button
