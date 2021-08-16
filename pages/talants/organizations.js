@@ -199,7 +199,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <HStack mt={4} align="stretch" spacing={4}>
               {organizationList}
               {/* desktop detail page */}
-              {details}
+              {organization && details}
             </HStack>
           </Container>
         </Box>
