@@ -12,6 +12,9 @@ const gateways = {
       const pwd = serverRuntimeConfig.SMS_PASSWORD;
       const countryCode = "852";
 
+
+      console.log("sms serverRuntimeConfig", serverRuntimeConfig);
+
       const requestUrl = `${url}?accountno=${accountno}&user=${user}&pwd=${pwd}&phone=${countryCode}${phone}&msg=${message}`;
 
       const options = {
