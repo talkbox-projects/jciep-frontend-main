@@ -6,7 +6,7 @@ const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 const gateways = {
   production: async (phone, message) => {
     try {
-      const url = "https://vercode.accessyou-anyip.com/sms/sendsms-vercode.php";
+      const url = "https://vercode.accessyou-api.com/sms/sendsms-vercode.php";
       const accountno = serverRuntimeConfig.SMS_ACCOUNT;
       const user = serverRuntimeConfig.SMS_USERNAME;
       const pwd = serverRuntimeConfig.SMS_PASSWORD;
@@ -32,7 +32,7 @@ const gateways = {
 
   development: async (phone, message) => {
     try {
-      const url = "https://vercode.accessyou-anyip.com/sms/sendsms-vercode.php";
+      const url = "https://vercode.accessyou-api.com/sms/sendsms-vercode.php";
       const accountno = serverRuntimeConfig.SMS_ACCOUNT;
       const user = serverRuntimeConfig.SMS_USERNAME;
       const pwd = serverRuntimeConfig.SMS_PASSWORD;
