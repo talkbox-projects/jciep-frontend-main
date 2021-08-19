@@ -26,6 +26,7 @@ import DividerTriple from "../../components/DividerTriple";
 import Container from "../../components/Container";
 import CategoryTag from "../../components/CategoryTag";
 import { VscQuote } from "react-icons/vsc";
+import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { getYoutubeLink } from "../../utils/general";
@@ -48,7 +49,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const PostHeader = ({ categories, post }) => {
+const PostHeader = ({ headerTitle, categories, post }) => {
   const getCategoryData = (key) => {
     return (categories ?? []).find((c) => c.key === key);
   };
@@ -74,7 +75,11 @@ const PostHeader = ({ categories, post }) => {
             <Image src={post.coverImage} />
           </AspectRatio>
         </Box>
-        <Box bgColor="#f6d644" minH="320px"></Box>
+        <Box bgColor="#f6d644" minH="320px">
+        
+        {headerTitle &&<ApostropheHeadline>
+          {headerTitle}
+        </ApostropheHeadline>}</Box>
         <Box bgColor="#f6d644">
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
@@ -360,11 +365,12 @@ const PostDetail = ({ post, setting, page }) => {
       </Box>
 
       {nextPost && (
+        <>
         <Box w="100%" cursor="pointer">
           <chakra.a href={`/sharing/${nextPost?.slug}`}>
-            <PostHeader categories={categories} post={nextPost} />
+            <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
           </chakra.a>
-        </Box>
+        </Box></>
       )}
     </VStack>
   );
