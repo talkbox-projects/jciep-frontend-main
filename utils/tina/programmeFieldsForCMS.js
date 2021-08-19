@@ -122,6 +122,11 @@ export default [
         component: "textarea",
       },
       {
+        name: "pageTitle",
+        label: "內頁頁面標題 Detail Page Title",
+        component: "text",
+      },
+      {
         label: "图像主 Image Main",
         name: "bgImageMain",
         component: "image",

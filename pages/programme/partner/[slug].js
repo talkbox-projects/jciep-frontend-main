@@ -117,7 +117,7 @@ const Partner = ({ page }) => {
                     bgColor="#F6D644"
                     fontSize={["24px", "56px"]}
                   >
-                    {partner?.agencyName}
+                    {partner?.pageTitle}
                   </Text>
                 </Box>
                 <Box pt={4}>
