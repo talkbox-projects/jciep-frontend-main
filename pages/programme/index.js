@@ -67,12 +67,15 @@ const Programme = ({ page }) => {
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
+      setTimeout(() => {
       document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
+      }, 300)
     }
   }, [router]);
+
 
   return (
     <VStack
@@ -128,7 +131,7 @@ const Programme = ({ page }) => {
           <Container>
             <Box position="relative" zIndex={2} pb={16}>
               <VStack mx={8} align="start" spacing={0}>
-                <Text
+                {page?.content?.heroBannerSection["title 標題"] &&<Text
                   p={1}
                   w="max"
                   maxW="80%"
@@ -139,7 +142,7 @@ const Programme = ({ page }) => {
                   display="inline"
                 >
                   {page?.content?.heroBannerSection["title 標題"]}
-                </Text>
+                </Text>}
               </VStack>
             </Box>
           </Container>

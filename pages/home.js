@@ -343,8 +343,12 @@ const Home = ({ setting, page }) => {
                         </Box>
                       )}
                     </Box>
-                    <NextLink href={link ?? "#"}>
                       <Box
+                        onClick={() => {
+                          link && router.push(link)
+                        }}
+                        outline="initial"
+                        {...link && { cursor: "pointer" }}
                         borderWidth={4}
                         borderColor="white"
                         borderRadius={32}
@@ -355,7 +359,6 @@ const Home = ({ setting, page }) => {
                         h="240px"
                         maxW="100%"
                       />
-                    </NextLink>
                   </Box>
                 )
               )}
@@ -441,6 +444,7 @@ const Home = ({ setting, page }) => {
           {(posts ?? []).map((post, index) => (
             <Container key={index} py={28}>
               <Stack
+                cursor="pointer"
                 align="center"
                 justifyContent="center"
                 spacing={[6, 8, 10, 16]}

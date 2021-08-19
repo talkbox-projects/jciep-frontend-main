@@ -22,6 +22,7 @@ import { getPage } from "../../utils/page/getPage";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { VscQuote } from "react-icons/vsc";
+import Anchor from "../../components/Anchor";
 import withPostCreatorCMS from "../../utils/post/withPostCreatorCMS";
 import {
   getPost,
@@ -88,6 +89,20 @@ const Sharing = ({ page, setting, lang }) => {
     pageRef.current = 1;
     fetchPosts();
   }, [fetchPosts]);
+
+
+  useEffect(() => {
+    
+    if (router.query.category) {
+      setTimeout(() => {
+        document.querySelector(`[data-tag='sharing-list']`).scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
+      }, 300)
+    }
+  }, [router]);
+
 
   const fetchHottestPosts = useCallback(async () => {
     try {
@@ -328,6 +343,7 @@ const Sharing = ({ page, setting, lang }) => {
         </Box>
       </Box>
 
+      <Anchor id="sharing-list" />
       {/* Posts Section */}
       <Container alignSelf="center" pt={16}>
         <Stack
@@ -370,6 +386,7 @@ const Sharing = ({ page, setting, lang }) => {
                 />
               </Text>
             </Box>
+
             {router?.query?.category && (
               <HStack align="center" spacing={4} p={1} my={4}>
                 <Text fontSize="xl">

@@ -208,10 +208,12 @@ const Resources = ({ page, enums, setting }) => {
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
+      setTimeout(() => {
       document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
+      }, 300)
     }
   }, [router]);
 

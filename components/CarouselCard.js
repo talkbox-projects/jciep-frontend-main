@@ -8,7 +8,7 @@ import {
   UnorderedList,
   ListItem,
 } from "@chakra-ui/layout";
-import { Text, Image, chakra, Link, Icon, Tooltip } from "@chakra-ui/react";
+import { Text, Image, chakra, Link, Icon, Tooltip, IconButton } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { motion } from "framer-motion";
@@ -73,18 +73,15 @@ const TextTool = ({
         <chakra.span pl="6px">
           <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
             
-            <Icon
+            <IconButton as={AiOutlineInfoCircle} variant="link"
+              cursor="pointer"
+              size={2}
               onMouseEnter={() => setIsLabelOpen(true)}
               onMouseLeave={() => setIsLabelOpen(false)}
               onClick={() => setIsLabelOpen(true)}
               mt={small ? "5px" : "5px"}
-              w={small ? "16px" : "24px"}
-              h={small ? "16px" : "24px"}
             >
-              <AiOutlineInfoCircle 
-                
-              />
-            </Icon>
+            </IconButton>
           </Tooltip>
         </chakra.span>
       )}
