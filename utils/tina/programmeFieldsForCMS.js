@@ -122,11 +122,6 @@ export default [
         component: "textarea",
       },
       {
-        name: "pageTitle",
-        label: "內頁頁面標題 Detail Page Title",
-        component: "text",
-      },
-      {
         label: "图像主 Image Main",
         name: "bgImageMain",
         component: "image",
@@ -248,6 +243,11 @@ export default [
             ],
           },
 
+          {
+            name: "pageTitle",
+            label: "內頁頁面標題 Detail Page Title",
+            component: "text",
+          },
           {
             name: "agencyName",
             label: "機構名稱 Agency Name",
