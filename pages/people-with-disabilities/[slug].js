@@ -125,7 +125,7 @@ const PwdDetail = ({ page }) => {
           alignItems="center"
           zIndex={2}
         >
-          <Image src={pwd?.icon} height={[16, 16, 88]} />
+          <Image alt="" src={pwd?.icon} height={[16, 16, 88]} />
         </Box>
         <HStack zIndex={2} fontSize={["24", "24", "56"]}>
           <Text fontWeight="bold">{pwd?.name}</Text>
@@ -144,7 +144,7 @@ const PwdDetail = ({ page }) => {
             data={pwd?.description}
           />
         </Box>
-        <Image
+        <Image alt=""
           pos="absolute"
           bottom="0"
           right="0"
@@ -235,7 +235,7 @@ const PwdDetail = ({ page }) => {
           ))}
         </VStack>
 
-        <Image
+        <Image alt=""
           src={pwd?.qnaStyles?.imageTop}
           pos="absolute"
           left={["-10%", "0%", "16%"]}
@@ -243,7 +243,7 @@ const PwdDetail = ({ page }) => {
           w={["37%", "37%", "19%"]}
           zIndex="0"
         />
-        <Image
+        <Image alt=""
           src={pwd?.qnaStyles?.imageBottom}
           pos="absolute"
           right={["9%", "10%", "16%"]}
@@ -275,7 +275,7 @@ const PwdDetail = ({ page }) => {
               {pwd?.traitSection?.description}
             </Text>
           </Box>
-          <Image
+          <Image alt=""
             src={pwd?.traitSection?.imageTop}
             w={["91px", "91px", "190px"]}
             h={["123px", "123px", "auto"]}
@@ -301,7 +301,7 @@ const PwdDetail = ({ page }) => {
             </Box>
             {pwd?.traitSection?.prosSection?.list?.map((text, i) => (
               <HStack spacing={4} w="100%" key={i} minH="32px">
-                <Image src={pwd?.traitSection?.prosSection?.icon} w="32px" />
+                <Image alt={text} src={pwd?.traitSection?.prosSection?.icon} w="32px" />
                 <Text fontSize="lg">{text}</Text>
               </HStack>
             ))}
@@ -314,7 +314,7 @@ const PwdDetail = ({ page }) => {
             </Box>
             {pwd?.traitSection?.consSection?.list?.map((text, i) => (
               <HStack spacing={4} w="100%" key={i} minH="32px">
-                <Image src={pwd?.traitSection?.consSection?.icon} w="32px" />
+                <Image alt={text} src={pwd?.traitSection?.consSection?.icon} w="32px" />
                 <Text fontSize="lg">{text}</Text>
               </HStack>
             ))}
@@ -446,7 +446,7 @@ const PwdDetail = ({ page }) => {
         </Container>
 
         <Box>
-          <Image
+          <Image alt=""
             src={pwd?.careerSection?.personLeft}
             pos="absolute"
             left="5%"
@@ -456,7 +456,7 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         <Box>
-          <Image
+          <Image alt=""
             src={pwd?.careerSection?.personRight}
             pos="absolute"
             right="5%"
@@ -511,14 +511,14 @@ const PwdDetail = ({ page }) => {
           px="24px"
           zIndex={2}
         >
-          <Image
+          <Image alt=""
             src={pwd?.videoSection?.leftImage}
             pos="absolute"
             left={["0", "0", "0", "5%", "16%", "25%"]}
             top="0"
             w={["0", "0", "0", "184px"]}
           />
-          <Image
+          <Image alt=""
             src={pwd?.videoSection?.rightImage}
             pos="absolute"
             right={["0", "0", "0", "5%", "18%", "25%"]}
@@ -557,7 +557,7 @@ const PwdDetail = ({ page }) => {
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <WrapItem key={index}>
               <Box w="100%" display="flex" flexDirection="column">
-                <Image
+                <Image alt=""
                   src={pwd?.referenceSection?.categoryIcon}
                   w="36px"
                   mb="6px"
@@ -587,7 +587,7 @@ const PwdDetail = ({ page }) => {
           ))}
         </Wrap>
 
-        <Image
+        <Image alt=""
           pos="absolute"
           bottom="0"
           right="0"
@@ -651,7 +651,7 @@ const PwdDetail = ({ page }) => {
               px="12px"
               onClick={() => router.push(`${data.slug}`)}
             >
-              <Image src={data.icon} h="48px" w="48px" />
+              <Image alt={data.name} src={data.icon} h="48px" w="48px" />
               <Text fontSize={["16px", "16px", "24px"]} textAlign="center">
                 {data.name}
               </Text>
@@ -680,7 +680,7 @@ const PwdDetail = ({ page }) => {
             </Text>
           </Box>
         </Grid>
-        <Image
+        <Image alt=""
           pos="absolute"
           right={["9%", "9%", "19%"]}
           bottom="0"

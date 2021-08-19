@@ -172,10 +172,10 @@ const OrganizationSubmissionDetailModal = ({
                 )}
               </Text>
               <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
-                {(submission?.businessRegistration ?? []).map(({ url }) => {
+                {(submission?.businessRegistration ?? []).map(({ url,label }) => {
                   return (
                     <AspectRatio ratio={1}>
-                      <Image borderRadius={8} boxShadow="md" src={url} />
+                      <Image alt={wordExtractor(page?.content?.wordings, "business_registration_alt_text")} borderRadius={8} boxShadow="md" src={url} />
                     </AspectRatio>
                   );
                 })}

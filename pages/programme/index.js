@@ -110,7 +110,7 @@ const Programme = ({ page }) => {
           {(page?.content?.heroBannerSection?.sliderImage ?? []).map(
             ({ image }, index) => {
               return (
-                <Image
+                <Image alt=""
                   minH={["40vh", "70vh"]}
                   key={index}
                   src={image}
@@ -339,7 +339,7 @@ const Programme = ({ page }) => {
                       </Text>
                       <Text fontSize="lg">{projectName}</Text>
                       <Box flex={1} minH="max-content" h="100%" />
-                      <Image
+                      <Image alt={agencyName}
                         w={["75%"]}
                         src={contact?.watermark}
                         position="absolute"
@@ -353,7 +353,7 @@ const Programme = ({ page }) => {
             </Wrap>
           </Container>
 
-          <Image
+          <Image alt=""
             pos="absolute"
             zIndex="1"
             src={page?.content?.partnerSection?.bgImageLeft}
@@ -367,7 +367,7 @@ const Programme = ({ page }) => {
             pos="relative"
             pb={["124px", "124px", "380px"]}
           >
-            <Image
+            <Image alt=""
               pos="absolute"
               right={["50px", "50px", "105px"]}
               bottom={["15%"]}
@@ -420,7 +420,7 @@ const Programme = ({ page }) => {
                       align="stretch"
                       alignItems={["center", "center", "start", "start"]}
                     >
-                      <Image
+                      <Image alt={categoryName}
                         w={["80px", "120px", "110px", "100px"]}
                         src={icon}
                       />
@@ -519,7 +519,7 @@ const Programme = ({ page }) => {
             )}
           </SimpleGrid>
         </Container>
-        <Image
+        <Image alt=""
           pos="absolute"
           src={page?.content?.referenceSection?.bgStyle?.bgGradient1}
           bottom={0}
@@ -527,7 +527,7 @@ const Programme = ({ page }) => {
           zIndex="0"
         />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
-          <Image
+          <Image alt=""
             pos="absolute"
             right={["22px", "35px", "81px"]}
             bottom="0"

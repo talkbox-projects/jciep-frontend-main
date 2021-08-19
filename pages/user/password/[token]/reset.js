@@ -211,7 +211,7 @@ const VerifyToken = ({ page }) => {
           width="100%"
         >
           {page?.content?.bgImage && (
-            <Image
+            <Image alt=""
               pos="absolute"
               bottom="0"
               left="0"

@@ -77,7 +77,7 @@ const PwdMain = ({ page }) => {
             zIndex="-1"
           />
         </Box>
-        <Image
+        <Image alt=""
           position="absolute"
           bottom="-74px"
           left={["0", "0", "0", "0", "149"]}
@@ -87,7 +87,7 @@ const PwdMain = ({ page }) => {
           maxW="334"
           zIndex="1"
         />
-        <Image
+        <Image alt=""
           position="absolute"
           bottom="-27px"
           right={["20px", "20px", "0", "0", "100"]}
@@ -97,7 +97,7 @@ const PwdMain = ({ page }) => {
           maxW="551"
           zIndex="1"
         />
-        <Image
+        <Image alt=""
           position="absolute"
           bottom="-1px"
           src={page?.content?.banner?.bgImageBottom}
@@ -200,7 +200,7 @@ const PwdMain = ({ page }) => {
               }
               zIndex={1}
             >
-              <Image src={data.icon} h="48px" w="48px" />
+              <Image  alt={data.name} src={data.icon} h="48px" w="48px" />
               <Text
                 fontWeight="bold"
                 fontSize={["16px", "16px", "24px"]}
@@ -212,14 +212,14 @@ const PwdMain = ({ page }) => {
           ))}
         </Grid>
 
-        <Image
+        <Image alt=""
           pos="absolute"
           src={page?.content?.pwdList?.bgStyle?.bgGradient1}
           bottom={0}
           right={0}
         />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
-          <Image
+          <Image alt=""
             pos="absolute"
             right={["22px", "35px", "35px", "81px"]}
             bottom="0"

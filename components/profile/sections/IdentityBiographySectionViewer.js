@@ -70,7 +70,7 @@ export const IdentityBiographySectionViewer = () => {
               );
               break;
             case "image":
-              comp = <Image src={file?.url} />;
+              comp = <Image alt="" src={file?.url} />;
               break;
             case "text":
               comp = <Text whiteSpace="pre-line">{text}</Text>;

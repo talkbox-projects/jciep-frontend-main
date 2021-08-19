@@ -170,7 +170,7 @@ const IdentityOpportunities = ({
             <Divider borderColor="gray.200" />
             <VStack align="stretch">
               <HStack>
-                <Image src={page?.content?.icon?.degreeIcon} w={6} h={6} />
+                <Image alt="" src={page?.content?.icon?.degreeIcon} w={6} h={6} />
                 <Text>
                   {
                     (enums?.EnumDegreeList ?? []).find(
@@ -181,7 +181,7 @@ const IdentityOpportunities = ({
               </HStack>
               {identity?.yearOfExperience && (
                 <HStack>
-                  <Image src={page?.content?.icon?.expIcon} w={6} h={6} />
+                  <Image alt="" src={page?.content?.icon?.expIcon} w={6} h={6} />
                   <Text>
                     {(enums?.EnumYearOfExperienceList ?? [])
                       .filter((x) =>
@@ -193,7 +193,7 @@ const IdentityOpportunities = ({
               )}
               {identity?.interestedEmploymentMode?.length > 0 && (
                 <HStack>
-                  <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
+                  <Image alt="" src={page?.content?.icon?.modeIcon} w={6} h={6} />
                   <Text>
                     {(enums?.EnumEmploymentModeList ?? [])
                       .filter((x) =>
@@ -245,7 +245,7 @@ const IdentityOpportunities = ({
                 </Link>
               </Text>
             </Box>
-            <Image
+            <Image alt=""
               position="absolute"
               bottom={2}
               right={2}

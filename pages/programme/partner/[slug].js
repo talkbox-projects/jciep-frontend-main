@@ -91,7 +91,7 @@ const Partner = ({ page }) => {
         <Slider {...settings}>
           {(partner?.sliderImage ?? []).map(({ image }, index) => {
             return (
-              <Image
+              <Image alt=""
                 minH={["40vh", "70vh"]}
                 key={index}
                 src={image}
@@ -224,7 +224,7 @@ const Partner = ({ page }) => {
                       alignItems="center"
                       textAlign={["center", "left", "left"]}
                     >
-                      <Image
+                      <Image alt=""
                         w={[12, 8, 8, 8]}
                         src={
                           page?.content?.partnerSection?.planSection
@@ -253,7 +253,7 @@ const Partner = ({ page }) => {
           secondaryColor="#fff"
           nextColor="#00BFBA"
         />
-        <Image
+        <Image alt=""
           position="absolute"
           bottom={0}
           src={page?.content?.partnerSection?.planSection?.bgImageBottom}
@@ -345,7 +345,7 @@ const Partner = ({ page }) => {
               })}
           </VStack>
         </Container>
-        <Image
+        <Image alt=""
           d={["none", "none", "none", "block"]}
           position="absolute"
           bottom={"30px"}
@@ -354,7 +354,7 @@ const Partner = ({ page }) => {
           src={page?.content?.partnerSection?.serviceSection?.bgImageLeft}
           zIndex="3"
         />
-        <Image
+        <Image alt=""
           position="absolute"
           bottom={["5%", "5%", "10%"]}
           right={"5%"}
@@ -385,7 +385,7 @@ const Partner = ({ page }) => {
                 ({ label, description, image }, index) => {
                   return (
                     <VStack key={index} maxW={["35%", "35%", "35%", "20%"]}>
-                      <Image minW={["100px", "200px"]} src={image} />
+                      <Image alt={label} minW={["100px", "200px"]} src={image} />
                       <Text
                         textAlign="center"
                         w={["100%", "100%", "150px"]}
@@ -421,7 +421,7 @@ const Partner = ({ page }) => {
             align="top"
           >
             <VStack as={GridItem} align="start">
-              <Image w="310px" src={partner?.contact?.logo} />
+              <Image alt={partner?.contact?.label} w="310px" src={partner?.contact?.logo} />
               <Text>{partner?.contact?.label}</Text>
             </VStack>
             <VStack as={GridItem} align="stretch">

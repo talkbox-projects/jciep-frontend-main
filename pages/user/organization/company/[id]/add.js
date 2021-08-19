@@ -360,7 +360,7 @@ const OrganizationCompanyAdd = ({ page }) => {
                           marginBottom="10px"
                         >
                       <Text as="span" key={index} position="relative">
-                        <Image
+                        <Image alt=""
                           height="100%"
                           display="inline-block"
                           border="1px solid lightgrey"

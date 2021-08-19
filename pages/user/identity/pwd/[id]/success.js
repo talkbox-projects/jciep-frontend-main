@@ -47,7 +47,7 @@ const IdentityPwdAddSuccess = ({ page }) => {
             {page?.content?.heading?.title}
           </Heading>
 
-          <Image
+          <Image alt=""
             height="150px"
             width="150px"
             marginTop="50px !important"

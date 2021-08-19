@@ -94,7 +94,7 @@ const JobOpportunities = ({ page }) => {
   const details = (
     <>
       <Stack spacing={2}>
-        {job?.companyLogo && <Image src={job?.companyLogo} w="120px" />}
+        {job?.companyLogo && <Image alt={job?.companyName} src={job?.companyLogo} w="120px" />}
         <Text fontSize={["lg"]}>{job?.companyName}</Text>
       </Stack>
       <Text fontSize={["2xl"]} pb={3} fontWeight="bold">
@@ -102,27 +102,27 @@ const JobOpportunities = ({ page }) => {
       </Text>
       <VStack py={4} spacing={3} align="start">
         <HStack>
-          <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
+          <Image alt={wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)} src={page?.content?.icon?.modeIcon} w={6} h={6} />
           <Text>
             {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
           </Text>
         </HStack>
         <HStack>
-          <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
+          <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")} src={page?.content?.icon?.locationIcon} w={6} h={6} />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_location_label")}
             {jobLocationRenderer(job)}
           </Text>
         </HStack>
         <HStack>
-          <Image src={page?.content?.icon?.timeIcon} w={6} h={6} />
+          <Image alt={wordExtractor(page?.content?.wordings, "job_publishDate_label")} src={page?.content?.icon?.timeIcon} w={6} h={6} />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_publishDate_label")}
             {moment(job?.publishDate)?.format("YYYY-MM-DD hh:mm a")}
           </Text>
         </HStack>
         <HStack>
-          <Image src={page?.content?.icon?.applyMethodsIcon} w={6} h={6} />
+          <Image alt={wordExtractor(page?.content?.wordings, "job_applyMethods_label")} src={page?.content?.icon?.applyMethodsIcon} w={6} h={6} />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_applyMethods_label")}
             {job?.applyMethods}
@@ -251,7 +251,7 @@ const JobOpportunities = ({ page }) => {
             borderRadius={8}
           >
             <Stack spacing={2}>
-              {job?.companyLogo && <Image src={job?.companyLogo} w="60px" />}
+              {job?.companyLogo && <Image alt={job?.companyName} src={job?.companyLogo} w="60px" />}
               <Text fontSize={["md"]}>{job?.companyName}</Text>
             </Stack>
             <Text pb={3} fontWeight="bold">
@@ -259,13 +259,16 @@ const JobOpportunities = ({ page }) => {
             </Text>
             <Wrap>{jobFunctionRenderer(job)}</Wrap>
             <HStack>
-              <Image src={page?.content?.icon?.modeIcon} w={6} h={6} />
+              <Image alt={wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)} src={page?.content?.icon?.modeIcon} w={6} h={6} />
               <Text>
                 {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
               </Text>
             </HStack>
             <HStack>
-              <Image src={page?.content?.icon?.expIcon} w={6} h={6} />
+              <Image alt= {wordExtractor(
+                  page?.content?.wordings,
+                  `yearOfExperience_${job?.yearOfExperience}`
+                )} src={page?.content?.icon?.expIcon} w={6} h={6} />
               <Text>
                 {wordExtractor(
                   page?.content?.wordings,
@@ -277,7 +280,7 @@ const JobOpportunities = ({ page }) => {
             <HStack w="100%">
               <Box flex={1} minW={0} w="100%">
                 <HStack>
-                  <Image src={page?.content?.icon?.locationIcon} w={6} h={6} />
+                  <Image src={wordExtractor(page?.content?.wordings, "job_location_label")} w={6} h={6} />
                   <Text isTruncated maxW="100%">
                     {jobLocationRenderer(job)}
                   </Text>
@@ -331,7 +334,7 @@ const JobOpportunities = ({ page }) => {
               </Link>
               
             </Box>
-            <Image
+            <Image alt=""
               position="absolute"
               bottom={2}
               right={2}

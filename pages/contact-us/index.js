@@ -50,9 +50,9 @@ const ContactUs = ({ page }) => {
         justifyContent="center"
       >
         <Container>
-          <Image src={page?.content?.banner?.bgImageMain} />
+          <Image alt="" src={page?.content?.banner?.bgImageMain} />
         </Container>
-        <Image
+        <Image alt=""
           position="absolute"
           bottom="-74px"
           left={["0", "0", "0", "0", "149"]}
@@ -62,7 +62,7 @@ const ContactUs = ({ page }) => {
           maxW="334"
           zIndex="2"
         />
-        <Image
+        <Image alt=""
           position="absolute"
           bottom="-27px"
           right={["20px", "20px", "0", "0", "100"]}
@@ -109,7 +109,7 @@ const ContactUs = ({ page }) => {
             >
               <SimpleGrid columns={[1, 1, 2, 2]} spacing={4}>
                 <Box>
-                  <Image
+                  <Image alt={page?.content?.contactSection?.contactInfo?.title}
                     src={page?.content?.contactSection?.contactInfo?.logo}
                   />
                   <Text mt={4}>

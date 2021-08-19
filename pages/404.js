@@ -39,6 +39,7 @@ const Custom404 = () => {
           </Heading>
 
           <Image
+            alt="404"
             height="150px"
             width="150px"
             marginTop="50px !important"

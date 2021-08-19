@@ -118,7 +118,7 @@ const ProfileDropzone = ({
           </>
         ) : (value?.contentType ?? "").startsWith("image") ? (
           <>
-            <Image src={value?.url} w="100%" />
+            <Image alt={wordExtractor(page?.content?.wordings, "upload_profile_alt_text")} src={value?.url} w="100%" />
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();

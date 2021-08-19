@@ -240,7 +240,7 @@ const Home = ({ setting, page }) => {
                   return (
                     <GridItem key={index}>
                       <VStack textAlign="center" fontSize={["xl"]}>
-                        <Image w={100} src={icon}></Image>
+                        <Image alt={name} w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
                         <Text>{caption}</Text>
                       </VStack>
@@ -453,7 +453,7 @@ const Home = ({ setting, page }) => {
                 onClick={() => router.push(`/sharing/${post?.slug}`)}
               >
                 <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                  <Image src={post?.content?.feature?.image} />
+                  <Image  alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
                 </Box>
                 <VStack
                   px={8}
@@ -631,7 +631,7 @@ const Home = ({ setting, page }) => {
                                   textAlign="center"
                                   cursor="pointer"
                                 >
-                                  <Image w={16} src={icon}></Image>
+                                  <Image alt={title} w={16} src={icon}></Image>
                                   <Text fontSize={"2xl"} fontWeight="bold">
                                     {title}
                                   </Text>

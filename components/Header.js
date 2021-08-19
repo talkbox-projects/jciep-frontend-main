@@ -249,10 +249,10 @@ const Header = ({
               </Link>
             </NextLink>
             <Text>
-              {(navigation.social ?? []).map(({ icon, url }, i) => {
+              {(navigation.social ?? []).map(({ icon, url, label }, i) => {
                 return (
                   <a key={i} href={url}>
-                    <Image display="inline-flex" height="25px" src={icon} />
+                    <Image alt={label} display="inline-flex" height="25px" src={icon} />
                   </a>
                 );
               })}
@@ -365,7 +365,7 @@ const Header = ({
           >
             <Box>
               <LinkOverlay as={NextLink} href="/home">
-                <Image cursor="pointer" p={2} h="100%" src={navigation?.logo} />
+                <Image alt={navigation?.title} cursor="pointer" p={2} h="100%" src={navigation?.logo} />
               </LinkOverlay>
             </Box>
             <Box flex={1} minW={0} w="100%" />
@@ -476,7 +476,7 @@ const Header = ({
       >
         <HStack align="center" h={16} p={3}>
           <LinkOverlay as={NextLink} href="/home">
-            <Image cursor="pointer" h="100%" src={navigation?.logo} />
+            <Image alt={navigation?.title} cursor="pointer" h="100%" src={navigation?.logo} />
           </LinkOverlay>
           <Box minW={0} w="100%" flex={1} />
           <IconButton
@@ -520,10 +520,10 @@ const Header = ({
                     </Select>
                   )}
                   <Text>
-                    {(navigation.social ?? []).map(({ icon, url }, i) => {
+                    {(navigation.social ?? []).map(({ icon, url, label }, i) => {
                       return (
                         <a key={i} href={url}>
-                          <Image
+                          <Image alt={label}
                             display="inline-flex"
                             height="25px"
                             src={icon}
@@ -769,6 +769,11 @@ export default withConfigurationCMS(
       label: "導航 Navigation",
       fields: [
         {
+          name: "title",
+          label: "標題",
+          component: "text",
+        },
+        {
           label: "Logo",
           name: "logo",
           component: "image",
@@ -800,6 +805,11 @@ export default withConfigurationCMS(
               name: "url",
               label: "路由 Url",
               placeholder: "https://",
+              component: "text",
+            },
+            {
+              name: "label",
+              label: "標籤",
               component: "text",
             },
           ],

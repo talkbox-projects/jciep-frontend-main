@@ -244,7 +244,7 @@ const Sharing = ({ page, setting, lang }) => {
                 borderColor="white"
                 overflow="hidden"
               >
-                <Image src={featuredArticle?.coverImage} />
+                <Image alt={featuredArticle?.title} src={featuredArticle?.coverImage} />
               </AspectRatio>
               <VStack flex={1} minW={0} w="100%" align="start">
                 <Icon
@@ -297,7 +297,7 @@ const Sharing = ({ page, setting, lang }) => {
           pb={16}
         >
           <AspectRatio w={"100%"} ratio={4 / 3}>
-            <Image src={featuredArticle?.coverImage} />
+            <Image alt={featuredArticle?.title} src={featuredArticle?.coverImage} />
           </AspectRatio>
           <DividerSimple flip={true}></DividerSimple>
           <VStack

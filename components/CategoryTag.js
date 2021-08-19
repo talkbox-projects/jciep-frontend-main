@@ -19,7 +19,7 @@ const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
           borderRadius={24}
           textColor={textColor}
         >
-          {withIcon && <Image src={icon} />}
+          {withIcon && <Image alt={label} src={icon} />}
           <Text fontWeight="bold" fontSize={size}>
             {label}
           </Text>
@@ -34,7 +34,7 @@ const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
           borderRadius={20}
           textColor={textColor}
         >
-          {withIcon && <Image src={icon} />}
+          {withIcon && <Image alt={label} src={icon} />}
           <Text fontSize={size}>{label}</Text>
         </HStack>
       );

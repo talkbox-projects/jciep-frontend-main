@@ -45,6 +45,7 @@ const BannerFragment = ({
       ) : (
         <AspectRatio ratio={2.5}>
           <Image
+            alt={wordExtractor(page?.content?.wordings, "banner_media_alt_text")}
             w="100%"
             src={
               entity?.bannerMedia?.file?.url ??

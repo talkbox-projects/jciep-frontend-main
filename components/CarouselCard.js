@@ -138,6 +138,7 @@ const Card = ({
             <Divider />
             <HStack spacing="5px">
               <Image
+                alt={organization?.text}
                 w="24px"
                 h="24px"
                 src={
@@ -157,6 +158,7 @@ const Card = ({
             <Divider />
             <HStack spacing="5px">
               <Image
+                alt={serviceTarget?.text}
                 w="24px"
                 h="24px"
                 src={page?.content?.resourceSection?.resourceListIcons?.avatar}
@@ -173,6 +175,10 @@ const Card = ({
               <UnorderedList m={0} pt="8px">
                 <HStack spacing="5px">
                   <Image
+                    alt={wordExtractor(
+                      page?.content?.wordings,
+                      "serviceHeading"
+                    )}
                     w="24px"
                     h="24px"
                     src={
@@ -217,6 +223,11 @@ const Card = ({
               {internship?.value && (
                 <HStack pt="8px" spacing="5px">
                   <Image
+
+                    alt={wordExtractor(
+                      page?.content?.wordings,
+                      "internship"
+                    )}
                     w="24px"
                     h="24px"
                     src={
@@ -234,6 +245,10 @@ const Card = ({
               {probationOrReferral?.value && (
                 <HStack pt="8px" spacing="5px">
                   <Image
+                    alt={wordExtractor(
+                      page?.content?.wordings,
+                      "onProbation"
+                    )}
                     w="24px"
                     h="24px"
                     src={
@@ -252,6 +267,10 @@ const Card = ({
                 <UnorderedList pt="8px" m={0} listStyleType="none">
                   <HStack spacing="5px">
                     <Image
+                    alt={wordExtractor(
+                      page?.content?.wordings,
+                      "fundingHeading"
+                    )}
                       w="24px"
                       h="24px"
                       src={
@@ -308,6 +327,10 @@ const Card = ({
               <Divider />
               <HStack pt="8px" spacing="5px" align="start">
                 <Image
+                    alt={wordExtractor(
+                      page?.content?.wordings,
+                      "contactHeading"
+                    )}
                   w="24px"
                   h="20px"
                   src={
@@ -339,6 +362,10 @@ const Card = ({
               </VStack>
               <HStack pt="32px" spacing="5px">
                 <Image
+                  alt={wordExtractor(
+                    page?.content?.wordings,
+                    "remarkHeading"
+                  )}
                   w="24px"
                   h="20px"
                   src={

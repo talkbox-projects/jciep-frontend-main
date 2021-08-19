@@ -73,7 +73,7 @@ const PostHeader = ({ headerTitle, categories, post }) => {
             ratio={4 / 3}
             overflow="hidden"
           >
-            <Image src={post.coverImage} />
+            <Image alt={post?.title} src={post.coverImage} />
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px">
@@ -87,7 +87,7 @@ const PostHeader = ({ headerTitle, categories, post }) => {
       </Box>
       <Box mt={16} d={["block", "block", "none"]} position="relative">
         <AspectRatio w="100%" ratio={4 / 3}>
-          <Image src={post.coverImage} />
+          <Image alt={post?.title} src={post.coverImage} />
         </AspectRatio>
         <Box w="100%" position="absolute" bottom={0}>
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
@@ -272,7 +272,7 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <Image
+                        <Image alt={caption}
                           w="100%"
                           title="postImage"
                           src={image}

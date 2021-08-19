@@ -89,7 +89,7 @@ const IdentitySelect = ({ page }) => {
                   onRoleSelect(e, "/user/identity/pwd/add");
                 }}
               >
-                <Image
+                <Image alt={page?.content?.pwd?.title}
                   height="150px"
                   width="150px"
                   margin="auto"
@@ -118,7 +118,7 @@ const IdentitySelect = ({ page }) => {
                   onRoleSelect(e, "/user/identity/employer/add");
                 }}
               >
-                <Image
+                <Image alt={page?.content?.employeer?.title}
                   height="150px"
                   width="150px"
                   margin="auto"
@@ -147,7 +147,7 @@ const IdentitySelect = ({ page }) => {
                   onRoleSelect(e, "/user/identity/staff/add");
                 }}
               >
-                <Image
+                <Image alt={page?.content?.ngo?.title}
                   height="150px"
                   width="150px"
                   margin="auto"
@@ -177,7 +177,7 @@ const IdentitySelect = ({ page }) => {
                   onRoleSelect(e, "/user/identity/public/add");
                 }}
               >
-                <Image
+                <Image alt={page?.content?.public?.title}
                   height="150px"
                   width="150px"
                   margin="auto"

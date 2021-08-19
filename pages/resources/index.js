@@ -295,7 +295,7 @@ const Resources = ({ page, enums, setting }) => {
                             bottom="-6px"
                           ></Box>
                         </Box>
-                        <Image
+                        <Image alt=""
                           h="120%"
                           src={page?.content?.dialogue?.leftQuoteImage}
                         />
@@ -341,7 +341,7 @@ const Resources = ({ page, enums, setting }) => {
                 {page?.content?.dialogue?.left?.role}
               </Text>
               <Box mr={["", "", "", "", "-275px !important"]}>
-                <Image
+                <Image alt=""
                   h={["127px", "127px", "194px", "194px"]}
                   src={page?.content?.dialogue?.left?.left}
                   zIndex="0"
@@ -375,7 +375,7 @@ const Resources = ({ page, enums, setting }) => {
                       position={["absolute", "relative"]}
                       bottom="10%"
                     >
-                      <Image
+                      <Image alt=""
                         h="120%"
                         src={page?.content?.dialogue?.rightQuoteImage}
                       />
@@ -425,7 +425,7 @@ const Resources = ({ page, enums, setting }) => {
               {page?.content?.dialogue?.right?.role}
             </Text>
             <Box mr={["", "", "", "", "-125px !important"]}>
-              <Image
+              <Image alt=""
                 w={["152px", "152px", "152px", "255px", "255px"]}
                 src={page?.content?.dialogue?.right?.rightImage}
               />
@@ -815,7 +815,7 @@ const Resources = ({ page, enums, setting }) => {
             </GridItem>
           </Grid>
         </Box>
-        <Image
+        <Image alt=""
           pos="absolute"
           right={["-5%", "-10%", "-35%"]}
           bottom="-30%"
@@ -877,7 +877,7 @@ const Resources = ({ page, enums, setting }) => {
             }
           )}
         </Flex>
-        <Image
+        <Image alt=""
           top="0"
           src={page?.content?.jobOpportunitySection?.image}
           pos="absolute"

@@ -62,7 +62,7 @@ const Footer = ({ footer }) => {
             direction={["column", "column", "row", "row"]}
           >
             <Box>
-              <Image maxW={150} src={footer?.logo} />
+              <Image alt="" maxW={150} src={footer?.logo} />
             </Box>
 
             <SimpleGrid
@@ -88,10 +88,11 @@ const Footer = ({ footer }) => {
                       </Button>
                     </NextLink>
                     <Text w="100%">
-                      {(social ?? []).map(({ icon, id, url }) => {
+                      {(social ?? []).map(({ icon, id, url, label }) => {
                         return (
                           <a href={url} key={id}>
                             <Image
+                              alt={label}
                               display="inline-flex"
                               src={icon}
                               height="30px"
@@ -284,6 +285,11 @@ export default withConfigurationCMS(Footer, {
               name: "url",
               label: "路由 Url",
               placeholder: "https://",
+              component: "text",
+            },
+            {
+              name: "label",
+              label: "標籤",
               component: "text",
             },
           ],
