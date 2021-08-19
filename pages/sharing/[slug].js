@@ -6,6 +6,7 @@ import { getPost, getRelatedPosts } from "../../utils/post/getPost";
 import { updateReadCount } from "../../utils/post/mutatePost";
 import withPostCMS from "../../utils/post/withPostCMS";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
+import NextLink from "next/link";
 import {
   Heading,
   Text,
@@ -76,10 +77,10 @@ const PostHeader = ({ headerTitle, categories, post }) => {
           </AspectRatio>
         </Box>
         <Box bgColor="#f6d644" minH="320px">
-        
-        {headerTitle &&<ApostropheHeadline>
-          {headerTitle}
-        </ApostropheHeadline>}</Box>
+          {headerTitle &&<ApostropheHeadline>
+            {headerTitle}
+          </ApostropheHeadline>}
+        </Box>
         <Box bgColor="#f6d644">
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
@@ -330,6 +331,23 @@ const PostDetail = ({ post, setting, page }) => {
             </Wrap>
           </VStack>
         )}
+
+        <VStack align="center" py={8}>
+          <NextLink href="/sharing">
+            <Button 
+              color="black"
+              mx="auto"
+              fontWeight="bold"
+              lineHeight={3}
+              borderRadius="3xl"
+              colorScheme="primary"
+              bgColor="primary.400"
+              >
+              {wordExtractor(page?.content?.wordings, "backToHome")}
+            </Button>
+          </NextLink>
+        </VStack>
+
 
         {post?.references?.length > 0 && (
           <VStack align="start" pt={8}>
