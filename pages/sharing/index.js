@@ -342,169 +342,14 @@ const Sharing = ({ page, setting, lang }) => {
           </VStack>
         </Box>
       </Box>
-
-      <Anchor id="sharing-list" />
       {/* Posts Section */}
       <Container alignSelf="center" pt={16}>
         <Stack
-          direction={["column-reverse", "column-reverse", "row"]}
+          direction={["column", "column", "row-reverse"]}
           spacing={4}
           align="start"
           w="100%"
         >
-          {/* Latest Articles with scroll */}
-          <Box flex={1} w={"100%"} minW={0}>
-            <Box
-              d={["none", "block"]}
-              mt="10px"
-              textAlign="center"
-              fontWeight="bold"
-              fontSize="24"
-              pb="36px"
-            >
-              <Text position="relative" display="inline-block">
-                {page?.content?.latestSection?.title}
-                <Box
-                  width="6.15px"
-                  height="27.69px"
-                  borderRadius="5px"
-                  pos="absolute"
-                  right={["-6", "-6", "-12"]}
-                  bottom="-3"
-                  background="#EFEFEF"
-                  transform="rotate(30deg)"
-                />
-                <Box
-                  width="6.15px"
-                  height="27.69px"
-                  borderRadius="5px"
-                  pos="absolute"
-                  left={["-6", "-6", "-12"]}
-                  bottom="-3"
-                  background="#EFEFEF"
-                  transform="rotate(-30deg)"
-                />
-              </Text>
-            </Box>
-
-            {router?.query?.category && (
-              <HStack align="center" spacing={4} p={1} my={4}>
-                <Text fontSize="xl">
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "selected_category_label"
-                  )}
-                </Text>
-                <CategoryTag
-                  size="lg"
-                  category={categories?.find(
-                    (category) => category.key === router.query.category
-                  )}
-                />
-                <Button
-                  size="lg"
-                  colorScheme="red"
-                  variant="link"
-                  onClick={() => {
-                    router.push(
-                      {
-                        pathname: "/sharing",
-                      },
-                      undefined,
-                      { shallow: true }
-                    );
-                  }}
-                >
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "cancel_button_label"
-                  )}
-                </Button>
-              </HStack>
-            )}
-
-            <InfiniteScroll
-              dataLength={latestPosts.length}
-              next={fetchPosts}
-              hasMore={latestPosts.length < totalRef.current}
-              loader={<SkeletonPlaceholder />}
-              endMessage={<Box w="100%" h="40px" />}
-            >
-              <SimpleGrid columns={[1, 2]} spacing={10}>
-                {latestPosts.map((post, i) => (
-                  <Stack
-                    as={GridItem}
-                    key={i}
-                    align="stretch"
-                    cursor="pointer"
-                    onClick={() => router.push(`/sharing/${post.slug}`)}
-                  >
-                    <AspectRatio ratio={4 / 3}>
-                      <Box
-                        bgImage={`url('${post.coverImage}')`}
-                        bgPos="center center"
-                        bgSize="cover"
-                        borderRadius={16}
-                        borderColor="white"
-                        borderWidth={3}
-                      ></Box>
-                    </AspectRatio>
-                    <Box>
-                      <Flex>
-                        <Box
-                          fontSize="12px"
-                          color={getCategoryData(post.category)?.textColor}
-                          background={getCategoryData(post.category)?.bgColor}
-                          borderRadius="19px"
-                          px="9px"
-                          mr="9px"
-                          display="inline"
-                          fontWeight="700"
-                        >
-                          {getCategoryData(post.category)?.label}
-                        </Box>
-                        <Text fontSize="12px" display="inline-block">
-                          {moment(post.publishDate).format("D MMM, hh:mm a")}
-                        </Text>
-                      </Flex>
-                      <Text
-                        fontSize={{ base: "20px", lg: "24px" }}
-                        fontWeight="bold"
-                        mb="5px"
-                        mt="5px"
-                      >
-                        {post.title}
-                      </Text>
-                      <Text 
-                        fontSize={{ base: "16px", lg: "16px" }}
-                        maxH="70px"
-                        overflow="hidden"
-                        position="relative"
-                      >
-                        {post.excerpt}
-                        <Box
-                          textAlign="right"
-                          position="absolute"
-                          bottom="0"
-                          right="5px"
-                          background="#fff"
-                        >
-                          ...{" "}
-                          <chakra.span
-                            color="#007878"
-                            fontSize="16px"
-                            fontWeight="bold"
-                          >
-                            More 
-                          </chakra.span>
-                        </Box>
-                      </Text>
-                    </Box>
-                  </Stack>
-                ))}
-              </SimpleGrid>
-            </InfiniteScroll>
-          </Box>
 
           {/* Right Section of Grid */}
           <Box w={["100%", "100%", "33%"]}>
@@ -657,6 +502,164 @@ const Sharing = ({ page, setting, lang }) => {
               </Wrap>
             </Box>
           </Box>
+
+
+          {/* Latest Articles with scroll */}
+          <Anchor id="sharing-list" />
+          <Box flex={1} w={"100%"} minW={0}>
+            <Box
+              d={["none", "block"]}
+              mt="10px"
+              textAlign="center"
+              fontWeight="bold"
+              fontSize="24"
+              pb="36px"
+            >
+              <Text position="relative" display="inline-block">
+                {page?.content?.latestSection?.title}
+                <Box
+                  width="6.15px"
+                  height="27.69px"
+                  borderRadius="5px"
+                  pos="absolute"
+                  right={["-6", "-6", "-12"]}
+                  bottom="-3"
+                  background="#EFEFEF"
+                  transform="rotate(30deg)"
+                />
+                <Box
+                  width="6.15px"
+                  height="27.69px"
+                  borderRadius="5px"
+                  pos="absolute"
+                  left={["-6", "-6", "-12"]}
+                  bottom="-3"
+                  background="#EFEFEF"
+                  transform="rotate(-30deg)"
+                />
+              </Text>
+            </Box>
+
+            {router?.query?.category && (
+              <HStack align="center" spacing={4} p={1} my={4}>
+                <Text fontSize="xl">
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "selected_category_label"
+                  )}
+                </Text>
+                <CategoryTag
+                  size="lg"
+                  category={categories?.find(
+                    (category) => category.key === router.query.category
+                  )}
+                />
+                <Button
+                  size="lg"
+                  colorScheme="red"
+                  variant="link"
+                  onClick={() => {
+                    router.push(
+                      {
+                        pathname: "/sharing",
+                      },
+                      undefined,
+                      { shallow: true }
+                    );
+                  }}
+                >
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "cancel_button_label"
+                  )}
+                </Button>
+              </HStack>
+            )}
+
+
+            <InfiniteScroll
+              dataLength={latestPosts.length}
+              next={fetchPosts}
+              hasMore={latestPosts.length < totalRef.current}
+              loader={<SkeletonPlaceholder />}
+              endMessage={<Box w="100%" h="40px" />}
+            >
+              <SimpleGrid columns={[1, 2]} spacing={10}>
+                {latestPosts.map((post, i) => (
+                  <Stack
+                    as={GridItem}
+                    key={i}
+                    align="stretch"
+                    cursor="pointer"
+                    onClick={() => router.push(`/sharing/${post.slug}`)}
+                  >
+                    <AspectRatio ratio={4 / 3}>
+                      <Box
+                        bgImage={`url('${post.coverImage}')`}
+                        bgPos="center center"
+                        bgSize="cover"
+                        borderRadius={16}
+                        borderColor="white"
+                        borderWidth={3}
+                      ></Box>
+                    </AspectRatio>
+                    <Box>
+                      <Flex>
+                        <Box
+                          fontSize="12px"
+                          color={getCategoryData(post.category)?.textColor}
+                          background={getCategoryData(post.category)?.bgColor}
+                          borderRadius="19px"
+                          px="9px"
+                          mr="9px"
+                          display="inline"
+                          fontWeight="700"
+                        >
+                          {getCategoryData(post.category)?.label}
+                        </Box>
+                        <Text fontSize="12px" display="inline-block">
+                          {moment(post.publishDate).format("D MMM, hh:mm a")}
+                        </Text>
+                      </Flex>
+                      <Text
+                        fontSize={{ base: "20px", lg: "24px" }}
+                        fontWeight="bold"
+                        mb="5px"
+                        mt="5px"
+                      >
+                        {post.title}
+                      </Text>
+                      <Text 
+                        fontSize={{ base: "16px", lg: "16px" }}
+                        maxH="70px"
+                        overflow="hidden"
+                        position="relative"
+                      >
+                        {post.excerpt}
+                        <Box
+                          textAlign="right"
+                          position="absolute"
+                          bottom="0"
+                          right="5px"
+                          background="#fff"
+                        >
+                          ...{" "}
+                          <chakra.span
+                            color="#007878"
+                            fontSize="16px"
+                            fontWeight="bold"
+                          >
+                            More 
+                          </chakra.span>
+                        </Box>
+                      </Text>
+                    </Box>
+                  </Stack>
+                ))}
+              </SimpleGrid>
+            </InfiniteScroll>
+          </Box>
+
         </Stack>
       </Container>
     </VStack>
