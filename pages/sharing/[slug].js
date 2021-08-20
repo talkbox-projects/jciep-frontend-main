@@ -9,6 +9,7 @@ import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import NextLink from "next/link";
 import {
   Heading,
+  HStack,
   Text,
   Image,
   Icon,
@@ -76,16 +77,21 @@ const PostHeader = ({ headerTitle, categories, post }) => {
             <Image alt={post?.title} src={post.coverImage} />
           </AspectRatio>
         </Box>
-        <Box bgColor="#f6d644" minH="320px">
+        <HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644" minH="320px">
           {headerTitle &&<ApostropheHeadline>
             {headerTitle}
           </ApostropheHeadline>}
-        </Box>
+        </HStack>
         <Box bgColor="#f6d644">
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
       </Box>
-      <Box mt={16} d={["block", "block", "none"]} position="relative">
+      <Box d={["block", "block", "none"]} position="relative">
+        {headerTitle &&<HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644">
+          <ApostropheHeadline>
+            {headerTitle}
+          </ApostropheHeadline>}
+        </HStack>}
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image alt={post?.title} src={post.coverImage} />
         </AspectRatio>
