@@ -72,16 +72,17 @@ const TextTool = ({
       {description && description !== "" && (
         <chakra.span pl="6px">
           <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
-            
-            <IconButton as={AiOutlineInfoCircle} variant="link"
-              cursor="pointer"
-              size={2}
-              onMouseEnter={() => setIsLabelOpen(true)}
-              onMouseLeave={() => setIsLabelOpen(false)}
-              onClick={() => setIsLabelOpen(true)}
-              mt={small ? "5px" : "5px"}
-            >
-            </IconButton>
+            <Box w="fit-content">
+              <IconButton as={AiOutlineInfoCircle} variant="link"
+                cursor="pointer"
+                size={2}
+                onMouseEnter={() => setIsLabelOpen(true)}
+                onMouseLeave={() => setIsLabelOpen(false)}
+                onClick={() => setIsLabelOpen(true)}
+                mt={small ? "5px" : "5px"}
+              >
+              </IconButton>
+            </Box>
           </Tooltip>
         </chakra.span>
       )}
