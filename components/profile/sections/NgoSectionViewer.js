@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Button,
@@ -10,6 +11,7 @@ import {
   Tag,
   useToast,
   Box,
+  Link,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
@@ -91,13 +93,13 @@ const NgoSectionViewer = () => {
               ? organization?.chineseCompanyName
               : organization?.englishCompanyName}
           </Text>
-          <Tag>
+          {(isAdmin || editable) && <Tag>
             {
               enums?.EnumOrganizationStatusList?.find(
                 (x) => x.key === organization?.status
               )?.value?.[router.locale]
             }
-          </Tag>
+          </Tag>}
         </Wrap>
       </VStack>
       <VStack px={8} py={4} align="stretch" spacing={6}>
@@ -132,10 +134,11 @@ const NgoSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
-            <Text>
-              {organization?.website ||
+              {organization?.website ? 
+                <Link href={organization?.website} wordBreak="break-word">
+                  <Text>{organization?.website}</Text>
+                </Link> :
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
           </FormControl>
           <FormControl>
             <FormLabel color="#999" mb={0}>

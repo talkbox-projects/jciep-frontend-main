@@ -683,8 +683,8 @@ const PwdSectionEditor = () => {
             </FormLabel>
             <Controller
               control={control}
-              rules={{}}
               name={"skill"}
+
               defaultValue={identity?.skill ?? []}
               render={({ field: { name, value, onChange } }) => {
                 const options = enums?.EnumSkillList.map(
@@ -695,6 +695,8 @@ const PwdSectionEditor = () => {
                 );
                 return (
                   <MultiSelect
+                    menuPortalTarget={document.body}
+                    menuPosition={'fixed'} 
                     styles={{
                       control: (_) => ({
                         ..._,

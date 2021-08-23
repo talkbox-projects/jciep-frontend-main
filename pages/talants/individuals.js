@@ -292,7 +292,7 @@ const IdentityOpportunities = ({
         </Box>
       </VStack>
       {/* mobile detail page */}
-      <Box bg="#fafafa" pt={[0, 0]} d={["block", "block", "none"]}>
+      <Box bg="#fafafa" pt={24} d={["block", "block", "none"]}>
         {router.query.identityId ? (
           <Box px={1}>
             <NextLink href="/talants/individuals">

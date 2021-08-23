@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import {
   Text,
   Button,
@@ -5,39 +6,33 @@ import {
   VStack,
   AspectRatio,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
-import { useAppContext } from "../../../store/AppStore";
-import {useEffect, useState} from "react";
+import { useAppContext, useDisclosureWithParams } from "../../../store/AppStore";
+import BiographyGallery from "../fragments/BiographyGallery";
 
 export const IdentityBiographySectionViewer = () => {
   const { page, identity, setEditSection, isAdmin, editable, editSection } =
     IdentityProfileStore.useContext();
 
-    const { identity: { id, type, organizationRole} = {} } = useAppContext();
-  const [staffAccess, setStaffAccess] = useState(false) 
-  
-  useEffect(async () => {
-    if (type === "staff" && organizationRole?.length> 0) {
-      let IdentityRole = (identity.organizationRole)
-      
-     let hasStaffAccess =  IdentityRole.filter(role =>  
-        role.organization.id === organizationRole[0].organization.id
-        && organizationRole[0].role === "staff" 
-        && organizationRole[0].status === "joined" 
-      )[0]
-       
-     if(hasStaffAccess) {
-      setStaffAccess(true)
-     } else {
-      setStaffAccess(false)
-     }   
-    }
+    const { identity: { type, organizationRole} = {} } = useAppContext();
+    const galleryDisclosure = useDisclosureWithParams();
 
-  }, [type, identity])
+    const staffAccess = useMemo(() => {
+      if (type === "staff" && organizationRole?.length > 0) {
+        return (organizationRole ?? []).find(
+          (role) =>
+            role.organization.id === organizationRole[0].organization.id &&
+            organizationRole[0].role === "staff" &&
+            organizationRole[0].status === "joined"
+        );
+      }
+      return false;
+    }, [organizationRole, type]);
 
 
   return (
@@ -58,10 +53,10 @@ export const IdentityBiographySectionViewer = () => {
         )}
       </HStack>
       {(identity?.biography?.blocks ?? []).map(
-        ({ id, type, youtubeUrl, text, file }, index) => {
+        ({ id, type, youtubeUrl, text, file, url }) => {
           let comp = null;
           switch (type) {
-            case "youtube":
+            case "youtube": {
               const youtubeLink = getYoutubeLink(youtubeUrl);
               comp = (
                 <AspectRatio w="100%" ratio={16 / 9}>
@@ -69,13 +64,21 @@ export const IdentityBiographySectionViewer = () => {
                 </AspectRatio>
               );
               break;
+            }
             case "image":
-              comp = <Image alt="" src={file?.url} />;
+              comp = <Image cursor="pointer" onClick={() => {
+                galleryDisclosure.onOpen({
+                  item: { file },
+                });
+              }} alt="" src={file?.url} />;
               break;
-            case "text":
-              comp = <Text whiteSpace="pre-line">{text}</Text>;
-              break;
-            default:
+              case "text":
+                comp = <Text whiteSpace="pre-line" wordBreak="break-all">{text}</Text>;
+                break;
+              case "url":
+                comp = <Link href={url}><Text whiteSpace="pre-line" wordBreak="break-all">{url}</Text></Link>;
+                break;
+              default:
           }
           return (
             <HStack key={id} align="start">
@@ -84,6 +87,12 @@ export const IdentityBiographySectionViewer = () => {
           );
         }
       )}
+      <BiographyGallery
+        params={galleryDisclosure.params}
+        page={page}
+        isOpen={galleryDisclosure.isOpen}
+        onClose={galleryDisclosure.onClose}
+      />
     </VStack>
   );
 };

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Menu,
   MenuButton,
@@ -53,6 +54,12 @@ const BiographyTypeSelector = ({
           {wordExtractor(
             page?.content?.wordings,
             "button_label_biography_text"
+          )}
+        </MenuItem>
+        <MenuItem onClick={() => onArrayAppend({ type: "url" })}>
+          {wordExtractor(
+            page?.content?.wordings,
+            "button_label_biography_url"
           )}
         </MenuItem>
       </MenuList>

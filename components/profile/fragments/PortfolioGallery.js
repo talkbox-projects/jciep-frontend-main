@@ -1,7 +1,7 @@
+import React from "react";
 import {
   AspectRatio,
   chakra,
-  IconButton,
   Image,
   Modal,
   ModalBody,
@@ -64,7 +64,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
     } else {
       return <></>;
     }
-  }, []);
+  }, [getImageComponent, getPdfComponent, getVideoComponent]);
 
   return (
     <Modal size="3xl" onClose={onClose} isOpen={isOpen}>

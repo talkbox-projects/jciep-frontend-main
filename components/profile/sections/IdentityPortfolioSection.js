@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Button,
@@ -84,7 +85,7 @@ const IdentityPortfolioSection = () => {
     [medias, galleryDisclosure, portfolioMediaDisclosure, isEditable]
   );
 
-  useEffect(async () => {
+  useEffect(() => {
     if (type === "staff" && organizationRole?.length> 0) {
       let IdentityRole = (identity.organizationRole)
       
@@ -201,7 +202,7 @@ const IdentityPortfolioSection = () => {
             }
 
             return (
-              <AspectRatio ratio={1}>
+              <AspectRatio key={index} ratio={1}>
                 <Box
                   onClick={() => onPortfolioItemClick(index)}
                   cursor="pointer"

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Button,
@@ -5,16 +6,20 @@ import {
   VStack,
   AspectRatio,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
+import { useDisclosureWithParams } from "../../../store/AppStore";
+import BiographyGallery from "../fragments/BiographyGallery";
 
 export const OrganizationBiographySectionViewer = () => {
   const { page, organization, setEditSection, isAdmin, editable, editSection } =
     OrganizationProfileStore.useContext();
 
+    const galleryDisclosure = useDisclosureWithParams();
   return (
     <VStack px={8} pb={8} align="stretch">
       <HStack py={4} align="center">
@@ -33,10 +38,10 @@ export const OrganizationBiographySectionViewer = () => {
         )}
       </HStack>
       {(organization?.biography?.blocks ?? []).map(
-        ({ id, type, youtubeUrl, text, file }, index) => {
+        ({ id, type, youtubeUrl, text, file, url }) => {
           let comp = null;
           switch (type) {
-            case "youtube":
+            case "youtube": {
               const youtubeLink = getYoutubeLink(youtubeUrl);
               comp = (
                 <AspectRatio w="100%" ratio={16 / 9}>
@@ -44,11 +49,19 @@ export const OrganizationBiographySectionViewer = () => {
                 </AspectRatio>
               );
               break;
+            }
             case "image":
-              comp = <Image alt="" src={file?.url} />;
+              comp = <Image cursor="pointer" onClick={() => {
+                galleryDisclosure.onOpen({
+                  item: { file },
+                });
+              }} alt="" src={file?.url} />;
               break;
             case "text":
-              comp = <Text whiteSpace="pre-line">{text}</Text>;
+              comp = <Text  whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
+              break;
+            case "url":
+              comp = <Link href={url}><Text whiteSpace="pre-line" wordBreak="break-all">{url}</Text></Link>;
               break;
             default:
           }
@@ -59,6 +72,12 @@ export const OrganizationBiographySectionViewer = () => {
           );
         }
       )}
+      <BiographyGallery
+        params={galleryDisclosure.params}
+        page={page}
+        isOpen={galleryDisclosure.isOpen}
+        onClose={galleryDisclosure.onClose}
+      />
     </VStack>
   );
 };

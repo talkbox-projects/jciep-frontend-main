@@ -1,3 +1,4 @@
+import React from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -146,7 +147,9 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               {organization?.website && (
                 <HStack>
                   <Image src={page?.content?.icon?.urlIcon} w={6} h={6} />
-                  <Text wordBreak="break-word">{organization?.website}</Text>
+                  <Link href={organization?.website} wordBreak="break-word">
+                    <Text>{organization?.website}</Text>
+                  </Link>
                 </HStack>
               )}
             </VStack>
@@ -205,7 +208,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
         </Box>
       </VStack>
       {/* mobile detail page */}
-      <Box bg="#fafafa" pt={[24, 0]} d={["block", "block", "none"]}>
+      <Box bg="#fafafa" pt={24} d={["block", "block", "none"]}>
         {router.query.organizationId ? (
           <Box px={1}>
             <NextLink href="/talants/organizations">

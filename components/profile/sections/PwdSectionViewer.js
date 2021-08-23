@@ -316,7 +316,7 @@ const PwdSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {identity.publishStatus === "approved" ? (
+        {(isAdmin || editable || staffAccess) && (identity.publishStatus === "approved" ? (
           <Button
             variant="outline"
             isActive={!!identity?.published}
@@ -352,7 +352,7 @@ const PwdSectionViewer = () => {
           </Button>
         ) : (
           publishMenu
-        )}
+        ))}
         {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
@@ -370,12 +370,12 @@ const PwdSectionViewer = () => {
               ? identity?.chineseName
               : identity?.englishName}
           </Text>
-          <Tag>
+          {(isAdmin || editable || staffAccess) &&  <Tag>
             {
               enums?.EnumIdentityTypeList?.find((x) => x.key === identity?.type)
                 ?.value?.[router.locale]
             }
-          </Tag>
+          </Tag>}
         </Wrap>
         <Text color="#999">
           {identity?.caption ??
