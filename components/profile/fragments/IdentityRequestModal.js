@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AspectRatio,
   Box,
@@ -20,10 +21,9 @@ const IdentityRequestModal = ({
   onClose,
 }) => {
   const {
-    register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     defaultValues: {
       id: entity?.id,

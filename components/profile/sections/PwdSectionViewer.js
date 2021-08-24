@@ -702,7 +702,7 @@ const PwdSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_hobby")}
             </FormLabel>
-            <Text whiteSpace="pre">
+            <Text whiteSpace="pre-line" wordBreak="break-word">
               {identity?.hobby ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
