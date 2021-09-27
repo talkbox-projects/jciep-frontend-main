@@ -15,6 +15,7 @@ import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import Dot from "./Dot";
+import React from "react";
 
 const ActivitySubSectionEditor = ({ form: { register, control } }) => {
   const { page } = IdentityProfileStore.useContext();
@@ -26,12 +27,11 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
     <VStack spacing={4} width={"100%"} align="stretch">
       <VStack pl={2} spacing={0} align="stretch">
         {(fields ?? []).map(
-          ({ id, name, description, startDatetime }, index) => {
+          ({ id, name, description, startDatetime, endDatetime }, index) => {
             const errors = {} 
             errors?.activity?.[index];
             const prefix = `activity[${index}]`;
             const borderColor = "#eee";
-            console.log(startDatetime);
             return (
               <Box
                 pl={2}
@@ -54,7 +54,6 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                   mb={12}
                   spacing={0.5}
                   fontSize={["lg", "sm"]}
-                  spacing={0}
                   align="start"
                 >
                   <HStack alignSelf="flex-end" pt={2}>
@@ -142,6 +141,27 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                     ></Input>
                     <FormHelperText color="red">
                       {errors?.startDatetime?.message}
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl
+                    as={HStack}
+                    align="center"
+                    isInvalid={errors?.endDatetime?.message}
+                  >
+                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "field_label_activity_endDatetime"
+                      )}
+                    </FormLabel>
+                    <Input
+                      variant="flushed"
+                      type="date"
+                      defaultValue={moment(endDatetime).format("YYYY-MM-DD")}
+                      {...register(`${prefix}.endDatetime`, {})}
+                    ></Input>
+                    <FormHelperText color="red">
+                      {errors?.endDatetime?.message}
                     </FormHelperText>
                   </FormControl>
                 </VStack>
