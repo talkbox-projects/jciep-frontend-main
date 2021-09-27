@@ -158,6 +158,22 @@ const IdentityBiographySectionEditor = () => {
                 break;
               case "url":
                 comp = (
+                  <>
+                  <FormControl>
+                    <Input
+                      placeholder="https://"
+                      {...register(`${prefix}.urlLabel`, {
+                        required: wordExtractor(
+                          page?.content?.wordings,
+                          "empty_text_label"
+                        ),
+                      })}
+                      defaultValue={text ?? ""}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.urlLabel?.message}
+                    </FormHelperText>
+                  </FormControl>
                   <FormControl>
                     <Input
                       placeholder="https://"
@@ -180,6 +196,7 @@ const IdentityBiographySectionEditor = () => {
                       {errors?.biography?.blocks?.[index]?.url?.message}
                     </FormHelperText>
                   </FormControl>
+                  </>
                 );
                 break;
             default:

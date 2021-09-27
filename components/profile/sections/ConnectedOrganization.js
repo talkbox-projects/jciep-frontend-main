@@ -2,9 +2,11 @@ import React from "react";
 import { Avatar, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useMemo } from "react";
+import { useRouter } from "next/router";
 
 const ConnectedOrganization = () => {
   const { identity } = IdentityProfileStore.useContext();
+  const router = useRouter();
 
   const approvedOrgRole = useMemo(
     () =>
@@ -20,7 +22,9 @@ const ConnectedOrganization = () => {
     <VStack align="stretch" mb={4}>
       <Text>這名人材已連繫</Text>
       {approvedOrgRole?.map((orgRole, i) => (
-        <HStack key={i} p={1}>
+        <HStack  onClick={() => {
+          router.push(`/talants/organizations?organizationId=${orgRole?.organization?.id}`);
+        }} cursor="pointer" key={i} p={1}>
           <Avatar bg="white" src={orgRole?.organization?.logo?.url} />
           <Heading fontWeight="normal" size="lg">
             {orgRole?.organization?.chineseCompanyName}

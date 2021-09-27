@@ -148,7 +148,8 @@ export default {
         const phoneVerify = await PhoneVerify.create({ phone });
         let result = await sendSms(
           phoneVerify.phone,
-          `Otp for phone verification is ${phoneVerify.otp}`
+          `賽馬會共融・知行計劃
+一次性電話驗證碼:${phoneVerify.otp}`
         );
         if (result) {
           return true;

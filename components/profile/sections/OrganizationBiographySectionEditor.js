@@ -145,28 +145,45 @@ const OrganizationBiographySectionEditor = () => {
             
             case "url":
               comp = (
-                <FormControl>
-                  <Input
-                    placeholder="https://"
-                    {...register(`${prefix}.url`, {
-                      required: wordExtractor(
-                        page?.content?.wordings,
-                        "empty_text_label"
-                      ),
-                      pattern: {
-                        value: urlRegex,
-                        message: wordExtractor(
+                <>
+                  <FormControl>
+                    <Input
+                      placeholder="標籤 Label"
+                      {...register(`${prefix}.urlLabel`, {
+                        required: wordExtractor(
                           page?.content?.wordings,
-                          "field_error_message_invalid_url"
+                          "empty_text_label"
                         ),
-                      },
-                    })}
-                    defaultValue={text ?? ""}
-                  />
-                  <FormHelperText color="red">
-                    {errors?.biography?.blocks?.[index]?.url?.message}
-                  </FormHelperText>
-                </FormControl>
+                      })}
+                      defaultValue={text ?? ""}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.urlLabel?.message}
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      placeholder="https://"
+                      {...register(`${prefix}.url`, {
+                        required: wordExtractor(
+                          page?.content?.wordings,
+                          "empty_text_label"
+                        ),
+                        pattern: {
+                          value: urlRegex,
+                          message: wordExtractor(
+                            page?.content?.wordings,
+                            "field_error_message_invalid_url"
+                          ),
+                        },
+                      })}
+                      defaultValue={text ?? ""}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.url?.message}
+                    </FormHelperText>
+                  </FormControl>
+                  </>
               );
               break;
             default:

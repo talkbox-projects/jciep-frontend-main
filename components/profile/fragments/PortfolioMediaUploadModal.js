@@ -17,7 +17,7 @@ import {
   FormHelperText,
   Textarea,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";
@@ -56,7 +56,7 @@ const PortfolioMediaUploadModal = ({ params, page, isOpen, onClose }) => {
             description: "",
           });
     }
-  }, [params, isOpen]);
+  }, [params, isOpen, reset]);
 
   const onSubmitButtonClick = useCallback(
     (item) => {
@@ -107,26 +107,40 @@ const PortfolioMediaUploadModal = ({ params, page, isOpen, onClose }) => {
             </FormControl>
             <VStack p={8} spacing={4} align="stretch">
               {mode === "upload" && (
-                <Controller
-                  control={control}
-                  name="file"
-                  render={({ field: { value, onChange } }) => {
-                    return (
-                      <AspectRatio ratio={2.5}>
-                        <ProfileDropzone
-                          value={value}
-                          onChange={onChange}
-                          page={page}
-                        />
-                      </AspectRatio>
-                    );
-                  }}
-                />
+                <FormControl isInvalid={errors?.file?.message}>
+                  <Controller
+                    control={control}
+                    name="file"
+                    rules={{
+                      required: wordExtractor(
+                        page?.content?.wordings,
+                        "field_error_message_required"
+                      ),
+                    }}
+                    render={({ field: { value, onChange } }) => {
+                      return (
+                        <AspectRatio ratio={2.5}>
+                          <ProfileDropzone
+                            value={value}
+                            onChange={onChange}
+                            page={page}
+                          />
+                        </AspectRatio>
+                      );
+                    }}
+                  />
+
+                  {errors?.file?.message && (
+                    <FormHelperText color="red">
+                      {errors?.file?.message}
+                    </FormHelperText>
+                  )}
+                </FormControl>
               )}
 
               {mode === "youtube" && (
                 <>
-                  <FormControl isInvalid={errors?.url?.message}>
+                  <FormControl isInvalid={errors?.videoUrl?.message}>
                     <FormLabel>
                       {wordExtractor(
                         page?.content?.wordings,
@@ -149,9 +163,9 @@ const PortfolioMediaUploadModal = ({ params, page, isOpen, onClose }) => {
                         },
                       })}
                     ></Input>
-                    {errors?.url?.message && (
+                    {errors?.videoUrl?.message && (
                       <FormHelperText color="red">
-                        {errors?.url?.message}
+                        {errors?.videoUrl?.message}
                       </FormHelperText>
                     )}
                   </FormControl>
