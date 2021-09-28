@@ -164,7 +164,7 @@ const Home = ({ setting, page }) => {
         >
           <Container>
             <VStack pb={16}>
-              <Heading color="white" fontSize={["4xl", "4xl", "6xl"]}>
+              <Heading as="h2" color="white" fontSize={["4xl", "4xl", "6xl"]}>
                 <MultiTextRenderer data={page?.content?.banner?.title} />
               </Heading>
               <Text
@@ -496,7 +496,7 @@ const Home = ({ setting, page }) => {
                   >
                     {post?.content?.feature?.tagline ?? post?.title}
                   </Heading>
-                  <Text
+                  <Text as="h2"
                     d="block"
                     pt={4}
                     whiteSpace="pre-wrap"

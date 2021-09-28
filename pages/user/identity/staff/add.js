@@ -275,6 +275,10 @@ const IdentityStaffAdd = ({ page }) => {
 
             <FormControl marginTop="20px !important">
               <Checkbox
+                aria-describedby={wordExtractor(
+                  page?.content?.wordings,
+                  "tnc_required"
+                )}
                 colorScheme="green"
                 {...register("terms", {
                   required: true,

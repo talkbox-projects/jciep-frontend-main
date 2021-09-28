@@ -9,15 +9,11 @@ import {
   GridItem,
   FormHelperText,
   FormLabel,
-  Textarea,
-  Checkbox,
-  Link
-} from "@chakra-ui/react";
-import { useCallback } from "react";
+  Textarea} from "@chakra-ui/react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { gql } from "graphql-request";

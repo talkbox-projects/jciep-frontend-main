@@ -1,34 +1,27 @@
 import { useAppContext } from "../store/AppStore";
-import { Controller, useForm } from "react-hook-form";
-import { useCallback, useState } from "react";
 import {
-  FormControl,
-  FormLabel,
-  FormHelperText,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  Button,
-  VStack,
   HStack,
-  PinInput,
-  PinInputField,
   IconButton,
   Text,
-  Progress, 
   UnorderedList,
   ListItem
 } from "@chakra-ui/react";
 import { useGetWording } from "../utils/wordings/useWording";
 import { FaArrowLeft } from "react-icons/fa";
+import React from 'react';
+import { useRouter } from "next/router";
 
 const EmailVerifySentModal = () => {
   const { emailVerifySentModalDisclosure, email } = useAppContext();
 
 
   const getWording = useGetWording();
+  const router = useRouter();
 
   return (
     <Modal
@@ -40,6 +33,7 @@ const EmailVerifySentModal = () => {
       <ModalContent maxW={600} w="95%" py={4}>
         <ModalHeader as={HStack} align="center" fontSize="3xl">
           <IconButton
+            aria-label={router.locale === "en" ? "back button":  "返回"}
             variant="ghost"
             icon={<FaArrowLeft />}
             onClick={() => {

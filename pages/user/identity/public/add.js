@@ -12,11 +12,9 @@ import {
   FormLabel,
   Link
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
-
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -215,6 +213,8 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
+
+                        aria-labelledby={page?.content?.form?.gender?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -241,6 +241,7 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
+                      aria-labelledby={page?.content?.form?.residentRestrict?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -270,6 +271,7 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
+                      aria-labelledby={page?.content?.form?.industry?.label}
                         styles={customStyles}
                         {...field}
                         isMulti
@@ -298,6 +300,10 @@ const IdentityPublicAdd = ({ page }) => {
             </SimpleGrid>
             <FormControl marginTop="20px !important">
               <Checkbox
+                aria-describedby={wordExtractor(
+                  page?.content?.wordings,
+                  "tnc_required"
+                )}
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >

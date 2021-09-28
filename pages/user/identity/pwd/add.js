@@ -13,7 +13,7 @@ import {
   Link, 
   FormLabel,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 
@@ -231,6 +231,7 @@ const IdentityPwdAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
+                        aria-labelledby={page?.content?.form?.gender?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -310,6 +311,7 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                    aria-labelledby={page?.content?.form?.residentRestrict?.label}
                     placeholder={wordExtractor(
                       page?.content?.wordings,
                       "resident_district_placeholder"
@@ -333,6 +335,7 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
+                  aria-labelledby={page?.content?.form?.personTypes?.label}
                   placeholder={wordExtractor(
                     page?.content?.wordings,
                     "person_types_placeholder"
@@ -363,6 +366,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                  aria-labelledby={page?.content?.form?.employeerMode?.label}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -404,6 +408,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
+                  aria-labelledby={page?.content?.form?.industry?.label}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -464,6 +469,10 @@ const IdentityPwdAdd = ({ page }) => {
 
             <FormControl marginTop="20px !important">
               <Checkbox
+                aria-describedby={wordExtractor(
+                  page?.content?.wordings,
+                  "tnc_required"
+                )}
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >

@@ -7,14 +7,13 @@ import {
   Input,
   SimpleGrid,
   GridItem,
-  Select,
   Checkbox,
   FormHelperText,
   Link,
   FormLabel,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import { getPage } from "../../../../utils/page/getPage";
@@ -279,6 +278,10 @@ const IdentityEmployerAdd = ({ page }) => {
 
             <FormControl marginTop="20px !important">
               <Checkbox
+                aria-describedby={wordExtractor(
+                  page?.content?.wordings,
+                  "tnc_required"
+                )}
                 colorScheme="green"
                 {...register("terms", {
                   required: true,
