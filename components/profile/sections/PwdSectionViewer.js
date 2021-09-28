@@ -488,7 +488,7 @@ const PwdSectionViewer = () => {
                   {identity?.industry.map((key) => (
                     <Tag key={key}>
                       {getEnumText(
-                        enums?.EnumInterestedIndustryList,
+                        enums?.EnumIndustryList,
                         key,
                         router.locale
                       ) ??

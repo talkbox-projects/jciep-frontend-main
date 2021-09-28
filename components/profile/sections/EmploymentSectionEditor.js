@@ -11,7 +11,6 @@ import {
   Input,
   FormHelperText,
   Textarea,
-  Select,
 } from "@chakra-ui/react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
@@ -19,6 +18,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";
 import { emailRegex, urlRegex } from "../../../utils/general";
+import React from "react";
 
 const EmploymentSectionEditor = () => {
   const router = useRouter();
@@ -255,7 +255,7 @@ const EmploymentSectionEditor = () => {
               name={"industry"}
               defaultValue={organization?.industry ?? []}
               render={({ field: { name, value, onChange } }) => {
-                const options = enums?.EnumInterestedIndustryList.map(
+                const options = enums?.EnumIndustryList.map(
                   ({ key: value, value: { [router.locale]: label } }) => ({
                     value,
                     label,

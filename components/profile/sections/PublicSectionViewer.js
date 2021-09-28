@@ -151,7 +151,7 @@ const PublicSectionViewer = () => {
             <Wrap>
               {identity?.industry.map((key) => (
                 <Tag key={key}>
-                  {getEnumText(enums?.EnumInterestedIndustryList, key, router.locale) ??
+                  {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
                     wordExtractor(page?.content?.wordings, "empty_text_label")}
                 </Tag>
               ))}

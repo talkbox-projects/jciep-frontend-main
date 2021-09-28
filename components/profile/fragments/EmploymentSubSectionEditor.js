@@ -155,7 +155,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                       {...register(`${prefix}.industry`, {})}
                       defaultValue={industry}
                     >
-                      {(enums?.EnumInterestedIndustryList ?? []).map(
+                      {(enums?.EnumIndustryList ?? []).map(
                         ({
                           key: value,
                           value: { [router.locale]: label } = {},
