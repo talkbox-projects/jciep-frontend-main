@@ -158,7 +158,7 @@ const IdentityPortfolioSection = () => {
 
             return (
               <AspectRatio ratio={1}>
-                <Box
+                <Box as={Button} variant="link"
                   onClick={() => onPortfolioItemClick(index)}
                   cursor="pointer"
                   borderRadius={8}

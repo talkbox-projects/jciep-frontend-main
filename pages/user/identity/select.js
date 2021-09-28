@@ -11,10 +11,10 @@ import {
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../store/AppStore";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useCredential } from "../../../utils/user";
 const PAGE_KEY = "identity_select";
 
@@ -77,7 +77,7 @@ const IdentitySelect = ({ page }) => {
             {page?.content?.heading?.title}
           </Heading>
           <SimpleGrid pt={16} columns={[1, 1, 2, 3]} spacing={8}>
-            <GridItem>
+            <GridItem minHeight="320px" as={Button} variant="unstyled">
               <Box
                 minHeight="320px"
                 textAlign="center"
@@ -101,12 +101,13 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   fontWeight={600}
                   letterSpacing="1.5px"
+                  whiteSpace="pre-wrap"
                 >
                   {page?.content?.pwd?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem>
+            <GridItem minHeight="320px" as={Button} variant="unstyled">
               <Box
                 minHeight="320px"
                 textAlign="center"
@@ -130,12 +131,13 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   fontWeight={600}
                   letterSpacing="1.5px"
+                  whiteSpace="pre-wrap"
                 >
                   {page?.content?.employeer?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem>
+            <GridItem minHeight="320px" as={Button} variant="unstyled">
               <Box
                 minHeight="320px"
                 textAlign="center"
@@ -159,12 +161,13 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   fontWeight={600}
                   letterSpacing="1.5px"
+                  whiteSpace="pre-wrap"
                 >
                   {page?.content?.ngo?.title}
                 </Text>
               </Box>
             </GridItem>
-            <GridItem>
+            <GridItem  minHeight="320px" as={Button} variant="unstyled">
               <Box
                 minHeight="320px"
                 textAlign="center"
@@ -189,6 +192,7 @@ const IdentitySelect = ({ page }) => {
                   margin="auto"
                   fontWeight={600}
                   letterSpacing="1.5px"
+                  whiteSpace="pre-wrap"
                 >
                   {page?.content?.public?.title}
                 </Text>

@@ -8,6 +8,7 @@ import withPostCMS from "../../utils/post/withPostCMS";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import NextLink from "next/link";
 import {
+  Link,
   Heading,
   HStack,
   Text,
@@ -390,10 +391,12 @@ const PostDetail = ({ post, setting, page }) => {
 
       {nextPost && (
         <>
-        <Box w="100%" cursor="pointer">
-          <chakra.a href={`/sharing/${nextPost?.slug}`}>
-            <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
-          </chakra.a>
+        <Box w="100%" cursor="pointer" >
+          <NextLink href={`/sharing/${nextPost?.slug}`}>
+            <Link>
+              <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
+            </Link>
+          </NextLink>
         </Box></>
       )}
     </VStack>

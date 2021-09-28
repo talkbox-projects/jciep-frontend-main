@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { VStack, Box, Text, Grid } from "@chakra-ui/layout";
-import { Image } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { Image, Link } from "@chakra-ui/react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
@@ -177,38 +178,41 @@ const PwdMain = ({ page }) => {
           justifyContent="center"
         >
           {(page?.content?.pwdList?.pwds ?? []).map((data, i) => (
-            <Box
-              key={i}
-              w="100%"
-              h={["132px", "132px", "122px"]}
-              transition="all 0.2s"
-              bg={["#fff", "#fff", "#fff", "rgba(255, 255, 255, 0.3)"]}
-              boxShadow={["lg", "lg", "lg", "none"]}
-              borderRadius="10px"
-              cursor="pointer"
-              _hover={{
-                background: "#fff",
-                boxShadow: "lg",
-              }}
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              px="12px"
-              onClick={() =>
-                router.push(`people-with-disabilities/${data.slug}`)
-              }
-              zIndex={1}
-            >
-              <Image  alt={data.name} src={data.icon} h="48px" w="48px" />
-              <Text
-                fontWeight="bold"
-                fontSize={["16px", "16px", "24px"]}
-                textAlign="center"
-              >
-                {data.name}
-              </Text>
-            </Box>
+            <NextLink key={i} passHref href={`people-with-disabilities/${data.slug}`}>
+              <Link>
+                <Box
+                  w="100%"
+                  h={["132px", "132px", "122px"]}
+                  transition="all 0.2s"
+                  bg={["#fff", "#fff", "#fff", "rgba(255, 255, 255, 0.3)"]}
+                  boxShadow={["lg", "lg", "lg", "none"]}
+                  borderRadius="10px"
+                  cursor="pointer"
+                  _hover={{
+                    background: "#fff",
+                    boxShadow: "lg",
+                  }}
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  px="12px"
+                  onClick={() =>
+                    router.push()
+                  }
+                  zIndex={1}
+                >
+                  <Image  alt={data.name} src={data.icon} h="48px" w="48px" />
+                  <Text
+                    fontWeight="bold"
+                    fontSize={["16px", "16px", "24px"]}
+                    textAlign="center"
+                  >
+                    {data.name}
+                  </Text>
+                </Box>
+              </Link>
+            </NextLink>
           ))}
         </Grid>
 

@@ -308,11 +308,11 @@ const Programme = ({ page }) => {
             >
               {(page?.content?.partnerSection?.partners ?? []).map(
                 ({ id, agencyName, projectName, contact, slug }, i) => (
-                  <NextLink key={i} href={`/programme/partner/${slug}`}>
-                    <WrapItem
+                  <NextLink key={i} passHref href={`/programme/partner/${slug}`}>
+                    <Link d="block"
+                      w={["100%", "100%", "40%", "25%"]}>
+                        <VStack w="100%"
                       position="relative"
-                      as={VStack}
-                      w={["100%", "100%", "40%", "25%"]}
                       transition="all 0.2s"
                       borderWidth={[0, 0, 0, 2]}
                       borderColor="#C6C6C6"
@@ -345,8 +345,8 @@ const Programme = ({ page }) => {
                         position="absolute"
                         bottom={0}
                         right={0}
-                      ></Image>
-                    </WrapItem>
+                      ></Image></VStack>
+                      </Link>
                   </NextLink>
                 )
               )}

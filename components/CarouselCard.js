@@ -8,7 +8,8 @@ import {
   UnorderedList,
   ListItem,
 } from "@chakra-ui/layout";
-import { Text, Image, chakra, Link, Icon, Tooltip, IconButton } from "@chakra-ui/react";
+import { 
+  Button,Text, Image, chakra, Link, Icon, Tooltip, IconButton } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { motion } from "framer-motion";
@@ -71,9 +72,8 @@ const TextTool = ({
       )}
       {description && description !== "" && (
         <chakra.span pl="6px">
-          <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
-            <Box w="fit-content">
-              <IconButton as={AiOutlineInfoCircle} variant="link"
+          <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF"  aria-label={description}>
+              <IconButton icon={<AiOutlineInfoCircle />} variant="link" 
                 cursor="pointer"
                 size={2}
                 onMouseEnter={() => setIsLabelOpen(true)}
@@ -82,7 +82,6 @@ const TextTool = ({
                 mt={small ? "5px" : "5px"}
               >
               </IconButton>
-            </Box>
           </Tooltip>
         </chakra.span>
       )}
@@ -316,14 +315,14 @@ const Card = ({
                 </UnorderedList>
               )}
             </Box>
-            <MotionBox
+            {show && <MotionBox
               overflow="hidden"
               height={0}
               transition={{ duration: 0.5 }}
               alignItems="start"
               spacing={0}
               w="100%"
-              {...(show && { animate: { height: "auto" } })}
+              {...(show ? { animate: { height: "auto" } } : { d: "none" })}
             >
               <Divider />
               <HStack pt="8px" spacing="5px" align="start">
@@ -387,13 +386,13 @@ const Card = ({
               >
                 {remark}
               </Text>
-            </MotionBox>
+            </MotionBox>}
             <Box pt="32px"></Box>
           </VStack>
         </VStack>
         <Box>
           <Divider />
-          <Text
+          <Button variant="link"
             pb="10px"
             cursor="pointer"
             onClick={() => setShow(!show)}
@@ -405,7 +404,7 @@ const Card = ({
             {show
               ? wordExtractor(page?.content?.wordings, "showLess")
               : wordExtractor(page?.content?.wordings, "showMore")}
-          </Text>
+          </Button>
         </Box>
       </Box>
     </Box>

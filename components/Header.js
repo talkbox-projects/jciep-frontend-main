@@ -266,12 +266,12 @@ const Header = ({
               {!isLoggedIn ? (
                 <PopoverContent p={3} w={48}>
                   <VStack align="stretch">
-                    <Link onClick={loginModalDisclosure.onOpen}>
+                    <Button variant="link"  onClick={loginModalDisclosure.onOpen}>
                       {getWording("header.login_label")}
-                    </Link>
-                    <Link onClick={registerModalDisclosure.onOpen}>
+                    </Button>
+                    <Button variant="link"  onClick={registerModalDisclosure.onOpen}>
                       {getWording("header.register_label")}
-                    </Link>
+                    </Button>
                   </VStack>
                 </PopoverContent>
               ) : (
@@ -391,10 +391,10 @@ const Header = ({
                       px={2}
                     >
                       {submenu?.length > 0 ? (
-                        <Popover trigger="hover" gutter={20}>
+                        <Popover gutter={20}>
                           <PopoverTrigger>
                             <Box h="100%">
-                              <NextLink href={path}>
+                              {/* <NextLink href={path}> */}
                                 <Button
                                   h="100%"
                                   variant="unstyled"
@@ -403,7 +403,7 @@ const Header = ({
                                 >
                                   {label}
                                 </Button>
-                              </NextLink>
+                              {/* </NextLink> */}
                             </Box>
                           </PopoverTrigger>
                           <PopoverContent w="fit-content">
@@ -542,22 +542,22 @@ const Header = ({
                     {!isLoggedIn ? (
                       <PopoverContent p={3} w={48}>
                         <VStack align="stretch">
-                          <Link
+                          <Button variant="link" 
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               loginModalDisclosure.onOpen();
                             }}
                           >
                             {getWording("header.login_label")}
-                          </Link>
-                          <Link
+                          </Button>
+                          <Button variant="link" 
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               registerModalDisclosure.onOpen();
                             }}
                           >
                             {getWording("header.register_label")}
-                          </Link>
+                          </Button>
                         </VStack>
                       </PopoverContent>
                     ) : (

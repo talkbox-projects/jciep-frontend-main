@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Stack, Box, Text, VStack, LinkBox } from "@chakra-ui/layout";
+import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
 import { NextSeo } from "next-seo";
@@ -343,11 +343,11 @@ const Home = ({ setting, page }) => {
                         </Box>
                       )}
                     </Box>
-                      <Box
+                      <Box as={Button}
                         onClick={() => {
                           link && router.push(link)
                         }}
-                        outline="initial"
+                        variant="link"
                         {...link && { cursor: "pointer" }}
                         borderWidth={4}
                         borderColor="white"
@@ -442,7 +442,7 @@ const Home = ({ setting, page }) => {
           }}
         >
           {(posts ?? []).map((post, index) => (
-            <Container key={index} py={28}>
+            <Container key={index} py={28} >
               <Stack
                 cursor="pointer"
                 align="center"
@@ -455,7 +455,7 @@ const Home = ({ setting, page }) => {
                 <Box w={["100%", "60%", "50%", "50%", "40%"]}>
                   <Image  alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
                 </Box>
-                <VStack
+                <VStack 
                   px={8}
                   align="start"
                   flex={[0, 0, 0, 1]}
@@ -598,7 +598,7 @@ const Home = ({ setting, page }) => {
                             remark,
                           }) => (
                             <NextLink passHref href={link} key={id}>
-                              <LinkBox height="100%">
+                              <Link outline="initial" height="100%">
                                 <GridItem
                                   as={VStack}
                                   borderWidth={2}
@@ -643,7 +643,7 @@ const Home = ({ setting, page }) => {
                                     {remark}
                                   </Text>
                                 </GridItem>
-                              </LinkBox>
+                              </Link>
                             </NextLink>
                           )
                         )}
