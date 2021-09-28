@@ -88,7 +88,7 @@ const JobOpportunities = ({ page }) => {
         (industry, index, arr) =>
           `${industry}${index === arr.length - 1 ? "" : "，"}`
       ),
-    [page, wordExtractor] // FIXME: comma for chinese / eng
+    [page] // FIXME: comma for chinese / eng
   );
 
   const details = (
@@ -280,7 +280,7 @@ const JobOpportunities = ({ page }) => {
             <HStack w="100%">
               <Box flex={1} minW={0} w="100%">
                 <HStack>
-                  <Image src={wordExtractor(page?.content?.wordings, "job_location_label")} w={6} h={6} />
+                  <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")}  src={page?.content?.icon?.locationIcon} w={6} h={6} />
                   <Text isTruncated maxW="100%">
                     {jobLocationRenderer(job)}
                   </Text>
