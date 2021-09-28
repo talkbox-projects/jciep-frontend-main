@@ -1,5 +1,6 @@
 import { HStack, Text } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/react";
+import React from "react";
 
 const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
   const {
