@@ -29,7 +29,7 @@ const Footer = ({ footer }) => {
                   direction={["column", "column", "row", "row"]}
                   key={id}
                 >
-                  <Box w="150px" color="gray.500">
+                  <Box w="150px" color="gray.700">
                     {title}
                   </Box>
                   <Wrap spacing={4} align="center">

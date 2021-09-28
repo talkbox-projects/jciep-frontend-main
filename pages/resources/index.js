@@ -84,25 +84,19 @@ const ServiceFilter = ({
   onChange = () => undefined,
   list = [],
 }) => (
-  <Menu closeOnSelect={false}>
-    <MenuButton
-      as={Button}
+  <Menu >
+    <MenuButton minW={["120px", "120px", "180px", "240px"]} as={Button}
       variant="outline"
       rightIcon={<ChevronDownIcon />}
-      borderWidth={0}
       borderBottomWidth="2px"
       size="lg"
-      borderRadius={0}
-      _hover={{}}
-      _focus={{}}
-      _active={{}}
-      px={0}
-      minW={["120px", "120px", "180px", "240px"]}
       textAlign="left"
     >
-      {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
-      {label}
-    </MenuButton>
+      <Text w="100%">
+        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {label}
+      </Text>
+      </MenuButton>
     <Portal>
       <MenuList maxW="100vw" minWidth="240px">
         <MenuOptionGroup value={value} onChange={onChange} type="checkbox">

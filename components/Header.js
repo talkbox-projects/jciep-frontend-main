@@ -54,7 +54,6 @@ import userGet from "../utils/api/UserGet";
 
 const Header = ({
   navigation,
-  isLangAvailable,
   isShowLangSwitcher = false,
 }) => {
   const getWording = useGetWording();
@@ -446,9 +445,11 @@ const Header = ({
                 href={navigation?.actionButton?.path ?? "/"}
                 target="_blank"
               >
-                <Button
+                <Button 
                   variant="outline"
                   colorScheme="secondary"
+                  color="#08A3A3"
+                  borderColor="#08A3A3"
                   borderRadius="2em"
                   py={0.5}
                   fontWeight="normal"
@@ -535,7 +536,7 @@ const Header = ({
                   </Text>
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
-                      <Button variant="unstyled">
+                      <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
                         <Avatar size="xs"></Avatar>
                       </Button>
                     </PopoverTrigger>

@@ -392,10 +392,10 @@ const Sharing = ({ page, setting, lang }) => {
                   columnGap="8px"
                   key={i}
                   pt="11px"
-                  borderTop="1px solid #EFEFEF"
+                  borderTop="1px solid #666"
                   mb="16px"
                 >
-                  <Text fontSize="36px" textAlign="left" color="#EFEFEF">{`0${
+                  <Text fontSize="36px" textAlign="left" color="#666">{`0${
                     i + 1
                   }`}</Text>
 

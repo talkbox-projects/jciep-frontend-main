@@ -316,9 +316,10 @@ const JobOpportunities = ({ page }) => {
                   {wordExtractor(page?.content?.wordings, "page_subtitle_link")}
                 </Link>
               </Text>
-              <Link href="/contact-us">
               <Button
                 mt={3}
+                as={Link}
+                href="/contact-us"
                 borderRadius="full"
                 color="#000"
                 bg="transparent"
@@ -331,7 +332,6 @@ const JobOpportunities = ({ page }) => {
               >
                 {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
               </Button>
-              </Link>
               
             </Box>
             <Image alt=""

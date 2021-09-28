@@ -102,7 +102,7 @@ const OtpVerifyModal = () => {
         <ModalBody>
           <VStack>
             <FormControl>
-              <FormLabel color="gray.400" fontWeight="normal">
+              <FormLabel color="gray.800" fontWeight="normal">
                 {getWording("otpVerify.sms_sent_message", {
                   params: { phone },
                 })}

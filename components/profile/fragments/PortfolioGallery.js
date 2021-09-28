@@ -14,10 +14,14 @@ import {
 } from "@chakra-ui/react";
 import { useCallback } from "react";
 import { getYoutubeLink } from "../../../utils/general";
+import { useRouter } from "next/router";
 
 const Iframe = chakra("iframe");
 
 const PortfolioGallery = ({ isOpen, onClose, params }) => {
+
+  const router = useRouter();
+
   const getVideoComponent = useCallback((item) => {
     const youtubeLink = getYoutubeLink(item?.videoUrl);
     return (
@@ -72,7 +76,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
       <ModalContent>
         <ModalHeader>
           {params?.item?.title ?? ""}
-          <ModalCloseButton />
+          <ModalCloseButton aria-label={router.locale === "en" ? "Close" : "關閉"} />
         </ModalHeader>
         <ModalBody>{getComponent(params?.item)}</ModalBody>
       </ModalContent>
