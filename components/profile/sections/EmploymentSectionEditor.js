@@ -255,7 +255,7 @@ const EmploymentSectionEditor = () => {
               name={"industry"}
               defaultValue={organization?.industry ?? []}
               render={({ field: { name, value, onChange } }) => {
-                const options = enums?.EnumIndustryList.map(
+                const options = enums?.EnumInterestedIndustryList.map(
                   ({ key: value, value: { [router.locale]: label } }) => ({
                     value,
                     label,

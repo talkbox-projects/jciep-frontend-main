@@ -5,7 +5,7 @@ import districts from "./enum/districts";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
 import employmentModes from "./enum/employmentModes";
-import industries from "./enum/industries";
+import interestedIndustries from "./enum/interestedIndustries";
 import pwdTypes from "./enum/pwdTypes";
 import publishStatus from "./enum/publishStatus";
 
@@ -123,7 +123,7 @@ const identitySchema = Schema({
   interestedIndustry: [
     {
       type: String,
-      enum: Object.keys(industries),
+      enum: Object.keys(interestedIndustries),
     },
   ],
   caption: {
@@ -142,7 +142,7 @@ const identitySchema = Schema({
   industry: [
     {
       type: String,
-      enum: Object.keys(industries),
+      enum: Object.keys(interestedIndustries),
     },
   ],
   industryOther: {

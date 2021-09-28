@@ -488,7 +488,7 @@ const PwdSectionViewer = () => {
                   {identity?.industry.map((key) => (
                     <Tag key={key}>
                       {getEnumText(
-                        enums?.EnumIndustryList,
+                        enums?.EnumInterestedIndustryList,
                         key,
                         router.locale
                       ) ??
@@ -552,7 +552,7 @@ const PwdSectionViewer = () => {
             <Wrap>
               {(identity?.interestedIndustry ?? []).map((key) => (
                 <Tag key={key}>
-                  {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
+                  {getEnumText(enums?.EnumInterestedIndustryList, key, router.locale) ??
                     wordExtractor(page?.content?.wordings, "empty_text_label")}
                 </Tag>
               ))}

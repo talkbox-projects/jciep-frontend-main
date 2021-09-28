@@ -36,7 +36,7 @@ export default gql`
     employmentType: EnumEmploymentMode
     companyName: String
     jobTitle: String
-    industry: EnumIndustry
+    industry: EnumInterestedIndustry
     industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -63,7 +63,7 @@ export default gql`
     employmentType: EnumEmploymentMode
     companyName: String
     jobTitle: String
-    industry: EnumIndustry
+    industry: EnumInterestedIndustry
     industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -88,9 +88,9 @@ export default gql`
     district: EnumDistrict
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
-    interestedIndustry: [EnumIndustry]
+    interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumIndustry]
+    industry: [EnumInterestedIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean
@@ -131,9 +131,9 @@ export default gql`
     district: EnumDistrict
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
-    interestedIndustry: [EnumIndustry]
+    interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumIndustry]
+    industry: [EnumInterestedIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean
@@ -173,9 +173,9 @@ export default gql`
     district: EnumDistrict
     pwdType: [EnumPwdType]
     interestedEmploymentMode: [EnumEmploymentMode]
-    interestedIndustry: [EnumIndustry]
+    interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumIndustry]
+    industry: [EnumInterestedIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean

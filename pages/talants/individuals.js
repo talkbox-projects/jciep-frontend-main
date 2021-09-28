@@ -158,7 +158,7 @@ const IdentityOpportunities = ({
             </VStack>
             {identity?.interestedIndustry?.length > 0 && (
               <Wrap>
-                {(enums?.EnumIndustryList ?? [])
+                {(enums?.EnumInterestedIndustryList ?? [])
                   .filter((x) =>
                     (identity?.interestedIndustry ?? []).includes(x.key)
                   )

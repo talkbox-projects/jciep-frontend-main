@@ -3,7 +3,7 @@ import districts from "./enum/districts";
 import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
-import industries from "./enum/industries";
+import interestedIndustries from "./enum/interestedIndustries";
 import joinRoles from "./enum/joinRoles";
 import joinStatus from "./enum/joinStatus";
 import oralLanguages from "./enum/oralLanguages";
@@ -38,7 +38,7 @@ export default {
     ...generateEnumResolver("identityType", identityTypes),
     ...generateEnumResolver("employmentMode", employmentModes),
     ...generateEnumResolver("gender", genders),
-    ...generateEnumResolver("industry", industries),
+    ...generateEnumResolver("interestedIndustry", interestedIndustries),
     ...generateEnumResolver("oralLanguage", oralLanguages),
     ...generateEnumResolver("organizationStatus", organizationStatus),
     ...generateEnumResolver("organizationType", organizationTypes),

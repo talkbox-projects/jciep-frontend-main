@@ -63,7 +63,7 @@ const EmploymentSubSectionViewer = () => {
                     <Tag size="sm" fontWeight="normal">
                       {industry === "other" && industryOther
                         ? industryOther
-                        : enums?.EnumIndustryList?.find(
+                        : enums?.EnumInterestedIndustryList?.find(
                             (x) => x.key === industry
                           )?.value?.[router.locale]}
                     </Tag>

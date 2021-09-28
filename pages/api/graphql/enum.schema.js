@@ -4,7 +4,7 @@ import districts from "./enum/districts";
 import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
-import industries from "./enum/industries";
+import interestedIndustries from "./enum/interestedIndustries";
 import joinRoles from "./enum/joinRoles";
 import joinStatus from "./enum/joinStatus";
 import oralLanguages from "./enum/oralLanguages";
@@ -51,7 +51,7 @@ export default gql`
   ${generateEnumSchema("employmentMode", employmentModes)}
   ${generateEnumSchema("gender", genders)}
   ${generateEnumSchema("identityType", identityTypes)}
-  ${generateEnumSchema("industry", industries)}
+  ${generateEnumSchema("interestedIndustry", interestedIndustries)}
   ${generateEnumSchema("oralLanguage", oralLanguages)}
   ${generateEnumSchema("organizationStatus", organizationStatus)}
   ${generateEnumSchema("organizationType", organizationTypes)}

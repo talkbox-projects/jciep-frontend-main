@@ -266,7 +266,7 @@ const OrganizationSubmissionFormModal = ({
                   name={"industry"}
                   defaultValue={submission?.industry ?? []}
                   render={({ field: { name, value, onChange } }) => {
-                    const options = enums?.EnumIndustryList.map(
+                    const options = enums?.EnumInterestedIndustryList.map(
                       ({ key: value, value: { [router.locale]: label } }) => ({
                         value,
                         label,

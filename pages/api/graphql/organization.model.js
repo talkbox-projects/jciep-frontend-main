@@ -1,6 +1,6 @@
 import { model, models, Schema } from "mongoose";
 import districts from "./enum/districts";
-import industries from "./enum/industries";
+import interestedIndustries from "./enum/interestedIndustries";
 import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
 import joinStatus from "./enum/joinStatus";
@@ -70,7 +70,7 @@ const organizationSchema = Schema({
   industry: [
     {
       type: String,
-      enum: Object.keys(industries),
+      enum: Object.keys(interestedIndustries),
     },
   ],
   industryOther: {
@@ -166,7 +166,7 @@ const organizationSubmissionSchema = Schema({
   industry: [
     {
       type: String,
-      enum: Object.keys(industries),
+      enum: Object.keys(interestedIndustries),
     },
   ],
   industryOther: {
