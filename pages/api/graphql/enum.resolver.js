@@ -15,6 +15,7 @@ import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
 import serviceTarget from "./enum/serviceTarget";
 import publishStatus from "./enum/publishStatus";
+import industries from "./enum/industries";
 
 const properize = (text) => {
   return text
@@ -39,6 +40,7 @@ export default {
     ...generateEnumResolver("employmentMode", employmentModes),
     ...generateEnumResolver("gender", genders),
     ...generateEnumResolver("interestedIndustry", interestedIndustries),
+    ...generateEnumResolver("industry", industries),
     ...generateEnumResolver("oralLanguage", oralLanguages),
     ...generateEnumResolver("organizationStatus", organizationStatus),
     ...generateEnumResolver("organizationType", organizationTypes),

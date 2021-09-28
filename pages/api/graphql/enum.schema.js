@@ -16,6 +16,7 @@ import writtenLanguages from "./enum/writtenLanguages";
 import yearOfExperiences from "./enum/yearOfExperiences";
 import serviceTarget from "./enum/serviceTarget";
 import publishStatus from "./enum/publishStatus";
+import industries from "./enum/industries";
 
 const properize = (text) => {
   return text
@@ -52,6 +53,7 @@ export default gql`
   ${generateEnumSchema("gender", genders)}
   ${generateEnumSchema("identityType", identityTypes)}
   ${generateEnumSchema("interestedIndustry", interestedIndustries)}
+  ${generateEnumSchema("industry", industries)}
   ${generateEnumSchema("oralLanguage", oralLanguages)}
   ${generateEnumSchema("organizationStatus", organizationStatus)}
   ${generateEnumSchema("organizationType", organizationTypes)}
