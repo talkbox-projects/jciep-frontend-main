@@ -28,7 +28,7 @@ import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { getEnumText } from "../../../utils/enums/getEnums";
 import wordExtractor from "../../../utils/wordExtractor";
 import { useForm } from "react-hook-form";
-import { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import OrganizationSubmissionUpdate from "../../../utils/api/OrganizationSubmissionUpdate";
 
 const OrganizationSubmissionDetailModal = ({
@@ -129,7 +129,7 @@ const OrganizationSubmissionDetailModal = ({
               <Wrap>
                 {submission?.industry.map((key) => (
                   <Tag key={key}>
-                    {getEnumText(enums?.EnumInterestedIndustryList, key, router.locale) ??
+                    {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
                       wordExtractor(
                         page?.content?.wordings,
                         "empty_text_label"

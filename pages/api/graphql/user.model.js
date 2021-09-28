@@ -8,6 +8,7 @@ import employmentModes from "./enum/employmentModes";
 import interestedIndustries from "./enum/interestedIndustries";
 import pwdTypes from "./enum/pwdTypes";
 import publishStatus from "./enum/publishStatus";
+import industries from "./enum/industries";
 
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
@@ -142,7 +143,7 @@ const identitySchema = Schema({
   industry: [
     {
       type: String,
-      enum: Object.keys(interestedIndustries),
+      enum: Object.keys(industries),
     },
   ],
   industryOther: {

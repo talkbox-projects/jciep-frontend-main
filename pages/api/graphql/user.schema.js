@@ -90,7 +90,7 @@ export default gql`
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumInterestedIndustry]
+    industry: [EnumIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean
@@ -133,7 +133,7 @@ export default gql`
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumInterestedIndustry]
+    industry: [EnumIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean
@@ -175,7 +175,7 @@ export default gql`
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
-    industry: [EnumInterestedIndustry]
+    industry: [EnumIndustry]
     industryOther: String
     tncAccept: Boolean
     published: Boolean

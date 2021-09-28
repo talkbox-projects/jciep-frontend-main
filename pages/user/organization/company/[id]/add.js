@@ -19,7 +19,7 @@ import {
   RiCloseCircleFill,
   
 } from "react-icons/ri";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import ReactSelect from "react-select";
@@ -60,7 +60,7 @@ const customStyles = {
   }
 }
 
-const OrganizationCompanyAdd = ({ page }) => {
+const OrganizationCompanyAdd = ({ page, enums }) => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
@@ -266,9 +266,14 @@ const OrganizationCompanyAdd = ({ page }) => {
                           page?.content?.wordings,
                           "industry_placeholder"
                         )}
-                        options={page?.content?.form?.industry?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
+                        options={
+                          enums?.EnumIndustryList.map(
+                            ({ key: value, value: { [router.locale]: label } }) => ({
+                              value,
+                              label,
+                            })
+                          )
+                        }
                       />
                     )}
                   />
