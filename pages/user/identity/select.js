@@ -175,7 +175,6 @@ const IdentitySelect = ({ page }) => {
                 borderRadius="20px"
                 className="box"
                 backgroundColor="#FFFFFF"
-                borderRadius="20px"
                 onClick={(e) => {
                   onRoleSelect(e, "/user/identity/public/add");
                 }}
