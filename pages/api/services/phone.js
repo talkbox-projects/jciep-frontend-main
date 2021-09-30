@@ -24,6 +24,9 @@ const gateways = {
 
       const response = await request(options);
 
+
+      console.log("response", response);
+
       return true;
     } catch (error) {
       return false;
@@ -47,8 +50,8 @@ const gateways = {
         method: "GET",
         url: requestUrl,
       };
-
       const response = await request(options);
+      console.log("response", response);
       return true;
     } catch (error) {
       return false;
