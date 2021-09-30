@@ -168,7 +168,7 @@ const IdentityBiographySectionEditor = () => {
                             "empty_text_label"
                           ),
                         })}
-                        defaultValue={text ?? ""}
+                        defaultValue={urlLabel ?? ""}
                       />
                       <FormHelperText color="red">
                         {errors?.biography?.blocks?.[index]?.urlLabel?.message}
@@ -190,7 +190,7 @@ const IdentityBiographySectionEditor = () => {
                             ),
                           },
                         })}
-                        defaultValue={text ?? ""}
+                        defaultValue={url ?? ""}
                       />
                       <FormHelperText color="red">
                         {errors?.biography?.blocks?.[index]?.url?.message}

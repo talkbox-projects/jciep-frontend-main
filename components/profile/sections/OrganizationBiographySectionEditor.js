@@ -64,7 +64,7 @@ const OrganizationBiographySectionEditor = () => {
         </Button>
       </HStack>
       <VStack px={8} align="stretch">
-        {(fields ?? []).map(({ id, type, youtubeUrl, text, file }, index) => {
+        {(fields ?? []).map(({ id, type, youtubeUrl, text, file, url, urlLabel }, index) => {
           let comp = null;
           const prefix = `biography.blocks[${index}]`;
           switch (type) {
@@ -155,7 +155,7 @@ const OrganizationBiographySectionEditor = () => {
                           "empty_text_label"
                         ),
                       })}
-                      defaultValue={text ?? ""}
+                      defaultValue={urlLabel ?? ""}
                     />
                     <FormHelperText color="red">
                       {errors?.biography?.blocks?.[index]?.urlLabel?.message}
@@ -177,7 +177,7 @@ const OrganizationBiographySectionEditor = () => {
                           ),
                         },
                       })}
-                      defaultValue={text ?? ""}
+                      defaultValue={url ?? ""}
                     />
                     <FormHelperText color="red">
                       {errors?.biography?.blocks?.[index]?.url?.message}
