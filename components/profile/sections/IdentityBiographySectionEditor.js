@@ -161,14 +161,14 @@ const IdentityBiographySectionEditor = () => {
                   <>
                   <FormControl>
                     <Input
-                      placeholder="https://"
+                      placeholder="標籤 Label"
                       {...register(`${prefix}.urlLabel`, {
                         required: wordExtractor(
                           page?.content?.wordings,
                           "empty_text_label"
                         ),
                       })}
-                      defaultValue={urlLabel ?? ""}
+                      defaultValue={text ?? ""}
                     />
                     <FormHelperText color="red">
                       {errors?.biography?.blocks?.[index]?.urlLabel?.message}
@@ -190,13 +190,13 @@ const IdentityBiographySectionEditor = () => {
                           ),
                         },
                       })}
-                      defaultValue={url ?? ""}
+                      defaultValue={text ?? ""}
                     />
                     <FormHelperText color="red">
                       {errors?.biography?.blocks?.[index]?.url?.message}
                     </FormHelperText>
                   </FormControl>
-                  </>
+                </>
                 );
                 break;
             default:
