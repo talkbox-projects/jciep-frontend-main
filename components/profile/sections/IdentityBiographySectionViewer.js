@@ -53,7 +53,7 @@ export const IdentityBiographySectionViewer = () => {
         )}
       </HStack>
       {(identity?.biography?.blocks ?? []).map(
-        ({ id, type, youtubeUrl, text, file, url, urlLabel = url }) => {
+        ({ id, type, youtubeUrl, text, file, imageLabel = "image 圖片",  url, urlLabel = url }) => {
           let comp = null;
           switch (type) {
             case "youtube": {
@@ -70,7 +70,7 @@ export const IdentityBiographySectionViewer = () => {
                 galleryDisclosure.onOpen({
                   item: { file },
                 });
-              }} alt="" src={file?.url} />;
+              }} alt={imageLabel} src={file?.url} />;
               break;
               case "text":
                 comp = <Text whiteSpace="pre-line" wordBreak="break-all">{text}</Text>;

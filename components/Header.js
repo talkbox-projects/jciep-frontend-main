@@ -258,7 +258,7 @@ const Header = ({
             </Text>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
-                <Button variant="unstyled">
+                <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
                   <Avatar size="xs"></Avatar>
                 </Button>
               </PopoverTrigger>

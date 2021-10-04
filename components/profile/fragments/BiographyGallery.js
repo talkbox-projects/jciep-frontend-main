@@ -7,7 +7,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useCallback } from "react";
@@ -18,7 +17,7 @@ const BiographyGallery = ({ isOpen, onClose, params }) => {
   const getImageComponent = useCallback((item) => {
     return (
       <VStack align="stretch">
-        <Image alt={item?.description} src={item?.file?.url} allowFullScreen />
+        <Image alt={item?.description ?? " "} src={item?.file?.url} allowFullScreen />
       </VStack>
     );
   }, []);

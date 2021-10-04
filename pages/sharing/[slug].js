@@ -392,8 +392,8 @@ const PostDetail = ({ post, setting, page }) => {
       {nextPost && (
         <>
         <Box w="100%" cursor="pointer" >
-          <NextLink href={`/sharing/${nextPost?.slug}`}>
-            <Link>
+          <NextLink passHref href={`/sharing/${nextPost?.slug}`}>
+            <Link d="block">
               <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
             </Link>
           </NextLink>

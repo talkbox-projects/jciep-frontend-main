@@ -39,7 +39,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
   const getImageComponent = useCallback((item) => {
     return (
       <VStack align="stretch">
-        <Image alt={item?.description} src={item?.file?.url} allowFullScreen />
+        <Image alt={item?.description ? item?.description : " "} src={item?.file?.url} allowFullScreen />
         <Text whiteSpace="pre" color="gray.500" fontSize="sm">
           {item?.description}
         </Text>
@@ -75,7 +75,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {params?.item?.title ?? ""}
+          {params?.item?.title ?? " "}
           <ModalCloseButton aria-label={router.locale === "en" ? "Close" : "關閉"} />
         </ModalHeader>
         <ModalBody>{getComponent(params?.item)}</ModalBody>

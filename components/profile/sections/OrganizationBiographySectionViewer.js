@@ -38,7 +38,7 @@ export const OrganizationBiographySectionViewer = () => {
         )}
       </HStack>
       {(organization?.biography?.blocks ?? []).map(
-        ({ id, type, youtubeUrl, text, file, url, urlLabel = url }) => {
+        ({ id, type, youtubeUrl, text, file, imageLabel, url, urlLabel = url }) => {
           let comp = null;
           switch (type) {
             case "youtube": {
@@ -55,7 +55,7 @@ export const OrganizationBiographySectionViewer = () => {
                 galleryDisclosure.onOpen({
                   item: { file },
                 });
-              }} alt="" src={file?.url} />;
+              }} alt={imageLabel} src={file?.url} />;
               break;
             case "text":
               comp = <Text  whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;

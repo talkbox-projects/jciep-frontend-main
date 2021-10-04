@@ -78,7 +78,7 @@ const IdentityBiographySectionEditor = () => {
         </VStack>
       </HStack>
       <VStack px={8} align="stretch">
-        {(fields ?? []).map(({ id, type, youtubeUrl, text, file , url, urlLabel }, index) => {
+        {(fields ?? []).map(({ id, type, youtubeUrl, text, file, imageLabel, url, urlLabel }, index) => {
           let comp = null;
           const prefix = `biography.blocks[${index}]`;
           switch (type) {
@@ -113,27 +113,44 @@ const IdentityBiographySectionEditor = () => {
               break;
             case "image":
               comp = (
-                <FormControl>
-                  <Controller
-                    control={control}
-                    name={`${prefix}.file`}
-                    defaultValue={file}
-                    render={({ field: { value, onChange } }) => {
-                      return (
-                        <AspectRatio ratio={2.5}>
-                          <ProfileDropzone
-                            value={value}
-                            onChange={onChange}
-                            page={page}
-                          />
-                        </AspectRatio>
-                      );
-                    }}
-                  />
-                  <FormHelperText color="red">
-                    {errors?.biography?.blocks?.[index]?.youtubeUrl?.message}
-                  </FormHelperText>
-                </FormControl>
+                <>
+                  <FormControl>
+                    <Controller
+                      control={control}
+                      name={`${prefix}.file`}
+                      defaultValue={file}
+                      render={({ field: { value, onChange } }) => {
+                        return (
+                          <AspectRatio ratio={2.5}>
+                            <ProfileDropzone
+                              value={value}
+                              onChange={onChange}
+                              page={page}
+                            />
+                          </AspectRatio>
+                        );
+                      }}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.youtubeUrl?.message}
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      placeholder="描述 Label"
+                      {...register(`${prefix}.imageLabel`, {
+                        required: wordExtractor(
+                          page?.content?.wordings,
+                          "empty_text_label"
+                        ),
+                      })}
+                      defaultValue={imageLabel ?? ""}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.imageLabel?.message}
+                    </FormHelperText>
+                  </FormControl>
+                </>
               );
               break;
               case "text":

@@ -6,6 +6,7 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import {
   Icon,
+  Link,
   SimpleGrid,
   Grid,
   chakra,
@@ -17,7 +18,6 @@ import {
   TabList,
   TabPanels,
   Tab,
-  Link,
   TabPanel,
   AspectRatio,
   IconButton,
@@ -442,71 +442,74 @@ const Home = ({ setting, page }) => {
           }}
         >
           {(posts ?? []).map((post, index) => (
-            <Container key={index} py={28} >
-              <Stack
-                cursor="pointer"
-                align="center"
-                justifyContent="center"
-                spacing={[6, 8, 10, 16]}
-                px="50px"
-                direction={["column", "column", "column", "row"]}
-                onClick={() => router.push(`/sharing/${post?.slug}`)}
-              >
-                <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                  <Image  alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
-                </Box>
-                <VStack 
-                  px={8}
-                  align="start"
-                  flex={[0, 0, 0, 1]}
-                  minW={0}
-                  textAlign="left"
-                >
-                  <HStack>
-                    <Icon
-                      as={VscQuote}
-                      fontSize={36}
-                      color="white"
-                      fontWeight="bold"
-                    />
-                    <Box
-                      bgColor="#00F5E7"
-                      borderRadius={24}
-                      fontSize="xl"
-                      px={4}
-                      py={0.5}
-                    >
-                      <Text>{getCategoryData(post?.category)?.label}</Text>
+            <Container key={index} py={28}>
+              <NextLink passHref href={`/sharing/${post?.slug}`}>
+                <Link d="block">
+                  <Stack
+                    cursor="pointer"
+                    align="center"
+                    justifyContent="center"
+                    spacing={[6, 8, 10, 16]}
+                    px="50px"
+                    direction={["column", "column", "column", "row"]}
+                  >
+                    <Box w={["100%", "60%", "50%", "50%", "40%"]}>
+                      <Image alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
                     </Box>
-                  </HStack>
-                  <Text
-                    fontWeight="bold"
-                    d="block"
-                    pb={4}
-                    lineHeight="xl"
-                    fontSize={["2xl", "2xl", "2xl", "2xl"]}
-                  >
-                    {post?.content?.feature?.persona}
-                  </Text>
-                  <Heading
-                    lineHeight="xl"
-                    fontSize={["2xl", "3xl", "4xl", "4xl"]}
-                    whiteSpace="pre-wrap"
-                    bgColor="white"
-                  >
-                    {post?.content?.feature?.tagline ?? post?.title}
-                  </Heading>
-                  <Text as="h2"
-                    d="block"
-                    pt={4}
-                    whiteSpace="pre-wrap"
-                    fontSize="2xl"
-                    borderRadius={4}
-                  >
-                    {post?.excerpt}
-                  </Text>
-                </VStack>
-              </Stack>
+                    <VStack 
+                      px={8}
+                      align="start"
+                      flex={[0, 0, 0, 1]}
+                      minW={0}
+                      textAlign="left"
+                    >
+                      <HStack>
+                        <Icon
+                          as={VscQuote}
+                          fontSize={36}
+                          color="white"
+                          fontWeight="bold"
+                        />
+                        <Box
+                          bgColor="#00F5E7"
+                          borderRadius={24}
+                          fontSize="xl"
+                          px={4}
+                          py={0.5}
+                        >
+                          <Text>{getCategoryData(post?.category)?.label}</Text>
+                        </Box>
+                      </HStack>
+                      <Text
+                        fontWeight="bold"
+                        d="block"
+                        pb={4}
+                        lineHeight="xl"
+                        fontSize={["2xl", "2xl", "2xl", "2xl"]}
+                      >
+                        {post?.content?.feature?.persona}
+                      </Text>
+                      <Heading
+                        lineHeight="xl"
+                        fontSize={["2xl", "3xl", "4xl", "4xl"]}
+                        whiteSpace="pre-wrap"
+                        bgColor="white"
+                      >
+                        {post?.content?.feature?.tagline ?? post?.title}
+                      </Heading>
+                      <Text as="h2"
+                        d="block"
+                        pt={4}
+                        whiteSpace="pre-wrap"
+                        fontSize="2xl"
+                        borderRadius={4}
+                      >
+                        {post?.excerpt}
+                      </Text>
+                    </VStack>
+                  </Stack>
+                </Link>
+              </NextLink>
             </Container>
           ))}
         </Carousel>
