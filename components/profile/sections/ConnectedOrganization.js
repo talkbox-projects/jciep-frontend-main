@@ -20,7 +20,7 @@ const ConnectedOrganization = () => {
 
   return (
     <VStack align="stretch" mb={4}>
-      <Text>這名人材已連繫</Text>
+      <Text>如對此人才有興趣，請按以下其所屬組織負責人聯絡</Text>
       {approvedOrgRole?.map((orgRole, i) => (
         <HStack  onClick={() => {
           router.push(`/talants/organizations?organizationId=${orgRole?.organization?.id}`);
