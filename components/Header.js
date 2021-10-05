@@ -263,9 +263,15 @@ const Header = ({
             </Text>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
-                <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
-                  <Avatar size="xs"></Avatar>
-                </Button>
+                {
+                  !isLoggedIn ?
+                  <Button aria-label={router.locale === "en" ? "Login/Logout" : "登入/登出"} variant="unstyled">
+                    <Avatar size="xs"></Avatar>
+                  </Button> : 
+                  <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
+                    <Avatar size="xs"></Avatar>
+                  </Button>
+                }
               </PopoverTrigger>
               {!isLoggedIn ? (
                 <PopoverContent p={3} w={48}>
