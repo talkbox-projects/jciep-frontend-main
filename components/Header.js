@@ -242,14 +242,14 @@ const Header = ({
                 <option value="en">EN</option>
               </Select>
             )}
-            <NextLink href="/contact-us" passHref>
-              <Link fontSize="sm">
-                {getWording("header.contact_us_label")}
-              </Link>
-            </NextLink>
             <NextLink href="/text-size" passHref>
               <Link fontSize="sm">
                 {getWording("header.font_size_level_label")}
+              </Link>
+            </NextLink>
+            <NextLink href="/contact-us" passHref>
+              <Link fontSize="sm">
+                {getWording("header.contact_us_label")}
               </Link>
             </NextLink>
             <Text>
