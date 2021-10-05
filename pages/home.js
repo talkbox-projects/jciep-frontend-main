@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { Stack, Box, Text, VStack } from "@chakra-ui/layout";
 import withPageCMS from "../utils/page/withPageCMS";
 import { getPage } from "../utils/page/getPage";
-import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import {
   Icon,
@@ -112,12 +111,6 @@ const Home = ({ setting, page }) => {
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
-      {page?.content?.seo?.title && (
-        <NextSeo
-          title={page?.content?.seo?.title}
-          description={page?.content?.seo?.description}
-        ></NextSeo>
-      )}
 
       {/* First Section */}
       <Box h={"100vh"} position="relative" overflow="hidden">

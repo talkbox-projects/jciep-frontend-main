@@ -19,7 +19,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import React, { useCallback, useEffect, useRef } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { NextSeo } from "next-seo";
 import { getPage } from "../../utils/page/getPage";
 import sharingFieldsForCMS from "../../utils/tina/sharingFieldsForCMS";
 import withPageCMS from "../../utils/page/withPageCMS";
@@ -182,12 +181,6 @@ const Sharing = ({ page, setting, lang }) => {
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
-      {page?.content?.seo?.title && (
-        <NextSeo
-          title={page?.content?.seo?.title}
-          description={page?.content?.seo?.description}
-        ></NextSeo>
-      )}
       {/* Featured Article Section */}
       <Box>
         <Box

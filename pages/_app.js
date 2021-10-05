@@ -89,7 +89,14 @@ const App = ({ Component, pageProps }) => {
           <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" />
         </Head>
         <ChakraProvider theme={theme} resetCSS={true}>
-          <NextSeo title="賽馬會共融．知行計劃" />
+
+          {pageProps?.page?.content?.seo?.title ? (
+            <NextSeo
+              title={pageProps?.page?.content?.seo?.title}
+              description={pageProps?.page?.content?.seo?.description}
+            ></NextSeo>
+          ) : 
+          <NextSeo title="賽馬會共融．知行計劃" />}
           <VStack align="stretch" spacing={0}>
             {pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>

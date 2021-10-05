@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { Box, VStack, GridItem, SimpleGrid } from "@chakra-ui/layout";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
-import { NextSeo } from "next-seo";
 import {
   HStack,
   chakra,
@@ -85,13 +84,6 @@ const Programme = ({ page }) => {
       spacing={0}
       align="stretch"
     >
-      {page?.content?.seo?.title && (
-        <NextSeo
-          title={page?.content?.seo?.title}
-          description={page?.content?.seo?.description}
-        ></NextSeo>
-      )}
-
       {/* Banner Section */}
       <Anchor id="vision" />
       <Box

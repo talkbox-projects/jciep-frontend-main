@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
-import { NextSeo } from "next-seo";
 import resourceFieldsForCMS from "../../utils/tina/resourceFieldsForCMS";
 import Slider from "react-slick";
 import CategoryTag from "../../components/CategoryTag";
@@ -213,12 +212,6 @@ const Resources = ({ page, enums, setting }) => {
 
   return (
     <VStack w="100%" spacing={0} align="stretch">
-      {page?.content?.seo?.title && (
-        <NextSeo
-          title={page?.content?.seo?.title}
-          description={page?.content?.seo?.description}
-        ></NextSeo>
-      )}
       {/* Banner Section */}
       <Box
         bgImg={`url(${page?.content?.heroBannerSection?.image})`}
