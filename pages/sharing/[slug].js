@@ -88,10 +88,11 @@ const PostHeader = ({ headerTitle, categories, post }) => {
         </Box>
       </Box>
       <Box d={["block", "block", "none"]} position="relative">
-        {headerTitle &&<HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644">
+        {headerTitle && <HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644">
           <ApostropheHeadline>
             {headerTitle}
-          </ApostropheHeadline>}
+          </ApostropheHeadline>
+          }
         </HStack>}
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image alt={post?.title} src={post.coverImage} />
@@ -279,7 +280,7 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <Image alt={caption}
+                        <Image alt={caption ? caption : " "}
                           w="100%"
                           title="postImage"
                           src={image}
