@@ -135,7 +135,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <Divider borderColor="gray.200" />
             <VStack align="stretch">
               <HStack>
-                <Image src={page?.content?.icon?.userIcon} w={6} h={6} />
+                <Image alt=" " src={page?.content?.icon?.userIcon} w={6} h={6} />
                 <Text>
                   {
                     organization?.member?.filter((x) => x.role === "member")
@@ -146,7 +146,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               </HStack>
               {organization?.website && (
                 <HStack>
-                  <Image src={page?.content?.icon?.urlIcon} w={6} h={6} />
+                  <Image alt=" " src={page?.content?.icon?.urlIcon} w={6} h={6} />
                   <Link href={organization?.website} wordBreak="break-word">
                     <Text>{organization?.website}</Text>
                   </Link>

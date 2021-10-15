@@ -373,7 +373,7 @@ const Header = ({
             borderWidth={1}
             pr={6}
           >
-            <Box>
+            <Box as="h1">
               <LinkOverlay as={NextLink} href="/home">
                 <Image alt={navigation?.title} cursor="pointer" p={2} h="100%" src={navigation?.logo} />
               </LinkOverlay>
