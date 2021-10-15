@@ -36,7 +36,7 @@ export default gql`
     employmentType: EnumEmploymentMode
     companyName: String
     jobTitle: String
-    industry: EnumInterestedIndustry
+    industry: EnumIndustry
     industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
@@ -63,7 +63,7 @@ export default gql`
     employmentType: EnumEmploymentMode
     companyName: String
     jobTitle: String
-    industry: EnumInterestedIndustry
+    industry: EnumIndustry
     industryOther: String
     startDatetime: Timestamp
     endDatetime: Timestamp
