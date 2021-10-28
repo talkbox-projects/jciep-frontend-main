@@ -486,7 +486,7 @@ const Header = ({
         bg="white"
         d={["block", "block", "block", "none"]}
       >
-        <HStack align="center" h={16} p={3}>
+        <HStack align="center" h={24} p={3}>
           <LinkOverlay as={NextLink} href="/home">
             <Image alt={navigation?.title} cursor="pointer" h="100%" src={navigation?.logo} />
           </LinkOverlay>
