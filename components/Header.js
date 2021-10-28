@@ -204,10 +204,15 @@ const Header = ({
         // top={isShowLangUnavailable ? 20 : 0}
         w="100%"
         zIndex={100}
-        h={12}
+        h={28}
       >
-        <Container>
-          <HStack py={2} fontSize="sm" alignItems="center" spacing={4}>
+        <Container h="100%">
+          <HStack h="100%"  py={2} fontSize="sm" alignItems="center" spacing={4}>
+            <Box as="h1" h="100%">
+              <LinkOverlay as={NextLink} href="/home">
+                <Image h="100%" alt={navigation?.title} cursor="pointer" p={2} src={navigation?.logo} />
+              </LinkOverlay>
+            </Box>
             {identity?.type === "admin" && (
               <Menu>
                 <MenuButton>
@@ -373,11 +378,6 @@ const Header = ({
             borderWidth={1}
             pr={6}
           >
-            <Box as="h1">
-              <LinkOverlay as={NextLink} href="/home">
-                <Image alt={navigation?.title} cursor="pointer" p={2} h="100%" src={navigation?.logo} />
-              </LinkOverlay>
-            </Box>
             <Box flex={1} minW={0} w="100%" />
             <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
               {(navigation.menu ?? []).map(
