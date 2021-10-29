@@ -451,7 +451,6 @@ const Header = ({
                   </HStack>
                 )
               )}
-              <Box flex={1} minW={0} w="100%" />
               <NextLink
                 href={navigation?.actionButton?.path ?? "/"}
                 target="_blank"
