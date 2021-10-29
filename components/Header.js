@@ -376,10 +376,9 @@ const Header = ({
             bgColor="white"
             boxShadow="sm"
             borderWidth={1}
-            pr={6}
+            px={6}
           >
-            <Box flex={1} minW={0} w="100%" />
-            <HStack spacing={0} justifyContent="stretch" h="100%" border={0}>
+            <HStack spacing={0} w="100%" justifyContent="center" h="100%" border={0}>
               {(navigation.menu ?? []).map(
                 ({ id, submenu = [], label, path = "/" }, index, arr) => (
                   <HStack
@@ -452,6 +451,7 @@ const Header = ({
                   </HStack>
                 )
               )}
+              <Box flex={1} minW={0} w="100%" />
               <NextLink
                 href={navigation?.actionButton?.path ?? "/"}
                 target="_blank"
