@@ -37,7 +37,7 @@ export const youtubeRegex =
   /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
 
 export const passwordRegex =
-  /^(?=.*\d*)(?=.*[a-z]*)(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+  /^(?=.*\d*)(?=.*[a-z]*)(?=.*[A-Z])(?=.*[!@#$%^&*_.,-]).{8,}$/;
 
 export const getYoutubeId = (url) => {
   const match = (url ?? "").match(youtubeRegex);

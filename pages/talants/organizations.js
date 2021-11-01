@@ -171,22 +171,47 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Box pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
-              <Text fontSize="5xl" fontWeight="bold">
-                {wordExtractor(page?.content?.wordings, "page_title")}
-              </Text>
-              <Text fontSize="xl">
-                {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
-                <Link>
-                  <Text d="inline" decoration="underline">
-                    {wordExtractor(
+           <HStack w="100%" align="center">
+              <Box flex={1} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+                <Text fontSize="5xl" fontWeight="bold">
+                  {wordExtractor(page?.content?.wordings, "page_title")}
+                </Text>
+                <Text fontSize="xl">
+                  {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
+                  <Link
+                    href={wordExtractor(
                       page?.content?.wordings,
-                      "page_subtitle_link"
+                      "page_subtitle_url"
                     )}
-                  </Text>
-                </Link>
-              </Text>
-            </Box>
+                  >
+                    <Text d="inline" decoration="underline">
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "page_subtitle_link"
+                      )}
+                    </Text>
+                  </Link>
+                </Text>
+              </Box>
+
+              <Button
+                mt={3}
+                as={Link}
+                target="_blank"
+                href="https://drive.google.com/file/d/1UPStCQEelG6dhV-CXlNVcvflXAhns5il/view"
+                borderRadius="full"
+                color="#000"
+                bg="transparent"
+                variant="outline"
+                _hover={{
+                  bg: "rgba(255,255,255, 0.3)",
+                }}
+                borderColor="#000"
+                
+              >
+                {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
+              </Button>
+            </HStack>
             <Image
               position="absolute"
               bottom={2}

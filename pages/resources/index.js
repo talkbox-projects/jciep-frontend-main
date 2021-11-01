@@ -138,6 +138,13 @@ const Resources = ({ page, enums, setting }) => {
   const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
   const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
 
+
+  const reset = () => {
+    setServiceOrgFilter([]);
+    setServiceTargetFilter([]);
+    setServiceDetailFilter([]);
+  }
+
   const serviceTargetList = useMemo(
     () =>
       enums?.EnumServiceTargetList?.map((target) => ({
@@ -474,6 +481,9 @@ const Resources = ({ page, enums, setting }) => {
               onChange={setServiceDetailFilter}
               list={serviceDetailList}
             />
+            <Button type="reset" onClick={reset} size="sm" variant="link">
+              {wordExtractor(page?.content?.wordings, "reset_label")}
+            </Button>
           </Stack>
           <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
         </Container>
@@ -643,7 +653,26 @@ const Resources = ({ page, enums, setting }) => {
             )}
           </Box>
         </VStack>
-      </Box>
+        <Container>
+          <Button
+            mt={3}
+            as={Link}
+            target="_blank"
+            href="https://drive.google.com/file/d/1DrkfJyOWI1CepayqrHfi3wBaCAQV7C5v/view"
+            borderRadius="full"
+            color="#000"
+            bg="transparent"
+            variant="outline"
+            _hover={{
+              bg: "rgba(255,255,255, 0.3)",
+            }}
+            borderColor="#000"
+            
+          >
+            {wordExtractor(page?.content?.wordings, "resource_download_label")}
+          </Button>
+        </Container>
+     </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
         <Anchor id="equip" top="0" />
