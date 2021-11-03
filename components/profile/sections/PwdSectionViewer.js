@@ -42,6 +42,7 @@ import PortfolioPublishRejectModal from "../fragments/PortfolioPublishRejectModa
 import PortfolioUnpublish from "../../../utils/api/PortfolioUnpublish";
 import PortfolioPublishApprove from "../../../utils/api/PortfolioPublishApprove";
 import PortfolioPublishReject from "../../../utils/api/PortfolioPublishReject";
+import ShareBox from "../../ShareBox";
 
 const PwdSectionViewer = () => {
   const router = useRouter();
@@ -316,6 +317,7 @@ const PwdSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
+        <ShareBox />
         {(isAdmin || editable || staffAccess) && (identity.publishStatus === "approved" ? (
           <Button
             variant="outline"

@@ -14,6 +14,7 @@ import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 import { useAppContext, useDisclosureWithParams } from "../../../store/AppStore";
 import BiographyGallery from "../fragments/BiographyGallery";
+import ShareBox from "../../ShareBox";
 
 export const IdentityBiographySectionViewer = () => {
   const { page, identity, setEditSection, isAdmin, editable, editSection } =
@@ -51,6 +52,7 @@ export const IdentityBiographySectionViewer = () => {
             {wordExtractor(page?.content?.wordings, "section_edit_label")}
           </Button>
         )}
+        
       </HStack>
       {(identity?.biography?.blocks ?? []).map(
         ({ id, type, youtubeUrl, text, file, imageLabel = "image 圖片",  url, urlLabel = url }) => {
