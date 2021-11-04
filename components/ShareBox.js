@@ -1,16 +1,18 @@
 
 
 import { Box, Menu,MenuButton ,IconButton, MenuList, MenuItem , Text} from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RiFacebookBoxLine, RiLinksLine, RiShareLine, RiWhatsappLine } from "react-icons/ri";
 import useClipboard from "react-use-clipboard";
-import {useRouter} from "next/router";
+
 
 const ShareBox = () => {
 
-
-    const router = useRouter();
-    const [, setCopied] = useClipboard(`${process.env.HOST_URL}/${router.locale}${router.asPath}`);
+    const [url, setUrl] = useState("");
+    useEffect(() => {
+        setUrl(window.location.href);
+    }, [])
+    const [, setCopied] = useClipboard(url);
 
 
     return <Box>
