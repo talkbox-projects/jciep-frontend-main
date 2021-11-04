@@ -272,13 +272,13 @@ const IdentityOpportunities = ({
                 {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
               </Button>
             </Stack>
-            <Image alt=" "
+            {/* <Image alt=" "
               position="absolute"
               bottom={2}
               right={2}
               w={["300px", "300px", "400px", "400px", "400px"]}
               src={page?.content?.banner?.bgImageRight}
-            />
+            /> */}
           </Container>
         </Box>
 
