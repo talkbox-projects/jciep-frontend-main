@@ -224,8 +224,8 @@ const IdentityOpportunities = ({
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <HStack align="stretch">
-              <Box pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <HStack w="100%" align="center">
+              <Box flex={1} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
                 </Text>
@@ -261,7 +261,7 @@ const IdentityOpportunities = ({
                 borderColor="#000"
                 
               >
-                {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
+                {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
               </Button>
             </HStack>
             <Image alt=""
