@@ -3,6 +3,7 @@ import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 import {
+  Stack,
   Divider,
   HStack,
   Image,
@@ -171,8 +172,8 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-           <HStack w="100%" align="center">
-              <Box flex={1} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Stack direction={["column", "column", "row", "row"]} w="100%"  align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+              <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
                 </Text>
@@ -209,9 +210,9 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                 borderColor="#000"
                 
               >
-                {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
+                {wordExtractor(page?.content?.wordings, "page_tutorial_organization_link")}
               </Button>
-            </HStack>
+            </Stack>
             <Image
               position="absolute"
               bottom={2}

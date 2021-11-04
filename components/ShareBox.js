@@ -10,7 +10,7 @@ const ShareBox = () => {
 
 
     const router = useRouter();
-    const [, setCopied] = useClipboard(`${router.locale}${router.asPath}`);
+    const [, setCopied] = useClipboard(`${process.env.HOST_URL}/${router.locale}${router.asPath}`);
 
 
     return <Box>

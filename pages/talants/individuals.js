@@ -3,6 +3,7 @@ import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 import {
+  Stack,
   Divider,
   HStack,
   Image,
@@ -32,6 +33,7 @@ import ActivitySection from "../../components/profile/sections/ActivitySection";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import organizationSearch from "../../utils/api/OrganizationSearch";
 import ConnectedOrganization from "../../components/profile/sections/ConnectedOrganization";
+import { NextSeo } from "next-seo";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -212,8 +214,14 @@ const IdentityOpportunities = ({
     </VStack>
   );
 
+
+  const seo = <NextSeo
+    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"}${identity?.chineseName ? `| ${identity?.chineseName}`: identity?.chineseName}`}
+    description={page?.content?.seo?.description} />
+
   return (
     <>
+      {seo} 
       <VStack spacing={0} align="stretch" w="100%">
         <Box
           d={!router.query.identityId ? "block" : ["none", "none", "block"]}
@@ -224,8 +232,8 @@ const IdentityOpportunities = ({
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <HStack w="100%" align="center">
-              <Box flex={1} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Stack direction={["column", "column", "row", "row"]} w="100%"  align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+              <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
                 </Text>
@@ -263,8 +271,8 @@ const IdentityOpportunities = ({
               >
                 {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
               </Button>
-            </HStack>
-            <Image alt=""
+            </Stack>
+            <Image alt=" "
               position="absolute"
               bottom={2}
               right={2}
