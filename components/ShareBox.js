@@ -6,12 +6,14 @@ import { RiFacebookBoxLine, RiLinksLine, RiShareLine, RiWhatsappLine } from "rea
 import useClipboard from "react-use-clipboard";
 
 
-const ShareBox = () => {
+
+
+const ShareBox = ({ identityId = "" }) => {
 
     const [url, setUrl] = useState("");
     useEffect(() => {
-        setUrl(window.location.href);
-    }, [])
+        setUrl(`${window.location.host}/talants/individuals?identityId=${identityId}`);
+    }, [identityId])
     const [, setCopied] = useClipboard(url);
 
 

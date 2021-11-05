@@ -29,7 +29,6 @@ import {
   MdRadioButtonChecked,
   MdArrowDropDown,
 } from "react-icons/md";
-import { useEffect, useState } from "react";
 import {
   useAppContext,
   useDisclosureWithParams,
@@ -41,7 +40,6 @@ import PortfolioPublishApproveModal from "../fragments/PortfolioPublishApproveMo
 import PortfolioPublishRejectModal from "../fragments/PortfolioPublishRejectModal";
 import PortfolioUnpublish from "../../../utils/api/PortfolioUnpublish";
 import PortfolioPublishApprove from "../../../utils/api/PortfolioPublishApprove";
-import PortfolioPublishReject from "../../../utils/api/PortfolioPublishReject";
 import ShareBox from "../../ShareBox";
 
 const PwdSectionViewer = () => {
@@ -317,7 +315,7 @@ const PwdSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        <ShareBox />
+        <ShareBox identityId={identity?.id ?? router.query.identityId} />
         {(isAdmin || editable || staffAccess) && (identity.publishStatus === "approved" ? (
           <Button
             variant="outline"
