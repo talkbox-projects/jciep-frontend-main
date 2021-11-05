@@ -23,8 +23,8 @@ const ShareBox = ({ identityId = "" }) => {
                 <IconButton borderRadius="50%" icon={<RiShareLine />}></IconButton>
             </MenuButton>
             <MenuList>
-                <MenuItem onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(window.location.href)}`)} icon={<RiWhatsappLine size={20} />}>Whatsapp</MenuItem>
-                <MenuItem onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`)}  icon={<RiFacebookBoxLine size={20} />}>Facebook</MenuItem>
+                <MenuItem onClick={() => window.open(`https://wa.me/?text=${url}`)} icon={<RiWhatsappLine size={20} />}>Whatsapp</MenuItem>
+                <MenuItem onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`)}  icon={<RiFacebookBoxLine size={20} />}>Facebook</MenuItem>
                 
                 <MenuItem onClick={setCopied} icon={<RiLinksLine size={20} />}><Text>Copy Link</Text></MenuItem>
             </MenuList>
