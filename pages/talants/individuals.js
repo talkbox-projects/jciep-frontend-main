@@ -258,7 +258,7 @@ const IdentityOpportunities = ({
                 mt={3}
                 as={Link}
                 target="_blank"
-                href="https://drive.google.com/file/d/1vh0zp5HT7eG7qSiKEvdLF5z4CziYxIrL/view"
+                href="https://drive.google.com/file/d/1yeuAoCZug-1pEc92u1Vf09lIS-7ZN9j8/view"
                 borderRadius="full"
                 color="#000"
                 bg="transparent"
@@ -272,13 +272,13 @@ const IdentityOpportunities = ({
                 {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
               </Button>
             </Stack>
-            {/* <Image alt=" "
+            <Image alt=" "
               position="absolute"
               bottom={2}
               right={2}
               w={["300px", "300px", "400px", "400px", "400px"]}
               src={page?.content?.banner?.bgImageRight}
-            /> */}
+            />
           </Container>
         </Box>
 
