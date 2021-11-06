@@ -105,7 +105,6 @@ const Card = ({
 }) => {
   const [show, setShow] = useState(false);
 
-  console.log(organization)
   return (
     <Box
       borderTop={`8px solid ${topColor ? topColor : "#4E7F8E"}`}
