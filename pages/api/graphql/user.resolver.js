@@ -12,7 +12,7 @@ import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
+const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 export default {
   Query: {
@@ -252,7 +252,7 @@ export default {
           await emailVerify.delete();
 
           const { identities, ..._user } = user.toObject();
-          const token = jwt.sign(_user, "shhhhh").toString();
+          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           return { token, user };
         }
@@ -262,7 +262,7 @@ export default {
         }).populate("identities");
         if (await user?.comparePassword(input?.password)) {
           const { identities, ..._user } = user.toObject();
-          const token = jwt.sign(_user, "shhhhh").toString();
+          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           return { token, user };
         } else {
@@ -284,7 +284,7 @@ export default {
           ).populate("identities");
 
           const { identities, ..._user } = user.toObject();
-          const token = jwt.sign(_user, "shhhhh").toString();
+          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           return { token, user };
         }
@@ -301,7 +301,7 @@ export default {
           user = await new User({ facebookId: snsMeta.id }).save();
         }
         const { identities, ..._user } = user.toObject();
-        const token = jwt.sign(_user, "shhhhh").toString();
+        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
         return { token, user };
@@ -318,7 +318,7 @@ export default {
           user = await new User({ googleId: snsMeta.id }).save();
         }
         const { identities, ..._user } = user.toObject();
-        const token = jwt.sign(_user, "shhhhh").toString();
+        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
         return { token, user };
@@ -335,7 +335,7 @@ export default {
           user = await new User({ appleId: snsMeta.id }).save();
         }
         const { identities, ..._user } = user.toObject();
-        const token = jwt.sign(_user, "shhhhh").toString();
+        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
         return { token, user };
@@ -344,9 +344,10 @@ export default {
       return null;
     },
 
-    UserGet: async (_parent, { token }) => {
+    UserGet: async (_parent, { token }, { user }) => {
+      console.log("[Graphql userGet] user=", user);
       try {
-        let decorderUser = jwt.decode(token, "shhhhh");
+        let decorderUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
         let user = await User.findById(decorderUser._id).populate("identities");
 
         let identities = user.identities.map(async (identity) => {

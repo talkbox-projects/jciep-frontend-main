@@ -25,6 +25,8 @@ import enumSchema from "./enum.schema";
 import enumResolver from "./enum.resolver";
 import jwt from "jsonwebtoken";
 import { User } from "./user.model";
+import getConfig from "next/config";
+const { serverRuntimeConfig } = getConfig();
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -59,11 +61,10 @@ const apolloServer = new ApolloServer({
   ]),
   context: async (context) => {
     try {
-      const token = nookies.get(context);
+      const token = nookies.get(context)?.["jciep-token"];
 
       if (token) {
-        let user = jwt.decode(token, "shhhhh");
-        console.log("[Graphql context] user=", user)
+        let user = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
         if (user) {
           user = await User.findById(user._id).populate("identities");
           return { user, context };
