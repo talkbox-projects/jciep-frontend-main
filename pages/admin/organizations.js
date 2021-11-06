@@ -1,17 +1,14 @@
 import {
   Avatar,
-  Box,
   CircularProgress,
   FormControl,
   FormLabel,
   GridItem,
-  HStack,
   Input,
   Tag,
   SimpleGrid,
   Text,
   VStack,
-  Button,
 } from "@chakra-ui/react";
 import moment from "moment";
 
@@ -22,7 +19,7 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import MultiSelect from "react-select";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -44,7 +41,6 @@ const AdminOrganization = ({ enums }) => {
   const [organizations, setOrganizations] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const days = [ "7 days", "1 month", "3 months"]
   const [params, setParams] = useState({
     status: enums?.EnumOrganizationStatusList.map((x) => x.key),
     type: enums?.EnumOrganizationTypeList.map((x) => x.key),
@@ -77,7 +73,7 @@ const AdminOrganization = ({ enums }) => {
     });
   }, [fetchOrganizations, params]);
 
-  const getTypeFilter = useCallback(() => {
+  const getTypeFilter = () => {
     const options = (enums?.EnumOrganizationTypeList ?? []).map(
       ({ key: value, value: { [router.locale]: label } }) => ({
         label,
@@ -96,9 +92,9 @@ const AdminOrganization = ({ enums }) => {
         options={options}
       ></MultiSelect>
     );
-  }, [enums, params]);
+  };
 
-  const getStatusFilter = useCallback(() => {
+  const getStatusFilter = () => {
     const options = (enums?.EnumOrganizationStatusList ?? []).map(
       ({ key: value, value: { [router.locale]: label } }) => ({
         label,
@@ -117,9 +113,9 @@ const AdminOrganization = ({ enums }) => {
         options={options}
       ></MultiSelect>
     );
-  }, [enums, params]);
+  };
 
-  const getDaysFilter = useCallback(() => {
+  const getDaysFilter = () => {
     const options = [
       { value: "All", label: 'All' },
       { value: "7 Days", label: '7 Days' },
@@ -136,7 +132,7 @@ const AdminOrganization = ({ enums }) => {
     options={options}
   ></MultiSelect>
         
-  })
+  };
 
   return (
     <VStack align="stretch" pt={[24, 48]}>
@@ -152,7 +148,7 @@ const AdminOrganization = ({ enums }) => {
               <Input
                 value={params?.name}
                 onChange={(e) =>
-                  setParams((_) => ({ ...params, name: e.target.value }))
+                  setParams({ ...params, name: e.target.value })
                 }
               ></Input>
             </FormControl>
@@ -185,7 +181,7 @@ const AdminOrganization = ({ enums }) => {
                 (organization?.submission ?? [])?.[0]?.status ===
                 "pendingApproval";
               return (
-                <NextLink href={`/user/organization/${organization.id}`}>
+                <NextLink key={organization.id} href={`/user/organization/${organization.id}`}>
                   <SimpleGrid columns={3} marginTop="0px">
                     <GridItem  borderBottom="1px solid lightgrey" padding="20px 0px" marginTop="0px"   >
                     <Avatar size="sm" src={organization?.logo?.url}></Avatar>
@@ -205,35 +201,6 @@ const AdminOrganization = ({ enums }) => {
                     {hasPendingApproval && <Tag>待處理申請</Tag>}
                     </GridItem>
                   </SimpleGrid>
-                  {/* <HStack
-                    borderBottomWidth={1}
-                    borderColor="#eee"
-                    spacing={4}
-                    px={6}
-                    py={4}
-                    key={organization.id}
-                    _hover={{
-                      bg: "#fafafa",
-                    }}
-                    cursor="pointer"
-                  >
-                    <Avatar size="sm" src={organization?.logo?.url}></Avatar>
-                    <Text>
-                      {router.locale === "zh"
-                        ? organization?.chineseCompanyName
-                        : organization?.englishCompanyName}
-                    </Text>
-
-                    
-                    <Box flex={1} minW={0} w="75%"></Box>
-                    <Text>
-                        {moment(organization?.createdAt).format("YYYY-MM-DD")}
-
-                    </Text>
-                    
-
-                    {hasPendingApproval && <Tag>待處理申請</Tag>}
-                  </HStack> */}
                 </NextLink>
               );
             })}

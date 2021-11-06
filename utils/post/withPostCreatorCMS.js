@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import { getGraphQLClient } from "../apollo";
 import React from "react";
-import Understand from "twilio/lib/rest/preview/Understand";
 
 const withPostCreatorCMS = (Component) => {
   const PostCreator = (props) => {

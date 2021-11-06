@@ -302,7 +302,7 @@ const IdentityOpportunities = ({
                   {wordExtractor(page?.content?.wordings, "organization_text")}
                 </option>
                 {(organizations ?? []).map(
-                  ({ id, chineseCompanyName, enghlishCompanyName }) => (
+                  ({ id, chineseCompanyName }) => (
                     <option key={id} value={id}>
                       {chineseCompanyName}
                     </option>

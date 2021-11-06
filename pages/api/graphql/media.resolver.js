@@ -14,6 +14,7 @@ export const createFile = async (stream, { filename, options }) => {
     stream
       .pipe(uploadStream)
       .on("error", (e) => {
+        console.error(e);
         reject();
       })
       .on("finish", () => {

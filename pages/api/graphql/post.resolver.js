@@ -103,7 +103,7 @@ export default {
 
     PostDelete: async (_parent, { input: { id } }) => {
       try {
-        const post = await PostModel.findByIdAndDelete(id);
+        await PostModel.findByIdAndDelete(id);
         return true;
       } catch (error) {
         return false;
@@ -111,7 +111,7 @@ export default {
     },
 
     PostRead: async (_parent, { id }) => {
-      const post = await PostModel.findByIdAndUpdate(id, {
+      await PostModel.findByIdAndUpdate(id, {
         $inc: { viewCount: 1 },
       }).exec();
       return true;

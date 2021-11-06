@@ -120,7 +120,7 @@ const OrganizationMemberListSection = ({ path }) => {
                       e.stopPropagation();
                       approveDisclosure.onOpen({
                         page,
-                        onSubmit: async (e) => {
+                        onSubmit: async () => {
                           try {
                             await OrganizationMemberApprove({
                               organizationId: organization?.id,
@@ -153,7 +153,7 @@ const OrganizationMemberListSection = ({ path }) => {
                       e.stopPropagation();
                       removeDisclosure.onOpen({
                         page,
-                        onSubmit: async (e) => {
+                        onSubmit: async () => {
                           try {
                             await OrganizationMemberRemove({
                               organizationId: organization?.id,

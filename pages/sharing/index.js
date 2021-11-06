@@ -81,7 +81,7 @@ const Sharing = ({ page, setting, lang }) => {
       );
       pageRef.current++;
     } catch (err) {
-      console.log("***** error", err);
+      console.error("***** error", err);
     }
   }, [page?.content?.latestSection?.numOfPostsPerPage, router.query.category]);
 
@@ -112,7 +112,7 @@ const Sharing = ({ page, setting, lang }) => {
       });
       setHottestPosts(data);
     } catch (err) {
-      console.log("***** error", err);
+      console.error("***** error", err);
     }
   }, [page?.content?.hotestSection?.numOfPosts]);
 
@@ -486,7 +486,7 @@ const Sharing = ({ page, setting, lang }) => {
                 </Box>
               </Box>
               <Wrap spacing={2}>
-                {(categories ?? []).map((category, i) => (
+                {(categories ?? []).map((category) => (
                   <WrapItem
                     key={category.key}
                     cursor="pointer"

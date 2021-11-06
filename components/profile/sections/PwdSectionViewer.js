@@ -279,10 +279,8 @@ const PwdSectionViewer = () => {
       } else {
         return (
           <Menu placement="bottom-end">
-            <MenuButton>
-              <Button rightIcon={<MdArrowDropDown />} variant="outline">
+            <MenuButton as={Button} rightIcon={<MdArrowDropDown />} variant="outline">
                 {text}
-              </Button>
             </MenuButton>
             <MenuList>
               {menuItems.map(({ label, key, color, onClick }) => (

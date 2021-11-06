@@ -7,6 +7,7 @@ import organizationGet from "../../../utils/api/OrganizationGet";
 import OrganizationNgoProfile from "../../../components/profile/OrganizationNgoProfile";
 import OrganizationEmploymentProfile from "../../../components/profile/OrganizationEmploymentProfile";
 import { useAppContext } from "../../../store/AppStore";
+import React from "react";
 
 const PAGE_KEY = "identity_id_profile";
 

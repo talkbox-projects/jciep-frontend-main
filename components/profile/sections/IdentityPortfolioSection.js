@@ -9,14 +9,12 @@ import {
   Icon,
   SimpleGrid,
   IconButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   RiAddFill,
   RiCloseCircleFill,
   RiEdit2Line,
-  RiFilePdfLine,
 } from "react-icons/ri";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -48,7 +46,7 @@ const IdentityPortfolioSection = () => {
   const galleryDisclosure = useDisclosureWithParams();
 
   const isEditable = useMemo(() => editSection === "portfolio", [editSection]);
-  const { identity: { id, type, organizationRole} = {} } = useAppContext();
+  const { identity: { type, organizationRole} = {} } = useAppContext();
   const [staffAccess, setStaffAccess] = useState(false) 
 
   const onItemRemove = useCallback(
@@ -102,7 +100,7 @@ const IdentityPortfolioSection = () => {
      }   
     }
 
-  }, [type, identity])
+  }, [type, identity, organizationRole])
 
   const onSave = useCallback(async () => {
     try {
@@ -111,7 +109,7 @@ const IdentityPortfolioSection = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [identity, medias]);
+  }, [identity?.id, medias, removeEditSection, saveIdentity]);
 
   return (
     <SectionCard>

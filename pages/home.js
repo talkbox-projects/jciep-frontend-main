@@ -393,7 +393,7 @@ const Home = ({ setting, page }) => {
           interval={3000}
           showStatus={false}
           showThumbs={false}
-          renderArrowPrev={(clickHandler, hasPrev, label) => {
+          renderArrowPrev={(clickHandler, hasPrev) => {
             return hasPrev ? (
               <HStack
                 px={3}
@@ -413,7 +413,7 @@ const Home = ({ setting, page }) => {
               </HStack>
             ) : null;
           }}
-          renderArrowNext={(clickHandler, hasNext, label) => {
+          renderArrowNext={(clickHandler, hasNext) => {
             return hasNext ? (
               <HStack
                 px={3}
@@ -549,7 +549,7 @@ const Home = ({ setting, page }) => {
               </TabList>
               <TabPanels>
                 {(page?.content?.roleIntroduction?.roles ?? []).map(
-                  ({ id, description, link, features }) => (
+                  ({ id, description, features }) => (
                     <TabPanel px={0} key={id} py={12}>
                       <Text w={["100%", "50%"]}>
                         {(description ?? []).map(

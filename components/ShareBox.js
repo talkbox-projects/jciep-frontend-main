@@ -19,9 +19,7 @@ const ShareBox = ({ identityId = "" }) => {
 
     return <Box>
         <Menu>
-            <MenuButton>
-                <IconButton borderRadius="50%" icon={<RiShareLine />}></IconButton>
-            </MenuButton>
+            <MenuButton as={IconButton} borderRadius="50%" icon={<RiShareLine />} />
             <MenuList>
                 <MenuItem onClick={() => window.open(`https://wa.me/?text=${url}`)} icon={<RiWhatsappLine size={20} />}>Whatsapp</MenuItem>
                 <MenuItem onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`)}  icon={<RiFacebookBoxLine size={20} />}>Facebook</MenuItem>

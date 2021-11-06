@@ -63,6 +63,7 @@ const apolloServer = new ApolloServer({
 
       if (token) {
         let user = jwt.decode(token, "shhhhh");
+        console.log("[Graphql context] user=", user)
         if (user) {
           user = await User.findById(user._id).populate("identities");
           return { user, context };

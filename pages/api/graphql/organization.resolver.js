@@ -2,7 +2,7 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import { Organization, OrganizationSubmission } from "./organization.model";
-import { EmailVerify, Identity, User } from "./user.model";
+import { Identity } from "./user.model";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -125,7 +125,7 @@ export default {
     },
   },
   Mutation: {
-    OrganizationSubmissionCreate: async (_parent, params, context) => {
+    OrganizationSubmissionCreate: async (_parent, params) => {
       /**
        * Create an organization submission (type can be ngo/employment)
        *
@@ -143,7 +143,7 @@ export default {
 
       const identity = await Identity.findById(params?.input?.identityId);
 
-      let organization = new Promise(async (resolve, reject) => {
+      let organization = new Promise(async (resolve) => {
         if (params.input.organizationId) {
           let organization = await Organization.findById(
             params.input.organizationId

@@ -1,12 +1,10 @@
 import {
-  Box,
   VStack,
   Tag,
   Text,
   HStack,
   Avatar,
   Button,
-  Link,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AiOutlineUserAdd } from "react-icons/ai";
@@ -17,6 +15,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationMemberJoinModal from "../fragments/OrganzationMemberJoinModal";
 import SectionCard from "../fragments/SectionCard";
 import NextLink from "next/link";
+import React from "react";
 
 const IdentityOrganizationListSection = () => {
   const { identity, page, enums, refreshIdentity } =
@@ -88,7 +87,7 @@ const IdentityOrganizationListSection = () => {
           (identity?.organizationRole ?? []).map(
             ({ organization, role, status }) => {
               return (
-                <HStack
+                <HStack key={organization.id}
                   onClick={() => {
                     router.push(`/user/organization/${organization.id}`);
                   }}

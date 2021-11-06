@@ -4,8 +4,6 @@ import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
 import { VStack } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
 

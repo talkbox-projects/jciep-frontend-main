@@ -12,7 +12,7 @@ import {
   FormLabel,
   Link
 } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../../utils/page/getPage";
@@ -42,11 +42,11 @@ export const getServerSideProps = async (context) => {
 
 
 const customStyles = {
-  multiValue: (provided, state) => {
+  multiValue: (provided) => {
     const borderRadius = "15px"  
     return { ...provided, borderRadius };
   },
-  multiValueRemove: (provided, state) => {
+  multiValueRemove: (provided) => {
     const color = "grey"
     return {...provided, color}
   }
@@ -59,13 +59,12 @@ const IdentityPublicAdd = ({ page }) => {
 
   const {
     handleSubmit,
-    setError,
     register,
     control,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = useCallback(
+  const onFormSubmit = 
     async ({
       chinese_name,
       english_name,
@@ -106,10 +105,10 @@ const IdentityPublicAdd = ({ page }) => {
           router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
-  );
+  ;
 
   return (
     <VStack py={36}>
@@ -152,7 +151,7 @@ const IdentityPublicAdd = ({ page }) => {
                   />
                   <FormHelperText>
                     {errors?.chinese_name?.type === "required" && (
-                      <Text color="red" color="red">
+                      <Text color="red">
                         {/* 輸入有效的中文名稱 Enter valid chinese name! */}
                         {wordExtractor(
                         page?.content?.wordings,

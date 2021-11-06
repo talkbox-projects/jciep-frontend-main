@@ -23,7 +23,6 @@ import {
 import {
   IoLogoFacebook,
   IoLogoGoogle,
-  IoLogoApple,
   IoMdPhonePortrait,
 } from "react-icons/io";
 import { AiOutlineMail } from "react-icons/ai";
@@ -34,7 +33,6 @@ import { useCredential } from "../utils/user";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import router from "next/router";
 import GoogleLogin from "react-google-login";
-import AppleLogin from "react-apple-login";
 import userLogin from "../utils/api/UserLogin";
 
 const LoginModal = () => {

@@ -2,11 +2,8 @@ import React from "react";
 import { useEffect } from "react";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPage } from "../../utils/page/getPage";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { VStack } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../utils/apollo";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../utils/user";
 import userLogin from "../../utils/api/UserLogin";
@@ -26,7 +23,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const GoogleLogin = ({ page }) => {
+const GoogleLogin = () => {
   const router = useRouter();
   const { accessToken } = router.query;
   const [setCredential] = useCredential();
@@ -52,11 +49,10 @@ const GoogleLogin = ({ page }) => {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     })();
 
-    console.log(accessToken);
   }, [accessToken, router, setCredential]);
 
   return (

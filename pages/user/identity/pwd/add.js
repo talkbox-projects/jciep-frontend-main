@@ -13,11 +13,10 @@ import {
   Link, 
   FormLabel,
 } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -43,11 +42,11 @@ export const getServerSideProps = async (context) => {
 };
 
 const customStyles = {
-  multiValue: (provided, state) => {
+  multiValue: (provided) => {
     const borderRadius = "15px";
     return { ...provided, borderRadius };
   },
-  multiValueRemove: (provided, state) => {
+  multiValueRemove: (provided) => {
     const color = "grey";
     return { ...provided, color };
   },
@@ -59,14 +58,12 @@ const IdentityPwdAdd = ({ page }) => {
 
   const {
     handleSubmit,
-    setError,
-    setValue,
     register,
     control,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = useCallback(
+  const onFormSubmit = 
     async ({
       chinese_name,
       english_name,
@@ -120,7 +117,7 @@ const IdentityPwdAdd = ({ page }) => {
         console.error(e);
       }
     }
-  );
+  ;
 
 
   return (

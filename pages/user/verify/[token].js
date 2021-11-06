@@ -17,7 +17,6 @@ import { useGetWording } from "../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { getPage } from "../../../utils/page/getPage";
-import { getConfiguration } from "../../../utils/configuration/getConfiguration";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
@@ -60,111 +59,6 @@ const VerifyToken = ({ page }) => {
   const onUserCreate = useCallback(
     async ({ password }) => {
       try {
-        const mutation = gql`
-          mutation UserLogin($input: LoginInput!) {
-            UserLogin(input: $input) {
-              token
-              user {
-                id
-                email
-                phone
-                facebookId
-                googleId
-                appleId
-                snsMeta {
-                  profilePicUrl
-                  displayName
-                }
-                identities {
-                  id
-                  type
-                  publishStatus
-                  chineseName
-                  englishName
-                  dob
-                  gender
-                  district
-                  pwdType
-                  interestedEmploymentMode
-                  interestedIndustry
-                  industry
-                  industryOther
-                  tncAccept
-                  published
-                  email
-                  phone
-                  profilePic {
-                    id
-                    url
-                    contentType
-                    fileSize
-                  }
-                  bannerMedia {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  yearOfExperience
-                  biography
-                  portfolio {
-                    file {
-                      id
-                      url
-                      contentType
-                      fileSize
-                    }
-                    videoUrl
-                    title
-                    description
-                  }
-                  writtenLanguage
-                  writtenLanguageOther
-                  oralLanguage
-                  oralLanguageOther
-                  hobby
-                  education {
-                    school
-                    degree
-                    fieldOfStudy
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  organizationRole {
-                    organization {
-                      id
-                    }
-                    status
-                    role
-                  }
-                  employment {
-                    employmentType
-                    companyName
-                    jobTitle
-                    industry
-                    industryOther
-                    startDatetime
-                    endDatetime
-                    present
-                  }
-                  activity {
-                    name
-                    description
-                    startDatetime
-                    endDatetime
-                  }
-                }
-              }
-            }
-          }
-        `;
-
         const data = await userLogin({
           input: {
             emailVerificationToken,
@@ -216,7 +110,7 @@ const VerifyToken = ({ page }) => {
         });
       }
     })();
-  }, [emailVerificationToken]);
+  }, [emailVerificationToken, getWording, setError]);
 
   if (!emailVerify) {
     return (

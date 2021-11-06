@@ -20,7 +20,7 @@ const gateways = {
         url: requestUrl,
       };
 
-      const response = await request(options);
+      await request(options);
 
 
       return true;
@@ -44,7 +44,7 @@ const gateways = {
         method: "GET",
         url: requestUrl,
       };
-      const response = await request(options);
+      await request(options);
       return true;
     } catch (error) {
       return false;

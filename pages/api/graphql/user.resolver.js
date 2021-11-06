@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
@@ -112,7 +113,7 @@ export default {
       return identities;
     },
 
-    IdentityGet: async (_parent, { id }, { user }, args) => {
+    IdentityGet: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
 
       const organizations = await Organization.find({

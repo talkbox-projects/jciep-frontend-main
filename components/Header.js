@@ -33,7 +33,6 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCMS } from "tinacms";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
 import { useAppContext } from "../store/AppStore";
@@ -99,7 +98,6 @@ const Header = ({
     }, undefined);
   }, [router.pathname]);
 
-  const cms = useCMS();
   const [setCredential, removeCredential] = useCredential();
 
   const onIdentitySwitch = useCallback(
@@ -153,6 +151,7 @@ const Header = ({
         const data = await getGraphQLClient().request(query);
         setEnumIdentityTypeList(data.EnumIdentityTypeList);
       } catch (e) {
+        console.error(e);
       }
     })();
   }, []);

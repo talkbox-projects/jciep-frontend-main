@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Text } from "@chakra-ui/react";
 import React, { useCallback } from "react";
 

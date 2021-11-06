@@ -7,7 +7,6 @@ import {
   Input,
   SimpleGrid,
   GridItem,
-  Checkbox,
   FormHelperText,
   FormLabel,
   Textarea,
@@ -19,15 +18,13 @@ import {
   RiCloseCircleFill,
   
 } from "react-icons/ri";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import ReactSelect from "react-select";
 
-import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
-import Link from "next/link";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
@@ -50,11 +47,11 @@ export const getServerSideProps = async (context) => {
 
 
 const customStyles = {
-  multiValue: (provided, state) => {
+  multiValue: (provided) => {
     const borderRadius = "15px"  
     return { ...provided, borderRadius };
   },
-  multiValueRemove: (provided, state) => {
+  multiValueRemove: (provided) => {
     const color = "grey"
     return {...provided, color}
   }
@@ -68,7 +65,6 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
 
   const {
     handleSubmit,
-    setError,
     register,
     control,
     formState: { errors, isSubmitting },
@@ -84,7 +80,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
     }
   };
 
-  const onFormSubmit = useCallback(
+  const onFormSubmit = 
     async ({
       chineseCompanyName,
       englishCompanyName,
@@ -149,7 +145,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
         console.error(e);
       }
     }
-  );
+  ;
 
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
@@ -354,7 +350,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
                   {files.map((file, index) => {
                     let url = URL.createObjectURL(file);
                     return (
-                      <Box
+                      <Box key={url+index}
                           w={["100%", "47.5%", "23.5%"]}
                           h={["250px", "210px", "180px"]}
                           display="inline-block"

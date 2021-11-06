@@ -1,4 +1,5 @@
-console.log(process.env.MONGODB_URL);
+/* eslint-disable no-undef */
+
 module.exports = {
   serverRuntimeConfig: {
     MONGODB_URL: process.env.MONGODB_URL,
@@ -24,7 +25,7 @@ module.exports = {
     defaultLocale: "zh",
     localeDetection: false,
   },
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif)$/i,
       use: [

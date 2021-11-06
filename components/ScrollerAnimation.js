@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text, VStack } from "@chakra-ui/layout";
-import { SimpleGrid, chakra, GridItem, Heading, Image } from "@chakra-ui/react";
+import { SimpleGrid, GridItem, Heading, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 // import { Scroll } from  "framer";
 
@@ -17,13 +17,11 @@ const ScrollerAnimation = ({
   endTitle,
 }) => {
   let Scroll = () => <div></div>;
-  let Frame = () => <div></div>;
   if (
     typeof window !== "undefined" &&
     typeof window.navigator !== "undefined"
   ) {
     Scroll = require("framer").Scroll;
-    Frame = require("framer").Frame;
   }
 
 

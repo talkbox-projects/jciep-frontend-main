@@ -13,7 +13,6 @@ import {
   Text,
   VStack,
   IconButton,
-  Wrap,
 } from "@chakra-ui/react";
 import moment from "moment";
 
@@ -190,7 +189,7 @@ const AdminIdentity = ({ enums }) => {
               <Input
                 value={params?.name}
                 onChange={(e) =>
-                  setParams((_) => ({
+                  setParams(() => ({
                     ...params,
                     page: 1,
                     limit: PAGE_LIMIT,

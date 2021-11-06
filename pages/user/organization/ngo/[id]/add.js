@@ -10,7 +10,7 @@ import {
   FormHelperText,
   FormLabel,
   Textarea} from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
@@ -42,12 +42,11 @@ const OrganizationNgoAdd = ({ page }) => {
 
   const {
     handleSubmit,
-    setError,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = useCallback(
+  const onFormSubmit = 
     async ({
       chineseOrganizationName,
       englishOrganizationName,
@@ -82,10 +81,10 @@ const OrganizationNgoAdd = ({ page }) => {
           );
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
-  );
+  ;
 
   return (
     <VStack py={36}>

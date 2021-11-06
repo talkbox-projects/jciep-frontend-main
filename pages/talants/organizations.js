@@ -13,7 +13,6 @@ import {
   Link,
   Button,
   Avatar,
-  Select,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";

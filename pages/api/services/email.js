@@ -9,8 +9,8 @@ sgMail.setApiKey(
 //  - Text
 //  - Html
 
-exports.sendEmail = ({ To, Subject, Text, Html }) => {
-  return new Promise((resolve, reject) => {
+exports.sendEmail = ({ To, Subject, Text }) => {
+  return new Promise((resolve) => {
     const msg = {
       to: To,
       from: "timtalkbox@gmail.com",

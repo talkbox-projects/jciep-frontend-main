@@ -1,11 +1,10 @@
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import React from "react";
 import getConfig from "next/config";
-const { serverRuntimeConfig } = getConfig();
 
 import {
   Box,
@@ -18,7 +17,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalOverlay,
-  useToast,
   Button,
   VStack,
   HStack,
@@ -28,7 +26,6 @@ import {
 import {
   IoLogoFacebook,
   IoLogoGoogle,
-  IoLogoApple,
   IoMdPhonePortrait,
 } from "react-icons/io";
 import { AiOutlineMail } from "react-icons/ai";
@@ -36,7 +33,6 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../utils/apollo";
 import { useGetWording } from "../utils/wordings/useWording";
 import router from "next/router";
-import AppleLogin from "react-apple-login";
 import { emailRegex } from "../utils/general";
 
 const RegisterModal = () => {
@@ -58,20 +54,19 @@ const RegisterModal = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-  const toast = useToast();
 
   useEffect(() => {
     if (!registerModalDisclosure.isOpen) {
       reset();
     }
-  }, [registerModalDisclosure.isOpen]);
+  }, [registerModalDisclosure.isOpen, reset]);
 
   const [publicRuntimeConfig, setPublicRuntimeConfig] = useState({});
   useEffect(() => {
     setPublicRuntimeConfig(getConfig().publicRuntimeConfig);
   }, []);
 
-  const onPhoneRegister = useCallback(async ({ phone }) => {
+  const onPhoneRegister = async ({ phone }) => {
     try {
       const mutation = gql`
         mutation UserPhoneVerify($phone: String!) {
@@ -92,7 +87,7 @@ const RegisterModal = () => {
         message: getWording("register.register_error_message"),
       });
     }
-  });
+  };
 
   const responseFacebook = (response) => {
     if (!response.accessToken) return;
@@ -106,7 +101,7 @@ const RegisterModal = () => {
     registerModalDisclosure.onClose();
   };
 
-  const onEmailRegister = useCallback(async ({ e, email }) => {
+  const onEmailRegister = async ({ e, email }) => {
     try {
 
       const mutation = gql`
@@ -124,7 +119,7 @@ const RegisterModal = () => {
         message: getWording("register.register_error_message"),
       });
     }
-  });
+  };
 
   return (
     <Modal

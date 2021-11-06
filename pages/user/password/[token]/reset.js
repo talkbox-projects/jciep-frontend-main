@@ -18,7 +18,6 @@ import { useGetWording } from "../../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { getPage } from "../../../../utils/page/getPage";
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import { useCredential } from "../../../../utils/user";
@@ -50,7 +49,6 @@ const VerifyToken = ({ page }) => {
 
   const {
     handleSubmit,
-    setError,
     register,
     getValues,
     formState: { errors, isSubmitting },

@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import { useForm, Controller } from "react-hook-form";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import OrganizationSubmissionCreate from "../../../utils/api/OrganizationSubmissionCreate";
 import { emailRegex, urlRegex } from "../../../utils/general";
 import ProfileDropzone from "./ProfileDropzone";
@@ -32,7 +32,7 @@ const OrganizationSubmissionFormModal = ({
   onClose,
   params: { organization, submission = null, onRefresh } = {},
 }) => {
-  const { page, enums, setOrganization } =
+  const { page, enums } =
     OrganizationProfileStore.useContext();
   const router = useRouter();
 
@@ -43,18 +43,18 @@ const OrganizationSubmissionFormModal = ({
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({});
 
   useEffect(() => {
     reset();
-  }, []);
+  }, [reset]);
 
 
-  const onSubmissionCreate = useCallback(
+  const onSubmissionCreate = 
     async (values) => {
       try {
-        const _submission = await OrganizationSubmissionCreate({
+        await OrganizationSubmissionCreate({
           input: { identityId, organizationId: organization.id, ...values },
         });
         onRefresh();
@@ -62,9 +62,7 @@ const OrganizationSubmissionFormModal = ({
       } catch (error) {
         console.error(error);
       }
-    },
-    [organization, onRefresh, onClose]
-  );
+    };
 
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>

@@ -12,7 +12,7 @@ import {
   Link,
   FormLabel,
 } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
@@ -46,13 +46,11 @@ const IdentityEmployerAdd = ({ page }) => {
 
   const {
     handleSubmit,
-    setError,
     register,
-    control,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = useCallback(
+  const onFormSubmit = 
     async ({
       contactPersonName,
       contactEmailAdress,
@@ -92,10 +90,10 @@ const IdentityEmployerAdd = ({ page }) => {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
-  );
+  ;
 
   return (
     <VStack py={36}>
