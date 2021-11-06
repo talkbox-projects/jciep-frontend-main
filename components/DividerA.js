@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-
+import React from "react";
 const DividerA = ({
   primaryColor = "#00BFBA",
   secondaryColor = "#FFFFFF",
@@ -11,9 +11,9 @@ const DividerA = ({
         <g
           id="bg/colorBorder/2"
           stroke="none"
-          stroke-width="1"
+          strokeWidth="1"
           fill="none"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         >
           <g id="border1" mask="url(#mask-2)">
             <g transform="translate(-264.000000, 0.973844)">

@@ -1,12 +1,11 @@
 import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
-import { useAppContext } from "../../../../../store/AppStore";
 import { useCredential } from "../../../../../utils/user";
 import { useRouter } from "next/router";
+import React from "react";
 
 const PAGE_KEY = "identity_pwd_add_success";
 
@@ -23,9 +22,8 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPwdAddSuccess = ({ page }) => {
-  const { user } = useAppContext();
   const router = useRouter();
-  const [setCredential, removeCredential] = useCredential();
+  const [, removeCredential] = useCredential();
 
   const logout = () => {
     removeCredential();

@@ -336,22 +336,22 @@ const Home = ({ setting, page }) => {
                         </Box>
                       )}
                     </Box>
-                      <Box as={Button}
-                        onClick={() => {
-                          link && router.push(link)
-                        }}
-                        variant="link"
-                        {...link && { cursor: "pointer" }}
-                        borderWidth={4}
-                        borderColor="white"
-                        borderRadius={32}
-                        bgImage={`url(${image})`}
-                        bgSize="cover"
-                        bgPos="center"
-                        w="240px"
-                        h="240px"
-                        maxW="100%"
-                      />
+                    <Box as={Button}
+                      onClick={() => {
+                        link && router.push(link)
+                      }}
+                      variant="link"
+                      {...link && { cursor: "pointer" }}
+                      borderWidth={4}
+                      borderColor="white"
+                      borderRadius={32}
+                      bgImage={`url(${image})`}
+                      bgSize="cover"
+                      bgPos="center"
+                      w="240px"
+                      h="240px"
+                      maxW="100%"
+                    />
                   </Box>
                 )
               )}
@@ -407,7 +407,7 @@ const Home = ({ setting, page }) => {
                   cursor="pointer"
                   onClick={clickHandler}
                   variant="unstyled"
-                  round={true}
+                  rounded="full"
                   as={FaArrowLeft}
                 />
               </HStack>
@@ -427,7 +427,7 @@ const Home = ({ setting, page }) => {
                   cursor="pointer"
                   onClick={clickHandler}
                   variant="unstyled"
-                  round={true}
+                  rounded="full"
                   as={FaArrowRight}
                 />
               </HStack>
@@ -449,7 +449,7 @@ const Home = ({ setting, page }) => {
                     <Box w={["100%", "60%", "50%", "50%", "40%"]}>
                       <Image alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
                     </Box>
-                    <VStack 
+                    <VStack
                       px={8}
                       align="start"
                       flex={[0, 0, 0, 1]}

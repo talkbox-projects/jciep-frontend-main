@@ -17,6 +17,7 @@ export const getCurrentUser = async (context) => {
     try {
         const token = nookies.get(context)?.["jciep-token"];
         const currentIdentityId = nookies.get(context)?.["jciep-identityId"];
+        console.log(nookies.get(context));
 
         if (token) {
             const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
@@ -31,4 +32,8 @@ export const getCurrentUser = async (context) => {
         console.log("getCurrentUser", error);
         return null;
     }
+}
+
+export const isAdmin = (auth = null) => {
+    return auth?.identity?.type === "admin";
 }

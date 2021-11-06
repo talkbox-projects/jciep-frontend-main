@@ -13,7 +13,6 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import Link from "next/link";
 import React, { useState } from "react";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
-import { useAppContext } from "../../../store/AppStore";
 import { useRouter } from "next/router";
 import { useCredential } from "../../../utils/user";
 const PAGE_KEY = "identity_select";
@@ -33,9 +32,8 @@ export const getServerSideProps = async (context) => {
 
 const IdentitySelect = ({ page }) => {
   const [selectedRole, setSelectedRole] = useState("/user/identity/pwd/add");
-  const { user } = useAppContext();
   const router = useRouter();
-  const [setCredential, removeCredential] = useCredential();
+  const [, removeCredential] = useCredential();
 
   const logout = () => {
     removeCredential();
@@ -167,7 +165,7 @@ const IdentitySelect = ({ page }) => {
                 </Text>
               </Box>
             </GridItem>
-            <GridItem  minHeight="320px" as={Button} variant="unstyled">
+            <GridItem minHeight="320px" as={Button} variant="unstyled">
               <Box
                 minHeight="320px"
                 textAlign="center"

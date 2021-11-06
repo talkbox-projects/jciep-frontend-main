@@ -47,9 +47,8 @@ import { gql } from "graphql-request";
 import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
-// import { IoWarning } from "react-icons/io5";
 import ResetPasswordModal from "./ResetPasswordModal";
-import userGet from "../utils/api/UserGet";
+import userMeGet from "../utils/api/UserMeGet";
 
 const Header = ({
   navigation,
@@ -122,11 +121,8 @@ const Header = ({
   useEffect(() => {
     (async () => {
       try {
-        const token = nookies.get("jciep-token")?.["jciep-token"];
-
-        const data = await userGet({ token: token });
-
-        setCredential({ token, user: data });
+        const user = await userMeGet();
+        setCredential({ user });
       } catch (e) {
         removeCredential();
       }
@@ -156,10 +152,10 @@ const Header = ({
     })();
   }, []);
 
-  const onLogout = useCallback(() => {
+  const onLogout = () => {
     removeCredential();
     router.push("/");
-  }, [router, removeCredential]);
+  };
 
   // useEffect(() => {
   //   if (router.pathname) setIsShowLangUnavailable(!isLangAvailable);
@@ -204,7 +200,7 @@ const Header = ({
         h={28}
       >
         <Container h="100%">
-          <HStack h="100%"  py={2} fontSize="sm" alignItems="center" spacing={4}>
+          <HStack h="100%" py={2} fontSize="sm" alignItems="center" spacing={4}>
             <Box as="h1" h="100%">
               <LinkOverlay as={NextLink} href="/home">
                 <Image h="100%" alt={navigation?.title} cursor="pointer" p={2} src={navigation?.logo} />
@@ -267,21 +263,21 @@ const Header = ({
               <PopoverTrigger>
                 {
                   !isLoggedIn ?
-                  <Button aria-label={router.locale === "en" ? "Login/Logout" : "登入/登出"} variant="unstyled">
-                    <Avatar size="xs" alt=" "></Avatar>
-                  </Button> : 
-                  <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
-                    <Avatar size="xs" alt=" "></Avatar>
-                  </Button>
+                    <Button aria-label={router.locale === "en" ? "Login/Logout" : "登入/登出"} variant="unstyled">
+                      <Avatar size="xs" alt=" "></Avatar>
+                    </Button> :
+                    <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
+                      <Avatar size="xs" alt=" "></Avatar>
+                    </Button>
                 }
               </PopoverTrigger>
               {!isLoggedIn ? (
                 <PopoverContent p={3} w={48}>
                   <VStack align="stretch">
-                    <Button variant="link"  onClick={loginModalDisclosure.onOpen}>
+                    <Button variant="link" onClick={loginModalDisclosure.onOpen}>
                       {getWording("header.login_label")}
                     </Button>
-                    <Button variant="link"  onClick={registerModalDisclosure.onOpen}>
+                    <Button variant="link" onClick={registerModalDisclosure.onOpen}>
                       {getWording("header.register_label")}
                     </Button>
                   </VStack>
@@ -401,14 +397,14 @@ const Header = ({
                           <PopoverTrigger>
                             <Box h="100%">
                               {/* <NextLink href={path}> */}
-                                <Button
-                                  h="100%"
-                                  variant="unstyled"
-                                  borderRadius={0}
-                                  fontWeight="normal"
-                                >
-                                  {label}
-                                </Button>
+                              <Button
+                                h="100%"
+                                variant="unstyled"
+                                borderRadius={0}
+                                fontWeight="normal"
+                              >
+                                {label}
+                              </Button>
                               {/* </NextLink> */}
                             </Box>
                           </PopoverTrigger>
@@ -452,7 +448,7 @@ const Header = ({
                 href={navigation?.actionButton?.path ?? "/"}
                 target="_blank"
               >
-                <Button 
+                <Button
                   variant="outline"
                   colorScheme="secondary"
                   color="#08A3A3"
@@ -550,7 +546,7 @@ const Header = ({
                     {!isLoggedIn ? (
                       <PopoverContent p={3} w={48}>
                         <VStack align="stretch">
-                          <Button variant="link" 
+                          <Button variant="link"
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               loginModalDisclosure.onOpen();
@@ -558,7 +554,7 @@ const Header = ({
                           >
                             {getWording("header.login_label")}
                           </Button>
-                          <Button variant="link" 
+                          <Button variant="link"
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               registerModalDisclosure.onOpen();

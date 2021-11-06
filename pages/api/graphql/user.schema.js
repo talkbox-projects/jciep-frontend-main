@@ -215,7 +215,6 @@ export default gql`
 
   type LoginOutput {
     user: User!
-    token: String!
   }
 
   type UserEmailValidityCheckOutput {
@@ -237,6 +236,8 @@ export default gql`
       page: Int!
     ): [User]
 
+
+    UserMeGet: User
 
     """
     Search Identtiy by either phone, email or name. Search the name of every identities.
@@ -262,7 +263,6 @@ export default gql`
     UserEmailVerify(email: String!): Boolean
 
     UserLogin(input: LoginInput): LoginOutput
-    UserGet(token: String!): User
     UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean

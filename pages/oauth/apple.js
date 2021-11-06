@@ -40,16 +40,14 @@ const AppleLogin = ({ id_token: accessToken }) => {
   useEffect(() => {
     (async () => {
       try {
-        
+
 
         const variables = {
           input: {
             appleToken: accessToken,
           },
         };
-
-        const data = await userLogin(variables)
-        // const data = await getGraphQLClient().request(mutation, variables);
+        const data = await userLogin(variables);
         setCredential(data);
         if (data) {
           const user = data?.user;

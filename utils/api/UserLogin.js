@@ -5,7 +5,6 @@ const userLogin = async ({ input }, context) => {
   const mutation = gql`
     mutation UserLogin($input: LoginInput) {
       UserLogin(input: $input) {
-        token
         user {
           id
           email

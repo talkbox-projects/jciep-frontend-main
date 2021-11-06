@@ -65,10 +65,7 @@ const VerifyToken = ({ page }) => {
             password,
           },
         });
-        setCredential({
-          token: data?.token,
-          user: data?.user,
-        });
+        setCredential(data);
         setIdentityId(data?.user?.identities?.[0]?.id ?? null);
         router.push("/user/identity/select");
       } catch (e) {

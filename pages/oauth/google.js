@@ -36,8 +36,6 @@ const GoogleLogin = () => {
             googleToken: accessToken,
           },
         };
-
-        // const data = await getGraphQLClient().request(mutation, variables);
         const data = await userLogin(variables);
         setCredential(data);
         if (data) {

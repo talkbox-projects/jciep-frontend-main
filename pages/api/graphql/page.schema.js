@@ -19,11 +19,9 @@ export default gql`
   }
 
   type Query {
-    "return null if not exists"
     PageGet(key: String!, lang: Language!): Page
   }
   type Mutation {
-    "header: x-token, require 'adminUser'"
     PageUpdate(input: PageUpdateInput): Page
   }
 `;

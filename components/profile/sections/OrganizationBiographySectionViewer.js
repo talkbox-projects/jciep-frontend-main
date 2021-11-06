@@ -19,7 +19,7 @@ export const OrganizationBiographySectionViewer = () => {
   const { page, organization, setEditSection, isAdmin, editable, editSection } =
     OrganizationProfileStore.useContext();
 
-    const galleryDisclosure = useDisclosureWithParams();
+  const galleryDisclosure = useDisclosureWithParams();
   return (
     <VStack px={8} pb={8} align="stretch">
       <HStack py={4} align="center">
@@ -58,7 +58,7 @@ export const OrganizationBiographySectionViewer = () => {
               }} alt={imageLabel} src={file?.url} />;
               break;
             case "text":
-              comp = <Text  whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
+              comp = <Text whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
               break;
             case "url":
               comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-all">{urlLabel}</Text></Link>;

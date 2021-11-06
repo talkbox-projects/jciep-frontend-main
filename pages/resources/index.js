@@ -95,7 +95,7 @@ const ServiceFilter = ({
         {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
         {label}
       </Text>
-      </MenuButton>
+    </MenuButton>
     <Portal>
       <MenuList maxW="100vw" minWidth="240px">
         <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
@@ -209,10 +209,10 @@ const Resources = ({ page, enums, setting }) => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
       setTimeout(() => {
-      document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
-        block: "start",
-        behavior: "smooth",
-      });
+        document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
       }, 300)
     }
   }, [router]);
@@ -581,7 +581,7 @@ const Resources = ({ page, enums, setting }) => {
               <IconButton
                 borderRadius="50%"
                 variant="unstyled"
-                round={true}
+                rounded="full"
                 size="md"
                 as={FaArrowRight}
               />
@@ -667,12 +667,12 @@ const Resources = ({ page, enums, setting }) => {
               bg: "rgba(255,255,255, 0.3)",
             }}
             borderColor="#000"
-            
+
           >
             {wordExtractor(page?.content?.wordings, "resource_download_label")}
           </Button>
         </Container>
-     </Box>
+      </Box>
       {/* Equip Section */}
       <Box overflow="hidden" bg="red" pos="relative">
         <Anchor id="equip" top="0" />

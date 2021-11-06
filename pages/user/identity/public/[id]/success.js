@@ -23,9 +23,8 @@ export const getServerSideProps = async (context) => {
   };
 };
 const IdentityPublicAddSuccess = ({ page }) => {
-  const { user } = useAppContext();
   const router = useRouter();
-  const [setCredential, removeCredential] = useCredential();
+  const [, removeCredential] = useCredential();
 
   const logout = () => {
     removeCredential();

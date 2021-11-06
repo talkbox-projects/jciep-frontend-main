@@ -79,7 +79,7 @@ const PostHeader = ({ headerTitle, categories, post }) => {
           </AspectRatio>
         </Box>
         <HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644" minH="320px">
-          {headerTitle &&<ApostropheHeadline>
+          {headerTitle && <ApostropheHeadline>
             {headerTitle}
           </ApostropheHeadline>}
         </HStack>
@@ -342,7 +342,7 @@ const PostDetail = ({ post, setting, page }) => {
 
         <VStack align="center" py={8}>
           <NextLink href="/sharing">
-            <Button 
+            <Button
               color="black"
               mx="auto"
               fontWeight="bold"
@@ -350,7 +350,7 @@ const PostDetail = ({ post, setting, page }) => {
               borderRadius="3xl"
               colorScheme="primary"
               bgColor="primary.400"
-              >
+            >
               {wordExtractor(page?.content?.wordings, "backToHome")}
             </Button>
           </NextLink>
@@ -392,13 +392,13 @@ const PostDetail = ({ post, setting, page }) => {
 
       {nextPost && (
         <>
-        <Box w="100%" cursor="pointer" >
-          <NextLink passHref href={`/sharing/${nextPost?.slug}`}>
-            <Link d="block">
-              <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
-            </Link>
-          </NextLink>
-        </Box></>
+          <Box w="100%" cursor="pointer" >
+            <NextLink passHref href={`/sharing/${nextPost?.slug}`}>
+              <Link d="block">
+                <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
+              </Link>
+            </NextLink>
+          </Box></>
       )}
     </VStack>
   );

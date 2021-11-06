@@ -100,10 +100,9 @@ const LoginModal = () => {
             password,
           },
         };
-
         const data = await userLogin(variables);
-
         setCredential(data);
+
         loginModalDisclosure.onClose();
         if (data) {
           const user = data.user;

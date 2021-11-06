@@ -1,10 +1,10 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const userGet = async ({ token }, context) => {
-  const mutation = gql`
-    mutation UserGet($token: String!) {
-      UserGet(token: $token) {
+const userMeGet = async (params, context) => {
+  const query = gql`
+    query UserMeGet {
+      UserMeGet {
         id
         email
         phone
@@ -105,9 +105,9 @@ const userGet = async ({ token }, context) => {
     }
   `;
 
-  const data = await getGraphQLClient(context).request(mutation, { token });
+  const data = await getGraphQLClient(context).request(query);
 
-  return data?.UserGet;
+  return data?.UserMeGet;
 };
 
-export default userGet;
+export default userMeGet;

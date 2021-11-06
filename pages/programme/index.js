@@ -67,10 +67,10 @@ const Programme = ({ page }) => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
       setTimeout(() => {
-      document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
-        block: "start",
-        behavior: "smooth",
-      });
+        document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
       }, 300)
     }
   }, [router]);
@@ -123,7 +123,7 @@ const Programme = ({ page }) => {
           <Container>
             <Box position="relative" zIndex={2} pb={16}>
               <VStack mx={8} align="start" spacing={0}>
-                {page?.content?.heroBannerSection["title 標題"] &&<Text
+                {page?.content?.heroBannerSection["title 標題"] && <Text
                   p={1}
                   w="max"
                   maxW="80%"
@@ -203,7 +203,7 @@ const Programme = ({ page }) => {
             >
               {page?.content?.visionSection?.title}
             </Text>
-            <Box fontSize={["lg", "xl", "xl"]} textAlign="center" text>
+            <Box fontSize={["lg", "xl", "xl"]} textAlign="center">
               <MultiTextRenderer data={page?.content?.visionSection?.detail} />
             </Box>
             {(page?.content?.visionSection?.sections ?? []).map(
@@ -256,9 +256,9 @@ const Programme = ({ page }) => {
                 h={["320px", "320px", "480px", "720px"]}
                 src={page?.content?.visionSection?.videoLink}
                 title="PWD Video"
-                frameborder="0"
+                frameBorder="0"
                 allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
+                allowFullScreen
               />
             )}
           </VStack>
@@ -303,42 +303,42 @@ const Programme = ({ page }) => {
                   <NextLink key={i} passHref href={`/programme/partner/${slug}`}>
                     <Link d="block"
                       w={["100%", "100%", "40%", "25%"]}>
-                        <VStack w="100%"
-                      position="relative"
-                      transition="all 0.2s"
-                      borderWidth={[0, 0, 0, 2]}
-                      borderColor="#C6C6C6"
-                      boxShadow={["lg", "lg", "lg", "none"]}
-                      bg={["white", "white", "white", "#FAFAFA"]}
-                      _hover={{
-                        borderColor: "transparent",
-                        boxShadow: "lg",
-                        bg: "white",
-                        opacity: 1,
-                      }}
-                      cursor="pointer"
-                      borderRadius={16}
-                      key={id}
-                      py={5}
-                      px={5}
-                      h={["250px", "320px"]}
-                      textAlign="left"
-                      align="left"
-                      zIndex="10"
-                    >
-                      <Text fontWeight="bold" fontSize="2xl">
-                        {agencyName}
-                      </Text>
-                      <Text fontSize="lg">{projectName}</Text>
-                      <Box flex={1} minH="max-content" h="100%" />
-                      <Image alt={agencyName}
-                        w={["75%"]}
-                        src={contact?.watermark}
-                        position="absolute"
-                        bottom={0}
-                        right={0}
-                      ></Image></VStack>
-                      </Link>
+                      <VStack w="100%"
+                        position="relative"
+                        transition="all 0.2s"
+                        borderWidth={[0, 0, 0, 2]}
+                        borderColor="#C6C6C6"
+                        boxShadow={["lg", "lg", "lg", "none"]}
+                        bg={["white", "white", "white", "#FAFAFA"]}
+                        _hover={{
+                          borderColor: "transparent",
+                          boxShadow: "lg",
+                          bg: "white",
+                          opacity: 1,
+                        }}
+                        cursor="pointer"
+                        borderRadius={16}
+                        key={id}
+                        py={5}
+                        px={5}
+                        h={["250px", "320px"]}
+                        textAlign="left"
+                        align="left"
+                        zIndex="10"
+                      >
+                        <Text fontWeight="bold" fontSize="2xl">
+                          {agencyName}
+                        </Text>
+                        <Text fontSize="lg">{projectName}</Text>
+                        <Box flex={1} minH="max-content" h="100%" />
+                        <Image alt={agencyName}
+                          w={["75%"]}
+                          src={contact?.watermark}
+                          position="absolute"
+                          bottom={0}
+                          right={0}
+                        ></Image></VStack>
+                    </Link>
                   </NextLink>
                 )
               )}

@@ -12,7 +12,7 @@ import {
 import { useCallback } from "react";
 
 const BiographyGallery = ({ isOpen, onClose, params }) => {
-  
+
 
   const getImageComponent = useCallback((item) => {
     return (

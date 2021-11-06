@@ -11,6 +11,7 @@ import send from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
+import nookies from "nookies";
 import getConfig from "next/config";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
@@ -19,6 +20,45 @@ export default {
     UserEmailValidityCheck: async (_parent, { token }) => {
       try {
         return await EmailVerify.findOne({ token });
+      } catch (error) {
+        return null;
+      }
+    },
+
+
+    UserMeGet: async (_parent, params, { auth }) => {
+      console.log("[Graphql userGet] auth=", auth);
+      try {
+        let user = auth.user;
+
+        const identities = user.identities.map(async (identity) => {
+          const organizations = await Organization.find({
+            member: { $elemMatch: { identityId: identity._id } },
+          });
+
+          let organizationRole = await (organizations ?? []).map(
+            (organization) => {
+              const member = organization.member.find(
+                ({ identityId }) => String(identityId) === String(identity._id)
+              );
+              return {
+                organization,
+                status: member.status,
+                role: member.role,
+              };
+            }
+          );
+
+          identity = identity.toObject();
+          identity.organizationRole = organizationRole;
+          identity.id = identity._id;
+          return identity;
+        });
+
+        user = user.toObject();
+        user.id = user._id;
+        user.identities = await Promise.all(identities);
+        return user;
       } catch (error) {
         return null;
       }
@@ -197,7 +237,7 @@ export default {
         return false;
       }
     },
-    UserLogin: async (_parent, { input }, { context }) => {
+    UserLogin: async (_parent, { input }, context) => {
       /**
        * Login via facebook/google/apple/email+password/phone+otp method. 
        * 
@@ -254,7 +294,9 @@ export default {
           const { identities, ..._user } = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
-          return { token, user };
+          nookies.set(context, "jciep-token", token, { path: "/" });
+
+          return { user };
         }
       } else if (input?.email && input?.password) {
         const user = await User.findOne({
@@ -264,7 +306,8 @@ export default {
           const { identities, ..._user } = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
-          return { token, user };
+          nookies.set(context, "jciep-token", token, { path: "/" });
+          return { user };
         } else {
           throw new Error("Wrong Email and Password!");
         }
@@ -286,7 +329,8 @@ export default {
           const { identities, ..._user } = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
-          return { token, user };
+          nookies.set(context, "jciep-token", token, { path: "/" });
+          return { user };
         }
       } else if (input.facebookToken) {
         const snsMeta = await facebook.getProfile(input.facebookToken);
@@ -304,7 +348,8 @@ export default {
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
-        return { token, user };
+        nookies.set(context, "jciep-token", token, { path: "/" });
+        return { user };
       } else if (input.googleToken) {
         let snsMeta = await google.getProfile(input.googleToken);
         if (!snsMeta) {
@@ -321,7 +366,9 @@ export default {
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
-        return { token, user };
+
+        nookies.set(context, "jciep-token", token, { path: "/" });
+        return { user };
       } else if (input.appleToken) {
         let snsMeta = await apple.getProfile(input.appleToken);
         if (!snsMeta) {
@@ -338,52 +385,19 @@ export default {
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
-        return { token, user };
+
+        nookies.set(context, "jciep-token", token, { path: "/" });
+        return { user };
       }
 
       return null;
     },
 
-    UserGet: async (_parent, { token }, { auth }) => {
-      console.log("[Graphql userGet] auth=", auth);
-      try {
-        let decorderUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
-        let user = await User.findById(decorderUser._id).populate("identities");
 
-        let identities = user.identities.map(async (identity) => {
-          const organizations = await Organization.find({
-            member: { $elemMatch: { identityId: identity._id } },
-          });
 
-          let organizationRole = await (organizations ?? []).map(
-            (organization) => {
-              const member = organization.member.find(
-                ({ identityId }) => String(identityId) === String(identity._id)
-              );
-              return {
-                organization,
-                status: member.status,
-                role: member.role,
-              };
-            }
-          );
+    UserLogout: (_parent, params, context) => {
 
-          identity = identity.toObject();
-          identity.organizationRole = organizationRole;
-          identity.id = identity._id;
-          return identity;
-        });
-
-        user = user.toObject();
-        user.id = user._id;
-        user.identities = await Promise.all(identities);
-        return user;
-      } catch (error) {
-        return null;
-      }
-    },
-
-    UserLogout: (_parent, { _context }) => {
+      nookies.destroy(context, "jciep-token", { path: "/" });
       return true;
     },
 

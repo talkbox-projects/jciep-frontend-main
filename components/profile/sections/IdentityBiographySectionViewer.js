@@ -20,20 +20,20 @@ export const IdentityBiographySectionViewer = () => {
   const { page, identity, setEditSection, isAdmin, editable, editSection } =
     IdentityProfileStore.useContext();
 
-    const { identity: { type, organizationRole} = {} } = useAppContext();
-    const galleryDisclosure = useDisclosureWithParams();
+  const { identity: { type, organizationRole } = {} } = useAppContext();
+  const galleryDisclosure = useDisclosureWithParams();
 
-    const staffAccess = useMemo(() => {
-      if (type === "staff" && organizationRole?.length > 0) {
-        return (organizationRole ?? []).find(
-          (role) =>
-            role.organization.id === organizationRole[0].organization.id &&
-            organizationRole[0].role === "staff" &&
-            organizationRole[0].status === "joined"
-        );
-      }
-      return false;
-    }, [organizationRole, type]);
+  const staffAccess = useMemo(() => {
+    if (type === "staff" && organizationRole?.length > 0) {
+      return (organizationRole ?? []).find(
+        (role) =>
+          role.organization.id === organizationRole[0].organization.id &&
+          organizationRole[0].role === "staff" &&
+          organizationRole[0].status === "joined"
+      );
+    }
+    return false;
+  }, [organizationRole, type]);
 
 
   return (
@@ -52,10 +52,10 @@ export const IdentityBiographySectionViewer = () => {
             {wordExtractor(page?.content?.wordings, "section_edit_label")}
           </Button>
         )}
-        
+
       </HStack>
       {(identity?.biography?.blocks ?? []).map(
-        ({ id, type, youtubeUrl, text, file, imageLabel = "image 圖片",  url, urlLabel = url }) => {
+        ({ id, type, youtubeUrl, text, file, imageLabel = "image 圖片", url, urlLabel = url }) => {
           let comp = null;
           switch (type) {
             case "youtube": {
@@ -74,13 +74,13 @@ export const IdentityBiographySectionViewer = () => {
                 });
               }} alt={imageLabel} src={file?.url} />;
               break;
-              case "text":
-                comp = <Text whiteSpace="pre-line" wordBreak="break-all">{text}</Text>;
-                break;
-              case "url":
-                comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-all">{urlLabel}</Text></Link>;
-                break;
-              default:
+            case "text":
+              comp = <Text whiteSpace="pre-line" wordBreak="break-all">{text}</Text>;
+              break;
+            case "url":
+              comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-all">{urlLabel}</Text></Link>;
+              break;
+            default:
           }
           return (
             <HStack key={id} align="start">
