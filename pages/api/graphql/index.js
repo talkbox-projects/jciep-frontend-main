@@ -3,7 +3,6 @@ import {
   mergeResolvers,
   mergeTypeDefs,
 } from "apollo-server-micro";
-import nookies from "nookies";
 import connectDB from "../../../server/db";
 import { processRequest } from "graphql-upload";
 import mediaResolver from "./media.resolver";
@@ -23,10 +22,9 @@ import userResolver from "./user.resolver";
 import organizationResolver from "./organization.resolver";
 import enumSchema from "./enum.schema";
 import enumResolver from "./enum.resolver";
-import jwt from "jsonwebtoken";
-import { User } from "./user.model";
 import getConfig from "next/config";
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig } = getConfig();
+import { getCurrentUser } from "../../../utils/auth";
 
 const apolloServer = new ApolloServer({
   uploads: false,
@@ -35,46 +33,30 @@ const apolloServer = new ApolloServer({
   typeDefs: mergeTypeDefs([
     /* enum */
     enumSchema,
-
     sharedSchema,
     mediaSchema,
     fileSchema,
     pageSchema,
     postSchema,
     configurationSchema,
-
     organizationSchema,
     userSchema,
   ]),
   resolvers: mergeResolvers([
     /* enum */
     enumResolver,
-
     mediaResolver,
     fileResolver,
     pageResolver,
     postResolver,
     configurationResolver,
-
     organizationResolver,
     userResolver,
   ]),
   context: async (context) => {
-    try {
-      const token = nookies.get(context)?.["jciep-token"];
-
-      if (token) {
-        let user = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
-        if (user) {
-          user = await User.findById(user._id).populate("identities");
-          return { user, context };
-        }
-      }
-      return { user: null, context };
-    } catch (error) {
-      return { user: null, context };
-    }
-  },
+    context.auth = await getCurrentUser(context);
+    return context
+  }
 });
 
 export const config = {

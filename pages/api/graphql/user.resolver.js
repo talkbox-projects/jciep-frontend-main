@@ -344,8 +344,8 @@ export default {
       return null;
     },
 
-    UserGet: async (_parent, { token }, { user }) => {
-      console.log("[Graphql userGet] user=", user);
+    UserGet: async (_parent, { token }, { auth }) => {
+      console.log("[Graphql userGet] auth=", auth);
       try {
         let decorderUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
         let user = await User.findById(decorderUser._id).populate("identities");
