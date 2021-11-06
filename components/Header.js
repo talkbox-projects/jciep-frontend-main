@@ -130,7 +130,6 @@ const Header = ({
 
         setCredential({ token, user: data });
       } catch (e) {
-        console.log(e);
         removeCredential();
       }
     })();
@@ -154,7 +153,6 @@ const Header = ({
         const data = await getGraphQLClient().request(query);
         setEnumIdentityTypeList(data.EnumIdentityTypeList);
       } catch (e) {
-        console.log(e);
       }
     })();
   }, []);

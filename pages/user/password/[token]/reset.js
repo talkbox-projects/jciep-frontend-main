@@ -68,7 +68,7 @@ const VerifyToken = ({ page }) => {
         });
         router.push("/");
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     [getWording, removeCredential, resetPasswordToken, router, toast]

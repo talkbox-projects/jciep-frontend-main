@@ -95,7 +95,6 @@ const IdentityPortfolioSection = () => {
         && organizationRole[0].status === "joined" 
       )[0]
        
-      console.log(hasStaffAccess)
      if(hasStaffAccess) {
       setStaffAccess(true)
      } else {

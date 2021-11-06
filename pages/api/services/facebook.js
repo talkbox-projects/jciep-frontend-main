@@ -15,7 +15,6 @@ export default {
         profilePicUrl,
       };
     } catch (e) {
-      console.log(e);
       return null;
     }
   },

@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
-import nookies from "nookies";
 import jwt from "jsonwebtoken";
 import sendSms from "../services/phone";
 import facebook from "../services/facebook";
@@ -31,7 +30,6 @@ export default {
 
       let keys = {};
 
-      console.log(input);
 
       let date = new Date();
       if (input.days === "7 Days") {
@@ -99,7 +97,6 @@ export default {
               ({ identityId }) => String(identityId) === String(identity.id)
             );
             if (member) {
-              console.log(member);
               _a.push({
                 organization,
                 status: member.status,
@@ -239,7 +236,6 @@ export default {
 
        */
 
-      console.log(input);
       if (input?.emailVerificationToken) {
         const emailVerify = await EmailVerify.findOne({
           token: input?.emailVerificationToken,
@@ -384,7 +380,6 @@ export default {
         user.identities = await Promise.all(identities);
         return user;
       } catch (error) {
-        console.log(error);
         return null;
       }
     },
@@ -444,7 +439,6 @@ export default {
           token,
         });
 
-        console.log(emailVerify);
 
         const { type } = emailVerify?.meta || {};
 

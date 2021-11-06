@@ -88,7 +88,6 @@ export default {
         await bucket.delete(file._id);
         return true;
       } catch (error) {
-        console.log(error);
         return false;
       }
     },

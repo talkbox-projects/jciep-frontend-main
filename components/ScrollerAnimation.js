@@ -26,15 +26,11 @@ const ScrollerAnimation = ({
     Frame = require("framer").Frame;
   }
 
-  const onScroll = (info) => {
-    console.log(info.offset, info.velocity);
-  };
 
   return (
     <Scroll
       width="100%"
       height="100vh"
-      onScroll={onScroll}
       direction="vertical"
     >
       {/* Second Section */}

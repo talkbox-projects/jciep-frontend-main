@@ -7,17 +7,15 @@ import {
   Input,
   SimpleGrid,
   GridItem,
-  Select,
   Checkbox,
   FormHelperText,
   Link,
   FormLabel,
 } from "@chakra-ui/react";
-import { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 
-import { getConfiguration } from "../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 
@@ -92,7 +90,7 @@ const IdentityStaffAdd = ({ page }) => {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   );
@@ -232,7 +230,6 @@ const IdentityStaffAdd = ({ page }) => {
                         validity: async (invitationCode) => {
                           try {
                             if (!invitationCode) return true;
-                            console.log(invitationCode)
 
                             const valid =
                               await OrganizationInvitationCodeValidity({
@@ -240,7 +237,6 @@ const IdentityStaffAdd = ({ page }) => {
                                 organizationType: "ngo",
                               });
 
-                              console.log(valid)
                             if (!valid) {
                               return wordExtractor(
                                 page?.content?.wordings,

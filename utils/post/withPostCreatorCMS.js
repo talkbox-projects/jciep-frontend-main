@@ -64,7 +64,6 @@ const withPostCreatorCMS = (Component) => {
           router.push(`/sharing/${values.slug}`);
         } catch (err) {
           cms.alerts.error("Error creating Post: " + err);
-          console.log("Error creating Post", err);
         }
       },
     };

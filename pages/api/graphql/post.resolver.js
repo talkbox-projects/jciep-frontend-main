@@ -78,7 +78,6 @@ export default {
         .sort({ publishDate: -1, _id: 1 })
         .limit(limit)
         .exec();
-      // console.log(" @@@ Mongooose return", posts);
       return posts;
     },
   },
@@ -112,7 +111,6 @@ export default {
     },
 
     PostRead: async (_parent, { id }) => {
-      console.log("Received id", id);
       const post = await PostModel.findByIdAndUpdate(id, {
         $inc: { viewCount: 1 },
       }).exec();

@@ -68,7 +68,6 @@ const RegisterModal = () => {
 
   const [publicRuntimeConfig, setPublicRuntimeConfig] = useState({});
   useEffect(() => {
-    console.log(getConfig().publicRuntimeConfig);
     setPublicRuntimeConfig(getConfig().publicRuntimeConfig);
   }, []);
 
@@ -109,7 +108,6 @@ const RegisterModal = () => {
 
   const onEmailRegister = useCallback(async ({ e, email }) => {
     try {
-      console.log(email);
 
       const mutation = gql`
         mutation UserEmailVerify($email: String!) {

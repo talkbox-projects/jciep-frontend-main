@@ -51,17 +51,6 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
             },
             index
           ) => {
-            console.log("field item=", {
-              id,
-              jobTitle,
-              companyName,
-              employmentType,
-              industry,
-              industryOther,
-              present,
-              startDatetime,
-              endDatetime,
-            });
             const errors = {};
             errors?.employment?.[index];
             const prefix = `employment[${index}]`;

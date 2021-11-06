@@ -58,7 +58,6 @@ const AdminOrganization = ({ enums }) => {
 
       try {
         setIsLoading(true);
-        console.log(await organizationSearch({ status, type, name, days}))
         setOrganizations(await organizationSearch({ status, type, name, days }));
       } catch (error) {
         console.error(error);

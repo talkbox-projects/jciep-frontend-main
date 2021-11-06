@@ -116,7 +116,6 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
           }
         );
 
-        console.log(filesUploadData);
 
         const mutation = gql`
           mutation OrganizationSubmissionCreate(
@@ -147,7 +146,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
           );
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   );
@@ -163,7 +162,6 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
   const onRemoveImage = async (index) => {
     let previousFiles = files;
 
-    console.log(previousFiles)
     let newFiles = previousFiles.filter((file, i) => i !== index);
     setFiles(newFiles);
   };

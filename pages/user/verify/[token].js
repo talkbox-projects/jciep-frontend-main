@@ -178,7 +178,7 @@ const VerifyToken = ({ page }) => {
         setIdentityId(data?.user?.identities?.[0]?.id ?? null);
         router.push("/user/identity/select");
       } catch (e) {
-        console.log(e);
+        console.error(e);
         setError("password_confirm", {
           message: getWording("emailVerify.user_create_error_message"),
         });

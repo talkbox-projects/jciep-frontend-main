@@ -31,7 +31,6 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
 
   const { identityId } = useAppContext();
   const editable = !!(organization?.member ?? []).find((m) => {
-    console.log(m?.identity?.id, identityId, m?.role, "staff");
     return (
       m?.identity?.id === identityId &&
       m?.role === "staff" &&

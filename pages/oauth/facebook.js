@@ -52,7 +52,7 @@ const FacebookLogin = ({ page }) => {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     })();
   }, [accessToken, router, setCredential]);

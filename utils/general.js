@@ -61,7 +61,6 @@ export const useInjectParams = () => {
             .filter((_t) => !!_t)
             .reduce((__arr, _t) => {
               let _t_arr = [_t];
-              console.log(_t, "_t", typeof _t === "string");
               if (typeof _t === "string") {
                 _t_arr = _t.split(`{{${key}}}`);
               }

@@ -41,7 +41,6 @@ const OrganizationMemberListSection = ({ path }) => {
 
   useEffect(() => {
     if (path !== undefined && id) {
-      console.log(organization.member);
       if (type === "admin") {
         setHasStaffAccess(true);
         return;

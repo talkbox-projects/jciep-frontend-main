@@ -114,7 +114,6 @@ export const getFilteredPosts = async (
 };
 
 export const getRelatedPosts = async ({ limit = 3, category, id }, context) => {
-  console.log("sending data", limit);
   const query = gql`
     query PostGetRelated($limit: Int!, $category: String, $id: ID!) {
       PostGetRelated(limit: $limit, category: $category, id: $id) {

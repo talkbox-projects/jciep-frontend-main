@@ -82,7 +82,7 @@ const Home = ({ setting, page }) => {
           .slice(0, Math.min(5, data?.length ?? 0))
       );
     } catch (err) {
-      console.log("***** error", err);
+      console.error("***** error", err);
     }
   }, []);
 

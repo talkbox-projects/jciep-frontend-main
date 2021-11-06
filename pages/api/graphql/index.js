@@ -65,13 +65,11 @@ const apolloServer = new ApolloServer({
         let user = jwt.decode(token, "shhhhh");
         if (user) {
           user = await User.findById(user._id).populate("identities");
-          console.log("user", user);
           return { user, context };
         }
       }
       return { user: null, context };
     } catch (error) {
-      console.log(error);
       return { user: null, context };
     }
   },

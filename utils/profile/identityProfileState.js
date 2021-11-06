@@ -23,7 +23,6 @@ const [IdentityProfileProvider, useIdentityProfileContext] = constate(
           };
 
           const data = await getGraphQLClient().request(mutation, variables);
-          console.log(partialIdentity);
           setIdentity((_) => {
             return { ..._, ...partialIdentity };
           });

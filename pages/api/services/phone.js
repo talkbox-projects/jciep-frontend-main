@@ -13,8 +13,6 @@ const gateways = {
       const countryCode = "852";
 
 
-      console.log("sms serverRuntimeConfig", serverRuntimeConfig);
-
       const requestUrl = `${url}?accountno=${accountno}&user=${user}&pwd=${pwd}&phone=${countryCode}${phone}&msg=${message}`;
 
       const options = {
@@ -24,8 +22,6 @@ const gateways = {
 
       const response = await request(options);
 
-
-      console.log("response", response);
 
       return true;
     } catch (error) {
@@ -42,8 +38,6 @@ const gateways = {
       const countryCode = "852";
 
 
-      console.log("sms serverRuntimeConfig", serverRuntimeConfig);
-
       const requestUrl = `${url}?accountno=${accountno}&user=${user}&pwd=${pwd}&phone=${countryCode}${phone}&msg=${message}`;
 
       const options = {
@@ -51,7 +45,6 @@ const gateways = {
         url: requestUrl,
       };
       const response = await request(options);
-      console.log("response", response);
       return true;
     } catch (error) {
       return false;

@@ -117,7 +117,7 @@ const IdentityPwdAdd = ({ page }) => {
           router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   );

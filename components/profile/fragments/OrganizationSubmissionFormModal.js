@@ -54,7 +54,6 @@ const OrganizationSubmissionFormModal = ({
   const onSubmissionCreate = useCallback(
     async (values) => {
       try {
-        console.log(values);
         const _submission = await OrganizationSubmissionCreate({
           input: { identityId, organizationId: organization.id, ...values },
         });

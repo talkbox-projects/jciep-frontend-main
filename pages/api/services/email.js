@@ -21,11 +21,9 @@ exports.sendEmail = ({ To, Subject, Text, Html }) => {
     sgMail
       .send(msg)
       .then((response) => {
-        console.log("***********");
         resolve(response);
       })
       .catch((error) => {
-        console.log(error.response.body);
         resolve(error.response.body);
       });
   });

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useAppContext } from "../store/AppStore";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
@@ -24,16 +23,15 @@ export const useCredential = () => {
       setCookie(null, "jciep-identityId", firstIdentityId, { path: "/" });
     }
 
-    console.log(user)
     setUser(user);
     setIdentityId(defaultIdentity?.id ?? firstIdentityId ?? null);
-  }, []);
+  }, [setIdentityId, setUser]);
 
   const removeCredential = useCallback(() => {
     destroyCookie(null, "jciep-token", { path: "/" });
     setIdentityId(null);
     setUser(null);
-  }, []);
+  }, [setIdentityId, setUser]);
 
   return [setCredential, removeCredential];
 };

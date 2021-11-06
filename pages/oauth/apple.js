@@ -62,7 +62,7 @@ const AppleLogin = ({ id_token: accessToken }) => {
           }
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     })();
   }, [accessToken, router, setCredential]);
