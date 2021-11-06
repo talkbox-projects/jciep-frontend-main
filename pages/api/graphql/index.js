@@ -26,12 +26,12 @@ import enumResolver from "./enum.resolver";
 import jwt from "jsonwebtoken";
 import { User } from "./user.model";
 import getConfig from "next/config";
-const { serverRuntimeConfig } = getConfig();
+const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 const apolloServer = new ApolloServer({
   uploads: false,
   introspection: true,
-  playground: true,
+  playground: publicRuntimeConfig.NODE_ENV === "development",
   typeDefs: mergeTypeDefs([
     /* enum */
     enumSchema,
