@@ -1,4 +1,3 @@
-import environmentSettingGet from "../api/EnvironmentSettingGet";
 import { getConfiguration } from "../configuration/getConfiguration";
 import { getEnums } from "../enums/getEnums";
 
@@ -49,7 +48,6 @@ const getSharedServerSideProps = async (context) => {
         "navigation",
         "wordings",
       ])),
-      // environmentSetting: await environmentSettingGet(),
     },
   };
 };

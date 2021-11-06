@@ -13,10 +13,25 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import nookies from "nookies";
 import getConfig from "next/config";
-import { getIdentityOrganizationRole } from "../../../utils/auth";
+import { checkIfAdmin, getIdentityOrganizationRole } from "../../../utils/auth";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 export default {
+  Identity: {
+    organizationRole: async (parent, args, context) => {
+      console.log(parent);
+      return await getIdentityOrganizationRole(parent._id)
+    },
+  },
+  User: {
+    identities: async (parent) => {
+      return await Identity.find({ _id: { $in: parent.identities } })
+        .map((identity) => {
+          identity.id = identity._id;
+          return identity
+        });
+    }
+  },
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
       try {
@@ -26,31 +41,21 @@ export default {
       }
     },
 
+    UserMeGet: async (_parent, params, context) => {
 
-    UserMeGet: async (_parent, params, { auth }) => {
-      try {
-        let user = auth.user;
+      let id = context?.auth?.user?.id;
+      const user = await User.findById(id);
+      user.id = user._id;
+      return user;
 
-        const identities = user.identities.map(async (identity) => {
-          identity = identity.toObject();
-          identity.organizationRole = await getIdentityOrganizationRole(identity._id);
-          identity.id = identity._id;
-          return identity;
-        });
-
-        user = user.toObject();
-        user.id = user._id;
-        user.identities = await Promise.all(identities);
-        return user;
-      } catch (error) {
-        return null;
-      }
     },
 
-    IdentitySearch: async (_parent, input) => {
+    IdentitySearch: async (_parent, input, context) => {
       /**
        * Search User
        */
+
+      const isAdmin = checkIfAdmin(context.auth?.identity);
 
       let keys = {};
 
@@ -66,7 +71,6 @@ export default {
         input.days = undefined;
       }
 
-      if (input.published) keys["published"] = input.published;
       if (input.phone) keys["phone"] = input.phone;
       if (input.email) keys["email"] = input.email;
       if (input.identityType) keys["type"] = { $in: input.identityType };
@@ -91,7 +95,9 @@ export default {
           ],
         });
 
-      if (input.publishStatus?.length > 0) {
+      if (!isAdmin) {
+        keys["publishStatus"] = "approved";
+      } else if (input.publishStatus?.length > 0) {
         const $or = [
           { type: { $ne: "pwd" } },
           { publishStatus: { $in: input.publishStatus } },
@@ -108,37 +114,20 @@ export default {
         keys["$and"] = compoundQuery;
       }
 
-      const organizations = await Organization.find();
 
       const identities = await Identity.find(keys)
         .skip((input.page - 1) * input?.limit)
         .limit(input?.limit);
 
-      identities.forEach((identity) => {
-        identity.organizationRole = (organizations ?? []).reduce(
-          (_a, organization) => {
-            const member = organization.member.find(
-              ({ identityId }) => String(identityId) === String(identity.id)
-            );
-            if (member) {
-              _a.push({
-                organization,
-                status: member.status,
-                role: member.role,
-              });
-            }
-            return _a;
-          },
-          []
-        );
-      });
+
 
       return identities;
     },
 
-    IdentityGet: async (_parent, { id }) => {
+    IdentityGet: async (_parent, { id }, context) => {
       const identity = await Identity.findById(id);
-      identity.organizationRole = await getIdentityOrganizationRole(id);
+      identity.id = identity._id;
+
       return identity;
     },
   },
@@ -210,7 +199,7 @@ export default {
        * Login via facebook/google/apple/email+password/phone+otp method. 
        * 
        * Create user if it does not exist
-
+ 
           case "facebook/google/apple":
             verify facebookToken, googleToken and appleToken
             if token is valid,
@@ -219,7 +208,7 @@ export default {
               return user
             else
               return error
-
+ 
           case "phone+otp"
             verify phone+otp
             if otp is valid,
@@ -228,7 +217,7 @@ export default {
               return user
             else
               return error
-
+ 
           case "email+password+emailVerificationToken"
             if emailVerificationToken exists
               if email does not exists in db
@@ -239,7 +228,7 @@ export default {
                 return user
               else
                 return error
-
+ 
        */
 
       if (input?.emailVerificationToken) {
@@ -256,10 +245,10 @@ export default {
               password: await User.generateHash(input?.password),
             },
             { upsert: true, new: true }
-          ).populate("identities");
+          );
           await emailVerify.delete();
 
-          const { identities, ..._user } = user.toObject();
+          const _user = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           nookies.set(context, "jciep-token", token, { path: "/" });
@@ -269,9 +258,9 @@ export default {
       } else if (input?.email && input?.password) {
         const user = await User.findOne({
           email: input?.email.trim(),
-        }).populate("identities");
+        });
         if (await user?.comparePassword(input?.password)) {
-          const { identities, ..._user } = user.toObject();
+          const _user = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           nookies.set(context, "jciep-token", token, { path: "/" });
@@ -292,9 +281,9 @@ export default {
             { phone: input.phone },
             { phone: input.phone },
             { upsert: true, new: true }
-          ).populate("identities");
+          );
 
-          const { identities, ..._user } = user.toObject();
+          const _user = user.toObject();
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           nookies.set(context, "jciep-token", token, { path: "/" });
@@ -306,13 +295,11 @@ export default {
           throw new Error("failed to login via facebook");
         }
 
-        let user = await User.findOne({ facebookId: snsMeta.id }).populate(
-          "identities"
-        );
+        let user = await User.findOne({ facebookId: snsMeta.id });
         if (!user) {
           user = await new User({ facebookId: snsMeta.id }).save();
         }
-        const { identities, ..._user } = user.toObject();
+        const _user = user.toObject();
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
@@ -324,13 +311,11 @@ export default {
           throw new Error("failed to login via google");
         }
 
-        let user = await User.findOne({ googleId: snsMeta.id }).populate(
-          "identities"
-        );
+        let user = await User.findOne({ googleId: snsMeta.id });
         if (!user) {
           user = await new User({ googleId: snsMeta.id }).save();
         }
-        const { identities, ..._user } = user.toObject();
+        const _user = user.toObject();
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();
@@ -343,13 +328,11 @@ export default {
           throw new Error("failed to login via apple");
         }
 
-        let user = await User.findOne({ appleId: snsMeta.id }).populate(
-          "identities"
-        );
+        let user = await User.findOne({ appleId: snsMeta.id });
         if (!user) {
           user = await new User({ appleId: snsMeta.id }).save();
         }
-        const { identities, ..._user } = user.toObject();
+        const _user = user.toObject();
         const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
         user.snsMeta = snsMeta;
         await user.save();

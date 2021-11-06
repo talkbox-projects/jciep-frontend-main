@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { checkIfAdmin } from "../../../utils/auth";
 import PostModel from "./post.model";
 
 export default {
@@ -82,13 +83,23 @@ export default {
     },
   },
   Mutation: {
-    PostUpdate: async (_parent, { input: { id, ..._post } }) => {
+    PostUpdate: async (_parent, { input: { id, ..._post } }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const post = await PostModel.findByIdAndUpdate(id, _post, {
         new: true,
       }).exec();
       return post;
     },
-    PostCreate: async (_parent, { input: _post }) => {
+    PostCreate: async (_parent, { input: _post }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       if (!_post.slug) {
         throw new Error("Invalid Slug");
       }
@@ -101,7 +112,12 @@ export default {
       }
     },
 
-    PostDelete: async (_parent, { input: { id } }) => {
+    PostDelete: async (_parent, { input: { id } }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       try {
         await PostModel.findByIdAndDelete(id);
         return true;

@@ -1,5 +1,6 @@
 import { GraphQLUpload } from "graphql-upload";
 import { connection, mongo } from "mongoose";
+import { checkIfAdmin } from "../../../utils/auth";
 
 export const getMediaBucket = () =>
   new mongo.GridFSBucket(connection.db, {
@@ -27,7 +28,12 @@ export const createFile = async (stream, { filename, options }) => {
 export default {
   Upload: GraphQLUpload,
   Query: {
-    MediaList: async (_parent, { offset = 0, limit = 10, directory = "/" }) => {
+    MediaList: async (_parent, { offset = 0, limit = 10, directory = "/" }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const bucket = getMediaBucket();
       const query = {
         metadata: {
@@ -53,7 +59,12 @@ export default {
     },
   },
   Mutation: {
-    MediaUpload: async (_parent, { file, directory }) => {
+    MediaUpload: async (_parent, { file, directory }, context) => {
+
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
       const { filename, mimetype: contentType, createReadStream } = await file;
 
       const result = await createFile(createReadStream(), {

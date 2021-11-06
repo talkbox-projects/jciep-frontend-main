@@ -48,7 +48,6 @@ export const getCurrentUser = async (context) => {
                 const user = await User.findById(jwtUser._id).populate("identities");
                 const identity = (user?.identities ?? []).find(({ id }) => id === currentIdentityId);
                 identity.organizationRole = await getIdentityOrganizationRole(currentIdentityId);
-                console.log("identity", identity)
                 return { user, identity };
             }
         }
@@ -67,7 +66,6 @@ export const checkIfAdmin = (identity = null) => {
 export const isJoinedOrganizationStaff = (identity, organizationId) =>
     identity.organizationRole.find(
         ({ organization: { _id }, role, status }) => {
-            console.log(String(_id) === String(organizationId), role === "staff", status === "joined");
             return String(_id) === String(organizationId) &&
                 role === "staff" &&
                 status === "joined";

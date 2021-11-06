@@ -1,3 +1,4 @@
+import { checkIfAdmin } from "../../../utils/auth";
 import PageModel from "./page.model";
 
 export default {
@@ -8,7 +9,13 @@ export default {
     },
   },
   Mutation: {
-    PageUpdate: async (_parent, { input: { id, key, lang, ..._page } }) => {
+    PageUpdate: async (_parent, { input: { id, key, lang, ..._page } }, context) => {
+
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const page = await PageModel.findOneAndUpdate({ lang, key }, _page, {
         new: true,
         upsert: true,
