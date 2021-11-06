@@ -17,7 +17,7 @@ const [Provider, useContext] = constate(
     }, []);
 
     const router = useRouter();
-    const saveOrganization = useCallback(
+    const saveOrganization =
       async (partialOrganization) => {
         try {
           const data = await organizationUpdate({ input: partialOrganization });
@@ -25,9 +25,7 @@ const [Provider, useContext] = constate(
         } catch (e) {
           console.error(e);
         }
-      },
-      [setOrganization, organization]
-    );
+      };
 
     useEffect(() => {
       setOrganization(_organization);

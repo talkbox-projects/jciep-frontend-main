@@ -153,8 +153,6 @@ export default gql`
       published: Boolean
     ): [Organization]
 
-    OrganizationSubmissionGet(id: ID): OrganizationSubmission
-
     OrganizationSubmissionSearch(
       type: EnumOrganizationType
       status: EnumOrganizationStatus

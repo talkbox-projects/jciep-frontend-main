@@ -5,50 +5,89 @@ import { Organization, OrganizationSubmission } from "./organization.model";
 import { Identity } from "./user.model";
 
 import getConfig from "next/config";
+import { checkIfAdmin, isIdentityUnderUser, isJoinedOrganizationStaff } from "../../../utils/auth";
 const { publicRuntimeConfig } = getConfig();
 
+
+
 export default {
+  Organization: {
+    submission: async (parent, args, context) => {
+
+      const organization = parent;
+      const identity = context?.auth?.identity;
+
+      if (!identity) {
+        return [];
+      }
+
+      if (!checkIfAdmin(identity) && !isJoinedOrganizationStaff(identity, organization._id)) {
+        return [];
+      }
+
+      const submissions = await OrganizationSubmission.find({ _id: { $in: organization.submission } });
+      return submissions || [];
+    },
+
+    member: async (parent, args, context) => {
+
+      const organization = parent;
+      const currentIdentity = context?.auth?.identity;
+      if (!currentIdentity) {
+        return [];
+      }
+
+      if (!checkIfAdmin(currentIdentity) && !isJoinedOrganizationStaff(currentIdentity, organization._id)) {
+        return parent.member.filter(({ status }) => status === "joined");
+      }
+
+      return parent.member;
+    }
+
+  },
+  Member: {
+    identity: async (parent, args, context) => {
+
+      const member = parent;
+      const currentIdentity = context?.auth?.identity;
+
+      if (!currentIdentity) {
+        return null;
+      }
+
+      const identity = await Identity.findById(member.identityId);
+      return identity;
+
+    }
+  },
+
   Query: {
     OrganizationGet: async (_parent, { id }) => {
-      const organization = await Organization.findById(id).populate(
-        "submission"
-      );
 
+      const organization = await Organization.findById(id);
       if (!organization?.invitationCode) {
         organization.invitationCode = parseInt(
           Math.random() * 900000 + 100000
         ).toString();
         await organization.save();
       }
-
-      const identities = await Identity.find({
-        _id: { $in: organization.member.map((m) => m.identityId) },
-      }).exec();
-      organization.member.forEach((member) => {
-        member.identity = identities.find((x) => {
-          return String(x._id) === String(member.identityId);
-        });
-      });
-
       return organization;
     },
 
-    OrganizationSubmissionGet: async (_parent, { id }) => {
-      /**
-       * Get OrganizationSubmission       *
-       */
-
-      return await OrganizationSubmission.findById(id).populate("organization");
-    },
     OrganizationSearch: async (
       _parent,
-      { status = [], type = [], name, published = undefined, days }
+      { status = [], type = [], name, published = undefined, days },
+      context
     ) => {
       /**
        * Search Organization
        * Admin can access to all organization
-       * other identity can only access to approved organization
+       * other identity can only access to approved organization and published
        */
+
+      const isAdmin = checkIfAdmin(context.auth?.identity);
+
+
       let date = new Date();
       if (days === "7 Days") {
         date.setDate(date.getDate() - 7);
@@ -60,36 +99,33 @@ export default {
         days = undefined;
       }
 
-      const organizations = await Organization.find({
-        ...(published !== undefined && { published }),
-        ...(status?.length && { status: { $in: status } }),
+      const filters = {
         ...(type?.length && { organizationType: { $in: type } }),
         ...(days && { createdAt: { $gte: date } }),
         ...(name && {
           $or: [
             { chineseCompanyName: { $regex: name, $options: "i" } },
             { englishCompanyName: { $regex: name, $options: "i" } },
-          ],
-        }),
-      })
+          ]
+        })
+      };
+
+      if (!isAdmin) {
+        filters.published = true;
+        filters.status = "approved";
+      } else {
+        if (published !== undefined) {
+          filters.published = published
+        }
+        if ((status?.length ?? 0) > 0) {
+          filters.status = { $in: status };
+        }
+      }
+
+      const organizations = await Organization.find(filters)
         .populate("submission")
         .sort({ createdAt: -1 });
 
-      const identities = await Identity.find({
-        _id: {
-          $in: organizations.reduce(
-            (_arr, x) => [..._arr, ...x.member.map((m) => m.identityId)],
-            []
-          ),
-        },
-      });
-      organizations.forEach((organization) => {
-        organization.member.forEach((member) => {
-          member.identity = identities.find((x) => {
-            return String(x._id) === String(member.identityId);
-          });
-        });
-      });
       return organizations;
     },
     OrganizationSubmissionSearch: async (_parent, input) => {
@@ -125,7 +161,7 @@ export default {
     },
   },
   Mutation: {
-    OrganizationSubmissionCreate: async (_parent, params) => {
+    OrganizationSubmissionCreate: async (_parent, params, context) => {
       /**
        * Create an organization submission (type can be ngo/employment)
        *
@@ -141,50 +177,51 @@ export default {
        * status = pendingApproval
        */
 
-      const identity = await Identity.findById(params?.input?.identityId);
+      const identityId = params?.input?.identityId;
+      const identity = await Identity.findById(identityId);
+      if (!isIdentityUnderUser(identityId, context?.auth?.user)) {
+        throw new Error("Permission Denied!");
+      }
 
-      let organization = new Promise(async (resolve) => {
+
+      let getOrganization = async () => {
         if (params.input.organizationId) {
           let organization = await Organization.findById(
             params.input.organizationId
           );
-
           if (!organization) {
             throw new Error("Organization not exists!");
           }
-
-          resolve(organization);
+          return organization;
         } else {
-          resolve(
-            await new Organization({
-              organizationType: params.input.organizationType,
-              remark: params?.input?.remark,
-              status: "pendingApproval",
-              chineseCompanyName: params?.input.chineseCompanyName,
-              englishCompanyName: params?.input.englishCompanyName,
-              website: params?.input?.website,
-              industry: params?.input?.industry,
-              industryOther: params?.input?.industryOther,
-              description: params?.input?.description,
-              businessRegistration: params.input?.businessRegistration,
-              submission: [],
-              member: [],
-              contactName: identity?.chineseName || "",
-              contactEmail: identity?.email || "",
-              contactPhone: identity?.phone || "",
-              district: params?.input?.district,
-              companyBenefit: params?.input?.companyBenefit,
-              identityId: params?.input?.identityId,
-              logo: params.input?.logo,
-              tncAccept: params?.input?.tncAccept,
-              invitationCode: Math.floor(100000 + Math.random() * 900000),
-              createdAt: new Date(),
-            })
-          );
+          return await new Organization({
+            organizationType: params.input.organizationType,
+            remark: params?.input?.remark,
+            status: "pendingApproval",
+            chineseCompanyName: params?.input.chineseCompanyName,
+            englishCompanyName: params?.input.englishCompanyName,
+            website: params?.input?.website,
+            industry: params?.input?.industry,
+            industryOther: params?.input?.industryOther,
+            description: params?.input?.description,
+            businessRegistration: params.input?.businessRegistration,
+            submission: [],
+            member: [],
+            contactName: identity?.chineseName || "",
+            contactEmail: identity?.email || "",
+            contactPhone: identity?.phone || "",
+            district: params?.input?.district,
+            companyBenefit: params?.input?.companyBenefit,
+            identityId: params?.input?.identityId,
+            logo: params.input?.logo,
+            tncAccept: params?.input?.tncAccept,
+            invitationCode: Math.floor(100000 + Math.random() * 900000),
+            createdAt: new Date(),
+          });
         }
-      });
+      };
 
-      organization = await organization;
+      const organization = await getOrganization();
 
       if (organization) {
         let organizationSubmission = await new OrganizationSubmission({
@@ -231,19 +268,21 @@ export default {
       }
     },
 
-    OrganizationSubmissionUpdate: async (_parent, { input }) => {
-      /**
-       * Only admin can call this api
-       * Update an organization submission in console by admin
-       */
+    OrganizationSubmissionUpdate: async (_parent, { input }, context) => {
+
+      const submission = await OrganizationSubmission.findById(input?.id);
+      const organizationId = submission.organization;
+      const identity = context?.auth?.identity
+      if (!checkIfAdmin(identity) && !isJoinedOrganizationStaff(identity, organizationId)) {
+        throw new Error("Permission Denied!");
+      }
 
       input.updateAt = new Date();
 
-      const submission = await OrganizationSubmission.findById(input?.id);
 
       if (["approved", "rejected"].includes(input?.status)) {
         input.vettedAt = new Date();
-        await Organization.findByIdAndUpdate(submission.organization, {
+        await Organization.findByIdAndUpdate(organizationId, {
           status: input?.status,
         });
       }
@@ -251,7 +290,7 @@ export default {
       if (["approved"].includes(input?.status)) {
         const submission = await OrganizationSubmission.findById(input.id);
         if (submission) {
-          await Organization.findByIdAndUpdate(submission.organization, {
+          await Organization.findByIdAndUpdate(organizationId, {
             chineseCompanyName: submission?.chineseCompanyName,
             englishCompanyName: submission?.englishCompanyName,
             website: submission?.website,
@@ -269,170 +308,173 @@ export default {
       }).populate("organization");
     },
 
-    OrganizationUpdate: async (_parent, { input }) => {
-      /**
-       * Only admin can call this api
-       * Update an organization
-       */ try {
-        const organization = await Organization.findByIdAndUpdate(
-          input.id,
-          input,
-          {
-            new: true,
-          }
-        ).populate("submission");
+    OrganizationUpdate: async (_parent, { input }, context) => {
 
-        const identities = await Identity.find({
-          _id: { $in: organization.member.map((m) => m.identityId) },
-        }).exec();
-        organization.member.forEach((member) => {
-          member.identity = identities.find((x) => {
-            return String(x._id) === String(member.identityId);
-          });
-        });
 
-        return organization;
-      } catch (error) {
-        console.error(error);
-        return null;
+      const identity = context?.auth?.identity;
+      if (!checkIfAdmin(identity) && !isJoinedOrganizationStaff(identity, input.id)) {
+        throw new Error("Permission Denied!");
       }
+
+      const organization = await Organization.findByIdAndUpdate(
+        input.id,
+        input,
+        {
+          new: true,
+        }
+      );
+
+      return organization;
+
     },
 
-    OrganizationMemberJoin: async (_parent, { identityId, invitationCode }) => {
-      try {
-        const identity = await Identity.findById(identityId);
-        const organization = await Organization.findOne({ invitationCode });
+    OrganizationMemberJoin: async (_parent, { identityId, invitationCode }, context) => {
 
-        if (!identity || !organization) {
-          return false;
-        }
 
-        if (
-          !(
-            ["pwd", "staff"].includes(identity.type) &&
-            organization.organizationType === "ngo"
-          )
-        ) {
-          return false;
-        }
+      if (!isIdentityUnderUser(identityId, context?.auth?.user)) {
+        throw new Error("Permission Denied");
+      }
 
-        const exists = !!(organization.member ?? []).find(
-          (m) => String(m.identityId) === String(identityId)
-        );
+      const identity = await Identity.findById(identityId);
+      const organization = await Organization.findOne({ invitationCode });
 
-        if (exists) {
-          return false;
-        }
-
-        await Organization.findOneAndUpdate(
-          { invitationCode },
-          {
-            $push: {
-              member: {
-                identityId: identity.id,
-                role: identity.type === "pwd" ? "member" : "staff",
-                status: "pendingApproval",
-              },
-            },
-          }
-        );
-        return true;
-      } catch (error) {
+      if (!identity || !organization) {
         return false;
       }
-    },
 
-    OrganizationMemberInvite: async (_parent, { input: { id, email } }) => {
-      /**
-       * Admin can send invitation for any organization
-       * Staff can only send invitation for his/her organization
-       * Employer can only send invitation for his/her organization
-       * Pwd/Public can not call this api.
-       */
-      try {
-        const organization = await Organization.findById(id);
+      if (
+        !(
+          ["pwd", "staff"].includes(identity.type) &&
+          organization.organizationType === "ngo"
+        )
+      ) {
+        return false;
+      }
 
-        let host = publicRuntimeConfig.HOST_URL
-          ? publicRuntimeConfig.HOST_URL
-          : "http://localhost:3000";
-        await send(
-          email,
-          {
-            url: `${host}`,
-            title: "《賽馬會共融・知行計劃》邀請函",
-            description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
-            button_text: "前往",
+      const exists = !!(organization.member ?? []).find(
+        (m) => String(m.identityId) === String(identityId)
+      );
+
+      if (exists) {
+        return false;
+      }
+
+      await Organization.findOneAndUpdate(
+        { invitationCode },
+        {
+          $push: {
+            member: {
+              identityId: identity.id,
+              role: identity.type === "pwd" ? "member" : "staff",
+              status: "pendingApproval",
+            },
           },
-          [
-            {
-              cid: "logo_base64",
-              filename: "logo.png",
-              encoding: "base64",
-              content: logoBase64,
-            },
-            {
-              cid: "banner_base64",
-              filename: "banner.png",
-              encoding: "base64",
-              content: bannerBase64,
-            },
-          ]
-        );
+        }
+      );
+      return true;
+    },
 
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
+    OrganizationMemberInvite: async (_parent, { input: { id, email } }, context) => {
+
+      const identity = context?.auth?.identity;
+      if (!checkIfAdmin(identity)
+        && !isJoinedOrganizationStaff(identity, id)
+      ) {
+        throw new Error("Permission Denied!");
       }
+
+      const organization = await Organization.findById(id);
+
+      let host = publicRuntimeConfig.HOST_URL ?? "http://localhost:3000";
+      await send(
+        email,
+        {
+          url: `${host}`,
+          title: "《賽馬會共融・知行計劃》邀請函",
+          description: `<div>你被邀請參與《賽馬會共融・知行計劃》，並成為相關的多元人才。<br/>請使用以下邀請碼創建帳戶 <br/> <strong style="font-size: 20px;padding: 12px;">${organization?.invitationCode}</strong>`,
+          button_text: "前往",
+        },
+        [
+          {
+            cid: "logo_base64",
+            filename: "logo.png",
+            encoding: "base64",
+            content: logoBase64,
+          },
+          {
+            cid: "banner_base64",
+            filename: "banner.png",
+            encoding: "base64",
+            content: bannerBase64,
+          },
+        ]
+      );
+
+      return true;
     },
     OrganizationMemberRemove: async (
       _parent,
-      { organizationId, identityId }
+      { organizationId, identityId },
+      context
     ) => {
-      try {
-        await Organization.findByIdAndUpdate(
-          organizationId,
-          {
-            $pull: { member: { identityId } },
-          },
-          { new: true }
-        );
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
+
+      const identity = context?.auth?.identity;
+      if (!checkIfAdmin(identity)
+        && !isJoinedOrganizationStaff(identity, organizationId)
+      ) {
+        throw new Error("Permission Denied!");
       }
+
+
+      await Organization.findByIdAndUpdate(
+        organizationId,
+        {
+          $pull: { member: { identityId } },
+        },
+        { new: true }
+      );
+      return true;
+
     },
 
     OrganizationMemberApprove: async (
       _parent,
-      { organizationId, identityId }
+      { organizationId, identityId },
+      context
     ) => {
-      try {
-        await Organization.findByIdAndUpdate(
-          organizationId,
-          {
-            $set: { [`member.$[m].status`]: "joined" },
-          },
-          {
-            arrayFilters: [{ "m.identityId": identityId }],
-            new: true,
-          }
-        );
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
+
+
+      const identity = context?.auth?.identity;
+      if (!checkIfAdmin(identity)
+        && !isJoinedOrganizationStaff(identity, organizationId)
+      ) {
+        throw new Error("Permission Denied!");
       }
+
+      await Organization.findByIdAndUpdate(
+        organizationId,
+        {
+          $set: { [`member.$[m].status`]: "joined" },
+        },
+        {
+          arrayFilters: [{ "m.identityId": identityId }],
+          new: true,
+        }
+      );
+      return true;
     },
-    OrganizationRemove: async (_parent, { id }) => {
-      try {
-        await Organization.findByIdAndDelete(id);
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
+    OrganizationRemove: async (_parent, { id }, context) => {
+
+      const identity = context?.auth?.identity;
+      if (!checkIfAdmin(identity)
+        && !isJoinedOrganizationStaff(identity, id)
+      ) {
+        throw new Error("Permission Denied!");
       }
+
+      await Organization.findByIdAndDelete(id);
+      return true;
+
     },
   },
 };

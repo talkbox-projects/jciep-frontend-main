@@ -41,7 +41,7 @@ export const getServerSideProps = async (context) => {
           published: true,
           type: ["ngo"],
           limit: 0,
-        }),
+        }, context),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -70,7 +70,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
         <NgoSection />
         <OrganizationBiographySection />
         <OrganizationPortfolioSection />
-        <OrganizationMemberListSection path="talants"/>
+        <OrganizationMemberListSection path="talants" />
       </VStack>
     </OrganizationProfileStore.Provider>
   );
@@ -171,7 +171,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Stack direction={["column", "column", "row", "row"]} w="100%"  align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
               <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
@@ -207,7 +207,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-                
+
               >
                 {wordExtractor(page?.content?.wordings, "page_tutorial_organization_link")}
               </Button>

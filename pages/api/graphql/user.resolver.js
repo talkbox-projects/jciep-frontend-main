@@ -13,6 +13,7 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import nookies from "nookies";
 import getConfig from "next/config";
+import { getIdentityOrganizationRole } from "../../../utils/auth";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 export default {
@@ -27,30 +28,12 @@ export default {
 
 
     UserMeGet: async (_parent, params, { auth }) => {
-      console.log("[Graphql userGet] auth=", auth);
       try {
         let user = auth.user;
 
         const identities = user.identities.map(async (identity) => {
-          const organizations = await Organization.find({
-            member: { $elemMatch: { identityId: identity._id } },
-          });
-
-          let organizationRole = await (organizations ?? []).map(
-            (organization) => {
-              const member = organization.member.find(
-                ({ identityId }) => String(identityId) === String(identity._id)
-              );
-              return {
-                organization,
-                status: member.status,
-                role: member.role,
-              };
-            }
-          );
-
           identity = identity.toObject();
-          identity.organizationRole = organizationRole;
+          identity.organizationRole = await getIdentityOrganizationRole(identity._id);
           identity.id = identity._id;
           return identity;
         });
@@ -155,22 +138,7 @@ export default {
 
     IdentityGet: async (_parent, { id }) => {
       const identity = await Identity.findById(id);
-
-      const organizations = await Organization.find({
-        member: { $elemMatch: { identityId: id } },
-      });
-
-      identity.organizationRole = (organizations ?? []).map((organization) => {
-        const member = organization.member.find(
-          ({ identityId }) => String(identityId) === String(id)
-        );
-        return {
-          organization,
-          status: member.status,
-          role: member.role,
-        };
-      });
-
+      identity.organizationRole = await getIdentityOrganizationRole(id);
       return identity;
     },
   },
@@ -552,22 +520,7 @@ export default {
           new: true,
         });
 
-        const organizations = await Organization.find({
-          member: { $elemMatch: { identityId: input.id } },
-        });
-
-        identity.organizationRole = (organizations ?? []).map(
-          (organization) => {
-            const member = organization.member.find(
-              ({ identityId }) => String(identityId) === String(input.id)
-            );
-            return {
-              organization,
-              status: member.status,
-              role: member.role,
-            };
-          }
-        );
+        identity.organizationRole = await getIdentityOrganizationRole(input.id);
 
         return identity;
       } catch (error) {

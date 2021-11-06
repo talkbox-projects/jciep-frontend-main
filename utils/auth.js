@@ -8,22 +8,47 @@ import nookies from "nookies";
 import getConfig from "next/config";
 import jwt from "jsonwebtoken";
 import { User } from "../pages/api/graphql/user.model";
+import { Organization } from "../pages/api/graphql/organization.model";
 
 
 const { serverRuntimeConfig } = getConfig();
+
+export const getIdentityOrganizationRole = async (identityId) => {
+
+    if (!identityId) return [];
+
+    const organizations = await Organization.find({
+        member: { $elemMatch: { identityId } },
+    });
+
+    const organizationRole = await (organizations ?? []).map(
+        (organization) => {
+            const member = organization.member.find(
+                ({ identityId }) => String(identityId) === String(identityId)
+            );
+            return {
+                organization,
+                status: member.status,
+                role: member.role,
+            };
+        }
+    );
+    return organizationRole;
+}
 
 export const getCurrentUser = async (context) => {
 
     try {
         const token = nookies.get(context)?.["jciep-token"];
         const currentIdentityId = nookies.get(context)?.["jciep-identityId"];
-        console.log(nookies.get(context));
 
         if (token) {
             const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
             if (jwtUser) {
                 const user = await User.findById(jwtUser._id).populate("identities");
                 const identity = (user?.identities ?? []).find(({ id }) => id === currentIdentityId);
+                identity.organizationRole = await getIdentityOrganizationRole(currentIdentityId);
+                console.log("identity", identity)
                 return { user, identity };
             }
         }
@@ -34,6 +59,22 @@ export const getCurrentUser = async (context) => {
     }
 }
 
-export const isAdmin = (auth = null) => {
-    return auth?.identity?.type === "admin";
+export const checkIfAdmin = (identity = null) => {
+    return identity?.type === "admin";
+}
+
+
+export const isJoinedOrganizationStaff = (identity, organizationId) =>
+    identity.organizationRole.find(
+        ({ organization: { _id }, role, status }) => {
+            console.log(String(_id) === String(organizationId), role === "staff", status === "joined");
+            return String(_id) === String(organizationId) &&
+                role === "staff" &&
+                status === "joined";
+
+        });
+
+
+export const isIdentityUnderUser = (identityId, user) => {
+    return !!(user?.identities ?? []).find(({ id }) => id === identityId);
 }
