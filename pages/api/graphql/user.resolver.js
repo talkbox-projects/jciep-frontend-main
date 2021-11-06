@@ -112,9 +112,6 @@ export default {
       return identities;
     },
 
-    UserGet: async (_parent, { id }) => {
-      return await User.findById(id);
-    },
     IdentityGet: async (_parent, { id }, { user }, args) => {
       const identity = await Identity.findById(id);
 
