@@ -87,6 +87,23 @@ const App = ({ Component, pageProps }) => {
       <AppProvider {...pageProps}>
         <Head>
           <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" />
+          <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
+          </link><link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
+          </link><link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
+          </link><link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png">
+          </link><link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png">
+          </link><link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png">
+          </link><link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png">
+          </link><link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png">
+          </link><link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png">
+          </link><link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-icon-192x192.png">
+          </link><link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+          </link><link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
+          </link><link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+          </link><link rel="manifest" href="/favicon/manifest.json"></link>
+          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png" />
+          <meta name="theme-color" content="#ffffff"></meta>
         </Head>
         <ChakraProvider theme={theme} resetCSS={true}>
 
@@ -95,8 +112,8 @@ const App = ({ Component, pageProps }) => {
               title={pageProps?.page?.content?.seo?.title}
               description={pageProps?.page?.content?.seo?.description}
             ></NextSeo>
-          ) : 
-          <NextSeo title="賽馬會共融．知行計劃" />}
+          ) :
+            <NextSeo title="賽馬會共融．知行計劃" />}
           <VStack align="stretch" spacing={0}>
             {pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>
@@ -106,7 +123,7 @@ const App = ({ Component, pageProps }) => {
           </VStack>
         </ChakraProvider>
       </AppProvider>
-    </SimpleReactLightbox>
+    </SimpleReactLightbox >
   );
 };
 
