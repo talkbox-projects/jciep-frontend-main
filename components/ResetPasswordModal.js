@@ -1,6 +1,6 @@
 import { useAppContext } from "../store/AppStore";
 import { useForm } from "react-hook-form";
-import { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   FormControl,
   FormLabel,
@@ -16,7 +16,6 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
-import wordExtractor from "../utils/wordExtractor";
 import { emailRegex } from "../utils/general";
 import { useGetWording } from "../utils/wordings/useWording";
 import UserPasswordResetEmailSend from "../utils/api/UserPasswordResetEmailSend";
@@ -41,7 +40,7 @@ const ResetPasswordModal = () => {
   });
 
   const toast = useToast();
-  const onResetPasswordEmailSent = useCallback(async ({ email }) => {
+  const onResetPasswordEmailSent = async ({ email }) => {
     try {
       const sent = await UserPasswordResetEmailSend({ email });
       toast({
@@ -59,7 +58,7 @@ const ResetPasswordModal = () => {
         title: getWording("resentPassword.reset_password_email_sent_fail"),
       });
     }
-  }, []);
+  };
   useEffect(() => {
     if (isOpen) {
       reset({ email: user?.email ?? "" });

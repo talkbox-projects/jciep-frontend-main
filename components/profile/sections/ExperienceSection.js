@@ -1,4 +1,5 @@
 import { VStack } from "@chakra-ui/react";
+import React from "react";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import SectionCard from "../fragments/SectionCard";
 import ExperienceSectionEditor from "./ExperienceSectionEditor";

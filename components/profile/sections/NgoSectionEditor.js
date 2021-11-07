@@ -12,6 +12,7 @@ import {
   FormHelperText,
   Textarea,
 } from "@chakra-ui/react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
@@ -25,7 +26,6 @@ const NgoSectionEditor = () => {
 
   const {
     handleSubmit,
-    control,
     register,
     formState: { isSubmitting, errors },
   } = useForm({

@@ -10,10 +10,9 @@ import {
   Tag,
   Input,
   FormHelperText,
-  Select,
 } from "@chakra-ui/react";
-import MultiSelect from "react-select";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
@@ -25,7 +24,6 @@ const StaffSectionEditor = () => {
 
   const {
     handleSubmit,
-    control,
     register,
     formState: { isSubmitting, errors },
   } = useForm({

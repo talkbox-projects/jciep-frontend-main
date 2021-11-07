@@ -28,7 +28,7 @@ const OrganizationBiographySectionEditor = () => {
     handleSubmit,
     control,
     register,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       id: organization.id,
@@ -159,7 +159,7 @@ const OrganizationBiographySectionEditor = () => {
                 </FormControl>
               );
               break;
-            
+
             case "url":
               comp = (
                 <>
@@ -200,7 +200,7 @@ const OrganizationBiographySectionEditor = () => {
                       {errors?.biography?.blocks?.[index]?.url?.message}
                     </FormHelperText>
                   </FormControl>
-                  </>
+                </>
               );
               break;
             default:

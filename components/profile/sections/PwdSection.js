@@ -4,6 +4,7 @@ import SectionCard from "../fragments/SectionCard";
 import PwdSectionEditor from "./PwdSectionEditor";
 import PwdSectionViewer from "./PwdSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import React from "react";
 
 const PwdSection = () => {
   const { page, identity, saveIdentity, editSection, editable } =

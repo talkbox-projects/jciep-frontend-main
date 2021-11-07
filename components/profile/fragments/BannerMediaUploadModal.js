@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import {
   AspectRatio,
   Text,
@@ -14,7 +15,7 @@ import {
   Input,
   FormHelperText,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import ProfileDropzone from "./ProfileDropzone";

@@ -1,8 +1,8 @@
+/* eslint-disable no-undef */
 import React from "react";
 import { Box, Text, VStack } from "@chakra-ui/layout";
 import { SimpleGrid, GridItem, Heading, Image } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-// import { Scroll } from  "framer";
 
 const MotionBox = motion(Box);
 const MotionImage = motion(Image);

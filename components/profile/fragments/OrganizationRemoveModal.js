@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import wordExtractor from "../../../utils/wordExtractor";
 
 const OrganizationRemoveModal = ({

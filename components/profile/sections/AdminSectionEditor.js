@@ -10,13 +10,12 @@ import {
   Tag,
   Input,
   FormHelperText,
-  Select,
 } from "@chakra-ui/react";
-import MultiSelect from "react-select";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
+import React from "react";
 
 const AdminSectionEditor = () => {
   const router = useRouter();
@@ -25,7 +24,6 @@ const AdminSectionEditor = () => {
 
   const {
     handleSubmit,
-    control,
     register,
     formState: { isSubmitting, errors },
   } = useForm({

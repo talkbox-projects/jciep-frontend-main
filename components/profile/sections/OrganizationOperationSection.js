@@ -1,5 +1,6 @@
 import { VStack, Text, HStack, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import React from "react";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import OrganizationRemove from "../../../utils/api/OrganizationRemove";

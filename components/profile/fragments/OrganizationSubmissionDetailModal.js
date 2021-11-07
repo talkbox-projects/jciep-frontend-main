@@ -53,12 +53,12 @@ const OrganizationSubmissionDetailModal = ({
       status: submission?.status,
       remark: submission?.remark,
     });
-  }, [submission]);
+  }, [submission, reset]);
 
   const onSubmissionUpdate = useCallback(
     async (values) => {
       try {
-        const _submission = await OrganizationSubmissionUpdate({
+        await OrganizationSubmissionUpdate({
           input: { id: submission.id, ...values },
         });
         refreshOrganization();
@@ -164,26 +164,26 @@ const OrganizationSubmissionDetailModal = ({
             </GridItem>
             {
               organization?.organizationType !== "ngo" ?
-              <GridItem w="100%">
-              <Text color="#999">
-                {wordExtractor(
-                  page?.content?.wordings,
-                  "field_label_submission_businessRegistration"
-                )}
-              </Text>
-              <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
-                {(submission?.businessRegistration ?? []).map(({ url,label }) => {
-                  return (
-                    <AspectRatio ratio={1}>
-                      <Image alt={wordExtractor(page?.content?.wordings, "business_registration_alt_text")} borderRadius={8} boxShadow="md" src={url} />
-                    </AspectRatio>
-                  );
-                })}
-              </SimpleGrid>
-            </GridItem>
-            : null
+                <GridItem w="100%">
+                  <Text color="#999">
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "field_label_submission_businessRegistration"
+                    )}
+                  </Text>
+                  <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
+                    {(submission?.businessRegistration ?? []).map(({ url }, index) => {
+                      return (
+                        <AspectRatio key={index} ratio={1}>
+                          <Image alt={wordExtractor(page?.content?.wordings, "business_registration_alt_text")} borderRadius={8} boxShadow="md" src={url} />
+                        </AspectRatio>
+                      );
+                    })}
+                  </SimpleGrid>
+                </GridItem>
+                : null
             }
-            
+
 
             <GridItem>
               <Text color="#999">

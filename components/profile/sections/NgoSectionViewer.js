@@ -10,7 +10,6 @@ import {
   Wrap,
   Tag,
   useToast,
-  Box,
   Link,
 } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -134,11 +133,11 @@ const NgoSectionViewer = () => {
             <FormLabel color="#999" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
-              {organization?.website ? 
-                <Link href={organization?.website} wordBreak="break-word">
-                  <Text>{organization?.website}</Text>
-                </Link> :
-                wordExtractor(page?.content?.wordings, "empty_text_label")}
+            {organization?.website ?
+              <Link href={organization?.website} wordBreak="break-word">
+                <Text>{organization?.website}</Text>
+              </Link> :
+              wordExtractor(page?.content?.wordings, "empty_text_label")}
           </FormControl>
           <FormControl>
             <FormLabel color="#999" mb={0}>

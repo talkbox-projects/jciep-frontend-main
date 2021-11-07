@@ -13,12 +13,11 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
-import moment from "moment";
-import { getEnumText } from "../../../utils/enums/getEnums";
+import React from "react";
 
 const AdminSectionViewer = () => {
   const router = useRouter();
-  const { page, enums, identity, editSection, setEditSection, editable } =
+  const { isAdmin, page, enums, identity, editSection, setEditSection, editable } =
     IdentityProfileStore.useContext();
 
   return (

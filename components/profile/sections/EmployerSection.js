@@ -5,6 +5,8 @@ import EmployerSectionEditor from "./EmployerSectionEditor";
 import EmployerSectionViewer from "./EmployerSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 
+import React from "react";
+
 const EmployerSection = () => {
   const { page, identity, saveIdentity, editSection, editable } =
     IdentityProfileStore.useContext();

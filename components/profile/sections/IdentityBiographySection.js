@@ -1,13 +1,12 @@
-import { Text, Button, HStack, VStack } from "@chakra-ui/react";
-import wordExtractor from "../../../utils/wordExtractor";
+import { VStack } from "@chakra-ui/react";
 import SectionCard from "../fragments/SectionCard";
-import { RiEdit2Line } from "react-icons/ri";
+import React from "react";
 import IdentityBiographySectionViewer from "./IdentityBiographySectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import IdentityBiographySectionEditor from "./IdentityBiographySectionEditor";
 
 const IdentityBiographySection = () => {
-  const { page, editSection, setEditSection } =
+  const { editSection } =
     IdentityProfileStore.useContext();
   const isEditing = editSection === "biography";
 

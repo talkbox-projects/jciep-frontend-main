@@ -23,7 +23,7 @@ import Dot from "./Dot";
 import MonthPicker from "./MonthPicker";
 
 const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
-  const { identity, page, enums } = IdentityProfileStore.useContext();
+  const { page, enums } = IdentityProfileStore.useContext();
   const router = useRouter();
   const { fields, append, remove, insert } = useFieldArray({
     control,
@@ -49,7 +49,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
             },
             index
           ) => {
-            const errors = {} 
+            const errors = {}
             errors?.education?.[index];
             const prefix = `education[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
@@ -57,9 +57,9 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
             const isCurrent = watch(`${prefix}.present`);
             return (
               <Box
-                pl={[0,2]}
+                pl={[0, 2]}
                 key={id}
-                borderLeftColor={["transparent","#eee"]}
+                borderLeftColor={["transparent", "#eee"]}
                 borderLeftWidth={2}
                 position="relative"
               >
@@ -69,10 +69,10 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                   left={"-5px"}
                   h={"8px"}
                   w={"8px"}
-                  bgColor={["transparent",borderColor]}
+                  bgColor={["transparent", borderColor]}
                 />
                 <VStack
-                  pl={[0,2]}
+                  pl={[0, 2]}
                   mt={-3}
                   mb={12}
                   spacing={0.5}
@@ -176,66 +176,66 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                       {errors?.education?.[index]?.fieldOfStudy?.message}
                     </FormHelperText>
                   </FormControl>
-                  
-                    <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
-                    <GridItem >
-                    <FormControl
-                      as={HStack}
-                      align="center"
-                      isInvalid={errors?.degree?.message}
-                    >
-                      <FormLabel w={[24,24,32]} fontSize="sm" color="#999" mb={0}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "field_label_education_startDatetime"
-                        )}
-                      </FormLabel>
-                      <Controller
-                        name={`${prefix}.startDatetime`}
-                        control={control}
-                        defaultValue={startDatetime}
-                        render={({ field }) => (
 
-                          <MonthPicker page={page} {...field} />
-                        )}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.startDatetime?.message}
-                      </FormHelperText>
-                    </FormControl>
+                  <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
+                    <GridItem >
+                      <FormControl
+                        as={HStack}
+                        align="center"
+                        isInvalid={errors?.degree?.message}
+                      >
+                        <FormLabel w={[24, 24, 32]} fontSize="sm" color="#999" mb={0}>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "field_label_education_startDatetime"
+                          )}
+                        </FormLabel>
+                        <Controller
+                          name={`${prefix}.startDatetime`}
+                          control={control}
+                          defaultValue={startDatetime}
+                          render={({ field }) => (
+
+                            <MonthPicker page={page} {...field} />
+                          )}
+                        />
+                        <FormHelperText color="red">
+                          {errors?.startDatetime?.message}
+                        </FormHelperText>
+                      </FormControl>
                     </GridItem>
                     <GridItem>
-                    <FormControl
-                      as={HStack}
-                      align="center"
-                      isInvalid={errors?.endDatetime?.message}
-                    >
-                      <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "field_label_education_endDatetime"
-                        )}
-                      </FormLabel>
-                      <Controller
-                        name={`${prefix}.endDatetime`}
-                        control={control}
-                        defaultValue={endDatetime}
-                        render={({ field }) => (
-                          <MonthPicker
-                            page={page}
-                            {...field}
-                            isDisabled={isCurrent}
-                          />
-                        )}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.endDatetime?.message}
-                      </FormHelperText>
-                    </FormControl>
+                      <FormControl
+                        as={HStack}
+                        align="center"
+                        isInvalid={errors?.endDatetime?.message}
+                      >
+                        <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "field_label_education_endDatetime"
+                          )}
+                        </FormLabel>
+                        <Controller
+                          name={`${prefix}.endDatetime`}
+                          control={control}
+                          defaultValue={endDatetime}
+                          render={({ field }) => (
+                            <MonthPicker
+                              page={page}
+                              {...field}
+                              isDisabled={isCurrent}
+                            />
+                          )}
+                        />
+                        <FormHelperText color="red">
+                          {errors?.endDatetime?.message}
+                        </FormHelperText>
+                      </FormControl>
                     </GridItem>
-                    </SimpleGrid>
-                   
-                    
+                  </SimpleGrid>
+
+
 
                   <FormControl
                     pt={2}
@@ -265,7 +265,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
           }
         )}
         {
-          <Box pl={[0,2]} borderLeftColor={["transparent", "#eee"]} borderLeftWidth={2}>
+          <Box pl={[0, 2]} borderLeftColor={["transparent", "#eee"]} borderLeftWidth={2}>
             <Button
               my={4}
               px={2}

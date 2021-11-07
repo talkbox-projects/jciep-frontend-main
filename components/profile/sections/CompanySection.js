@@ -1,4 +1,6 @@
-import { Box } from "@chakra-ui/react";
+
+import { VStack } from "@chakra-ui/layout";
+import React from "react";
 import SectionCard from "../fragments/SectionCard";
 
 const CompanySection = ({ identity, page, enums, editable }) => {

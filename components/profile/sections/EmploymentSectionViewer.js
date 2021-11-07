@@ -9,6 +9,7 @@ import {
   Wrap,
   Tag,
 } from "@chakra-ui/react";
+import React from "react";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";

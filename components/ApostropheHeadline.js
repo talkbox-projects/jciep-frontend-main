@@ -1,5 +1,5 @@
-import { Box, Flex, HStack, Text } from "@chakra-ui/react";
-
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React from "react";
 const ApostropheHeadline = ({
   color = "#ffffff",
   fontSize = ["3xl", "4xl"],

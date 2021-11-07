@@ -1,4 +1,5 @@
 import { VStack } from "@chakra-ui/react";
+import React from "react";
 import BannerFragment from "../fragments/BannerFragment";
 import SectionCard from "../fragments/SectionCard";
 import PublicSectionEditor from "./PublicSectionEditor";

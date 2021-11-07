@@ -14,7 +14,6 @@ import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 import { useAppContext, useDisclosureWithParams } from "../../../store/AppStore";
 import BiographyGallery from "../fragments/BiographyGallery";
-import ShareBox from "../../ShareBox";
 
 export const IdentityBiographySectionViewer = () => {
   const { page, identity, setEditSection, isAdmin, editable, editSection } =

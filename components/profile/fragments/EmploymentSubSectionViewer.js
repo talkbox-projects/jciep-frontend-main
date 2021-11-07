@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Box, VStack, Wrap, Tag, Flex, HStack } from "@chakra-ui/react";
+import { Text, Box, VStack, Wrap, Tag, HStack } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -64,17 +64,17 @@ const EmploymentSubSectionViewer = () => {
                       {industry === "other" && industryOther
                         ? industryOther
                         : enums?.EnumIndustryList?.find(
-                            (x) => x.key === industry
-                          )?.value?.[router.locale]}
+                          (x) => x.key === industry
+                        )?.value?.[router.locale]}
                     </Tag>
                     <Text>
                       {startDatetime &&
                         `${moment(startDatetime).format("YYYY/MM")} - `}
                       {present
                         ? wordExtractor(
-                            page?.content?.wordings,
-                            "present_label"
-                          )
+                          page?.content?.wordings,
+                          "present_label"
+                        )
                         : endDatetime && moment(endDatetime).format("YYYY/MM")}
                     </Text>
                   </Wrap>

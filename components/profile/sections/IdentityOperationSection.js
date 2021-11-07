@@ -6,6 +6,7 @@ import IdentityRemove from "../../../utils/api/IdentityRemove";
 import wordExtractor from "../../../utils/wordExtractor";
 import IdentityRemoveModal from "../fragments/IdentityRemoveModal";
 import SectionCard from "../fragments/SectionCard";
+import React from "react";
 
 const IdentityOperationSection = () => {
   const { identity, page } = IdentityProfileStore.useContext();

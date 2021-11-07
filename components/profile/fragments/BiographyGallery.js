@@ -1,4 +1,4 @@
-import React from "react";
+
 import {
   Image,
   Modal,
@@ -9,7 +9,7 @@ import {
   ModalOverlay,
   VStack,
 } from "@chakra-ui/react";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 
 const BiographyGallery = ({ isOpen, onClose, params }) => {
 

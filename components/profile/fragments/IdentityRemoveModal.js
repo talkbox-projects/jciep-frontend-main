@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import wordExtractor from "../../../utils/wordExtractor";
+import React from "react";
 
 const IdentityRemoveModal = ({
   isOpen,

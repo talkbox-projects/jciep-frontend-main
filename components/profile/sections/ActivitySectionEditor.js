@@ -52,7 +52,7 @@ const ActivitySectionEditor = () => {
           </HStack>
         </VStack>
       </HStack>
-      <Stack px={1} direction={"column"} px={8} spacing={4}>
+      <Stack direction={"column"} px={8} spacing={4}>
         <ActivitySubSectionEditor form={form} />
       </Stack>
     </VStack>

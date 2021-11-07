@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/layout";
 import { Button, Icon } from "@chakra-ui/react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }) => {
+import React from "react";
+const ButtonGroup = ({ next, previous, ...rest }) => {
   const {
     carouselState: { currentSlide, slidesToShow },
   } = rest;

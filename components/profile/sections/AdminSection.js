@@ -4,6 +4,7 @@ import SectionCard from "../fragments/SectionCard";
 import StaffSectionEditor from "./StaffSectionEditor";
 import StaffSectionViewer from "./StaffSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import React from "react";
 
 const StaffSection = () => {
   const { page, identity, saveIdentity, editSection, editable } =

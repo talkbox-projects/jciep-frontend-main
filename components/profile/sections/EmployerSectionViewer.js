@@ -13,6 +13,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
+import React from "react";
 
 const StaffSectionViewer = () => {
   const router = useRouter();

@@ -1,34 +1,35 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Text, Button, HStack, VStack, Stack } from "@chakra-ui/react";
 import wordExtractor from "../../../utils/wordExtractor";
 import { RiEdit2Line } from "react-icons/ri";
 import ActvitySubSectionViewer from "../fragments/ActvitySubSectionViewer";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useAppContext } from "../../../store/AppStore";
-import {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 const ActivitySectionViewer = () => {
   const { page, editSection, setEditSection, isAdmin, editable, identity } =
     IdentityProfileStore.useContext();
 
-    
-    const { identity: { id, type, organizationRole} = {} } = useAppContext();
-  const [staffAccess, setStaffAccess] = useState(false) 
-  
+
+  const { identity: { type, organizationRole } = {} } = useAppContext();
+  const [staffAccess, setStaffAccess] = useState(false)
+
   useEffect(async () => {
-    if (type === "staff" && organizationRole?.length> 0) {
+    if (type === "staff" && organizationRole?.length > 0) {
       let IdentityRole = (identity.organizationRole)
-      
-     let hasStaffAccess =  IdentityRole.filter(role =>  
+
+      let hasStaffAccess = IdentityRole.filter(role =>
         role.organization.id === organizationRole[0].organization.id
-        && organizationRole[0].role === "staff" 
-        && organizationRole[0].status === "joined" 
+        && organizationRole[0].role === "staff"
+        && organizationRole[0].status === "joined"
       )[0]
-       
-     if(hasStaffAccess) {
-      setStaffAccess(true)
-     } else {
-      setStaffAccess(false)
-     }   
+
+      if (hasStaffAccess) {
+        setStaffAccess(true)
+      } else {
+        setStaffAccess(false)
+      }
     }
 
   }, [type, identity])
@@ -52,7 +53,6 @@ const ActivitySectionViewer = () => {
         )}
       </HStack>
       <Stack
-        px={1}
         direction={["column", "column", "column", "row"]}
         px={8}
         spacing={4}

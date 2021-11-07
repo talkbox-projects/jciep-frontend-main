@@ -3,6 +3,7 @@ import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import SectionCard from "../fragments/SectionCard";
 import ActivitySectionEditor from "./ActivitySectionEditor";
 import ActivitySectionViewer from "./ActivitySectionViewer";
+import React from "react";
 
 const ActivitySection = () => {
   const { editSection } = IdentityProfileStore.useContext();

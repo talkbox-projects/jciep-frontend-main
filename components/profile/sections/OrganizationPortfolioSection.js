@@ -8,14 +8,13 @@ import {
   Icon,
   SimpleGrid,
   IconButton,
-  useDisclosure,
 } from "@chakra-ui/react";
+import React from "react";
 import { useCallback, useMemo, useState } from "react";
 import {
   RiAddFill,
   RiCloseCircleFill,
   RiEdit2Line,
-  RiFilePdfLine,
 } from "react-icons/ri";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -78,15 +77,14 @@ const IdentityPortfolioSection = () => {
     [medias, galleryDisclosure, portfolioMediaDisclosure, isEditable]
   );
 
-  const onSave = useCallback(async () => {
+  const onSave = async () => {
     try {
       await saveOrganization({ id: organization?.id, portfolio: medias });
       removeEditSection();
     } catch (error) {
       console.error(error);
     }
-  }, [organization, medias]);
-
+  }
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">

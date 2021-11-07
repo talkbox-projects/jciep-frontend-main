@@ -8,15 +8,12 @@ import {
   Button,
   VStack,
   Input,
-  Select,
   FormHelperText,
   FormLabel,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import OrganizationInvitationCodeValidity from "../../../utils/api/OrganizationInvitationCodeValidity";
 import wordExtractor from "../../../utils/wordExtractor";
 
@@ -38,7 +35,7 @@ const OrganizationMemberJoinModal = ({
     if (!isOpen) {
       reset();
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

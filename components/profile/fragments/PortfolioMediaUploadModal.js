@@ -1,7 +1,6 @@
+/* eslint-disable no-useless-escape */
 import {
   AspectRatio,
-  Text,
-  Icon,
   Button,
   Modal,
   ModalBody,
@@ -50,11 +49,11 @@ const PortfolioMediaUploadModal = ({ params, page, isOpen, onClose }) => {
       params?.item
         ? reset(params?.item)
         : reset({
-            videoUrl: "",
-            file: null,
-            title: "",
-            description: "",
-          });
+          videoUrl: "",
+          file: null,
+          title: "",
+          description: "",
+        });
     }
   }, [params, isOpen, reset]);
 

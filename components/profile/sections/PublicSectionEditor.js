@@ -12,6 +12,7 @@ import {
   FormHelperText,
   Select,
 } from "@chakra-ui/react";
+import React from "react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";

@@ -1,5 +1,5 @@
-import { Box, HStack, Text } from "@chakra-ui/react";
-
+import { Text } from "@chakra-ui/react";
+import React from "react";
 const HighlightHeadline = ({
   bgColor = "#F6D644",
   fontSize = ["3xl", "4xl"],

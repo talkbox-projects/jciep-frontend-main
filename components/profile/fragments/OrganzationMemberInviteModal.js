@@ -14,7 +14,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import OrganizationMemberInvite from "../../../utils/api/OrganizationMemberInvite";
@@ -33,7 +33,7 @@ const OrganzationMemberInviteModal = ({ isOpen, onClose, params }) => {
     defaultValues: {},
   });
 
-  const onInvite = useCallback(
+  const onInvite =
     async (values) => {
       try {
         if (!params?.id) return;
@@ -45,14 +45,12 @@ const OrganzationMemberInviteModal = ({ isOpen, onClose, params }) => {
       } catch (error) {
         console.error(error);
       }
-    },
-    [params]
-  );
+    };
   useEffect(() => {
     if (!isOpen) {
       reset();
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

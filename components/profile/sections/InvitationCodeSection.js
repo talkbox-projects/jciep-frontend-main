@@ -4,13 +4,11 @@ import {
   StatNumber,
   StatHelpText,
   VStack,
-  Tag,
   Text,
   HStack,
-  Avatar,
   Button,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";

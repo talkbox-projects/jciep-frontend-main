@@ -3,7 +3,6 @@ import { Box, useBreakpointValue } from "@chakra-ui/react";
 
 const HoverCard = ({
   children,
-  mobileProps,
   desktopProps,
   isMobileBreakPointValue = [true, true, false, false],
 }) => {

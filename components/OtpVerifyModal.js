@@ -22,8 +22,6 @@ import {
 } from "@chakra-ui/react";
 import { useGetWording } from "../utils/wordings/useWording";
 import { FaArrowLeft } from "react-icons/fa";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../utils/apollo";
 import { useCredential } from "../utils/user";
 import { useRouter } from "next/router";
 import userLogin from "../utils/api/UserLogin";

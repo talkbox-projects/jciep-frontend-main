@@ -2,6 +2,7 @@ import { Accordion, AccordionItem, AccordionButton, Box, Text, Link, AccordionPa
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { VStack } from "@chakra-ui/layout";
 import MultiTextRenderer from "./MultiTextRenderer";
+import React from 'react';
 const Accordian = ({ title, description, link, bgColor, multi, fontSize, boldTitle, textAlign }) => {
   return (
     <Accordion pt="10px" allowToggle allowMultiple border="transparent" w="100%">
