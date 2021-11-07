@@ -239,6 +239,25 @@ export default gql`
 
     UserMeGet: User
 
+    AdminIdentitySearch(
+      phone: String
+      email: String
+      name: String
+      organizationId: ID
+      identityType: [EnumIdentityType]
+      publishStatus: [EnumPublishStatus]
+      published: Boolean
+      limit: Int!
+      page: Int!
+      days: String
+    ): [Identity]
+
+    TalantIdentitySearch(
+      organizationId: ID
+      limit: Int!
+      page: Int!
+    ): [Identity]
+
     """
     Search Identtiy by either phone, email or name. Search the name of every identities.
     """

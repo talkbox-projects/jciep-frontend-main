@@ -50,7 +50,7 @@ export default {
 
     },
 
-    IdentitySearch: async (_parent, input, context) => {
+    AdminIdentitySearch: async (_parent, input, context) => {
       /**
        * Search User
        */
@@ -95,9 +95,7 @@ export default {
           ],
         });
 
-      if (!isAdmin) {
-        keys["publishStatus"] = "approved";
-      } else if (input.publishStatus?.length > 0) {
+      if (input.publishStatus?.length > 0) {
         const $or = [
           { type: { $ne: "pwd" } },
           { publishStatus: { $in: input.publishStatus } },
@@ -120,6 +118,26 @@ export default {
         .limit(input?.limit);
 
 
+
+      return identities;
+    },
+
+    TalantIdentitySearch: async (_parent, input) => {
+
+      const keys = { publishStatus: "approved" };
+
+      if (input.organizationId) {
+        const organization = await Organization.findById(input.organizationId);
+        keys._id = {
+          $in: organization.member
+            .filter((x) => !!x.identityId)
+            .map((m) => Types.ObjectId(m.identityId)),
+        };
+      }
+
+      const identities = await Identity.find(keys)
+        .skip((input.page - 1) * input?.limit)
+        .limit(input?.limit);
 
       return identities;
     },
@@ -512,6 +530,7 @@ export default {
       }
     },
     IdentityRemove: async (_parent, { id }) => {
+
       try {
         await Identity.findByIdAndDelete(id);
         return true;
@@ -535,7 +554,12 @@ export default {
       return true;
     },
 
-    PortfolioPublishApprove: async (_parent, { id }) => {
+    PortfolioPublishApprove: async (_parent, { id }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const identity = await Identity.findById(id);
       if (identity?.type !== "pwd") {
         return false;
@@ -549,7 +573,12 @@ export default {
       return true;
     },
 
-    PortfolioPublishReject: async (_parent, { id }) => {
+    PortfolioPublishReject: async (_parent, { id }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const identity = await Identity.findById(id);
       if (identity?.type !== "pwd") {
         return false;
@@ -564,6 +593,7 @@ export default {
     },
 
     PortfolioUnpublish: async (_parent, { id }) => {
+
       const identity = await Identity.findById(id);
       if (identity?.type !== "pwd") {
         return false;

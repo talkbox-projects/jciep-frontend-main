@@ -280,7 +280,7 @@ const PwdSectionViewer = () => {
         return (
           <Menu placement="bottom-end">
             <MenuButton as={Button} rightIcon={<MdArrowDropDown />} variant="outline">
-                {text}
+              {text}
             </MenuButton>
             <MenuList>
               {menuItems.map(({ label, key, color, onClick }) => (
@@ -297,7 +297,7 @@ const PwdSectionViewer = () => {
     enums?.EnumPublishStatusList,
     id,
     identity?.email,
-    identity.id,
+    identity?.id,
     identity?.phone,
     identity.publishStatus,
     isAdmin,
@@ -368,7 +368,7 @@ const PwdSectionViewer = () => {
               ? identity?.chineseName
               : identity?.englishName}
           </Text>
-          {(isAdmin || editable || staffAccess) &&  <Tag>
+          {(isAdmin || editable || staffAccess) && <Tag>
             {
               enums?.EnumIdentityTypeList?.find((x) => x.key === identity?.type)
                 ?.value?.[router.locale]
@@ -436,9 +436,9 @@ const PwdSectionViewer = () => {
                   {identity?.dob
                     ? moment(identity?.dob).format("YYYY-MM-DD")
                     : wordExtractor(
-                        page?.content?.wordings,
-                        "empty_text_label"
-                      )}
+                      page?.content?.wordings,
+                      "empty_text_label"
+                    )}
                 </Text>
               </FormControl>
               <FormControl>
@@ -513,14 +513,14 @@ const PwdSectionViewer = () => {
             <Wrap>
               {identity?.interestedEmploymentMode?.length > 0
                 ? (identity?.interestedEmploymentMode ?? []).map((key) => (
-                    <Tag key={key}>
-                      {getEnumText(
-                        enums?.EnumEmploymentModeList,
-                        key,
-                        router.locale
-                      )}
-                    </Tag>
-                  ))
+                  <Tag key={key}>
+                    {getEnumText(
+                      enums?.EnumEmploymentModeList,
+                      key,
+                      router.locale
+                    )}
+                  </Tag>
+                ))
                 : wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Wrap>
           </FormControl>
@@ -531,10 +531,10 @@ const PwdSectionViewer = () => {
             <Wrap>
               {identity?.pwdType?.length > 0
                 ? (identity?.pwdType ?? []).map((key) => (
-                    <Tag key={key}>
-                      {getEnumText(enums?.EnumPwdTypeList, key, router.locale)}
-                    </Tag>
-                  ))
+                  <Tag key={key}>
+                    {getEnumText(enums?.EnumPwdTypeList, key, router.locale)}
+                  </Tag>
+                ))
                 : wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Wrap>
           </FormControl>

@@ -84,7 +84,13 @@ export default {
       };
     },
 
-    MediaDelete: async (_parent, { path: _path }) => {
+    MediaDelete: async (_parent, { path: _path }, context) => {
+
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       try {
         const path = _path.split("/").filter((x) => !!x);
         const directory = `/${path.slice(0, path.length - 1).join("/")}`;

@@ -23,7 +23,7 @@ import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useCallback } from "react";
-import identitySearch from "../../utils/api/IdentitySearch";
+import talantIdentitySearch from "../../utils/api/TalantIdentitySearch";
 import IdentityProfileStore from "../../store/IdentityProfileStore";
 import PwdSection from "../../components/profile/sections/PwdSection";
 import IdentityPortfolioSection from "../../components/profile/sections/IdentityPortfolioSection";
@@ -49,7 +49,7 @@ export const getServerSideProps = async (context) => {
           published: true,
           type: ["ngo"],
         }),
-        identities: await identitySearch({
+        identities: await talantIdentitySearch({
           published: true,
           identityType: ["pwd"],
           organizationId: context.query.organizationId,
@@ -81,9 +81,8 @@ const IdentityOpportunities = ({
         query += `identityId=${identityId ?? router.query.identityId}&`;
       }
       if (organizationId ?? router.query.organizationId) {
-        query += `organizationId=${
-          organizationId ?? router.query.organizationId
-        }&`;
+        query += `organizationId=${organizationId ?? router.query.organizationId
+          }&`;
       }
       return `/talants/individuals?${query}`;
     },
@@ -216,12 +215,12 @@ const IdentityOpportunities = ({
 
 
   const seo = <NextSeo
-    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"}${identity?.chineseName ? `| ${identity?.chineseName}`: identity?.chineseName}`}
+    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"}${identity?.chineseName ? `| ${identity?.chineseName}` : identity?.chineseName}`}
     description={page?.content?.seo?.description} />
 
   return (
     <>
-      {seo} 
+      {seo}
       <VStack spacing={0} align="stretch" w="100%">
         <Box
           d={!router.query.identityId ? "block" : ["none", "none", "block"]}
@@ -232,7 +231,7 @@ const IdentityOpportunities = ({
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Stack direction={["column", "column", "row", "row"]} w="100%"  align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
               <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
@@ -267,7 +266,7 @@ const IdentityOpportunities = ({
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-                
+
               >
                 {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
               </Button>
