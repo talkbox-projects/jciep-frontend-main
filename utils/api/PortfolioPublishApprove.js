@@ -1,14 +1,14 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const PortfolioPublishApprove = async ({ id }, context) => {
+const PortfolioPublishApprove = async ({ organizationId, identityId }, context) => {
   const query = gql`
-    mutation PortfolioPublishApprove($id: ID!) {
-      PortfolioPublishApprove(id: $id)
+    mutation PortfolioPublishApprove($organizationId: ID!, $identityId: ID!) {
+      PortfolioPublishApprove(organizationId: $organizationId, identityId: $identityId)
     }
   `;
 
-  const data = await getGraphQLClient(context).request(query, { id });
+  const data = await getGraphQLClient(context).request(query, { organizationId, identityId });
 
   return data?.PortfolioPublishApprove;
 };

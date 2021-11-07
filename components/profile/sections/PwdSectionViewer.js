@@ -64,6 +64,8 @@ const PwdSectionViewer = () => {
   const publishRejectDisclosure = useDisclosureWithParams();
   const unpublishDisclosure = useDisclosureWithParams();
 
+
+  const organizationId = organizationRole[0].organization.id;
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
       return (organizationRole ?? []).find(
@@ -105,7 +107,8 @@ const PwdSectionViewer = () => {
                   onSubmit: async () => {
                     try {
                       await PortfolioPublishRequest({
-                        id: identity.id,
+                        organizationId,
+                        identityId: identity.id,
                       });
                       await refreshIdentity();
                       publishRequestDisclosure.onClose();
@@ -134,7 +137,8 @@ const PwdSectionViewer = () => {
                     onSubmit: async () => {
                       try {
                         await PortfolioPublishApprove({
-                          id: identity.id,
+                          organizationId,
+                          identityId: identity.id,
                         });
                         await refreshIdentity();
                         publishApproveDisclosure.onClose();
@@ -158,7 +162,8 @@ const PwdSectionViewer = () => {
                     onSubmit: async () => {
                       try {
                         await PortfolioUnpublish({
-                          id: identity.id,
+                          organizationId,
+                          identityId: identity.id,
                         });
                         await refreshIdentity();
                         unpublishDisclosure.onClose();
@@ -185,7 +190,8 @@ const PwdSectionViewer = () => {
                     onSubmit: async () => {
                       try {
                         await PortfolioUnpublish({
-                          id: identity.id,
+                          organizationId,
+                          identityId: identity.id,
                         });
                         await refreshIdentity();
                         unpublishDisclosure.onClose();

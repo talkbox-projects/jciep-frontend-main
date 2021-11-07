@@ -566,8 +566,17 @@ export default {
       }
     },
 
-    PortfolioPublishRequest: async (_parent, { id }) => {
-      const identity = await Identity.findById(id);
+    PortfolioPublishRequest: async (_parent, { organizationId, identityId }, context) => {
+
+      const currentIdentity = context?.auth?.identity;
+      if (!checkIfAdmin(currentIdentity)
+        && !isJoinedOrganizationStaff(currentIdentity, organizationId)
+      ) {
+        throw new Error("Permission Denied!");
+      }
+
+
+      const identity = await Identity.findById(identityId);
       if (identity?.type !== "pwd") {
         return false;
       }
@@ -618,7 +627,14 @@ export default {
       return true;
     },
 
-    PortfolioUnpublish: async (_parent, { id }) => {
+    PortfolioUnpublish: async (_parent, { id }, context) => {
+
+      const currentIdentity = context?.auth?.identity;
+      if (!checkIfAdmin(currentIdentity)
+        && !isJoinedOrganizationStaff(currentIdentity, organizationId)
+      ) {
+        throw new Error("Permission Denied!");
+      }
 
       const identity = await Identity.findById(id);
       if (identity?.type !== "pwd") {

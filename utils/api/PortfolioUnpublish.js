@@ -1,16 +1,16 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const PortfolioUnpublish = async ({ id }, context) => {
+const PortfolioUnpublish = async ({ organizationId, identityId }, context) => {
   const query = gql`
-    mutation PortfolioUnpublish($id: ID!) {
-      PortfolioUnpublish(id: $id)
+    mutation PortfolioUnpublish($organizationId: ID!, $identityId: ID!) {
+      PortfolioUnpublish(organizationId: $organizationId, identityId: $identityId)
     }
   `;
 
-  const data = await getGraphQLClient(context).request(query, { id });
+  const data = await getGraphQLClient(context).request(query, { organizationId, identityId });
 
-  return data?.PortfolioPublishUnpublish;
+  return data?.PortfolioUnpublish;
 };
 
 export default PortfolioUnpublish;
