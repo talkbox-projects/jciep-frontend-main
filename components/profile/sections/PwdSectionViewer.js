@@ -65,7 +65,7 @@ const PwdSectionViewer = () => {
   const unpublishDisclosure = useDisclosureWithParams();
 
 
-  const organizationId = organizationRole[0].organization.id;
+  const organizationId = organizationRole?.[0]?.organization?.id;
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
       return (organizationRole ?? []).find(
@@ -78,7 +78,7 @@ const PwdSectionViewer = () => {
     return false;
   }, [organizationRole, type]);
 
-  const publishMenu = useMemo(() => {
+  const publishMenu = () => {
     const isGuest = identity.id !== id && !staffAccess && !isAdmin;
 
     const showMissingEMailAndPhoneTooltip =
@@ -299,22 +299,10 @@ const PwdSectionViewer = () => {
         );
       }
     }
-  }, [
-    enums?.EnumPublishStatusList,
-    id,
-    identity?.email,
-    identity?.id,
-    identity?.phone,
-    identity.publishStatus,
-    isAdmin,
-    page,
-    publishApproveDisclosure,
-    publishRequestDisclosure,
-    refreshIdentity,
-    router.locale,
-    staffAccess,
-    unpublishDisclosure,
-  ]);
+  };
+
+  console.log("ediable:", editable, editSection, (isAdmin || editable || staffAccess) && !editSection);
+  console.log("staffAccess:", staffAccess);
 
   return (
     <VStack spacing={1} align="stretch">

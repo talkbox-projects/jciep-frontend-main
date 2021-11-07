@@ -33,9 +33,6 @@ export const getServerSideProps = async (context) => {
 
 const IdentityProfile = ({ api: { identity }, enums, page }) => {
   let comp = null;
-  const { identity: { id: currentId } = {} } = useAppContext();
-  const router = useRouter();
-  const editable = currentId === router.query.id;
 
   switch (identity?.type) {
     case "pwd":
@@ -63,7 +60,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
       identity={identity}
       enums={enums}
       page={page}
-      editable={editable}
+      editable={true}
     >
       <Box w="100%" bgColor="#fafafa">
         {comp}
