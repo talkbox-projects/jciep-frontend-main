@@ -1,40 +1,10 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const identitySearch = async (
-  {
-    limit,
-    page,
-    organizationId,
-    identityType,
-    publishStatus,
-    published,
-    name,
-    days,
-  },
-  context
-) => {
+const adminIdentityGet = async ({ id }, context) => {
   const query = gql`
-    query IdentitySearch(
-      $limit: Int!
-      $page: Int!
-      $organizationId: ID
-      $identityType: [EnumIdentityType]
-      $publishStatus: [EnumPublishStatus]
-      $name: String
-      $days: String
-      $published: Boolean
-    ) {
-      IdentitySearch(
-        limit: $limit
-        page: $page
-        organizationId: $organizationId
-        identityType: $identityType
-        publishStatus: $publishStatus
-        published: $published
-        name: $name
-        days: $days
-      ) {
+    query AdminIdentityGet($id: ID!) {
+      AdminIdentityGet(id: $id) {
         id
         type
         publishStatus
@@ -70,7 +40,6 @@ const identitySearch = async (
           title
           description
         }
-        createdAt
         educationLevel
         yearOfExperience
         biography
@@ -133,18 +102,9 @@ const identitySearch = async (
     }
   `;
 
-  const data = await getGraphQLClient(context).request(query, {
-    page,
-    limit,
-    organizationId,
-    identityType,
-    publishStatus,
-    name,
-    published,
-    days,
-  });
+  const data = await getGraphQLClient(context).request(query, { id });
 
-  return data?.IdentitySearch;
+  return data?.AdminIdentityGet;
 };
 
-export default identitySearch;
+export default adminIdentityGet;

@@ -1,23 +1,14 @@
 import {
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
   VStack,
   Tag,
   Text,
   HStack,
-  Avatar,
   Button,
-  Tooltip,
-  Icon,
   Box,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import {
-  AiFillInfoCircle,
-  AiOutlineInfoCircle,
   AiOutlinePlus,
 } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
@@ -25,8 +16,8 @@ import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationSubmissionDetailModal from "../fragments/OrganizationSubmissionDetailModal";
 import OrganizationSubmissionFormModal from "../fragments/OrganizationSubmissionFormModal";
-import OrganzationMemberInviteModal from "../fragments/OrganzationMemberInviteModal";
 import SectionCard from "../fragments/SectionCard";
+import React from "react";
 
 const OrganizationSubmissionSection = () => {
   const { organization, page, enums, refreshOrganization } =
@@ -70,9 +61,9 @@ const OrganizationSubmissionSection = () => {
           {(organization?.submission ?? [])
             .sort((a, b) => (a?.createdAt > b?.createdAt ? -1 : 1))
             .map((submission, index) => {
-              const { id, createdAt, vettedAt, status } = submission;
+              const { id, createdAt, status } = submission;
               return (
-                <HStack
+                <HStack key={id}
                   onClick={() => {
                     submissionDetailDisclosure.onOpen({
                       organization,
@@ -80,7 +71,6 @@ const OrganizationSubmissionSection = () => {
                       isLatest: index === 0,
                       onRefresh: refreshOrganization,
                     });
-                    // router.push(`/user/identity/${id}`);
                   }}
                   _hover={{
                     bg: "#fafafa",

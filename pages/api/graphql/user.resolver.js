@@ -13,7 +13,7 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import nookies from "nookies";
 import getConfig from "next/config";
-import { checkIfAdmin, getIdentityOrganizationRole } from "../../../utils/auth";
+import { checkIfAdmin, getIdentityOrganizationRole, isJoinedOrganizationStaff } from "../../../utils/auth";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 export default {
@@ -55,8 +55,9 @@ export default {
        * Search User
        */
 
-      const isAdmin = checkIfAdmin(context.auth?.identity);
-
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
       let keys = {};
 
 
@@ -142,11 +143,36 @@ export default {
       return identities;
     },
 
-    IdentityGet: async (_parent, { id }, context) => {
+    AdminIdentityGet: async (_parent, { id }, context) => {
+
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        throw new Error("Permission Denied!");
+      }
+
       const identity = await Identity.findById(id);
       identity.id = identity._id;
 
       return identity;
+    },
+
+    OrganizationIdentityGet: async (_parent, { organizationId, identityId }, context) => {
+
+      if (!isJoinedOrganizationStaff(context?.auth?.identity, organizationId)) {
+        throw new Error("Permission Denied!");
+      }
+      console.log("identityId", identityId);
+
+      const identity = await Identity.findById(identityId);
+      identity.id = identity._id;
+
+      return identity;
+    },
+
+    IdentityMeGet: async (_parent, params, context) => {
+      if (!context?.auth?.identity) {
+        throw new Error("Permission Denied!");
+      }
+      return Identity.findById(context?.auth?.identity._id);
     },
   },
   Mutation: {

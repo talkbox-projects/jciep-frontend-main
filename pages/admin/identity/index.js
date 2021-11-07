@@ -16,10 +16,10 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 
-import Container from "../../components/Container";
-import identitySearch from "../../utils/api/IdentitySearch";
-import { getPage } from "../../utils/page/getPage";
-import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import Container from "../../../components/Container";
+import adminIdentitySearch from "../../../utils/api/AdminIdentitySearch";
+import { getPage } from "../../../utils/page/getPage";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import MultiSelect from "react-select";
@@ -62,7 +62,7 @@ const AdminIdentity = ({ enums }) => {
       try {
         setIsLoading(true);
         setIdentities(
-          await identitySearch({
+          await adminIdentitySearch({
             limit,
             page,
             identityType,
@@ -228,7 +228,7 @@ const AdminIdentity = ({ enums }) => {
               return (
                 <NextLink
                   key={identity.id}
-                  href={`/user/identity/${identity.id}`}
+                  href={`/admin/identity/${identity.id}`}
                 >
                   <HStack
                     borderBottomWidth={1}

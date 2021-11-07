@@ -1,7 +1,7 @@
 import constate from "constate";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import identityGet from "../utils/api/IdentityGet";
+import { useCallback, useEffect, useState } from "react";
+import identityGet from "../utils/api/AdminIdentityGet";
 import identityUpdate from "../utils/api/IdentityUpdate";
 import { useAppContext } from "./AppStore";
 
@@ -23,7 +23,7 @@ const [Provider, useContext] = constate(
       setEditSection(null);
     }, []);
 
-    const saveIdentity = useCallback(
+    const saveIdentity =
       async (partialIdentity) => {
         try {
           const data = await identityUpdate({ input: partialIdentity });
@@ -32,14 +32,12 @@ const [Provider, useContext] = constate(
         } catch (e) {
           console.error(e);
         }
-      },
-      [setIdentity, identity]
-    );
+      };
 
-    const refreshIdentity = useCallback(async () => {
+    const refreshIdentity = async () => {
       const identity = await identityGet({ id: router.query.id });
       setIdentity(identity);
-    }, []);
+    };
 
     useEffect(() => {
       setIdentity(_identity);

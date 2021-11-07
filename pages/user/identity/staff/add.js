@@ -15,7 +15,7 @@ import {
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-
+import nookies from "nookies";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 
@@ -51,7 +51,7 @@ const IdentityStaffAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = 
+  const onFormSubmit =
     async ({
       contactPersonName,
       contactEmailAdress,
@@ -85,14 +85,15 @@ const IdentityStaffAdd = ({ page }) => {
           if (!invitationCode) {
             router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
           } else {
-            router.push(`/user/identity/${data.IdentityCreate.id}`);
+            nookies.set(null, "jciep-identityId", data.IdentityCreate.id, { path: "/" });
+            router.push(`/user/identity/me`);
           }
         }
       } catch (e) {
         console.error(e);
       }
     }
-  ;
+    ;
 
   return (
     <VStack py={36}>
@@ -131,10 +132,10 @@ const IdentityStaffAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.contactPersonName?.type === "required" && (
                       <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "contact_person_name_required"
-                          )}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "contact_person_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -163,20 +164,20 @@ const IdentityStaffAdd = ({ page }) => {
                   <FormHelperText>
                     {errors?.contactEmailAdress?.type === "required" && (
                       <Text color="red">
-                     
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "contact_email_required"
-                      )}
+
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "contact_email_required"
+                        )}
                       </Text>
                     )}
                     {errors?.contactEmailAdress?.type === "pattern" && (
                       <Text color="red">
-                     
+
                         {wordExtractor(
-                        page?.content?.wordings,
-                        "contact_email_pattern"
-                      )}
+                          page?.content?.wordings,
+                          "contact_email_pattern"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -202,9 +203,9 @@ const IdentityStaffAdd = ({ page }) => {
                     {errors?.contactNumber?.type === "required" && (
                       <Text color="red">
                         {wordExtractor(
-                        page?.content?.wordings,
-                        "contact_number_required"
-                      )}
+                          page?.content?.wordings,
+                          "contact_number_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -282,7 +283,7 @@ const IdentityStaffAdd = ({ page }) => {
                 {page?.content?.form?.terms?.text}
 
                 <Link target="_blank" href={page?.content?.form?.terms?.url}>
-                 
+
                   {page?.content?.form?.terms?.link}
                 </Link>
               </Checkbox>
@@ -290,10 +291,10 @@ const IdentityStaffAdd = ({ page }) => {
                 {errors?.terms?.type === "required" && (
                   <Text color="red">
                     {wordExtractor(
-                        page?.content?.wordings,
-                        "tnc_required"
-                      )}
-                    </Text>
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
+                  </Text>
                 )}
               </FormHelperText>
             </FormControl>
@@ -376,7 +377,7 @@ export default withPageCMS(IdentityStaffAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder:"https://"
+              placeholder: "https://"
             },
           ],
         },

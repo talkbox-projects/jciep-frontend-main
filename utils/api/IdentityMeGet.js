@@ -1,10 +1,10 @@
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../apollo";
 
-const identityGet = async ({ id }, context) => {
+const identityMeGet = async (params, context) => {
   const query = gql`
-    query IdentityGet($id: ID!) {
-      IdentityGet(id: $id) {
+    query IdentityMeGet {
+      IdentityMeGet {
         id
         type
         publishStatus
@@ -102,9 +102,9 @@ const identityGet = async ({ id }, context) => {
     }
   `;
 
-  const data = await getGraphQLClient(context).request(query, { id });
+  const data = await getGraphQLClient(context).request(query);
 
-  return data?.IdentityGet;
+  return data?.IdentityMeGet;
 };
 
-export default identityGet;
+export default identityMeGet;

@@ -183,7 +183,7 @@ const OrganizationMemberListSection = ({ path }) => {
                 {...(identity?.id && {
                   onClick: () => {
                     if (isAdmin || editable) {
-                      router.push(`/user/identity/${identity.id}`);
+                      router.push(`/user/identity/${organization.id}/${identity.id}`);
                     } else {
                       router.push(
                         `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`

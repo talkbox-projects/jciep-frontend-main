@@ -73,6 +73,11 @@ export const isJoinedOrganizationStaff = (identity, organizationId) =>
         });
 
 
+
+export const canViewIdentity = (currentIdentity, identity) =>
+    currentIdentity.organizationRole[0].organization.id === identity;
+
+
 export const isIdentityUnderUser = (identityId, user) => {
     return !!(user?.identities ?? []).find(({ id }) => id === identityId);
 }

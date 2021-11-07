@@ -8,9 +8,9 @@ import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
-import identityGet from "../../../utils/api/IdentityGet";
+import identityMeGet from "../../../utils/api/IdentityMeGet";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React from "react";
 import { useAppContext } from "../../../store/AppStore";
 
 const PAGE_KEY = "identity_id_profile";
@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        identity: await identityGet({ id: context.query.id }, context),
+        identity: await identityMeGet(undefined, context),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -39,7 +39,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
 
   switch (identity?.type) {
     case "pwd":
-      comp = <IdentityPwdProfile  />;
+      comp = <IdentityPwdProfile />;
       break;
     case "public":
       comp = <IdentityPublicProfile />;

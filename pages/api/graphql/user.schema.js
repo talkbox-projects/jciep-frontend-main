@@ -258,23 +258,12 @@ export default gql`
       page: Int!
     ): [Identity]
 
-    """
-    Search Identtiy by either phone, email or name. Search the name of every identities.
-    """
-    IdentitySearch(
-      phone: String
-      email: String
-      name: String
-      organizationId: ID
-      identityType: [EnumIdentityType]
-      publishStatus: [EnumPublishStatus]
-      published: Boolean
-      limit: Int!
-      page: Int!
-      days: String
-    ): [Identity]
 
-    IdentityGet(id: ID!): Identity
+    AdminIdentityGet(id: ID!): Identity
+    OrganizationIdentityGet(organizationId: ID!, identityId: ID!): Identity
+
+    IdentityMeGet: Identity
+
   }
 
   type Mutation {

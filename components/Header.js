@@ -103,7 +103,7 @@ const Header = ({
     (identityId) => {
       setIdentityId(identityId);
       nookies.set(null, "jciep-identityId", identityId, { path: "/" });
-      router.push(`/user/identity/${identityId}`);
+      router.push(`/user/identity/me`);
     },
     [router, setIdentityId]
   );
@@ -214,7 +214,7 @@ const Header = ({
                   </Button>
                 </MenuButton>
                 <MenuList>
-                  <NextLink href="/admin/identities">
+                  <NextLink href="/admin/identity">
                     <MenuItem key="identities">用戶管理</MenuItem>
                   </NextLink>
                   <NextLink href="/admin/organizations">

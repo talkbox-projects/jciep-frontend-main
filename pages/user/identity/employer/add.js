@@ -12,6 +12,7 @@ import {
   Link,
   FormLabel,
 } from "@chakra-ui/react";
+import nookies from "nookies";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -50,7 +51,7 @@ const IdentityEmployerAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = 
+  const onFormSubmit =
     async ({
       contactPersonName,
       contactEmailAdress,
@@ -86,14 +87,16 @@ const IdentityEmployerAdd = ({ page }) => {
               `/user/organization/company/${data.IdentityCreate.id}/add`
             );
           } else {
-            router.push(`/user/identity/${data.IdentityCreate.id}`);
+
+            nookies.set(null, "jciep-identityId", data.IdentityCreate.id, { path: "/" });
+            router.push(`/user/identity/me`);
           }
         }
       } catch (e) {
         console.error(e);
       }
     }
-  ;
+    ;
 
   return (
     <VStack py={36}>
@@ -170,10 +173,10 @@ const IdentityEmployerAdd = ({ page }) => {
                         {/* "輸入有效的聯繫電子郵件地址 Enter valid contact email
                         address! */}
 
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "contact_email_required"
-                      )}
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "contact_email_required"
+                        )}
                       </Text>
                     )}
                     {errors?.contactEmailAdress?.type === "pattern" && (
@@ -182,8 +185,8 @@ const IdentityEmployerAdd = ({ page }) => {
                         address! */}
                         {wordExtractor(
                           page?.content?.wordings,
-                        "contact_email_pattern"
-                      )}
+                          "contact_email_pattern"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -210,9 +213,9 @@ const IdentityEmployerAdd = ({ page }) => {
                       <Text color="red">
                         {/* 輸入有效的聯繫電話 Enter valid contact Number! */}
                         {wordExtractor(
-                        page?.content?.wordings,
-                        "contact_number_required"
-                      )}
+                          page?.content?.wordings,
+                          "contact_number_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -288,17 +291,17 @@ const IdentityEmployerAdd = ({ page }) => {
                 {page?.content?.form?.terms?.text}
 
                 <Link target="_blank" href={page?.content?.form?.terms?.url}>
-                {page?.content?.form?.terms?.link}
+                  {page?.content?.form?.terms?.link}
                 </Link>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
                   <Text color="red">
                     {/* 請接受條款和條件 Please accept T&C! */}
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "tnc_required"
-                      )}
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
                   </Text>
                 )}
               </FormHelperText>
@@ -382,7 +385,7 @@ export default withPageCMS(IdentityEmployerAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder:"https://"
+              placeholder: "https://"
             },
           ],
         },
