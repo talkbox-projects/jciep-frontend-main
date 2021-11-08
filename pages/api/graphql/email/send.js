@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
-const html = require("./templates/activation.js").default;
+import nodemailer from "nodemailer";
+import html from "./templates/activation.js";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();

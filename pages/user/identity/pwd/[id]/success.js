@@ -63,7 +63,6 @@ const IdentityPwdAddSuccess = ({ page }) => {
                 height="46px"
                 width="114px"
                 border="2px solid #C6C6C6"
-                borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"

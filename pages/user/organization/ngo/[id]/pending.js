@@ -1,12 +1,12 @@
 import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../../../store/AppStore";
 import { useCredential } from "../../../../../utils/user";
+import React from "react";
 
 const PAGE_KEY = "organization_ngo_pending";
 
@@ -66,7 +66,6 @@ const OrganizationNgoPending = ({ page }) => {
                 height="46px"
                 width="114px"
                 border="2px solid #C6C6C6"
-                borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"

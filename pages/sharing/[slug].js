@@ -92,7 +92,6 @@ const PostHeader = ({ headerTitle, categories, post }) => {
           <ApostropheHeadline>
             {headerTitle}
           </ApostropheHeadline>
-          }
         </HStack>}
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image alt={post?.title} src={post.coverImage} />

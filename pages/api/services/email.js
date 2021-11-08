@@ -1,4 +1,4 @@
-const sgMail = require("@sendgrid/mail");
+import sgMail from "@sendgrid/mail";
 sgMail.setApiKey(
   "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"
 );
@@ -9,7 +9,7 @@ sgMail.setApiKey(
 //  - Text
 //  - Html
 
-exports.sendEmail = ({ To, Subject, Text }) => {
+export const sendEmail = ({ To, Subject, Text }) => {
   return new Promise((resolve) => {
     const msg = {
       to: To,

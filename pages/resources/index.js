@@ -874,7 +874,7 @@ const Resources = ({ page, enums, setting }) => {
           {(page?.content?.jobOpportunitySection?.buttons ?? []).map(
             ({ label, link }, index) => {
               return (
-                <Link href={link}>
+                <Link key={index} href={link}>
                   <Button
                     zIndex="100"
                     borderRadius="22px"

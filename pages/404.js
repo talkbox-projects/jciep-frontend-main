@@ -1,9 +1,6 @@
-import { getConfiguration } from "../utils/configuration/getConfiguration";
-import { getPage } from "../utils/page/getPage";
 import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-
-const PAGE_KEY = "404";
+import React from "react";
 
 // export const getStaticProps = async (context) => {
 //   return {
@@ -35,7 +32,7 @@ const Custom404 = () => {
           padding="0 25px"
         >
           <Heading as="h4" textAlign="center">
-          404 錯誤  
+            404 錯誤
           </Heading>
 
           <Image
@@ -56,7 +53,6 @@ const Custom404 = () => {
                 boxSizing="border-box"
                 height="46px"
                 border="2px solid #C6C6C6"
-                borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"
@@ -66,7 +62,7 @@ const Custom404 = () => {
             </Link>
           </Box>
 
-         
+
         </Box>
       </Box>
     </VStack>

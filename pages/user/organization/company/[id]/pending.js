@@ -1,6 +1,6 @@
 import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import { getConfiguration } from "../../../../../utils/configuration/getConfiguration";
+import React from "react";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
@@ -47,7 +47,7 @@ const OrganizationCompanyPending = ({ page }) => {
             {page?.content?.heading?.title}
           </Heading>
 
-          <Image  alt=""
+          <Image alt=""
             height="150px"
             width="150px"
             marginTop="50px !important"
@@ -67,7 +67,6 @@ const OrganizationCompanyPending = ({ page }) => {
                 height="46px"
                 width="114px"
                 border="2px solid #C6C6C6"
-                borderRadius="22px"
                 marginTop="30px !important"
                 borderRadius="50px"
                 bgColor="primary.400"
