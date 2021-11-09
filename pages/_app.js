@@ -17,6 +17,8 @@ import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 const theme = extendTheme({
+  initialColorMode: "light",
+  useSystemColorMode: false,
   colors: {
     secondary: {
       50: "#E5FFFE",
