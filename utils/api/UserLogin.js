@@ -5,102 +5,100 @@ const userLogin = async ({ input }, context) => {
   const mutation = gql`
     mutation UserLogin($input: LoginInput) {
       UserLogin(input: $input) {
-        user {
+        id
+        email
+        phone
+        facebookId
+        googleId
+        appleId
+        snsMeta {
+          profilePicUrl
+          displayName
+        }
+        identities {
           id
+          type
+          publishStatus
+          chineseName
+          englishName
+          dob
+          gender
+          district
+          pwdType
+          interestedEmploymentMode
+          interestedIndustry
+          interestedIndustryOther
+          industry
+          industryOther
+          tncAccept
+          published
           email
           phone
-          facebookId
-          googleId
-          appleId
-          snsMeta {
-            profilePicUrl
-            displayName
-          }
-          identities {
-            id
-            type
-            publishStatus
-            chineseName
-            englishName
-            dob
-            gender
-            district
-            pwdType
-            interestedEmploymentMode
-            interestedIndustry
-            interestedIndustryOther
-            industry
-            industryOther
-            tncAccept
-            published
-            email
-            phone
-            organizationRole {
-              organization {
-                id
-              }
-              status
-              role
+          organizationRole {
+            organization {
+              id
             }
-            profilePic {
+            status
+            role
+          }
+          profilePic {
+            id
+            url
+            contentType
+            fileSize
+          }
+          bannerMedia {
+            file {
               id
               url
               contentType
               fileSize
             }
-            bannerMedia {
-              file {
-                id
-                url
-                contentType
-                fileSize
-              }
-              videoUrl
-              title
-              description
+            videoUrl
+            title
+            description
+          }
+          yearOfExperience
+          biography
+          portfolio {
+            file {
+              id
+              url
+              contentType
+              fileSize
             }
-            yearOfExperience
-            biography
-            portfolio {
-              file {
-                id
-                url
-                contentType
-                fileSize
-              }
-              videoUrl
-              title
-              description
-            }
-            writtenLanguage
-            writtenLanguageOther
-            oralLanguage
-            oralLanguageOther
-            hobby
-            education {
-              school
-              degree
-              fieldOfStudy
-              startDatetime
-              endDatetime
-              present
-            }
-            employment {
-              employmentType
-              companyName
-              jobTitle
-              industry
-              industryOther
-              startDatetime
-              endDatetime
-              present
-            }
-            activity {
-              name
-              description
-              startDatetime
-              endDatetime
-            }
+            videoUrl
+            title
+            description
+          }
+          writtenLanguage
+          writtenLanguageOther
+          oralLanguage
+          oralLanguageOther
+          hobby
+          education {
+            school
+            degree
+            fieldOfStudy
+            startDatetime
+            endDatetime
+            present
+          }
+          employment {
+            employmentType
+            companyName
+            jobTitle
+            industry
+            industryOther
+            startDatetime
+            endDatetime
+            present
+          }
+          activity {
+            name
+            description
+            startDatetime
+            endDatetime
           }
         }
       }

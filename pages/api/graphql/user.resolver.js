@@ -19,7 +19,6 @@ const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 export default {
   Identity: {
     organizationRole: async (parent, args, context) => {
-      console.log(parent);
       return await getIdentityOrganizationRole(parent._id)
     },
   },
@@ -160,8 +159,6 @@ export default {
       if (!isJoinedOrganizationStaff(context?.auth?.identity, organizationId)) {
         throw new Error("Permission Denied!");
       }
-      console.log("identityId", identityId);
-
       const identity = await Identity.findById(identityId);
       identity.id = identity._id;
 
@@ -297,7 +294,7 @@ export default {
 
           nookies.set(context, "jciep-token", token, { path: "/" });
 
-          return { user };
+          return user;
         }
       } else if (input?.email && input?.password) {
         const user = await User.findOne({
@@ -308,7 +305,7 @@ export default {
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           nookies.set(context, "jciep-token", token, { path: "/" });
-          return { user };
+          return user;
         } else {
           throw new Error("Wrong Email and Password!");
         }
@@ -331,7 +328,7 @@ export default {
           const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
 
           nookies.set(context, "jciep-token", token, { path: "/" });
-          return { user };
+          return user;
         }
       } else if (input.facebookToken) {
         const snsMeta = await facebook.getProfile(input.facebookToken);
@@ -348,7 +345,7 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
         nookies.set(context, "jciep-token", token, { path: "/" });
-        return { user };
+        return user;
       } else if (input.googleToken) {
         let snsMeta = await google.getProfile(input.googleToken);
         if (!snsMeta) {
@@ -365,7 +362,7 @@ export default {
         await user.save();
 
         nookies.set(context, "jciep-token", token, { path: "/" });
-        return { user };
+        return user;
       } else if (input.appleToken) {
         let snsMeta = await apple.getProfile(input.appleToken);
         if (!snsMeta) {
@@ -382,7 +379,7 @@ export default {
         await user.save();
 
         nookies.set(context, "jciep-token", token, { path: "/" });
-        return { user };
+        return user;
       }
 
       return null;

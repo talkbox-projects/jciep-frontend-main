@@ -118,11 +118,13 @@ const Header = ({
     }
   }, [loginModalDisclosure, registerModalDisclosure, router]);
 
+
+
   useEffect(() => {
     (async () => {
       try {
         const user = await userMeGet();
-        setCredential({ user });
+        setCredential(user);
       } catch (e) {
         removeCredential();
       }
@@ -154,6 +156,7 @@ const Header = ({
 
   const onLogout = () => {
     removeCredential();
+    alert("onLogout");
     router.push("/");
   };
 

@@ -77,6 +77,13 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+userSchema.virtual('requirePasswordSet').get(function () {
+  return !!this.phone && !this.password;
+});
+
+userSchema.set('toObject', { virtuals: true });
+userSchema.set('toJSON', { virtuals: true });
+
 const identitySchema = Schema({
   userId: {
     type: Schema.Types.ObjectId,

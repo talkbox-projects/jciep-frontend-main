@@ -301,8 +301,6 @@ const PwdSectionViewer = () => {
     }
   };
 
-  console.log("ediable:", editable, editSection, (isAdmin || editable || staffAccess) && !editSection);
-  console.log("staffAccess:", staffAccess);
 
   return (
     <VStack spacing={1} align="stretch">

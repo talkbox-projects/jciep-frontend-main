@@ -51,11 +51,10 @@ const OtpVerifyModal = () => {
             otp,
           },
         }
-        const data = await userLogin(variables);
-        setCredential(data);
+        const user = await userLogin(variables);
+        setCredential(user);
         otpVerifyModalDisclosure.onClose();
-        if (data) {
-          const user = data?.user;
+        if (user) {
           if (user?.identities?.length === 0) {
             router.push("/user/identity/select");
           } else {

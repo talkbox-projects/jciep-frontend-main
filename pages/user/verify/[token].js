@@ -56,17 +56,17 @@ const VerifyToken = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onUserCreate = useCallback(
+  const onUserCreate =
     async ({ password }) => {
       try {
-        const data = await userLogin({
+        const user = await userLogin({
           input: {
             emailVerificationToken,
             password,
           },
         });
-        setCredential(data);
-        setIdentityId(data?.user?.identities?.[0]?.id ?? null);
+        setCredential(user);
+        setIdentityId(user?.identities?.[0]?.id ?? null);
         router.push("/user/identity/select");
       } catch (e) {
         console.error(e);
@@ -74,16 +74,7 @@ const VerifyToken = ({ page }) => {
           message: getWording("emailVerify.user_create_error_message"),
         });
       }
-    },
-    [
-      emailVerificationToken,
-      getWording,
-      router,
-      setCredential,
-      setError,
-      setIdentityId,
-    ]
-  );
+    };
 
   useEffect(() => {
     (async () => {

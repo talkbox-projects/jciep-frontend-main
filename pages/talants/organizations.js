@@ -212,13 +212,6 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                 {wordExtractor(page?.content?.wordings, "page_tutorial_organization_link")}
               </Button>
             </Stack>
-            <Image
-              position="absolute"
-              bottom={2}
-              right={2}
-              w={["300px", "300px", "400px", "400px", "400px"]}
-              src={page?.content?.banner?.bgImageRight}
-            />
           </Container>
         </Box>
 

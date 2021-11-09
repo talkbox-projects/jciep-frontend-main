@@ -21,6 +21,7 @@ export default gql`
     googleId: String
     identities: [Identity]
     snsMeta: SnsMeta
+    requirePasswordSet: Boolean
   }
 
   type Education {
@@ -213,10 +214,6 @@ export default gql`
     password: String
   }
 
-  type LoginOutput {
-    user: User!
-  }
-
   type UserEmailValidityCheckOutput {
     email: String!
     meta: JsonContent
@@ -224,17 +221,6 @@ export default gql`
 
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
-
-    """
-    Search User by either phone, email or name. Search the name of every identities.
-    """
-    UserSearch(
-      phone: String
-      email: String
-      name: String
-      limit: Int!
-      page: Int!
-    ): [User]
 
 
     UserMeGet: User
@@ -270,7 +256,7 @@ export default gql`
     UserPhoneVerify(phone: String!): Boolean
     UserEmailVerify(email: String!): Boolean
 
-    UserLogin(input: LoginInput): LoginOutput
+    UserLogin(input: LoginInput): User
     UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean

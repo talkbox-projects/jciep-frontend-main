@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { useAppContext } from "../store/AppStore";
-import { setCookie, destroyCookie, parseCookies } from "nookies";
+import { setCookie, parseCookies } from "nookies";
 import UserLogout from "./api/UserLogout";
 
 export const useCredential = () => {
   const { setUser, setIdentityId } = useAppContext();
 
-  const setCredential = useCallback(({ user }) => {
+  const setCredential = useCallback((user) => {
     const defaultIdentityId = parseCookies()?.["jciep-identityId"] ?? null;
     const firstIdentityId = user?.identities?.[0]?.id;
     const defaultIdentity = user?.identities.find(

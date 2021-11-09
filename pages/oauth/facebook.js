@@ -37,10 +37,9 @@ const FacebookLogin = () => {
           },
         };
 
-        const data = await userLogin(variables);
-        setCredential(data);
-        if (data) {
-          const user = data?.user;
+        const user = await userLogin(variables);
+        setCredential(user);
+        if (user) {
           if (user?.identities?.length === 0) {
             router.replace("/user/identity/select");
           } else {

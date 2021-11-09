@@ -11,6 +11,7 @@ const userMeGet = async (params, context) => {
         facebookId
         googleId
         appleId
+        requirePasswordSet
         snsMeta {
           profilePicUrl
           displayName
