@@ -37,6 +37,8 @@ export const emailRegex =
 export const youtubeRegex =
   /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
 
+export const phoneRegex = /[0-9]{8}/;
+
 export const passwordRegex =
   /^(?=.*\d*)(?=.*[a-z]*)(?=.*[A-Z])(?=.*[!@#$%^&*_.,-]).{8,}$/;
 

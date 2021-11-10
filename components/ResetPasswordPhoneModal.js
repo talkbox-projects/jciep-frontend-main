@@ -51,7 +51,7 @@ const ResetPasswordPhoneModal = () => {
 
       toast({
         status: "success",
-        title: getWording("resentPassword.reset_password_email_sent_success"),
+        title: getWording("resentPassword.reset_password_phone_sent_success"),
       });
 
       onClose();
@@ -61,7 +61,7 @@ const ResetPasswordPhoneModal = () => {
       console.error(error);
       toast({
         status: "error",
-        title: getWording("resentPassword.reset_password_email_sent_fail"),
+        title: getWording("resentPassword.reset_password_phone_sent_fail"),
       });
     }
   };
@@ -75,27 +75,27 @@ const ResetPasswordPhoneModal = () => {
       <ModalOverlay />
       <ModalContent as="form" onSubmit={handleSubmit(onResetPasswordPhoneSent)}>
         <ModalHeader>
-          {getWording("resentPassword.reset_password_email_title")}
+          {getWording("resentPassword.reset_password_phone_title")}
         </ModalHeader>
         <ModalBody spacing={4} as={VStack} align="center">
           <Text color="#999" w="100%" fontSize="sm">
-            {getWording("resentPassword.reset_password_email_description")}
+            {getWording("resentPassword.reset_password_phone_description")}
           </Text>
 
           <FormControl isInvalid={errors?.phone?.message}>
             <FormLabel m={0} p={0}>
-              {getWording("resentPassword.reset_password_email_label")}
+              {getWording("resentPassword.reset_password_phone_label")}
             </FormLabel>
             <Input
               variant="flushed"
               {...register("phone", {
                 required: getWording(
-                  "resentPassword.reset_password_email_error_message"
+                  "resentPassword.reset_password_phone_error_message"
                 ),
                 pattern: {
                   value: phoneRegex,
                   message: getWording(
-                    "resentPassword.reset_password_email_error_message"
+                    "resentPassword.reset_password_phone_error_message"
                   ),
                 },
               })}
@@ -112,7 +112,7 @@ const ResetPasswordPhoneModal = () => {
               isLoading={isSubmitting}
               type="submit"
             >
-              {getWording("resentPassword.send_email_button_label")}
+              {getWording("resentPassword.send_phone_button_label")}
             </Button>
           </Box>
         </ModalBody>
