@@ -219,8 +219,14 @@ export default gql`
     meta: JsonContent
   }
 
+  type UserPhoneValidityCheckOutput {
+    phone: String!
+    meta: JsonContent
+  }
+
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
+    UserPhoneValidityCheck(phone: String!,otp: String!): UserPhoneValidityCheckOutput
 
 
     UserMeGet: User
@@ -260,6 +266,7 @@ export default gql`
     UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean
+    UserPasswordResetPhoneSend(phone: String!): Boolean
     UserPasswordReset(token: String!, password: String!): Boolean
 
     IdentityCreate(input: IdentityCreateInput!): Identity

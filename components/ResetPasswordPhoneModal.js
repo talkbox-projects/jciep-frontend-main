@@ -16,14 +16,15 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react";
-import { emailRegex } from "../utils/general";
+import { phoneRegex } from "../utils/general";
 import { useGetWording } from "../utils/wordings/useWording";
-import UserPasswordResetEmailSend from "../utils/api/UserPasswordResetEmailSend";
+import UserPasswordResetPhoneSend from "../utils/api/UserPasswordResetPhoneSend";
 
-const ResetPasswordEmailModal = () => {
+const ResetPasswordPhoneModal = () => {
   const {
     user,
-    resetPasswordEmailModalDisclosure: { isOpen, onClose },
+    resetPasswordPhoneModalDisclosure: { isOpen, onClose },
+    otpVerifyModalDisclosure
   } = useAppContext();
 
   const getWording = useGetWording();
@@ -35,22 +36,27 @@ const ResetPasswordEmailModal = () => {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      email: user?.email,
+      phone: user?.phone,
     },
   });
 
   const toast = useToast();
-  const onResetPasswordEmailSent = async ({ email }) => {
+  const onResetPasswordPhoneSent = async ({ phone }) => {
     try {
-      const sent = await UserPasswordResetEmailSend({ email });
+      const sent = await UserPasswordResetPhoneSend({ phone });
+
+      if (!sent) {
+        throw new Error("Failed!");
+      }
+
       toast({
         status: "success",
         title: getWording("resentPassword.reset_password_email_sent_success"),
       });
 
-      if (!sent) {
-        throw new Error("Failed!");
-      }
+      onClose();
+      otpVerifyModalDisclosure.onOpen({ phone, type: "resetPassword" });
+
     } catch (error) {
       console.error(error);
       toast({
@@ -61,13 +67,13 @@ const ResetPasswordEmailModal = () => {
   };
   useEffect(() => {
     if (isOpen) {
-      reset({ email: user?.email ?? "" });
+      reset({ phone: user?.phone ?? "" });
     }
   }, [isOpen, user, reset]);
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent as="form" onSubmit={handleSubmit(onResetPasswordEmailSent)}>
+      <ModalContent as="form" onSubmit={handleSubmit(onResetPasswordPhoneSent)}>
         <ModalHeader>
           {getWording("resentPassword.reset_password_email_title")}
         </ModalHeader>
@@ -76,18 +82,18 @@ const ResetPasswordEmailModal = () => {
             {getWording("resentPassword.reset_password_email_description")}
           </Text>
 
-          <FormControl isInvalid={errors?.email?.message}>
+          <FormControl isInvalid={errors?.phone?.message}>
             <FormLabel m={0} p={0}>
               {getWording("resentPassword.reset_password_email_label")}
             </FormLabel>
             <Input
               variant="flushed"
-              {...register("email", {
+              {...register("phone", {
                 required: getWording(
                   "resentPassword.reset_password_email_error_message"
                 ),
                 pattern: {
-                  value: emailRegex,
+                  value: phoneRegex,
                   message: getWording(
                     "resentPassword.reset_password_email_error_message"
                   ),
@@ -115,4 +121,4 @@ const ResetPasswordEmailModal = () => {
   );
 };
 
-export default ResetPasswordEmailModal;
+export default ResetPasswordPhoneModal;

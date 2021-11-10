@@ -40,6 +40,15 @@ export default {
       }
     },
 
+    UserPhoneValidityCheck: async (_parent, { phone, otp }) => {
+      try {
+        return await PhoneVerify.findOne({ otp, phone });
+      } catch (error) {
+        return null;
+      }
+    },
+
+
     UserMeGet: async (_parent, params, context) => {
 
       let id = context?.auth?.user?.id;
@@ -194,9 +203,6 @@ export default {
       }
     },
     UserEmailVerify: async (_parent, { email }) => {
-      /**
-       * Send an email with a verification link (md5 token) to inbox.
-       */
       try {
         const emailVerify = await EmailVerify.create({
           email,
@@ -250,7 +256,7 @@ export default {
             else
               return error
  
-          case "phone+otp"
+          case "phone+otp+password"
             verify phone+otp
             if otp is valid,
               if user not exists,
@@ -309,7 +315,7 @@ export default {
         } else {
           throw new Error("Wrong Email and Password!");
         }
-      } else if (input?.phone) {
+      } else if (input?.phone && input?.otp) {
         const phoneVerify = await PhoneVerify.findOne({
           phone: input?.phone,
           otp: input?.otp,
@@ -320,7 +326,10 @@ export default {
           await phoneVerify.delete();
           const user = await User.findOneAndUpdate(
             { phone: input.phone },
-            { phone: input.phone },
+            {
+              phone: input.phone,
+              password: await User.generateHash(input?.password)
+            },
             { upsert: true, new: true }
           );
 
@@ -329,6 +338,19 @@ export default {
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
+        }
+      } else if (input?.phone && input?.password) {
+        const user = await User.findOne({
+          phone: input?.phone.trim(),
+        });
+        if (await user?.comparePassword(input?.password)) {
+          const _user = user.toObject();
+          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+
+          nookies.set(context, "jciep-token", token, { path: "/" });
+          return user;
+        } else {
+          throw new Error("Wrong Phone and Password!");
         }
       } else if (input.facebookToken) {
         const snsMeta = await facebook.getProfile(input.facebookToken);
@@ -393,10 +415,29 @@ export default {
       return true;
     },
 
+    UserPasswordResetPhoneSend: async (_parent, { phone }) => {
+
+      try {
+        const phoneVerify = await PhoneVerify.create({
+          phone,
+          meta: { type: "resetPassword" },
+        });
+        let result = await sendSms(
+          phoneVerify.phone,
+          encodeURIComponent(`賽馬會共融・知行計劃一次性電話驗證碼:${phoneVerify.otp}`)
+        );
+        if (result) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+
     UserPasswordResetEmailSend: async (_parent, { email }) => {
-      /**
-       * Send password reset email with reset link + md5_token
-       */
       try {
         const emailVerify = await EmailVerify.create({
           email,

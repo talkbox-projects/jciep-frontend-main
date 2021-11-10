@@ -57,6 +57,10 @@ const [AppProvider, useAppContext] = constate((props) => {
         name: "resentPassword",
         label: "Reset Password Modal (resentPassword)",
       },
+      {
+        name: "resetPasswordResetModal",
+        label: "Reset Password Reset Modal",
+      },
     ],
     key: "wordings",
     initialValue: props?.wordings?.value,
@@ -89,7 +93,9 @@ const [AppProvider, useAppContext] = constate((props) => {
   });
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
-  const ResetPasswordEmailModalDisclosure = useDisclosureWithParams();
+  const resetPasswordEmailModalDisclosure = useDisclosureWithParams();
+  const resetPasswordPhoneModalDisclosure = useDisclosureWithParams();
+  const resetPasswordResetModalDisclosure = useDisclosureWithParams();
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
@@ -133,7 +139,9 @@ const [AppProvider, useAppContext] = constate((props) => {
     registerModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
-    ResetPasswordEmailModalDisclosure,
+    resetPasswordEmailModalDisclosure,
+    resetPasswordPhoneModalDisclosure,
+    resetPasswordResetModalDisclosure,
     user,
     setUser,
     isLoggedIn,

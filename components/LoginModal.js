@@ -40,7 +40,8 @@ const LoginModal = () => {
     loginModalDisclosure,
     registerModalDisclosure,
     otpVerifyModalDisclosure,
-    ResetPasswordEmailModalDisclosure,
+    resetPasswordEmailModalDisclosure,
+    resetPasswordPhoneModalDisclosure
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -59,25 +60,31 @@ const LoginModal = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onPhoneLogin = useCallback(
-    async ({ phone }) => {
-      const mutation = gql`
-        mutation UserPhoneVerify($phone: String!) {
-          UserPhoneVerify(phone: $phone)
-        }
-      `;
-      let result = await getGraphQLClient().request(mutation, { phone });
-      if (result.UserPhoneVerify) {
-        otpVerifyModalDisclosure.onOpen({ phone, type: "login" });
+  const onPhoneLogin =
+    async ({ phone, password }) => {
+      try {
+        const variables = {
+          input: {
+            phone,
+            password,
+          },
+        };
+        const user = await userLogin(variables);
+        setCredential(user);
         loginModalDisclosure.onClose();
-      } else {
-        setError("phone", {
+        if (user) {
+          if (user?.identities?.length === 0) {
+            router.push("/user/identity/select");
+          } else {
+            router.push("/");
+          }
+        }
+      } catch (e) {
+        setError("password", {
           message: getWording("login.login_error_message"),
         });
       }
-    },
-    [getWording, loginModalDisclosure, otpVerifyModalDisclosure, setError]
-  );
+    };
 
   const responseFacebook = (response) => {
     if (!response.accessToken) return;
@@ -102,7 +109,6 @@ const LoginModal = () => {
         };
         const user = await userLogin(variables);
         setCredential(user);
-
         loginModalDisclosure.onClose();
         if (user) {
           if (user?.identities?.length === 0) {
@@ -160,7 +166,7 @@ const LoginModal = () => {
                   <Button
                     onClick={() => {
                       loginModalDisclosure.onClose();
-                      ResetPasswordEmailModalDisclosure.onOpen();
+                      resetPasswordEmailModalDisclosure.onOpen();
                     }}
                     fontWeight="normal"
                     variant="link"
@@ -197,6 +203,33 @@ const LoginModal = () => {
                   </FormHelperText>
                 </FormControl>
                 <FormControl>
+                  <FormLabel>
+                    {getWording("login.login_password_label")}
+                  </FormLabel>
+                  <Input
+                    type="password"
+                    placeholder={getWording("login.login_password_placeholder")}
+                    {...register("password")}
+                  />
+                  <FormHelperText color="red.500">
+                    {errors?.password?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl as={VStack} align="end">
+                  <Button
+                    onClick={() => {
+                      loginModalDisclosure.onClose();
+                      resetPasswordPhoneModalDisclosure.onOpen();
+                    }}
+                    fontWeight="normal"
+                    variant="link"
+                    textDecor="underline"
+                    color="black"
+                  >
+                    {getWording("login.forget_password_label")}
+                  </Button>
+                </FormControl>
+                <FormControl>
                   <Button
                     color="black"
                     w="100%"
@@ -208,7 +241,7 @@ const LoginModal = () => {
                     isLoading={isSubmitting}
                     type="submit"
                   >
-                    {getWording("login.phone_verify_button_label")}
+                    {getWording("login.login_button_label")}
                   </Button>
                 </FormControl>
               </VStack>

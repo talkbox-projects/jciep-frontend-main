@@ -48,8 +48,9 @@ import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
 import ResetPasswordEmailModal from "./ResetPasswordEmailModal";
+import ResetPasswordPhoneModal from "./ResetPasswordPhoneModal";
 import userMeGet from "../utils/api/UserMeGet";
-
+import ResetPasswordResetModal from "./ResetPasswordResetModal";
 const Header = ({
   navigation,
   isShowLangSwitcher = false,
@@ -69,10 +70,6 @@ const Header = ({
 
   const router = useRouter();
   const mobileMenuDisclosure = useDisclosure();
-
-  // const [isShowLangUnavailable, setIsShowLangUnavailable] = useState(
-  //   !isLangAvailable
-  // );
 
   const tabIndex = useMemo(() => {
     const kv = {
@@ -156,7 +153,6 @@ const Header = ({
 
   const onLogout = () => {
     removeCredential();
-    alert("onLogout");
     router.push("/");
   };
 
@@ -473,6 +469,8 @@ const Header = ({
       <OtpVerifyModal />
       <EmailVerifySentModal />
       <ResetPasswordEmailModal />
+      <ResetPasswordPhoneModal />
+      <ResetPasswordResetModal />
       <Box
         position="fixed"
         zIndex={100}

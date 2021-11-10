@@ -25,10 +25,12 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useCredential } from "../utils/user";
 import { useRouter } from "next/router";
 import userLogin from "../utils/api/UserLogin";
+import { getGraphQLClient } from "../utils/apollo";
+import { gql } from "graphql-request";
 
 const OtpVerifyModal = () => {
-  const { otpVerifyModalDisclosure } = useAppContext();
-  const phone = otpVerifyModalDisclosure?.params?.phone;
+  const { otpVerifyModalDisclosure, resetPasswordResetModalDisclosure } = useAppContext();
+  const { type, phone } = otpVerifyModalDisclosure?.params;
   const router = useRouter();
 
   const getWording = useGetWording();
@@ -39,43 +41,33 @@ const OtpVerifyModal = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
-  const [setCredential] = useCredential();
 
-  const onOtpVerify = useCallback(
+  const onOtpVerify =
     async ({ otp }) => {
       try {
-
-        let variables = {
-          input: {
-            phone,
-            otp,
-          },
-        }
-        const user = await userLogin(variables);
-        setCredential(user);
-        otpVerifyModalDisclosure.onClose();
-        if (user) {
-          if (user?.identities?.length === 0) {
-            router.push("/user/identity/select");
-          } else {
-            router.push("/");
+        const query = gql`
+        query UserPhoneValidityCheck($phone: String!,$otp: String!) {
+          UserPhoneValidityCheck(phone: $phone, otp: $otp) {
+            phone
+            meta
           }
+        }
+      `;
+
+        const data = await getGraphQLClient().request(query, {
+          otp, phone,
+        });
+
+        if (data?.UserPhoneValidityCheck?.phone) {
+          resetPasswordResetModalDisclosure.onOpen({ otp, phone, type })
+          otpVerifyModalDisclosure.onClose();
         }
       } catch (e) {
         setError("otp", {
           message: getWording("otpVerify.invalid_otp_message"),
         });
       }
-    },
-    [
-      getWording,
-      otpVerifyModalDisclosure,
-      phone,
-      router,
-      setCredential,
-      setError,
-    ]
-  );
+    };
 
   return (
     <Modal

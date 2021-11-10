@@ -46,14 +46,14 @@ export const getCurrentUser = async (context) => {
             const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
             if (jwtUser) {
                 const user = await User.findById(jwtUser._id).populate("identities");
-                const identity = (user?.identities ?? []).find(({ id }) => id === currentIdentityId);
+                const identity = (user?.identities ?? []).find(({ id }) => String(id) === String(currentIdentityId));
                 identity.organizationRole = await getIdentityOrganizationRole(currentIdentityId);
                 return { user, identity };
             }
         }
         return null;
     } catch (error) {
-        console.log("getCurrentUser", error);
+        // console.log("getCurrentUser", error);
         return null;
     }
 }

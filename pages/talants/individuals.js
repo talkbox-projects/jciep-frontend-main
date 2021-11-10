@@ -53,7 +53,7 @@ export const getServerSideProps = async (context) => {
           published: true,
           identityType: ["pwd"],
           organizationId: context.query.organizationId,
-          limit: 10,
+          limit: 100,
           page: 1,
         }),
       },
