@@ -20,10 +20,10 @@ import { emailRegex } from "../utils/general";
 import { useGetWording } from "../utils/wordings/useWording";
 import UserPasswordResetEmailSend from "../utils/api/UserPasswordResetEmailSend";
 
-const ResetPasswordModal = () => {
+const ResetPasswordEmailModal = () => {
   const {
     user,
-    resetPasswordModalDisclosure: { isOpen, onClose },
+    ResetPasswordEmailModalDisclosure: { isOpen, onClose },
   } = useAppContext();
 
   const getWording = useGetWording();
@@ -115,4 +115,4 @@ const ResetPasswordModal = () => {
   );
 };
 
-export default ResetPasswordModal;
+export default ResetPasswordEmailModal;

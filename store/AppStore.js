@@ -89,7 +89,7 @@ const [AppProvider, useAppContext] = constate((props) => {
   });
   const otpVerifyModalDisclosure = useDisclosureWithParams();
   const emailVerifySentModalDisclosure = useDisclosureWithParams();
-  const resetPasswordModalDisclosure = useDisclosureWithParams();
+  const ResetPasswordEmailModalDisclosure = useDisclosureWithParams();
   const [user, setUser] = useState(null);
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
@@ -133,7 +133,7 @@ const [AppProvider, useAppContext] = constate((props) => {
     registerModalDisclosure,
     otpVerifyModalDisclosure,
     emailVerifySentModalDisclosure,
-    resetPasswordModalDisclosure,
+    ResetPasswordEmailModalDisclosure,
     user,
     setUser,
     isLoggedIn,

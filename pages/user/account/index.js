@@ -41,7 +41,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const AccountInfoPage = ({ page }) => {
-  const { user, resetPasswordModalDisclosure } = useAppContext();
+  const { user, ResetPasswordEmailModalDisclosure } = useAppContext();
   const injectParams = useInjectParams();
 
   const getLoginMethod = useCallback(({ user }) => {
@@ -146,7 +146,7 @@ const AccountInfoPage = ({ page }) => {
       return (
         <Button
           onClick={() => {
-            resetPasswordModalDisclosure.onOpen();
+            ResetPasswordEmailModalDisclosure.onOpen();
           }}
           variant="outline"
           colorScheme="gray"
@@ -161,7 +161,7 @@ const AccountInfoPage = ({ page }) => {
   }, [
     getLoginMethod,
     page?.content?.wordings,
-    resetPasswordModalDisclosure,
+    ResetPasswordEmailModalDisclosure,
     user,
   ]);
 

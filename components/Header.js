@@ -47,7 +47,7 @@ import { gql } from "graphql-request";
 import nookies from "nookies";
 import { useCredential } from "../utils/user";
 import { AiOutlineMenu } from "react-icons/ai";
-import ResetPasswordModal from "./ResetPasswordModal";
+import ResetPasswordEmailModal from "./ResetPasswordEmailModal";
 import userMeGet from "../utils/api/UserMeGet";
 
 const Header = ({
@@ -472,7 +472,7 @@ const Header = ({
       <RegisterModal />
       <OtpVerifyModal />
       <EmailVerifySentModal />
-      <ResetPasswordModal />
+      <ResetPasswordEmailModal />
       <Box
         position="fixed"
         zIndex={100}

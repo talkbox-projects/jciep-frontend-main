@@ -40,7 +40,7 @@ const LoginModal = () => {
     loginModalDisclosure,
     registerModalDisclosure,
     otpVerifyModalDisclosure,
-    resetPasswordModalDisclosure,
+    ResetPasswordEmailModalDisclosure,
   } = useAppContext();
 
   const [tab, setTab] = useState("email");
@@ -160,7 +160,7 @@ const LoginModal = () => {
                   <Button
                     onClick={() => {
                       loginModalDisclosure.onClose();
-                      resetPasswordModalDisclosure.onOpen();
+                      ResetPasswordEmailModalDisclosure.onOpen();
                     }}
                     fontWeight="normal"
                     variant="link"
