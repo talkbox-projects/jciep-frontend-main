@@ -165,9 +165,6 @@ export default {
 
     OrganizationIdentityGet: async (_parent, { organizationId, identityId }, context) => {
 
-      if (!isJoinedOrganizationStaff(context?.auth?.identity, organizationId)) {
-        throw new Error("Permission Denied!");
-      }
       const identity = await Identity.findById(identityId);
       identity.id = identity._id;
 
