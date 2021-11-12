@@ -41,7 +41,7 @@ export const getServerSideProps = async (context) => {
 };
 
 const AccountInfoPage = ({ page }) => {
-  const { user, resetPasswordEmailModalDisclosure } = useAppContext();
+  const { user, resetPasswordEmailModalDisclosure, resetPasswordPhoneModalDisclosure } = useAppContext();
   const injectParams = useInjectParams();
 
   const getLoginMethod = useCallback(({ user }) => {
@@ -142,6 +142,7 @@ const AccountInfoPage = ({ page }) => {
 
   const resetPasswordLink = useMemo(() => {
     const loginViaEmail = getLoginMethod({ user }) === "email";
+    const loginViaPhone = getLoginMethod({ user }) === "phone";
     if (loginViaEmail) {
       return (
         <Button
@@ -155,18 +156,26 @@ const AccountInfoPage = ({ page }) => {
           {wordExtractor(page?.content?.wordings, "reset_password_label")}
         </Button>
       );
+    } else if (loginViaPhone) {
+      return (
+        <Button
+          onClick={() => {
+            resetPasswordPhoneModalDisclosure.onOpen();
+          }}
+          variant="outline"
+          colorScheme="gray"
+          rightIcon={<RiArrowRightLine />}
+        >
+          {wordExtractor(page?.content?.wordings, "reset_password_label")}
+        </Button>
+      );
     } else {
       return null;
     }
-  }, [
-    getLoginMethod,
-    page?.content?.wordings,
-    resetPasswordEmailModalDisclosure,
-    user,
-  ]);
+  }, [getLoginMethod, page?.content?.wordings, resetPasswordEmailModalDisclosure, resetPasswordPhoneModalDisclosure, user]);
 
   return (
-    <VStack py={[24, 40]}>
+    <VStack py={[24, 48]}>
       <Container>
         <Text fontSize="4xl">
           {wordExtractor(page?.content?.wordings, "title")}
