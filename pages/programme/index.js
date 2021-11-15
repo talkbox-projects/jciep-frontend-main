@@ -418,7 +418,7 @@ const Programme = ({ page }) => {
                       />
                       <Heading
                         pt={4}
-                        as="h4"
+                        as="span"
                         fontSize={["20px", "24px", ""]}
                         fontWeight="normal"
                       >

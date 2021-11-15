@@ -3,7 +3,7 @@ import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import { Organization, OrganizationSubmission } from "./organization.model";
 import { Identity } from "./user.model";
-
+import nookies from "nookies";
 import getConfig from "next/config";
 import { checkIfAdmin, isIdentityUnderUser, isJoinedOrganizationStaff } from "../../../utils/auth";
 const { publicRuntimeConfig } = getConfig();
@@ -173,8 +173,8 @@ export default {
        *    create an organization submission with the id of newly-created organization.
        * status = pendingApproval
        */
-
       const identityId = params?.input?.identityId;
+      console.log(identityId, nookies.get(context), context?.auth);
       const identity = await Identity.findById(identityId);
       if (!isIdentityUnderUser(identityId, context?.auth?.user)) {
         throw new Error("Permission Denied!");

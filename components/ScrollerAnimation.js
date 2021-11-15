@@ -35,7 +35,7 @@ const ScrollerAnimation = ({
       <MotionBox bg="#efefef">
         <MotionBox px={(0.5, 0.5, 1, 2)} maxWidth={1024} w="100%" mx="auto">
           <VStack align="center" py={16}>
-            <Heading as="h4">{headline}</Heading>
+            <Heading as="span">{headline}</Heading>
             <Text
               pt={16}
               textAlign="center"
@@ -87,7 +87,7 @@ const ScrollerAnimation = ({
           <VStack align="center" py={32}>
             <MotionImage maxW="480" w="80%" src={partialLogo} display="none" />
             <MotionImage maxW="480" w="80%" src={logo}></MotionImage>
-            <Heading pt={8} as="h4" fontSize={["2xl", "3xl", "4xl"]}>
+            <Heading pt={8} as="span" fontSize={["2xl", "3xl", "4xl"]}>
               {endTitle}
             </Heading>
             <Text

@@ -43,7 +43,7 @@ const OrganizationCompanyPending = ({ page }) => {
           margin="auto"
           padding="0px 25px"
         >
-          <Heading as="h4" textAlign="center">
+          <Heading as="span" textAlign="center">
             {page?.content?.heading?.title}
           </Heading>
 

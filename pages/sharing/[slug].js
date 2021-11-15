@@ -279,7 +279,7 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <Image alt={caption ? caption : " "}
+                        <Image alt={""}
                           w="100%"
                           title="postImage"
                           src={image}

@@ -39,7 +39,7 @@ const PortfolioGallery = ({ isOpen, onClose, params }) => {
   const getImageComponent = useCallback((item) => {
     return (
       <VStack align="stretch">
-        <Image alt={item?.description ? item?.description : " "} src={item?.file?.url} allowFullScreen />
+        <Image alt={item?.description ? item?.description : "相片集圖片"} src={item?.file?.url} allowFullScreen />
         <Text whiteSpace="pre" color="gray.500" fontSize="sm">
           {item?.description}
         </Text>

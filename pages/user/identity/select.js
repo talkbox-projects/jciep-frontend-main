@@ -71,7 +71,7 @@ const IdentitySelect = ({ page }) => {
           background="#f8f8f8"
           padding="25px"
         >
-          <Heading as="h4" textAlign="center">
+          <Heading as="span" textAlign="center">
             {page?.content?.heading?.title}
           </Heading>
           <SimpleGrid pt={16} columns={[1, 1, 2, 3]} spacing={8}>

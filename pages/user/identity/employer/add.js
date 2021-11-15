@@ -82,13 +82,13 @@ const IdentityEmployerAdd = ({ page }) => {
         });
 
         if (data) {
+          nookies.set(null, "jciep-identityId", data.IdentityCreate.id, { path: "/" });
           if (!invitationCode) {
             router.push(
               `/user/organization/company/${data.IdentityCreate.id}/add`
             );
           } else {
 
-            nookies.set(null, "jciep-identityId", data.IdentityCreate.id, { path: "/" });
             router.push(`/user/identity/me`);
           }
         }

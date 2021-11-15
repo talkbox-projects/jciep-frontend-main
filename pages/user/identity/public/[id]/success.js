@@ -42,7 +42,7 @@ const IdentityPublicAddSuccess = ({ page }) => {
           padding="0px 25px"
         >
           <Heading
-            as="h4"
+            as="span"
             textAlign="center"
             fontSize="36px"
             letterSpacing="1.5px"

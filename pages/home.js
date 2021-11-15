@@ -277,7 +277,7 @@ const Home = ({ setting, page }) => {
               w="80%"
               src={page?.content?.animation?.endFrame?.image}
             ></Image>
-            <Box pt={"12vh"} as="h4" fontSize={["2xl", "4xl", "6xl"]}>
+            <Box pt={"12vh"} as="span" fontSize={["2xl", "4xl", "6xl"]}>
               <HighlightHeadline>
                 {page?.content?.animation?.endFrame?.title}
               </HighlightHeadline>

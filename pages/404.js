@@ -31,7 +31,7 @@ const Custom404 = () => {
           margin="auto"
           padding="0 25px"
         >
-          <Heading as="h4" textAlign="center">
+          <Heading as="span" textAlign="center">
             404 錯誤
           </Heading>
 
