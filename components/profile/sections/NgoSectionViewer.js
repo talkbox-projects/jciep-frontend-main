@@ -37,42 +37,43 @@ const NgoSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) && (
-          <Button
-            variant="outline"
-            isActive={!!organization?.published}
-            onClick={async () => {
-              try {
-                await saveOrganization({
-                  id: organization?.id,
-                  published: !organization?.published,
-                });
-                refreshOrganization();
-                toast({
-                  title: !organization?.published ? "已發佈檔案" : "已取消發佈",
-                  status: !organization?.published ? "info" : "warning",
-                  position: "bottom",
-                });
-              } catch (error) {
-                console.error(error);
+        {(isAdmin || editable) &&
+          organization?.status === "approved" && (
+            <Button
+              variant="outline"
+              isActive={!!organization?.published}
+              onClick={async () => {
+                try {
+                  await saveOrganization({
+                    id: organization?.id,
+                    published: !organization?.published,
+                  });
+                  refreshOrganization();
+                  toast({
+                    title: !organization?.published ? "已發佈檔案" : "已取消發佈",
+                    status: !organization?.published ? "info" : "warning",
+                    position: "bottom",
+                  });
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+              leftIcon={
+                !organization?.published ? (
+                  <MdRadioButtonUnchecked />
+                ) : (
+                  <MdRadioButtonChecked />
+                )
               }
-            }}
-            leftIcon={
-              !organization?.published ? (
-                <MdRadioButtonUnchecked />
-              ) : (
-                <MdRadioButtonChecked />
-              )
-            }
-          >
-            {wordExtractor(
-              page?.content?.wordings,
-              organization?.published
-                ? "published_my_profile_label"
-                : "publish_my_profile_label"
-            )}
-          </Button>
-        )}
+            >
+              {wordExtractor(
+                page?.content?.wordings,
+                organization?.published
+                  ? "published_my_profile_label"
+                  : "publish_my_profile_label"
+              )}
+            </Button>
+          )}
         {(isAdmin || editable) &&
           organization?.status === "approved" &&
           !editSection && (
