@@ -624,13 +624,13 @@ export default {
       return true;
     },
 
-    PortfolioPublishApprove: async (_parent, { id }, context) => {
+    PortfolioPublishApprove: async (_parent, { identityId }, context) => {
 
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
 
-      const identity = await Identity.findById(id);
+      const identity = await Identity.findById(identityId);
       if (identity?.type !== "pwd") {
         return false;
       }
@@ -643,13 +643,13 @@ export default {
       return true;
     },
 
-    PortfolioPublishReject: async (_parent, { id }, context) => {
+    PortfolioPublishReject: async (_parent, { identityId }, context) => {
 
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
 
-      const identity = await Identity.findById(id);
+      const identity = await Identity.findById(identityId);
       if (identity?.type !== "pwd") {
         return false;
       }

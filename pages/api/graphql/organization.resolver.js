@@ -34,8 +34,14 @@ export default {
       const organization = parent;
       const currentIdentity = context?.auth?.identity;
 
-      if (!checkIfAdmin(currentIdentity) && !isJoinedOrganizationStaff(currentIdentity, organization._id)) {
-        return parent.member.filter(({ status }) => status === "joined");
+      if (!currentIdentity || (!checkIfAdmin(currentIdentity) && !isJoinedOrganizationStaff(currentIdentity, organization._id))) {
+        const members = parent.member.filter(({ status }) => status === "joined");
+        // TODO: to be revised by Tim 20210909
+        const publishedIdentities = await Identity.find({ publishStatus: "approved", _id: { $in: members.map(x => x.identityId) } }).select("_id");
+        const publishedIdentityIds = publishedIdentities.map(x => String(x._id)) ?? [];
+        return parent.member.filter(({ identityId, status }) => {
+          return status === "joined" && publishedIdentityIds.includes(String(identityId));
+        });
       }
 
       return parent.member;
@@ -46,11 +52,11 @@ export default {
     identity: async (parent, args, context) => {
 
       const member = parent;
-      const currentIdentity = context?.auth?.identity;
+      // const currentIdentity = context?.auth?.identity;
 
-      if (!currentIdentity) {
-        return null;
-      }
+      // if (!currentIdentity) {
+      //   return null;
+      // }
 
       const identity = await Identity.findById(member.identityId);
       return identity;

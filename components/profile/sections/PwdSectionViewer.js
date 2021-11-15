@@ -65,7 +65,7 @@ const PwdSectionViewer = () => {
   const unpublishDisclosure = useDisclosureWithParams();
 
 
-  const organizationId = organizationRole?.[0]?.organization?.id;
+  const organizationId = identity?.organizationRole?.[0]?.organization?.id;
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
       return (organizationRole ?? []).find(
@@ -78,7 +78,7 @@ const PwdSectionViewer = () => {
     return false;
   }, [organizationRole, type]);
 
-  const publishMenu = () => {
+  const publishMenu = (() => {
     const isGuest = identity.id !== id && !staffAccess && !isAdmin;
 
     const showMissingEMailAndPhoneTooltip =
@@ -299,7 +299,7 @@ const PwdSectionViewer = () => {
         );
       }
     }
-  };
+  });
 
 
   return (
@@ -341,7 +341,7 @@ const PwdSectionViewer = () => {
             )}
           </Button>
         ) : (
-          publishMenu
+          publishMenu()
         ))}
         {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
