@@ -21,16 +21,17 @@ export const getIdentityOrganizationRole = async (identityId) => {
         member: { $elemMatch: { identityId } },
     });
 
-    const organizationRole = await (organizations ?? []).map(
+    const organizationRole = (organizations ?? []).map(
         (organization) => {
             const member = organization.member.find(
-                ({ identityId }) => String(identityId) === String(identityId)
+                ({ identityId: _identityId }) => String(_identityId) === String(identityId)
             );
             return {
                 organization,
                 status: member.status,
                 role: member.role,
             };
+
         }
     );
     return organizationRole;
@@ -41,6 +42,7 @@ export const getCurrentUser = async (context) => {
     try {
         const token = nookies.get(context)?.["jciep-token"];
         const currentIdentityId = nookies.get(context)?.["jciep-identityId"];
+
 
         if (token) {
             const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
