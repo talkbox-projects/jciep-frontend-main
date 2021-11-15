@@ -19,11 +19,9 @@ import {
   Divider,
   Tooltip,
   Stack,
-  Flex,
   Heading,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import pwdFieldsForCMS from "../../utils/tina/pwdFieldsForCMS";
@@ -42,6 +40,7 @@ import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import { getYoutubeLink } from "../../utils/general";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { NextSeo } from "next-seo";
 
 const PAGE_KEY = "pwd";
 
@@ -98,8 +97,14 @@ const PwdDetail = ({ page }) => {
     }
   };
 
+  const seo = <NextSeo
+    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"} | ${pwd?.name}`}
+    description={page?.content?.seo?.description} />
+
   return (
     <VStack w="100%" align="stretch" spacing={0}>
+      {seo}
+
       {/* Description Section */}
       <Box
         bg={pwd?.descriptionStyles?.bgColor}

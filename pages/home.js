@@ -336,7 +336,8 @@ const Home = ({ setting, page }) => {
                         </Box>
                       )}
                     </Box>
-                    <Box as={Button}
+                    <Button
+                      aria-label={caption}
                       onClick={() => {
                         link && router.push(link)
                       }}

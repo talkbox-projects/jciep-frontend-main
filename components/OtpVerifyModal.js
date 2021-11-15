@@ -115,7 +115,7 @@ const OtpVerifyModal = () => {
                       placeholder=""
                     >
                       {[0, 1, 2, 3, 4, 5].map((x) => (
-                        <PinInputField alt={router.locale === "en" ? `${x + 1}th digit field` : `第${x + 1}位數字欄位`} key={x} py={8} px={2} />
+                        <PinInputField aria-label={router.locale === "en" ? `${x + 1}th digit field` : `第${x + 1}位數字欄位`} key={x} py={8} px={2} />
                       ))}
                     </PinInput>
                   )}
@@ -127,9 +127,9 @@ const OtpVerifyModal = () => {
                   {errors?.otp?.message}
                 </FormHelperText>
               )}
-              <FormHelperText>
+              <FormHelperText color="gray.900">
                 {getWording("otpVerify.failed_to_receive_message")}
-                <Button size="sm" variant="link">
+                <Button size="sm" variant="link" color="gray.900">
                   {getWording("otpVerify.resend_link_label")}
                 </Button>
               </FormHelperText>

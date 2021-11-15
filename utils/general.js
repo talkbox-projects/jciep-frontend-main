@@ -84,7 +84,7 @@ export const useInjectParams = () => {
 
 export const htmlStyles = {
   a: {
-    color: "green.500",
+    color: "green.800",
     textDecor: "underline",
   },
   table: {

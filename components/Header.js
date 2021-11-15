@@ -450,8 +450,8 @@ const Header = ({
                 <Button
                   variant="outline"
                   colorScheme="secondary"
-                  color="#08A3A3"
-                  borderColor="#08A3A3"
+                  color="#0D8282"
+                  borderColor="#0D8282"
                   borderRadius="2em"
                   py={0.5}
                   fontWeight="normal"

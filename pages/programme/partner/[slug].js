@@ -36,6 +36,7 @@ import { SRLWrapper, useLightbox } from "simple-react-lightbox";
 import { useCMS } from "tinacms";
 import wordExtractor from "../../../utils/wordExtractor";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import { NextSeo } from "next-seo";
 const PAGE_KEY = "programme";
 
 export const getServerSideProps = async (context) => {
@@ -52,7 +53,6 @@ export const getServerSideProps = async (context) => {
 };
 
 const Partner = ({ page }) => {
-  const cms = useCMS();
   const router = useRouter();
   const { openLightbox } = useLightbox();
   const slug = router.query.slug;
@@ -72,8 +72,14 @@ const Partner = ({ page }) => {
 
   const [sliderIndex, setSliderIndex] = useState(0);
 
+
+  const seo = <NextSeo
+    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"} | ${partner?.projectName}`}
+    description={page?.content?.seo?.description} />
+
   return (
     <VStack overflowY="visible" w="100%" spacing={0} align="stretch">
+      {seo}
       {/* First Section */}
       <Box
         pos="relative"
