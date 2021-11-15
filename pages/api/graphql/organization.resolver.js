@@ -33,9 +33,6 @@ export default {
 
       const organization = parent;
       const currentIdentity = context?.auth?.identity;
-      if (!currentIdentity) {
-        return [];
-      }
 
       if (!checkIfAdmin(currentIdentity) && !isJoinedOrganizationStaff(currentIdentity, organization._id)) {
         return parent.member.filter(({ status }) => status === "joined");
