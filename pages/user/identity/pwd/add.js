@@ -10,7 +10,7 @@ import {
   // Select,
   Checkbox,
   FormHelperText,
-  Link, 
+  Link,
   FormLabel,
 } from "@chakra-ui/react";
 import React from "react";
@@ -63,7 +63,7 @@ const IdentityPwdAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = 
+  const onFormSubmit =
     async ({
       chinese_name,
       english_name,
@@ -117,7 +117,7 @@ const IdentityPwdAdd = ({ page }) => {
         console.error(e);
       }
     }
-  ;
+    ;
 
 
   return (
@@ -228,7 +228,7 @@ const IdentityPwdAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
-                        aria-labelledby={page?.content?.form?.gender?.label}
+                        aria-label={page?.content?.form?.gender?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -308,7 +308,7 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
-                    aria-labelledby={page?.content?.form?.residentRestrict?.label}
+                    aria-label={page?.content?.form?.residentRestrict?.label}
                     placeholder={wordExtractor(
                       page?.content?.wordings,
                       "resident_district_placeholder"
@@ -332,11 +332,11 @@ const IdentityPwdAdd = ({ page }) => {
                 control={control}
                 render={({ field }) => (
                   <ReactSelect
-                  aria-labelledby={page?.content?.form?.personTypes?.label}
-                  placeholder={wordExtractor(
-                    page?.content?.wordings,
-                    "person_types_placeholder"
-                  )}
+                    aria-label={page?.content?.form?.personTypes?.label}
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "person_types_placeholder"
+                    )}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -363,7 +363,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
-                  aria-labelledby={page?.content?.form?.employeerMode?.label}
+                    aria-label={page?.content?.form?.employeerMode?.label}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -405,7 +405,7 @@ const IdentityPwdAdd = ({ page }) => {
                 rules={{ required: true }}
                 render={({ field }) => (
                   <ReactSelect
-                  aria-labelledby={page?.content?.form?.industry?.label}
+                    aria-label={page?.content?.form?.industry?.label}
                     styles={customStyles}
                     {...field}
                     isMulti
@@ -413,7 +413,7 @@ const IdentityPwdAdd = ({ page }) => {
                       page?.content?.wordings,
                       "industry_placeholder"
                     )}
-                    
+
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -423,7 +423,7 @@ const IdentityPwdAdd = ({ page }) => {
               <FormHelperText>
                 {errors?.industry?.type === "required" && (
                   <Text color="red">
-                  {/* 請選擇行業 Please select industry! */}
+                    {/* 請選擇行業 Please select industry! */}
                     {wordExtractor(
                       page?.content?.wordings,
                       "industry_required"
@@ -433,36 +433,36 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-            
-              <FormControl>
-                <FormLabel>
-                  {page?.content?.form?.interestedIndustryOther}{" "}
-                  <Text as="span" color="red">
-                    
-                  </Text>
-                </FormLabel>
-                <Input
-                  type="text"
-                  placeholder={wordExtractor(
-                    page?.content?.wordings,
-                    "interested_industry_other_placeholder"
-                  )}
-                  {...register("interested_industry_other")}
-                />
-                <FormHelperText>
-                  {errors?.interested_industry_other?.type === "required" && (
-                    <Text color="red">
-                      {/* 輸入一個有效的感興趣的行業 其他 Enter valid interested
+
+            <FormControl>
+              <FormLabel>
+                {page?.content?.form?.interestedIndustryOther}{" "}
+                <Text as="span" color="red">
+
+                </Text>
+              </FormLabel>
+              <Input
+                type="text"
+                placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "interested_industry_other_placeholder"
+                )}
+                {...register("interested_industry_other")}
+              />
+              <FormHelperText>
+                {errors?.interested_industry_other?.type === "required" && (
+                  <Text color="red">
+                    {/* 輸入一個有效的感興趣的行業 其他 Enter valid interested
                       industry other */}
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "interested_industry_other_required"
-                      )}
-                    </Text>
-                  )}
-                </FormHelperText>
-              </FormControl>
-            
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "interested_industry_other_required"
+                    )}
+                  </Text>
+                )}
+              </FormHelperText>
+            </FormControl>
+
 
             <FormControl marginTop="20px !important">
               <Checkbox
@@ -484,9 +484,9 @@ const IdentityPwdAdd = ({ page }) => {
                     {/* 請接受條款和條件 Please accept T&C!
                    */}
                     {wordExtractor(
-                    page?.content?.wordings,
-                    "tnc_required"
-                  )}
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
                   </Text>
                 )}
               </FormHelperText>
@@ -767,7 +767,7 @@ export default withPageCMS(IdentityPwdAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder:"https://"
+              placeholder: "https://"
             },
           ],
         },

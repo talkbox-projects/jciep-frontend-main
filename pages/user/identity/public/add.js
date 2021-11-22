@@ -38,17 +38,17 @@ export const getServerSideProps = async (context) => {
       lang: context.locale,
     },
   };
-};        
+};
 
 
 const customStyles = {
   multiValue: (provided) => {
-    const borderRadius = "15px"  
+    const borderRadius = "15px"
     return { ...provided, borderRadius };
   },
   multiValueRemove: (provided) => {
     const color = "grey"
-    return {...provided, color}
+    return { ...provided, color }
   }
 }
 
@@ -64,7 +64,7 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit = 
+  const onFormSubmit =
     async ({
       chinese_name,
       english_name,
@@ -108,15 +108,15 @@ const IdentityPublicAdd = ({ page }) => {
         console.error(e);
       }
     }
-  ;
+    ;
 
   return (
     <VStack py={36}>
       <Text mt={10} fontSize="16px">{page?.content?.step?.title}</Text>
-      <Text  
-          fontSize="36px" 
-          letterSpacing="1.5px"
-          fontWeight={600}
+      <Text
+        fontSize="36px"
+        letterSpacing="1.5px"
+        fontWeight={600}
       >
         {page?.content?.step?.subTitle}
       </Text>
@@ -144,9 +144,9 @@ const IdentityPublicAdd = ({ page }) => {
                   <Input
                     type="text"
                     placeholder={wordExtractor(
-                        page?.content?.wordings,
-                        "chinese_name_placeholder"
-                      )}
+                      page?.content?.wordings,
+                      "chinese_name_placeholder"
+                    )}
                     {...register("chinese_name", { required: true })}
                   />
                   <FormHelperText>
@@ -154,9 +154,9 @@ const IdentityPublicAdd = ({ page }) => {
                       <Text color="red">
                         {/* 輸入有效的中文名稱 Enter valid chinese name! */}
                         {wordExtractor(
-                        page?.content?.wordings,
-                        "chinese_name_required"
-                      )}
+                          page?.content?.wordings,
+                          "chinese_name_required"
+                        )}
                       </Text>
                     )}
                   </FormHelperText>
@@ -182,9 +182,9 @@ const IdentityPublicAdd = ({ page }) => {
                     {errors?.english_name?.type === "required" && (
                       <Text color="red">
                         {wordExtractor(
-                        page?.content?.wordings,
-                        "english_name_required"
-                      )}{" "}
+                          page?.content?.wordings,
+                          "english_name_required"
+                        )}{" "}
                       </Text>
                     )}
                   </FormHelperText>
@@ -213,7 +213,7 @@ const IdentityPublicAdd = ({ page }) => {
                     render={({ field }) => (
                       <ReactSelect
 
-                        aria-labelledby={page?.content?.form?.gender?.label}
+                        aria-label={page?.content?.form?.gender?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -240,7 +240,7 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
-                      aria-labelledby={page?.content?.form?.residentRestrict?.label}
+                        aria-label={page?.content?.form?.residentRestrict?.label}
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -261,7 +261,7 @@ const IdentityPublicAdd = ({ page }) => {
                   <FormLabel>
                     {page?.content?.form?.industry?.label}{" "}
                     <Text as="span" color="red">
-                      
+
                     </Text>
                   </FormLabel>
                   <Controller
@@ -270,7 +270,7 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
-                      aria-labelledby={page?.content?.form?.industry?.label}
+                        aria-label={page?.content?.form?.industry?.label}
                         styles={customStyles}
                         {...field}
                         isMulti
@@ -306,7 +306,7 @@ const IdentityPublicAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-               {page?.content?.form?.terms?.text} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
+                {page?.content?.form?.terms?.text} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
@@ -315,7 +315,7 @@ const IdentityPublicAdd = ({ page }) => {
                       page?.content?.wordings,
                       "tnc_required"
                     )}
-                    </Text>
+                  </Text>
                 )}
               </FormHelperText>
             </FormControl>
@@ -518,7 +518,7 @@ export default withPageCMS(IdentityPublicAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder:"https://"
+              placeholder: "https://"
             }
           ]
         },

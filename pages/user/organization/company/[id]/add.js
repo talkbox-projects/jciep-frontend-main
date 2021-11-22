@@ -16,7 +16,7 @@ import {
 import {
   RiAddFill,
   RiCloseCircleFill,
-  
+
 } from "react-icons/ri";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -48,12 +48,12 @@ export const getServerSideProps = async (context) => {
 
 const customStyles = {
   multiValue: (provided) => {
-    const borderRadius = "15px"  
+    const borderRadius = "15px"
     return { ...provided, borderRadius };
   },
   multiValueRemove: (provided) => {
     const color = "grey"
-    return {...provided, color}
+    return { ...provided, color }
   }
 }
 
@@ -80,7 +80,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
     }
   };
 
-  const onFormSubmit = 
+  const onFormSubmit =
     async ({
       chineseCompanyName,
       englishCompanyName,
@@ -90,8 +90,8 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
     }) => {
       try {
 
-        if(validate()) {
-          return 
+        if (validate()) {
+          return
         }
 
         const FileUploadmutation = gql`
@@ -145,7 +145,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
         console.error(e);
       }
     }
-  ;
+    ;
 
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
@@ -308,7 +308,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
                   h={["250px", "210px", "180px"]}
                   display="inline-block"
                   boxShadow="0px 1px 0px 0.5px #d3d3d3fc"
-                 
+
                   marginRight="10px"
                   marginBottom="10px"
                 >
@@ -328,36 +328,36 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
                       <Text as="span"
                         textAlign="center"
                         fontSize="30px"
-                        display="block"                        
+                        display="block"
                       >
-                          <IconButton
-                            zIndex="-1"
-                            fontSize="4xl"
-                            icon={<RiAddFill />}
-                            variant="link"
-                          />
+                        <IconButton
+                          zIndex="-1"
+                          fontSize="4xl"
+                          icon={<RiAddFill />}
+                          variant="link"
+                        />
                       </Text>
-                      <Text as="span" 
-                        textAlign="center" 
+                      <Text as="span"
+                        textAlign="center"
                         display="block" >
                         {page?.content?.form?.businessRegistration?.label}
                       </Text>
                     </Text>
-                    
+
                   </FormLabel>
                 </Box>
-                
-                  {files.map((file, index) => {
-                    let url = URL.createObjectURL(file);
-                    return (
-                      <Box key={url+index}
-                          w={["100%", "47.5%", "23.5%"]}
-                          h={["250px", "210px", "180px"]}
-                          display="inline-block"
-                          verticalAlign="top"
-                          marginRight="10px"
-                          marginBottom="10px"
-                        >
+
+                {files.map((file, index) => {
+                  let url = URL.createObjectURL(file);
+                  return (
+                    <Box key={url + index}
+                      w={["100%", "47.5%", "23.5%"]}
+                      h={["250px", "210px", "180px"]}
+                      display="inline-block"
+                      verticalAlign="top"
+                      marginRight="10px"
+                      marginBottom="10px"
+                    >
                       <Text as="span" key={index} position="relative">
                         <Image alt=""
                           height="100%"
@@ -366,7 +366,7 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
                           objectFit="cover"
                           src={url}
                         ></Image>
-                       <IconButton
+                        <IconButton
                           onClick={(e) => {
                             e.stopPropagation();
                             onRemoveImage(index)
@@ -381,18 +381,18 @@ const OrganizationCompanyAdd = ({ page, enums }) => {
                         />
                       </Text>
                     </Box>
-                    );
-                  })}
+                  );
+                })}
               </Box>
               {
-                fileError ? 
-                <FormHelperText color="red">
-                  {wordExtractor(
+                fileError ?
+                  <FormHelperText color="red">
+                    {wordExtractor(
                       page?.content?.wordings,
                       "business_registration_required"
-                  )}
-                </FormHelperText>
-                : null
+                    )}
+                  </FormHelperText>
+                  : null
               }
             </FormControl>
 
