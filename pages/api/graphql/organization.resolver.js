@@ -334,6 +334,7 @@ export default {
     OrganizationMemberJoin: async (_parent, { identityId, invitationCode }, context) => {
 
 
+      const identity = context?.auth?.identity;
       if (!checkIfAdmin(identity) && !isIdentityUnderUser(identityId, context?.auth?.user)) {
         throw new Error("Permission Denied");
       }
