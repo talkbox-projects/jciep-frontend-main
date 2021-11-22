@@ -163,6 +163,7 @@ export default {
       return identity;
     },
 
+
     OrganizationIdentityGet: async (_parent, { organizationId, identityId }, context) => {
 
       const identity = await Identity.findById(identityId);

@@ -110,7 +110,7 @@ const PwdSectionViewer = () => {
                         organizationId,
                         identityId: identity.id,
                       });
-                      await refreshIdentity();
+                      window.location.reload();
                       publishRequestDisclosure.onClose();
                     } catch (error) {
                       console.error(error);
@@ -140,7 +140,7 @@ const PwdSectionViewer = () => {
                           organizationId,
                           identityId: identity.id,
                         });
-                        await refreshIdentity();
+                        window.location.reload();
                         publishApproveDisclosure.onClose();
                       } catch (error) {
                         console.error(error);
@@ -165,7 +165,7 @@ const PwdSectionViewer = () => {
                           organizationId,
                           identityId: identity.id,
                         });
-                        await refreshIdentity();
+                        window.location.reload();
                         unpublishDisclosure.onClose();
                       } catch (error) {
                         console.error(error);
@@ -193,7 +193,7 @@ const PwdSectionViewer = () => {
                           organizationId,
                           identityId: identity.id,
                         });
-                        await refreshIdentity();
+                        window.location.reload();
                         unpublishDisclosure.onClose();
                       } catch (error) {
                         console.error(error);
@@ -222,7 +222,7 @@ const PwdSectionViewer = () => {
                       await PortfolioUnpublish({
                         id: identity.id,
                       });
-                      await refreshIdentity();
+                      window.location.reload();
                       unpublishDisclosure.onClose();
                     } catch (error) {
                       console.error(error);
@@ -250,7 +250,7 @@ const PwdSectionViewer = () => {
                       await PortfolioPublishRequest({
                         id: identity.id,
                       });
-                      await refreshIdentity();
+                      window.location.reload();
                       publishRequestDisclosure.onClose();
                     } catch (error) {
                       console.error(error);

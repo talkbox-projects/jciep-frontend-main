@@ -52,7 +52,7 @@ const IdentityOrganizationListSection = () => {
                     invitationCode: params?.invitationCode,
                     identityId: identity?.id,
                   });
-                  refreshIdentity();
+                  window.location.reload();
                   joinDisclosure.onClose();
                 } catch (error) {
                   console.error(error);
@@ -71,9 +71,8 @@ const IdentityOrganizationListSection = () => {
         {!hasOrganization ? (
           <Text align="center" color="#999" fontSize="sm">
             <NextLink
-              href={`/user/organization/${
-                identity?.type === "staff" ? "ngo" : "company"
-              }/${identity?.id}/add`}
+              href={`/user/organization/${identity?.type === "staff" ? "ngo" : "company"
+                }/${identity?.id}/add`}
             >
               <Button variant="link">
                 {wordExtractor(
