@@ -68,7 +68,7 @@ const IdentityOrganizationListSection = () => {
         </Button>
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
-        {!hasOrganization ? (
+        {!hasOrganization && ["ngo", "employer"].includes(identity?.type) ? (
           <Text align="center" color="#999" fontSize="sm">
             <NextLink
               href={`/user/organization/${identity?.type === "staff" ? "ngo" : "company"
