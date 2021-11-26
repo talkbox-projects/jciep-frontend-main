@@ -607,6 +607,7 @@ export default {
       const currentIdentity = context?.auth?.identity;
       if (!checkIfAdmin(currentIdentity)
         && !isJoinedOrganizationStaff(currentIdentity, organizationId)
+        && currentIdentity._id === identityId
       ) {
         throw new Error("Permission Denied!");
       }
@@ -663,16 +664,17 @@ export default {
       return true;
     },
 
-    PortfolioUnpublish: async (_parent, { id }, context) => {
+    PortfolioUnpublish: async (_parent, { organizationId, identityId }, context) => {
 
       const currentIdentity = context?.auth?.identity;
       if (!checkIfAdmin(currentIdentity)
         && !isJoinedOrganizationStaff(currentIdentity, organizationId)
+        && currentIdentity._id === identityId
       ) {
         throw new Error("Permission Denied!");
       }
 
-      const identity = await Identity.findById(id);
+      const identity = await Identity.findById(identityId);
       if (identity?.type !== "pwd") {
         return false;
       }

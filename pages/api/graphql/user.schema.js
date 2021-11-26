@@ -274,9 +274,9 @@ export default gql`
 
     IdentityRemove(id: ID!): Boolean
 
-    PortfolioPublishRequest(organizationId: ID!, identityId: ID!): Boolean
-    PortfolioPublishApprove(organizationId: ID!, identityId: ID!): Boolean
-    PortfolioPublishReject(organizationId: ID!, identityId: ID!): Boolean
-    PortfolioUnpublish(organizationId: ID!, identityId: ID!): Boolean
+    PortfolioPublishRequest(organizationId: ID, identityId: ID!): Boolean
+    PortfolioPublishApprove(organizationId: ID, identityId: ID!): Boolean
+    PortfolioPublishReject(organizationId: ID, identityId: ID!): Boolean
+    PortfolioUnpublish(organizationId: ID, identityId: ID!): Boolean
   }
 `;

@@ -220,7 +220,8 @@ const PwdSectionViewer = () => {
                   onSubmit: async () => {
                     try {
                       await PortfolioUnpublish({
-                        id: identity.id,
+                        organizationId,
+                        identityId: identity.id,
                       });
                       window.location.reload();
                       unpublishDisclosure.onClose();
@@ -248,7 +249,8 @@ const PwdSectionViewer = () => {
                   onSubmit: async () => {
                     try {
                       await PortfolioPublishRequest({
-                        id: identity.id,
+                        organizationId,
+                        identityId: identity.id,
                       });
                       window.location.reload();
                       publishRequestDisclosure.onClose();

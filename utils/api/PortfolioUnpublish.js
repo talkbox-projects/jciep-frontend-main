@@ -3,7 +3,7 @@ import { getGraphQLClient } from "../apollo";
 
 const PortfolioUnpublish = async ({ organizationId, identityId }, context) => {
   const query = gql`
-    mutation PortfolioUnpublish($organizationId: ID!, $identityId: ID!) {
+    mutation PortfolioUnpublish($organizationId: ID, $identityId: ID!) {
       PortfolioUnpublish(organizationId: $organizationId, identityId: $identityId)
     }
   `;
