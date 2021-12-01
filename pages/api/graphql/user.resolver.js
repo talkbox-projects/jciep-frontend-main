@@ -133,7 +133,7 @@ export default {
 
     TalantIdentitySearch: async (_parent, input) => {
 
-      const keys = { publishStatus: "approved" };
+      const keys = { publishStatus: "approved", published: true };
 
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
