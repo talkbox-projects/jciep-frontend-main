@@ -8,8 +8,9 @@ import {
   UnorderedList,
   ListItem,
 } from "@chakra-ui/layout";
-import { 
-  Button,Text, Image, chakra, Link, Icon, Tooltip, IconButton } from "@chakra-ui/react";
+import {
+  Button, Text, Image, chakra, Link, Icon, Tooltip, IconButton
+} from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { motion } from "framer-motion";
@@ -72,16 +73,14 @@ const TextTool = ({
       )}
       {description && description !== "" && (
         <chakra.span pl="6px">
-          <Tooltip isOpen={isLabelOpen}  hasArrow label={description} bg="#1E1E1E" color="#FFFFFF"  aria-label={description}>
-              <IconButton icon={<AiOutlineInfoCircle />} variant="link" 
-                cursor="pointer"
-                size={2}
-                onMouseEnter={() => setIsLabelOpen(true)}
-                onMouseLeave={() => setIsLabelOpen(false)}
-                onClick={() => setIsLabelOpen(true)}
-                mt={small ? "5px" : "5px"}
-              >
-              </IconButton>
+          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF" aria-label={description}>
+            <IconButton icon={<AiOutlineInfoCircle />} variant="link"
+              cursor="pointer"
+              size={2}
+              onClick={() => setIsLabelOpen(true)}
+              mt={small ? "5px" : "5px"}
+            >
+            </IconButton>
           </Tooltip>
         </chakra.span>
       )}
@@ -266,10 +265,10 @@ const Card = ({
                 <UnorderedList pt="8px" m={0} listStyleType="none">
                   <HStack spacing="5px">
                     <Image
-                    alt={wordExtractor(
-                      page?.content?.wordings,
-                      "fundingHeading"
-                    )}
+                      alt={wordExtractor(
+                        page?.content?.wordings,
+                        "fundingHeading"
+                      )}
                       w="24px"
                       h="24px"
                       src={
@@ -326,10 +325,10 @@ const Card = ({
               <Divider />
               <HStack pt="8px" spacing="5px" align="start">
                 <Image
-                    alt={wordExtractor(
-                      page?.content?.wordings,
-                      "contactHeading"
-                    )}
+                  alt={wordExtractor(
+                    page?.content?.wordings,
+                    "contactHeading"
+                  )}
                   w="24px"
                   h="20px"
                   src={

@@ -74,10 +74,10 @@ export const IdentityBiographySectionViewer = () => {
               }} alt={imageLabel} src={file?.url} />;
               break;
             case "text":
-              comp = <Text whiteSpace="pre-line" wordBreak="break-all">{text}</Text>;
+              comp = <Text whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
               break;
             case "url":
-              comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-all">{urlLabel}</Text></Link>;
+              comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-word">{urlLabel}</Text></Link>;
               break;
             default:
           }

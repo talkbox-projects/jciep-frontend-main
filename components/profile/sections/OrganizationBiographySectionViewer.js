@@ -61,7 +61,7 @@ export const OrganizationBiographySectionViewer = () => {
               comp = <Text whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
               break;
             case "url":
-              comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-all">{urlLabel}</Text></Link>;
+              comp = <Link href={url} target="_blank"><Text whiteSpace="pre-line" wordBreak="break-word">{urlLabel}</Text></Link>;
               break;
             default:
           }

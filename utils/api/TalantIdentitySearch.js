@@ -6,11 +6,6 @@ const talantIdentitySearch = async (
     limit,
     page,
     organizationId,
-    identityType,
-    publishStatus,
-    published,
-    name,
-    days,
   },
   context
 ) => {
@@ -127,11 +122,6 @@ const talantIdentitySearch = async (
     page,
     limit,
     organizationId,
-    identityType,
-    publishStatus,
-    name,
-    published,
-    days,
   });
 
   return data?.TalantIdentitySearch;
