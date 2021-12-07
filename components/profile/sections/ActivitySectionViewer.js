@@ -12,12 +12,12 @@ const ActivitySectionViewer = () => {
     IdentityProfileStore.useContext();
 
 
-  const { identity: { type, organizationRole } = {} } = useAppContext();
+  const { identity: { type, organizationRole = [] } = {} } = useAppContext();
   const [staffAccess, setStaffAccess] = useState(false)
 
   useEffect(async () => {
     if (type === "staff" && organizationRole?.length > 0) {
-      let IdentityRole = (identity.organizationRole)
+      let IdentityRole = (identity?.organizationRole ?? [])
 
       let hasStaffAccess = IdentityRole.filter(role =>
         role.organization.id === organizationRole[0].organization.id

@@ -46,8 +46,8 @@ const IdentityPortfolioSection = () => {
   const galleryDisclosure = useDisclosureWithParams();
 
   const isEditable = useMemo(() => editSection === "portfolio", [editSection]);
-  const { identity: { type, organizationRole} = {} } = useAppContext();
-  const [staffAccess, setStaffAccess] = useState(false) 
+  const { identity: { type, organizationRole = [] } = {} } = useAppContext();
+  const [staffAccess, setStaffAccess] = useState(false)
 
   const onItemRemove = useCallback(
     (index) => {
@@ -84,20 +84,20 @@ const IdentityPortfolioSection = () => {
   );
 
   useEffect(() => {
-    if (type === "staff" && organizationRole?.length> 0) {
-      let IdentityRole = (identity.organizationRole)
-      
-     let hasStaffAccess =  IdentityRole.filter(role =>  
+    if (type === "staff" && organizationRole?.length > 0) {
+      let IdentityRole = (identity?.organizationRole ?? [])
+
+      let hasStaffAccess = IdentityRole.filter(role =>
         role.organization.id === organizationRole[0].organization.id
-        && organizationRole[0].role === "staff" 
-        && organizationRole[0].status === "joined" 
+        && organizationRole[0].role === "staff"
+        && organizationRole[0].status === "joined"
       )[0]
-       
-     if(hasStaffAccess) {
-      setStaffAccess(true)
-     } else {
-      setStaffAccess(false)
-     }   
+
+      if (hasStaffAccess) {
+        setStaffAccess(true)
+      } else {
+        setStaffAccess(false)
+      }
     }
 
   }, [type, identity, organizationRole])

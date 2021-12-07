@@ -626,9 +626,11 @@ export default {
       return true;
     },
 
-    PortfolioPublishApprove: async (_parent, { identityId }, context) => {
+    PortfolioPublishApprove: async (_parent, { organizationId, identityId }, context) => {
 
-      if (!checkIfAdmin(context?.auth?.identity)) {
+      const currentIdentity = context?.auth?.identity;
+      if (!checkIfAdmin(currentIdentity)
+        && !isJoinedOrganizationStaff(currentIdentity, organizationId)) {
         throw new Error("Permission Denied!");
       }
 
@@ -645,9 +647,11 @@ export default {
       return true;
     },
 
-    PortfolioPublishReject: async (_parent, { identityId }, context) => {
+    PortfolioPublishReject: async (_parent, { organizationId, identityId }, context) => {
 
-      if (!checkIfAdmin(context?.auth?.identity)) {
+      const currentIdentity = context?.auth?.identity;
+      if (!checkIfAdmin(currentIdentity)
+        && !isJoinedOrganizationStaff(currentIdentity, organizationId)) {
         throw new Error("Permission Denied!");
       }
 
