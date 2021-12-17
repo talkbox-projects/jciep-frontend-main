@@ -40,7 +40,7 @@ export const youtubeRegex =
 export const phoneRegex = /[0-9]{8}/;
 
 export const passwordRegex =
-  /^(?=.*\d*)(?=.*[a-z]*)(?=.*[A-Z])(?=.*[!@#$%^&*_.,-]).{8,}$/;
+  /.{8,}$/;
 
 export const getYoutubeId = (url) => {
   const match = (url ?? "").match(youtubeRegex);
