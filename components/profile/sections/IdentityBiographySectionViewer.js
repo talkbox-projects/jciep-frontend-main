@@ -7,6 +7,7 @@ import {
   AspectRatio,
   Image,
   Link,
+  Stack,
 } from "@chakra-ui/react";
 import { RiEdit2Line } from "react-icons/ri";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
@@ -67,11 +68,21 @@ export const IdentityBiographySectionViewer = () => {
               break;
             }
             case "image":
-              comp = <Image cursor="pointer" onClick={() => {
-                galleryDisclosure.onOpen({
-                  item: { file },
-                });
-              }} alt={imageLabel} src={file?.url} />;
+              comp = (
+                <Stack spacing={2}>
+                  <Image
+                    cursor="pointer"
+                    onClick={() => {
+                      galleryDisclosure.onOpen({
+                        item: { file },
+                      });
+                    }}
+                    alt={imageLabel}
+                    src={file?.url}
+                  />
+                  <Text color="gray.500">{imageLabel}</Text>
+                </Stack>
+              );
               break;
             case "text":
               comp = <Text whiteSpace="pre-line" wordBreak="break-word">{text}</Text>;
