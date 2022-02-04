@@ -24,6 +24,7 @@
     "formidable": "^1.2.2",
     "framer-motion": "^5.2.1",
     "ga-4-react": "^0.1.281",
+    "globby": "^12.1.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "graphql-tools": "^7.0.5",
