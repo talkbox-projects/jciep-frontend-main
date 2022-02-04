@@ -802,6 +802,8 @@ export default withPageCMS(JobOpportunities, {
           label: "資歷 Qualification",
           options: [
             { value: "n/A", label: "沒指定 N/A" },
+            { value: "primarySchool", label: "小學 Primary School" },
+            { value: "secondarySchool", label: "中學 Secondary School" },
             { value: "diploma", label: "文憑 Diploma" },
             { value: "higherDiploma", label: "高級文憑 Higher Diploma" },
             { value: "associateDegree", label: "副學士學位 Associate Degree" },
