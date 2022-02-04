@@ -389,6 +389,7 @@ const Home = ({ setting, page }) => {
         <Carousel
           showArrows={true}
           showIndicators={false}
+          autoPlay
           infiniteLoop
           interval={3000}
           showStatus={false}

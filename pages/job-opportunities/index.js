@@ -265,10 +265,10 @@ const JobOpportunities = ({ page }) => {
               </Text>
             </HStack>
             <HStack>
-              <Image alt= {wordExtractor(
-                  page?.content?.wordings,
-                  `yearOfExperience_${job?.yearOfExperience}`
-                )} src={page?.content?.icon?.expIcon} w={6} h={6} />
+              <Image alt={wordExtractor(
+                page?.content?.wordings,
+                `yearOfExperience_${job?.yearOfExperience}`
+              )} src={page?.content?.icon?.expIcon} w={6} h={6} />
               <Text>
                 {wordExtractor(
                   page?.content?.wordings,
@@ -280,7 +280,7 @@ const JobOpportunities = ({ page }) => {
             <HStack w="100%">
               <Box flex={1} minW={0} w="100%">
                 <HStack>
-                  <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")}  src={page?.content?.icon?.locationIcon} w={6} h={6} />
+                  <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")} src={page?.content?.icon?.locationIcon} w={6} h={6} />
                   <Text isTruncated maxW="100%">
                     {jobLocationRenderer(job)}
                   </Text>
@@ -328,11 +328,11 @@ const JobOpportunities = ({ page }) => {
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-                
+
               >
                 {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
               </Button>
-              
+
             </Box>
             <Image alt=""
               position="absolute"
@@ -808,6 +808,13 @@ export default withPageCMS(JobOpportunities, {
             { value: "degree", label: "學士學位 Degree" },
             { value: "masterOrAbove", label: "碩士學位或以上 Master or above" },
           ],
+        },
+        {
+          name: 'publishDate',
+          label: 'Created At',
+          component: 'date',
+          dateFormat: 'MMMM DD YYYY',
+          timeFormat: true,
         },
       ],
     },
