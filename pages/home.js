@@ -350,8 +350,7 @@ const Home = ({ setting, page }) => {
                       bgSize="cover"
                       bgPos="center"
                       w="240px"
-                      h="240px"
-                      maxW="100%"
+                      minH="240px"
                     />
                   </Box>
                 )
