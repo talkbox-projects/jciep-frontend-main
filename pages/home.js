@@ -113,7 +113,7 @@ const Home = ({ setting, page }) => {
     <VStack w="100%" align="stretch" spacing={0}>
 
       {/* First Section */}
-      <Box h={"100vh"} position="relative" overflow="hidden">
+      <Box h={["100vh", "100vh", "100vh", "130vh"]} position="relative" overflow="hidden">
         <AspectRatio h="100%" ratio={5 / 3} zIndex="-1">
           {page?.content?.banner?.youtube ? (
             <iframe

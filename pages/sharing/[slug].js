@@ -60,7 +60,7 @@ const PostHeader = ({ headerTitle, categories, post }) => {
     <Box w="100%">
       <Box
         d={["none", "none", "block"]}
-        pb={[56, 56, 56, 56, 56, 40]}
+        pb={[72, 72, 72, 72, 56, 56]}
         w="100%"
         position="relative"
       >
