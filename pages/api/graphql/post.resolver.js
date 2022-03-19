@@ -6,15 +6,25 @@ export default {
   Query: {
     PostSearch: async (
       _parent,
-      { lang, status = [], limit, page, category, featureDisplay }
+      { lang, limit, page, category, featureDisplay }, context
     ) => {
+
+
+      let status = [];
+      if (!checkIfAdmin(context?.auth?.identity)) {
+        status = ["published"];
+      } else {
+        status = ["removed", "published", "draft"];
+      }
+
       const articlesData = await PostModel.aggregate([
         {
           $match: {
             ...(featureDisplay && { featureDisplay }),
             ...(lang && { lang }),
-            ...(status?.length && { status: { $in: [status] } }),
+            ...({ status: { $in: status } }),
             ...(category?.length && { category: { $in: [category] } }),
+
           },
         },
         {
