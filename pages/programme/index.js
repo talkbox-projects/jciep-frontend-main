@@ -88,7 +88,7 @@ const Programme = ({ page }) => {
       <Anchor id="vision" />
       <Box
         h="40vh"
-        minH={["40vh", "70vh"]}
+        minH={["40vh", "80vh"]}
         w="100vw"
         position="relative"
         overflowY="visible"
@@ -103,7 +103,7 @@ const Programme = ({ page }) => {
             ({ image }, index) => {
               return (
                 <Image alt=""
-                  minH={["40vh", "70vh"]}
+                  minH={["40vh", "80vh"]}
                   key={index}
                   src={image}
                   objectFit="cover"
