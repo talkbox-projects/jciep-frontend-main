@@ -231,7 +231,7 @@ const IdentityOpportunities = ({
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[36, 36, 36, 48]}>
               <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}

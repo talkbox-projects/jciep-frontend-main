@@ -43,7 +43,7 @@ const PwdMain = ({ page }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       <Box
-        minH={["50vh", "70vh"]}
+        minH={["80vh", "100vh"]}
         w="100%"
         position="relative"
         overflowY="visible"
@@ -202,7 +202,7 @@ const PwdMain = ({ page }) => {
                   }
                   zIndex={1}
                 >
-                  <Image  alt={data.name} src={data.icon} h="48px" w="48px" />
+                  <Image alt={data.name} src={data.icon} h="48px" w="48px" />
                   <Text
                     fontWeight="bold"
                     fontSize={["16px", "16px", "24px"]}

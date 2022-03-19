@@ -306,7 +306,7 @@ const JobOpportunities = ({ page }) => {
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Box pb={[48, 48, 48, 36]} pt={[24, 24, 24, 36]}>
+            <Box pb={[48, 48, 48, 36]} pt={[36, 36, 36, 48]}>
               <Text fontSize="5xl" fontWeight="bold">
                 {wordExtractor(page?.content?.wordings, "page_title")}
               </Text>

@@ -36,7 +36,7 @@ const ContactUs = ({ page }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0}>
       <Box
-        minH={["50vh", "70vh"]}
+        minH={["80vh", "100vh"]}
         w="100%"
         position="relative"
         overflowY="visible"
