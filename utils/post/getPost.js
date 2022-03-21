@@ -12,6 +12,7 @@ export const getPost = async ({ idOrSlug, lang }, context) => {
         excerpt
         featureDisplay
         content
+        publishDate
         category
         tags
         references {

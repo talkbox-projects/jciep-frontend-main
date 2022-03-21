@@ -12,7 +12,7 @@ export default {
 
       let status = [];
       if (!checkIfAdmin(context?.auth?.identity)) {
-        status = ["published"];
+        status = ["published", "draft"];
       } else {
         status = ["removed", "published", "draft"];
       }

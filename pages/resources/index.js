@@ -228,7 +228,7 @@ const Resources = ({ page, enums, setting }) => {
         <Container>
           <Text
             d="inline-block"
-            mt={48}
+            mt={56}
             px={2}
             mb={36}
             fontWeight="bold"
