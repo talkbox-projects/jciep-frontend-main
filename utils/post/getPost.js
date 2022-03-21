@@ -11,6 +11,7 @@ export const getPost = async ({ idOrSlug, lang }, context) => {
         title
         excerpt
         featureDisplay
+        status
         content
         publishDate
         category
