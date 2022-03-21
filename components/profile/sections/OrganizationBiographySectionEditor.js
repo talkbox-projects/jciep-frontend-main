@@ -57,7 +57,7 @@ const OrganizationBiographySectionEditor = () => {
     >
       <HStack px={8} py={4} align="center">
         <Text flex={1} minW={0} w="100%" fontSize="2xl">
-          {wordExtractor(page?.content?.wordings, "biography_header_label")}
+          {wordExtractor(page?.content?.wordings, "biography_organization_header_label")}
         </Text>
         <Button variant="link" type="submit" leftIcon={<RiEdit2Line />}>
           {wordExtractor(page?.content?.wordings, "save_button_label")}

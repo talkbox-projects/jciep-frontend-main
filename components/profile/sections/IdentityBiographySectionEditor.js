@@ -56,7 +56,7 @@ const IdentityBiographySectionEditor = () => {
     >
       <HStack px={8} py={4} align="center">
         <Text flex={1} minW={0} w="100%" fontSize="2xl" fontFamily="SFNSDisplay"  >
-          {wordExtractor(page?.content?.wordings, "biography_header_label")}
+          {wordExtractor(page?.content?.wordings, "biography_identity_header_label")}
         </Text>
         <VStack align="stretch">
           <HStack py={2} spacing={4} justifyContent="flex-end">
@@ -153,69 +153,69 @@ const IdentityBiographySectionEditor = () => {
                 </>
               );
               break;
-              case "text":
-                comp = (
+            case "text":
+              comp = (
+                <FormControl>
+                  <Textarea
+                    rows={5}
+                    resize="none"
+                    {...register(`${prefix}.text`, {
+                      required: wordExtractor(
+                        page?.content?.wordings,
+                        "empty_text_label"
+                      ),
+                    })}
+                    defaultValue={text ?? ""}
+                  />
+                  <FormHelperText color="red">
+                    {errors?.biography?.blocks?.[index]?.text?.message}
+                  </FormHelperText>
+                </FormControl>
+              );
+              break;
+            case "url":
+              comp = (
+                <>
                   <FormControl>
-                    <Textarea
-                      rows={5}
-                      resize="none"
-                      {...register(`${prefix}.text`, {
+                    <Input
+                      placeholder="標籤 Label"
+                      {...register(`${prefix}.urlLabel`, {
                         required: wordExtractor(
                           page?.content?.wordings,
                           "empty_text_label"
                         ),
                       })}
-                      defaultValue={text ?? ""}
+                      defaultValue={urlLabel ?? ""}
                     />
                     <FormHelperText color="red">
-                      {errors?.biography?.blocks?.[index]?.text?.message}
+                      {errors?.biography?.blocks?.[index]?.urlLabel?.message}
                     </FormHelperText>
                   </FormControl>
-                );
-                break;
-              case "url":
-                comp = (
-                  <>
-                    <FormControl>
-                      <Input
-                        placeholder="標籤 Label"
-                        {...register(`${prefix}.urlLabel`, {
-                          required: wordExtractor(
+                  <FormControl>
+                    <Input
+                      placeholder="https://"
+                      {...register(`${prefix}.url`, {
+                        required: wordExtractor(
+                          page?.content?.wordings,
+                          "empty_text_label"
+                        ),
+                        pattern: {
+                          value: urlRegex,
+                          message: wordExtractor(
                             page?.content?.wordings,
-                            "empty_text_label"
+                            "field_error_message_invalid_url"
                           ),
-                        })}
-                        defaultValue={urlLabel ?? ""}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.biography?.blocks?.[index]?.urlLabel?.message}
-                      </FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                      <Input
-                        placeholder="https://"
-                        {...register(`${prefix}.url`, {
-                          required: wordExtractor(
-                            page?.content?.wordings,
-                            "empty_text_label"
-                          ),
-                          pattern: {
-                            value: urlRegex,
-                            message: wordExtractor(
-                              page?.content?.wordings,
-                              "field_error_message_invalid_url"
-                            ),
-                          },
-                        })}
-                        defaultValue={url ?? ""}
-                      />
-                      <FormHelperText color="red">
-                        {errors?.biography?.blocks?.[index]?.url?.message}
-                      </FormHelperText>
-                    </FormControl>
-                  </>
-                );
-                break;
+                        },
+                      })}
+                      defaultValue={url ?? ""}
+                    />
+                    <FormHelperText color="red">
+                      {errors?.biography?.blocks?.[index]?.url?.message}
+                    </FormHelperText>
+                  </FormControl>
+                </>
+              );
+              break;
             default:
           }
           return (
