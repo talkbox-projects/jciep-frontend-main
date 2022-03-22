@@ -6,10 +6,9 @@ export default {
   Query: {
     PostSearch: async (
       _parent,
-      { lang, limit, page, category, featureDisplay }, context
+      { lang, limit, page, category, featureDisplay },
+      context
     ) => {
-
-
       let status = [];
       if (!checkIfAdmin(context?.auth?.identity)) {
         status = ["published", "draft"];
@@ -22,9 +21,8 @@ export default {
           $match: {
             ...(featureDisplay && { featureDisplay }),
             ...(lang && { lang }),
-            ...({ status: { $in: status } }),
+            ...{ status: { $in: status } },
             ...(category?.length && { category: { $in: [category] } }),
-
           },
         },
         {
@@ -94,7 +92,6 @@ export default {
   },
   Mutation: {
     PostUpdate: async (_parent, { input: { id, ..._post } }, context) => {
-
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
@@ -105,7 +102,6 @@ export default {
       return post;
     },
     PostCreate: async (_parent, { input: _post }, context) => {
-
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
@@ -117,13 +113,12 @@ export default {
       if (existingPost) {
         throw new Error("Slug is already in use");
       } else {
-        const post = await PostModel.create(_post);
+        const post = await PostModel.create({ status: "draft", ..._post });
         return post;
       }
     },
 
-    PostDelete: async (_parent, { input: { id } }, context) => {
-
+    PostDelete: async (_parent, { id }, context) => {
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
