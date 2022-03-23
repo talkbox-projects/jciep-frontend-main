@@ -16,6 +16,15 @@ import { init } from "../utils/ga";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
+const Avatar = {
+  parts: ["container"],
+  baseStyle: {
+    container: {
+      bg: "#6d7682",
+    },
+  },
+};
+
 const theme = extendTheme({
   initialColorMode: "light",
   useSystemColorMode: false,
@@ -71,6 +80,9 @@ const theme = extendTheme({
       800: "#440d09",
       900: "#1e0100",
     },
+  },
+  components: {
+    Avatar,
   },
   styles: {
     global: {
