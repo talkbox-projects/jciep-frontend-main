@@ -41,7 +41,11 @@ export const getServerSideProps = async (context) => {
 };
 
 const AccountInfoPage = ({ page }) => {
-  const { user, resetPasswordEmailModalDisclosure, resetPasswordPhoneModalDisclosure } = useAppContext();
+  const {
+    user,
+    resetPasswordEmailModalDisclosure,
+    resetPasswordPhoneModalDisclosure,
+  } = useAppContext();
   const injectParams = useInjectParams();
 
   const getLoginMethod = useCallback(({ user }) => {
@@ -85,7 +89,7 @@ const AccountInfoPage = ({ page }) => {
           break;
         case "apple":
           loginMethodDisplay = (
-            <HStack color="gray.500">
+            <HStack color="gray.600">
               <Icon fontSize="lg" as={IoLogoApple} />{" "}
               <Text>
                 {wordExtractor(page?.content?.wordings, "apple_label")}
@@ -96,7 +100,7 @@ const AccountInfoPage = ({ page }) => {
 
         case "phone":
           loginMethodDisplay = (
-            <HStack color="gray.500">
+            <HStack color="gray.600">
               <Icon fontSize="lg" as={MdPhoneAndroid} />{" "}
               <Text>
                 {wordExtractor(page?.content?.wordings, "phone_label")}
@@ -106,7 +110,7 @@ const AccountInfoPage = ({ page }) => {
           break;
         default:
           loginMethodDisplay = (
-            <HStack color="gray.500">
+            <HStack color="gray.600">
               <Icon fontSize="lg" as={IoMail} />{" "}
               <Text>
                 {wordExtractor(page?.content?.wordings, "email_label")}
@@ -172,7 +176,13 @@ const AccountInfoPage = ({ page }) => {
     } else {
       return null;
     }
-  }, [getLoginMethod, page?.content?.wordings, resetPasswordEmailModalDisclosure, resetPasswordPhoneModalDisclosure, user]);
+  }, [
+    getLoginMethod,
+    page?.content?.wordings,
+    resetPasswordEmailModalDisclosure,
+    resetPasswordPhoneModalDisclosure,
+    user,
+  ]);
 
   return (
     <VStack py={[24, 48]}>
