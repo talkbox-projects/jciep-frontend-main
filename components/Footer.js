@@ -54,7 +54,7 @@ const Footer = ({ footer }) => {
               );
             })}
           </VStack>
-          <Divider pt={8}  borderColor="#EFEFEF"/>
+          <Divider pt={8} borderColor="#EFEFEF" />
           <Stack
             pt={8}
             spacing={8}
@@ -70,24 +70,26 @@ const Footer = ({ footer }) => {
               minW={0}
               w="100%"
               columns={[2, 2, 3, 5, 5]}
-              gap={[8,12]}
+              gap={[8, 12]}
               padding="0 2%"
             >
               {(footer?.sitemap ?? []).map(
                 ({ id, links = [], title, url = "/", social = [] }) => (
                   <VStack key={id} align="start">
-                    <NextLink href={url}>
-                      <Button
-                        textAlign="left"
-                        variant="link"
-                        color="black"
-                        fontWeight="bold"
-                        fontSize={["xl", "xl", "lg"]}
-                      >
-                        {title}
-                      </Button>
-                    </NextLink>
-                    <Text w="100%">
+                    {title && (
+                      <NextLink href={url}>
+                        <Button
+                          textAlign="left"
+                          variant="link"
+                          color="black"
+                          fontWeight="bold"
+                          fontSize={["xl", "xl", "lg"]}
+                        >
+                          {title}
+                        </Button>
+                      </NextLink>
+                    )}
+                    <Box w="100%">
                       {(social ?? []).map(({ icon, id, url, label }) => {
                         return (
                           <a href={url} key={id}>
@@ -100,7 +102,7 @@ const Footer = ({ footer }) => {
                           </a>
                         );
                       })}
-                    </Text>
+                    </Box>
 
                     {(links ?? []).map(
                       ({ id: _id, url = "/", label = "" }, i) => {
