@@ -9,7 +9,14 @@ import {
   ListItem,
 } from "@chakra-ui/layout";
 import {
-  Button, Text, Image, chakra, Link, Icon, Tooltip, IconButton
+  Button,
+  Text,
+  Image,
+  chakra,
+  Link,
+  Icon,
+  Tooltip,
+  IconButton,
 } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -32,8 +39,7 @@ const TextTool = ({
   minHeight = "auto",
   small,
 }) => {
-
-  const [isLabelOpen, setIsLabelOpen] = useState(false)
+  const [isLabelOpen, setIsLabelOpen] = useState(false);
 
   return (
     <Text
@@ -73,14 +79,16 @@ const TextTool = ({
       )}
       {description && description !== "" && (
         <chakra.span pl="6px">
-          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF" aria-label={description}>
-            <IconButton icon={<AiOutlineInfoCircle />} variant="link"
+          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
+            <IconButton
+              aria-label={description}
+              icon={<AiOutlineInfoCircle />}
+              variant="link"
               cursor="pointer"
               size={2}
               onClick={() => setIsLabelOpen(true)}
               mt={small ? "5px" : "5px"}
-            >
-            </IconButton>
+            ></IconButton>
           </Tooltip>
         </chakra.span>
       )}
@@ -136,7 +144,7 @@ const Card = ({
             <Divider />
             <HStack spacing="5px">
               <Image
-                alt={organization?.text}
+                alt=""
                 w="24px"
                 h="24px"
                 src={
@@ -156,7 +164,7 @@ const Card = ({
             <Divider />
             <HStack spacing="5px">
               <Image
-                alt={serviceTarget?.text}
+                alt=""
                 w="24px"
                 h="24px"
                 src={page?.content?.resourceSection?.resourceListIcons?.avatar}
@@ -173,10 +181,7 @@ const Card = ({
               <UnorderedList m={0} pt="8px">
                 <HStack spacing="5px">
                   <Image
-                    alt={wordExtractor(
-                      page?.content?.wordings,
-                      "serviceHeading"
-                    )}
+                    alt=""
                     w="24px"
                     h="24px"
                     src={
@@ -221,11 +226,7 @@ const Card = ({
               {internship?.value && (
                 <HStack pt="8px" spacing="5px">
                   <Image
-
-                    alt={wordExtractor(
-                      page?.content?.wordings,
-                      "internship"
-                    )}
+                    alt=""
                     w="24px"
                     h="24px"
                     src={
@@ -243,10 +244,7 @@ const Card = ({
               {probationOrReferral?.value && (
                 <HStack pt="8px" spacing="5px">
                   <Image
-                    alt={wordExtractor(
-                      page?.content?.wordings,
-                      "onProbation"
-                    )}
+                    alt=""
                     w="24px"
                     h="24px"
                     src={
@@ -265,10 +263,7 @@ const Card = ({
                 <UnorderedList pt="8px" m={0} listStyleType="none">
                   <HStack spacing="5px">
                     <Image
-                      alt={wordExtractor(
-                        page?.content?.wordings,
-                        "fundingHeading"
-                      )}
+                      alt=""
                       w="24px"
                       h="24px"
                       src={
@@ -313,84 +308,81 @@ const Card = ({
                 </UnorderedList>
               )}
             </Box>
-            {show && <MotionBox
-              overflow="hidden"
-              height={0}
-              transition={{ duration: 0.5 }}
-              alignItems="start"
-              spacing={0}
-              w="100%"
-              {...(show ? { animate: { height: "auto" } } : { d: "none" })}
-            >
-              <Divider />
-              <HStack pt="8px" spacing="5px" align="start">
-                <Image
-                  alt={wordExtractor(
-                    page?.content?.wordings,
-                    "contactHeading"
-                  )}
-                  w="24px"
-                  h="20px"
-                  src={
-                    page?.content?.resourceSection?.resourceListIcons?.contact
-                  }
-                />
-                <Text color="#1E1E1E" fontSize="16px">
-                  {wordExtractor(page?.content?.wordings, "contactHeading")}
-                </Text>
-              </HStack>
-              <Text
-                pl="27px"
-                whiteSpace="pre-line"
-                color="#1E1E1E"
-                fontSize="16px"
+            {show && (
+              <MotionBox
+                overflow="hidden"
+                height={0}
+                transition={{ duration: 0.5 }}
+                alignItems="start"
+                spacing={0}
+                w="100%"
+                {...(show ? { animate: { height: "auto" } } : { d: "none" })}
               >
-                {contact?.text}
-              </Text>
-              <VStack pl="27px" alignItems="start">
-                <Text color="#1E1E1E" fontSize="12px">
-                  {contact?.description}
+                <Divider />
+                <HStack pt="8px" spacing="5px" align="start">
+                  <Image
+                    alt=""
+                    w="24px"
+                    h="20px"
+                    src={
+                      page?.content?.resourceSection?.resourceListIcons?.contact
+                    }
+                  />
+                  <Text color="#1E1E1E" fontSize="16px">
+                    {wordExtractor(page?.content?.wordings, "contactHeading")}
+                  </Text>
+                </HStack>
+                <Text
+                  pl="27px"
+                  whiteSpace="pre-line"
+                  color="#1E1E1E"
+                  fontSize="16px"
+                >
+                  {contact?.text}
                 </Text>
-                <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
-                  <chakra.a href={contact?.link} target="_blank">
-                    {contact?.linkName}
-                    <Icon pl={1} size="sm" as={FaShareSquare} />
-                  </chakra.a>
-                </Text>
-              </VStack>
-              <HStack pt="32px" spacing="5px">
-                <Image
-                  alt={wordExtractor(
-                    page?.content?.wordings,
-                    "remarkHeading"
-                  )}
-                  w="24px"
-                  h="20px"
-                  src={
-                    page?.content?.resourceSection?.resourceListIcons?.remarks
-                  }
-                />
+                <VStack pl="27px" alignItems="start">
+                  <Text color="#1E1E1E" fontSize="12px">
+                    {contact?.description}
+                  </Text>
+                  <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
+                    <chakra.a href={contact?.link} target="_blank">
+                      {contact?.linkName}
+                      <Icon pl={1} size="sm" as={FaShareSquare} />
+                    </chakra.a>
+                  </Text>
+                </VStack>
+                <HStack pt="32px" spacing="5px">
+                  <Image
+                    alt=""
+                    w="24px"
+                    h="20px"
+                    src={
+                      page?.content?.resourceSection?.resourceListIcons?.remarks
+                    }
+                  />
 
-                <Text color="#1E1E1E" fontSize="16px">
-                  {wordExtractor(page?.content?.wordings, "remarkHeading")}
-                </Text>
-              </HStack>
+                  <Text color="#1E1E1E" fontSize="16px">
+                    {wordExtractor(page?.content?.wordings, "remarkHeading")}
+                  </Text>
+                </HStack>
 
-              <Text
-                pl="27px"
-                whiteSpace="pre-line"
-                color="#1E1E1E"
-                fontSize="12px"
-              >
-                {remark}
-              </Text>
-            </MotionBox>}
+                <Text
+                  pl="27px"
+                  whiteSpace="pre-line"
+                  color="#1E1E1E"
+                  fontSize="12px"
+                >
+                  {remark}
+                </Text>
+              </MotionBox>
+            )}
             <Box pt="32px"></Box>
           </VStack>
         </VStack>
         <Box>
           <Divider />
-          <Button variant="link"
+          <Button
+            variant="link"
             pb="10px"
             cursor="pointer"
             onClick={() => setShow(!show)}
