@@ -111,9 +111,12 @@ const Home = ({ setting, page }) => {
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
-
       {/* First Section */}
-      <Box h={["100vh", "100vh", "100vh", "130vh"]} position="relative" overflow="hidden">
+      <Box
+        h={["100vh", "100vh", "100vh", "130vh"]}
+        position="relative"
+        overflow="hidden"
+      >
         <AspectRatio h="100%" ratio={5 / 3} zIndex="-1">
           {page?.content?.banner?.youtube ? (
             <iframe
@@ -157,7 +160,7 @@ const Home = ({ setting, page }) => {
         >
           <Container>
             <VStack pb={16}>
-              <Heading as="h2" color="white" fontSize={["4xl", "4xl", "6xl"]}>
+              <Heading color="white" fontSize={["4xl", "4xl", "6xl"]}>
                 <MultiTextRenderer data={page?.content?.banner?.title} />
               </Heading>
               <Text
@@ -339,10 +342,10 @@ const Home = ({ setting, page }) => {
                     <Button
                       aria-label={caption}
                       onClick={() => {
-                        link && router.push(link)
+                        link && router.push(link);
                       }}
                       variant="link"
-                      {...link && { cursor: "pointer" }}
+                      {...(link && { cursor: "pointer" })}
                       borderWidth={4}
                       borderColor="white"
                       borderRadius={32}
@@ -447,7 +450,10 @@ const Home = ({ setting, page }) => {
                     direction={["column", "column", "column", "row"]}
                   >
                     <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                      <Image alt={post?.content?.feature?.tagline ?? post?.title} src={post?.content?.feature?.image} />
+                      <Image
+                        alt={post?.content?.feature?.tagline ?? post?.title}
+                        src={post?.content?.feature?.image}
+                      />
                     </Box>
                     <VStack
                       px={8}
@@ -482,15 +488,16 @@ const Home = ({ setting, page }) => {
                       >
                         {post?.content?.feature?.persona}
                       </Text>
-                      <Heading
+                      <Text
                         lineHeight="xl"
                         fontSize={["2xl", "3xl", "4xl", "4xl"]}
                         whiteSpace="pre-wrap"
                         bgColor="white"
+                        fontWeight="bold"
                       >
                         {post?.content?.feature?.tagline ?? post?.title}
-                      </Heading>
-                      <Text as="h2"
+                      </Text>
+                      <Text
                         d="block"
                         pt={4}
                         whiteSpace="pre-wrap"
