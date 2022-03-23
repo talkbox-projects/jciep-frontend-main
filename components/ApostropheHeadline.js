@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import React from "react";
 const ApostropheHeadline = ({
   color = "#ffffff",
@@ -16,7 +16,7 @@ const ApostropheHeadline = ({
           transform="rotate(-30deg)"
         />
       </Box>
-      <Text
+      <Heading
         mx={8}
         mb="-10px"
         fontSize={fontSize}
@@ -24,7 +24,7 @@ const ApostropheHeadline = ({
         textAlign="center"
       >
         {children}
-      </Text>
+      </Heading>
       <Box>
         <Box
           width="6.15px"

@@ -4,6 +4,7 @@ import {
   chakra,
   GridItem,
   HStack,
+  Heading,
   Icon,
   Image,
   SimpleGrid,
@@ -13,7 +14,7 @@ import {
   Link,
   WrapItem,
 } from "@chakra-ui/react";
-import NextLink from "next/link"
+import NextLink from "next/link";
 import { Text, VStack, Box, Grid, Stack, Flex } from "@chakra-ui/layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import React, { useCallback, useEffect, useRef } from "react";
@@ -91,19 +92,16 @@ const Sharing = ({ page, setting, lang }) => {
     fetchPosts();
   }, [fetchPosts]);
 
-
   useEffect(() => {
-    
     if (router.query.category) {
       setTimeout(() => {
         document.querySelector(`[data-tag='sharing-list']`).scrollIntoView({
           block: "start",
           behavior: "smooth",
         });
-      }, 300)
+      }, 300);
     }
   }, [router]);
-
 
   const fetchHottestPosts = useCallback(async () => {
     try {
@@ -239,7 +237,10 @@ const Sharing = ({ page, setting, lang }) => {
                 borderColor="white"
                 overflow="hidden"
               >
-                <Image alt={featuredArticle?.title} src={featuredArticle?.coverImage} />
+                <Image
+                  alt={featuredArticle?.title}
+                  src={featuredArticle?.coverImage}
+                />
               </AspectRatio>
               <VStack flex={1} minW={0} w="100%" align="start">
                 <Icon
@@ -292,7 +293,10 @@ const Sharing = ({ page, setting, lang }) => {
           pb={16}
         >
           <AspectRatio w={"100%"} ratio={4 / 3}>
-            <Image alt={featuredArticle?.title} src={featuredArticle?.coverImage} />
+            <Image
+              alt={featuredArticle?.title}
+              src={featuredArticle?.coverImage}
+            />
           </AspectRatio>
           <DividerSimple flip={true}></DividerSimple>
           <VStack
@@ -345,14 +349,18 @@ const Sharing = ({ page, setting, lang }) => {
           align="start"
           w="100%"
         >
-
           {/* Right Section of Grid */}
           <Box w={["100%", "100%", "33%"]}>
             <Box textAlign="left" fontSize="36px" pb="15px">
               <Text pos="relative" display="inline-block" pl="8px">
-                <Box zIndex={1} fontSize="20px" fontWeight="700"  pos="relative">
+                <Heading
+                  zIndex={1}
+                  fontSize="20px"
+                  fontWeight="700"
+                  pos="relative"
+                >
                   {page?.content?.hotestSection?.title}
-                </Box>
+                </Heading>
                 <Box
                   w="112px"
                   height="33px"
@@ -378,7 +386,6 @@ const Sharing = ({ page, setting, lang }) => {
 
             <Flex direction="column">
               {hottestPosts.map((post, i) => (
-
                 <Grid
                   templateColumns="45px 1fr"
                   justifyContent={{ base: "center", lg: "unset" }}
@@ -392,10 +399,7 @@ const Sharing = ({ page, setting, lang }) => {
                     i + 1
                   }`}</Text>
 
-                  <Box
-                    key={i}
-                    cursor="pointer"
-                  >
+                  <Box key={i} cursor="pointer">
                     <NextLink passHref href={`/sharing/${post.slug}`} key={i}>
                       <Link w="100%" d="block">
                         <Flex>
@@ -411,7 +415,7 @@ const Sharing = ({ page, setting, lang }) => {
                           >
                             {getCategoryData(post.category)?.label}
                           </Box>
-                          <Text fontSize="12px"  display="inline-block">
+                          <Text fontSize="12px" display="inline-block">
                             {moment(post.publishDate).format("D MMM, hh:mm a")}
                           </Text>
                         </Flex>
@@ -429,7 +433,7 @@ const Sharing = ({ page, setting, lang }) => {
                           overflow="hidden"
                           position="relative"
                         >
-                          {post.excerpt} 
+                          {post.excerpt}
                           <Box
                             textAlign="right"
                             position="absolute"
@@ -447,7 +451,6 @@ const Sharing = ({ page, setting, lang }) => {
                             </chakra.span>
                           </Box>
                         </Text>
-                    
                       </Link>
                     </NextLink>
                   </Box>
@@ -459,9 +462,14 @@ const Sharing = ({ page, setting, lang }) => {
               <Box mt="70px" mb={4}>
                 <Box textAlign="left" fontSize="36px">
                   <Text pos="relative" display="inline-block" pl="8px">
-                    <Box zIndex={1} fontSize="20px" fontWeight="700" pos="relative">
+                    <Heading
+                      zIndex={1}
+                      fontSize="20px"
+                      fontWeight="700"
+                      pos="relative"
+                    >
                       {page?.content?.categorySection?.title}
-                    </Box>
+                    </Heading>
                     <Box
                       w="112px"
                       height="33px"
@@ -487,11 +495,11 @@ const Sharing = ({ page, setting, lang }) => {
               </Box>
               <Wrap spacing={2}>
                 {(categories ?? []).map((category) => (
-                  <WrapItem
-                    key={category.key}
-                    cursor="pointer"
-                  >
-                    <NextLink passHref href={`/sharing?category=${category.key}`}>
+                  <WrapItem key={category.key} cursor="pointer">
+                    <NextLink
+                      passHref
+                      href={`/sharing?category=${category.key}`}
+                    >
                       <Link>
                         <CategoryTag category={category} />
                       </Link>
@@ -501,7 +509,6 @@ const Sharing = ({ page, setting, lang }) => {
               </Wrap>
             </Box>
           </Box>
-
 
           {/* Latest Articles with scroll */}
           <Anchor id="sharing-list" />
@@ -514,7 +521,7 @@ const Sharing = ({ page, setting, lang }) => {
               fontSize="24"
               pb="36px"
             >
-              <Text position="relative" display="inline-block">
+              <Heading position="relative" display="inline-block">
                 {page?.content?.latestSection?.title}
                 <Box
                   width="6.15px"
@@ -536,7 +543,7 @@ const Sharing = ({ page, setting, lang }) => {
                   background="#EFEFEF"
                   transform="rotate(-30deg)"
                 />
-              </Text>
+              </Heading>
             </Box>
 
             {router?.query?.category && (
@@ -575,7 +582,6 @@ const Sharing = ({ page, setting, lang }) => {
               </HStack>
             )}
 
-
             <InfiniteScroll
               dataLength={latestPosts.length}
               next={fetchPosts}
@@ -585,84 +591,81 @@ const Sharing = ({ page, setting, lang }) => {
             >
               <SimpleGrid columns={[1, 2]} spacing={10}>
                 {latestPosts.map((post, i) => (
-
-                  <Stack key={i}
-                    as={GridItem}
-                    align="stretch"
-                    cursor="pointer"
-                  >
-                    <NextLink passHref href={`/sharing/${post.slug}`} 
-                                        key={i}>
-                    <Link>
-                      <AspectRatio ratio={4 / 3}>
-                        <Box
-                          bgImage={`url('${post.coverImage}')`}
-                          bgPos="center center"
-                          bgSize="cover"
-                          borderRadius={16}
-                          borderColor="white"
-                          borderWidth={3}
-                        ></Box>
-                      </AspectRatio>
-                      <Box>
-                        <Flex>
+                  <Stack key={i} as={GridItem} align="stretch" cursor="pointer">
+                    <NextLink passHref href={`/sharing/${post.slug}`} key={i}>
+                      <Link>
+                        <AspectRatio ratio={4 / 3}>
                           <Box
-                            fontSize="12px"
-                            color={getCategoryData(post.category)?.textColor}
-                            background={getCategoryData(post.category)?.bgColor}
-                            borderRadius="19px"
-                            px="9px"
-                            mr="9px"
-                            display="inline"
-                            fontWeight="700"
-                          >
-                            {getCategoryData(post.category)?.label}
-                          </Box>
-                          <Text fontSize="12px" display="inline-block">
-                            {moment(post.publishDate).format("D MMM, hh:mm a")}
-                          </Text>
-                        </Flex>
-                        <Text
-                          fontSize={{ base: "20px", lg: "24px" }}
-                          fontWeight="bold"
-                          mb="5px"
-                          mt="5px"
-                        >
-                          {post.title}
-                        </Text>
-                        <Text 
-                          fontSize={{ base: "16px", lg: "16px" }}
-                          maxH="70px"
-                          overflow="hidden"
-                          position="relative"
-                        >
-                          {post.excerpt}
-                          <Box
-                            textAlign="right"
-                            position="absolute"
-                            bottom="0"
-                            right="5px"
-                            background="#fff"
-                          >
-                            ...{" "}
-                            <chakra.span
-                              color="#007878"
-                              fontSize="16px"
-                              fontWeight="bold"
+                            bgImage={`url('${post.coverImage}')`}
+                            bgPos="center center"
+                            bgSize="cover"
+                            borderRadius={16}
+                            borderColor="white"
+                            borderWidth={3}
+                          ></Box>
+                        </AspectRatio>
+                        <Box>
+                          <Flex>
+                            <Box
+                              fontSize="12px"
+                              color={getCategoryData(post.category)?.textColor}
+                              background={
+                                getCategoryData(post.category)?.bgColor
+                              }
+                              borderRadius="19px"
+                              px="9px"
+                              mr="9px"
+                              display="inline"
+                              fontWeight="700"
                             >
-                              More 
-                            </chakra.span>
-                          </Box>
-                        </Text>
-                      </Box>
-                    </Link>
+                              {getCategoryData(post.category)?.label}
+                            </Box>
+                            <Text fontSize="12px" display="inline-block">
+                              {moment(post.publishDate).format(
+                                "D MMM, hh:mm a"
+                              )}
+                            </Text>
+                          </Flex>
+                          <Text
+                            fontSize={{ base: "20px", lg: "24px" }}
+                            fontWeight="bold"
+                            mb="5px"
+                            mt="5px"
+                          >
+                            {post.title}
+                          </Text>
+                          <Text
+                            fontSize={{ base: "16px", lg: "16px" }}
+                            maxH="70px"
+                            overflow="hidden"
+                            position="relative"
+                          >
+                            {post.excerpt}
+                            <Box
+                              textAlign="right"
+                              position="absolute"
+                              bottom="0"
+                              right="5px"
+                              background="#fff"
+                            >
+                              ...{" "}
+                              <chakra.span
+                                color="#007878"
+                                fontSize="16px"
+                                fontWeight="bold"
+                              >
+                                More
+                              </chakra.span>
+                            </Box>
+                          </Text>
+                        </Box>
+                      </Link>
                     </NextLink>
                   </Stack>
                 ))}
               </SimpleGrid>
             </InfiniteScroll>
           </Box>
-
         </Stack>
       </Container>
     </VStack>

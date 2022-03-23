@@ -138,7 +138,9 @@ const PwdDetail = ({ page }) => {
           <Image alt="" src={pwd?.icon} height={[16, 16, 88]} />
         </Box>
         <HStack zIndex={2} fontSize={["24", "24", "56"]}>
-          <Text fontWeight="bold">{pwd?.name}</Text>
+          <Heading fontSize={["24", "24", "56"]} fontWeight="bold">
+            {pwd?.name}
+          </Heading>
           {pwd?.remark && (
             <Tooltip hasArrow label={pwd?.remark}>
               <Text d="inline">
@@ -279,9 +281,9 @@ const PwdDetail = ({ page }) => {
       >
         <Box display="flex" pos="relative">
           <Box zIndex={2} mt={["110px", "110px", "80px"]}>
-            <Text fontSize={["24px", "24px", "56px"]} fontWeight="bold">
+            <Heading fontSize={["24px", "24px", "56px"]} fontWeight="bold">
               {pwd?.traitSection?.title}
-            </Text>
+            </Heading>
             <Text zIndex={2} fontSize="16px" position="relative">
               {pwd?.traitSection?.description}
             </Text>
@@ -587,9 +589,9 @@ const PwdDetail = ({ page }) => {
                   w="36px"
                   mb="6px"
                 />
-                <Text fontSize={["20px", "20px", "24px"]} fontWeight="bold">
+                <Heading fontSize={["20px", "20px", "24px"]} fontWeight="bold">
                   {category.title}
-                </Text>
+                </Heading>
                 <Box
                   w="100%"
                   minW={0}

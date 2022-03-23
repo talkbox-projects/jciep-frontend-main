@@ -5,7 +5,7 @@ import withPageCMS from "../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import { useCredential } from "../../../../../utils/user";
 import { useRouter } from "next/router";
-import React from 'react';
+import React from "react";
 
 const PAGE_KEY = "identity_public_add_success";
 
@@ -42,7 +42,6 @@ const IdentityPublicAddSuccess = ({ page }) => {
           padding="0px 25px"
         >
           <Heading
-            as="span"
             textAlign="center"
             fontSize="36px"
             letterSpacing="1.5px"
@@ -51,7 +50,8 @@ const IdentityPublicAddSuccess = ({ page }) => {
             {page?.content?.heading?.title}
           </Heading>
 
-          <Image alt=""
+          <Image
+            alt=""
             height="150px"
             width="150px"
             marginTop="50px !important"

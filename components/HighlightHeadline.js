@@ -1,4 +1,4 @@
-import { Text } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 import React from "react";
 const HighlightHeadline = ({
   bgColor = "#F6D644",
@@ -6,7 +6,7 @@ const HighlightHeadline = ({
   children,
 }) => {
   return (
-    <Text
+    <Heading
       px={2}
       textAlign="center"
       fontWeight="bold"
@@ -18,7 +18,7 @@ const HighlightHeadline = ({
       fontSize={fontSize}
     >
       {children}
-    </Text>
+    </Heading>
   );
 };
 

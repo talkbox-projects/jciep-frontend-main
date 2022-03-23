@@ -14,10 +14,7 @@ import {
   AccordionPanel,
   AccordionButton,
   Wrap,
-  WrapItem,
   Link,
-  Flex,
-  Button,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
@@ -71,10 +68,9 @@ const Programme = ({ page }) => {
           block: "start",
           behavior: "smooth",
         });
-      }, 300)
+      }, 300);
     }
   }, [router]);
-
 
   return (
     <VStack
@@ -102,7 +98,8 @@ const Programme = ({ page }) => {
           {(page?.content?.heroBannerSection?.sliderImage ?? []).map(
             ({ image }, index) => {
               return (
-                <Image alt=""
+                <Image
+                  alt=""
                   minH={["40vh", "80vh"]}
                   key={index}
                   src={image}
@@ -123,18 +120,20 @@ const Programme = ({ page }) => {
           <Container>
             <Box position="relative" zIndex={2} pb={16}>
               <VStack mx={8} align="start" spacing={0}>
-                {page?.content?.heroBannerSection["title 標題"] && <Text
-                  p={1}
-                  w="max"
-                  maxW="80%"
-                  fontWeight="semibold"
-                  fontSize={["24px", "24px", "36px", "56px"]}
-                  bg={page?.content?.heroBannerSection?.titleBgColor}
-                  color="black"
-                  display="inline"
-                >
-                  {page?.content?.heroBannerSection["title 標題"]}
-                </Text>}
+                {page?.content?.heroBannerSection["title 標題"] && (
+                  <Text
+                    p={1}
+                    w="max"
+                    maxW="80%"
+                    fontWeight="semibold"
+                    fontSize={["24px", "24px", "36px", "56px"]}
+                    bg={page?.content?.heroBannerSection?.titleBgColor}
+                    color="black"
+                    display="inline"
+                  >
+                    {page?.content?.heroBannerSection["title 標題"]}
+                  </Text>
+                )}
               </VStack>
             </Box>
           </Container>
@@ -211,9 +210,13 @@ const Programme = ({ page }) => {
                 return (
                   <VStack pt={16} key={id}>
                     <Box position="relative" mx={["47px", "47px", "0px"]}>
-                      <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                      <Heading
+                        fontWeight="bold"
+                        fontSize="2xl"
+                        textAlign="center"
+                      >
                         {title}
-                      </Text>
+                      </Heading>
                       <Box
                         width="6.15px"
                         height="27.69px"
@@ -300,10 +303,14 @@ const Programme = ({ page }) => {
             >
               {(page?.content?.partnerSection?.partners ?? []).map(
                 ({ id, agencyName, projectName, contact, slug }, i) => (
-                  <NextLink key={i} passHref href={`/programme/partner/${slug}`}>
-                    <Link d="block"
-                      w={["100%", "100%", "40%", "25%"]}>
-                      <VStack w="100%"
+                  <NextLink
+                    key={i}
+                    passHref
+                    href={`/programme/partner/${slug}`}
+                  >
+                    <Link d="block" w={["100%", "100%", "40%", "25%"]}>
+                      <VStack
+                        w="100%"
                         position="relative"
                         transition="all 0.2s"
                         borderWidth={[0, 0, 0, 2]}
@@ -331,13 +338,15 @@ const Programme = ({ page }) => {
                         </Text>
                         <Text fontSize="lg">{projectName}</Text>
                         <Box flex={1} minH="max-content" h="100%" />
-                        <Image alt={agencyName}
+                        <Image
+                          alt={agencyName}
                           w={["75%"]}
                           src={contact?.watermark}
                           position="absolute"
                           bottom={0}
                           right={0}
-                        ></Image></VStack>
+                        ></Image>
+                      </VStack>
                     </Link>
                   </NextLink>
                 )
@@ -345,7 +354,8 @@ const Programme = ({ page }) => {
             </Wrap>
           </Container>
 
-          <Image alt=""
+          <Image
+            alt=""
             pos="absolute"
             zIndex="1"
             src={page?.content?.partnerSection?.bgImageLeft}
@@ -359,7 +369,8 @@ const Programme = ({ page }) => {
             pos="relative"
             pb={["124px", "124px", "380px"]}
           >
-            <Image alt=""
+            <Image
+              alt=""
               pos="absolute"
               right={["50px", "50px", "105px"]}
               bottom={["15%"]}
@@ -412,7 +423,8 @@ const Programme = ({ page }) => {
                       align="stretch"
                       alignItems={["center", "center", "start", "start"]}
                     >
-                      <Image alt={categoryName}
+                      <Image
+                        alt={categoryName}
                         w={["80px", "120px", "110px", "100px"]}
                         src={icon}
                       />
@@ -511,7 +523,8 @@ const Programme = ({ page }) => {
             )}
           </SimpleGrid>
         </Container>
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           src={page?.content?.referenceSection?.bgStyle?.bgGradient1}
           bottom={0}
@@ -519,7 +532,8 @@ const Programme = ({ page }) => {
           zIndex="0"
         />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
-          <Image alt=""
+          <Image
+            alt=""
             pos="absolute"
             right={["22px", "35px", "81px"]}
             bottom="0"

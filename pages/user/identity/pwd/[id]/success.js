@@ -41,11 +41,10 @@ const IdentityPwdAddSuccess = ({ page }) => {
           margin="auto"
           padding="0 25px"
         >
-          <Heading as="span" textAlign="center">
-            {page?.content?.heading?.title}
-          </Heading>
+          <Heading textAlign="center">{page?.content?.heading?.title}</Heading>
 
-          <Image alt=""
+          <Image
+            alt=""
             height="150px"
             width="150px"
             marginTop="50px !important"
