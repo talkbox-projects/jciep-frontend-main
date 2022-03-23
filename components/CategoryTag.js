@@ -6,7 +6,7 @@ const CategoryTag = ({ category, size = "lg", withIcon = true }) => {
   const {
     label = "Unknown Category",
     image: icon,
-    bgColor = "#00BAB4",
+    bgColor = "#00837F",
     textColor = "white",
   } = category ?? {};
 
