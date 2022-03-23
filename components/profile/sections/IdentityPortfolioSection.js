@@ -11,11 +11,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  RiAddFill,
-  RiCloseCircleFill,
-  RiEdit2Line,
-} from "react-icons/ri";
+import { RiAddFill, RiCloseCircleFill, RiEdit2Line } from "react-icons/ri";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import PortfolioMediaUploadModal from "../fragments/PortfolioMediaUploadModal";
@@ -47,7 +43,7 @@ const IdentityPortfolioSection = () => {
 
   const isEditable = useMemo(() => editSection === "portfolio", [editSection]);
   const { identity: { type, organizationRole = [] } = {} } = useAppContext();
-  const [staffAccess, setStaffAccess] = useState(false)
+  const [staffAccess, setStaffAccess] = useState(false);
 
   const onItemRemove = useCallback(
     (index) => {
@@ -85,22 +81,22 @@ const IdentityPortfolioSection = () => {
 
   useEffect(() => {
     if (type === "staff" && organizationRole?.length > 0) {
-      let IdentityRole = (identity?.organizationRole ?? [])
+      let IdentityRole = identity?.organizationRole ?? [];
 
-      let hasStaffAccess = IdentityRole.filter(role =>
-        role.organization.id === organizationRole[0].organization.id
-        && organizationRole[0].role === "staff"
-        && organizationRole[0].status === "joined"
-      )[0]
+      let hasStaffAccess = IdentityRole.filter(
+        (role) =>
+          role.organization.id === organizationRole[0].organization.id &&
+          organizationRole[0].role === "staff" &&
+          organizationRole[0].status === "joined"
+      )[0];
 
       if (hasStaffAccess) {
-        setStaffAccess(true)
+        setStaffAccess(true);
       } else {
-        setStaffAccess(false)
+        setStaffAccess(false);
       }
     }
-
-  }, [type, identity, organizationRole])
+  }, [type, identity, organizationRole]);
 
   const onSave = useCallback(async () => {
     try {
@@ -115,7 +111,13 @@ const IdentityPortfolioSection = () => {
     <SectionCard>
       <VStack spacing={1} align="stretch">
         <HStack w="100%" px={8} py={4} align="center">
-          <Text flex={1} minW={0} w="100%" fontSize="2xl" fontFamily="SFNSDisplay" >
+          <Text
+            flex={1}
+            minW={0}
+            w="100%"
+            fontSize="2xl"
+            fontFamily="SFNSDisplay"
+          >
             {wordExtractor(page?.content?.wordings, "portfolio_header_label")}
           </Text>
           {isEditable ? (
@@ -171,7 +173,7 @@ const IdentityPortfolioSection = () => {
             switch (type) {
               case "video":
                 comp = (
-                  <VStack spacing={0} fontSize="sm" color="#ddd">
+                  <VStack spacing={0} fontSize="sm" color="#757575">
                     <Icon as={AiFillYoutube} fontSize="4xl" />
                     <Text>Youtube</Text>
                   </VStack>
@@ -200,7 +202,9 @@ const IdentityPortfolioSection = () => {
 
             return (
               <AspectRatio key={index} ratio={1}>
-                <Box as={Button} variant="link"
+                <Box
+                  as={Button}
+                  variant="link"
                   onClick={() => onPortfolioItemClick(index)}
                   cursor="pointer"
                   borderRadius={8}

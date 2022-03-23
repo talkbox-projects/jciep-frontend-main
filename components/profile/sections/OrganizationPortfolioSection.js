@@ -11,11 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useCallback, useMemo, useState } from "react";
-import {
-  RiAddFill,
-  RiCloseCircleFill,
-  RiEdit2Line,
-} from "react-icons/ri";
+import { RiAddFill, RiCloseCircleFill, RiEdit2Line } from "react-icons/ri";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import wordExtractor from "../../../utils/wordExtractor";
 import PortfolioMediaUploadModal from "../fragments/PortfolioMediaUploadModal";
@@ -84,7 +80,7 @@ const IdentityPortfolioSection = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   return (
     <SectionCard>
       <VStack spacing={1} align="stretch">
@@ -127,7 +123,7 @@ const IdentityPortfolioSection = () => {
             switch (type) {
               case "video":
                 comp = (
-                  <VStack spacing={0} fontSize="sm" color="#ddd">
+                  <VStack spacing={0} fontSize="sm" color="#757575">
                     <Icon as={AiFillYoutube} fontSize="4xl" />
                     <Text>Youtube</Text>
                   </VStack>
@@ -156,7 +152,9 @@ const IdentityPortfolioSection = () => {
 
             return (
               <AspectRatio key={index} ratio={1}>
-                <Box as={Button} variant="link"
+                <Box
+                  as={Button}
+                  variant="link"
                   onClick={() => onPortfolioItemClick(index)}
                   cursor="pointer"
                   borderRadius={8}
