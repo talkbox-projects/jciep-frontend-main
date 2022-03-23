@@ -382,6 +382,7 @@ const Card = ({
         <Box>
           <Divider />
           <Button
+            color="black"
             variant="link"
             pb="10px"
             cursor="pointer"

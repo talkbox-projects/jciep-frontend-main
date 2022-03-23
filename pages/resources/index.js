@@ -486,7 +486,13 @@ const Resources = ({ page, enums, setting }) => {
               onChange={setServiceDetailFilter}
               list={serviceDetailList}
             />
-            <Button type="reset" onClick={reset} size="sm" variant="link">
+            <Button
+              colorScheme="black"
+              type="reset"
+              onClick={reset}
+              size="sm"
+              variant="link"
+            >
               {wordExtractor(page?.content?.wordings, "reset_label")}
             </Button>
           </Stack>
