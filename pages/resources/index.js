@@ -83,8 +83,10 @@ const ServiceFilter = ({
   onChange = () => undefined,
   list = [],
 }) => (
-  <Menu >
-    <MenuButton minW={["120px", "120px", "180px", "240px"]} as={Button}
+  <Menu>
+    <MenuButton
+      minW={["120px", "120px", "180px", "240px"]}
+      as={Button}
       variant="outline"
       rightIcon={<ChevronDownIcon />}
       borderBottomWidth="2px"
@@ -138,12 +140,11 @@ const Resources = ({ page, enums, setting }) => {
   const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
   const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
 
-
   const reset = () => {
     setServiceOrgFilter([]);
     setServiceTargetFilter([]);
     setServiceDetailFilter([]);
-  }
+  };
 
   const serviceTargetList = useMemo(
     () =>
@@ -213,7 +214,7 @@ const Resources = ({ page, enums, setting }) => {
           block: "start",
           behavior: "smooth",
         });
-      }, 300)
+      }, 300);
     }
   }, [router]);
 
@@ -289,7 +290,8 @@ const Resources = ({ page, enums, setting }) => {
                             bottom="-6px"
                           ></Box>
                         </Box>
-                        <Image alt=""
+                        <Image
+                          alt=""
                           h="120%"
                           src={page?.content?.dialogue?.leftQuoteImage}
                         />
@@ -335,7 +337,8 @@ const Resources = ({ page, enums, setting }) => {
                 {page?.content?.dialogue?.left?.role}
               </Text>
               <Box mr={["", "", "", "", "-275px !important"]}>
-                <Image alt=""
+                <Image
+                  alt=""
                   h={["127px", "127px", "194px", "194px"]}
                   src={page?.content?.dialogue?.left?.left}
                   zIndex="0"
@@ -369,7 +372,8 @@ const Resources = ({ page, enums, setting }) => {
                       position={["absolute", "relative"]}
                       bottom="10%"
                     >
-                      <Image alt=""
+                      <Image
+                        alt=""
                         h="120%"
                         src={page?.content?.dialogue?.rightQuoteImage}
                       />
@@ -419,7 +423,8 @@ const Resources = ({ page, enums, setting }) => {
               {page?.content?.dialogue?.right?.role}
             </Text>
             <Box mr={["", "", "", "", "-125px !important"]}>
-              <Image alt=""
+              <Image
+                alt=""
                 w={["152px", "152px", "152px", "255px", "255px"]}
                 src={page?.content?.dialogue?.right?.rightImage}
               />
@@ -496,7 +501,6 @@ const Resources = ({ page, enums, setting }) => {
           minH="600px"
         >
           <Slider {...settings} initialSlide={0} draggable={false}>
-            <Box minW="150px" />
             {(filteredResourceList ?? []).map((resource, index) => {
               const {
                 name,
@@ -513,7 +517,13 @@ const Resources = ({ page, enums, setting }) => {
                 reminder,
               } = resource;
               return (
-                <Box key={resource?.id} px={1} h="100%" maxW={"336px"}>
+                <Box
+                  {...(index === 0 && { ml: "150px" })}
+                  key={resource?.id}
+                  px={1}
+                  h="100%"
+                  maxW={"336px"}
+                >
                   <Card
                     name={name}
                     topColor={topColor}
@@ -667,7 +677,6 @@ const Resources = ({ page, enums, setting }) => {
               bg: "rgba(255,255,255, 0.3)",
             }}
             borderColor="#000"
-
           >
             {wordExtractor(page?.content?.wordings, "resource_download_label")}
           </Button>
@@ -831,7 +840,8 @@ const Resources = ({ page, enums, setting }) => {
             </GridItem>
           </Grid>
         </Box>
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           right={["-5%", "-10%", "-35%"]}
           bottom="-30%"
@@ -893,7 +903,8 @@ const Resources = ({ page, enums, setting }) => {
             }
           )}
         </Flex>
-        <Image alt=""
+        <Image
+          alt=""
           top="0"
           src={page?.content?.jobOpportunitySection?.image}
           pos="absolute"
