@@ -78,21 +78,32 @@ const PostHeader = ({ headerTitle, categories, post }) => {
             <Image alt={post?.title} src={post.coverImage} />
           </AspectRatio>
         </Box>
-        <HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644" minH="320px">
-          {headerTitle && <ApostropheHeadline>
-            {headerTitle}
-          </ApostropheHeadline>}
+        <HStack
+          alignContent="flex-end"
+          paddingBottom={8}
+          justifyContent="center"
+          bgColor="#f6d644"
+          minH="320px"
+        >
+          {headerTitle && (
+            <ApostropheHeadline>{headerTitle}</ApostropheHeadline>
+          )}
         </HStack>
         <Box bgColor="#f6d644">
           <DividerSimple flip={true} primaryColor="#f6d644"></DividerSimple>
         </Box>
       </Box>
       <Box d={["block", "block", "none"]} position="relative">
-        {headerTitle && <HStack alignContent="flex-end" paddingBottom={8} justifyContent="center" bgColor="#f6d644">
-          <ApostropheHeadline>
-            {headerTitle}
-          </ApostropheHeadline>
-        </HStack>}
+        {headerTitle && (
+          <HStack
+            alignContent="flex-end"
+            paddingBottom={8}
+            justifyContent="center"
+            bgColor="#f6d644"
+          >
+            <ApostropheHeadline>{headerTitle}</ApostropheHeadline>
+          </HStack>
+        )}
         <AspectRatio w="100%" ratio={4 / 3}>
           <Image alt={post?.title} src={post.coverImage} />
         </AspectRatio>
@@ -245,6 +256,9 @@ const PostDetail = ({ post, setting, page }) => {
           <VStack align="stretch" spacing={4}>
             {(post?.content?.blocks ?? []).map(
               ({ _template, content, caption, image, link }, index) => {
+                const imageName = image?.substring(
+                  image.lastIndexOf("images/") + 7
+                );
                 switch (_template) {
                   case "content-block":
                     return (
@@ -279,7 +293,8 @@ const PostDetail = ({ post, setting, page }) => {
                   case "image-block":
                     return (
                       <VStack align="stretch">
-                        <Image alt={""}
+                        <Image
+                          alt={imageName}
                           w="100%"
                           title="postImage"
                           src={image}
@@ -355,7 +370,6 @@ const PostDetail = ({ post, setting, page }) => {
           </NextLink>
         </VStack>
 
-
         {post?.references?.length > 0 && (
           <VStack align="start" pt={8}>
             <Divider />
@@ -391,13 +405,21 @@ const PostDetail = ({ post, setting, page }) => {
 
       {nextPost && (
         <>
-          <Box w="100%" cursor="pointer" >
+          <Box w="100%" cursor="pointer">
             <NextLink passHref href={`/sharing/${nextPost?.slug}`}>
               <Link d="block">
-                <PostHeader headerTitle={wordExtractor(page?.content?.wordings, "nextPostHeading")} categories={categories} post={nextPost} />
+                <PostHeader
+                  headerTitle={wordExtractor(
+                    page?.content?.wordings,
+                    "nextPostHeading"
+                  )}
+                  categories={categories}
+                  post={nextPost}
+                />
               </Link>
             </NextLink>
-          </Box></>
+          </Box>
+        </>
       )}
     </VStack>
   );
