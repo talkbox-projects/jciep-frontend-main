@@ -97,9 +97,14 @@ const PwdDetail = ({ page }) => {
     }
   };
 
-  const seo = <NextSeo
-    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"} | ${pwd?.name}`}
-    description={page?.content?.seo?.description} />
+  const seo = (
+    <NextSeo
+      title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"} | ${
+        pwd?.name
+      }`}
+      description={page?.content?.seo?.description}
+    />
+  );
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
@@ -149,7 +154,8 @@ const PwdDetail = ({ page }) => {
             data={pwd?.description}
           />
         </Box>
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           bottom="0"
           right="0"
@@ -203,23 +209,21 @@ const PwdDetail = ({ page }) => {
                     >
                       {({ isExpanded }) => (
                         <>
-                          <h2>
-                            <AccordionButton>
-                              <Box
-                                p={2}
-                                flex="1"
-                                textAlign="center"
-                                fontWeight="bold"
-                              >
-                                {qna.question}
-                              </Box>
-                              {isExpanded ? (
-                                <MinusIcon fontSize="12px" />
-                              ) : (
-                                <AddIcon fontSize="12px" />
-                              )}
-                            </AccordionButton>
-                          </h2>
+                          <AccordionButton>
+                            <Box
+                              p={2}
+                              flex="1"
+                              textAlign="center"
+                              fontWeight="bold"
+                            >
+                              {qna.question}
+                            </Box>
+                            {isExpanded ? (
+                              <MinusIcon fontSize="12px" />
+                            ) : (
+                              <AddIcon fontSize="12px" />
+                            )}
+                          </AccordionButton>
                           {isExpanded && (
                             <Divider m="auto" w="95%" color="#eee" />
                           )}
@@ -240,7 +244,8 @@ const PwdDetail = ({ page }) => {
           ))}
         </VStack>
 
-        <Image alt=""
+        <Image
+          alt=""
           src={pwd?.qnaStyles?.imageTop}
           pos="absolute"
           left={["-10%", "0%", "16%"]}
@@ -248,7 +253,8 @@ const PwdDetail = ({ page }) => {
           w={["37%", "37%", "19%"]}
           zIndex="0"
         />
-        <Image alt=""
+        <Image
+          alt=""
           src={pwd?.qnaStyles?.imageBottom}
           pos="absolute"
           right={["9%", "10%", "16%"]}
@@ -280,7 +286,8 @@ const PwdDetail = ({ page }) => {
               {pwd?.traitSection?.description}
             </Text>
           </Box>
-          <Image alt=""
+          <Image
+            alt=""
             src={pwd?.traitSection?.imageTop}
             w={["91px", "91px", "190px"]}
             h={["123px", "123px", "auto"]}
@@ -306,7 +313,11 @@ const PwdDetail = ({ page }) => {
             </Box>
             {pwd?.traitSection?.prosSection?.list?.map((text, i) => (
               <HStack spacing={4} w="100%" key={i} minH="32px">
-                <Image alt={text} src={pwd?.traitSection?.prosSection?.icon} w="32px" />
+                <Image
+                  alt={text}
+                  src={pwd?.traitSection?.prosSection?.icon}
+                  w="32px"
+                />
                 <Text fontSize="lg">{text}</Text>
               </HStack>
             ))}
@@ -319,7 +330,11 @@ const PwdDetail = ({ page }) => {
             </Box>
             {pwd?.traitSection?.consSection?.list?.map((text, i) => (
               <HStack spacing={4} w="100%" key={i} minH="32px">
-                <Image alt={text} src={pwd?.traitSection?.consSection?.icon} w="32px" />
+                <Image
+                  alt={text}
+                  src={pwd?.traitSection?.consSection?.icon}
+                  w="32px"
+                />
                 <Text fontSize="lg">{text}</Text>
               </HStack>
             ))}
@@ -451,7 +466,8 @@ const PwdDetail = ({ page }) => {
         </Container>
 
         <Box>
-          <Image alt=""
+          <Image
+            alt=""
             src={pwd?.careerSection?.personLeft}
             pos="absolute"
             left="5%"
@@ -461,7 +477,8 @@ const PwdDetail = ({ page }) => {
         </Box>
 
         <Box>
-          <Image alt=""
+          <Image
+            alt=""
             src={pwd?.careerSection?.personRight}
             pos="absolute"
             right="5%"
@@ -516,14 +533,16 @@ const PwdDetail = ({ page }) => {
           px="24px"
           zIndex={2}
         >
-          <Image alt=""
+          <Image
+            alt=""
             src={pwd?.videoSection?.leftImage}
             pos="absolute"
             left={["0", "0", "0", "5%", "16%", "25%"]}
             top="0"
             w={["0", "0", "0", "184px"]}
           />
-          <Image alt=""
+          <Image
+            alt=""
             src={pwd?.videoSection?.rightImage}
             pos="absolute"
             right={["0", "0", "0", "5%", "18%", "25%"]}
@@ -562,7 +581,8 @@ const PwdDetail = ({ page }) => {
           {(pwd?.referenceSection?.category ?? []).map((category, index) => (
             <WrapItem key={index}>
               <Box w="100%" display="flex" flexDirection="column">
-                <Image alt=""
+                <Image
+                  alt=""
                   src={pwd?.referenceSection?.categoryIcon}
                   w="36px"
                   mb="6px"
@@ -592,7 +612,8 @@ const PwdDetail = ({ page }) => {
           ))}
         </Wrap>
 
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           bottom="0"
           right="0"
@@ -685,7 +706,8 @@ const PwdDetail = ({ page }) => {
             </Text>
           </Box>
         </Grid>
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           right={["9%", "9%", "19%"]}
           bottom="0"
