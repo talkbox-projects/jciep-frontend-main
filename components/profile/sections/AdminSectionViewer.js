@@ -17,8 +17,15 @@ import React from "react";
 
 const AdminSectionViewer = () => {
   const router = useRouter();
-  const { isAdmin, page, enums, identity, editSection, setEditSection, editable } =
-    IdentityProfileStore.useContext();
+  const {
+    isAdmin,
+    page,
+    enums,
+    identity,
+    editSection,
+    setEditSection,
+    editable,
+  } = IdentityProfileStore.useContext();
 
   return (
     <VStack spacing={1} align="stretch">
@@ -47,7 +54,7 @@ const AdminSectionViewer = () => {
             }
           </Tag>
         </Wrap>
-        <Text color="#999">
+        <Text color="#757575">
           {identity?.caption ??
             wordExtractor(page?.content?.wordings, "empty_text_label")}
         </Text>
@@ -56,7 +63,7 @@ const AdminSectionViewer = () => {
       <VStack px={8} py={4} align="stretch" spacing={4}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseName"
@@ -68,7 +75,7 @@ const AdminSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishName"
@@ -82,7 +89,7 @@ const AdminSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
             <Text>
@@ -91,7 +98,7 @@ const AdminSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>
             <Text>

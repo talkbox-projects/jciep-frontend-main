@@ -81,8 +81,9 @@ const IdentityOpportunities = ({
         query += `identityId=${identityId ?? router.query.identityId}&`;
       }
       if (organizationId ?? router.query.organizationId) {
-        query += `organizationId=${organizationId ?? router.query.organizationId
-          }&`;
+        query += `organizationId=${
+          organizationId ?? router.query.organizationId
+        }&`;
       }
       return `/talants/individuals?${query}`;
     },
@@ -155,7 +156,7 @@ const IdentityOpportunities = ({
               <Text pt={2} color="#000">
                 {identity?.chineseName}
               </Text>
-              <Text color="#999">{identity?.caption}</Text>
+              <Text color="#757575">{identity?.caption}</Text>
             </VStack>
             {identity?.interestedIndustry?.length > 0 && (
               <Wrap>
@@ -171,7 +172,12 @@ const IdentityOpportunities = ({
             <Divider borderColor="gray.200" />
             <VStack align="stretch">
               <HStack>
-                <Image alt="" src={page?.content?.icon?.degreeIcon} w={6} h={6} />
+                <Image
+                  alt=""
+                  src={page?.content?.icon?.degreeIcon}
+                  w={6}
+                  h={6}
+                />
                 <Text>
                   {
                     (enums?.EnumDegreeList ?? []).find(
@@ -182,7 +188,12 @@ const IdentityOpportunities = ({
               </HStack>
               {identity?.yearOfExperience && (
                 <HStack>
-                  <Image alt="" src={page?.content?.icon?.expIcon} w={6} h={6} />
+                  <Image
+                    alt=""
+                    src={page?.content?.icon?.expIcon}
+                    w={6}
+                    h={6}
+                  />
                   <Text>
                     {(enums?.EnumYearOfExperienceList ?? [])
                       .filter((x) =>
@@ -194,7 +205,12 @@ const IdentityOpportunities = ({
               )}
               {identity?.interestedEmploymentMode?.length > 0 && (
                 <HStack>
-                  <Image alt="" src={page?.content?.icon?.modeIcon} w={6} h={6} />
+                  <Image
+                    alt=""
+                    src={page?.content?.icon?.modeIcon}
+                    w={6}
+                    h={6}
+                  />
                   <Text>
                     {(enums?.EnumEmploymentModeList ?? [])
                       .filter((x) =>
@@ -213,10 +229,16 @@ const IdentityOpportunities = ({
     </VStack>
   );
 
-
-  const seo = <NextSeo
-    title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"}${identity?.chineseName ? `| ${identity?.chineseName}` : identity?.chineseName}`}
-    description={page?.content?.seo?.description} />
+  const seo = (
+    <NextSeo
+      title={`${page?.content?.seo?.title ?? "賽馬會共融．知行計劃"}${
+        identity?.chineseName
+          ? `| ${identity?.chineseName}`
+          : identity?.chineseName
+      }`}
+      description={page?.content?.seo?.description}
+    />
+  );
 
   return (
     <>
@@ -231,7 +253,13 @@ const IdentityOpportunities = ({
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[36, 36, 36, 48]}>
+            <Stack
+              direction={["column", "column", "row", "row"]}
+              w="100%"
+              align={["start", "start", "center"]}
+              pb={[48, 48, 48, 36]}
+              pt={[36, 36, 36, 48]}
+            >
               <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
@@ -266,9 +294,11 @@ const IdentityOpportunities = ({
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-
               >
-                {wordExtractor(page?.content?.wordings, "page_tutorial_individual_link")}
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "page_tutorial_individual_link"
+                )}
               </Button>
             </Stack>
           </Container>
@@ -293,13 +323,11 @@ const IdentityOpportunities = ({
                   {/* Organization */}
                   {wordExtractor(page?.content?.wordings, "organization_text")}
                 </option>
-                {(organizations ?? []).map(
-                  ({ id, chineseCompanyName }) => (
-                    <option key={id} value={id}>
-                      {chineseCompanyName}
-                    </option>
-                  )
-                )}
+                {(organizations ?? []).map(({ id, chineseCompanyName }) => (
+                  <option key={id} value={id}>
+                    {chineseCompanyName}
+                  </option>
+                ))}
               </Select>
             </Box>
             <HStack mt={4} align="stretch" spacing={4}>

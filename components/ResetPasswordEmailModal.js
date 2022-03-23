@@ -72,7 +72,7 @@ const ResetPasswordEmailModal = () => {
           {getWording("resentPassword.reset_password_email_title")}
         </ModalHeader>
         <ModalBody spacing={4} as={VStack} align="center">
-          <Text color="#999" w="100%" fontSize="sm">
+          <Text color="#757575" w="100%" fontSize="sm">
             {getWording("resentPassword.reset_password_email_description")}
           </Text>
 

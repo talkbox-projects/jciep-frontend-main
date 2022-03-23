@@ -101,7 +101,7 @@ const AdminSectionEditor = () => {
             isRequired={true}
             isInvalid={errors?.chineseName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseName"
@@ -122,7 +122,7 @@ const AdminSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isRequired isInvalid={errors?.englishName?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishName"
@@ -145,7 +145,7 @@ const AdminSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.email?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
             <Input
@@ -172,7 +172,7 @@ const AdminSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.phone?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>
             <Input

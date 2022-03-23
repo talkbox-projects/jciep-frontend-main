@@ -64,7 +64,6 @@ const PwdSectionViewer = () => {
   const publishRejectDisclosure = useDisclosureWithParams();
   const unpublishDisclosure = useDisclosureWithParams();
 
-
   const organizationId = identity?.organizationRole?.[0]?.organization?.id;
   const staffAccess = useMemo(() => {
     if (type === "staff" && organizationRole?.length > 0) {
@@ -78,7 +77,7 @@ const PwdSectionViewer = () => {
     return false;
   }, [organizationRole, type]);
 
-  const publishMenu = (() => {
+  const publishMenu = () => {
     const isGuest = identity.id !== id && !staffAccess && !isAdmin;
 
     const showMissingEMailAndPhoneTooltip =
@@ -287,7 +286,11 @@ const PwdSectionViewer = () => {
       } else {
         return (
           <Menu placement="bottom-end">
-            <MenuButton as={Button} rightIcon={<MdArrowDropDown />} variant="outline">
+            <MenuButton
+              as={Button}
+              rightIcon={<MdArrowDropDown />}
+              variant="outline"
+            >
               {text}
             </MenuButton>
             <MenuList>
@@ -301,50 +304,50 @@ const PwdSectionViewer = () => {
         );
       }
     }
-  });
-
+  };
 
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
         <ShareBox identityId={identity?.id ?? router.query.identityId} />
-        {(isAdmin || editable || staffAccess) && (identity.publishStatus === "approved" ? (
-          <Button
-            variant="outline"
-            isActive={!!identity?.published}
-            onClick={async () => {
-              try {
-                await saveIdentity({
-                  id: identity?.id,
-                  published: !identity?.published,
-                });
-                toast({
-                  title: !identity?.published ? "已發佈檔案" : "已取消發佈",
-                  status: !identity?.published ? "info" : "warning",
-                  position: "bottom",
-                });
-              } catch (error) {
-                console.error(error);
+        {(isAdmin || editable || staffAccess) &&
+          (identity.publishStatus === "approved" ? (
+            <Button
+              variant="outline"
+              isActive={!!identity?.published}
+              onClick={async () => {
+                try {
+                  await saveIdentity({
+                    id: identity?.id,
+                    published: !identity?.published,
+                  });
+                  toast({
+                    title: !identity?.published ? "已發佈檔案" : "已取消發佈",
+                    status: !identity?.published ? "info" : "warning",
+                    position: "bottom",
+                  });
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+              leftIcon={
+                !identity?.published ? (
+                  <MdRadioButtonUnchecked />
+                ) : (
+                  <MdRadioButtonChecked />
+                )
               }
-            }}
-            leftIcon={
-              !identity?.published ? (
-                <MdRadioButtonUnchecked />
-              ) : (
-                <MdRadioButtonChecked />
-              )
-            }
-          >
-            {wordExtractor(
-              page?.content?.wordings,
-              identity?.published
-                ? "published_my_profile_label"
-                : "publish_my_profile_label"
-            )}
-          </Button>
-        ) : (
-          publishMenu()
-        ))}
+            >
+              {wordExtractor(
+                page?.content?.wordings,
+                identity?.published
+                  ? "published_my_profile_label"
+                  : "publish_my_profile_label"
+              )}
+            </Button>
+          ) : (
+            publishMenu()
+          ))}
         {(isAdmin || editable || staffAccess) && !editSection && (
           <Button
             onClick={() => setEditSection("profile")}
@@ -362,14 +365,17 @@ const PwdSectionViewer = () => {
               ? identity?.chineseName
               : identity?.englishName}
           </Text>
-          {(isAdmin || editable || staffAccess) && <Tag>
-            {
-              enums?.EnumIdentityTypeList?.find((x) => x.key === identity?.type)
-                ?.value?.[router.locale]
-            }
-          </Tag>}
+          {(isAdmin || editable || staffAccess) && (
+            <Tag>
+              {
+                enums?.EnumIdentityTypeList?.find(
+                  (x) => x.key === identity?.type
+                )?.value?.[router.locale]
+              }
+            </Tag>
+          )}
         </Wrap>
-        <Text color="#999">
+        <Text color="#757575">
           {identity?.caption ??
             wordExtractor(page?.content?.wordings, "empty_text_label")}
         </Text>
@@ -379,7 +385,7 @@ const PwdSectionViewer = () => {
           <>
             <Stack direction={["column", "column", "row"]}>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_chineseName"
@@ -391,7 +397,7 @@ const PwdSectionViewer = () => {
                 </Text>
               </FormControl>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_englishName"
@@ -405,7 +411,7 @@ const PwdSectionViewer = () => {
             </Stack>
             <Stack direction={["column", "column", "row"]}>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(page?.content?.wordings, "field_label_email")}
                 </FormLabel>
                 <Text>
@@ -414,7 +420,7 @@ const PwdSectionViewer = () => {
                 </Text>
               </FormControl>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(page?.content?.wordings, "field_label_phone")}
                 </FormLabel>
                 <Text>{identity?.phone ?? identity?.phone}</Text>
@@ -423,20 +429,20 @@ const PwdSectionViewer = () => {
 
             <Stack direction={["column", "column", "row"]}>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(page?.content?.wordings, "field_label_dob")}
                 </FormLabel>
                 <Text>
                   {identity?.dob
                     ? moment(identity?.dob).format("YYYY-MM-DD")
                     : wordExtractor(
-                      page?.content?.wordings,
-                      "empty_text_label"
-                    )}
+                        page?.content?.wordings,
+                        "empty_text_label"
+                      )}
                 </Text>
               </FormControl>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_district"
@@ -454,7 +460,7 @@ const PwdSectionViewer = () => {
             </Stack>
             <Stack direction={["column", "column", "row"]}>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_district"
@@ -470,7 +476,7 @@ const PwdSectionViewer = () => {
                 </Text>
               </FormControl>
               <FormControl>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_industry"
@@ -498,7 +504,7 @@ const PwdSectionViewer = () => {
         <Divider />
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedEmploymentMode"
@@ -507,35 +513,35 @@ const PwdSectionViewer = () => {
             <Wrap>
               {identity?.interestedEmploymentMode?.length > 0
                 ? (identity?.interestedEmploymentMode ?? []).map((key) => (
-                  <Tag key={key}>
-                    {getEnumText(
-                      enums?.EnumEmploymentModeList,
-                      key,
-                      router.locale
-                    )}
-                  </Tag>
-                ))
+                    <Tag key={key}>
+                      {getEnumText(
+                        enums?.EnumEmploymentModeList,
+                        key,
+                        router.locale
+                      )}
+                    </Tag>
+                  ))
                 : wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_pwdType")}
             </FormLabel>
             <Wrap>
               {identity?.pwdType?.length > 0
                 ? (identity?.pwdType ?? []).map((key) => (
-                  <Tag key={key}>
-                    {getEnumText(enums?.EnumPwdTypeList, key, router.locale)}
-                  </Tag>
-                ))
+                    <Tag key={key}>
+                      {getEnumText(enums?.EnumPwdTypeList, key, router.locale)}
+                    </Tag>
+                  ))
                 : wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Wrap>
           </FormControl>
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedIndustry"
@@ -544,14 +550,18 @@ const PwdSectionViewer = () => {
             <Wrap>
               {(identity?.interestedIndustry ?? []).map((key) => (
                 <Tag key={key}>
-                  {getEnumText(enums?.EnumInterestedIndustryList, key, router.locale) ??
+                  {getEnumText(
+                    enums?.EnumInterestedIndustryList,
+                    key,
+                    router.locale
+                  ) ??
                     wordExtractor(page?.content?.wordings, "empty_text_label")}
                 </Tag>
               ))}
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedIndustryOther"
@@ -565,7 +575,7 @@ const PwdSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_educationLevel"
@@ -580,7 +590,7 @@ const PwdSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_yearOfExperience"
@@ -599,7 +609,7 @@ const PwdSectionViewer = () => {
         <Divider />
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_writtenLanguage"
@@ -619,7 +629,7 @@ const PwdSectionViewer = () => {
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_writtenLanguageOther"
@@ -633,7 +643,7 @@ const PwdSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_oralLanguage"
@@ -653,7 +663,7 @@ const PwdSectionViewer = () => {
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_oralLanguageOther"
@@ -667,7 +677,7 @@ const PwdSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_skill")}
             </FormLabel>
             <Wrap>
@@ -680,7 +690,7 @@ const PwdSectionViewer = () => {
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_skillOther")}
             </FormLabel>
             <Text>
@@ -691,7 +701,7 @@ const PwdSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_hobby")}
             </FormLabel>
             <Text whiteSpace="pre-line" wordBreak="break-word">

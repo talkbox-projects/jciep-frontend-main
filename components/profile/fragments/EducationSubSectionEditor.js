@@ -12,7 +12,7 @@ import {
   FormHelperText,
   Button,
   SimpleGrid,
-  GridItem
+  GridItem,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { Controller, useFieldArray } from "react-hook-form";
@@ -49,7 +49,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
             },
             index
           ) => {
-            const errors = {}
+            const errors = {};
             errors?.education?.[index];
             const prefix = `education[${index}]`;
             const borderColor = present ? "#00BFBA" : "#eee";
@@ -110,7 +110,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.school}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_school"
@@ -128,7 +128,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.degree?.message}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_degree"
@@ -161,7 +161,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.education?.[index]?.fieldOfStudy}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_fieldOfStudy"
@@ -178,13 +178,18 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                   </FormControl>
 
                   <SimpleGrid columns={[1, 1, 1, 2]} width="100%">
-                    <GridItem >
+                    <GridItem>
                       <FormControl
                         as={HStack}
                         align="center"
                         isInvalid={errors?.degree?.message}
                       >
-                        <FormLabel w={[24, 24, 32]} fontSize="sm" color="#999" mb={0}>
+                        <FormLabel
+                          w={[24, 24, 32]}
+                          fontSize="sm"
+                          color="#757575"
+                          mb={0}
+                        >
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_education_startDatetime"
@@ -195,7 +200,6 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                           control={control}
                           defaultValue={startDatetime}
                           render={({ field }) => (
-
                             <MonthPicker page={page} {...field} />
                           )}
                         />
@@ -210,7 +214,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                         align="center"
                         isInvalid={errors?.endDatetime?.message}
                       >
-                        <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                        <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_education_endDatetime"
@@ -235,8 +239,6 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                     </GridItem>
                   </SimpleGrid>
 
-
-
                   <FormControl
                     pt={2}
                     pl={24}
@@ -244,7 +246,7 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.education?.[index]?.fieldOfStudy}
                   >
-                    <FormLabel fontSize="sm" color="#999" mb={0}>
+                    <FormLabel fontSize="sm" color="#757575" mb={0}>
                       <Checkbox
                         defaultChecked={present}
                         {...register(`${prefix}.present`, {})}
@@ -265,7 +267,11 @@ const EducationSubSectionEditor = ({ form: { register, control, watch } }) => {
           }
         )}
         {
-          <Box pl={[0, 2]} borderLeftColor={["transparent", "#eee"]} borderLeftWidth={2}>
+          <Box
+            pl={[0, 2]}
+            borderLeftColor={["transparent", "#eee"]}
+            borderLeftWidth={2}
+          >
             <Button
               my={4}
               px={2}

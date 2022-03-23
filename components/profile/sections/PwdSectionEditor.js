@@ -105,7 +105,7 @@ const PwdSectionEditor = () => {
             isRequired={true}
             isInvalid={errors?.chineseName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseName"
@@ -126,7 +126,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isRequired isInvalid={errors?.englishName?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishName"
@@ -149,7 +149,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.email?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
             <Input
@@ -176,7 +176,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.phone?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>
             <Input
@@ -197,7 +197,7 @@ const PwdSectionEditor = () => {
 
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.dob?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_dob")}
             </FormLabel>
             <Input
@@ -209,7 +209,7 @@ const PwdSectionEditor = () => {
             <FormHelperText color="red">{errors?.dob?.message}</FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.gender?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_gender")}
             </FormLabel>
             <Select
@@ -234,7 +234,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.district?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Select
@@ -262,7 +262,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.industry?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
             </FormLabel>
             <Controller
@@ -314,7 +314,7 @@ const PwdSectionEditor = () => {
         <Divider />
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.interestedEmploymentMode?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedEmploymentMode"
@@ -365,7 +365,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.pwdType?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_pwdType")}
             </FormLabel>
             <Controller
@@ -415,7 +415,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.skill?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedIndustry"
@@ -466,7 +466,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.interestedIndustryOther?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_interestedIndustryOther"
@@ -484,7 +484,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.educationLevel?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_educationLevel"
@@ -510,7 +510,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.yearOfExperience?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_yearOfExperience"
@@ -540,7 +540,7 @@ const PwdSectionEditor = () => {
         <Divider />
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.writtenLanguage?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_writtenLanguage"
@@ -591,7 +591,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.writtenLanguageOther?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_writtenLanguageOther"
@@ -609,7 +609,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.oralLanguage?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_oralLanguage"
@@ -660,7 +660,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.oralLanguageOther?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_oralLanguageOther"
@@ -678,13 +678,12 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.skill?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_skill")}
             </FormLabel>
             <Controller
               control={control}
               name={"skill"}
-
               defaultValue={identity?.skill ?? []}
               render={({ field: { name, value, onChange } }) => {
                 const options = enums?.EnumSkillList.map(
@@ -696,7 +695,7 @@ const PwdSectionEditor = () => {
                 return (
                   <MultiSelect
                     menuPortalTarget={document.body}
-                    menuPosition={'fixed'} 
+                    menuPosition={"fixed"}
                     styles={{
                       control: (_) => ({
                         ..._,
@@ -728,7 +727,7 @@ const PwdSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.skillOther?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_skillOther")}
             </FormLabel>
             <Input
@@ -743,7 +742,7 @@ const PwdSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.hobby?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_hobby")}
             </FormLabel>
             <Textarea

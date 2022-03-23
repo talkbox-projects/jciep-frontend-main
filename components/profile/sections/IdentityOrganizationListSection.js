@@ -1,11 +1,4 @@
-import {
-  VStack,
-  Tag,
-  Text,
-  HStack,
-  Avatar,
-  Button,
-} from "@chakra-ui/react";
+import { VStack, Tag, Text, HStack, Avatar, Button } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
@@ -69,10 +62,11 @@ const IdentityOrganizationListSection = () => {
       </HStack>
       <VStack pb={4} align="stretch" px={1} direction={"column"} spacing={4}>
         {!hasOrganization && ["ngo", "employer"].includes(identity?.type) ? (
-          <Text align="center" color="#999" fontSize="sm">
+          <Text align="center" color="#757575" fontSize="sm">
             <NextLink
-              href={`/user/organization/${identity?.type === "staff" ? "ngo" : "company"
-                }/${identity?.id}/add`}
+              href={`/user/organization/${
+                identity?.type === "staff" ? "ngo" : "company"
+              }/${identity?.id}/add`}
             >
               <Button variant="link">
                 {wordExtractor(
@@ -86,7 +80,8 @@ const IdentityOrganizationListSection = () => {
           (identity?.organizationRole ?? []).map(
             ({ organization, role, status }) => {
               return (
-                <HStack key={organization.id}
+                <HStack
+                  key={organization.id}
                   onClick={() => {
                     router.push(`/user/organization/${organization.id}`);
                   }}
@@ -102,7 +97,7 @@ const IdentityOrganizationListSection = () => {
                   ></Avatar>
                   <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
                     <Text>{organization?.chineseCompanyName}</Text>
-                    <Text color="#999" fontSize="sm">
+                    <Text color="#757575" fontSize="sm">
                       {
                         enums?.EnumJoinRoleList?.find((x) => x.key === role)
                           ?.value?.[router?.locale]

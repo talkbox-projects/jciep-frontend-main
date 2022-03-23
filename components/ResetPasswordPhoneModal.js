@@ -24,7 +24,7 @@ const ResetPasswordPhoneModal = () => {
   const {
     user,
     resetPasswordPhoneModalDisclosure: { isOpen, onClose },
-    otpVerifyModalDisclosure
+    otpVerifyModalDisclosure,
   } = useAppContext();
 
   const getWording = useGetWording();
@@ -56,7 +56,6 @@ const ResetPasswordPhoneModal = () => {
 
       onClose();
       otpVerifyModalDisclosure.onOpen({ phone, type: "resetPassword" });
-
     } catch (error) {
       console.error(error);
       toast({
@@ -78,7 +77,7 @@ const ResetPasswordPhoneModal = () => {
           {getWording("resentPassword.reset_password_phone_title")}
         </ModalHeader>
         <ModalBody spacing={4} as={VStack} align="center">
-          <Text color="#999" w="100%" fontSize="sm">
+          <Text color="#757575" w="100%" fontSize="sm">
             {getWording("resentPassword.reset_password_phone_description")}
           </Text>
 

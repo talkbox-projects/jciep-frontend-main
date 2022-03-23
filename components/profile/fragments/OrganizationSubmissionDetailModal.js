@@ -40,7 +40,6 @@ const OrganizationSubmissionDetailModal = ({
     OrganizationProfileStore.useContext();
   const router = useRouter();
 
-
   const { reset, handleSubmit, register } = useForm({
     defaultValues: {
       status: submission?.status,
@@ -84,7 +83,7 @@ const OrganizationSubmissionDetailModal = ({
         <ModalBody pb={6} as={VStack} align="stretch">
           <SimpleGrid gap={4} columns={[1, 2, 2, 2]}>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_chineseCompanyName"
@@ -96,7 +95,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_englishCompanyName"
@@ -108,7 +107,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_website"
@@ -120,7 +119,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999" mb={0}>
+              <Text color="#757575" mb={0}>
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_industry"
@@ -139,7 +138,7 @@ const OrganizationSubmissionDetailModal = ({
               </Wrap>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_industryOther"
@@ -151,7 +150,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_description"
@@ -162,31 +161,38 @@ const OrganizationSubmissionDetailModal = ({
                   wordExtractor(page?.content?.wordings, "empty_text_label")}
               </Text>
             </GridItem>
-            {
-              organization?.organizationType !== "ngo" ?
-                <GridItem w="100%">
-                  <Text color="#999">
-                    {wordExtractor(
-                      page?.content?.wordings,
-                      "field_label_submission_businessRegistration"
-                    )}
-                  </Text>
-                  <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
-                    {(submission?.businessRegistration ?? []).map(({ url }, index) => {
+            {organization?.organizationType !== "ngo" ? (
+              <GridItem w="100%">
+                <Text color="#757575">
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    "field_label_submission_businessRegistration"
+                  )}
+                </Text>
+                <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
+                  {(submission?.businessRegistration ?? []).map(
+                    ({ url }, index) => {
                       return (
                         <AspectRatio key={index} ratio={1}>
-                          <Image alt={wordExtractor(page?.content?.wordings, "business_registration_alt_text")} borderRadius={8} boxShadow="md" src={url} />
+                          <Image
+                            alt={wordExtractor(
+                              page?.content?.wordings,
+                              "business_registration_alt_text"
+                            )}
+                            borderRadius={8}
+                            boxShadow="md"
+                            src={url}
+                          />
                         </AspectRatio>
                       );
-                    })}
-                  </SimpleGrid>
-                </GridItem>
-                : null
-            }
-
+                    }
+                  )}
+                </SimpleGrid>
+              </GridItem>
+            ) : null}
 
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_contactName"
@@ -198,7 +204,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_contactEmail"
@@ -210,7 +216,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_contactPhone"
@@ -222,7 +228,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_createdAt"
@@ -233,7 +239,7 @@ const OrganizationSubmissionDetailModal = ({
               </Text>
             </GridItem>
             <GridItem>
-              <Text color="#999">
+              <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
                   "field_label_submission_vettedAt"

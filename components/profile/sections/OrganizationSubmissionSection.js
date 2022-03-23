@@ -1,16 +1,7 @@
-import {
-  VStack,
-  Tag,
-  Text,
-  HStack,
-  Button,
-  Box,
-} from "@chakra-ui/react";
+import { VStack, Tag, Text, HStack, Button, Box } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import {
-  AiOutlinePlus,
-} from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import wordExtractor from "../../../utils/wordExtractor";
@@ -42,7 +33,7 @@ const OrganizationSubmissionSection = () => {
             onClick={() => {
               submissionFormDisclosure.onOpen({
                 organization,
-                onRefresh: refreshOrganization
+                onRefresh: refreshOrganization,
               });
             }}
           >
@@ -63,7 +54,8 @@ const OrganizationSubmissionSection = () => {
             .map((submission, index) => {
               const { id, createdAt, status } = submission;
               return (
-                <HStack key={id}
+                <HStack
+                  key={id}
                   onClick={() => {
                     submissionDetailDisclosure.onOpen({
                       organization,
@@ -84,18 +76,18 @@ const OrganizationSubmissionSection = () => {
                       textOverflow="ellipsis"
                       {...(index > 0 && {
                         fontSize: "xs",
-                        color: "#999",
+                        color: "#757575",
                       })}
                     >
                       {moment(createdAt).format("YYYY-MM-DD hh:mm a")}
                     </Text>
-                    <Text color="#999" fontSize="sm"></Text>
+                    <Text color="#757575" fontSize="sm"></Text>
                   </VStack>
                   <Tag
                     size="md"
                     {...(index > 0 && {
                       fontSize: "xs",
-                      color: "#999",
+                      color: "#757575",
                     })}
                   >
                     {

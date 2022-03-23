@@ -99,7 +99,7 @@ const EmploymentSectionEditor = () => {
             isRequired={true}
             isInvalid={errors?.chineseCompanyName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseCompanyName"
@@ -123,7 +123,7 @@ const EmploymentSectionEditor = () => {
             isRequired
             isInvalid={errors?.englishCompanyName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishCompanyName"
@@ -146,7 +146,7 @@ const EmploymentSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactName?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactName"
@@ -167,7 +167,7 @@ const EmploymentSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.contactEmail?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactEmail"
@@ -198,7 +198,7 @@ const EmploymentSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactPhone?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactPhone"
@@ -219,7 +219,7 @@ const EmploymentSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.website?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
             <Input
@@ -243,7 +243,7 @@ const EmploymentSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.skill?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_industry"
@@ -294,7 +294,7 @@ const EmploymentSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.industryOther?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_industryOther"
@@ -312,7 +312,7 @@ const EmploymentSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.description?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_description"

@@ -60,7 +60,7 @@ const EmploymentSectionViewer = () => {
       <VStack px={8} py={4} align="stretch" spacing={6}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseCompanyName"
@@ -72,7 +72,7 @@ const EmploymentSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishCompanyName"
@@ -86,7 +86,7 @@ const EmploymentSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
             <Text>
@@ -95,7 +95,7 @@ const EmploymentSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactName"
@@ -109,7 +109,7 @@ const EmploymentSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactEmail"
@@ -121,7 +121,7 @@ const EmploymentSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactPhone"
@@ -135,7 +135,7 @@ const EmploymentSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_industry"
@@ -151,7 +151,7 @@ const EmploymentSectionViewer = () => {
             </Wrap>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_industryOther"
@@ -165,7 +165,7 @@ const EmploymentSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_description"

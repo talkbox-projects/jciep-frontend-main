@@ -97,7 +97,7 @@ const NgoSectionEditor = () => {
             isRequired={true}
             isInvalid={errors?.chineseCompanyName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseCompanyName"
@@ -121,7 +121,7 @@ const NgoSectionEditor = () => {
             isRequired
             isInvalid={errors?.englishCompanyName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishCompanyName"
@@ -144,7 +144,7 @@ const NgoSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactName?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactName"
@@ -165,7 +165,7 @@ const NgoSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.contactEmail?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactEmail"
@@ -196,7 +196,7 @@ const NgoSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactPhone?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactPhone"
@@ -217,7 +217,7 @@ const NgoSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.website?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
             <Input
@@ -241,7 +241,7 @@ const NgoSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.description?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_description"

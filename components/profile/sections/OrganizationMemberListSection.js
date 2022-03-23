@@ -183,7 +183,9 @@ const OrganizationMemberListSection = ({ path }) => {
                 {...(identity?.id && {
                   onClick: () => {
                     if (isAdmin || editable) {
-                      router.push(`/user/identity/${organization.id}/${identity.id}`);
+                      router.push(
+                        `/user/identity/${organization.id}/${identity.id}`
+                      );
                     } else {
                       router.push(
                         `/talants/individuals?identityId=${identity.id}&organizationId=${organization.id}`
@@ -209,7 +211,7 @@ const OrganizationMemberListSection = ({ path }) => {
                 ></Avatar>
                 <VStack align="start" spacing={0} flex={1} minW={0} w="100%">
                   <Text textOverflow="ellipsis">{identity?.chineseName}</Text>
-                  <Text color="#999" fontSize="sm">
+                  <Text color="#757575" fontSize="sm">
                     {
                       enums?.EnumJoinRoleList?.find((x) => x.key === role)
                         ?.value?.[router?.locale]

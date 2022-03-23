@@ -32,8 +32,7 @@ const OrganizationSubmissionFormModal = ({
   onClose,
   params: { organization, submission = null, onRefresh } = {},
 }) => {
-  const { page, enums } =
-    OrganizationProfileStore.useContext();
+  const { page, enums } = OrganizationProfileStore.useContext();
   const router = useRouter();
 
   const { identityId } = useAppContext();
@@ -50,19 +49,17 @@ const OrganizationSubmissionFormModal = ({
     reset();
   }, [reset]);
 
-
-  const onSubmissionCreate = 
-    async (values) => {
-      try {
-        await OrganizationSubmissionCreate({
-          input: { identityId, organizationId: organization.id, ...values },
-        });
-        onRefresh();
-        onClose();
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const onSubmissionCreate = async (values) => {
+    try {
+      await OrganizationSubmissionCreate({
+        input: { identityId, organizationId: organization.id, ...values },
+      });
+      onRefresh();
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
@@ -82,21 +79,16 @@ const OrganizationSubmissionFormModal = ({
                 isRequired={true}
                 isInvalid={errors?.chineseCompanyName?.message}
               >
-                <FormLabel color="#999" mb={0}>
-
-                  {
-                    organization?.organizationType !== "ngo" ?
-                    wordExtractor(
-                      page?.content?.wordings,
-                      "field_label_chineseCompanyName"
-                    )
-                    : 
-                    wordExtractor(
-                      page?.content?.wordings,
-                      "field_label_chineseOrganizationName"
-                    )
-                  }
-                  
+                <FormLabel color="#757575" mb={0}>
+                  {organization?.organizationType !== "ngo"
+                    ? wordExtractor(
+                        page?.content?.wordings,
+                        "field_label_chineseCompanyName"
+                      )
+                    : wordExtractor(
+                        page?.content?.wordings,
+                        "field_label_chineseOrganizationName"
+                      )}
                 </FormLabel>
                 <Input
                   variant="flushed"
@@ -116,21 +108,16 @@ const OrganizationSubmissionFormModal = ({
                 isRequired
                 isInvalid={errors?.englishCompanyName?.message}
               >
-                <FormLabel color="#999" mb={0}>
-
-                  {
-                   organization?.organizationType !== "ngo" ?
-                   wordExtractor(
-                    page?.content?.wordings,
-                    "field_label_englishCompanyName"
-                  )
-                  : 
-                  wordExtractor(
-                    page?.content?.wordings,
-                    "field_label_englishOrganizationName"
-                  )
-                  }
-                  
+                <FormLabel color="#757575" mb={0}>
+                  {organization?.organizationType !== "ngo"
+                    ? wordExtractor(
+                        page?.content?.wordings,
+                        "field_label_englishCompanyName"
+                      )
+                    : wordExtractor(
+                        page?.content?.wordings,
+                        "field_label_englishOrganizationName"
+                      )}
                 </FormLabel>
                 <Input
                   variant="flushed"
@@ -149,7 +136,7 @@ const OrganizationSubmissionFormModal = ({
             </Stack>
             <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.contactName?.message}>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_contactName"
@@ -170,7 +157,7 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
               <FormControl isInvalid={errors?.contactEmail?.message}>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_contactEmail"
@@ -201,7 +188,7 @@ const OrganizationSubmissionFormModal = ({
             </Stack>
             <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.contactPhone?.message}>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_contactPhone"
@@ -222,7 +209,7 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
               <FormControl isInvalid={errors?.website?.message}>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_website"
@@ -247,83 +234,84 @@ const OrganizationSubmissionFormModal = ({
                 </FormHelperText>
               </FormControl>
             </Stack>
-            {
-              organization?.organizationType !== "ngo" ?
+            {organization?.organizationType !== "ngo" ? (
               <Stack direction={["column", "column", "row"]}>
-              <FormControl isInvalid={errors?.skill?.message}>
-                <FormLabel color="#999" mb={0}>
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "field_label_organization_industry"
-                  )}
-                </FormLabel>
-                <Controller
-                  control={control}
-                  rules={{}}
-                  name={"industry"}
-                  defaultValue={submission?.industry ?? []}
-                  render={({ field: { name, value, onChange } }) => {
-                    const options = enums?.EnumIndustryList.map(
-                      ({ key: value, value: { [router.locale]: label } }) => ({
-                        value,
-                        label,
-                      })
-                    );
-                    return (
-                      <MultiSelect
-                        styles={{
-                          control: (_) => ({
-                            ..._,
-                            borderRadius: 0,
-                            borderColor: "#ddd",
-                            borderTop: 0,
-                            borderLeft: 0,
-                            borderRight: 0,
-                            borderBottomWidth: 1,
-                          }),
-                        }}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "empty_text_label"
-                        )}
-                        isMulti={true}
-                        name={name}
-                        onChange={(s) => onChange(s.map((s) => s.value))}
-                        value={options.filter((o) =>
-                          (value ?? [])?.includes(o.value)
-                        )}
-                        options={options}
-                      />
-                    );
-                  }}
-                ></Controller>
-                <FormHelperText color="red">
-                  {errors?.industry?.message}
-                </FormHelperText>
-              </FormControl>
-              <FormControl isInvalid={errors?.industryOther?.message}>
-                <FormLabel color="#999" mb={0}>
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "field_label_organization_industryOther"
-                  )}
-                </FormLabel>
-                <Input
-                  variant="flushed"
-                  defaultValue={submission?.industryOther}
-                  {...register("industryOther", {})}
-                ></Input>
-                <FormHelperText color="red">
-                  {errors?.industryOther?.message}
-                </FormHelperText>
-              </FormControl>
-            </Stack>
-            : null
-            }
-            
+                <FormControl isInvalid={errors?.skill?.message}>
+                  <FormLabel color="#757575" mb={0}>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "field_label_organization_industry"
+                    )}
+                  </FormLabel>
+                  <Controller
+                    control={control}
+                    rules={{}}
+                    name={"industry"}
+                    defaultValue={submission?.industry ?? []}
+                    render={({ field: { name, value, onChange } }) => {
+                      const options = enums?.EnumIndustryList.map(
+                        ({
+                          key: value,
+                          value: { [router.locale]: label },
+                        }) => ({
+                          value,
+                          label,
+                        })
+                      );
+                      return (
+                        <MultiSelect
+                          styles={{
+                            control: (_) => ({
+                              ..._,
+                              borderRadius: 0,
+                              borderColor: "#ddd",
+                              borderTop: 0,
+                              borderLeft: 0,
+                              borderRight: 0,
+                              borderBottomWidth: 1,
+                            }),
+                          }}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "empty_text_label"
+                          )}
+                          isMulti={true}
+                          name={name}
+                          onChange={(s) => onChange(s.map((s) => s.value))}
+                          value={options.filter((o) =>
+                            (value ?? [])?.includes(o.value)
+                          )}
+                          options={options}
+                        />
+                      );
+                    }}
+                  ></Controller>
+                  <FormHelperText color="red">
+                    {errors?.industry?.message}
+                  </FormHelperText>
+                </FormControl>
+                <FormControl isInvalid={errors?.industryOther?.message}>
+                  <FormLabel color="#757575" mb={0}>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "field_label_organization_industryOther"
+                    )}
+                  </FormLabel>
+                  <Input
+                    variant="flushed"
+                    defaultValue={submission?.industryOther}
+                    {...register("industryOther", {})}
+                  ></Input>
+                  <FormHelperText color="red">
+                    {errors?.industryOther?.message}
+                  </FormHelperText>
+                </FormControl>
+              </Stack>
+            ) : null}
+
             <Stack direction={["column", "column", "row"]}>
               <FormControl isInvalid={errors?.description?.message}>
-                <FormLabel color="#999" mb={0}>
+                <FormLabel color="#757575" mb={0}>
                   {wordExtractor(
                     page?.content?.wordings,
                     "field_label_organization_description"
@@ -342,39 +330,37 @@ const OrganizationSubmissionFormModal = ({
               </FormControl>
             </Stack>
 
-            {
-              organization?.organizationType !== "ngo" ?
-                <Stack direction={["column", "column", "row"]}>
-              <FormControl isInvalid={errors?.contactPhone?.message}>
-                <FormLabel color="#999" mb={0}>
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "field_label_businessRegistration"
-                  )}
-                </FormLabel>
-                <Controller
-                  control={control}
-                  name="businessRegistration"
-                  render={({ field: { value, onChange } }) => {
-                    return (
-                      <AspectRatio ratio={2.5}>
-                        <ProfileDropzone
-                          value={value}
-                          onChange={onChange}
-                          page={page}
-                        />
-                      </AspectRatio>
-                    );
-                  }}
-                />
-                <FormHelperText color="red">
-                  {errors?.contactPhone?.message}
-                </FormHelperText>
-              </FormControl>
-            </Stack>
-            : null
-            }
-            
+            {organization?.organizationType !== "ngo" ? (
+              <Stack direction={["column", "column", "row"]}>
+                <FormControl isInvalid={errors?.contactPhone?.message}>
+                  <FormLabel color="#757575" mb={0}>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "field_label_businessRegistration"
+                    )}
+                  </FormLabel>
+                  <Controller
+                    control={control}
+                    name="businessRegistration"
+                    render={({ field: { value, onChange } }) => {
+                      return (
+                        <AspectRatio ratio={2.5}>
+                          <ProfileDropzone
+                            value={value}
+                            onChange={onChange}
+                            page={page}
+                          />
+                        </AspectRatio>
+                      );
+                    }}
+                  />
+                  <FormHelperText color="red">
+                    {errors?.contactPhone?.message}
+                  </FormHelperText>
+                </FormControl>
+              </Stack>
+            ) : null}
+
             <Button
               alignSelf="center"
               minW={24}

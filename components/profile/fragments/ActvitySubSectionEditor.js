@@ -28,7 +28,7 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
       <VStack pl={2} spacing={0} align="stretch">
         {(fields ?? []).map(
           ({ id, name, description, startDatetime, endDatetime }, index) => {
-            const errors = {} 
+            const errors = {};
             errors?.activity?.[index];
             const prefix = `activity[${index}]`;
             const borderColor = "#eee";
@@ -87,7 +87,7 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                     align="center"
                     isInvalid={errors?.name}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_activity_name"
@@ -105,7 +105,13 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                     align="start"
                     isInvalid={errors?.activity?.[index]?.description}
                   >
-                    <FormLabel mt={2} w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel
+                      mt={2}
+                      w={24}
+                      fontSize="sm"
+                      color="#757575"
+                      mb={0}
+                    >
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_activity_description"
@@ -127,7 +133,7 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                     align="center"
                     isInvalid={errors?.startDatetime?.message}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_activity_startDatetime"
@@ -148,7 +154,7 @@ const ActivitySubSectionEditor = ({ form: { register, control } }) => {
                     align="center"
                     isInvalid={errors?.endDatetime?.message}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_activity_endDatetime"

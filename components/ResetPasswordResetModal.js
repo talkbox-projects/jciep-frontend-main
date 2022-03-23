@@ -26,7 +26,11 @@ import userLogin from "../utils/api/UserLogin";
 const ResetPasswordResetModal = () => {
   const {
     user,
-    resetPasswordResetModalDisclosure: { isOpen, onClose, params: { phone, otp } },
+    resetPasswordResetModalDisclosure: {
+      isOpen,
+      onClose,
+      params: { phone, otp },
+    },
   } = useAppContext();
 
   const getWording = useGetWording();
@@ -36,7 +40,7 @@ const ResetPasswordResetModal = () => {
     reset,
     register,
     formState: { isSubmitting, errors },
-    getValues
+    getValues,
   } = useForm({
     defaultValues: {
       email: user?.email,
@@ -51,7 +55,9 @@ const ResetPasswordResetModal = () => {
       const user = await userLogin({ input: { phone, otp, password } });
       toast({
         status: "success",
-        title: getWording("resetPasswordResetModal.reset_password_phone_success"),
+        title: getWording(
+          "resetPasswordResetModal.reset_password_phone_success"
+        ),
       });
       if (user) {
         onClose();
@@ -83,8 +89,10 @@ const ResetPasswordResetModal = () => {
           {getWording("resetPasswordResetModal.reset_password_phone_title")}
         </ModalHeader>
         <ModalBody spacing={4} as={VStack} align="center">
-          <Text color="#999" w="100%" fontSize="sm">
-            {getWording("resetPasswordResetModal.reset_password_phone_description")}
+          <Text color="#757575" w="100%" fontSize="sm">
+            {getWording(
+              "resetPasswordResetModal.reset_password_phone_description"
+            )}
           </Text>
 
           <FormControl>
@@ -93,15 +101,21 @@ const ResetPasswordResetModal = () => {
             </FormLabel>
             <Input
               type="password"
-              placeholder={getWording("resetPasswordResetModal.password_placeholder")}
+              placeholder={getWording(
+                "resetPasswordResetModal.password_placeholder"
+              )}
               {...register("password", {
                 required: {
                   value: true,
-                  message: getWording("resetPasswordResetModal.password_error_message"),
+                  message: getWording(
+                    "resetPasswordResetModal.password_error_message"
+                  ),
                 },
                 pattern: {
                   value: passwordRegex,
-                  message: getWording("resetPasswordResetModal.register_password_pattern"),
+                  message: getWording(
+                    "resetPasswordResetModal.register_password_pattern"
+                  ),
                 },
               })}
             />
@@ -115,7 +129,9 @@ const ResetPasswordResetModal = () => {
             </FormLabel>
             <Input
               type="password"
-              placeholder={getWording("resetPasswordResetModal.confirm_password_placeholder")}
+              placeholder={getWording(
+                "resetPasswordResetModal.confirm_password_placeholder"
+              )}
               {...register("confirm_password", {
                 required: {
                   value: true,

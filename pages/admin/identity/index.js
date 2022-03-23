@@ -251,7 +251,7 @@ const AdminIdentity = ({ enums }) => {
                       </Text>
 
                       {identity.type === "pwd" && (
-                        <Text color="#999" fontSize="sm">
+                        <Text color="#757575" fontSize="sm">
                           發佈狀態：
                           <Tag size="sm" variant="outline">
                             {" "}
@@ -264,7 +264,7 @@ const AdminIdentity = ({ enums }) => {
                         </Text>
                       )}
                       {identity.type === "pwd" && (
-                        <Text color="#999" fontSize="sm">
+                        <Text color="#757575" fontSize="sm">
                           連繫機構：
                           {identity?.organizationRole?.[0]?.organization
                             ?.chineseCompanyName ?? "沒有"}
@@ -281,7 +281,7 @@ const AdminIdentity = ({ enums }) => {
                     </Tag>
                     {hasPendingApproval && <Tag>待處理申請</Tag>}
 
-                    <Text color="#999" fontSize="sm">
+                    <Text color="#757575" fontSize="sm">
                       {moment(identity?.createdAt).format("YYYY-MM-DD hh:mm a")}
                     </Text>
                   </HStack>

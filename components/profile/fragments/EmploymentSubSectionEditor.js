@@ -113,7 +113,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.companyName}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_companyName"
@@ -133,7 +133,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.industry?.message}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_employment_industry"
@@ -170,7 +170,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                       <FormLabel
                         w={24}
                         fontSize="sm"
-                        color="#999"
+                        color="#757575"
                         mb={0}
                       ></FormLabel>
                       <Input
@@ -192,7 +192,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.employmentType?.message}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_employment_employmentType"
@@ -225,7 +225,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.employment?.[index]?.jobTitle}
                   >
-                    <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                    <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "field_label_jobTitle"
@@ -250,7 +250,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                         <FormLabel
                           w={[24, 24, 32]}
                           fontSize="sm"
-                          color="#999"
+                          color="#757575"
                           mb={0}
                         >
                           {wordExtractor(
@@ -277,7 +277,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                         align="center"
                         isInvalid={errors?.endDatetime?.message}
                       >
-                        <FormLabel w={24} fontSize="sm" color="#999" mb={0}>
+                        <FormLabel w={24} fontSize="sm" color="#757575" mb={0}>
                           {wordExtractor(
                             page?.content?.wordings,
                             "field_label_employment_endDatetime"
@@ -309,7 +309,7 @@ const EmploymentSubSectionEditor = ({ form: { register, control, watch } }) => {
                     align="center"
                     isInvalid={errors?.employment?.[index]?.jobTitle}
                   >
-                    <FormLabel fontSize="sm" color="#999" mb={0}>
+                    <FormLabel fontSize="sm" color="#757575" mb={0}>
                       <Checkbox
                         defaultChecked={present}
                         {...register(`${prefix}.present`, {})}

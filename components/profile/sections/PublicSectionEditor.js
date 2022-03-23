@@ -103,7 +103,7 @@ const PublicSectionEditor = () => {
             isRequired={true}
             isInvalid={errors?.chineseName?.message}
           >
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseName"
@@ -124,7 +124,7 @@ const PublicSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isRequired isInvalid={errors?.englishName?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishName"
@@ -147,7 +147,7 @@ const PublicSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isRequired isInvalid={errors?.email?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
             <Input
@@ -174,7 +174,7 @@ const PublicSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.phone?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>
             <Input
@@ -194,7 +194,7 @@ const PublicSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.dob?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_dob")}
             </FormLabel>
             <Input
@@ -206,7 +206,7 @@ const PublicSectionEditor = () => {
             <FormHelperText color="red">{errors?.dob?.message}</FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.gender?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_gender")}
             </FormLabel>
             <Select
@@ -234,7 +234,7 @@ const PublicSectionEditor = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.district?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Select
@@ -265,7 +265,7 @@ const PublicSectionEditor = () => {
             </FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.industry?.message}>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
             </FormLabel>
             <Controller

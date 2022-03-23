@@ -17,7 +17,6 @@ import { AiOutlineEdit } from "react-icons/ai";
 import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
 
-
 const PublicSectionViewer = () => {
   const router = useRouter();
   const {
@@ -57,7 +56,7 @@ const PublicSectionViewer = () => {
             }
           </Tag>
         </Wrap>
-        <Text color="#999">
+        <Text color="#757575">
           {identity?.caption ??
             wordExtractor(page?.content?.wordings, "empty_text_label")}
         </Text>
@@ -65,7 +64,7 @@ const PublicSectionViewer = () => {
       <VStack px={8} py={4} align="stretch" spacing={6}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseName"
@@ -77,7 +76,7 @@ const PublicSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishName"
@@ -91,7 +90,7 @@ const PublicSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
             </FormLabel>
             <Text>
@@ -100,7 +99,7 @@ const PublicSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
             </FormLabel>
             <Text>
@@ -111,7 +110,7 @@ const PublicSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_dob")}
             </FormLabel>
             <Text>
@@ -120,7 +119,7 @@ const PublicSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Text>
@@ -134,7 +133,7 @@ const PublicSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
             </FormLabel>
             <Text>
@@ -146,7 +145,7 @@ const PublicSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
             </FormLabel>
             <Wrap>

@@ -36,12 +36,15 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       api: {
-        organizations: await organizationSearch({
-          status: ["approved"],
-          published: true,
-          type: ["ngo"],
-          limit: 0,
-        }, context),
+        organizations: await organizationSearch(
+          {
+            status: ["approved"],
+            published: true,
+            type: ["ngo"],
+            limit: 0,
+          },
+          context
+        ),
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -130,12 +133,17 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                   ? organization?.chineseCompanyName
                   : organization?.enghlishCompanyName}
               </Text>
-              <Text color="#999">{organization?.description}</Text>
+              <Text color="#757575">{organization?.description}</Text>
             </VStack>
             <Divider borderColor="gray.200" />
             <VStack align="stretch">
               <HStack>
-                <Image alt=" " src={page?.content?.icon?.userIcon} w={6} h={6} />
+                <Image
+                  alt=" "
+                  src={page?.content?.icon?.userIcon}
+                  w={6}
+                  h={6}
+                />
                 <Text>
                   {
                     organization?.member?.filter((x) => x.role === "member")
@@ -146,7 +154,12 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               </HStack>
               {organization?.website && (
                 <HStack>
-                  <Image alt=" " src={page?.content?.icon?.urlIcon} w={6} h={6} />
+                  <Image
+                    alt=" "
+                    src={page?.content?.icon?.urlIcon}
+                    w={6}
+                    h={6}
+                  />
                   <Link href={organization?.website} wordBreak="break-word">
                     <Text>{organization?.website}</Text>
                   </Link>
@@ -171,7 +184,13 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
             <DividerSimple primary="#FD5F53" />
           </Box>
           <Container pt={12} position="relative">
-            <Stack direction={["column", "column", "row", "row"]} w="100%" align={["start", "start", "center"]} pb={[48, 48, 48, 36]} pt={[36, 36, 36, 48]}>
+            <Stack
+              direction={["column", "column", "row", "row"]}
+              w="100%"
+              align={["start", "start", "center"]}
+              pb={[48, 48, 48, 36]}
+              pt={[36, 36, 36, 48]}
+            >
               <Box flex={1}>
                 <Text fontSize="5xl" fontWeight="bold">
                   {wordExtractor(page?.content?.wordings, "page_title")}
@@ -207,9 +226,11 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-
               >
-                {wordExtractor(page?.content?.wordings, "page_tutorial_organization_link")}
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "page_tutorial_organization_link"
+                )}
               </Button>
             </Stack>
           </Container>
@@ -325,5 +346,3 @@ export default withPageCMS(IdentityOpportunities, {
     },
   ],
 });
-
-

@@ -37,43 +37,42 @@ const NgoSectionViewer = () => {
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
-        {(isAdmin || editable) &&
-          organization?.status === "approved" && (
-            <Button
-              variant="outline"
-              isActive={!!organization?.published}
-              onClick={async () => {
-                try {
-                  await saveOrganization({
-                    id: organization?.id,
-                    published: !organization?.published,
-                  });
-                  refreshOrganization();
-                  toast({
-                    title: !organization?.published ? "已發佈檔案" : "已取消發佈",
-                    status: !organization?.published ? "info" : "warning",
-                    position: "bottom",
-                  });
-                } catch (error) {
-                  console.error(error);
-                }
-              }}
-              leftIcon={
-                !organization?.published ? (
-                  <MdRadioButtonUnchecked />
-                ) : (
-                  <MdRadioButtonChecked />
-                )
+        {(isAdmin || editable) && organization?.status === "approved" && (
+          <Button
+            variant="outline"
+            isActive={!!organization?.published}
+            onClick={async () => {
+              try {
+                await saveOrganization({
+                  id: organization?.id,
+                  published: !organization?.published,
+                });
+                refreshOrganization();
+                toast({
+                  title: !organization?.published ? "已發佈檔案" : "已取消發佈",
+                  status: !organization?.published ? "info" : "warning",
+                  position: "bottom",
+                });
+              } catch (error) {
+                console.error(error);
               }
-            >
-              {wordExtractor(
-                page?.content?.wordings,
-                organization?.published
-                  ? "published_my_profile_label"
-                  : "publish_my_profile_label"
-              )}
-            </Button>
-          )}
+            }}
+            leftIcon={
+              !organization?.published ? (
+                <MdRadioButtonUnchecked />
+              ) : (
+                <MdRadioButtonChecked />
+              )
+            }
+          >
+            {wordExtractor(
+              page?.content?.wordings,
+              organization?.published
+                ? "published_my_profile_label"
+                : "publish_my_profile_label"
+            )}
+          </Button>
+        )}
         {(isAdmin || editable) &&
           organization?.status === "approved" &&
           !editSection && (
@@ -93,19 +92,21 @@ const NgoSectionViewer = () => {
               ? organization?.chineseCompanyName
               : organization?.englishCompanyName}
           </Text>
-          {(isAdmin || editable) && <Tag>
-            {
-              enums?.EnumOrganizationStatusList?.find(
-                (x) => x.key === organization?.status
-              )?.value?.[router.locale]
-            }
-          </Tag>}
+          {(isAdmin || editable) && (
+            <Tag>
+              {
+                enums?.EnumOrganizationStatusList?.find(
+                  (x) => x.key === organization?.status
+                )?.value?.[router.locale]
+              }
+            </Tag>
+          )}
         </Wrap>
       </VStack>
       <VStack px={8} py={4} align="stretch" spacing={6}>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_chineseOrganizationName"
@@ -117,7 +118,7 @@ const NgoSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_englishOrganizationName"
@@ -131,17 +132,19 @@ const NgoSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_website")}
             </FormLabel>
-            {organization?.website ?
+            {organization?.website ? (
               <Link href={organization?.website} wordBreak="break-word">
                 <Text>{organization?.website}</Text>
-              </Link> :
-              wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Link>
+            ) : (
+              wordExtractor(page?.content?.wordings, "empty_text_label")
+            )}
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactName"
@@ -155,7 +158,7 @@ const NgoSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactEmail"
@@ -167,7 +170,7 @@ const NgoSectionViewer = () => {
             </Text>
           </FormControl>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_contactPhone"
@@ -181,7 +184,7 @@ const NgoSectionViewer = () => {
         </Stack>
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
-            <FormLabel color="#999" mb={0}>
+            <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
                 "field_label_organization_description"
