@@ -63,63 +63,57 @@ const IdentityPwdAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit =
-    async ({
-      chinese_name,
-      english_name,
-      date_of_birth,
-      gender,
-      resident_district,
-      person_types,
-      interested_employee,
-      interested_industry_other,
-      industry,
-      terms,
-      invitationCode,
-    }) => {
-      try {
-        const mutation = gql`
-          mutation IdentityCreate($input: IdentityCreateInput!) {
-            IdentityCreate(input: $input) {
-              id
-            }
+  const onFormSubmit = async ({
+    chinese_name,
+    english_name,
+    date_of_birth,
+    gender,
+    resident_district,
+    person_types,
+    interested_employee,
+    interested_industry_other,
+    industry,
+    terms,
+    invitationCode,
+  }) => {
+    try {
+      const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
           }
-        `;
-
-        let data = await getGraphQLClient().request(mutation, {
-          input: {
-            userId: user.id,
-            identity: "pwd",
-            chineseName: chinese_name,
-            englishName: english_name,
-            dob: date_of_birth,
-            gender: gender?.value,
-            district: resident_district?.value,
-            pwdType: person_types?.map(({ value }) => ({ value }?.value)),
-            interestedEmploymentMode: interested_employee?.map(
-              ({ value }) => ({ value }?.value)
-            ),
-            interestedIndustry: industry?.map(
-              ({ value }) => ({ value }?.value)
-            ),
-            interestedIndustryOther: interested_industry_other,
-            tncAccept: terms,
-            invitationCode: invitationCode,
-            email: user.email ? user.email : "",
-            phone: user.phone ? user.phone : "",
-          },
-        });
-
-        if (data && data.IdentityCreate) {
-          router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
         }
-      } catch (e) {
-        console.error(e);
+      `;
+
+      let data = await getGraphQLClient().request(mutation, {
+        input: {
+          userId: user.id,
+          identity: "pwd",
+          chineseName: chinese_name,
+          englishName: english_name,
+          dob: date_of_birth,
+          gender: gender?.value,
+          district: resident_district?.value,
+          pwdType: person_types?.map(({ value }) => ({ value }?.value)),
+          interestedEmploymentMode: interested_employee?.map(
+            ({ value }) => ({ value }?.value)
+          ),
+          interestedIndustry: industry?.map(({ value }) => ({ value }?.value)),
+          interestedIndustryOther: interested_industry_other,
+          tncAccept: terms,
+          invitationCode: invitationCode,
+          email: user.email ? user.email : "",
+          phone: user.phone ? user.phone : "",
+        },
+      });
+
+      if (data && data.IdentityCreate) {
+        router.push(`/user/identity/pwd/${data.IdentityCreate.id}/success`);
       }
+    } catch (e) {
+      console.error(e);
     }
-    ;
-
-
+  };
   return (
     <VStack py={36}>
       <Text>{page?.content?.step?.title}</Text>
@@ -413,7 +407,6 @@ const IdentityPwdAdd = ({ page }) => {
                       page?.content?.wordings,
                       "industry_placeholder"
                     )}
-
                     options={page?.content?.form?.industry?.options.map(
                       ({ label, value }) => ({ label, value })
                     )}
@@ -433,13 +426,10 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-
             <FormControl>
               <FormLabel>
                 {page?.content?.form?.interestedIndustryOther}{" "}
-                <Text as="span" color="red">
-
-                </Text>
+                <Text as="span" color="red"></Text>
               </FormLabel>
               <Input
                 type="text"
@@ -463,30 +453,30 @@ const IdentityPwdAdd = ({ page }) => {
               </FormHelperText>
             </FormControl>
 
-
             <FormControl marginTop="20px !important">
               <Checkbox
-                aria-describedby={wordExtractor(
-                  page?.content?.wordings,
-                  "tnc_required"
-                )}
+                // aria-describedby={wordExtractor(
+                //   page?.content?.wordings,
+                //   "tnc_required"
+                // )}
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
                 <Text>
                   {" "}
-                  {page?.content?.form?.terms?.text} {" "} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
+                  {page?.content?.form?.terms?.text}{" "}
+                  <Link target="_blank" href={page?.content?.form?.terms?.url}>
+                    {" "}
+                    {page?.content?.form?.terms?.link}{" "}
+                  </Link>
                 </Text>
               </Checkbox>
               <FormHelperText style={{ color: "red" }}>
                 {errors?.terms?.type === "required" && (
                   <Text color="red">
                     {/* 請接受條款和條件 Please accept T&C!
-                   */}
-                    {wordExtractor(
-                      page?.content?.wordings,
-                      "tnc_required"
-                    )}
+                     */}
+                    {wordExtractor(page?.content?.wordings, "tnc_required")}
                   </Text>
                 )}
               </FormHelperText>
@@ -767,7 +757,7 @@ export default withPageCMS(IdentityPwdAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder: "https://"
+              placeholder: "https://",
             },
           ],
         },
