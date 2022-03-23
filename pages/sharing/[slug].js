@@ -265,7 +265,7 @@ const PostDetail = ({ post, setting, page }) => {
                       <Box
                         sx={{
                           a: {
-                            color: "green.500",
+                            color: "green.700",
                             textDecor: "underline",
                           },
                           table: {
