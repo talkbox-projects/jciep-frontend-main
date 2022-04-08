@@ -260,7 +260,7 @@ const Resources = ({ page, enums, setting }) => {
                 ({ message }, index) => {
                   if (index == 0) {
                     return (
-                      <HStack position="relative">
+                      <HStack key={index} position="relative">
                         <Box
                           ml={[0, 0, 0, 16]}
                           py={1}
@@ -302,6 +302,7 @@ const Resources = ({ page, enums, setting }) => {
                   } else {
                     return (
                       <Box
+                        key={index}
                         py={1}
                         px={2}
                         w={["75%", "75%", "65%", "max"]}
@@ -370,6 +371,7 @@ const Resources = ({ page, enums, setting }) => {
                 if (index == 0) {
                   return (
                     <HStack
+                      key={index}
                       justifyContent="flex-end"
                       position={["absolute", "relative"]}
                       bottom="10%"
