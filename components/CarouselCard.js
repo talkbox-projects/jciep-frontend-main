@@ -38,6 +38,7 @@ const TextTool = ({
   className = "",
   minHeight = "auto",
   small,
+  ariaLabel,
 }) => {
   const [isLabelOpen, setIsLabelOpen] = useState(false);
 
@@ -81,7 +82,7 @@ const TextTool = ({
         <chakra.span pl="6px">
           <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
             <IconButton
-              aria-label={description}
+              aria-label={ariaLabel}
               icon={<AiOutlineInfoCircle />}
               variant="link"
               cursor="pointer"
@@ -174,6 +175,7 @@ const Card = ({
                 text={serviceTarget?.text}
                 description={serviceTarget?.description}
                 fontSize="16px"
+                ariaLabel={"殘疾人士定義提示"}
               />
             </HStack>
             <Divider />
@@ -280,6 +282,7 @@ const Card = ({
                     />
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
+                    console.log(target);
                     return (
                       <ListItem
                         display="flex"
@@ -301,6 +304,13 @@ const Card = ({
                           description={description}
                           fontSize="12px"
                           small
+                          ariaLabel={
+                            target === "employer"
+                              ? "僱主津貼提示"
+                              : target === "trainee"
+                              ? "僱員/實習生/訓練生津貼提示"
+                              : ""
+                          }
                         />
                       </ListItem>
                     );
