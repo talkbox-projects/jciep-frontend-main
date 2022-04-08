@@ -15,9 +15,13 @@ import {
   chakra,
   Link,
   Icon,
-  Tooltip,
   IconButton,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
 } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -86,25 +90,23 @@ const TextTool = ({
         </chakra.span>
       )}
       {description && description !== "" && (
-        <chakra.span pl="6px" onClick={tooltipDisclosure.onToggle}>
-          <Tooltip
-            isOpen={tooltipDisclosure.isOpen}
-            hasArrow
-            label={description}
-            bg="#1E1E1E"
-            color="#FFFFFF"
-          >
-            <IconButton
-              aria-label={ariaLabel}
-              icon={<AiOutlineInfoCircle />}
-              variant="link"
-              cursor="pointer"
-              size={2}
-              onClick={() => setIsLabelOpen(true)}
-              mt={small ? "5px" : "5px"}
-              {...(!isActive && { tabIndex: -1 })}
-            ></IconButton>
-          </Tooltip>
+        <chakra.span pl="6px">
+          <Popover trigger="hover">
+            <PopoverTrigger>
+              <IconButton
+                aria-label={ariaLabel}
+                icon={<AiOutlineInfoCircle />}
+                variant="link"
+                size={2}
+                onClick={() => setIsLabelOpen(true)}
+                {...(!isActive && { tabIndex: -1 })}
+              ></IconButton>
+            </PopoverTrigger>
+            <PopoverContent fontSize="sm" bg="black" color="white">
+              <PopoverArrow bg="black" />
+              <PopoverBody>{description}</PopoverBody>
+            </PopoverContent>
+          </Popover>
         </chakra.span>
       )}
     </Text>
