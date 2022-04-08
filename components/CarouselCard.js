@@ -17,6 +17,7 @@ import {
   Icon,
   Tooltip,
   IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -40,6 +41,7 @@ const TextTool = ({
   small,
   ariaLabel,
 }) => {
+  const tooltipDisclosure = useDisclosure();
   const [isLabelOpen, setIsLabelOpen] = useState(false);
 
   return (
@@ -79,8 +81,14 @@ const TextTool = ({
         </chakra.span>
       )}
       {description && description !== "" && (
-        <chakra.span pl="6px">
-          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
+        <chakra.span pl="6px" onClick={tooltipDisclosure.onToggle}>
+          <Tooltip
+            isOpen={tooltipDisclosure.isOpen}
+            hasArrow
+            label={description}
+            bg="#1E1E1E"
+            color="#FFFFFF"
+          >
             <IconButton
               aria-label={ariaLabel}
               icon={<AiOutlineInfoCircle />}
