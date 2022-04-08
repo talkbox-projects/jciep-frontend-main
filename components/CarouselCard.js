@@ -282,7 +282,6 @@ const Card = ({
                     />
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
-                    console.log(target);
                     return (
                       <ListItem
                         display="flex"
