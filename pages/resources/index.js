@@ -14,7 +14,6 @@ import {
   Button,
   Grid,
   GridItem,
-  IconButton,
   Portal,
   Menu,
   MenuButton,
@@ -34,12 +33,12 @@ import DividerA from "../../components/DividerA";
 
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import Anchor from "../../components/Anchor";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { NextArrow, PrevArrow } from "../../components/SliderArrow";
 
 const PAGE_KEY = "resources";
 
@@ -506,7 +505,14 @@ const Resources = ({ page, enums, setting }) => {
           w="100vw"
           minH="600px"
         >
-          <Slider {...settings} initialSlide={0} draggable={false}>
+          <Slider
+            {...settings}
+            initialSlide={0}
+            draggable={false}
+            prevArrow={<PrevArrow />}
+            nextArrow={<NextArrow />}
+            accessibility={false}
+          >
             {(filteredResourceList ?? []).map((resource, index) => {
               const {
                 name,
@@ -549,60 +555,6 @@ const Resources = ({ page, enums, setting }) => {
               );
             })}
           </Slider>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            left={0}
-            top="35%"
-            // h="100%"
-            align="center"
-            m={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-              cursor="pointer"
-              onClick={() => sliderRef.current.slickPrev()}
-            >
-              <IconButton variant="unstyled" as={FaArrowLeft} size="md" />
-            </Box>
-          </HStack>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            right={0}
-            top="35%"
-            // h="100%"
-            align="center"
-            m={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-              cursor="pointer"
-              onClick={() => sliderRef.current.slickNext()}
-            >
-              <IconButton
-                borderRadius="50%"
-                variant="unstyled"
-                rounded="full"
-                size="md"
-                as={FaArrowRight}
-              />
-            </Box>
-          </HStack>
         </Box>
         <VStack
           w="100%"
