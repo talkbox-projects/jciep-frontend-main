@@ -40,6 +40,7 @@ const TextTool = ({
   minHeight = "auto",
   small,
   ariaLabel,
+  isActive,
 }) => {
   const tooltipDisclosure = useDisclosure();
   const [isLabelOpen, setIsLabelOpen] = useState(false);
@@ -58,7 +59,11 @@ const TextTool = ({
           fontSize={fontSize}
           fontWeight={bold ? "bold" : "normal"}
         >
-          <Link isExternal={true} href={url}>
+          <Link
+            {...(!isActive && { tabIndex: -1 })}
+            isExternal={true}
+            href={url}
+          >
             {" "}
             {text}
           </Link>
@@ -97,6 +102,7 @@ const TextTool = ({
               size={2}
               onClick={() => setIsLabelOpen(true)}
               mt={small ? "5px" : "5px"}
+              {...(!isActive && { tabIndex: -1 })}
             ></IconButton>
           </Tooltip>
         </chakra.span>
@@ -118,6 +124,7 @@ const Card = ({
   topColor,
   contact,
   page,
+  isActive,
 }) => {
   const [show, setShow] = useState(false);
 
@@ -149,6 +156,7 @@ const Card = ({
               className="carousel-card-header"
               bold
               share={true}
+              isActive={isActive}
             />
             <Divider />
             <HStack spacing="5px">
@@ -168,6 +176,7 @@ const Card = ({
                 link={organization?.link}
                 url={organization?.link}
                 fontSize="16px"
+                isActive={isActive}
               />
             </HStack>
             <Divider />
@@ -184,6 +193,7 @@ const Card = ({
                 description={serviceTarget?.description}
                 fontSize="16px"
                 ariaLabel={"殘疾人士定義提示"}
+                isActive={isActive}
               />
             </HStack>
             <Divider />
@@ -204,6 +214,7 @@ const Card = ({
                       "serviceHeading"
                     )}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
                 {(services ?? []).map(({ category, description }, index) => {
@@ -228,6 +239,7 @@ const Card = ({
                         description={description}
                         fontSize="12px"
                         small
+                        isActive={isActive}
                       />
                     </ListItem>
                   );
@@ -248,6 +260,7 @@ const Card = ({
                     text={wordExtractor(page?.content?.wordings, "internship")}
                     description={internship?.description}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
               )}
@@ -266,6 +279,7 @@ const Card = ({
                     text={wordExtractor(page?.content?.wordings, "onProbation")}
                     description={probationOrReferral?.description}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
               )}
@@ -287,6 +301,7 @@ const Card = ({
                         "fundingHeading"
                       )}
                       fontSize="16px"
+                      isActive={isActive}
                     />
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
@@ -318,6 +333,7 @@ const Card = ({
                               ? "僱員/實習生/訓練生津貼提示"
                               : ""
                           }
+                          isActive={isActive}
                         />
                       </ListItem>
                     );
@@ -408,6 +424,7 @@ const Card = ({
             w="100%"
             mt="10px"
             fontSize="16px"
+            {...(!isActive && { tabIndex: -1 })}
           >
             {show
               ? wordExtractor(page?.content?.wordings, "showLess")

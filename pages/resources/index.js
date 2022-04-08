@@ -125,6 +125,8 @@ export const getServerSideProps = async (context) => {
 const Resources = ({ page, enums, setting }) => {
   const router = useRouter();
   const [showItems, setShowItems] = useState(3);
+
+  const [activeSldie, setActiveSldie] = useState(0);
   const sliderRef = useRef(null);
   const settings = {
     ref: (c) => (sliderRef.current = c),
@@ -133,6 +135,7 @@ const Resources = ({ page, enums, setting }) => {
     slidesToScroll: 1,
     variableWidth: true,
     infinite: false,
+    beforeChange: (current, next) => setActiveSldie(next),
   };
 
   const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
@@ -550,6 +553,7 @@ const Resources = ({ page, enums, setting }) => {
                     contact={contact}
                     reminder={reminder}
                     page={page}
+                    isActive={activeSldie === index}
                   />
                 </Box>
               );
