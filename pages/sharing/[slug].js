@@ -294,7 +294,7 @@ const PostDetail = ({ post, setting, page }) => {
                     return (
                       <VStack align="stretch">
                         <Image
-                          alt={imageName}
+                          alt={caption ?? imageName}
                           w="100%"
                           title="postImage"
                           src={image}
