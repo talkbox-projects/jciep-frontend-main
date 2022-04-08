@@ -10,7 +10,7 @@ import {
   Checkbox,
   FormHelperText,
   FormLabel,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -23,7 +23,6 @@ import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
-
 
 const PAGE_KEY = "identity_public_add";
 
@@ -40,18 +39,20 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-
 const customStyles = {
   multiValue: (provided) => {
-    const borderRadius = "15px"
+    const borderRadius = "15px";
     return { ...provided, borderRadius };
   },
   multiValueRemove: (provided) => {
-    const color = "grey"
-    return { ...provided, color }
-  }
-}
-
+    const color = "grey";
+    return {
+      ...provided,
+      color,
+      ":hover": { ...provided[":hover"], color: "#E60000" },
+    };
+  },
+};
 
 const IdentityPublicAdd = ({ page }) => {
   const router = useRouter();
@@ -64,60 +65,53 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onFormSubmit =
-    async ({
-      chinese_name,
-      english_name,
-      date_of_birth,
-      gender,
-      resident_district,
-      industry,
-      terms,
-    }) => {
-      try {
-        const mutation = gql`
-          mutation IdentityCreate($input: IdentityCreateInput!) {
-            IdentityCreate(input: $input) {
-              id
-            }
+  const onFormSubmit = async ({
+    chinese_name,
+    english_name,
+    date_of_birth,
+    gender,
+    resident_district,
+    industry,
+    terms,
+  }) => {
+    try {
+      const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
           }
-        `;
-
-        let data = await getGraphQLClient().request(mutation, {
-          input: {
-            userId: user.id,
-            identity: "public",
-            chineseName: chinese_name,
-            englishName: english_name,
-            dob: date_of_birth,
-            gender: gender?.value,
-            district: resident_district?.value,
-            interestedIndustry: industry?.map(
-              ({ value }) => ({ value }?.value)
-            ),
-            tncAccept: terms,
-            email: user.email ? user.email : "",
-            phone: user.phone ? user.phone : "",
-          },
-        });
-
-        if (data && data.IdentityCreate) {
-          router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
         }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    ;
+      `;
 
+      let data = await getGraphQLClient().request(mutation, {
+        input: {
+          userId: user.id,
+          identity: "public",
+          chineseName: chinese_name,
+          englishName: english_name,
+          dob: date_of_birth,
+          gender: gender?.value,
+          district: resident_district?.value,
+          interestedIndustry: industry?.map(({ value }) => ({ value }?.value)),
+          tncAccept: terms,
+          email: user.email ? user.email : "",
+          phone: user.phone ? user.phone : "",
+        },
+      });
+
+      if (data && data.IdentityCreate) {
+        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <VStack py={36}>
-      <Text mt={10} fontSize="16px">{page?.content?.step?.title}</Text>
-      <Text
-        fontSize="36px"
-        letterSpacing="1.5px"
-        fontWeight={600}
-      >
+      <Text mt={10} fontSize="16px">
+        {page?.content?.step?.title}
+      </Text>
+      <Text fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
         {page?.content?.step?.subTitle}
       </Text>
       <Box justifyContent="center" width="100%" marginTop="40px !important">
@@ -198,9 +192,7 @@ const IdentityPublicAdd = ({ page }) => {
                     placeholder=""
                     {...register("date_of_birth")}
                   />
-                  <FormHelperText>
-
-                  </FormHelperText>
+                  <FormHelperText></FormHelperText>
                 </FormControl>
               </GridItem>
               <GridItem>
@@ -212,7 +204,6 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
-
                         aria-label={page?.content?.form?.gender?.label}
                         {...field}
                         placeholder={wordExtractor(
@@ -240,7 +231,9 @@ const IdentityPublicAdd = ({ page }) => {
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
-                        aria-label={page?.content?.form?.residentRestrict?.label}
+                        aria-label={
+                          page?.content?.form?.residentRestrict?.label
+                        }
                         {...field}
                         placeholder={wordExtractor(
                           page?.content?.wordings,
@@ -260,9 +253,7 @@ const IdentityPublicAdd = ({ page }) => {
                 <FormControl>
                   <FormLabel>
                     {page?.content?.form?.industry?.label}{" "}
-                    <Text as="span" color="red">
-
-                    </Text>
+                    <Text as="span" color="red"></Text>
                   </FormLabel>
                   <Controller
                     name="industry"
@@ -306,15 +297,16 @@ const IdentityPublicAdd = ({ page }) => {
                 colorScheme="green"
                 {...register("terms", { required: true })}
               >
-                {page?.content?.form?.terms?.text} <Link target="_blank" href={page?.content?.form?.terms?.url}>  {page?.content?.form?.terms?.link} </Link>
+                {page?.content?.form?.terms?.text}{" "}
+                <Link target="_blank" href={page?.content?.form?.terms?.url}>
+                  {" "}
+                  {page?.content?.form?.terms?.link}{" "}
+                </Link>
               </Checkbox>
               <FormHelperText>
                 {errors?.terms?.type === "required" && (
                   <Text color="red">
-                    {wordExtractor(
-                      page?.content?.wordings,
-                      "tnc_required"
-                    )}
+                    {wordExtractor(page?.content?.wordings, "tnc_required")}
                   </Text>
                 )}
               </FormHelperText>
@@ -518,9 +510,9 @@ export default withPageCMS(IdentityPublicAdd, {
               name: "url",
               label: "關聯 Url",
               component: "text",
-              placeholder: "https://"
-            }
-          ]
+              placeholder: "https://",
+            },
+          ],
         },
         {
           name: "continue",
