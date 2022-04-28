@@ -30,6 +30,7 @@ export function PrevArrow(props) {
           variant="unstyled"
           icon={<Icon as={FaArrowLeft} fontSize="4xl" />}
           size="md"
+          aria-label="previous"
         />
       </Box>
     </HStack>
@@ -64,6 +65,7 @@ export function NextArrow(props) {
           variant="unstyled"
           icon={<Icon as={FaArrowRight} fontSize="4xl" />}
           size="md"
+          aria-label="next"
         />
       </Box>
     </HStack>
