@@ -2,7 +2,9 @@
 /* eslint-disable no-undef */
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
-import jwt from "jsonwebtoken";
+import {AccessToken} from "./accessToken.model";
+import { uuidv4 } from "../../../utils/general";
+// import jwt from "jsonwebtoken";
 import sendSms from "../services/phone";
 import facebook from "../services/facebook";
 import google from "../services/google";
@@ -15,6 +17,14 @@ import nookies from "nookies";
 import getConfig from "next/config";
 import { checkIfAdmin, getIdentityOrganizationRole, isJoinedOrganizationStaff } from "../../../utils/auth";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
+
+const generateToken = (user) => {
+    return new AccessToken({
+      _id: uuidv4(),
+      userId: user._id,
+      createdAt: new Date()
+    }).save();
+};
 
 export default {
   Identity: {
@@ -293,8 +303,9 @@ export default {
           );
           await emailVerify.delete();
 
-          const _user = user.toObject();
-          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          // const _user = user.toObject();
+          // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          const token = await generateToken(user)._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
 
@@ -305,8 +316,9 @@ export default {
           email: input?.email.trim(),
         });
         if (await user?.comparePassword(input?.password)) {
-          const _user = user.toObject();
-          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          // const _user = user.toObject();
+          // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          const token = await generateToken(user)._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -331,8 +343,9 @@ export default {
             { upsert: true, new: true }
           );
 
-          const _user = user.toObject();
-          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          // const _user = user.toObject();
+          // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          const token = await generateToken(user)._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -342,8 +355,9 @@ export default {
           phone: input?.phone.trim(),
         });
         if (await user?.comparePassword(input?.password)) {
-          const _user = user.toObject();
-          const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          // const _user = user.toObject();
+          // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+          const token = await generateToken(user)._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -360,8 +374,9 @@ export default {
         if (!user) {
           user = await new User({ facebookId: snsMeta.id }).save();
         }
-        const _user = user.toObject();
-        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        // const _user = user.toObject();
+        // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        const token = await generateToken(user)._id;
         user.snsMeta = snsMeta;
         await user.save();
         nookies.set(context, "jciep-token", token, { path: "/" });
@@ -376,8 +391,9 @@ export default {
         if (!user) {
           user = await new User({ googleId: snsMeta.id }).save();
         }
-        const _user = user.toObject();
-        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        // const _user = user.toObject();
+        // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        const token = await generateToken(user)._id;
         user.snsMeta = snsMeta;
         await user.save();
 
@@ -393,8 +409,9 @@ export default {
         if (!user) {
           user = await new User({ appleId: snsMeta.id }).save();
         }
-        const _user = user.toObject();
-        const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        // const _user = user.toObject();
+        // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
+        const token = await generateToken(user)._id;
         user.snsMeta = snsMeta;
         await user.save();
 

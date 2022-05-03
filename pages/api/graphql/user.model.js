@@ -9,6 +9,8 @@ import interestedIndustries from "./enum/interestedIndustries";
 import pwdTypes from "./enum/pwdTypes";
 import publishStatus from "./enum/publishStatus";
 import industries from "./enum/industries";
+import ages from "./enum/ages";
+import wishToDo from "./enum/wishToDo";
 
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
@@ -256,6 +258,29 @@ const identitySchema = Schema({
   },
   createdAt: {
     type: Date,
+  },
+
+
+  /* phase 2 fields */
+  age: {
+    type: String,
+    enum: Object.keys(ages),
+  },
+  currentIndustry: {
+    type: String
+  },
+  pwdOther: {
+    type: String
+  },
+  wishToDo: {
+    type: String,
+    enum: Object.keys(wishToDo),
+  },
+  wishToDoOther: {
+    type: String
+  },
+  appTncAccept: {
+    type: Boolean,
   },
 });
 

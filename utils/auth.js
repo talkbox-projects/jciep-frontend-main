@@ -6,10 +6,10 @@
 
 import nookies from "nookies";
 import getConfig from "next/config";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import { User } from "../pages/api/graphql/user.model";
 import { Organization } from "../pages/api/graphql/organization.model";
-
+import { AccessToken } from "../pages/api/graphql/accessToken.model";
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -45,13 +45,21 @@ export const getCurrentUser = async (context) => {
 
 
         if (token) {
-            const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
-            if (jwtUser) {
-                const user = await User.findById(jwtUser._id).populate("identities");
+            const accessObject = await AccessToken.findById(token);
+            if (accessObject) {
+                const user = await User.findById(accessObject.userId).populate("identities");
                 const identity = (user?.identities ?? []).find(({ id }) => String(id) === String(currentIdentityId));
                 identity.organizationRole = await getIdentityOrganizationRole(currentIdentityId);
                 return { user, identity };
             }
+
+            // const jwtUser = jwt.decode(token, serverRuntimeConfig.JWT_SALT);
+            // if (jwtUser) {
+            //     const user = await User.findById(jwtUser._id).populate("identities");
+            //     const identity = (user?.identities ?? []).find(({ id }) => String(id) === String(currentIdentityId));
+            //     identity.organizationRole = await getIdentityOrganizationRole(currentIdentityId);
+            //     return { user, identity };
+            // }
         }
         return null;
     } catch (error) {
