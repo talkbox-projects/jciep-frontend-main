@@ -15,8 +15,13 @@ import {
   chakra,
   Link,
   Icon,
-  Tooltip,
   IconButton,
+  useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
 } from "@chakra-ui/react";
 import { FaShareSquare } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -38,7 +43,10 @@ const TextTool = ({
   className = "",
   minHeight = "auto",
   small,
+  ariaLabel,
+  isActive,
 }) => {
+  const tooltipDisclosure = useDisclosure();
   const [isLabelOpen, setIsLabelOpen] = useState(false);
 
   return (
@@ -55,7 +63,11 @@ const TextTool = ({
           fontSize={fontSize}
           fontWeight={bold ? "bold" : "normal"}
         >
-          <Link isExternal={true} href={url}>
+          <Link
+            {...(!isActive && { tabIndex: -1 })}
+            isExternal={true}
+            href={url}
+          >
             {" "}
             {text}
           </Link>
@@ -79,17 +91,22 @@ const TextTool = ({
       )}
       {description && description !== "" && (
         <chakra.span pl="6px">
-          <Tooltip hasArrow label={description} bg="#1E1E1E" color="#FFFFFF">
-            <IconButton
-              aria-label={description}
-              icon={<AiOutlineInfoCircle />}
-              variant="link"
-              cursor="pointer"
-              size={2}
-              onClick={() => setIsLabelOpen(true)}
-              mt={small ? "5px" : "5px"}
-            ></IconButton>
-          </Tooltip>
+          <Popover trigger="hover">
+            <PopoverTrigger>
+              <IconButton
+                aria-label={ariaLabel}
+                icon={<AiOutlineInfoCircle />}
+                variant="link"
+                size={2}
+                onClick={() => setIsLabelOpen(true)}
+                {...(!isActive && { tabIndex: -1 })}
+              ></IconButton>
+            </PopoverTrigger>
+            <PopoverContent fontSize="sm" bg="black" color="white">
+              <PopoverArrow bg="black" />
+              <PopoverBody>{description}</PopoverBody>
+            </PopoverContent>
+          </Popover>
         </chakra.span>
       )}
     </Text>
@@ -109,6 +126,7 @@ const Card = ({
   topColor,
   contact,
   page,
+  isActive,
 }) => {
   const [show, setShow] = useState(false);
 
@@ -140,6 +158,7 @@ const Card = ({
               className="carousel-card-header"
               bold
               share={true}
+              isActive={isActive}
             />
             <Divider />
             <HStack spacing="5px">
@@ -159,6 +178,7 @@ const Card = ({
                 link={organization?.link}
                 url={organization?.link}
                 fontSize="16px"
+                isActive={isActive}
               />
             </HStack>
             <Divider />
@@ -174,6 +194,8 @@ const Card = ({
                 text={serviceTarget?.text}
                 description={serviceTarget?.description}
                 fontSize="16px"
+                ariaLabel={"殘疾人士定義提示"}
+                isActive={isActive}
               />
             </HStack>
             <Divider />
@@ -194,6 +216,7 @@ const Card = ({
                       "serviceHeading"
                     )}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
                 {(services ?? []).map(({ category, description }, index) => {
@@ -218,6 +241,7 @@ const Card = ({
                         description={description}
                         fontSize="12px"
                         small
+                        isActive={isActive}
                       />
                     </ListItem>
                   );
@@ -238,6 +262,7 @@ const Card = ({
                     text={wordExtractor(page?.content?.wordings, "internship")}
                     description={internship?.description}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
               )}
@@ -256,6 +281,7 @@ const Card = ({
                     text={wordExtractor(page?.content?.wordings, "onProbation")}
                     description={probationOrReferral?.description}
                     fontSize="16px"
+                    isActive={isActive}
                   />
                 </HStack>
               )}
@@ -277,6 +303,7 @@ const Card = ({
                         "fundingHeading"
                       )}
                       fontSize="16px"
+                      isActive={isActive}
                     />
                   </HStack>
                   {(subsidy ?? []).map(({ target, description }, index) => {
@@ -301,6 +328,14 @@ const Card = ({
                           description={description}
                           fontSize="12px"
                           small
+                          ariaLabel={
+                            target === "employer"
+                              ? "僱主津貼提示"
+                              : target === "trainee"
+                              ? "僱員/實習生/訓練生津貼提示"
+                              : ""
+                          }
+                          isActive={isActive}
                         />
                       </ListItem>
                     );
@@ -391,6 +426,7 @@ const Card = ({
             w="100%"
             mt="10px"
             fontSize="16px"
+            {...(!isActive && { tabIndex: -1 })}
           >
             {show
               ? wordExtractor(page?.content?.wordings, "showLess")

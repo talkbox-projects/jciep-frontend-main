@@ -14,7 +14,6 @@ import {
   Button,
   Grid,
   GridItem,
-  IconButton,
   Portal,
   Menu,
   MenuButton,
@@ -34,12 +33,12 @@ import DividerA from "../../components/DividerA";
 
 import HighlightHeadline from "../../components/HighlightHeadline";
 import ApostropheHeadline from "../../components/ApostropheHeadline";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import Anchor from "../../components/Anchor";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { NextArrow, PrevArrow } from "../../components/SliderArrow";
 
 const PAGE_KEY = "resources";
 
@@ -126,6 +125,8 @@ export const getServerSideProps = async (context) => {
 const Resources = ({ page, enums, setting }) => {
   const router = useRouter();
   const [showItems, setShowItems] = useState(3);
+
+  const [activeSldie, setActiveSldie] = useState(0);
   const sliderRef = useRef(null);
   const settings = {
     ref: (c) => (sliderRef.current = c),
@@ -134,6 +135,7 @@ const Resources = ({ page, enums, setting }) => {
     slidesToScroll: 1,
     variableWidth: true,
     infinite: false,
+    beforeChange: (current, next) => setActiveSldie(next),
   };
 
   const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
@@ -258,7 +260,7 @@ const Resources = ({ page, enums, setting }) => {
                 ({ message }, index) => {
                   if (index == 0) {
                     return (
-                      <HStack position="relative">
+                      <HStack key={index} position="relative">
                         <Box
                           ml={[0, 0, 0, 16]}
                           py={1}
@@ -300,6 +302,7 @@ const Resources = ({ page, enums, setting }) => {
                   } else {
                     return (
                       <Box
+                        key={index}
                         py={1}
                         px={2}
                         w={["75%", "75%", "65%", "max"]}
@@ -368,6 +371,7 @@ const Resources = ({ page, enums, setting }) => {
                 if (index == 0) {
                   return (
                     <HStack
+                      key={index}
                       justifyContent="flex-end"
                       position={["absolute", "relative"]}
                       bottom="10%"
@@ -506,7 +510,14 @@ const Resources = ({ page, enums, setting }) => {
           w="100vw"
           minH="600px"
         >
-          <Slider {...settings} initialSlide={0} draggable={false}>
+          <Slider
+            {...settings}
+            initialSlide={0}
+            draggable={false}
+            prevArrow={<PrevArrow />}
+            nextArrow={<NextArrow />}
+            accessibility={false}
+          >
             {(filteredResourceList ?? []).map((resource, index) => {
               const {
                 name,
@@ -544,65 +555,12 @@ const Resources = ({ page, enums, setting }) => {
                     contact={contact}
                     reminder={reminder}
                     page={page}
+                    isActive={activeSldie === index}
                   />
                 </Box>
               );
             })}
           </Slider>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            left={0}
-            top="35%"
-            // h="100%"
-            align="center"
-            m={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-              cursor="pointer"
-              onClick={() => sliderRef.current.slickPrev()}
-            >
-              <IconButton variant="unstyled" as={FaArrowLeft} size="md" />
-            </Box>
-          </HStack>
-          <HStack
-            pos="absolute"
-            zIndex={1}
-            right={0}
-            top="35%"
-            // h="100%"
-            align="center"
-            m={12}
-          >
-            <Box
-              _hover={{
-                color: "white",
-                bg: "black",
-              }}
-              boxShadow="lg"
-              bg="white"
-              p={4}
-              borderRadius="50%"
-              cursor="pointer"
-              onClick={() => sliderRef.current.slickNext()}
-            >
-              <IconButton
-                borderRadius="50%"
-                variant="unstyled"
-                rounded="full"
-                size="md"
-                as={FaArrowRight}
-              />
-            </Box>
-          </HStack>
         </Box>
         <VStack
           w="100%"
