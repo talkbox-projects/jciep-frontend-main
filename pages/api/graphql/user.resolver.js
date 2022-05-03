@@ -322,7 +322,7 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/" });
+          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
           return user;
         } else {
           throw new Error("Wrong Email and Password!");
@@ -350,7 +350,7 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/" });
+          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
           return user;
         }
       } else if (input?.phone && input?.password) {
@@ -363,7 +363,7 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/" });
+          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
           return user;
         } else {
           throw new Error("Wrong Phone and Password!");
@@ -384,7 +384,7 @@ export default {
         const token = tokenObject._id;
         user.snsMeta = snsMeta;
         await user.save();
-        nookies.set(context, "jciep-token", token, { path: "/" });
+        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
         return user;
       } else if (input.googleToken) {
         let snsMeta = await google.getProfile(input.googleToken);
@@ -403,7 +403,7 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
 
-        nookies.set(context, "jciep-token", token, { path: "/" });
+        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
         return user;
       } else if (input.appleToken) {
         let snsMeta = await apple.getProfile(input.appleToken);
@@ -422,7 +422,7 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
 
-        nookies.set(context, "jciep-token", token, { path: "/" });
+        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
         return user;
       }
 
@@ -434,7 +434,7 @@ export default {
     UserLogout: async (_parent, params, context) => {
       const token = nookies.get(context)?.["jciep-token"];
       await AccessToken.findByIdAndDelete(token);
-      nookies.destroy(context, "jciep-token", {path: "/"});
+      nookies.destroy(context, "jciep-token", { path: "/"});
       return true;
     },
 
