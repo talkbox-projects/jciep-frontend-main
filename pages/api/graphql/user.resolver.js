@@ -305,7 +305,8 @@ export default {
 
           // const _user = user.toObject();
           // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-          const token = await generateToken(user)._id;
+          const tokenObject = await generateToken(user);
+          const token = tokenObject._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
 
@@ -318,7 +319,8 @@ export default {
         if (await user?.comparePassword(input?.password)) {
           // const _user = user.toObject();
           // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-          const token = await generateToken(user)._id;
+          const tokenObject = await generateToken(user);
+          const token = tokenObject._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -345,7 +347,8 @@ export default {
 
           // const _user = user.toObject();
           // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-          const token = await generateToken(user)._id;
+          const tokenObject = await generateToken(user);
+          const token = tokenObject._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -357,7 +360,8 @@ export default {
         if (await user?.comparePassword(input?.password)) {
           // const _user = user.toObject();
           // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-          const token = await generateToken(user)._id;
+          const tokenObject = await generateToken(user);
+          const token = tokenObject._id;
 
           nookies.set(context, "jciep-token", token, { path: "/" });
           return user;
@@ -376,7 +380,8 @@ export default {
         }
         // const _user = user.toObject();
         // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-        const token = await generateToken(user)._id;
+        const tokenObject = await generateToken(user);
+        const token = tokenObject._id;
         user.snsMeta = snsMeta;
         await user.save();
         nookies.set(context, "jciep-token", token, { path: "/" });
@@ -393,7 +398,8 @@ export default {
         }
         // const _user = user.toObject();
         // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-        const token = await generateToken(user)._id;
+        const tokenObject = await generateToken(user);
+        const token = tokenObject._id;
         user.snsMeta = snsMeta;
         await user.save();
 
@@ -411,7 +417,8 @@ export default {
         }
         // const _user = user.toObject();
         // const token = jwt.sign(_user, serverRuntimeConfig.JWT_SALT).toString();
-        const token = await generateToken(user)._id;
+        const tokenObject = await generateToken(user);
+        const token = tokenObject._id;
         user.snsMeta = snsMeta;
         await user.save();
 
@@ -424,9 +431,10 @@ export default {
 
 
 
-    UserLogout: (_parent, params, context) => {
-
-      nookies.destroy(context, "jciep-token", { path: "/" });
+    UserLogout: async (_parent, params, context) => {
+      const token = nookies.get(context)?.["jciep-token"];
+      await AccessToken.findByIdAndDelete(token);
+      nookies.destroy(context, "jciep-token", {path: "/"});
       return true;
     },
 
