@@ -21,4 +21,5 @@ export default {
     zh: "器官殘障/長期病患",
   },
   visualImpairment: { en: "Visual Impairment", zh: "視力障礙" },
+  other: { en: "Other", zh: "其他" },
 };

@@ -6,6 +6,8 @@ import organizationStatus from "./enum/organizationStatus";
 import organizationTypes from "./enum/organizationTypes";
 import joinStatus from "./enum/joinStatus";
 import joinRoles from "./enum/joinRoles";
+import targetGroup from "./enum/targetGroup";
+import targetGroupDisabilities from "./enum/targetGroupDisabilities";
 
 const organizationSchema = Schema({
   organizationType: {
@@ -128,7 +130,37 @@ const organizationSchema = Schema({
   },
   createdAt: {
     type: Date
-  }
+  },
+
+  /* phase 2 fields */
+  centre: {
+    type: String
+  },
+  missionNVision: {
+    type: String
+  },
+  organizationTypeOther: {
+    type: String
+  },
+  targetGroup: {
+    type: String,
+    enum: Object.keys(targetGroup),
+  },
+  targetGroupDisabilities: {
+    type: String,
+    enum: Object.keys(targetGroupDisabilities),
+  },
+  targetGroupDisabilitiesOther: {
+    type: String
+  },
+  postalAddress: {
+    type: String
+  },
+  createdBy: Schema.Types.ObjectId,
+  lastUpdateAt: Date,
+  lastUpdateBy: Schema.Types.ObjectId,
+  approvedAt: Date,
+  approvedBy: Schema.Types.ObjectId
 });
 
 const organizationSubmissionSchema = Schema({
@@ -210,6 +242,31 @@ const organizationSubmissionSchema = Schema({
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "Identity",
+  },
+
+  /* phase 2 fields */
+  centre: {
+    type: String
+  },
+  missionNVision: {
+    type: String
+  },
+  organizationTypeOther: {
+    type: String
+  },
+  targetGroup: {
+    type: String,
+    enum: Object.keys(targetGroup),
+  },
+  targetGroupDisabilities: {
+    type: String,
+    enum: Object.keys(targetGroupDisabilities),
+  },
+  targetGroupDisabilitiesOther: {
+    type: String
+  },
+  postalAddress: {
+    type: String
   },
 });
 
