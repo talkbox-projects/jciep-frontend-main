@@ -282,6 +282,9 @@ const identitySchema = Schema({
   appTncAccept: {
     type: Boolean,
   },
+  phase2profile: {
+    type: Boolean
+  },
 });
 
 userSchema.virtual("member.identity", {
