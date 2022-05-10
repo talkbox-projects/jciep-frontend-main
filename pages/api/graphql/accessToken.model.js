@@ -3,7 +3,7 @@ import { uuidv4 } from "../../../utils/general";
 
 const accessTokenSchema = Schema({
     _id: String,
-    userId: String,
+    userId: Schema.Types.ObjectId,
     createdAt: {
         type: Date,
     }
