@@ -69,11 +69,90 @@ After called, WebContext.loginHandler will receive a response as below
 
 ## Hybrid App Bridge methods
 
+### getRegistrationInfo
+
+register jciep account via App
+
+#### parameters
+
+- callback: String (callbackHandler)
+
+```javascript
+var json = {
+    name: "getRegistrationInfo",
+    options: {
+        callback: "getRegistrationInfoHandler"
+    }
+};
+
+AppContext.postMessage(json);
+```
+
+
+#### response format
+
+- name: String
+- errorCode: Integer
+- options: Object
+- result: Object
+  - type: "apple" | "facebook" | "google" | "phone" | "email"
+  - token: string (apple/facebook/google token, mandatory when type = apple/facebook/google)
+  - email: string (registered email address, mandatory when type = email)
+  - phone: string (registered phone number, mandatory when type = phone)
+  - otp: string (mandatory when type = phone or email)
+
+```javascript
+// success
+var response = {
+   name: "getRegistrationInfo",
+   errorCode: 0,
+   options: {},
+   result: {
+	   type: "email",
+	   email: "admin@platformforinclusion.com",
+	   otp: "435678"
+  },
+};
+
+// error
+var response = {
+   name: "getRegistrationInfo",
+   errorCode: 1, // error code handling to de discussed
+   options: {},
+   result: null,
+};
+```
+
+
+### sendLoginSuccessResponse
+
+send login success response to app
+
+#### parameters
+
+- callback: String (callbackHandler)
+- token: String (jciep-token)
+- identityId: String (jciep-identityId)
+
+
+```javascript
+var json = {
+    name: "sendLoginSuccessResponse",
+    options: {
+        callback: "sendLoginSuccessResponseHandler"
+		token: "jciep-token",
+		identityId: "xxxxxxxx"
+	}
+};
+
+AppContext.postMessage(json);
+```
+
 ### pickFile
 
 pick files using Android/iOS native file picker.
 
-### parameters
+#### parameters
 
 - callback: String (callbackHandler)
 - params: Object
@@ -99,7 +178,7 @@ var json = {
 AppContext.postMessage(json);
 ```
 
-### response format
+#### response format
 
 - name: String
 - errorCode: Integer
@@ -142,99 +221,11 @@ var response = {
 ```
 
 
-## requestAuthentication
-
-request client BioID/Password Authentication
-
-### parameters
-
-- callback: String (callbackHandler)
-
-```javascript
-var json = {
-    name: "requestAuthentication",
-    options: {
-        callback: "requestAuthenticationHandler",
-    }
-};
-
-AppContext.postMessage(json);
-```
-
-### response format
-
-- name: String
-- errorCode: Integer
-- options: Object
-- result: Object
-  - authenticated: Boolean (return whether user is authenticated, true = success and false = failed)
-
-```javascript
-// success
-var response = {
-   name: "requestAuthentication",
-   errorCode: 0,
-   options: {},
-   result: {
-      authenticated: true,
-  },
-};
-
-// error 
-```
-
-
-## getDeviceInfo
-
-request app device info
-
-### parameters
-
-- callback: String (callbackHandler)
-
-```javascript
-var json = {
-    name: "getDeviceInfo",
-    options: {
-        callback: "getDeviceInfoHandler",
-    }
-};
-
-AppContext.postMessage(json);
-```
-
-### response format
-
-- name: String
-- errorCode: Integer
-- options: Object
-- result: Object
-  - clientType: Integer (refer to client types)
-  - lang: String (format: zh_HK)
-  - version: String (device OS)
-
-```javascript
-// success
-var response = {
-   name: "getDeviceInfo",
-   errorCode: 0,
-   options: {},
-   result: {
-      clientType: 1,
-      lang: "zh_HK",
-      version: "iOS14"
-  },
-};
-
-// error 
-```
-
-
-## openWebView
+### openWebView
 
 request app open build-in WebView or external browser
 
-### parameters
+#### parameters
 
 - callback: String (callbackHandler)
 - params: Object
@@ -259,7 +250,7 @@ var json = {
 AppContext.postMessage(json);
 ```
 
-### response format
+#### response format
 
 - name: String
 - errorCode: Integer
@@ -279,11 +270,11 @@ var response = {
 ```
 
 
-## download
+### download
 
 request app to download file
 
-### parameters
+#### parameters
 
 - callback: String (callbackHandler)
 - params: Object
@@ -307,7 +298,7 @@ var json = {
 AppContext.postMessage(json);
 ```
 
-### response format
+#### response format
 
 - name: String
 - errorCode: Integer
