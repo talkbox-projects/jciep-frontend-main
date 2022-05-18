@@ -368,25 +368,3 @@ var json = {
 
 AppContext.postMessage(json);
 ```
-
-
-### triggerPhoneCall
-
-pass phone number and trigger phone app
-
-#### parameters
-- phone: string (mandatory)
-
-```javascript
-var json = {
-	name: "triggerPhoneCall",
-	options: {
-		callback: "triggerPhoneCallHandler",
-		params: {
-			phone: "91234567"
-		},
-	}
-};
-
-AppContext.postMessage(json);
-```
