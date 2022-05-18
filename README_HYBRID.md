@@ -316,3 +316,77 @@ var response = {
 
 // error
 ```
+
+### closeWebView (with redirection)
+custom function from web to app
+
+for hyperlink handling, iOS/Android app will close the current window.
+
+#### parameters
+- url: string (optional; url; redirect main view to this url if needed) 
+
+```javascript
+var json = {
+	name: "closeWebView",
+	options: {
+		callback: "closeWebViewHandler",
+		params: {
+			url: "https://example.com"
+		},
+	}
+};
+
+AppContext.postMessage(json);
+```
+
+
+## backToRoot (with redirection)
+custom function from web to app
+
+iOS/Android app will close all the stacked web view(s) and execute hybrid function in root webview.
+
+### parameters
+- name: string (optional; url; call the hybrid function {name} after being back to root window) 
+- meta: object (optional; a custom object being passed to the function {name}) 
+
+```javascript
+var json = {
+	name: "backToRoot",
+	options: {
+		callback: "backToRootHandler",
+		params: {
+			name: "navigateTo"
+			meta: { //custom object.
+				type: 2,
+				meta: {
+					path: "/events"
+				}
+			}
+		}
+	}
+};
+
+AppContext.postMessage(json);
+```
+
+
+### triggerPhoneCall
+
+pass phone number and trigger phone app
+
+#### parameters
+- phone: string (mandatory)
+
+```javascript
+var json = {
+	name: "triggerPhoneCall",
+	options: {
+		callback: "triggerPhoneCallHandler",
+		params: {
+			phone: "91234567"
+		},
+	}
+};
+
+AppContext.postMessage(json);
+```
