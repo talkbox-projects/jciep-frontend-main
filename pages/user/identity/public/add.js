@@ -63,16 +63,23 @@ const IdentityPublicAdd = ({ page }) => {
     register,
     control,
     formState: { errors, isSubmitting },
+    watch
   } = useForm();
 
   const onFormSubmit = async ({
     chinese_name,
     english_name,
-    date_of_birth,
+    age,
     gender,
     resident_district,
+    email,
+    phone,
     industry,
     terms,
+    job_function,
+    is_disability,
+    wish_to_do,
+    pwd_type
   }) => {
     try {
       const mutation = gql`
@@ -89,13 +96,17 @@ const IdentityPublicAdd = ({ page }) => {
           identity: "public",
           chineseName: chinese_name,
           englishName: english_name,
-          dob: date_of_birth,
+          age: age?.value,
           gender: gender?.value,
           district: resident_district?.value,
-          interestedIndustry: industry?.map(({ value }) => ({ value }?.value)),
-          tncAccept: terms,
-          email: user.email ? user.email : "",
-          phone: user.phone ? user.phone : "",
+          email:email,
+          phone:phone,
+          jobFunction: job_function,
+          industry: industry.value,
+          isDisability: (is_disability.value === "true"),
+          wishToDo: wish_to_do.value,
+          pwdType: pwd_type.value,
+          tncAccept: terms
         },
       });
 
@@ -106,6 +117,12 @@ const IdentityPublicAdd = ({ page }) => {
       console.error(e);
     }
   };
+
+  React.useEffect(() => {
+    const subscription = watch((value, { name, type }) => console.log(value, name, type));
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <VStack py={36}>
       <Text mt={10} fontSize="16px">
@@ -186,11 +203,24 @@ const IdentityPublicAdd = ({ page }) => {
               </GridItem>
               <GridItem>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.dob}</FormLabel>
-                  <Input
-                    type="date"
-                    placeholder=""
-                    {...register("date_of_birth")}
+                  <FormLabel>{page?.content?.form?.age?.label}</FormLabel>
+                  <Controller
+                    name="age"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        aria-label={page?.content?.form?.age?.label}
+                        {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "age_placeholder"
+                        )}
+                        options={page?.content?.form?.age?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
+                      />
+                    )}
                   />
                   <FormHelperText></FormHelperText>
                 </FormControl>
@@ -252,6 +282,58 @@ const IdentityPublicAdd = ({ page }) => {
               <GridItem>
                 <FormControl>
                   <FormLabel>
+                    {page?.content?.form?.email}{" "}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "email_placeholder"
+                    )}
+                    {...register("email", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.english_name?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "email_required"
+                        )}{" "}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.phone}{" "}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "phone_placeholder"
+                    )}
+                    {...register("phone", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.english_name?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "phone_required"
+                        )}{" "}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
                     {page?.content?.form?.industry?.label}{" "}
                     <Text as="span" color="red"></Text>
                   </FormLabel>
@@ -264,7 +346,6 @@ const IdentityPublicAdd = ({ page }) => {
                         aria-label={page?.content?.form?.industry?.label}
                         styles={customStyles}
                         {...field}
-                        isMulti
                         placeholder={wordExtractor(
                           page?.content?.wordings,
                           "industry_placeholder"
@@ -287,6 +368,168 @@ const IdentityPublicAdd = ({ page }) => {
                   </FormHelperText>
                 </FormControl>
               </GridItem>
+
+              {/* <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.industryOther}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "industry_other_placeholder"
+                    )}
+                    {...register("industry_other", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.industry_other?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "industry_other_required"
+                        )}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem> */}
+
+              <GridItem>
+                <FormControl>
+                <FormLabel>
+                    {page?.content?.form?.jobFunction}{" "}
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "job_function_placeholder"
+                    )}
+                    {...register("job_function")}
+                  />
+                </FormControl>
+              </GridItem>
+
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.isDisability?.label}{" "}
+                  </FormLabel>
+                  <Controller
+                    name="is_disability"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        aria-label={page?.content?.form?.isDisability?.label}
+                        styles={customStyles}
+                        {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "is_disability_placeholder"
+                        )}
+                        options={page?.content?.form?.isDisability?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.wishToDo?.label}{" "}
+                  </FormLabel>
+                  <Controller
+                    name="wish_to_do"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        aria-label={page?.content?.form?.wishToDo?.label}
+                        styles={customStyles}
+                        {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "wish_to_do_placeholder"
+                        )}
+                        options={page?.content?.form?.wishToDo?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+
+
+              {/* <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.wishToDoOther}{" "}
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "wish_to_do_placeholder"
+                    )}
+                    {...register("wish_to_do_other", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.wishToDoOther?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "wish_to_do_other_required"
+                        )}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem> */}
+
+              
+
+              <GridItem>
+                <FormControl>
+                  <FormLabel>
+                    {page?.content?.form?.pwdType?.label}{" "}
+                  </FormLabel>
+                  <Controller
+                    name="pwd_type"
+                    isClearable
+                    control={control}
+                    render={({ field }) => (
+                      <ReactSelect
+                        aria-label={page?.content?.form?.pwdType?.label}
+                        styles={customStyles}
+                        {...field}
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "pwd_type_placeholder"
+                        )}
+                        options={page?.content?.form?.pwdType?.options.map(
+                          ({ label, value }) => ({ label, value })
+                        )}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </GridItem>
+
+
+
             </SimpleGrid>
             <FormControl marginTop="20px !important">
               <Checkbox
@@ -420,6 +663,52 @@ export default withPageCMS(IdentityPublicAdd, {
           ],
         },
         {
+          name: "age",
+          label: "年齡 Age",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "phone",
+          label: "電話 Phone Label",
+          component: "text",
+        },
+        {
+          name: "email",
+          label: "電郵 Email Label",
+          component: "text",
+        },
+        {
           name: "residentRestrict",
           label: "居住區 Resident District ",
           component: "group",
@@ -457,7 +746,7 @@ export default withPageCMS(IdentityPublicAdd, {
         },
         {
           name: "industry",
-          label: "行業/工作 Industry/Job ",
+          label: "從事行業 Industry",
           component: "group",
           fields: [
             {
@@ -490,6 +779,129 @@ export default withPageCMS(IdentityPublicAdd, {
               ],
             },
           ],
+        },
+        {
+          name: "industryOther",
+          label: "其他行業 Industry Other Label",
+          component: "text",
+        },
+        {
+          name: "jobFunction",
+          label: "從事業務 Job Function Label",
+          component: "text",
+        },
+        {
+          name: "isDisability",
+          label: "你是殘疾人士嗎 IsDisability Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "pwdType",
+          label: "請問哪種殘疾 Pwd Type",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "wishToDo",
+          label: "你希望在此平台上參與的活動 Wish To Do",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "wishToDoOther",
+          label: "其他，請說明 Wish To Do Other Label",
+          component: "text",
         },
         {
           name: "terms",

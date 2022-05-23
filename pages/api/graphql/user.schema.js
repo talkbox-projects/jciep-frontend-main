@@ -140,6 +140,11 @@ export default gql`
     published: Boolean
     email: String
     phone: String
+    age: EnumAge
+    jobFunction: String
+    isDisability: Boolean
+    wishToDo: EnumWishToDo
+    wishToDoOther: String
 
     profilePic: FileInput
     bannerMedia: FileMetaInput

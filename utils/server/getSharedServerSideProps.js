@@ -20,6 +20,7 @@ const getSharedServerSideProps = async (context) => {
       enums:
         (await getEnums({
           keys: [
+            "EnumAgeList",
             "EnumGenderList",
             "EnumDistrictList",
             "EnumIndustryList",

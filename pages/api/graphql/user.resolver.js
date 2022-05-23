@@ -543,6 +543,7 @@ export default {
         dob: input.dob,
         pwdType: input?.pwdType,
         gender: input?.gender,
+        age: input?.age,
         district: input?.district,
         interestedEmploymentMode: input?.interestedEmploymentMode,
         interestedIndustryOther: input?.interestedIndustryOther,
