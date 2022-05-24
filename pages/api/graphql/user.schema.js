@@ -131,6 +131,7 @@ export default gql`
     gender: EnumGender
     district: EnumDistrict
     pwdType: [EnumPwdType]
+    pwdOther: String
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
@@ -166,6 +167,8 @@ export default gql`
     activity: [ActivityInput]
 
     invitationCode: String
+
+    phase2profile: Boolean
   }
 
   input IdentityUpdateInput {
