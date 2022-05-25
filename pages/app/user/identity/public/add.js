@@ -150,12 +150,9 @@ const IdentityPublicAdd = ({ page }) => {
               px={"15px"}
             >
               <GridItem>
-                <FormControl>
+                <FormControl isRequired>
                   <FormLabel {...labelStyles}>
-                    {page?.content?.form?.chineseName}{" "}
-                    <Text as="span" color="red">
-                      *
-                    </Text>
+                    {page?.content?.form?.chineseName}
                   </FormLabel>
                   <Input
                     type="text"
