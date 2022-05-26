@@ -69,6 +69,11 @@ export default gql`
   input OrganizationSubmissionCreateInput {
     organizationType: EnumOrganizationType
     remark: String
+    centre: String
+    missionNVision: String
+    targetGroup: EnumTargetGroup
+    targetGroupDisabilities: EnumTargetGroupDisability
+    targetGroupDisabilitiesOther: String
     chineseCompanyName: String
     englishCompanyName: String
     website: String
@@ -86,6 +91,7 @@ export default gql`
     contactName: String
     contactPhone: String
     contactEmail: String
+    postalAddress: String
   }
 
   input OrganizationSubmissionUpdateInput {

@@ -15,8 +15,7 @@ import {
 } from "@chakra-ui/react";
 import {
   RiAddFill,
-  RiCloseCircleFill,
-
+  RiCloseCircleFill
 } from "react-icons/ri";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";

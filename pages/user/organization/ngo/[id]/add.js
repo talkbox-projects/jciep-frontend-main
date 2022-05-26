@@ -5,16 +5,18 @@ import {
   VStack,
   FormControl,
   Input,
-  SimpleGrid,
   GridItem,
   FormHelperText,
   FormLabel,
   Textarea,
   Grid,
   Checkbox,
-  Link
+  IconButton,
+  Image,
+  Link,
 } from "@chakra-ui/react";
-import React from "react";
+import { RiAddFill, RiCloseCircleFill } from "react-icons/ri";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import ReactSelect from "react-select";
@@ -54,6 +56,8 @@ export const getServerSideProps = async (context) => {
 
 const OrganizationNgoAdd = ({ page }) => {
   const router = useRouter();
+  const [files, setFiles] = useState([]);
+  const [fileError, setFileError] = useState(false);
   const { id } = router.query;
 
   const {
@@ -66,13 +70,71 @@ const OrganizationNgoAdd = ({ page }) => {
 
   const watchFields = watch(["targetGroupDisabilities"]);
 
+  const validate = () => {
+    if (files.length < 1) {
+      setFileError(true);
+      return true;
+    } else {
+      setFileError(false);
+      return false;
+    }
+  };
+
+  const onFileUpload = async (e) => {
+    let uploadedFiles = await e.target.files[0];
+    let previousFiles = files;
+    let newFiles = previousFiles.concat(uploadedFiles);
+    setFileError("");
+    setFiles(newFiles);
+  };
+
+  const onRemoveImage = async (index) => {
+    let previousFiles = files;
+
+    let newFiles = previousFiles.filter((file, i) => i !== index);
+    setFiles(newFiles);
+  };
+
   const onFormSubmit = async ({
     chineseOrganizationName,
     englishOrganizationName,
-    ngoWebsite,
-    ngoDescription,
+    website,
+    description,
+    centre,
+    missionNVision,
+    organizationType,
+    targetGroup,
+    targetGroupDisabilities,
+    targetGroupDisabilitiesOther,
+    contactName,
+    contactPhone,
+    contactEmail,
+    postalAddress,
+    tncAccept,
   }) => {
     try {
+      if (validate()) {
+        return;
+      }
+
+      const FileUploadmutation = gql`
+        mutation FileUpload($file: FileUpload!) {
+          FileUpload(files: $file) {
+            id
+            url
+            contentType
+            fileSize
+          }
+        }
+      `;
+
+      let filesUploadData = await getGraphQLClient().request(
+        FileUploadmutation,
+        {
+          file: files,
+        }
+      );
+
       const mutation = gql`
         mutation OrganizationSubmissionCreate(
           $input: OrganizationSubmissionCreateInput!
@@ -85,12 +147,26 @@ const OrganizationNgoAdd = ({ page }) => {
 
       let data = await getGraphQLClient().request(mutation, {
         input: {
-          organizationType: "ngo",
+          organizationType: organizationType.value,
           chineseCompanyName: chineseOrganizationName,
           englishCompanyName: englishOrganizationName,
-          website: ngoWebsite,
-          description: ngoDescription,
+          centre: centre,
+          website: website,
+          description: description,
+          missionNVision: missionNVision,
+          targetGroup: targetGroup?.value,
+          targetGroupDisabilities: targetGroupDisabilities?.value,
+          targetGroupDisabilitiesOther:
+            targetGroupDisabilities?.value === "other"
+              ? targetGroupDisabilitiesOther
+              : "",
+          contactName: contactName,
+          contactPhone: contactPhone,
+          contactEmail: contactEmail,
+          postalAddress: postalAddress,
+          tncAccept: tncAccept,
           identityId: id,
+          businessRegistration: filesUploadData.FileUpload,
         },
       });
 
@@ -103,6 +179,7 @@ const OrganizationNgoAdd = ({ page }) => {
       console.error(e);
     }
   };
+
   return (
     <VStack py={{ base: 36, md: 48 }}>
       <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
@@ -125,6 +202,110 @@ const OrganizationNgoAdd = ({ page }) => {
               py={10}
               gap={6}
             >
+              <GridItem colSpan={{ base: 2 }}>
+                <FormLabel>
+                {page?.content?.form?.businessRegistration?.label}
+                </FormLabel>
+                <FormControl marginTop="20px !important">
+                  <Box width="100%">
+                    <Box
+                      w={["100%"]}
+                      h={["250px", "210px", "180px"]}
+                      display="inline-block"
+                      border={'#EFEFEF 1px solid'}
+                      marginRight="10px"
+                      marginBottom="10px"
+                      borderRadius="15px"
+                    >
+                      <FormLabel height="100%" width="100%" cursor="pointer">
+                        <Input
+                          type="file"
+                          multiple={true}
+                          display="none"
+                          onChange={onFileUpload}
+                          onClick={(event) =>
+                            (event.currentTarget.value = null)
+                          }
+                        />
+                        <Text
+                          height="100%"
+                          display="flex"
+                          justifyContent="center"
+                          flexDirection="column"
+                        >
+                          <Text
+                            as="span"
+                            textAlign="center"
+                            fontSize="30px"
+                            display="block"
+                          >
+                            <IconButton
+                              zIndex="-1"
+                              fontSize="4xl"
+                              icon={<RiAddFill />}
+                              variant="link"
+                            />
+                          </Text>
+                          <Text as="span" textAlign="center" display="block" fontWeight={400} fontSize={'12px'} color="gray.500">
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "business_registration_content"
+                            )}
+                          </Text>
+                        </Text>
+                      </FormLabel>
+                    </Box>
+
+                    {files.map((file, index) => {
+                      let url = URL.createObjectURL(file);
+                      return (
+                        <Box
+                          key={url + index}
+                          w={["100%", "47.5%", "23.5%"]}
+                          h={["250px", "210px", "180px"]}
+                          display="inline-block"
+                          verticalAlign="top"
+                          marginRight="10px"
+                          marginBottom="10px"
+                        >
+                          <Text as="span" key={index} position="relative">
+                            <Image
+                              alt=""
+                              height="100%"
+                              display="inline-block"
+                              border="1px solid lightgrey"
+                              objectFit="cover"
+                              src={url}
+                            ></Image>
+                            <IconButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onRemoveImage(index);
+                              }}
+                              marginLeft="-40px"
+                              marginTop="10px"
+                              fontSize="25px"
+                              position="absolute"
+                              color="gray.300"
+                              icon={<RiCloseCircleFill />}
+                              variant="link"
+                            />
+                          </Text>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                  {fileError ? (
+                    <FormHelperText color="red">
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "business_registration_required"
+                      )}
+                    </FormHelperText>
+                  ) : null}
+                </FormControl>
+              </GridItem>
+
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl isRequired>
                   <FormLabel>
@@ -487,7 +668,29 @@ const OrganizationNgoAdd = ({ page }) => {
                 </FormControl>
               </GridItem>
 
-
+              <GridItem colSpan={{ base: 2, md: 1 }}>
+                <FormControl isRequired>
+                  <FormLabel>{page?.content?.form?.website}</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "website_placeholder"
+                    )}
+                    {...register("website", { required: true })}
+                  />
+                  <FormHelperText>
+                    {errors?.website?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "website_required"
+                        )}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
             </Grid>
 
             <FormControl marginTop="20px !important">
@@ -500,7 +703,10 @@ const OrganizationNgoAdd = ({ page }) => {
                 {...register("tncAccept", { required: true })}
               >
                 {page?.content?.form?.tncAccept?.text}{" "}
-                <Link target="_blank" href={page?.content?.form?.tncAccept?.url}>
+                <Link
+                  target="_blank"
+                  href={page?.content?.form?.tncAccept?.url}
+                >
                   {" "}
                   {page?.content?.form?.tncAccept?.link}{" "}
                 </Link>
@@ -508,125 +714,14 @@ const OrganizationNgoAdd = ({ page }) => {
               <FormHelperText>
                 {errors?.tncAccept?.type === "required" && (
                   <Text color="red">
-                    {wordExtractor(page?.content?.wordings, "tnc_accept_required")}
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_accept_required"
+                    )}
                   </Text>
                 )}
               </FormHelperText>
             </FormControl>
-
-            {/* <SimpleGrid columns={[1, 2, 2, 2]} spacing={4} width="100%">
-              <GridItem>
-                <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.chineseOrganizationName}{" "}
-                    <Text as="span" color="red">
-                      *
-                    </Text>
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "chinese_organization_name_placeholder"
-                    )}
-                    {...register("chineseOrganizationName", {
-                      required: true,
-                    })}
-                  />
-                  <FormHelperText>
-                    {errors?.chineseOrganizationName?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "chinese_organization_name_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-              <GridItem>
-                <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.englishOrganizationName}{" "}
-                    <Text as="span" color="red">
-                      *
-                    </Text>
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "english_organization_name_placeholder"
-                    )}
-                    {...register("englishOrganizationName", {
-                      required: true,
-                    })}
-                  />
-                  <FormHelperText>
-                    {errors?.englishOrganizationName?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "english_organization_name_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl>
-                  <FormLabel>{page?.content?.form?.ngoWebsite}</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "ngo_website_placeholder"
-                    )}
-                    {...register("ngoWebsite")}
-                  />
-                  <FormHelperText></FormHelperText>
-                </FormControl>
-              </GridItem>
-            </SimpleGrid> */}
-
-            {/* <FormControl marginTop="20px !important">
-              <FormLabel>{page?.content?.form?.ngoDescription}</FormLabel>
-              <Textarea
-                placeholder={wordExtractor(
-                  page?.content?.wordings,
-                  "ngo_description_placeholder"
-                )}
-                {...register("ngoDescription")}
-              ></Textarea>
-              <FormHelperText></FormHelperText>
-            </FormControl> */}
-
-            {/* <FormControl marginTop="20px !important">
-              <Checkbox
-                colorScheme="green"
-                {...register("terms", {
-                  required: true,
-                })}
-              >
-                {page?.content?.form?.terms?.text}
-                <a target="_blank" href={page?.content?.form?.terms?.url}>
-                  {page?.content?.form?.terms?.link}
-                </a>
-              </Checkbox>
-              <FormHelperText>
-                {errors?.terms?.type === "required" && (
-                  <Text color="red">
-                    {wordExtractor(
-                      page?.content?.wordings,
-                      "tnc_required"
-                    )}
-                  </Text>
-                )}
-              </FormHelperText>
-            </FormControl> */}
 
             <FormControl textAlign="center">
               <Button
@@ -855,6 +950,23 @@ export default withPageCMS(OrganizationNgoAdd, {
               label: "關聯 Url",
               component: "text",
               placeholder: "https://",
+            },
+          ],
+        },
+        {
+          name: "businessRegistration",
+          label: "機構商標 Business Registration ",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "Text",
+              label: "文本 Text",
+              component: "text",
             },
           ],
         },
