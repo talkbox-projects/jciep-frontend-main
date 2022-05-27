@@ -1,9 +1,18 @@
-import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Image,
+  Heading,
+  Text,
+  VStack,
+  Grid,
+  GridItem,
+} from "@chakra-ui/react";
 import Link from "next/link";
-import { getPage } from "../../../../../utils/page/getPage";
-import withPageCMS from "../../../../../utils/page/withPageCMS";
-import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
-import { useCredential } from "../../../../../utils/user";
+import { getPage } from "../../../../../../utils/page/getPage";
+import withPageCMS from "../../../../../../utils/page/withPageCMS";
+import getSharedServerSideProps from "../../../../../../utils/server/getSharedServerSideProps";
+import { useCredential } from "../../../../../../utils/user";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -31,55 +40,73 @@ const IdentityPublicAddSuccess = ({ page }) => {
   };
 
   return (
-    <VStack py={{ base: 36, md: 48 }}>
-      <Box justifyContent="center" width="100%">
-        <Box
-          maxWidth={470}
-          width="100%"
-          textAlign="center"
-          margin="auto"
-          padding="0px 25px"
-          mt={10}
-        >
-          <Heading
-            textAlign="center"
-            fontSize="36px"
-            letterSpacing="1.5px"
-            fontWeight={600}
-          >
-            {page?.content?.heading?.title}
-          </Heading>
+    <Box pt={{ base: '64px' }}>
+      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
+        <GridItem>
+            <Image src={'/images/app/close.svg'} alt={''}/>
+        </GridItem>
+        <GridItem textAlign="center">
+          <Text fontWeight={700}>{page?.content?.heading?.title}</Text>
+        </GridItem>
+      </Grid>
 
-          <Image
-            alt=""
-            height="150px"
-            width="150px"
-            marginTop="50px !important"
-            margin="auto"
-            src={page?.content?.publicSuccess?.image}
-          />
+      <Box>
+        <Box justifyContent="center" width="100%">
+          <Box width="100%" textAlign="center" margin="auto">
+            <Box backgroundColor="#F6D644" position={"relative"} h={"100px"} />
+            <Image
+              src={"/images/app/border.svg"}
+              w={'100%'}
+              alt={""}
+              pos={"relative"}
+              zIndex={1}
+            />
+            <Image
+              alt=""
+              height="150px"
+              width="150px"
+              margin="auto"
+              src={page?.content?.publicSuccess?.image}
+              position={"relative"}
+              zIndex={2}
+              marginTop={"-100px"}
+            />
 
-          <Text marginTop="30px" fontWeight={700} dangerouslySetInnerHTML={{__html: page?.content?.publicSuccess?.content}}/>
+            <Text
+              marginTop="30px"
+              fontWeight={700}
+              dangerouslySetInnerHTML={{
+                __html: page?.content?.publicSuccess?.content,
+              }}
+            />
 
-          <Box width="100%" textAlign="center" marginBottom="120px">
-            <Link href="/">
-              <Button
-                color="#1E1E1E"
-                boxSizing="border-box"
-                height="46px"
-                width="114px"
-                border="2px solid #C6C6C6"
-                marginTop="30px !important"
-                borderRadius="50px"
-                bgColor="primary.400"
-              >
-                {page?.content?.publicSuccess?.button}
-              </Button>
-            </Link>
-          </Box>
-          <br />
-
-          {/* <Text marginTop="10px" textAlign="center">
+            <Box bgColor="#FFF">
+              <Box
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
+                  marginTop: "60px",
+                }}
+                h={"16px"}
+                w={"100%"}
+                opacity={0.2}
+              />
+              <Box px={"15px"} py={"12px"} w="100%">
+                <Box width="100%" textAlign="center">
+                  <Link href="/">
+                    <Button
+                      backgroundColor="#F6D644"
+                      borderRadius="22px"
+                      height="44px"
+                      width="100%"
+                    >
+                      {page?.content?.publicSuccess?.button}
+                    </Button>
+                  </Link>
+                </Box>
+              </Box>
+            </Box>
+            {/* <Text marginTop="10px" textAlign="center">
             <Text as="span">
               {page?.content?.footer?.drop?.text}
               <Text as="span" cursor="pointer" onClick={logout}>
@@ -87,9 +114,10 @@ const IdentityPublicAddSuccess = ({ page }) => {
               </Text>
             </Text>
           </Text> */}
+          </Box>
         </Box>
       </Box>
-    </VStack>
+    </Box>
   );
 };
 

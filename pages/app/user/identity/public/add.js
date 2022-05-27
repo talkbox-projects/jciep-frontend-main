@@ -136,7 +136,18 @@ const IdentityPublicAdd = ({ page }) => {
   };
 
   return (
-    <Box py={{ base: 24 }}>
+    <Box pt={{ base: '64px' }}>
+      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} borderBottom="1px solid #EFEFEF" mb={'40px'}>
+        <GridItem>
+            <Image src={'/images/app/back.svg'} alt={''}/>
+        </GridItem>
+        <GridItem textAlign="center">
+          <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+          <Text color="gray.500" fontSize={'12px'}>{page?.content?.step?.subTitle}</Text>
+        </GridItem>
+      </Grid>
+
+
       <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
         {page?.content?.step?.title}
       </Text>
