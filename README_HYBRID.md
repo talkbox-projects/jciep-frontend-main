@@ -1,4 +1,4 @@
-# JCIEP Hybrid WebView protocol (Flutter)
+# JCIEP Hybrid WebView protocol (Flutter) 1.0.0
 
 ### Start
 * Flutter plugin: webview_flutter
@@ -140,9 +140,10 @@ var json = {
     name: "sendLoginSuccessResponse",
     options: {
         callback: "sendLoginSuccessResponseHandler"
-		token: "jciep-token",
-		identityId: "xxxxxxxx"
-	}
+        params: {
+	    token: "jciep-token",
+	    identityId: "xxxxxxxx"
+        }
 };
 
 AppContext.postMessage(json);
@@ -367,4 +368,39 @@ var json = {
 };
 
 AppContext.postMessage(json);
+```
+
+
+## getVersion
+
+get current Hybrid WebView protocol version.
+
+### paramters
+- callback: String (callbackHandler)
+- version: String
+
+```javascript
+var json = {
+	name: "getVersion",
+	options: {
+		callback: "getVersionHandler",
+	}
+};
+
+AppContext.postMessage(json);
+```
+
+### response format
+
+- version: String
+
+```javascript
+var response = {
+	name: "getVersion",
+	errorCode: 0,
+	options: {},
+	result: {
+		version: "1.0.0",
+	},
+};
 ```
