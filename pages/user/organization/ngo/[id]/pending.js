@@ -34,21 +34,28 @@ const OrganizationNgoPending = ({ page }) => {
   };
 
   return (
-    <VStack py={36}>
-      <Text>{page?.content?.step?.title}</Text>
-      <Box justifyContent="center" width="100%">
+    <VStack py={{ base: 36, md: 48 }}>
+
+<Box justifyContent="center" width="100%">
         <Box
           maxWidth={470}
           width="100%"
           textAlign="center"
           margin="auto"
           padding="0px 25px"
+          mt={10}
         >
-          <Heading as="span" textAlign="center">
+          <Heading
+            textAlign="center"
+            fontSize="36px"
+            letterSpacing="1.5px"
+            fontWeight={600}
+          >
             {page?.content?.heading?.title}
           </Heading>
 
-          <Image alt=""
+          <Image
+            alt=""
             height="150px"
             width="150px"
             marginTop="50px !important"
@@ -56,7 +63,7 @@ const OrganizationNgoPending = ({ page }) => {
             src={page?.content?.ngoSuccess?.image}
           />
 
-          <Text marginTop="30px">{page?.content?.ngoSuccess?.description}</Text>
+          <Text marginTop="30px" fontWeight={700} dangerouslySetInnerHTML={{__html: page?.content?.ngoSuccess?.content}}/>
 
           <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
@@ -74,15 +81,7 @@ const OrganizationNgoPending = ({ page }) => {
               </Button>
             </Link>
           </Box>
-
-          <Text marginTop="10px" textAlign="center">
-            <Text as="span">
-              {page?.content?.footer?.drop?.text}
-              <Text as="span" cursor="pointer" onClick={logout}>
-                {page?.content?.footer?.drop?.button}
-              </Text>
-            </Text>
-          </Text>
+          <br />
         </Box>
       </Box>
     </VStack>

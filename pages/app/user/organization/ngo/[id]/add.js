@@ -40,6 +40,10 @@ import {
       return { ...provided, color };
     },
   };
+
+  const labelStyles = {
+    marginBottom: "0px",
+  };
   
   export const getServerSideProps = async (context) => {
     const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -181,32 +185,54 @@ import {
     };
   
     return (
-      <VStack py={{ base: 36, md: 48 }}>
-        <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
+      <Box pt={{ base: "64px" }}>
+      <Grid
+          templateColumns="repeat(3, 1fr)"
+          width="100%"
+          px={"20px"}
+          alignItems="center"
+          h={"48px"}
+          borderBottom="1px solid #EFEFEF"
+          mb={"40px"}
+        >
+          <GridItem>
+            <Image src={"/images/app/back.svg"} alt={""} />
+          </GridItem>
+          <GridItem textAlign="center">
+            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+            <Text color="gray.500" fontSize={"12px"}>
+              {page?.content?.step?.subTitle}
+            </Text>
+          </GridItem>
+        </Grid>
+        <Text
+          fontSize="24px"
+          letterSpacing="1.5px"
+          fontWeight={600}
+          px={"15px"}
+        >
           {page?.content?.step?.title}
         </Text>
-        <Text fontSize="16px">{page?.content?.step?.subTitle}</Text>
   
-        <Box justifyContent="center" width="100%" marginTop="30px !important">
+        <Box justifyContent="center" width="100%">
           <Box
-            maxWidth={800}
+            maxWidth={"md"}
             width="100%"
             textAlign="left"
             margin="auto"
-            padding="0px 25px"
           >
-            <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
+            <VStack py={{ base: 12 }} as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns={"repeat(2, 1fr)"}
                 width="100%"
-                py={10}
                 gap={6}
+                px="15px"
               >
                 <GridItem colSpan={{ base: 2 }}>
                   <FormLabel>
                   {page?.content?.form?.businessRegistration?.label}
                   </FormLabel>
-                  <FormControl marginTop="20px !important">
+                  <FormControl>
                     <Box width="100%">
                       <Box
                         w={["100%"]}
@@ -693,7 +719,7 @@ import {
                 </GridItem>
               </Grid>
   
-              <FormControl marginTop="20px !important">
+              <FormControl marginTop="20px !important" px="15px">
                 <Checkbox
                   aria-describedby={wordExtractor(
                     page?.content?.wordings,
@@ -722,8 +748,33 @@ import {
                   )}
                 </FormHelperText>
               </FormControl>
+
+              <Box
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
+                  marginTop: "60px",
+                }}
+                h={"16px"}
+                w={"100%"}
+                opacity={0.2}
+              />
+              <Box px={"15px"} py={"12px"} w="100%">
+                <FormControl textAlign="center">
+                  <Button
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="100%"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
+                    {page?.content?.form?.continue}
+                  </Button>
+                </FormControl>
+              </Box>
   
-              <FormControl textAlign="center">
+              {/* <FormControl textAlign="center">
                 <Button
                   backgroundColor="#F6D644"
                   borderRadius="22px"
@@ -734,11 +785,11 @@ import {
                 >
                   {page?.content?.form?.continue}
                 </Button>
-              </FormControl>
+              </FormControl> */}
             </VStack>
           </Box>
         </Box>
-      </VStack>
+      </Box>
     );
   };
   

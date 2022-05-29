@@ -16,7 +16,7 @@ import {
   Center,
   Stack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../../../utils/page/getPage";
@@ -28,6 +28,10 @@ import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../utils/general";
+import organizationSearch from "../../../../../utils/api/OrganizationSearch";
+import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
+import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
+
 
 const PAGE_KEY = "identity_public_add";
 
@@ -40,6 +44,13 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true,
+          type: ["ngo"],
+        }),
+      },
     },
   };
 };
@@ -57,9 +68,13 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page }) => {
+const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const { user } = useAppContext();
+  const [formState, setFormState] = useState();
+  const [step, setStep] = useState("step1");
+  const [showSelectCentre, setShowSelectCentre] = useState(false);
+  const [selectedOrganization, setOrganization] = useState(null);
   const {
     handleSubmit,
     register,
@@ -67,12 +82,78 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
     watch,
     setValue,
+    setError,
+    getValues
   } = useForm();
 
   const watchFields = watch(
-    ["industry", "is_disability", "pwd_type", "wish_to_do"],
+    ["industry", "is_disability", "pwd_type", "wish_to_do", "selectOrganization"],
     { pwd_type: [] }
   );
+
+  const handlePostData = async (input, invitationCode) => {
+    try {
+      const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
+          }
+        }
+      `;
+      let data = await getGraphQLClient().request(mutation, {
+        input,
+      });
+      if (data && data.IdentityCreate) {
+        router.push(`/app/user/identity/public/${data.IdentityCreate.id}/success`);
+        if(invitationCode){
+          await OrganizationMemberJoin({
+            invitationCode: invitationCode,
+            identityId: data.IdentityCreate.id,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSubmitInvitation = async (formState) => {
+    setError("invitationCode", {})
+    const isValid = await OrganizationInvitationCodeValidity({
+      invitationCode: getValues("invitationCode"),
+      organizationType: "ngo",
+    });
+
+    if(!isValid) {
+      setError("invitationCode", {message: wordExtractor(
+        page?.content?.wordings,
+        "invitation_code_error_message"
+      )})
+      return;
+    }
+
+    handlePostData(formState, getValues("invitationCode"))
+  };
+
+  const startCreateOrganization = async (input) => {
+    try {
+      const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
+          }
+        }
+      `;
+      let data = await getGraphQLClient().request(mutation, {
+        input,
+      });
+      if (data && data.IdentityCreate) {
+        router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const onFormSubmit = async ({
     chinese_name,
@@ -116,680 +197,876 @@ const IdentityPublicAdd = ({ page }) => {
       }).filter(([v]) => v != null)
     );
 
-    try {
-      const mutation = gql`
-        mutation IdentityCreate($input: IdentityCreateInput!) {
-          IdentityCreate(input: $input) {
-            id
-          }
-        }
-      `;
-      let data = await getGraphQLClient().request(mutation, {
-        input,
-      });
-      if (data && data.IdentityCreate) {
-        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    setFormState(input);
+    setStep("step2");
   };
 
-  return (
-    <Box pt={{ base: '64px' }}>
-      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} borderBottom="1px solid #EFEFEF" mb={'40px'}>
-        <GridItem>
-            <Image src={'/images/app/back.svg'} alt={''}/>
-        </GridItem>
-        <GridItem textAlign="center">
-          <Text fontWeight={700}>{page?.content?.step?.title}</Text>
-          <Text color="gray.500" fontSize={'12px'}>{page?.content?.step?.subTitle}</Text>
-        </GridItem>
-      </Grid>
+  useEffect(()=>{
+    var json = {
+      name: "getRegistrationInfo",
+      options: {
+          callback: "getRegistrationInfoHandler"
+      }
+  };
+  // window.AppContext.postMessage(json);
+  },[])
+
+  if (step === "step2") {
+    return (
+      <Box pt={{ base: "64px" }}>
+       <Grid
+          templateColumns="repeat(3, 1fr)"
+          width="100%"
+          px={"20px"}
+          alignItems="center"
+          h={"48px"}
+          borderBottom="1px solid #EFEFEF"
+          mb={"40px"}
+        >
+          <GridItem>
+            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>router.push(`/`)} />
+          </GridItem>
+          <GridItem textAlign="center">
+            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+            <Text color="gray.500" fontSize={"12px"}>
+              {page?.content?.step?.step2SubTitle}
+            </Text>
+          </GridItem>
+        </Grid>
+        <Text
+          fontSize="24px"
+          letterSpacing="1.5px"
+          fontWeight={600}
+          px={"15px"}
+        >
+          {page?.content?.step?.step2Title}
+        </Text>
 
 
-      <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
-        {page?.content?.step?.title}
-      </Text>
-      <Box justifyContent="center" width="100%">
-        <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
-          <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
-            <Grid
-              templateColumns="repeat(1, 1fr)"
-              gap={"60px"}
-              width="100%"
-              px={"15px"}
-            >
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.chineseName}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    variant="flushed"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "chinese_name_placeholder"
-                    )}
-                    {...register("chinese_name", { required: true })}
-                  />
-                  <FormHelperText>
-                    {errors?.chinese_name?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "chinese_name_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.englishName}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    variant="flushed"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "english_name_placeholder"
-                    )}
-                    {...register("english_name", { required: true })}
-                  />
-                  <FormHelperText>
-                    {errors?.english_name?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "english_name_required"
-                        )}{" "}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.age?.label}
-                  </FormLabel>
-                  <Controller
-                    name="age"
-                    isClearable
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <ReactSelect
-                        aria-label={page?.content?.form?.age?.label}
-                        {...field}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "age_placeholder"
-                        )}
-                        options={page?.content?.form?.age?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
-                        styles={customStyles}
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                      />
-                    )}
-                  />
-                  <FormHelperText>
-                    {errors?.age?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(page?.content?.wordings, "age_required")}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.gender?.label}
-                  </FormLabel>
-                  <Controller
-                    name="gender"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <ReactSelect
-                        aria-label={page?.content?.form?.gender?.label}
-                        {...field}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "gender_placeholder"
-                        )}
-                        options={page?.content?.form?.gender?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
-                        styles={customStyles}
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                      />
-                    )}
-                  />
-                  <FormHelperText>
-                    {errors?.gender?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "gender_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.residentRestrict?.label}
-                  </FormLabel>
-                  <Controller
-                    name="resident_district"
-                    isClearable
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <ReactSelect
-                        aria-label={
-                          page?.content?.form?.residentRestrict?.label
+        <Box justifyContent="center" width="100%">
+          <Box
+            maxWidth={"md"}
+            width="100%"
+            textAlign="left"
+            margin="auto"
+            padding="0px 15px"
+          >
+            <VStack py={{ base: 12 }}>
+              <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
+                <GridItem colSpan={{ base: 2 }}>
+                  <FormControl>
+                    <Flex gap={2}>
+                      <Button
+                        flex={1}
+                        backgroundColor={
+                          showSelectCentre ? "#F6D644" : "transparent"
                         }
-                        {...field}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "resident_district_placeholder"
-                        )}
-                        options={page?.content?.form?.residentRestrict?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
-                        styles={customStyles}
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                      />
-                    )}
-                  />
-                  <FormHelperText>
-                    {errors?.resident_district?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "resident_restrict_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.phone}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    variant="flushed"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "phone_placeholder"
-                    )}
-                    {...register("phone", { required: true })}
-                  />
-                  <FormHelperText>
-                    {errors?.phone?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "phone_required"
-                        )}{" "}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.email}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    variant="flushed"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "email_placeholder"
-                    )}
-                    {...register("email", {
-                      required: true,
-                      pattern: {
-                        value: emailRegex,
-                        message: wordExtractor(
-                          page?.content?.wordings,
-                          "email_invalid_format"
-                        ),
-                      },
-                    })}
-                  />
-                  <FormHelperText>
-                    {errors?.email?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "email_required"
-                        )}{" "}
-                      </Text>
-                    )}
-                    <Text color="red">{errors?.email?.message}</Text>
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.industry?.label}
-                  </FormLabel>
-                  <Controller
-                    name="industry"
-                    isClearable
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <ReactSelect
-                        aria-label={page?.content?.form?.industry?.label}
-                        {...field}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "industry_placeholder"
-                        )}
-                        options={page?.content?.form?.industry?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
-                        styles={customStyles}
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                      />
-                    )}
-                  />
-                  <FormHelperText>
-                    {errors?.industry?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "industry_required"
-                        )}
-                      </Text>
-                    )}{" "}
-                  </FormHelperText>
-                </FormControl>
-                {watchFields[0]?.value === "other" && (
-                  <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
-                    <FormControl isRequired>
-                      <FormLabel {...labelStyles}>
-                        {page?.content?.form?.industryOther}
-                      </FormLabel>
-                      <Input
-                        type="text"
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "industry_other_placeholder"
-                        )}
-                        {...register("industry_other", { required: true })}
-                        variant="flushed"
-                      />
-                      <FormHelperText>
-                        {errors?.industry_other?.type === "required" && (
-                          <Text color="red">
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "industry_other_required"
-                            )}
-                          </Text>
-                        )}
-                      </FormHelperText>
-                    </FormControl>
-                  </Box>
-                )}
-              </GridItem>
-
-              <GridItem>
-                <FormControl>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.jobFunction}{" "}
-                  </FormLabel>
-                  <Input
-                    type="text"
-                    placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "job_function_placeholder"
-                    )}
-                    {...register("job_function")}
-                    variant="flushed"
-                  />
-                </FormControl>
-              </GridItem>
-            </Grid>
-
-            <Box
-              bgColor="#F3F3F3"
-              h={"8px"}
-              w={"100%"}
-              style={{ margin: "60px 0" }}
-            />
-
-            <Grid
-              templateColumns="repeat(1, 1fr)"
-              gap={"60px"}
-              width="100%"
-              px={"15px"}
-            >
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel
-                    fontSize="24px"
-                    letterSpacing="1.5px"
-                    marginBottom={"20px"}
-                    fontWeight={600}
-                  >
-                    {page?.content?.form?.isDisability?.label}
-                  </FormLabel>
-                  <Flex gap={2}>
-                    {page?.content?.form?.isDisability?.options.map((d) => {
-                      const isActive = d.value === watchFields[1];
-                      return (
-                        <Button
-                          flex={1}
-                          key={d.label}
-                          backgroundColor={isActive ? "#F6D644" : "transparent"}
-                          border={`2px solid ${
-                            isActive ? "#FFFFFF" : "#999999"
-                          }`}
-                          height="38px"
-                          width="117px"
-                          onClick={() => {
-                            setValue("is_disability", d.value);
-                            setValue("pwd_type", []);
-                          }}
-                        >
-                          {d.label}
-                        </Button>
-                      );
-                    })}
-                  </Flex>
-                  <FormHelperText>
-                    {errors?.is_disability?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "is_disability_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-
-              {watchFields[1] === "true" && (
-                <GridItem>
-                  <Box pt={2}>
-                    <FormControl>
-                      <FormLabel
-                        fontSize="24px"
-                        letterSpacing="1.5px"
-                        marginBottom={"20px"}
-                        fontWeight={600}
+                        border={`2px solid ${
+                          showSelectCentre ? "#FFFFFF" : "#999999"
+                        }`}
+                        height="38px"
+                        width="117px"
+                        onClick={() => setShowSelectCentre(true)}
                       >
-                        {page?.content?.form?.pwdType?.label}
-                      </FormLabel>
+                        {
+                          page?.content?.form?.createOrganization?.options[0]
+                            ?.label
+                        }
+                      </Button>
 
-                      <Controller
-                        control={control}
-                        name="pwd_type"
-                        rules={{ required: true }}
-                        defaultValue={[]}
-                        render={({ field: { value, name } }) => (
-                          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                            {page?.content?.form?.pwdType?.options.map(
-                              (d, i) => {
-                                const BG_COLORS = [
-                                  "#FFDA94",
-                                  "#FEB534",
-                                  "#97CB8D",
-                                  "#F6D644",
-                                  "#FEB534",
-                                  "#FFDA94",
-                                  "#00BFBA",
-                                  "#97CB8D",
-                                  "#F6D644",
-                                  "#00BFBA",
-                                  "#FFDA94",
-                                ];
-                                return (
-                                  <Box
-                                    key={d.label}
-                                    height="130px"
-                                    borderRadius={"10px"}
-                                    border={"1px solid #EFEFEF"}
-                                    bgColor={
-                                      value.includes(d.value)
-                                        ? "#F6D644"
-                                        : "#FFFFFF"
-                                    }
-                                    cursor="pointer"
-                                    onClick={() => {
-                                      value.includes(d.value)
-                                        ? setValue(
-                                            name,
-                                            value.filter((i) => i !== d.value)
-                                          )
-                                        : setValue(name, [...value, d.value]);
-                                      if (d.value === "other") {
-                                        setValue("pwd_other", "");
-                                      }
-                                    }}
-                                  >
-                                    <Center h={"100%"}>
-                                      <Stack direction={"column"} spacing={4}>
-                                        <Box
-                                          textAlign="center"
-                                          bgColor={
-                                            value.includes(d.value)
-                                              ? "#FFF"
-                                              : BG_COLORS[i]
-                                          }
-                                          borderRadius={"50%"}
-                                          w={"48px"}
-                                          h={"48px"}
-                                          mx={"auto"}
-                                        >
-                                          <Center h={"100%"}>
-                                            <Image
-                                              src={`/images/app/${d.value}.svg`}
-                                              d={"inline-block"}
-                                            />
-                                          </Center>
-                                        </Box>
-                                        <Text textAlign="center">
-                                          {d.label}
-                                        </Text>
-                                      </Stack>
-                                    </Center>
-                                  </Box>
-                                );
-                              }
-                            )}
-                          </Grid>
-                        )}
-                      />
-
-                      <FormHelperText>
-                        {errors?.pwd_type?.type === "required" && (
-                          <Text color="red">
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "pwd_type_required"
-                            )}
-                          </Text>
-                        )}
-                      </FormHelperText>
-                    </FormControl>
-                  </Box>
+                      <Button
+                        flex={1}
+                        backgroundColor={"transparent"}
+                        border={`2px solid #999999`}
+                        height="38px"
+                        width="117px"
+                        onClick={() => handlePostData(formState)}
+                      >
+                        {
+                          page?.content?.form?.createOrganization?.options[1]
+                            ?.label
+                        }
+                      </Button>
+                    </Flex>
+                  </FormControl>
                 </GridItem>
-              )}
 
-              {watchFields[2] !== undefined &&
-                watchFields[2]?.includes("other") && (
-                  <GridItem>
-                    <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {page?.content?.form?.pwdOther}{" "}
-                      </FormLabel>
-                      <Input
-                        type="text"
-                        variant="flushed"
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "pwd_other_placeholder"
-                        )}
-                        {...register("pwd_other", {
-                          required: true,
-                          defaultValue: "",
-                        })}
-                      />
-                    </FormControl>
-                  </GridItem>
-                )}
-
-              <GridItem>
-                <FormControl isRequired>
-                  <FormLabel {...labelStyles}>
-                    {page?.content?.form?.wishToDo?.label}
-                  </FormLabel>
-                  <Controller
-                    name="wish_to_do"
-                    isClearable
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <ReactSelect
-                        aria-label={page?.content?.form?.wishToDo?.label}
-                        {...field}
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "wish_to_do_placeholder"
-                        )}
-                        options={page?.content?.form?.wishToDo?.options.map(
-                          ({ label, value }) => ({ label, value })
-                        )}
-                        styles={customStyles}
-                        components={{
-                          IndicatorSeparator: () => null,
-                        }}
-                      />
-                    )}
-                  />
-                  <FormHelperText>
-                    {errors?.wish_to_do?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "wish_to_do_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
-                </FormControl>
-
-                {watchFields[3]?.value === "other" && (
-                  <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
-                    <FormControl isRequired>
-                      <FormLabel {...labelStyles}>
-                        {page?.content?.form?.wishToDoOther}
-                      </FormLabel>
-                      <Input
-                        type="text"
-                        placeholder={wordExtractor(
-                          page?.content?.wordings,
-                          "wish_to_do_other_placeholder"
-                        )}
-                        {...register("wish_to_do_other", { required: true })}
-                        variant="flushed"
-                      />
-                      <FormHelperText>
-                        {errors?.wish_to_do_other?.type === "required" && (
-                          <Text color="red">
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "wish_to_do_other_required"
+                {showSelectCentre && <GridItem colSpan={{ base: 2 }} pt={6}>
+                  <FormControl>
+                    <FormLabel>
+                      {page?.content?.form?.selectOrganization?.label}
+                    </FormLabel>
+                    <Controller
+                      name="selectOrganization"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={
+                            page?.content?.form?.selectOrganization?.label
+                          }
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "select_organization_placeholder"
+                          )}
+                          options={(organizations ?? []).map(
+                              ({ chineseCompanyName, id }) => ({
+                                label: chineseCompanyName,
+                                value: id,
+                              })
                             )}
-                          </Text>
-                        )}
-                      </FormHelperText>
+                          onChange={(data) => {
+                              const organization = organizations.find(
+                                (d) => d.id === data.value
+                              );
+                              setOrganization(organization);
+                            }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {
+                        page?.content?.form?.selectOrganizationContent
+                          ?.content01
+                      }
+                      <br />
+                      {
+                        page?.content?.form?.selectOrganizationContent
+                          ?.content02
+                      }
+                      <Text
+                        as="span"
+                        color="#017878"
+                        cursor="pointer"
+                        onClick={() => startCreateOrganization(formState)}
+                      >
+                        {page?.content?.form?.selectOrganizationContent?.link}
+                      </Text>
+                      !
+                    </FormHelperText>
+                  </FormControl>
+                  {selectedOrganization && <Box mt={8} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+                    <FormControl>
+                      <FormLabel>
+                        {page?.content?.form?.invitationCode}
+                      </FormLabel>
+                      <Input
+                        type="text"
+                        {...register("invitationCode")}
+                        variant="flushed"
+                      />
                     </FormControl>
-                  </Box>
-                )}
-              </GridItem>
-            </Grid>
-            <Box px={"15px"} w={"100%"}>
-              <FormControl marginTop="20px !important">
-                <Checkbox
-                  aria-describedby={wordExtractor(
-                    page?.content?.wordings,
-                    "tnc_required"
-                  )}
-                  colorScheme="green"
-                  {...register("terms", { required: true })}
-                >
-                  {page?.content?.form?.terms?.text}{" "}
-                  <Link target="_blank" href={page?.content?.form?.terms?.url}>
-                    {" "}
-                    {page?.content?.form?.terms?.link}{" "}
-                  </Link>
-                </Checkbox>
-                <FormHelperText>
-                  {errors?.terms?.type === "required" && (
-                    <Text color="red">
-                      {wordExtractor(page?.content?.wordings, "tnc_required")}
-                    </Text>
-                  )}
-                </FormHelperText>
-              </FormControl>
-            </Box>
-            <Box style={{background: "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)", marginTop: "60px"}} h={'16px'} w={'100%'} opacity={0.2}/>
-            <Box px={"15px"} py={"12px"} w="100%">
-              <FormControl textAlign="center">
+                  </Box>}
+                </GridItem>}
+              </Grid>
+              {selectedOrganization && <FormControl textAlign="center">
                 <Button
                   backgroundColor="#F6D644"
                   borderRadius="22px"
                   height="44px"
-                  width="100%"
-                  type="submit"
-                  isLoading={isSubmitting}
+                  width="117.93px"
+                  onClick={() => handleSubmitInvitation(formState)}
                 >
                   {page?.content?.form?.continue}
                 </Button>
-              </FormControl>
-            </Box>
-          </VStack>
+              </FormControl>}
+            </VStack>
+          </Box>
         </Box>
       </Box>
-    </Box>
-  );
+    );
+  }
+
+  if (step === "step1") {
+    return (
+      <Box pt={{ base: "64px" }}>
+        <Grid
+          templateColumns="repeat(3, 1fr)"
+          width="100%"
+          px={"20px"}
+          alignItems="center"
+          h={"48px"}
+          borderBottom="1px solid #EFEFEF"
+          mb={"40px"}
+        >
+          <GridItem>
+            <Image src={"/images/app/back.svg"} alt={""} />
+          </GridItem>
+          <GridItem textAlign="center">
+            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+            <Text color="gray.500" fontSize={"12px"}>
+              {page?.content?.step?.subTitle}
+            </Text>
+          </GridItem>
+        </Grid>
+
+        <Text
+          fontSize="24px"
+          letterSpacing="1.5px"
+          fontWeight={600}
+          px={"15px"}
+        >
+          {page?.content?.step?.title}
+        </Text>
+        <Box justifyContent="center" width="100%">
+          <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
+            <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
+              <Grid
+                templateColumns="repeat(1, 1fr)"
+                gap={"60px"}
+                width="100%"
+                px={"15px"}
+              >
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.chineseName}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      variant="flushed"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "chinese_name_placeholder"
+                      )}
+                      {...register("chinese_name", { required: true })}
+                    />
+                    <FormHelperText>
+                      {errors?.chinese_name?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "chinese_name_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.englishName}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      variant="flushed"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "english_name_placeholder"
+                      )}
+                      {...register("english_name", { required: true })}
+                    />
+                    <FormHelperText>
+                      {errors?.english_name?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "english_name_required"
+                          )}{" "}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.age?.label}
+                    </FormLabel>
+                    <Controller
+                      name="age"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={page?.content?.form?.age?.label}
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "age_placeholder"
+                          )}
+                          options={page?.content?.form?.age?.options.map(
+                            ({ label, value }) => ({ label, value })
+                          )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.age?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "age_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.gender?.label}
+                    </FormLabel>
+                    <Controller
+                      name="gender"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={page?.content?.form?.gender?.label}
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "gender_placeholder"
+                          )}
+                          options={page?.content?.form?.gender?.options.map(
+                            ({ label, value }) => ({ label, value })
+                          )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.gender?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "gender_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.residentRestrict?.label}
+                    </FormLabel>
+                    <Controller
+                      name="resident_district"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={
+                            page?.content?.form?.residentRestrict?.label
+                          }
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "resident_district_placeholder"
+                          )}
+                          options={page?.content?.form?.residentRestrict?.options.map(
+                            ({ label, value }) => ({ label, value })
+                          )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.resident_district?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "resident_restrict_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.phone}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      variant="flushed"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "phone_placeholder"
+                      )}
+                      {...register("phone", { required: true })}
+                    />
+                    <FormHelperText>
+                      {errors?.phone?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "phone_required"
+                          )}{" "}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.email}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      variant="flushed"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "email_placeholder"
+                      )}
+                      {...register("email", {
+                        required: true,
+                        pattern: {
+                          value: emailRegex,
+                          message: wordExtractor(
+                            page?.content?.wordings,
+                            "email_invalid_format"
+                          ),
+                        },
+                      })}
+                    />
+                    <FormHelperText>
+                      {errors?.email?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "email_required"
+                          )}{" "}
+                        </Text>
+                      )}
+                      <Text color="red">{errors?.email?.message}</Text>
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.industry?.label}
+                    </FormLabel>
+                    <Controller
+                      name="industry"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={page?.content?.form?.industry?.label}
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "industry_placeholder"
+                          )}
+                          options={page?.content?.form?.industry?.options.map(
+                            ({ label, value }) => ({ label, value })
+                          )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.industry?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "industry_required"
+                          )}
+                        </Text>
+                      )}{" "}
+                    </FormHelperText>
+                  </FormControl>
+                  {watchFields[0]?.value === "other" && (
+                    <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+                      <FormControl isRequired>
+                        <FormLabel {...labelStyles}>
+                          {page?.content?.form?.industryOther}
+                        </FormLabel>
+                        <Input
+                          type="text"
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "industry_other_placeholder"
+                          )}
+                          {...register("industry_other", { required: true })}
+                          variant="flushed"
+                        />
+                        <FormHelperText>
+                          {errors?.industry_other?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "industry_other_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
+                      </FormControl>
+                    </Box>
+                  )}
+                </GridItem>
+
+                <GridItem>
+                  <FormControl>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.jobFunction}{" "}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "job_function_placeholder"
+                      )}
+                      {...register("job_function")}
+                      variant="flushed"
+                    />
+                  </FormControl>
+                </GridItem>
+              </Grid>
+
+              <Box
+                bgColor="#F3F3F3"
+                h={"8px"}
+                w={"100%"}
+                style={{ margin: "60px 0" }}
+              />
+
+              <Grid
+                templateColumns="repeat(1, 1fr)"
+                gap={"60px"}
+                width="100%"
+                px={"15px"}
+              >
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel
+                      fontSize="24px"
+                      letterSpacing="1.5px"
+                      marginBottom={"20px"}
+                      fontWeight={600}
+                    >
+                      {page?.content?.form?.isDisability?.label}
+                    </FormLabel>
+                    <Flex gap={2}>
+                      {page?.content?.form?.isDisability?.options.map((d) => {
+                        const isActive = d.value === watchFields[1];
+                        return (
+                          <Button
+                            flex={1}
+                            key={d.label}
+                            backgroundColor={
+                              isActive ? "#F6D644" : "transparent"
+                            }
+                            border={`2px solid ${
+                              isActive ? "#FFFFFF" : "#999999"
+                            }`}
+                            height="38px"
+                            width="117px"
+                            onClick={() => {
+                              setValue("is_disability", d.value);
+                              setValue("pwd_type", []);
+                            }}
+                          >
+                            {d.label}
+                          </Button>
+                        );
+                      })}
+                    </Flex>
+                    <FormHelperText>
+                      {errors?.is_disability?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "is_disability_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                {watchFields[1] === "true" && (
+                  <GridItem>
+                    <Box pt={2}>
+                      <FormControl>
+                        <FormLabel
+                          fontSize="24px"
+                          letterSpacing="1.5px"
+                          marginBottom={"20px"}
+                          fontWeight={600}
+                        >
+                          {page?.content?.form?.pwdType?.label}
+                        </FormLabel>
+
+                        <Controller
+                          control={control}
+                          name="pwd_type"
+                          rules={{ required: true }}
+                          defaultValue={[]}
+                          render={({ field: { value, name } }) => (
+                            <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+                              {page?.content?.form?.pwdType?.options.map(
+                                (d, i) => {
+                                  const BG_COLORS = [
+                                    "#FFDA94",
+                                    "#FEB534",
+                                    "#97CB8D",
+                                    "#F6D644",
+                                    "#FEB534",
+                                    "#FFDA94",
+                                    "#00BFBA",
+                                    "#97CB8D",
+                                    "#F6D644",
+                                    "#00BFBA",
+                                    "#FFDA94",
+                                  ];
+                                  return (
+                                    <Box
+                                      key={d.label}
+                                      height="130px"
+                                      borderRadius={"10px"}
+                                      border={"1px solid #EFEFEF"}
+                                      bgColor={
+                                        value.includes(d.value)
+                                          ? "#F6D644"
+                                          : "#FFFFFF"
+                                      }
+                                      cursor="pointer"
+                                      onClick={() => {
+                                        value.includes(d.value)
+                                          ? setValue(
+                                              name,
+                                              value.filter((i) => i !== d.value)
+                                            )
+                                          : setValue(name, [...value, d.value]);
+                                        if (d.value === "other") {
+                                          setValue("pwd_other", "");
+                                        }
+                                      }}
+                                    >
+                                      <Center h={"100%"}>
+                                        <Stack direction={"column"} spacing={4}>
+                                          <Box
+                                            textAlign="center"
+                                            bgColor={
+                                              value.includes(d.value)
+                                                ? "#FFF"
+                                                : BG_COLORS[i]
+                                            }
+                                            borderRadius={"50%"}
+                                            w={"48px"}
+                                            h={"48px"}
+                                            mx={"auto"}
+                                          >
+                                            <Center h={"100%"}>
+                                              <Image
+                                                src={`/images/app/${d.value}.svg`}
+                                                d={"inline-block"}
+                                              />
+                                            </Center>
+                                          </Box>
+                                          <Text textAlign="center">
+                                            {d.label}
+                                          </Text>
+                                        </Stack>
+                                      </Center>
+                                    </Box>
+                                  );
+                                }
+                              )}
+                            </Grid>
+                          )}
+                        />
+
+                        <FormHelperText>
+                          {errors?.pwd_type?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "pwd_type_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
+                      </FormControl>
+                    </Box>
+                  </GridItem>
+                )}
+
+                {watchFields[2] !== undefined &&
+                  watchFields[2]?.includes("other") && (
+                    <GridItem>
+                      <FormControl>
+                        <FormLabel {...labelStyles}>
+                          {page?.content?.form?.pwdOther}{" "}
+                        </FormLabel>
+                        <Input
+                          type="text"
+                          variant="flushed"
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "pwd_other_placeholder"
+                          )}
+                          {...register("pwd_other", {
+                            required: true,
+                            defaultValue: "",
+                          })}
+                        />
+                      </FormControl>
+                    </GridItem>
+                  )}
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.wishToDo?.label}
+                    </FormLabel>
+                    <Controller
+                      name="wish_to_do"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={page?.content?.form?.wishToDo?.label}
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "wish_to_do_placeholder"
+                          )}
+                          options={page?.content?.form?.wishToDo?.options.map(
+                            ({ label, value }) => ({ label, value })
+                          )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.wish_to_do?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "wish_to_do_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+
+                  {watchFields[3]?.value === "other" && (
+                    <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+                      <FormControl isRequired>
+                        <FormLabel {...labelStyles}>
+                          {page?.content?.form?.wishToDoOther}
+                        </FormLabel>
+                        <Input
+                          type="text"
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "wish_to_do_other_placeholder"
+                          )}
+                          {...register("wish_to_do_other", { required: true })}
+                          variant="flushed"
+                        />
+                        <FormHelperText>
+                          {errors?.wish_to_do_other?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "wish_to_do_other_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
+                      </FormControl>
+                    </Box>
+                  )}
+                </GridItem>
+              </Grid>
+              <Box px={"15px"} w={"100%"}>
+                <FormControl marginTop="20px !important">
+                  <Checkbox
+                    aria-describedby={wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
+                    colorScheme="green"
+                    {...register("terms", { required: true })}
+                  >
+                    {page?.content?.form?.terms?.text}{" "}
+                    <Link
+                      target="_blank"
+                      href={page?.content?.form?.terms?.url}
+                    >
+                      {" "}
+                      {page?.content?.form?.terms?.link}{" "}
+                    </Link>
+                  </Checkbox>
+                  <FormHelperText>
+                    {errors?.terms?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(page?.content?.wordings, "tnc_required")}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </Box>
+              <Box
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
+                  marginTop: "60px",
+                }}
+                h={"16px"}
+                w={"100%"}
+                opacity={0.2}
+              />
+              <Box px={"15px"} py={"12px"} w="100%">
+                <FormControl textAlign="center">
+                  <Button
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="100%"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
+                    {page?.content?.form?.continue}
+                  </Button>
+                </FormControl>
+              </Box>
+            </VStack>
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
 };
 
 export default withPageCMS(IdentityPublicAdd, {

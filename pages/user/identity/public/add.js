@@ -29,6 +29,9 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../utils/general";
+import organizationSearch from "../../../../utils/api/OrganizationSearch";
+import OrganizationMemberJoin from "../../../../utils/api/OrganizationMemberJoin";
+import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
 
 const PAGE_KEY = "identity_public_add";
 
@@ -41,6 +44,13 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true,
+          type: ["ngo"],
+        }),
+      },
     },
   };
 };
@@ -60,15 +70,13 @@ const customStyles = {
   },
 };
 
-const IdentityPublicAdd = ({ page }) => {
+const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [formState, setFormState] = useState();
-  {
-    /** step1:reg profile, step2:question*/
-  }
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
+  const [selectedOrganization, setOrganization] = useState(null);
   const {
     handleSubmit,
     register,
@@ -76,14 +84,22 @@ const IdentityPublicAdd = ({ page }) => {
     formState: { errors, isSubmitting },
     watch,
     setValue,
+    setError,
+    getValues
   } = useForm();
 
   const watchFields = watch(
-    ["industry", "is_disability", "pwd_type", "wish_to_do"],
+    [
+      "industry",
+      "is_disability",
+      "pwd_type",
+      "wish_to_do",
+      "selectOrganization",
+    ],
     { pwd_type: [] }
   );
 
-  const handlePostData = async (input) => {
+  const handlePostData = async (input, invitationCode) => {
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -97,10 +113,34 @@ const IdentityPublicAdd = ({ page }) => {
       });
       if (data && data.IdentityCreate) {
         router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
+        if(invitationCode){
+          await OrganizationMemberJoin({
+            invitationCode: invitationCode,
+            identityId: data.IdentityCreate.id,
+          });
+        }
       }
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handleSubmitInvitation = async (formState) => {
+    setError("invitationCode", {})
+    const isValid = await OrganizationInvitationCodeValidity({
+      invitationCode: getValues("invitationCode"),
+      organizationType: "ngo",
+    });
+
+    if(!isValid) {
+      setError("invitationCode", {message: wordExtractor(
+        page?.content?.wordings,
+        "invitation_code_error_message"
+      )})
+      return;
+    }
+
+    handlePostData(formState, getValues("invitationCode"))
   };
 
   const startCreateOrganization = async (input) => {
@@ -121,7 +161,6 @@ const IdentityPublicAdd = ({ page }) => {
     } catch (e) {
       console.error(e);
     }
-
   };
 
   const onFormSubmit = async ({
@@ -173,7 +212,13 @@ const IdentityPublicAdd = ({ page }) => {
   if (step === "step2") {
     return (
       <VStack py={{ base: 36, md: 48 }}>
-        <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
+        <Text
+          mt={4}
+          fontSize="36px"
+          letterSpacing="1.5px"
+          fontWeight={600}
+          px={"15px"}
+        >
           {page?.content?.step?.step2Title}
         </Text>
         <Text fontSize="16px">{page?.content?.step?.step2SubTitle}</Text>
@@ -183,9 +228,9 @@ const IdentityPublicAdd = ({ page }) => {
             width="100%"
             textAlign="left"
             margin="auto"
-            padding="0px 25px"
+            padding="0px 15px"
           >
-            <VStack py={{ base: 24 }}>
+            <VStack py={{ base: 12 }}>
               <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
                 <GridItem colSpan={{ base: 2 }}>
                   <FormControl>
@@ -221,112 +266,106 @@ const IdentityPublicAdd = ({ page }) => {
                             ?.label
                         }
                       </Button>
-
-                      {/* {page?.content?.form?.createOrganization?.options.map(
-                        (d) => {
-                          const isActive = d.value === "true";
-                          return (
-                            <Button
-                              flex={1}
-                              key={d.label}
-                              backgroundColor={
-                                isActive ? "#F6D644" : "transparent"
-                              }
-                              border={`2px solid ${
-                                isActive ? "#FFFFFF" : "#999999"
-                              }`}
-                              height="38px"
-                              width="117px"
-                              onClick={() => {
-                                if (d.value === "true") {
-                                  setShowSelectCentre(true);
-                                } else {
-                                  handlePostData(formState)
-                                }
-                              }}
-                            >
-                              {d.label}
-                            </Button>
-                          );
-                        }
-                      )} */}
                     </Flex>
                   </FormControl>
                 </GridItem>
 
-                <GridItem colSpan={{ base: 2 }} pt={6}>
-                  <FormControl>
-                    <FormLabel>
-                      {page?.content?.form?.selectOrganization?.label}
-                    </FormLabel>
-                    <Controller
-                      name="selectOrganization"
-                      isClearable
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <ReactSelect
-                          aria-label={
-                            page?.content?.form?.selectOrganization?.label
-                          }
-                          {...field}
-                          placeholder={wordExtractor(
-                            page?.content?.wordings,
-                            "industry_placeholder"
-                          )}
-                          options={page?.content?.form?.selectOrganization?.options.map(
-                            ({ label, value }) => ({ label, value })
-                          )}
-                        />
-                      )}
-                    />
-                    <FormHelperText>
-                      {
-                        page?.content?.form?.selectOrganizationContent
-                          ?.content01
-                      }
-                      <br />
-                      {
-                        page?.content?.form?.selectOrganizationContent
-                          ?.content02
-                      }
-                      <Text
-                        as="span"
-                        color="#017878"
-                        cursor="pointer"
-                        onClick={() => startCreateOrganization(formState)}
-                      >
-                        {page?.content?.form?.selectOrganizationContent?.link}
-                      </Text>
-                      !
-                    </FormHelperText>
-                  </FormControl>
-                  <Box mt={8} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+                {showSelectCentre && (
+                  <GridItem colSpan={{ base: 2 }} pt={6}>
                     <FormControl>
                       <FormLabel>
-                        {page?.content?.form?.invitationCode}
+                        {page?.content?.form?.selectOrganization?.label}
                       </FormLabel>
-                      <Input
-                        type="text"
-                        {...register("invitationCode")}
-                        variant="flushed"
+                      <Controller
+                        name="selectOrganization"
+                        isClearable
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <ReactSelect
+                            aria-label={
+                              page?.content?.form?.selectOrganization?.label
+                            }
+                            {...field}
+                            placeholder={wordExtractor(
+                              page?.content?.wordings,
+                              "select_organization_placeholder"
+                            )}
+                            options={(organizations ?? []).map(
+                              ({ chineseCompanyName, id }) => ({
+                                label: chineseCompanyName,
+                                value: id,
+                              })
+                            )}
+                            onChange={(data) => {
+                              const organization = organizations.find(
+                                (d) => d.id === data.value
+                              );
+                              setOrganization(organization);
+                            }}
+                          />
+                        )}
                       />
+                      <FormHelperText>
+                        {
+                          page?.content?.form?.selectOrganizationContent
+                            ?.content01
+                        }
+                        <br />
+                        {
+                          page?.content?.form?.selectOrganizationContent
+                            ?.content02
+                        }
+                        <Text
+                          as="span"
+                          color="#017878"
+                          cursor="pointer"
+                          onClick={() => startCreateOrganization(formState)}
+                        >
+                          {page?.content?.form?.selectOrganizationContent?.link}
+                        </Text>
+                        !
+                      </FormHelperText>
                     </FormControl>
-                  </Box>
-                </GridItem>
+                    {selectedOrganization && (
+                      <Box
+                        mt={8}
+                        p={6}
+                        bgColor={"#FAFAFA"}
+                        borderRadius={"15px"}
+                      >
+                        <FormControl>
+                          <FormLabel>
+                            {page?.content?.form?.invitationCode}
+                          </FormLabel>
+                          <Input
+                            type="text"
+                            name="invitationCode"
+                            variant="flushed"
+                            {...register("invitationCode")}
+                          />
+                          {errors?.invitationCode?.message && <FormHelperText color="red">
+                          {errors?.invitationCode?.message}
+                          </FormHelperText>}
+                        </FormControl>
+                      </Box>
+                    )}
+                  </GridItem>
+                )}
               </Grid>
-              {/* <FormControl textAlign="center">
-                <Button
-                  backgroundColor="#F6D644"
-                  borderRadius="22px"
-                  height="44px"
-                  width="117.93px"
-                  type="submit"
-                  isLoading={isSubmitting}
-                >
-                  {page?.content?.form?.continue}
-                </Button>
-              </FormControl> */}
+              {selectedOrganization && (
+                <FormControl textAlign="center">
+                  <Button
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="117.93px"
+                    onClick={() => handleSubmitInvitation(formState)}
+                  >
+                    {page?.content?.form?.continue}
+                  </Button>
+                </FormControl>
+              )}
             </VStack>
           </Box>
         </Box>
