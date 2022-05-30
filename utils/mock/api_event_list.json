@@ -1,0 +1,104 @@
+{
+  "timestamp": 1638857357560,
+  "data": {
+    "total": 10,
+    "list": [
+      {
+        "id": "60dd9921f168053238816000",
+        "name": "共融單車團",
+        "startDate": "2022-05-10",
+        "endDate": "2022-05-10",
+        "startTime": "14:00",
+        "endTime": "17:00",
+        "location": "大圍港鐵站",
+        "banner": {
+          "id": "60f686ab3db961001ce8b7ac",
+          "url": "https://images.unsplash.com/photo-1472653431158-6364773b2a56?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80",
+          "contentType": "image/png",
+          "fileSize": 789417
+        },
+        "likeCount": 100,
+        "bookmarkCount": 100,
+        "organizationId": "60dd9921f168053238816000",
+        "organizationName": "Friday Co.",
+        "organizationContactName": "Tim Au Yeung",
+        "organizationContactNumber": "97360335",
+        "organizationContactEmail": "office@fridayplace.com",
+        "liked": true,
+        "bookmarked": true
+      },
+      {
+        "id": "60dd9921f168053238816000",
+        "name": "品茶探索體驗",
+        "startDate": "2022-05-10",
+        "endDate": "2022-05-10",
+        "startTime": "14:00",
+        "endTime": "17:00",
+        "location": "同得仕大廈",
+        "banner": {
+          "id": "60f686ab3db961001ce8b7ac",
+          "url": "https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+          "contentType": "image/png",
+          "fileSize": 789417
+        },
+        "likeCount": 100,
+        "bookmarkCount": 100,
+        "organizationId": "60dd9921f168053238816000",
+        "organizationName": "Happy Co.",
+        "organizationContactName": "Alpha Yiu",
+        "organizationContactNumber": "97360335",
+        "organizationContactEmail": "office@happy.com",
+        "liked": true,
+        "bookmarked": true
+      },
+      {
+        "id": "60dd9921f168053238816000",
+        "name": "你扭我又扭氣球訓練班",
+        "startDate": "2022-05-10",
+        "endDate": "2022-05-10",
+        "startTime": "14:00",
+        "endTime": "17:00",
+        "location": "觀塘社區中心",
+        "banner": {
+          "id": "60f686ab3db961001ce8b7ac",
+          "url": "https://images.unsplash.com/photo-1611142287927-64cede3148da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+          "contentType": "image/png",
+          "fileSize": 789417
+        },
+        "likeCount": 100,
+        "bookmarkCount": 100,
+        "organizationId": "60dd9921f168053238816000",
+        "organizationName": "Ms Balloon",
+        "organizationContactName": "Anita Wong",
+        "organizationContactNumber": "97360335",
+        "organizationContactEmail": "office@msballoon.com",
+        "liked": true,
+        "bookmarked": true
+      },
+      {
+        "id": "60dd9921f168053238816000",
+        "name": "摺上加摺",
+        "startDate": "2022-05-10",
+        "endDate": "2022-05-10",
+        "startTime": "14:00",
+        "endTime": "17:00",
+        "location": "北區大會堂",
+        "banner": {
+          "id": "60f686ab3db961001ce8b7ac",
+          "url": "https://images.unsplash.com/photo-1563261438-73168c06ae56?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80",
+          "contentType": "image/png",
+          "fileSize": 789417
+        },
+        "likeCount": 100,
+        "bookmarkCount": 100,
+        "organizationId": "60dd9921f168053238816000",
+        "organizationName": "Origami Co.",
+        "organizationContactName": "Soap Wong",
+        "organizationContactNumber": "97360335",
+        "organizationContactEmail": "office@origami.com",
+        "liked": true,
+        "bookmarked": true
+      }
+    ]
+  }
+}
