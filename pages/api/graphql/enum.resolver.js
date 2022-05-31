@@ -17,6 +17,11 @@ import serviceTarget from "./enum/serviceTarget";
 import publishStatus from "./enum/publishStatus";
 import industries from "./enum/industries";
 
+import ages from "./enum/ages";
+import wishToDo from "./enum/wishToDo";
+import targetGroups from "./enum/targetGroup";
+import targetGroupDisabilities from "./enum/targetGroupDisabilities";
+
 const properize = (text) => {
   return text
     .replace(/\b(\w)/g, (match, capture) => capture.toUpperCase())
@@ -34,6 +39,11 @@ const generateEnumResolver = (_key, constants) => {
 
 export default {
   Query: {
+    ...generateEnumResolver("age", ages),
+    ...generateEnumResolver("wishToDo", wishToDo),
+    ...generateEnumResolver("targetGroup", targetGroups),
+    ...generateEnumResolver("targetGroupDisability", targetGroupDisabilities),
+    ...generateEnumResolver("wishToDo", wishToDo),
     ...generateEnumResolver("degree", degrees),
     ...generateEnumResolver("district", districts),
     ...generateEnumResolver("identityType", identityTypes),

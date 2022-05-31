@@ -5,7 +5,7 @@ import {
   VStack,
   FormControl,
   Input,
-  SimpleGrid,
+  Grid,
   GridItem,
   Checkbox,
   FormHelperText,
@@ -15,23 +15,23 @@ import {
   Image,
   Center,
   Stack,
-  Grid,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
-import { getPage } from "../../../../utils/page/getPage";
-import withPageCMS from "../../../../utils/page/withPageCMS";
+import { getPage } from "../../../../../utils/page/getPage";
+import withPageCMS from "../../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
-import { useAppContext } from "../../../../store/AppStore";
+import { useAppContext } from "../../../../../store/AppStore";
 import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../../../utils/apollo";
-import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
-import wordExtractor from "../../../../utils/wordExtractor";
-import { emailRegex } from "../../../../utils/general";
-import organizationSearch from "../../../../utils/api/OrganizationSearch";
-import OrganizationMemberJoin from "../../../../utils/api/OrganizationMemberJoin";
-import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
+import { getGraphQLClient } from "../../../../../utils/apollo";
+import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
+import wordExtractor from "../../../../../utils/wordExtractor";
+import { emailRegex } from "../../../../../utils/general";
+import organizationSearch from "../../../../../utils/api/OrganizationSearch";
+import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
+import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
+
 
 const PAGE_KEY = "identity_public_add";
 
@@ -56,18 +56,16 @@ export const getServerSideProps = async (context) => {
 };
 
 const customStyles = {
-  multiValue: (provided) => {
-    const borderRadius = "15px";
-    return { ...provided, borderRadius };
-  },
-  multiValueRemove: (provided) => {
-    const color = "grey";
-    return {
-      ...provided,
-      color,
-      ":hover": { ...provided[":hover"], color: "#E60000" },
-    };
-  },
+  control: (provided) => ({
+    ...provided,
+    borderRadius: "0px",
+    border: "none",
+    borderBottom: "1px solid #EFEFEF",
+  }),
+};
+
+const labelStyles = {
+  marginBottom: "0px",
 };
 
 const IdentityPublicAdd = ({ page, api: { organizations } }) => {
@@ -89,13 +87,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   } = useForm();
 
   const watchFields = watch(
-    [
-      "industry",
-      "is_disability",
-      "pwd_type",
-      "wish_to_do",
-      "selectOrganization",
-    ],
+    ["industry", "is_disability", "pwd_type", "wish_to_do", "selectOrganization"],
     { pwd_type: [] }
   );
 
@@ -112,7 +104,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         input,
       });
       if (data && data.IdentityCreate) {
-        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
+        router.push(`/app/user/identity/public/${data.IdentityCreate.id}/success`);
         if(invitationCode){
           await OrganizationMemberJoin({
             invitationCode: invitationCode,
@@ -156,7 +148,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         input,
       });
       if (data && data.IdentityCreate) {
-        router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
+        router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }
     } catch (e) {
       console.error(e);
@@ -209,19 +201,48 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     setStep("step2");
   };
 
+  useEffect(()=>{
+    var json = {
+      name: "getRegistrationInfo",
+      options: {
+          callback: "getRegistrationInfoHandler"
+      }
+  };
+  // window.AppContext.postMessage(json);
+  },[])
+
   if (step === "step2") {
     return (
-      <VStack py={{ base: 36, md: 48 }}>
+      <Box pt={{ base: "64px" }}>
+       <Grid
+          templateColumns="repeat(3, 1fr)"
+          width="100%"
+          px={"20px"}
+          alignItems="center"
+          h={"48px"}
+          borderBottom="1px solid #EFEFEF"
+          mb={"40px"}
+        >
+          <GridItem>
+            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>router.push(`/`)} />
+          </GridItem>
+          <GridItem textAlign="center">
+            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+            <Text color="gray.500" fontSize={"12px"}>
+              {page?.content?.step?.step2SubTitle}
+            </Text>
+          </GridItem>
+        </Grid>
         <Text
-          mt={4}
-          fontSize="36px"
+          fontSize="24px"
           letterSpacing="1.5px"
           fontWeight={600}
           px={"15px"}
         >
           {page?.content?.step?.step2Title}
         </Text>
-        <Text fontSize="16px">{page?.content?.step?.step2SubTitle}</Text>
+
+
         <Box justifyContent="center" width="100%">
           <Box
             maxWidth={"md"}
@@ -270,139 +291,142 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                 </GridItem>
 
-                {showSelectCentre && (
-                  <GridItem colSpan={{ base: 2 }} pt={6}>
-                    <FormControl>
-                      <FormLabel>
-                        {page?.content?.form?.selectOrganization?.label}
-                      </FormLabel>
-                      <Controller
-                        name="selectOrganization"
-                        isClearable
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <ReactSelect
-                            aria-label={
-                              page?.content?.form?.selectOrganization?.label
-                            }
-                            {...field}
-                            placeholder={wordExtractor(
-                              page?.content?.wordings,
-                              "select_organization_placeholder"
-                            )}
-                            options={(organizations ?? []).map(
+                {showSelectCentre && <GridItem colSpan={{ base: 2 }} pt={6}>
+                  <FormControl>
+                    <FormLabel>
+                      {page?.content?.form?.selectOrganization?.label}
+                    </FormLabel>
+                    <Controller
+                      name="selectOrganization"
+                      isClearable
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={
+                            page?.content?.form?.selectOrganization?.label
+                          }
+                          {...field}
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "select_organization_placeholder"
+                          )}
+                          options={(organizations ?? []).map(
                               ({ chineseCompanyName, id }) => ({
                                 label: chineseCompanyName,
                                 value: id,
                               })
                             )}
-                            onChange={(data) => {
+                          onChange={(data) => {
                               const organization = organizations.find(
                                 (d) => d.id === data.value
                               );
                               setOrganization(organization);
                             }}
-                          />
-                        )}
-                      />
-                      <FormHelperText>
-                        {
-                          page?.content?.form?.selectOrganizationContent
-                            ?.content01
-                        }
-                        <br />
-                        {
-                          page?.content?.form?.selectOrganizationContent
-                            ?.content02
-                        }
-                        <Text
-                          as="span"
-                          color="#017878"
-                          cursor="pointer"
-                          onClick={() => startCreateOrganization(formState)}
-                        >
-                          {page?.content?.form?.selectOrganizationContent?.link}
-                        </Text>
-                        !
-                      </FormHelperText>
-                    </FormControl>
-                    {selectedOrganization && (
-                      <Box
-                        mt={8}
-                        p={6}
-                        bgColor={"#FAFAFA"}
-                        borderRadius={"15px"}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {
+                        page?.content?.form?.selectOrganizationContent
+                          ?.content01
+                      }
+                      <br />
+                      {
+                        page?.content?.form?.selectOrganizationContent
+                          ?.content02
+                      }
+                      <Text
+                        as="span"
+                        color="#017878"
+                        cursor="pointer"
+                        onClick={() => startCreateOrganization(formState)}
                       >
-                        <FormControl>
-                          <FormLabel>
-                            {page?.content?.form?.invitationCode}
-                          </FormLabel>
-                          <Input
-                            type="text"
-                            name="invitationCode"
-                            variant="flushed"
-                            {...register("invitationCode")}
-                          />
-                          {errors?.invitationCode?.message && <FormHelperText color="red">
-                          {errors?.invitationCode?.message}
-                          </FormHelperText>}
-                        </FormControl>
-                      </Box>
-                    )}
-                  </GridItem>
-                )}
+                        {page?.content?.form?.selectOrganizationContent?.link}
+                      </Text>
+                      !
+                    </FormHelperText>
+                  </FormControl>
+                  {selectedOrganization && <Box mt={8} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+                    <FormControl>
+                      <FormLabel>
+                        {page?.content?.form?.invitationCode}
+                      </FormLabel>
+                      <Input
+                        type="text"
+                        {...register("invitationCode")}
+                        variant="flushed"
+                      />
+                    </FormControl>
+                  </Box>}
+                </GridItem>}
               </Grid>
-              {selectedOrganization && (
-                <FormControl textAlign="center">
-                  <Button
-                    backgroundColor="#F6D644"
-                    borderRadius="22px"
-                    height="44px"
-                    width="117.93px"
-                    onClick={() => handleSubmitInvitation(formState)}
-                  >
-                    {page?.content?.form?.continue}
-                  </Button>
-                </FormControl>
-              )}
+              {selectedOrganization && <FormControl textAlign="center">
+                <Button
+                  backgroundColor="#F6D644"
+                  borderRadius="22px"
+                  height="44px"
+                  width="117.93px"
+                  onClick={() => handleSubmitInvitation(formState)}
+                >
+                  {page?.content?.form?.continue}
+                </Button>
+              </FormControl>}
             </VStack>
           </Box>
         </Box>
-      </VStack>
+      </Box>
     );
   }
 
   if (step === "step1") {
     return (
-      <VStack py={{ base: 36, md: 48 }}>
-        <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
+      <Box pt={{ base: "64px" }}>
+        <Grid
+          templateColumns="repeat(3, 1fr)"
+          width="100%"
+          px={"20px"}
+          alignItems="center"
+          h={"48px"}
+          borderBottom="1px solid #EFEFEF"
+          mb={"40px"}
+        >
+          <GridItem>
+            <Image src={"/images/app/back.svg"} alt={""} />
+          </GridItem>
+          <GridItem textAlign="center">
+            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
+            <Text color="gray.500" fontSize={"12px"}>
+              {page?.content?.step?.subTitle}
+            </Text>
+          </GridItem>
+        </Grid>
+
+        <Text
+          fontSize="24px"
+          letterSpacing="1.5px"
+          fontWeight={600}
+          px={"15px"}
+        >
           {page?.content?.step?.title}
         </Text>
-        <Text fontSize="16px">{page?.content?.step?.subTitle}</Text>
         <Box justifyContent="center" width="100%">
-          <Box
-            maxWidth={800}
-            width="100%"
-            textAlign="left"
-            margin="auto"
-            padding="0px 25px"
-          >
-            <Text fontSize="16px" textAlign="center">
-              {page?.content?.heading?.description}
-            </Text>
-            <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
+          <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
+            <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
-                templateColumns={"repeat(2, 1fr)"}
+                templateColumns="repeat(1, 1fr)"
+                gap={"60px"}
                 width="100%"
-                py={10}
-                gap={6}
+                px={"15px"}
               >
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.chineseName}</FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.chineseName}
+                    </FormLabel>
                     <Input
                       type="text"
+                      variant="flushed"
                       placeholder={wordExtractor(
                         page?.content?.wordings,
                         "chinese_name_placeholder"
@@ -421,11 +445,14 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.englishName}</FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.englishName}
+                    </FormLabel>
                     <Input
                       type="text"
+                      variant="flushed"
                       placeholder={wordExtractor(
                         page?.content?.wordings,
                         "english_name_placeholder"
@@ -444,9 +471,12 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.age?.label}</FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.age?.label}
+                    </FormLabel>
                     <Controller
                       name="age"
                       isClearable
@@ -463,6 +493,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           options={page?.content?.form?.age?.options.map(
                             ({ label, value }) => ({ label, value })
                           )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
                         />
                       )}
                     />
@@ -478,9 +512,12 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.gender?.label}</FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.gender?.label}
+                    </FormLabel>
                     <Controller
                       name="gender"
                       control={control}
@@ -496,6 +533,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           options={page?.content?.form?.gender?.options.map(
                             ({ label, value }) => ({ label, value })
                           )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
                         />
                       )}
                     />
@@ -512,9 +553,9 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                 </GridItem>
 
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>
+                    <FormLabel {...labelStyles}>
                       {page?.content?.form?.residentRestrict?.label}
                     </FormLabel>
                     <Controller
@@ -535,6 +576,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           options={page?.content?.form?.residentRestrict?.options.map(
                             ({ label, value }) => ({ label, value })
                           )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
                         />
                       )}
                     />
@@ -551,11 +596,41 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                 </GridItem>
 
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.email}</FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.phone}
+                    </FormLabel>
                     <Input
                       type="text"
+                      variant="flushed"
+                      placeholder={wordExtractor(
+                        page?.content?.wordings,
+                        "phone_placeholder"
+                      )}
+                      {...register("phone", { required: true })}
+                    />
+                    <FormHelperText>
+                      {errors?.phone?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "phone_required"
+                          )}{" "}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
+                </GridItem>
+
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.email}
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      variant="flushed"
                       placeholder={wordExtractor(
                         page?.content?.wordings,
                         "email_placeholder"
@@ -585,33 +660,9 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                 </GridItem>
 
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.phone}</FormLabel>
-                    <Input
-                      type="text"
-                      placeholder={wordExtractor(
-                        page?.content?.wordings,
-                        "phone_placeholder"
-                      )}
-                      {...register("phone", { required: true })}
-                    />
-                    <FormHelperText>
-                      {errors?.phone?.type === "required" && (
-                        <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "phone_required"
-                          )}{" "}
-                        </Text>
-                      )}
-                    </FormHelperText>
-                  </FormControl>
-                </GridItem>
-
-                <GridItem colSpan={{ base: 2, md: 1 }}>
-                  <FormControl isRequired>
-                    <FormLabel>
+                    <FormLabel {...labelStyles}>
                       {page?.content?.form?.industry?.label}
                     </FormLabel>
                     <Controller
@@ -622,7 +673,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                       render={({ field }) => (
                         <ReactSelect
                           aria-label={page?.content?.form?.industry?.label}
-                          styles={customStyles}
                           {...field}
                           placeholder={wordExtractor(
                             page?.content?.wordings,
@@ -631,6 +681,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           options={page?.content?.form?.industry?.options.map(
                             ({ label, value }) => ({ label, value })
                           )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
                         />
                       )}
                     />
@@ -645,11 +699,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                       )}{" "}
                     </FormHelperText>
                   </FormControl>
-
                   {watchFields[0]?.value === "other" && (
-                    <Box pt={2}>
+                    <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
                       <FormControl isRequired>
-                        <FormLabel>
+                        <FormLabel {...labelStyles}>
                           {page?.content?.form?.industryOther}
                         </FormLabel>
                         <Input
@@ -659,6 +712,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                             "industry_other_placeholder"
                           )}
                           {...register("industry_other", { required: true })}
+                          variant="flushed"
                         />
                         <FormHelperText>
                           {errors?.industry_other?.type === "required" && (
@@ -675,9 +729,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   )}
                 </GridItem>
 
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                <GridItem>
                   <FormControl>
-                    <FormLabel>{page?.content?.form?.jobFunction} </FormLabel>
+                    <FormLabel {...labelStyles}>
+                      {page?.content?.form?.jobFunction}{" "}
+                    </FormLabel>
                     <Input
                       type="text"
                       placeholder={wordExtractor(
@@ -685,6 +741,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                         "job_function_placeholder"
                       )}
                       {...register("job_function")}
+                      variant="flushed"
                     />
                   </FormControl>
                 </GridItem>
@@ -694,13 +751,23 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 bgColor="#F3F3F3"
                 h={"8px"}
                 w={"100%"}
-                style={{ margin: "0 0 40px 0" }}
+                style={{ margin: "60px 0" }}
               />
 
-              <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+              <Grid
+                templateColumns="repeat(1, 1fr)"
+                gap={"60px"}
+                width="100%"
+                px={"15px"}
+              >
+                <GridItem>
                   <FormControl isRequired>
-                    <FormLabel>
+                    <FormLabel
+                      fontSize="24px"
+                      letterSpacing="1.5px"
+                      marginBottom={"20px"}
+                      fontWeight={600}
+                    >
                       {page?.content?.form?.isDisability?.label}
                     </FormLabel>
                     <Flex gap={2}>
@@ -740,21 +807,17 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-              </Grid>
 
-              <Box
-                bgColor="#F3F3F3"
-                h={"8px"}
-                w={"100%"}
-                style={{ margin: "40px 0" }}
-              />
-
-              <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
-                <GridItem colSpan={{ base: 2, md: 2 }}>
-                  {watchFields[1] === "true" && (
+                {watchFields[1] === "true" && (
+                  <GridItem>
                     <Box pt={2}>
                       <FormControl>
-                        <FormLabel>
+                        <FormLabel
+                          fontSize="24px"
+                          letterSpacing="1.5px"
+                          marginBottom={"20px"}
+                          fontWeight={600}
+                        >
                           {page?.content?.form?.pwdType?.label}
                         </FormLabel>
 
@@ -764,7 +827,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           rules={{ required: true }}
                           defaultValue={[]}
                           render={({ field: { value, name } }) => (
-                            <SimpleGrid minChildWidth="150px" spacing="20px">
+                            <Grid templateColumns="repeat(2, 1fr)" gap={6}>
                               {page?.content?.form?.pwdType?.options.map(
                                 (d, i) => {
                                   const BG_COLORS = [
@@ -784,7 +847,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                     <Box
                                       key={d.label}
                                       height="130px"
-                                      width="150px"
                                       borderRadius={"10px"}
                                       border={"1px solid #EFEFEF"}
                                       bgColor={
@@ -806,7 +868,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                       }}
                                     >
                                       <Center h={"100%"}>
-                                        <Stack direction={"column"} spacing={2}>
+                                        <Stack direction={"column"} spacing={4}>
                                           <Box
                                             textAlign="center"
                                             bgColor={
@@ -835,7 +897,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                   );
                                 }
                               )}
-                            </SimpleGrid>
+                            </Grid>
                           )}
                         />
 
@@ -851,15 +913,19 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                         </FormHelperText>
                       </FormControl>
                     </Box>
-                  )}
-                </GridItem>
+                  </GridItem>
+                )}
+
                 {watchFields[2] !== undefined &&
                   watchFields[2]?.includes("other") && (
-                    <GridItem colSpan={{ base: 2, md: 1 }}>
+                    <GridItem>
                       <FormControl>
-                        <FormLabel>{page?.content?.form?.pwdOther} </FormLabel>
+                        <FormLabel {...labelStyles}>
+                          {page?.content?.form?.pwdOther}{" "}
+                        </FormLabel>
                         <Input
                           type="text"
+                          variant="flushed"
                           placeholder={wordExtractor(
                             page?.content?.wordings,
                             "pwd_other_placeholder"
@@ -873,9 +939,9 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                     </GridItem>
                   )}
 
-                <GridItem colSpan={{ base: 2, md: 1 }}>
-                  <FormControl>
-                    <FormLabel isRequired>
+                <GridItem>
+                  <FormControl isRequired>
+                    <FormLabel {...labelStyles}>
                       {page?.content?.form?.wishToDo?.label}
                     </FormLabel>
                     <Controller
@@ -886,7 +952,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                       render={({ field }) => (
                         <ReactSelect
                           aria-label={page?.content?.form?.wishToDo?.label}
-                          styles={customStyles}
                           {...field}
                           placeholder={wordExtractor(
                             page?.content?.wordings,
@@ -895,6 +960,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           options={page?.content?.form?.wishToDo?.options.map(
                             ({ label, value }) => ({ label, value })
                           )}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
                         />
                       )}
                     />
@@ -911,9 +980,9 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
 
                   {watchFields[3]?.value === "other" && (
-                    <Box pt={2}>
+                    <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
                       <FormControl isRequired>
-                        <FormLabel>
+                        <FormLabel {...labelStyles}>
                           {page?.content?.form?.wishToDoOther}
                         </FormLabel>
                         <Input
@@ -923,6 +992,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                             "wish_to_do_other_placeholder"
                           )}
                           {...register("wish_to_do_other", { required: true })}
+                          variant="flushed"
                         />
                         <FormHelperText>
                           {errors?.wish_to_do_other?.type === "required" && (
@@ -939,50 +1009,64 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   )}
                 </GridItem>
               </Grid>
-              <FormControl marginTop="20px !important">
-                <Checkbox
-                  aria-describedby={wordExtractor(
-                    page?.content?.wordings,
-                    "tnc_required"
-                  )}
-                  colorScheme="green"
-                  {...register("terms", { required: true })}
-                >
-                  {page?.content?.form?.terms?.text}{" "}
-                  <Link target="_blank" href={page?.content?.form?.terms?.url}>
-                    {" "}
-                    {page?.content?.form?.terms?.link}{" "}
-                  </Link>
-                </Checkbox>
-                <FormHelperText>
-                  {errors?.terms?.type === "required" && (
-                    <Text color="red">
-                      {wordExtractor(page?.content?.wordings, "tnc_required")}
-                    </Text>
-                  )}
-                </FormHelperText>
-              </FormControl>
-
-              <FormControl textAlign="center">
-                <Button
-                  backgroundColor="#F6D644"
-                  borderRadius="22px"
-                  height="44px"
-                  width="117.93px"
-                  type="submit"
-                  isLoading={isSubmitting}
-                >
-                  {page?.content?.form?.continue}
-                </Button>
-              </FormControl>
+              <Box px={"15px"} w={"100%"}>
+                <FormControl marginTop="20px !important">
+                  <Checkbox
+                    aria-describedby={wordExtractor(
+                      page?.content?.wordings,
+                      "tnc_required"
+                    )}
+                    colorScheme="green"
+                    {...register("terms", { required: true })}
+                  >
+                    {page?.content?.form?.terms?.text}{" "}
+                    <Link
+                      target="_blank"
+                      href={page?.content?.form?.terms?.url}
+                    >
+                      {" "}
+                      {page?.content?.form?.terms?.link}{" "}
+                    </Link>
+                  </Checkbox>
+                  <FormHelperText>
+                    {errors?.terms?.type === "required" && (
+                      <Text color="red">
+                        {wordExtractor(page?.content?.wordings, "tnc_required")}
+                      </Text>
+                    )}
+                  </FormHelperText>
+                </FormControl>
+              </Box>
+              <Box
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
+                  marginTop: "60px",
+                }}
+                h={"16px"}
+                w={"100%"}
+                opacity={0.2}
+              />
+              <Box px={"15px"} py={"12px"} w="100%">
+                <FormControl textAlign="center">
+                  <Button
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="100%"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
+                    {page?.content?.form?.continue}
+                  </Button>
+                </FormControl>
+              </Box>
             </VStack>
           </Box>
         </Box>
-      </VStack>
+      </Box>
     );
   }
-
-  return <div></div>;
 };
 
 export default withPageCMS(IdentityPublicAdd, {
@@ -1003,24 +1087,16 @@ export default withPageCMS(IdentityPublicAdd, {
           label: "副標題 Sub title",
           component: "text",
         },
+      ],
+    },
+    {
+      name: "heading",
+      label: "標題 Heading",
+      component: "group",
+      fields: [
         {
-          name: "step2Title",
-          label: "步驟二 Title",
-          component: "text",
-        },
-        {
-          name: "step2SubTitle",
-          label: "步驟二副標題 Sub title",
-          component: "text",
-        },
-        {
-          name: "step3Title",
-          label: "步驟三 Title",
-          component: "text",
-        },
-        {
-          name: "step3SubTitle",
-          label: "步驟三副標題 Sub title",
+          name: "description",
+          label: "描述 Description",
           component: "text",
         },
       ],
@@ -1321,105 +1397,6 @@ export default withPageCMS(IdentityPublicAdd, {
               ],
             },
           ],
-        },
-        {
-          name: "createOrganization",
-          label: "你有興趣建立關於你的機構檔案嗎 Create Organization Label",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "selectOrganization",
-          label: "選擇機構 select Organization Label",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "selectOrganizationContent",
-          label: "機構名單 organization Content Label",
-          component: "group",
-          fields: [
-            {
-              name: "content01",
-              label: "文本 text",
-              component: "text",
-            },
-            {
-              name: "content02",
-              label: "文本2 text",
-              component: "text",
-            },
-            {
-              name: "link",
-              label: "關聯 Link",
-              component: "text",
-            },
-          ],
-        },
-        {
-          name: "invitationCode",
-          label: "邀請碼 Invitation Code Label",
-          component: "text",
         },
         {
           name: "wishToDoOther",

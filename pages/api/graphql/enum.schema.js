@@ -18,6 +18,11 @@ import serviceTarget from "./enum/serviceTarget";
 import publishStatus from "./enum/publishStatus";
 import industries from "./enum/industries";
 
+import ages from "./enum/ages";
+import wishToDo from "./enum/wishToDo";
+import targetGroups from "./enum/targetGroup";
+import targetGroupDisabilities from "./enum/targetGroupDisabilities";
+
 const properize = (text) => {
   return text
     .replace(/\b(\w)/g, (match, capture) => capture.toUpperCase())
@@ -47,6 +52,10 @@ const generateEnumSchema = (_key, constants) => {
 };
 
 export default gql`
+  ${generateEnumSchema("age", ages)}
+  ${generateEnumSchema("wishToDo", wishToDo)}
+  ${generateEnumSchema("targetGroup", targetGroups)}
+  ${generateEnumSchema("targetGroupDisability", targetGroupDisabilities)}
   ${generateEnumSchema("degree", degrees)}
   ${generateEnumSchema("district", districts)}
   ${generateEnumSchema("employmentMode", employmentModes)}

@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, ChakraProvider, extendTheme, VStack } from "@chakra-ui/react";
 import { withTina } from "tinacms";
+import { useRouter } from "next/router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { NextSeo } from "next-seo";
@@ -94,10 +95,22 @@ const theme = extendTheme({
 });
 
 const App = ({ Component, pageProps }) => {
-  useEffect(() => {
-    const gaCode = "G-PXJQB5QF90";
-    init(publicRuntimeConfig.GA4_CODE || gaCode);
-  }, []);
+  const router = useRouter()
+  const [showHeader, setShowHeader] = useState(true)
+    useEffect(() => {
+      const gaCode = "G-PXJQB5QF90";
+      init(publicRuntimeConfig.GA4_CODE || gaCode);
+    }, []);
+
+    useEffect(() => {
+      if(router.isReady){
+        const regex = /app/gi;
+        if(router?.route.match(regex)){
+          setShowHeader(false)
+        }
+      }
+    }, [router]);
+
 
   return (
     <SimpleReactLightbox>
@@ -191,11 +204,11 @@ const App = ({ Component, pageProps }) => {
             <NextSeo title="賽馬會共融．知行計劃" />
           )}
           <VStack align="stretch" spacing={0}>
-            {pageProps?.header && <Header {...pageProps}></Header>}
+            {showHeader && pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>
               <Component {...pageProps} />
             </Box>
-            {pageProps?.footer && <Footer {...pageProps}></Footer>}
+            {showHeader && pageProps?.footer && <Footer {...pageProps}></Footer>}
           </VStack>
         </ChakraProvider>
       </AppProvider>
