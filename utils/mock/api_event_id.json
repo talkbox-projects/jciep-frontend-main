@@ -1,0 +1,74 @@
+{
+  "timestamp": 1638857357560,
+  "data": {
+    "id": "60dd9921f168053238816000",
+    "name": "發展智障人士的「斜槓事業」",
+    "type": "簡介",
+    "typeOther": "",
+    "description": "相信大部分打工一族的夢想，就是不受金錢和時間限制，隨心所欲地過自己想要的生活，故近年在職場興起的「斜槓職人風」，便成爲很多青年心儀的就業選項。對於智障人士亦不例外。",
+    "startDate": "2022-05-10",
+    "endDate": "2022-05-10",
+    "startTime": "12:00",
+    "endTime": "14:00",
+    "datetimeRemark": "",
+    "venue": [
+      "kwunTong"
+    ],
+    "location": "九龍灣展貿徑1號",
+    "freeOrCharge": "free",
+    "price": "",
+    "submissionDeadline": "2022-04-29",
+    "eventManager": "Michael Chiang",
+    "contactNumber": "81777778",
+    "registerUrl": "https://www.gt.app/",
+    "otherUrl": ["https://www.gt.app/#/home", "https://www.gt.app/#/portfolio"],
+    "stockPhoto": "https://images.unsplash.com/photo-1542888743-a0323a8bd3df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1529&q=80",
+    "remark": "",
+    "organizationId": "60dd9921f168053238816000",
+    "organizationName": "Friday Co.",
+    "organizationContactName": "Eunice Chung",
+    "organizationContactNumber": "97360335",
+    "organizationContactEmail": "office@fridayplace.com",
+    "createdAt": 1638857357560,
+    "createdBy": "Frankie Cheung",
+    "lastUpdateAt": 1638857357560,
+    "lastUpdateBy": "Frankie Cheung",
+    "publishedAt": 1638857357560,
+    "likeCount": 100,
+    "bookmarkCount": 100,
+    "banner": {
+      "id": "60f686ab3db961001ce8b7ac",
+      "url": "https://platformforinclusion.hk/api/media/sharing/images/WhatsApp_Image_2022-04-13_at_6.29.41_PM.jpeg",
+      "contentType": "image/png",
+      "fileSize": 789417
+    },
+    "additionalInformation": [
+      {
+        "id": "60f686ab3db961001ce8b7ac",
+        "url": "https://platformforinclusion.hk/api/media/sharing/images/WhatsApp_Image_2022-04-13_at_6.29.41_PM.jpeg",
+        "contentType": "image/png",
+        "fileSize": 789417
+      },
+      {
+        "id": "60f686ab3db961001ce8b7aa",
+        "url": "https://platformforinclusion.hk/api/media/sharing/images/WhatsApp_Image_2022-04-13_at_6.29.41_PM.jpeg",
+        "contentType": "image/png",
+        "fileSize": 789417
+      },
+      {
+        "id": "60f686ab3db961001ce8b7ab",
+        "url": "https://platformforinclusion.hk/api/media/sharing/images/WhatsApp_Image_2022-04-13_at_6.29.41_PM.jpeg",
+        "contentType": "image/png",
+        "fileSize": 789417
+      },
+      {
+        "id": "60f686ab3db961001ce8b7ad",
+        "url": "https://platformforinclusion.hk/api/media/sharing/images/WhatsApp_Image_2022-04-13_at_6.29.41_PM.jpeg",
+        "contentType": "image/png",
+        "fileSize": 789417
+      }
+    ],
+    "liked": true,
+    "bookmarked": true
+  }
+}

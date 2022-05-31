@@ -18,7 +18,7 @@ import {
   Flex,
   InputGroup,
   InputLeftElement,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
@@ -70,11 +70,7 @@ const JobOpportunities = ({ page }) => {
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
-        <Box
-          d={!router.query.jobId ? "block" : ["none", "none", "block"]}
-          bgColor="#F6D644"
-          position="relative"
-        >
+        <Box bgColor="#F6D644" position="relative">
           <Box position="absolute" bottom={0} w="100%">
             <DividerSimple primary="#FD5F53" />
           </Box>
@@ -83,7 +79,12 @@ const JobOpportunities = ({ page }) => {
               <Text fontSize="5xl" fontWeight="bold" pb={4}>
                 {wordExtractor(page?.content?.wordings, "page_title")}
               </Text>
-              <Flex direction={["column", "column", "row"]} maxWidth={"xl"} align="center" gap={4}>
+              <Flex
+                direction={["column", "column", "row"]}
+                maxWidth={"xl"}
+                align="center"
+                gap={4}
+              >
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" left={2}>
                     <SearchIcon color="gray.500" />
@@ -99,9 +100,11 @@ const JobOpportunities = ({ page }) => {
                     px={10}
                   />
                 </InputGroup>
-                <Flex w={{md: '140px'}} gap={1}>
-                    <RiFilter2Fill fontSize={18} pt={2}/>
-                    <Text textDecoration={"underline"} fontSize={'14px'}>進階篩選</Text>
+                <Flex w={{ md: "140px" }} gap={1}>
+                  <RiFilter2Fill fontSize={18} pt={2} />
+                  <Text textDecoration={"underline"} fontSize={"14px"}>
+                    進階篩選
+                  </Text>
                 </Flex>
               </Flex>
             </Box>
@@ -116,39 +119,52 @@ const JobOpportunities = ({ page }) => {
           </Container>
         </Box>
 
-        <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
+        <Box bg="#fafafa" py={16}>
           <Container>
-            <Flex direction={{ base: "column", md: "row" }} pb={8} gap={{md: 12}}>
-              <Box w={{base: '100%', md: '180px'}}>
-              <Select
-                value={router.query.organizationId ?? ""}
-                onChange={(e) =>
-                  router.push(
-                    generateUrlParameter({
-                      identityId: "",
-                      organizationId: e.target.value,
-                    })
-                  )
-                }
-                variant="flushed"
-                _placeholder={{color: "gray.200"}}
-              >
-                <option key="" value="">
-                  {wordExtractor(page?.content?.wordings, "designated_day")}
-                </option>
-                {/* {(organizations ?? []).map(({ id, chineseCompanyName }) => (
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              pb={8}
+              gap={{ md: 12 }}
+            >
+              <Box w={{ base: "100%", md: "180px" }}>
+                <Select
+                  value={router.query.organizationId ?? ""}
+                  onChange={(e) =>
+                    router.push(
+                      generateUrlParameter({
+                        identityId: "",
+                        organizationId: e.target.value,
+                      })
+                    )
+                  }
+                  variant="flushed"
+                  _placeholder={{ color: "gray.200" }}
+                >
+                  <option key="" value="">
+                    {wordExtractor(page?.content?.wordings, "designated_day")}
+                  </option>
+                  {/* {(organizations ?? []).map(({ id, chineseCompanyName }) => (
                   <option key={id} value={id}>
                     {chineseCompanyName}
                   </option>
                 ))} */}
-              </Select>
+                </Select>
               </Box>
               <Box flex={1}>
                 <FilterSection page={page} />
               </Box>
             </Flex>
-            <Flex direction={{ base: "column", md: "row" }} gap={{md: 12}}>
-              <Box w={{base: '100%', md: '180px'}} fontSize={{base: 24, md: 36}}><Text as="span" fontWeight={700}>JAN</Text> <Text as="span">2022</Text></Box>
+            <Flex direction={{ base: "column", md: "row" }} gap={{ md: 12 }}>
+              <Box
+                w={{ base: "100%", md: "180px" }}
+                fontSize={{ base: 24, md: 36 }}
+                pb={{base: 4, md: 0}}
+              >
+                <Text as="span" fontWeight={700}>
+                  JAN
+                </Text>{" "}
+                <Text as="span">2022</Text>
+              </Box>
               <Box flex={1}>
                 <Grid
                   templateColumns={{
@@ -173,13 +189,13 @@ const JobOpportunities = ({ page }) => {
                         bgSize="cover"
                         bgPosition={"center center"}
                       />
-                      <Box p={"16px"} fontSize={'14px'}>
+                      <Box p={"16px"} fontSize={"14px"}>
                         <Stack>
                           <Text fontSize={"xl"} fontWeight="bold">
                             {d.name}
                           </Text>
                           <Flex align="center" gap={2}>
-                            <Box w={'20px'}>
+                            <Box w={"20px"}>
                               <TimeIcon color="gray.500" fontSize={18} />
                             </Box>
                             <Box>
@@ -187,21 +203,31 @@ const JobOpportunities = ({ page }) => {
                             </Box>
                           </Flex>
                           <Flex align="center" gap={2}>
-                            <Box w={'20px'}>
+                            <Box w={"20px"}>
                               <IoLocationSharp color="gray.500" fontSize={18} />
                             </Box>
                             <Box>
                               <b>{d.location}</b>
                             </Box>
                           </Flex>
-                          <Text fontSize={"sm"} fontWeight={400} color="gray.400">{`由 ${d.organizationName} 主辦`}</Text>
+                          <Text
+                            fontSize={"sm"}
+                            fontWeight={400}
+                            color="gray.400"
+                          >{`由 ${d.organizationName} 主辦`}</Text>
                         </Stack>
-                        <Divider mt={6} my={4}/>
-                        <Flex justifyContent="space-between" align="center" pb={4} fontSize={'14px'}>
+                        <Divider mt={6} my={4} />
+                        <Flex
+                          justifyContent="space-between"
+                          align="center"
+                          pb={4}
+                          fontSize={"14px"}
+                        >
                           <Box>
                             <Button
                               backgroundColor="#F6D644"
                               borderRadius="22px"
+                              onClick={() => router.push(`/events/${d.id}`)}
                             >
                               我想參加
                             </Button>
@@ -237,7 +263,7 @@ const FilterSection = ({ page }) => {
     color: "#1E1E1E",
   };
   return (
-    <Stack direction={{ base: "row" }} spacing={4}>
+    <Stack direction={{ base: "row" }} spacing={4} pt={{ base: 4, md: 0 }}>
       {page?.content?.form?.filter?.options.map((d) => {
         const renderStyle = d.value === selected ? selectedStyles : stylesProps;
         return (
