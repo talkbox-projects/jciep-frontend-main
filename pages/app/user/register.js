@@ -8,7 +8,7 @@ import {
   Grid,
   GridItem,
   Container,
-  Flex
+  Flex,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../utils/page/getPage";
@@ -35,9 +35,7 @@ export const getServerSideProps = async (context) => {
 };
 const AppUserRegister = ({ page }) => {
   const router = useRouter();
-  const {
-    user
-  } = useAppContext();
+  const { user } = useAppContext();
   const [, removeCredential] = useCredential();
 
   const logout = () => {
@@ -46,23 +44,37 @@ const AppUserRegister = ({ page }) => {
   };
 
   return (
-    <Box pt={{ base: '64px' }}>
-      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
+    <Box pt={{ base: "64px" }}>
+      <Grid
+        templateColumns="repeat(3, 1fr)"
+        width="100%"
+        px={"20px"}
+        alignItems="center"
+        h={"48px"}
+        backgroundColor="#F6D644"
+      >
         <GridItem>
-            <Image src={'/images/app/close.svg'} alt={''}/>
+          <Image src={"/images/app/close.svg"} alt={""} />
         </GridItem>
       </Grid>
       <Box>
         <Box justifyContent="center" width="100%">
           <Box width="100%" textAlign="center" margin="auto">
-            <Box backgroundColor="#F6D644" bgImage={`url('/images/app/welcome_top_bg.png')`} bgRepeat={'no-repeat'} bgPosition={'center center'} position={"relative"} h={"230px"} />
+            <Box
+              backgroundColor="#F6D644"
+              bgImage={`url('/images/app/welcome_top_bg.png')`}
+              bgRepeat={"no-repeat"}
+              bgPosition={"center center"}
+              position={"relative"}
+              h={"230px"}
+            />
             <Image
               src={"/images/app/welcome_white_bg.svg"}
-              w={'100%'}
+              w={"100%"}
               alt={""}
               pos={"relative"}
               zIndex={1}
-              mt={'-40px'}
+              mt={"-40px"}
             />
             <Image
               alt=""
@@ -75,41 +87,62 @@ const AppUserRegister = ({ page }) => {
               marginTop={"-120px"}
             />
 
-<Box bgImage={`url('/images/app/bottom_bg.png')`} bgRepeat={'no-repeat'} bgPosition={'bottom center'}>
+            <Box
+              bgImage={`url('/images/app/bottom_bg.png')`}
+              bgRepeat={"no-repeat"}
+              bgPosition={"bottom center"}
+            >
+              <Container>
+                <Text fontWeight={700} fontSize={"24px"}>
+                  {page?.content?.heading?.title}
+                </Text>
+                <Text
+                  marginTop="10px"
+                  dangerouslySetInnerHTML={{
+                    __html: page?.content?.startRegistration?.content,
+                  }}
+                />
+              </Container>
 
-            <Container>
-              <Text fontWeight={700} fontSize={'24px'}>{page?.content?.heading?.title}</Text>
-              <Text
-                marginTop="10px"
-                dangerouslySetInnerHTML={{
-                  __html: page?.content?.startRegistration?.content,
-                }}
-              />
-            </Container>
-
-            <Box>
-              <Box px={"15px"} py={"12px"} mt={10} w="100%">
-                <Box width="100%" textAlign="center">
-                  <Link href="/app/user/identity/public/add">
-                    <Button
-                      backgroundColor="#F6D644"
-                      borderRadius="22px"
-                      height="44px"
-                      width="100%"
-                    >
-                      {page?.content?.continue}
-                    </Button>
-                  </Link>
-                </Box>
-                <Flex direction={'column'} gap={2} py={6} mt={10} color={'#666666'}>
-                  <Text dangerouslySetInnerHTML={{__html: page?.content?.remark?.text?.replace(" ", `<b>${user?.email}</b>`)}}/>
-                  <Box>
-                  <Text as="span">{page?.content?.remark?.text02}</Text> <Text as="span" onClick={()=>logout()}>退出</Text>
+              <Box>
+                <Box px={"15px"} py={"12px"} mt={10} w="100%">
+                  <Box width="100%" textAlign="center">
+                    <Link href="/app/user/identity/public/add">
+                      <Button
+                        backgroundColor="#F6D644"
+                        borderRadius="22px"
+                        height="44px"
+                        width="100%"
+                      >
+                        {page?.content?.continue}
+                      </Button>
+                    </Link>
                   </Box>
-                </Flex>
+                  <Flex
+                    direction={"column"}
+                    gap={2}
+                    py={6}
+                    mt={10}
+                    color={"#666666"}
+                  >
+                    <Text
+                      dangerouslySetInnerHTML={{
+                        __html: page?.content?.remark?.text?.replace(
+                          " ",
+                          `<b>${user?.email}</b>`
+                        ),
+                      }}
+                    />
+                    <Box>
+                      <Text as="span">{page?.content?.remark?.text02}</Text>{" "}
+                      <Text as="span" onClick={() => logout()}>
+                        退出
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Box>
               </Box>
             </Box>
-</Box>
 
             {/* <Text marginTop="10px" textAlign="center">
             <Text as="span">
@@ -180,7 +213,7 @@ export default withPageCMS(AppUserRegister, {
           name: "content",
           label: "內容 content",
           component: "textarea",
-        }
+        },
       ],
     },
     {
