@@ -1,29 +1,23 @@
 import {
-  Box,
   Button,
+  Box,
+  Image,
+  Heading,
   Text,
   VStack,
-  FormControl,
-  Input,
-  SimpleGrid,
+  Grid,
   GridItem,
-  Checkbox,
-  FormHelperText,
-  FormLabel,
-  Link,
+  Container,
+  Flex
 } from "@chakra-ui/react";
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
-import ReactSelect from "react-select";
+import Link from "next/link";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
-import { useRouter } from "next/router";
-import { useAppContext } from "../../../store/AppStore";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../../utils/apollo";
-import HighlightHeadline from "../../../components/HighlightHeadline";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
-import wordExtractor from "../../../utils/wordExtractor";
+import { useCredential } from "../../../utils/user";
+import { useAppContext } from "../../../store/AppStore";
+import { useRouter } from "next/router";
+import React from "react";
 
 const PAGE_KEY = "app_user_register";
 
@@ -39,15 +33,96 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-
 const AppUserRegister = ({ page }) => {
+  const router = useRouter();
+  const {
+    user
+  } = useAppContext();
+  const [, removeCredential] = useCredential();
+
+  const logout = () => {
+    removeCredential();
+    router.push("/");
+  };
+
   return (
-    <VStack py={36}>
-      <Box fontSize={["2xl", "2xl", "4xl", "4xl"]}>
-        <HighlightHeadline>歡迎註冊</HighlightHeadline>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+    <Box pt={{ base: '64px' }}>
+      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
+        <GridItem>
+            <Image src={'/images/app/close.svg'} alt={''}/>
+        </GridItem>
+      </Grid>
+      <Box>
+        <Box justifyContent="center" width="100%">
+          <Box width="100%" textAlign="center" margin="auto">
+            <Box backgroundColor="#F6D644" bgImage={`url('/images/app/welcome_top_bg.png')`} bgRepeat={'no-repeat'} bgPosition={'center center'} position={"relative"} h={"230px"} />
+            <Image
+              src={"/images/app/welcome_white_bg.svg"}
+              w={'100%'}
+              alt={""}
+              pos={"relative"}
+              zIndex={1}
+              mt={'-40px'}
+            />
+            <Image
+              alt=""
+              height="200px"
+              width="300px"
+              margin="auto"
+              src={page?.content?.startRegistration?.image}
+              position={"relative"}
+              zIndex={2}
+              marginTop={"-120px"}
+            />
+
+<Box bgImage={`url('/images/app/bottom_bg.png')`} bgRepeat={'no-repeat'} bgPosition={'bottom center'}>
+
+            <Container>
+              <Text fontWeight={700} fontSize={'24px'}>{page?.content?.heading?.title}</Text>
+              <Text
+                marginTop="10px"
+                dangerouslySetInnerHTML={{
+                  __html: page?.content?.startRegistration?.content,
+                }}
+              />
+            </Container>
+
+            <Box>
+              <Box px={"15px"} py={"12px"} mt={10} w="100%">
+                <Box width="100%" textAlign="center">
+                  <Link href="/app/user/identity/public/add">
+                    <Button
+                      backgroundColor="#F6D644"
+                      borderRadius="22px"
+                      height="44px"
+                      width="100%"
+                    >
+                      {page?.content?.continue}
+                    </Button>
+                  </Link>
+                </Box>
+                <Flex direction={'column'} gap={2} py={6} mt={10} color={'#666666'}>
+                  <Text dangerouslySetInnerHTML={{__html: page?.content?.remark?.text?.replace(" ", `<b>${user?.email}</b>`)}}/>
+                  <Box>
+                  <Text as="span">{page?.content?.remark?.text02}</Text> <Text as="span" onClick={()=>logout()}>退出</Text>
+                  </Box>
+                </Flex>
+              </Box>
+            </Box>
+</Box>
+
+            {/* <Text marginTop="10px" textAlign="center">
+            <Text as="span">
+              {page?.content?.footer?.drop?.text}
+              <Text as="span" cursor="pointer" onClick={logout}>
+                {page?.content?.footer?.drop?.button}
+              </Text>
+            </Text>
+          </Text> */}
+          </Box>
+        </Box>
       </Box>
-    </VStack>
+    </Box>
   );
 };
 
@@ -77,205 +152,63 @@ export default withPageCMS(AppUserRegister, {
       component: "group",
       fields: [
         {
-          name: "description",
-          label: "描述 Description",
+          name: "title",
+          label: "標題 Title",
           component: "text",
         },
       ],
     },
     {
-      name: "form",
-      label: "形式 Form",
+      name: "startRegistration",
+      label: "開始 Start Registration",
       component: "group",
       fields: [
         {
-          name: "chineseName",
-          label: "中文名 Chinese Name Label",
+          label: "身份 Image",
+          name: "image",
+          component: "image",
+          uploadDir: () => "/identity",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
+          name: "description",
+          label: "描述 description",
           component: "text",
         },
         {
-          name: "englishName",
-          label: "英文名 English Name Label",
+          name: "content",
+          label: "內容 content",
+          component: "textarea",
+        }
+      ],
+    },
+    {
+      name: "remark",
+      label: "身份 current",
+      component: "group",
+      fields: [
+        {
+          name: "text",
+          label: "文本 text",
           component: "text",
         },
         {
-          name: "dob",
-          label: "出生日期 Date of Birth ",
+          name: "text02",
+          label: "文本 text",
           component: "text",
         },
         {
-          name: "gender",
-          label: "性別 Gender Label",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-        // {
-        //   name: "age",
-        //   label: "年齡 Age",
-        //   component: "group",
-        //   fields: [
-        //     {
-        //       name: "label",
-        //       label: "標籤 Label",
-        //       component: "text",
-        //     },
-        //     {
-        //       name: "options",
-        //       label: "區段  Options",
-        //       component: "group-list",
-        //       itemProps: ({ id: key, caption: label }) => ({
-        //         key,
-        //         label,
-        //       }),
-        //       defaultItem: () => ({
-        //         id: Math.random().toString(36).substr(2, 9),
-        //       }),
-        //       fields: [
-        //         {
-        //           name: "label",
-        //           label: "標籤 Label",
-        //           component: "text",
-        //         },
-        //         {
-        //           name: "value",
-        //           label: "價值 Value",
-        //           component: "text",
-        //         },
-        //       ],
-        //     },
-        //   ],
-        // },
-        {
-          name: "residentRestrict",
-          label: "居住區 Resident District ",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "industry",
-          label: "行業/工作 Industry/Job ",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "terms",
-          label: "條款和條件 T&C Label",
-          component: "group",
-          fields: [
-            {
-              name: "text",
-              label: "文本 text",
-              component: "text",
-            },
-            {
-              name: "link",
-              label: "關聯 Link",
-              component: "text",
-            },
-            {
-              name: "url",
-              label: "關聯 Url",
-              component: "text",
-              placeholder: "https://",
-            },
-          ],
-        },
-        {
-          name: "continue",
-          label: "繼續標籤 Continue Label",
+          name: "logout",
+          label: "文本 text",
           component: "text",
         },
       ],
+    },
+    {
+      name: "continue",
+      label: "開始設定 Continue Label",
+      component: "text",
     },
   ],
 });

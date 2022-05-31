@@ -224,7 +224,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
           mb={"40px"}
         >
           <GridItem>
-            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>router.push(`/`)} />
+            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>setStep('step1')} />
           </GridItem>
           <GridItem textAlign="center">
             <Text fontWeight={700}>{page?.content?.step?.title}</Text>
@@ -392,7 +392,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
           mb={"40px"}
         >
           <GridItem>
-            <Image src={"/images/app/back.svg"} alt={""} />
+            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>router.push(`/app/user/register`)} />
           </GridItem>
           <GridItem textAlign="center">
             <Text fontWeight={700}>{page?.content?.step?.title}</Text>
