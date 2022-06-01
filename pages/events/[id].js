@@ -28,7 +28,7 @@ import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import EVENT from "../../utils/mock/api_event_id.json";
 
-const PAGE_KEY = "events";
+const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};

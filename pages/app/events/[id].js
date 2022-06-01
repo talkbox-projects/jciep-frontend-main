@@ -24,13 +24,13 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 
 import { TimeIcon } from "@chakra-ui/icons";
 import { IoLocationSharp, IoImageOutline } from "react-icons/io5";
-import { HiDownload } from "react-icons/hi";
+import { HiDownload, HiBookmark } from "react-icons/hi";
 import { AiOutlineLink, AiFillBank } from "react-icons/ai";
 import { BiUserCircle } from "react-icons/bi";
 import { GoCalendar } from "react-icons/go";
 import EVENT from "../../../utils/mock/api_event_id.json";
 
-const PAGE_KEY = "events";
+const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -44,14 +44,14 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const JobOpportunities = ({ page }) => {
+const Event = ({ page }) => {
   const router = useRouter();
   const EVENT_ID = EVENT?.data;
 
   return (
     <Box pt={{ base: "64px" }}>
-      <Box bg="#fafafa" pb={12}>
-        <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
+      <Box bg="#FFF" pb={12}>
+        <Flex direction={{ base: "column", md: "row" }}>
           <Box flex={1}>
             <Box
               bgImage={`url(${EVENT_ID?.banner?.url})`}
@@ -94,7 +94,6 @@ const JobOpportunities = ({ page }) => {
                 bgColor={"#FFF"}
                 borderRadius={"10px"}
                 overflow={"hidden"}
-                boxShadow="xl"
               >
                 <Box p={"16px"} fontSize={"14px"}>
                   <Stack>
@@ -218,22 +217,63 @@ const JobOpportunities = ({ page }) => {
                       <Text as="p">{EVENT_ID.remark}</Text>
                     </Flex>
                   )}
+
+                  <Flex align="center" gap={2}>
+                    <Box w={"20px"}>
+                      <GoCalendar color="gray.500" fontSize={18} />
+                    </Box>
+                    <Box fontWeight={700}>活動登記</Box>
+                  </Flex>
+
+                  <Stack direction={"column"} spacing={2} py={4}>
+                    <Flex direction="row" gap={2}>
+                      <Text>截止登記日子</Text>
+                      <Text fontWeight={700}>
+                        {EVENT_ID.submissionDeadline}
+                      </Text>
+                    </Flex>
+                    <Flex direction="row" gap={2}>
+                      <Text>活動負責人</Text>
+                      <Text fontWeight={700}>{EVENT_ID.eventManager}</Text>
+                    </Flex>
+                    <Flex direction="row" gap={2}>
+                      <Text>備註</Text>
+                      <Text fontWeight={700}>
+                        {EVENT_ID.remark ? EVENT_ID.remark : "N/A"}
+                      </Text>
+                    </Flex>
+                  </Stack>
                 </Box>
-              </GridItem>
-            </Grid>
-          </Box>
-          <Box w={{ base: "100%", md: "310px" }}>
-            <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
-              <Box>
-                <Text fontWeight={700} mb={2}>
-                  關於活動
-                </Text>
-                <Text as="p" fontSize={"14px"}>
-                  {EVENT_ID.description}
-                </Text>
-              </Box>
-              <Divider my={6} />
-              {/* <Box fontSize={"14px"}>
+
+                <Box>
+                  <Box
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
+                      marginTop: "60px",
+                    }}
+                    h={"16px"}
+                    w={"100%"}
+                    opacity={0.2}
+                  />
+                  <Box px={"15px"} py={"12px"} w="100%">
+                    <Flex direction="row" gap={4}>
+                      <Button
+                        backgroundColor="#F6D644"
+                        borderRadius="22px"
+                        height="44px"
+                        width="100%"
+                        flex={1}
+                      >
+                        登記
+                      </Button>
+                      <Box border="1px solid #EFEFEF" borderRadius="50%" p={2} minW={'30px'}>
+                        <HiBookmark color="#0D8282" fontSize={24} />
+                      </Box>
+                    </Flex>
+                  </Box>
+
+                  {/* <Box fontSize={"14px"}>
                 <Text fontWeight={700} mb={2}>
                   活動登記
                 </Text>
@@ -252,7 +292,7 @@ const JobOpportunities = ({ page }) => {
                 </Text>
               </Box> */}
 
-              <Flex gap={2} direction={"column"} mt={10}>
+                  {/* <Flex gap={2} direction={"column"} mt={10} pb={6}>
                 <Button borderRadius="20px" w={"100%"}>
                   登記
                 </Button>
@@ -262,8 +302,10 @@ const JobOpportunities = ({ page }) => {
                 <Button borderRadius="20px" w={"100%"}>
                   聯絡活動籌辦人
                 </Button>
-              </Flex>
-            </Box>
+              </Flex> */}
+                </Box>
+              </GridItem>
+            </Grid>
           </Box>
         </Flex>
       </Box>
@@ -271,7 +313,7 @@ const JobOpportunities = ({ page }) => {
   );
 };
 
-export default withPageCMS(JobOpportunities, {
+export default withPageCMS(Event, {
   key: PAGE_KEY,
   fields: [
     {

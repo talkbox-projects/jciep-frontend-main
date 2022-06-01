@@ -33,7 +33,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RiFilter2Fill } from "react-icons/ri";
 import EVENTS from "../../utils/mock/api_event_list.json";
 
-const PAGE_KEY = "events";
+const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
