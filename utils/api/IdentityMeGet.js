@@ -11,16 +11,23 @@ const identityMeGet = async (params, context) => {
         chineseName
         englishName
         dob
+        age
         gender
         district
         pwdType
+        pwdOther
+        wishToDo
+        wishToDoOther
         interestedEmploymentMode
         interestedIndustry
+        currentIndustry
         interestedIndustryOther
         industry
         industryOther
         tncAccept
+        appTncAccept
         published
+        phase2profile
         email
         phone
         profilePic {

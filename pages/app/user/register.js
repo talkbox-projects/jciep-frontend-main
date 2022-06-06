@@ -2,9 +2,7 @@ import {
   Button,
   Box,
   Image,
-  Heading,
   Text,
-  VStack,
   Grid,
   GridItem,
   Container,
@@ -67,15 +65,16 @@ const AppUserRegister = ({ page }) => {
               bgPosition={"center center"}
               position={"relative"}
               h={"230px"}
-            />
-            <Image
-              src={"/images/app/welcome_white_bg.svg"}
-              w={"100%"}
-              alt={""}
-              pos={"relative"}
-              zIndex={1}
-              mt={"-40px"}
-            />
+            >
+              <Image
+                src={"/images/app/welcome_white_bg.svg"}
+                w={"100%"}
+                alt={""}
+                zIndex={1}
+                bottom={0}
+                pos={"absolute"}
+              />
+            </Box>
             <Image
               alt=""
               height="200px"
@@ -136,22 +135,13 @@ const AppUserRegister = ({ page }) => {
                     <Box>
                       <Text as="span">{page?.content?.remark?.text02}</Text>{" "}
                       <Text as="span" onClick={() => logout()}>
-                        退出
+                      {page?.content?.logout}
                       </Text>
                     </Box>
                   </Flex>
                 </Box>
               </Box>
             </Box>
-
-            {/* <Text marginTop="10px" textAlign="center">
-            <Text as="span">
-              {page?.content?.footer?.drop?.text}
-              <Text as="span" cursor="pointer" onClick={logout}>
-                {page?.content?.footer?.drop?.button}
-              </Text>
-            </Text>
-          </Text> */}
           </Box>
         </Box>
       </Box>
@@ -241,6 +231,11 @@ export default withPageCMS(AppUserRegister, {
     {
       name: "continue",
       label: "開始設定 Continue Label",
+      component: "text",
+    },
+    {
+      name: "logout",
+      label: "退出 Logout Label",
       component: "text",
     },
   ],

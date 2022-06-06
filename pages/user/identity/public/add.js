@@ -17,7 +17,7 @@ import {
   Stack,
   Grid,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../../utils/page/getPage";
@@ -87,6 +87,14 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     setError,
     getValues
   } = useForm();
+
+  useEffect(()=>{
+    if(window){
+      window.scroll({
+        top: 0
+      })
+    }
+  },[step])
 
   const watchFields = watch(
     [

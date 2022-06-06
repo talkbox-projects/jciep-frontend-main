@@ -28,7 +28,6 @@ const PublicSectionViewer = () => {
     isAdmin,
     editable,
   } = IdentityProfileStore.useContext();
-
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
@@ -109,7 +108,19 @@ const PublicSectionViewer = () => {
           </FormControl>
         </Stack>
         <Stack direction={["column", "column", "row"]}>
-          <FormControl>
+        <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(page?.content?.wordings, "field_label_age")}
+            </FormLabel>
+            <Text>
+            {getEnumText(
+                enums?.EnumAgeList,
+                identity?.age,
+                router.locale
+              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
+            </Text>
+          </FormControl>
+          {/* <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_dob")}
             </FormLabel>
@@ -117,10 +128,10 @@ const PublicSectionViewer = () => {
               {moment(identity?.dob).format("YYYY-MM-DD") ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
-          </FormControl>
+          </FormControl> */}
           <FormControl>
             <FormLabel color="#757575" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_district")}
+              {wordExtractor(page?.content?.wordings, "field_label_gender")}
             </FormLabel>
             <Text>
               {getEnumText(
@@ -158,6 +169,38 @@ const PublicSectionViewer = () => {
             </Wrap>
           </FormControl>
         </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(page?.content?.wordings, "field_label_wish_to_do")}
+            </FormLabel>
+            <Text>
+
+            {identity?.wishToDoOther ? identity?.wishToDoOther : getEnumText(
+                enums?.EnumWishToDoList,
+                identity?.wishToDo,
+                router.locale
+              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
+            </Text>
+          </FormControl>
+          {/* <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(page?.content?.wordings, "field_label_industry")}
+            </FormLabel>
+            <Wrap>
+              {identity?.industry.map((key) => (
+                <Tag key={key}>
+                  {getEnumText(enums?.EnumIndustryList, key, router.locale) ??
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Tag>
+              ))}
+            </Wrap>
+          </FormControl> */}
+        </Stack>
+
+
+
       </VStack>
     </VStack>
   );

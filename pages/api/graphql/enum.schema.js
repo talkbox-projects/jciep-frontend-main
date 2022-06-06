@@ -19,7 +19,7 @@ import publishStatus from "./enum/publishStatus";
 import industries from "./enum/industries";
 
 import ages from "./enum/ages";
-import wishToDo from "./enum/wishToDo";
+import wishToDos from "./enum/wishToDo";
 import targetGroups from "./enum/targetGroup";
 import targetGroupDisabilities from "./enum/targetGroupDisabilities";
 
@@ -53,7 +53,7 @@ const generateEnumSchema = (_key, constants) => {
 
 export default gql`
   ${generateEnumSchema("age", ages)}
-  ${generateEnumSchema("wishToDo", wishToDo)}
+  ${generateEnumSchema("wishToDo", wishToDos)}
   ${generateEnumSchema("targetGroup", targetGroups)}
   ${generateEnumSchema("targetGroupDisability", targetGroupDisabilities)}
   ${generateEnumSchema("degree", degrees)}

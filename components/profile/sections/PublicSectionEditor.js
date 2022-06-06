@@ -29,12 +29,16 @@ const PublicSectionEditor = () => {
     control,
     register,
     formState: { isSubmitting, errors },
+    watch
   } = useForm({
     defaultValues: {
       id: identity.id,
       caption: identity.caption,
+      wishToDoStatus: identity.wishToDoStatus
     },
   });
+
+  const wishToDoStatus = watch("wishToDo", identity.wishToDo);
 
   return (
     <VStack
@@ -195,15 +199,33 @@ const PublicSectionEditor = () => {
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.dob?.message}>
             <FormLabel color="#757575" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_dob")}
+              {wordExtractor(page?.content?.wordings, "field_label_age")}
             </FormLabel>
-            <Input
-              type="date"
+
+            <Select
               variant="flushed"
-              defaultValue={identity?.dob}
-              {...register("dob", {})}
-            ></Input>
-            <FormHelperText color="red">{errors?.dob?.message}</FormHelperText>
+              {...register("age", {
+                required: wordExtractor(
+                  page?.content?.wordings,
+                  "field_error_message_required"
+                ),
+              })}
+              defaultValue={identity?.age}
+            >
+              <option key={"unselected"} value={""}>
+                {wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </option>
+              {(enums?.EnumAgeList ?? []).map(
+                ({ key: value, value: { [router.locale]: label } = {} }) => {
+                  return (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  );
+                }
+              )}
+            </Select>
+            <FormHelperText color="red">{errors?.age?.message}</FormHelperText>
           </FormControl>
           <FormControl isInvalid={errors?.gender?.message}>
             <FormLabel color="#757575" mb={0}>
@@ -312,6 +334,51 @@ const PublicSectionEditor = () => {
               {errors?.industry?.message}
             </FormHelperText>
           </FormControl>
+        </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(page?.content?.wordings, "field_label_wish_to_do")}
+            </FormLabel>
+
+            <Select
+              variant="flushed"
+              {...register("wishToDo", {
+                required: wordExtractor(
+                  page?.content?.wordings,
+                  "field_error_message_required"
+                ),
+              })}
+              defaultValue={identity?.wishToDo}
+            >
+              <option key={"unselected"} value={""}>
+                {wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </option>
+              {(enums?.EnumWishToDoList ?? []).map(
+                ({ key: value, value: { [router.locale]: label } = {} }) => {
+                  return (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  );
+                }
+              )}
+            </Select>
+          </FormControl>
+          {wishToDoStatus === "other" && <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_wish_to_do_other"
+              )}
+            </FormLabel>
+            <Input
+              variant="flushed"
+              defaultValue={identity?.caption}
+              {...register("wishToDoOther", {})}
+            ></Input>
+          </FormControl>}
         </Stack>
       </VStack>
     </VStack>

@@ -28,10 +28,10 @@ import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../utils/general";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
-
 
 const PAGE_KEY = "identity_public_add";
 
@@ -71,7 +71,7 @@ const labelStyles = {
 const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const { user } = useAppContext();
-  const [formState, setFormState] = useState();
+  const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
@@ -83,11 +83,17 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     watch,
     setValue,
     setError,
-    getValues
+    getValues,
   } = useForm();
 
   const watchFields = watch(
-    ["industry", "is_disability", "pwd_type", "wish_to_do", "selectOrganization"],
+    [
+      "industry",
+      "is_disability",
+      "pwd_type",
+      "wish_to_do",
+      "selectOrganization",
+    ],
     { pwd_type: [] }
   );
 
@@ -104,8 +110,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         input,
       });
       if (data && data.IdentityCreate) {
-        router.push(`/app/user/identity/public/${data.IdentityCreate.id}/success`);
-        if(invitationCode){
+        router.push(
+          `/app/user/identity/public/${data.IdentityCreate.id}/success`
+        );
+        if (invitationCode) {
           await OrganizationMemberJoin({
             invitationCode: invitationCode,
             identityId: data.IdentityCreate.id,
@@ -118,21 +126,23 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   };
 
   const handleSubmitInvitation = async (formState) => {
-    setError("invitationCode", {})
+    setError("invitationCode", {});
     const isValid = await OrganizationInvitationCodeValidity({
       invitationCode: getValues("invitationCode"),
       organizationType: "ngo",
     });
 
-    if(!isValid) {
-      setError("invitationCode", {message: wordExtractor(
-        page?.content?.wordings,
-        "invitation_code_error_message"
-      )})
+    if (!isValid) {
+      setError("invitationCode", {
+        message: wordExtractor(
+          page?.content?.wordings,
+          "invitation_code_error_message"
+        ),
+      });
       return;
     }
 
-    handlePostData(formState, getValues("invitationCode"))
+    handlePostData(formState, getValues("invitationCode"));
   };
 
   const startCreateOrganization = async (input) => {
@@ -201,178 +211,214 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     setStep("step2");
   };
 
-  useEffect(()=>{
-    var json = {
-      name: "getRegistrationInfo",
-      options: {
-          callback: "getRegistrationInfoHandler"
-      }
-  };
-  // window.AppContext.postMessage(json);
-  },[])
+  useEffect(() => {
+    // var json = {
+    //   name: "getRegistrationInfo",
+    //   options: {
+    //     callback: "getRegistrationInfoHandler",
+    //   },
+    // };
+    // window.AppContext.postMessage(json);
+  }, [formState]);
 
   if (step === "step2") {
     return (
       <Box pt={{ base: "64px" }}>
-       <Grid
-          templateColumns="repeat(3, 1fr)"
-          width="100%"
-          px={"20px"}
-          alignItems="center"
-          h={"48px"}
-          borderBottom="1px solid #EFEFEF"
-          mb={"40px"}
+        <NAV
+          title={page?.content?.step?.title}
+          subTitle={page?.content?.step?.step2SubTitle}
+          handleClickLeftIcon={() => setStep("step1")}
+        />
+        <Box
+          bgImage={`url('/images/app/bottom_bg.png')`}
+          bgRepeat={"no-repeat"}
+          bgPosition={"bottom center"}
+          minH={"lg"}
         >
-          <GridItem>
-            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>setStep('step1')} />
-          </GridItem>
-          <GridItem textAlign="center">
-            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
-            <Text color="gray.500" fontSize={"12px"}>
-              {page?.content?.step?.step2SubTitle}
-            </Text>
-          </GridItem>
-        </Grid>
-        <Text
-          fontSize="24px"
-          letterSpacing="1.5px"
-          fontWeight={600}
-          px={"15px"}
-        >
-          {page?.content?.step?.step2Title}
-        </Text>
-
-
-        <Box justifyContent="center" width="100%">
-          <Box
-            maxWidth={"md"}
-            width="100%"
-            textAlign="left"
-            margin="auto"
-            padding="0px 15px"
+          <Text
+            fontSize="20px"
+            letterSpacing="1.5px"
+            fontWeight={600}
+            px={"15px"}
+            mt={0}
+            mb={2}
           >
-            <VStack py={{ base: 12 }}>
-              <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
-                <GridItem colSpan={{ base: 2 }}>
-                  <FormControl>
-                    <Flex gap={2}>
-                      <Button
-                        flex={1}
-                        backgroundColor={
-                          showSelectCentre ? "#F6D644" : "transparent"
-                        }
-                        border={`2px solid ${
-                          showSelectCentre ? "#FFFFFF" : "#999999"
-                        }`}
-                        height="38px"
-                        width="117px"
-                        onClick={() => setShowSelectCentre(true)}
-                      >
-                        {
-                          page?.content?.form?.createOrganization?.options[0]
-                            ?.label
-                        }
-                      </Button>
+            {page?.content?.step?.step2Title}
+          </Text>
 
-                      <Button
-                        flex={1}
-                        backgroundColor={"transparent"}
-                        border={`2px solid #999999`}
-                        height="38px"
-                        width="117px"
-                        onClick={() => handlePostData(formState)}
-                      >
-                        {
-                          page?.content?.form?.createOrganization?.options[1]
-                            ?.label
-                        }
-                      </Button>
-                    </Flex>
-                  </FormControl>
-                </GridItem>
-
-                {showSelectCentre && <GridItem colSpan={{ base: 2 }} pt={6}>
-                  <FormControl>
-                    <FormLabel>
-                      {page?.content?.form?.selectOrganization?.label}
-                    </FormLabel>
-                    <Controller
-                      name="selectOrganization"
-                      isClearable
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <ReactSelect
-                          aria-label={
-                            page?.content?.form?.selectOrganization?.label
-                          }
-                          {...field}
-                          placeholder={wordExtractor(
-                            page?.content?.wordings,
-                            "select_organization_placeholder"
-                          )}
-                          options={(organizations ?? []).map(
-                              ({ chineseCompanyName, id }) => ({
-                                label: chineseCompanyName,
-                                value: id,
-                              })
-                            )}
-                          onChange={(data) => {
-                              const organization = organizations.find(
-                                (d) => d.id === data.value
-                              );
-                              setOrganization(organization);
-                            }}
-                        />
-                      )}
-                    />
-                    <FormHelperText>
-                      {
-                        page?.content?.form?.selectOrganizationContent
-                          ?.content01
-                      }
-                      <br />
-                      {
-                        page?.content?.form?.selectOrganizationContent
-                          ?.content02
-                      }
-                      <Text
-                        as="span"
-                        color="#017878"
-                        cursor="pointer"
-                        onClick={() => startCreateOrganization(formState)}
-                      >
-                        {page?.content?.form?.selectOrganizationContent?.link}
-                      </Text>
-                      !
-                    </FormHelperText>
-                  </FormControl>
-                  {selectedOrganization && <Box mt={8} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
+          <Box justifyContent="center" width="100%">
+            <Box
+              maxWidth={"md"}
+              width="100%"
+              textAlign="left"
+              margin="auto"
+              padding="0px 15px"
+            >
+              <VStack py={{ base: 12 }}>
+                <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={4}>
+                  <GridItem colSpan={{ base: 2 }}>
                     <FormControl>
-                      <FormLabel>
-                        {page?.content?.form?.invitationCode}
-                      </FormLabel>
-                      <Input
-                        type="text"
-                        {...register("invitationCode")}
-                        variant="flushed"
-                      />
+                      <Flex gap={2}>
+                        <Button
+                          flex={1}
+                          backgroundColor={
+                            showSelectCentre ? "#F6D644" : "transparent"
+                          }
+                          border={`2px solid ${
+                            showSelectCentre ? "#F6D644" : "#999999"
+                          }`}
+                          height="48px"
+                          width="117px"
+                          onClick={() => setShowSelectCentre(true)}
+                        >
+                          {
+                            page?.content?.form?.createOrganization?.options[0]
+                              ?.label
+                          }
+                        </Button>
+
+                        <Button
+                          flex={1}
+                          backgroundColor={"transparent"}
+                          border={`2px solid #999999`}
+                          height="48px"
+                          width="117px"
+                          onClick={() => handlePostData(formState)}
+                        >
+                          {
+                            page?.content?.form?.createOrganization?.options[1]
+                              ?.label
+                          }
+                        </Button>
+                      </Flex>
                     </FormControl>
-                  </Box>}
-                </GridItem>}
-              </Grid>
-              {selectedOrganization && <FormControl textAlign="center">
-                <Button
-                  backgroundColor="#F6D644"
-                  borderRadius="22px"
-                  height="44px"
-                  width="117.93px"
-                  onClick={() => handleSubmitInvitation(formState)}
-                >
-                  {page?.content?.form?.continue}
-                </Button>
-              </FormControl>}
-            </VStack>
+                  </GridItem>
+
+                  {showSelectCentre && (
+                    <GridItem colSpan={{ base: 2 }} pt={6}>
+                      <FormControl>
+                        <FormLabel>
+                          {page?.content?.form?.selectOrganization?.label}
+                        </FormLabel>
+                        <Controller
+                          name="selectOrganization"
+                          isClearable
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <ReactSelect
+                              aria-label={
+                                page?.content?.form?.selectOrganization?.label
+                              }
+                              {...field}
+                              styles={customStyles}
+                              placeholder={wordExtractor(
+                                page?.content?.wordings,
+                                "select_organization_placeholder"
+                              )}
+                              options={(organizations ?? []).map(
+                                ({ chineseCompanyName, id }) => ({
+                                  label: chineseCompanyName,
+                                  value: id,
+                                })
+                              )}
+                              onChange={(data) => {
+                                const organization = organizations.find(
+                                  (d) => d.id === data.value
+                                );
+                                setOrganization(organization);
+                              }}
+                              components={{
+                                IndicatorSeparator: () => null,
+                              }}
+                            />
+                          )}
+                        />
+                        <FormHelperText>
+                          <Flex direction="row" gap={1}>
+                            <Box>
+                              <InfoOutlineIcon fontSize={"14px"} />
+                            </Box>
+                            <Box fontSize={"12px"}>
+                              {
+                                page?.content?.form?.selectOrganizationContent
+                                  ?.content01
+                              }
+                              <br />
+                              {
+                                page?.content?.form?.selectOrganizationContent
+                                  ?.content02
+                              }
+                              <Text
+                                as="span"
+                                color="#017878"
+                                cursor="pointer"
+                                fontWeight={700}
+                                onClick={() =>
+                                  startCreateOrganization(formState)
+                                }
+                              >
+                                {
+                                  page?.content?.form?.selectOrganizationContent
+                                    ?.link
+                                }
+                              </Text>
+                              !
+                            </Box>
+                          </Flex>
+                        </FormHelperText>
+                      </FormControl>
+                      {selectedOrganization && (
+                        <Box
+                          mt={8}
+                          mb={4}
+                          p={6}
+                          bgColor={"#FAFAFA"}
+                          borderRadius={"15px"}
+                        >
+                          <FormControl>
+                            <FormLabel>
+                              {page?.content?.form?.invitationCode}
+                            </FormLabel>
+                            <Input
+                              type="text"
+                              {...register("invitationCode")}
+                              variant="flushed"
+                            />
+                            <FormHelperText>
+                              <Flex direction="row" gap={1}>
+                                <Box>
+                                  <InfoOutlineIcon fontSize={"14px"} />
+                                </Box>
+                                <Box fontSize={"12px"}>
+                                  {wordExtractor(
+                                    page?.content?.wordings,
+                                    "invitation_code_content"
+                                  )}
+                                </Box>
+                              </Flex>
+                            </FormHelperText>
+                          </FormControl>
+                        </Box>
+                      )}
+                    </GridItem>
+                  )}
+                </Grid>
+                {selectedOrganization && (
+                  <FormControl textAlign="center">
+                    <Button
+                      backgroundColor="#F6D644"
+                      borderRadius="22px"
+                      height="44px"
+                      width="117.93px"
+                      onClick={() => handleSubmitInvitation(formState)}
+                    >
+                      {page?.content?.form?.continue}
+                    </Button>
+                  </FormControl>
+                )}
+              </VStack>
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -382,48 +428,36 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   if (step === "step1") {
     return (
       <Box pt={{ base: "64px" }}>
-        <Grid
-          templateColumns="repeat(3, 1fr)"
-          width="100%"
-          px={"20px"}
-          alignItems="center"
-          h={"48px"}
-          borderBottom="1px solid #EFEFEF"
-          mb={"40px"}
-        >
-          <GridItem>
-            <Image src={"/images/app/back.svg"} alt={""} onClick={()=>router.push(`/app/user/register`)} />
-          </GridItem>
-          <GridItem textAlign="center">
-            <Text fontWeight={700}>{page?.content?.step?.title}</Text>
-            <Text color="gray.500" fontSize={"12px"}>
-              {page?.content?.step?.subTitle}
-            </Text>
-          </GridItem>
-        </Grid>
-
+        <NAV
+          title={page?.content?.step?.title}
+          subTitle={page?.content?.step?.subTitle}
+          handleClickLeftIcon={() => router.push(`/app/user/register`)}
+        />
         <Text
-          fontSize="24px"
+          fontSize="20px"
           letterSpacing="1.5px"
           fontWeight={600}
           px={"15px"}
+          mt={0}
         >
           {page?.content?.step?.title}
         </Text>
+
         <Box justifyContent="center" width="100%">
           <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
             <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns="repeat(1, 1fr)"
-                gap={"60px"}
+                gap={"40px"}
                 width="100%"
                 px={"15px"}
               >
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.chineseName}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.chineseName}
+                      required={true}
+                    />
                     <Input
                       type="text"
                       variant="flushed"
@@ -446,10 +480,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                 </GridItem>
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.englishName}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.englishName}
+                      required={true}
+                    />
                     <Input
                       type="text"
                       variant="flushed"
@@ -473,10 +508,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.age?.label}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.age?.label}
+                      required={true}
+                    />
                     <Controller
                       name="age"
                       isClearable
@@ -514,10 +550,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.gender?.label}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.gender?.label}
+                      required={true}
+                    />
                     <Controller
                       name="gender"
                       control={control}
@@ -554,10 +591,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.residentRestrict?.label}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.residentRestrict?.label}
+                      required={true}
+                    />
                     <Controller
                       name="resident_district"
                       isClearable
@@ -597,10 +635,8 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.phone}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL name={page?.content?.form?.phone} required={true} />
                     <Input
                       type="text"
                       variant="flushed"
@@ -624,10 +660,8 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.email}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL name={page?.content?.form?.email} required={true} />
                     <Input
                       type="text"
                       variant="flushed"
@@ -661,10 +695,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.industry?.label}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.industry?.label}
+                      required={true}
+                    />
                     <Controller
                       name="industry"
                       isClearable
@@ -701,10 +736,8 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   </FormControl>
                   {watchFields[0]?.value === "other" && (
                     <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
-                      <FormControl isRequired>
-                        <FormLabel {...labelStyles}>
-                          {page?.content?.form?.industryOther}
-                        </FormLabel>
+                      <FormControl>
+                        <LABEL name={page?.content?.form?.industryOther} />
                         <Input
                           type="text"
                           placeholder={wordExtractor(
@@ -714,16 +747,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           {...register("industry_other", { required: true })}
                           variant="flushed"
                         />
-                        <FormHelperText>
-                          {errors?.industry_other?.type === "required" && (
-                            <Text color="red">
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "industry_other_required"
-                              )}
-                            </Text>
-                          )}
-                        </FormHelperText>
                       </FormControl>
                     </Box>
                   )}
@@ -731,9 +754,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
                 <GridItem>
                   <FormControl>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.jobFunction}{" "}
-                    </FormLabel>
+                    <LABEL name={page?.content?.form?.jobFunction} />
                     <Input
                       type="text"
                       placeholder={wordExtractor(
@@ -756,12 +777,12 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
               <Grid
                 templateColumns="repeat(1, 1fr)"
-                gap={"60px"}
+                gap={"40px"}
                 width="100%"
                 px={"15px"}
               >
                 <GridItem>
-                  <FormControl isRequired>
+                  <FormControl>
                     <FormLabel
                       fontSize="24px"
                       letterSpacing="1.5px"
@@ -769,32 +790,48 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                       fontWeight={600}
                     >
                       {page?.content?.form?.isDisability?.label}
+                      <Text as="span" color="red">
+                        {" "}
+                        *
+                      </Text>
                     </FormLabel>
-                    <Flex gap={2}>
-                      {page?.content?.form?.isDisability?.options.map((d) => {
-                        const isActive = d.value === watchFields[1];
-                        return (
-                          <Button
-                            flex={1}
-                            key={d.label}
-                            backgroundColor={
-                              isActive ? "#F6D644" : "transparent"
+
+                    <Controller
+                      control={control}
+                      name="is_disability"
+                      rules={{ required: true }}
+                      defaultValue={null}
+                      render={({ field: { value } }) => (
+                        <Flex gap={2}>
+                          {page?.content?.form?.isDisability?.options.map(
+                            (d) => {
+                              const isActive = d.value === value;
+                              return (
+                                <Button
+                                  flex={1}
+                                  key={d.label}
+                                  backgroundColor={
+                                    isActive ? "#F6D644" : "transparent"
+                                  }
+                                  border={`2px solid ${
+                                    isActive ? "#FFFFFF" : "#999999"
+                                  }`}
+                                  height="38px"
+                                  width="117px"
+                                  onClick={() => {
+                                    setValue("is_disability", d.value);
+                                    setValue("pwd_type", []);
+                                  }}
+                                >
+                                  {d.label}
+                                </Button>
+                              );
                             }
-                            border={`2px solid ${
-                              isActive ? "#FFFFFF" : "#999999"
-                            }`}
-                            height="38px"
-                            width="117px"
-                            onClick={() => {
-                              setValue("is_disability", d.value);
-                              setValue("pwd_type", []);
-                            }}
-                          >
-                            {d.label}
-                          </Button>
-                        );
-                      })}
-                    </Flex>
+                          )}
+                        </Flex>
+                      )}
+                    />
+
                     <FormHelperText>
                       {errors?.is_disability?.type === "required" && (
                         <Text color="red">
@@ -819,6 +856,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                           fontWeight={600}
                         >
                           {page?.content?.form?.pwdType?.label}
+                          <Text as="span" color="red">
+                            {" "}
+                            *
+                          </Text>
                         </FormLabel>
 
                         <Controller
@@ -844,7 +885,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                     "#FFDA94",
                                   ];
                                   return (
-                                    <Box
+                                    <GridItem
                                       key={d.label}
                                       height="130px"
                                       borderRadius={"10px"}
@@ -855,6 +896,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                           : "#FFFFFF"
                                       }
                                       cursor="pointer"
+                                      colSpan={d.value === "other" ? 2 : 1}
                                       onClick={() => {
                                         value.includes(d.value)
                                           ? setValue(
@@ -888,12 +930,12 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                                               />
                                             </Center>
                                           </Box>
-                                          <Text textAlign="center">
+                                          <Text textAlign="center" px={2}>
                                             {d.label}
                                           </Text>
                                         </Stack>
                                       </Center>
-                                    </Box>
+                                    </GridItem>
                                   );
                                 }
                               )}
@@ -920,9 +962,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   watchFields[2]?.includes("other") && (
                     <GridItem>
                       <FormControl>
-                        <FormLabel {...labelStyles}>
-                          {page?.content?.form?.pwdOther}{" "}
-                        </FormLabel>
+                        <LABEL
+                          name={page?.content?.form?.pwdOther}
+                          required={true}
+                        />
                         <Input
                           type="text"
                           variant="flushed"
@@ -931,7 +974,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                             "pwd_other_placeholder"
                           )}
                           {...register("pwd_other", {
-                            required: true,
+                            required: watchFields[2]?.includes("other"),
                             defaultValue: "",
                           })}
                         />
@@ -940,10 +983,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                   )}
 
                 <GridItem>
-                  <FormControl isRequired>
-                    <FormLabel {...labelStyles}>
-                      {page?.content?.form?.wishToDo?.label}
-                    </FormLabel>
+                  <FormControl>
+                    <LABEL
+                      name={page?.content?.form?.wishToDo.label}
+                      required={true}
+                    />
                     <Controller
                       name="wish_to_do"
                       isClearable
@@ -981,17 +1025,20 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
                   {watchFields[3]?.value === "other" && (
                     <Box pt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
-                      <FormControl isRequired>
-                        <FormLabel {...labelStyles}>
-                          {page?.content?.form?.wishToDoOther}
-                        </FormLabel>
+                      <FormControl>
+                        <LABEL
+                          name={page?.content?.form?.wishToDoOther}
+                          required={true}
+                        />
                         <Input
                           type="text"
                           placeholder={wordExtractor(
                             page?.content?.wordings,
                             "wish_to_do_other_placeholder"
                           )}
-                          {...register("wish_to_do_other", { required: true })}
+                          {...register("wish_to_do_other", {
+                            required: watchFields[3]?.value === "other",
+                          })}
                           variant="flushed"
                         />
                         <FormHelperText>
@@ -1067,6 +1114,54 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
       </Box>
     );
   }
+};
+
+const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
+  return (
+    <Grid
+      templateColumns="repeat(3, 1fr)"
+      width="100%"
+      px={"20px"}
+      alignItems="center"
+      h={"48px"}
+      borderBottom="1px solid #EFEFEF"
+      mb={"40px"}
+    >
+      <GridItem>
+        <Image
+          src={"/images/app/back.svg"}
+          alt={""}
+          onClick={() => handleClickLeftIcon()}
+        />
+      </GridItem>
+      <GridItem textAlign="center">
+        {title && <Text fontWeight={700}>{title}</Text>}
+        {subTitle && (
+          <Text color="gray.500" fontSize={"12px"}>
+            {subTitle}
+          </Text>
+        )}
+      </GridItem>
+    </Grid>
+  );
+};
+
+const LABEL = ({ name, required }) => {
+  if (!name) {
+    return "";
+  }
+
+  return (
+    <FormLabel {...labelStyles}>
+      {name}
+      {required && (
+        <Text as="span" color="red">
+          {" "}
+          *
+        </Text>
+      )}
+    </FormLabel>
+  );
 };
 
 export default withPageCMS(IdentityPublicAdd, {

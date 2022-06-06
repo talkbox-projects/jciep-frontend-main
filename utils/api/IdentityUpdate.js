@@ -23,6 +23,9 @@ const identityUpdate = async ({ input }, context) => {
         published
         email
         phone
+        age
+        wishToDo
+        wishToDoOther
         profilePic {
           id
           url

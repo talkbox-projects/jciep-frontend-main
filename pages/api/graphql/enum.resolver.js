@@ -18,7 +18,7 @@ import publishStatus from "./enum/publishStatus";
 import industries from "./enum/industries";
 
 import ages from "./enum/ages";
-import wishToDo from "./enum/wishToDo";
+import wishToDos from "./enum/wishToDo";
 import targetGroups from "./enum/targetGroup";
 import targetGroupDisabilities from "./enum/targetGroupDisabilities";
 
@@ -40,10 +40,9 @@ const generateEnumResolver = (_key, constants) => {
 export default {
   Query: {
     ...generateEnumResolver("age", ages),
-    ...generateEnumResolver("wishToDo", wishToDo),
     ...generateEnumResolver("targetGroup", targetGroups),
     ...generateEnumResolver("targetGroupDisability", targetGroupDisabilities),
-    ...generateEnumResolver("wishToDo", wishToDo),
+    ...generateEnumResolver("wishToDo", wishToDos),
     ...generateEnumResolver("degree", degrees),
     ...generateEnumResolver("district", districts),
     ...generateEnumResolver("identityType", identityTypes),
