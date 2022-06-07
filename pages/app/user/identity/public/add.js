@@ -1182,6 +1182,26 @@ export default withPageCMS(IdentityPublicAdd, {
           label: "副標題 Sub title",
           component: "text",
         },
+        {
+          name: "step2Title",
+          label: "步驟二 Title",
+          component: "text",
+        },
+        {
+          name: "step2SubTitle",
+          label: "步驟二副標題 Sub title",
+          component: "text",
+        },
+        {
+          name: "step3Title",
+          label: "步驟三 Title",
+          component: "text",
+        },
+        {
+          name: "step3SubTitle",
+          label: "步驟三副標題 Sub title",
+          component: "text",
+        },
       ],
     },
     {
@@ -1211,11 +1231,6 @@ export default withPageCMS(IdentityPublicAdd, {
           label: "英文名 English Name Label",
           component: "text",
         },
-        // {
-        //   name: "dob",
-        //   label: "出生日期 Date of Birth ",
-        //   component: "text",
-        // },
         {
           name: "gender",
           label: "性別 Gender Label",
@@ -1496,6 +1511,105 @@ export default withPageCMS(IdentityPublicAdd, {
         {
           name: "wishToDoOther",
           label: "其他，請說明 Wish To Do Other Label",
+          component: "text",
+        },
+        {
+          name: "createOrganization",
+          label: "你有興趣建立關於你的機構檔案嗎 Create Organization Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "selectOrganization",
+          label: "選擇機構 select Organization Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "selectOrganizationContent",
+          label: "機構名單 organization Content Label",
+          component: "group",
+          fields: [
+            {
+              name: "content01",
+              label: "文本 text",
+              component: "text",
+            },
+            {
+              name: "content02",
+              label: "文本2 text",
+              component: "text",
+            },
+            {
+              name: "link",
+              label: "關聯 Link",
+              component: "text",
+            },
+          ],
+        },
+        {
+          name: "invitationCode",
+          label: "邀請碼 Invitation Code Label",
           component: "text",
         },
         {
