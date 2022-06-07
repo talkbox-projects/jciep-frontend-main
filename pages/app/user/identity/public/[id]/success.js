@@ -15,35 +15,53 @@ import getSharedServerSideProps from "../../../../../../utils/server/getSharedSe
 import { useCredential } from "../../../../../../utils/user";
 import { useRouter } from "next/router";
 import React from "react";
+import nookies from "nookies";
+import { useAppContext } from "../../../../../../store/AppStore";
 
 const PAGE_KEY = "identity_public_add_success";
 
 export const getServerSideProps = async (context) => {
+  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      token: cookies['jciep-token'],
+      identityId: cookies['jciep-identityId']
     },
   };
 };
-const IdentityPublicAddSuccess = ({ page }) => {
-  const router = useRouter();
+
+const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   const [, removeCredential] = useCredential();
 
-  const logout = () => {
-    removeCredential();
-    router.push("/");
-  };
+  const {postMessage} = useAppContext()
+
+  const sendLoginSuccessResponse = () => {
+
+    let json = {
+      name: "sendLoginSuccessResponse",
+      options: { 
+        callback: "sendLoginSuccessResponseHandler",
+        params: {
+          token: token,
+          identityId: identityId
+        }
+      }
+    }
+
+    postMessage(json)
+  }
 
   return (
     <Box pt={{ base: '64px' }}>
       <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
         <GridItem>
-            <Image src={'/images/app/close.svg'} alt={''}/>
+          {/* <Image src={'/images/app/close.svg'} alt={''}/> */}
+          {" "}
         </GridItem>
         <GridItem textAlign="center">
           <Text fontWeight={700}>{page?.content?.heading?.title}</Text>
@@ -93,16 +111,15 @@ const IdentityPublicAddSuccess = ({ page }) => {
               />
               <Box px={"15px"} py={"12px"} w="100%">
                 <Box width="100%" textAlign="center">
-                  <Link href="/">
                     <Button
                       backgroundColor="#F6D644"
                       borderRadius="22px"
                       height="44px"
                       width="100%"
+                      onClick={()=> sendLoginSuccessResponse()}
                     >
                       {page?.content?.publicSuccess?.button}
                     </Button>
-                  </Link>
                 </Box>
               </Box>
             </Box>

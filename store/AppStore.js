@@ -133,6 +133,13 @@ const [AppProvider, useAppContext] = constate((props) => {
     });
   }, []);
 
+  const postMessage = useCallback((data) => {
+    if(window){
+      console.log('postMessage', data);
+      window.postMessage(data)
+    }
+  },[])
+
   return {
     wordings,
     loginModalDisclosure,
@@ -154,6 +161,8 @@ const [AppProvider, useAppContext] = constate((props) => {
 
     environmentSetting,
     setEnvironmentSetting,
+
+    postMessage
   };
 });
 

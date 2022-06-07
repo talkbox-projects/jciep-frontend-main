@@ -16,12 +16,13 @@ import React from "react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
+import { useAppContext } from "../../../store/AppStore";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 
 const PublicSectionEditor = () => {
   const router = useRouter();
-  const { page, enums, saveIdentity, identity, removeEditSection } =
+  const { page, enums, saveIdentity, identity, removeEditSection, token, identityId } =
     IdentityProfileStore.useContext();
 
   const {
@@ -40,12 +41,28 @@ const PublicSectionEditor = () => {
 
   const wishToDoStatus = watch("wishToDo", identity.wishToDo);
 
+  const {postMessage} = useAppContext()
+
   return (
     <VStack
       as="form"
       onSubmit={handleSubmit(async (values) => {
         try {
           await saveIdentity(values);
+
+          let json = {
+            name: "sendLoginSuccessResponse",
+            options: { 
+              callback: "sendLoginSuccessResponseHandler",
+              params: {
+                token: token,
+                identityId: identityId
+              }
+            }
+          }
+          
+          postMessage(json)
+
           removeEditSection();
         } catch (error) {
           console.error(error);

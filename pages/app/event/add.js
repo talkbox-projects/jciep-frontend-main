@@ -66,13 +66,6 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
-      api: {
-        // organizations: await organizationSearch({
-        //   status: ["approved"],
-        //   published: true,
-        //   type: ["ngo"],
-        // }),
-      },
     },
   };
 };
@@ -106,7 +99,7 @@ const EventAdd = ({ page }) => {
   });
   const router = useRouter();
   const { user } = useAppContext();
-  const [step, setStep] = useState("step2");
+  const [step, setStep] = useState("step1");
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();

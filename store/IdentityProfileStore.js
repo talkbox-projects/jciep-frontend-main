@@ -12,6 +12,8 @@ const [Provider, useContext] = constate(
     enums,
     userFieldVisible = false,
     editable = true,
+    token,
+    identityId
   }) => {
     const [identity, setIdentity] = useState(_identity);
     const [editSection, setEditSection] = useState(null);
@@ -58,6 +60,8 @@ const [Provider, useContext] = constate(
 
       page,
       enums,
+      token,
+      identityId
     };
   }
 );

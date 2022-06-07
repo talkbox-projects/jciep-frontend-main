@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -47,22 +47,24 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+//api: { identities, events }
+
+
 const JobOpportunities = ({ page }) => {
   const router = useRouter();
   const EVENTS_LIST = EVENTS?.data;
-
   const generateUrlParameter = useCallback(
     ({ identityId, organizationId }) => {
       let query = "";
-      if (identityId ?? router.query.identityId) {
-        query += `identityId=${identityId ?? router.query.identityId}&`;
-      }
-      if (organizationId ?? router.query.organizationId) {
-        query += `organizationId=${
-          organizationId ?? router.query.organizationId
-        }&`;
-      }
-      return `/talants/individuals?${query}`;
+      // if (identityId ?? router.query.identityId) {
+      //   query += `identityId=${identityId ?? router.query.identityId}&`;
+      // }
+      // if (organizationId ?? router.query.organizationId) {
+      //   query += `organizationId=${
+      //     organizationId ?? router.query.organizationId
+      //   }&`;
+      // }
+      return `/events?${query}`;
     },
     [router]
   );
@@ -173,9 +175,9 @@ const JobOpportunities = ({ page }) => {
                   }}
                   gap={6}
                 >
-                  {(EVENTS_LIST?.list || []).map((d) => (
+                  {(EVENTS_LIST?.list || []).map((d, i) => (
                     <GridItem
-                      key={d.id}
+                      key={`${d.id}${i}`}
                       flex={1}
                       bgColor={"#FFF"}
                       borderRadius={"10px"}

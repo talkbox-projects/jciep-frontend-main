@@ -9,11 +9,13 @@ import withPageCMS from "../../../../../utils/page/withPageCMS";
 import IdentityProfileStore from "../../../../../store/IdentityProfileStore";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import identityMeGet from "../../../../../utils/api/IdentityMeGet";
+import nookies from "nookies";
 import React from "react";
 
 const PAGE_KEY = "identity_id_profile";
 
 export const getServerSideProps = async (context) => {
+  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
   return {
@@ -25,11 +27,13 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      token: cookies['jciep-token'],
+      identityId: cookies['jciep-identityId']
     },
   };
 };
 
-const IdentityProfile = ({ api: { identity }, enums, page }) => {
+const IdentityProfile = ({ api: { identity }, enums, page, token, identityId}) => {
   let comp = null;
 
   switch (identity?.type) {
@@ -56,6 +60,8 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
       enums={enums}
       page={page}
       editable={true}
+      token={token}
+      identityId={identityId}
     >
       <Box w="100%" bgColor="#fafafa">
         {comp}
