@@ -117,6 +117,8 @@ const OrganizationNgoAdd = ({ page }) => {
         return;
       }
 
+      console.log('files-',files)
+
       const FileUploadmutation = gql`
         mutation FileUpload($file: FileUpload!) {
           FileUpload(files: $file) {
@@ -135,46 +137,48 @@ const OrganizationNgoAdd = ({ page }) => {
         }
       );
 
-      const mutation = gql`
-        mutation OrganizationSubmissionCreate(
-          $input: OrganizationSubmissionCreateInput!
-        ) {
-          OrganizationSubmissionCreate(input: $input) {
-            id
-          }
-        }
-      `;
+      console.log('file upload', filesUploadData)
 
-      let data = await getGraphQLClient().request(mutation, {
-        input: {
-          organizationType: organizationType.value,
-          chineseCompanyName: chineseOrganizationName,
-          englishCompanyName: englishOrganizationName,
-          centre: centre,
-          website: website,
-          description: description,
-          missionNVision: missionNVision,
-          targetGroup: targetGroup?.value,
-          targetGroupDisabilities: targetGroupDisabilities?.value,
-          targetGroupDisabilitiesOther:
-            targetGroupDisabilities?.value === "other"
-              ? targetGroupDisabilitiesOther
-              : "",
-          contactName: contactName,
-          contactPhone: contactPhone,
-          contactEmail: contactEmail,
-          postalAddress: postalAddress,
-          tncAccept: tncAccept,
-          identityId: id,
-          businessRegistration: filesUploadData.FileUpload,
-        },
-      });
+      // const mutation = gql`
+      //   mutation OrganizationSubmissionCreate(
+      //     $input: OrganizationSubmissionCreateInput!
+      //   ) {
+      //     OrganizationSubmissionCreate(input: $input) {
+      //       id
+      //     }
+      //   }
+      // `;
 
-      if (data && data.OrganizationSubmissionCreate) {
-        router.push(
-          `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
-        );
-      }
+      // let data = await getGraphQLClient().request(mutation, {
+      //   input: {
+      //     organizationType: organizationType.value,
+      //     chineseCompanyName: chineseOrganizationName,
+      //     englishCompanyName: englishOrganizationName,
+      //     centre: centre,
+      //     website: website,
+      //     description: description,
+      //     missionNVision: missionNVision,
+      //     targetGroup: targetGroup?.value,
+      //     targetGroupDisabilities: targetGroupDisabilities?.value,
+      //     targetGroupDisabilitiesOther:
+      //       targetGroupDisabilities?.value === "other"
+      //         ? targetGroupDisabilitiesOther
+      //         : "",
+      //     contactName: contactName,
+      //     contactPhone: contactPhone,
+      //     contactEmail: contactEmail,
+      //     postalAddress: postalAddress,
+      //     tncAccept: tncAccept,
+      //     identityId: id,
+      //     businessRegistration: filesUploadData.FileUpload,
+      //   },
+      // });
+
+      // if (data && data.OrganizationSubmissionCreate) {
+      //   router.push(
+      //     `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
+      //   );
+      // }
     } catch (e) {
       console.error(e);
     }

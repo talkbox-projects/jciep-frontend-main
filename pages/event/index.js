@@ -18,6 +18,7 @@ import {
   Flex,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Select,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -27,32 +28,38 @@ import Container from "../../components/Container";
 import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-
 import { SearchIcon, TimeIcon } from "@chakra-ui/icons";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiFilter2Fill } from "react-icons/ri";
+import { getEvents } from "../../utils/event/getEvent";
 import EVENTS from "../../utils/mock/api_event_list.json";
 
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+let host = publicRuntimeConfig.HOST_URL
+? publicRuntimeConfig.HOST_URL
+: "http://localhost:3000";
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const events = (await getEvents()) ?? {};
 
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      events
     },
   };
 };
 
-//api: { identities, events }
-
-
-const JobOpportunities = ({ page }) => {
+const Event = ({ page, events }) => {
   const router = useRouter();
+  const [filteredEvents, setFiltered] = useState(events?.list);
   const EVENTS_LIST = EVENTS?.data;
+
   const generateUrlParameter = useCallback(
     ({ identityId, organizationId }) => {
       let query = "";
@@ -64,10 +71,14 @@ const JobOpportunities = ({ page }) => {
       //     organizationId ?? router.query.organizationId
       //   }&`;
       // }
-      return `/events?${query}`;
+      return `/event?${query}`;
     },
     [router]
   );
+
+  const filterAction = ({params}) => {
+    console.log('params', params)
+  }
 
   return (
     <>
@@ -88,7 +99,7 @@ const JobOpportunities = ({ page }) => {
                 gap={4}
               >
                 <InputGroup>
-                  <InputLeftElement pointerEvents="none" left={2}>
+                <InputLeftElement pointerEvents="none" left={'4px'} top={'3px'} cursor="pointer">
                     <SearchIcon color="gray.500" />
                   </InputLeftElement>
                   <Input
@@ -97,9 +108,10 @@ const JobOpportunities = ({ page }) => {
                       "page_search"
                     )}
                     bgColor={"#FFF"}
-                    borderRadius={"20px"}
+                    borderRadius={"25px"}
                     border={"none"}
-                    px={10}
+                    px={4}
+                    minHeight={'45px'}
                   />
                 </InputGroup>
                 <Flex w={{ md: "140px" }} gap={1}>
@@ -160,7 +172,7 @@ const JobOpportunities = ({ page }) => {
               <Box
                 w={{ base: "100%", md: "180px" }}
                 fontSize={{ base: 24, md: 36 }}
-                pb={{base: 4, md: 0}}
+                pb={{ base: 4, md: 0 }}
               >
                 <Text as="span" fontWeight={700}>
                   JAN
@@ -175,74 +187,107 @@ const JobOpportunities = ({ page }) => {
                   }}
                   gap={6}
                 >
-                  {(EVENTS_LIST?.list || []).map((d, i) => (
-                    <GridItem
-                      key={`${d.id}${i}`}
-                      flex={1}
-                      bgColor={"#FFF"}
-                      borderRadius={"10px"}
-                      overflow={"hidden"}
-                      boxShadow="xl"
-                    >
-                      <Box
-                        bgImage={`url(${d?.banner?.url})`}
-                        h={{ base: "170px" }}
-                        w={"100%"}
-                        bgSize="cover"
-                        bgPosition={"center center"}
-                      />
-                      <Box p={"16px"} fontSize={"14px"}>
-                        <Stack>
-                          <Text fontSize={"xl"} fontWeight="bold">
-                            {d.name}
-                          </Text>
-                          <Flex align="center" gap={2}>
-                            <Box w={"20px"}>
-                              <TimeIcon color="gray.500" fontSize={18} />
-                            </Box>
-                            <Box>
-                              <b>{d.startDate}</b>- {d.startTime} - {d.endTime}
-                            </Box>
-                          </Flex>
-                          <Flex align="center" gap={2}>
-                            <Box w={"20px"}>
-                              <IoLocationSharp color="gray.500" fontSize={18} />
-                            </Box>
-                            <Box>
+                  {(filteredEvents || []).map((d, i) => {
+                    return (
+                      <GridItem
+                        key={`${d.id}${i}`}
+                        flex={1}
+                        bgColor={"#FFF"}
+                        borderRadius={"10px"}
+                        overflow={"hidden"}
+                        boxShadow="xl"
+                      >
+                        {/** ${publicRuntimeConfig.HOST_URL} */}
+                        <Box
+                          bgImage={`url(https://jciep.talkbox.io/${d?.banner?.url})`}
+                          h={{ base: "170px" }}
+                          w={"100%"}
+                          bgSize="cover"
+                          bgPosition={"center center"}
+                        />
+                        <Box p={"16px"} fontSize={"14px"}>
+                          <Stack>
+                            <Text fontSize={"xl"} fontWeight="bold">
+                              {d.name}
+                            </Text>
+                            <Flex align="center" gap={2}>
+                              <Box w={"20px"}>
+                                <Image
+                                  src={`${host}/images/app/time.svg`}
+                                  alt={""}
+                                  color="gray.500"
+                                  fontSize={18}
+                                />
+                              </Box>
+                              <Box>
+                                <b>{d.startDate}</b> -{" "}{d.startTime} -{" "}{d.endTime}
+                              </Box>
+                            </Flex>
+                            <Flex align="center" gap={2}>
+                              <Box w={"20px"}>
+                                <Image
+                                  src={`${host}/images/app/location-pin.svg`}
+                                  alt={""}
+                                  color="gray.500"
+                                  fontSize={18}
+                                  mx={"auto"}
+                                />
+                              </Box>
+                              {/* <Box>
                               <b>{d.location}</b>
-                            </Box>
-                          </Flex>
-                          <Text
+                            </Box> */}
+                            </Flex>
+                            {/* <Text
                             fontSize={"sm"}
                             fontWeight={400}
                             color="gray.400"
-                          >{`由 ${d.organizationName} 主辦`}</Text>
-                        </Stack>
-                        <Divider mt={6} my={4} />
-                        <Flex
-                          justifyContent="space-between"
-                          align="center"
-                          pb={4}
-                          fontSize={"14px"}
-                        >
-                          <Box>
-                            <Button
-                              backgroundColor="#F6D644"
-                              borderRadius="22px"
-                              onClick={() => router.push(`/events/${d.id}`)}
-                            >
-                              我想參加
-                            </Button>
-                          </Box>
-                          <Box>
-                            {d.liked
-                              ? `你及其他${d.bookmarkCount}人關注中`
-                              : `${d.bookmarkCount}關注中`}
-                          </Box>
-                        </Flex>
-                      </Box>
-                    </GridItem>
-                  ))}
+                          >{`由 ${d.organizationName} 主辦`}</Text> */}
+                          </Stack>
+                          <Divider mt={6} my={4} />
+                          <Flex
+                            justifyContent="space-between"
+                            align="center"
+                            pb={4}
+                          >
+                            <Box>
+                              <Button
+                                backgroundColor="#F6D644"
+                                borderRadius="22px"
+                                onClick={() => router.push(`/events/${d.id}`)}
+                              >
+                                {wordExtractor(
+                                  page?.content?.wordings,
+                                  "join_label"
+                                )}{" "}
+                              </Button>
+                            </Box>
+
+                            <Flex direction={"row"} align="center" gap={2}>
+                              <Box w={"20px"}>
+                                <Image
+                                  src={`${host}/images/app/${d.bookmarked ? 'list-bookmark-active.svg' : 'list-bookmark.svg'}`}
+                                  alt={""}
+                                  color="gray.500"
+                                  fontSize={14}
+                                />
+                              </Box>
+                              <Box>
+                                {d.bookmarked
+                                  ? wordExtractor(
+                                      page?.content?.wordings,
+                                      "bookmarked_label"
+                                    ).replace("$", d.bookmarkCount)
+                                  : wordExtractor(
+                                      page?.content?.wordings,
+                                      "bookmarked_count_label"
+                                    ).replace("$", d.bookmarkCount)}
+                              </Box>
+                            </Flex>
+                          </Flex>
+                        </Box>
+                      </GridItem>
+                    );
+                  })}
                 </Grid>
               </Box>
             </Flex>
@@ -286,7 +331,7 @@ const FilterSection = ({ page }) => {
   );
 };
 
-export default withPageCMS(JobOpportunities, {
+export default withPageCMS(Event, {
   key: PAGE_KEY,
   fields: [
     {

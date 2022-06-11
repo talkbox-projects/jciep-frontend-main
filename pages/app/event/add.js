@@ -57,19 +57,6 @@ import { urlRegex } from "../../../utils/general";
 
 const PAGE_KEY = "event_add";
 
-export const getServerSideProps = async (context) => {
-  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
-  return {
-    props: {
-      page,
-      isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props,
-      lang: context.locale,
-    },
-  };
-};
-
 const customStyles = {
   control: (provided) => ({
     ...provided,
@@ -81,6 +68,19 @@ const customStyles = {
 
 const labelStyles = {
   marginBottom: "0px",
+};
+
+export const getServerSideProps = async (context) => {
+  const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
+  return {
+    props: {
+      page,
+      isLangAvailable: context.locale === page.lang,
+      ...(await getSharedServerSideProps(context))?.props,
+      lang: context.locale,
+    },
+  };
 };
 
 const EventAdd = ({ page }) => {
