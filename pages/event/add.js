@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
@@ -83,34 +83,45 @@ const EventAdd = ({ page, stockPhotos }) => {
     setError,
   } = useForm({
     defaultValues: {
-      name: "發展智障人士的「斜槓事業」 demo",
-      otherUrl: ["https://www.demo.com"],
-      type: "class",
-      description: "成爲很多青年心儀的就業選項",
-      startDate: "2023-05-20",
-      endDate: "2023-05-23",
-      venue: "kwunTong",
-      freeOrCharge: "free",
-      submissionDeadline: "2023-05-18",
-      stockPhoto: "placeholder-event(helping)",
+      otherUrls: [""],
+      additionalInformation: [{ file: "", content: "" }],
     },
   });
+  const additionalFileRefs = useRef(null);
   const [files, setFiles] = useState([]);
+  const [additionalFiles, setAdditionalFiles] = useState([]);
+  const [stockPhotoId, setStockPhotoId] = useState("");
   const [step, setStep] = useState("step1");
   const [fileError, setFileError] = useState(false);
+  const [additionalFileError, setAdditionalFileError] = useState(false);
   const [formState, setFormState] = useState([]);
   const watchFields = watch(["type", "freeOrCharge"], { type: [] });
   const getDescriptionCount = watch("description", 0);
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
+  const watchAdditionalInformation = watch("additionalInformation");
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "otherUrl",
+    name: "otherUrls",
   });
+
+  const {
+    fields: additionalInformationFields,
+    append: additionalInformationAppend,
+    remove: additionalInformationRemove,
+  } = useFieldArray({ control, name: "additionalInformation" });
+
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
     setFileError("");
     setFiles([uploadedFiles]);
   };
+
+  const onAdditionalFileUpload = async (e) => {
+    let uploadedFiles = await e.target.files[0];
+    setAdditionalFileError("");
+    setAdditionalFiles([uploadedFiles]);
+  };
+
   const ImagesComponent = () => {
     const inputRef = useRef(null);
     const UploadBox = () => (
@@ -185,6 +196,13 @@ const EventAdd = ({ page, stockPhotos }) => {
       });
     };
 
+    useEffect(() => {
+      if (files.length > 0) {
+        setStockPhotoId("");
+        setValue("stockPhotoId", "");
+      }
+    }, []);
+
     return (
       <Grid
         templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
@@ -192,12 +210,23 @@ const EventAdd = ({ page, stockPhotos }) => {
         width="100%"
       >
         {(stockPhotos || []).map((d) => (
-          <GridItem borderRadius={"5px"} overflow={"hidden"} key={d.id}>
+          <GridItem
+            borderRadius={"5px"}
+            overflow={"hidden"}
+            key={d.id}
+            onClick={() => {
+              setStockPhotoId(d.id);
+              setValue("stockPhotoId", d.id);
+              setFiles([]);
+            }}
+            cursor="pointer"
+          >
             <Box
               bgImg={`url('${d?.url}')`}
               w={"100%"}
               h={"75px"}
               bgSize={"cover"}
+              border={`3px solid ${stockPhotoId === d.id ? "#F6D644" : "#FFF"}`}
             />
           </GridItem>
         ))}
@@ -219,21 +248,6 @@ const EventAdd = ({ page, stockPhotos }) => {
                 bottom={0}
                 zIndex={2}
               />
-              <Stack
-                color="#007878"
-                direction="row"
-                fontSize="14px"
-                alignItems="center"
-                spacing={1}
-              >
-                <BsPlus />
-                <Text>
-                  {wordExtractor(
-                    page?.content?.wordings,
-                    "add_custom_image_label"
-                  )}
-                </Text>
-              </Stack>
             </Box>
           </GridItem>
         )}
@@ -258,29 +272,7 @@ const EventAdd = ({ page, stockPhotos }) => {
       </Grid>
     );
   };
-  // const HandleNumberInput = ({
-  //   placeholder,
-  //   fieldName,
-  //   maxLength = 2,
-  //   required = false,
-  // }) => {
-  //   return (
-  //     <Input
-  //       type="text"
-  //       variant="flushed"
-  //       placeholder={placeholder}
-  //       maxLength={maxLength}
-  //       {...register(fieldName, {
-  //         required: required,
-  //         maxLength: maxLength,
-  //       })}
-  //       onChange={(e) => {
-  //         setValue(fieldName, e.target.value.replace(/[^0-9]/g, ""));
-  //       }}
-  //     />
-  //   );
-  // };
-
+  
   const onFormSubmit = async ({
     name,
     type,
@@ -309,24 +301,21 @@ const EventAdd = ({ page, stockPhotos }) => {
     banner,
     additionalInformation,
   }) => {
-    // console.log("sub");
+    console.log("sub");
+    const FileUploadmutation = gql`
+      mutation FileUpload($file: FileUpload!) {
+        FileUpload(files: $file) {
+          id
+          url
+          contentType
+          fileSize
+        }
+      }
+    `;
 
-    // const FileUploadmutation = gql`
-    //   mutation FileUpload($file: FileUpload!) {
-    //     FileUpload(files: $file) {
-    //       id
-    //       url
-    //       contentType
-    //       fileSize
-    //     }
-    //   }
-    // `;
-
-    // console.log('additionalInformation[0]?.file-',additionalInformation[0]?.file)
-
-    // let filesUploadData = await getGraphQLClient().request(FileUploadmutation, {
-    //   file: additionalInformation[0]?.file,
-    // });
+    let filesUploadData = await getGraphQLClient().request(FileUploadmutation, {
+      file: additionalInformation[0]?.file,
+    });
 
     const input = Object.fromEntries(
       Object.entries({
@@ -358,29 +347,33 @@ const EventAdd = ({ page, stockPhotos }) => {
         additionalInformation: [additionalInformation[0]?.file],
       }).filter(([_, v]) => v != null)
     );
-
-    console.log("wo", input);
-
-    axios.post('https://jciep.talkbox.io/api/app/event/create', input, {
-      headers: { 
-        'jciep-token': '1017299e-34f0-4206-ad25-243625dd5281', 
-        'jciep-identityId': '62a03548b75ab2001b2c75ed'
-      }
-    })
-    .then((res) => { console.table(res.data) })
-    .catch((error) => { console.error(error) })
-
     // setFormState(input);
     // setStep("step2");
   };
 
-  // Callback version of watch.  It's your responsibility to unsubscribe when done.
-  React.useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
+  const renderAdditionalImage = useCallback((data) => {
+    if (!data) {
+      return;
+    }
+    let url = URL.createObjectURL(data);
+    return (
+      <Box
+        bgImg={`url(${url})`}
+        w={"100%"}
+        h={"75px"}
+        bgSize={"cover"}
+        bgPosition={"center center"}
+      />
     );
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  }, []);
+
+  // Callback version of watch.  It's your responsibility to unsubscribe when done.
+  // React.useEffect(() => {
+  //   const subscription = watch((value, { name, type }) =>
+  //     console.log(value, name, type)
+  //   );
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   return (
     <>
@@ -558,6 +551,8 @@ const EventAdd = ({ page, stockPhotos }) => {
                       </Text>
                     </GridItem>
                   </Grid>
+
+
                   <Grid
                     templateColumns={{
                       base: "repeat(2, 1fr)",
@@ -921,8 +916,20 @@ const EventAdd = ({ page, stockPhotos }) => {
                             page?.content?.wordings,
                             "contact_number_placeholder"
                           )}
-                          {...register("contactNumber")}
+                          {...register("contactNumber",{
+                            required: true,
+                          })}
                         />
+                        <FormHelperText>
+                          {errors?.submissionDeadline?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "contact_number_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
                       </FormControl>
                     </GridItem>
 
@@ -963,7 +970,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                                   page?.content?.wordings,
                                   "other_url_placeholder"
                                 )}
-                                {...register(`otherUrl[${index}]`, {
+                                {...register(`otherUrls[${index}]`, {
                                   required: true,
                                 })}
                               />
@@ -981,7 +988,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                           </Box>
                         ))}
                         <FormHelperText>
-                          {errors?.otherUrl?.[0]?.type === "required" && (
+                          {errors?.otherUrls?.[0]?.type === "required" && (
                             <Text color="red">
                               {wordExtractor(
                                 page?.content?.wordings,
@@ -1040,14 +1047,128 @@ const EventAdd = ({ page, stockPhotos }) => {
                     p={6}
                   >
                     <GridItem colSpan={2}>
-                      <EventBiographySectionEditor
-                        page={page}
-                        handleSetValue={setValue}
-                        register={register("additionalInformation", {
-                          required: true,
-                        })}
-                        errors={errors}
-                      />
+                      {additionalInformationFields.map((item, index) => {
+                        return (
+                          <Grid
+                            key={item.id}
+                            templateColumns={{
+                              base: "repeat(5, 1fr)",
+                            }}
+                            gap={6}
+                            bgColor="#FFF"
+                            borderRadius={"15px"}
+                            mb={4}
+                            alignItems="center"
+                          >
+                            <GridItem
+                              borderRadius={"5px"}
+                              overflow={"hidden"}
+                              border={"1px solid #EFEFEF"}
+                              color={"#666666"}
+                              cursor={"pointer"}
+                              pos={"relative"}
+                              height={`100%`}
+                              colSpan={2}
+                            >
+                              {watchAdditionalInformation[index]?.file?.length >
+                              0 ? (
+                                renderAdditionalImage(
+                                  watchAdditionalInformation[index]?.file?.[0]
+                                )
+                              ) : (
+                                <Box h={'100%'}>
+                                  <Center
+                                    h={"100%"}
+                                    fontSize={"14px"}
+                                    pos={"relative"}
+                                    zIndex={1}
+                                  >
+                                    <Stack
+                                      direction="column"
+                                      alignItems={"center"}
+                                      spacing={2}
+                                    >
+                                      <BsPlus />
+                                      <Text>
+                                        {" "}
+                                        {wordExtractor(
+                                          page?.content?.wordings,
+                                          "add_custom_images_label"
+                                        )}
+                                      </Text>
+                                    </Stack>
+                                  </Center>
+                                  <Input
+                                    type="file"
+                                    multiple={false}
+                                    opacity={0}
+                                    zIndex={2}
+                                    top={0}
+                                    left={0}
+                                    right={0}
+                                    bottom={0}
+                                    height={"100%"}
+                                    position="absolute"
+                                    ref={additionalFileRefs}
+                                    {...register(
+                                      `additionalInformation[${index}].file`
+                                    )}
+                                  />
+                                </Box>
+                              )}
+                            </GridItem>
+                            <GridItem
+                              borderRadius={"5px"}
+                              overflow={"hidden"}
+                              color={"#666666"}
+                              cursor={"pointer"}
+                              pos={"relative"}
+                              colSpan={2}
+                            >
+                              <Textarea
+                                {...register(
+                                  `additionalInformation[${index}].content`
+                                )}
+                              />
+                            </GridItem>
+                            <GridItem colSpan={1}>
+                              <Button
+                                colorScheme="red"
+                                size="xs"
+                                onClick={() =>
+                                  additionalInformationRemove(index)
+                                }
+                              >
+                                {wordExtractor(
+                                  page?.content?.wordings,
+                                  "delete_information_label"
+                                )}
+                              </Button>
+                            </GridItem>
+
+                            <GridItem colSpan={5}>
+                              <Divider my={2} />
+                            </GridItem>
+                          </Grid>
+                        );
+                      })}
+
+                      <Flex justify="end">
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            additionalInformationAppend({
+                              file: "",
+                              content: "",
+                            });
+                          }}
+                        >
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "add_information_label"
+                          )}
+                        </Button>
+                      </Flex>
                     </GridItem>
                   </Grid>
 
@@ -1185,6 +1306,42 @@ export default withPageCMS(EventAdd, {
         {
           name: "filter",
           label: "篩選 Filter Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "type",
+          label: "活動類別 Type Label",
           component: "group",
           fields: [
             {

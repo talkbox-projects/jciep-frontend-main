@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Divider,
@@ -23,14 +23,18 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import wordExtractor from "../../../utils/wordExtractor";
 import Container from "../../../components/Container";
 import moment from "moment";
+import nookies from "nookies";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { CloseIcon } from "@chakra-ui/icons";
 import EVENT from "../../../utils/mock/api_event_id.json";
+import { getEventDetail } from "../../../utils/event/getEvent";
 import { useAppContext } from "../../../store/AppStore";
+import { likeEvent, bookmarkEvent } from "../../../utils/event/eventAction";
 
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
+  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
   return {
@@ -38,12 +42,15 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      token: cookies["jciep-token"] ?? "",
+      identityId: cookies["jciep-identityId"] ?? "",
     },
   };
 };
 
-const Event = ({ page }) => {
+const Event = ({ page, token, identityId }) => {
   const router = useRouter();
+  const [detail, setDetail] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenRegistrationModal,
@@ -74,12 +81,25 @@ const Event = ({ page }) => {
     bookmarked,
   } = EVENT?.data;
 
+  useEffect(() => {
+    const { query } = router;
+    async function fetchData() {
+      const data = (await getEventDetail(query?.id)) ?? {};
+      setDetail(data);
+    }
+    fetchData();
+  }, [router]);
+
   return (
     <Box pt={{ base: "64px" }}>
       <Box bg="#FFF" pb={12}>
         <Flex direction={{ base: "column", md: "row" }}>
           <Box flex={1}>
-            <BannerSection name={name} type={type} url={banner?.url} />
+            <BannerSection
+              name={detail?.name}
+              tags={detail?.tags}
+              url={`${detail?.banner?.file?.url}`}
+            />
             <Grid
               templateColumns={{
                 base: "repeat(1, 1fr)",
@@ -94,7 +114,7 @@ const Event = ({ page }) => {
               >
                 <Box p={"16px"} fontSize={"14px"}>
                   <Stack>
-                    <Box color={"#0D8282"}>#tag(API)</Box>
+                    {/* <Box color={"#0D8282"}>#tag(API)</Box> */}
                     <Flex align="center" gap={2}>
                       <Box w={"20px"}>
                         <Image
@@ -107,9 +127,9 @@ const Event = ({ page }) => {
                       <Box>
                         <b>
                           {wordExtractor(page?.content?.wordings, "from_label")}{" "}
-                          {moment(startDate).format("DD/MM/YYYY")}{" "}
+                          {moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
                           {wordExtractor(page?.content?.wordings, "to_label")}{" "}
-                          {moment(endDate).format("DD/MM/YYYY")}{" "}
+                          {moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
                         </b>
                       </Box>
                     </Flex>
@@ -125,8 +145,9 @@ const Event = ({ page }) => {
                       </Box>
                       <Box>
                         <b>
-                          {moment(startTime, ["HH.mm"]).format("hh:mm a")} -{" "}
-                          {moment(endTime, ["HH.mm"]).format("hh:mm a")}{" "}
+                          {moment(detail?.startTime, ["HH.mm"]).format("hh:mm a")} -{" "}
+                          {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
+                          ({`${detail.datetimeRemark}`})
                         </b>
                       </Box>
                     </Flex>
@@ -142,7 +163,7 @@ const Event = ({ page }) => {
                         />
                       </Box>
                       <Box>
-                        <b>{location}</b>
+                        <b>{detail?.venue}</b>
                       </Box>
                     </Flex>
 
@@ -159,7 +180,7 @@ const Event = ({ page }) => {
                         {wordExtractor(
                           page?.content?.wordings,
                           "bookmark_label"
-                        ).replace("$", likeCount)}
+                        ).replace("$", detail?.bookmarkCount)}
                       </Box>
                     </Flex>
                   </Stack>
@@ -188,14 +209,14 @@ const Event = ({ page }) => {
                             "event_type_label"
                           )}
                         </Text>
-                        <Text fontWeight={700}>{type}</Text>
+                        <Text fontWeight={700}>{detail?.type}</Text>
                       </Flex>
                     </Box>
                   </Flex>
 
-                  <Flex gap={4} direction="column">
-                    <Text as="p">{description}</Text>
-                    <Flex
+                  <Flex gap={4} direction="column" mb={4}>
+                    <Text as="p">{detail?.description}</Text>
+                    {/* <Flex
                       color="#0D8282"
                       align="center"
                       fontWeight={700}
@@ -212,11 +233,11 @@ const Event = ({ page }) => {
                       <Link target="_blank" href={registerUrl}>
                         {registerUrl}
                       </Link>
-                    </Flex>
+                    </Flex> */}
                   </Flex>
 
                   <Flex direction="column">
-                    {otherUrl?.map((d) => (
+                    {detail?.otherUrls?.map((d) => (
                       <Flex
                         key={d}
                         color="#0D8282"
@@ -264,7 +285,7 @@ const Event = ({ page }) => {
                     gap={2}
                     py={4}
                   >
-                    {additionalInformation?.map((d) => (
+                    {detail?.additionalInformation?.map((d) => (
                       <GridItem
                         key={d.id}
                         flex={1}
@@ -314,7 +335,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "quota_label"
                       )}
-                      value={`人數約20人 (API)`}
+                      value={detail?.venue}
                     />
 
                     <RegistrationRow
@@ -322,7 +343,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "free_or_charge_label"
                       )}
-                      value={freeOrCharge}
+                      value={detail?.freeOrCharge}
                     />
 
                     <RegistrationRow
@@ -330,7 +351,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "price_label"
                       )}
-                      value={price}
+                      value={detail?.price}
                     />
 
                     <RegistrationRow
@@ -338,7 +359,9 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "submission_deadline_label"
                       )}
-                      value={submissionDeadline}
+                      value={moment(detail?.submissionDeadline).format(
+                          "YYYY-MM-DD"
+                        ) ?? ""}
                     />
 
                     <RegistrationRow
@@ -346,7 +369,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "event_manager_label"
                       )}
-                      value={eventManager}
+                      value={detail?.eventManager}
                     />
 
                     <RegistrationRow
@@ -354,7 +377,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "contact_number_label"
                       )}
-                      value={contactNumber}
+                      value={detail?.contactNumber}
                     />
 
                     <RegistrationRow
@@ -362,7 +385,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "remark_label"
                       )}
-                      value={remark ?? "N/A"}
+                      value={detail?.remark}
                     />
 
                     <Flex direction="row" gap={2}>
@@ -389,8 +412,8 @@ const Event = ({ page }) => {
                               mx={"auto"}
                             />
                           </Box>
-                          <Link target="_blank" href={registerUrl}>
-                            {registerUrl}
+                          <Link target="_blank" href={detail?.registerUrl}>
+                            {detail?.registerUrl}
                           </Link>
                         </Flex>
                       </Box>
@@ -433,13 +456,18 @@ const Event = ({ page }) => {
                         <Center h={"100%"}>
                           <Image
                             src={
-                              bookmarked
+                              detail?.bookmarked
                                 ? "/images/app/bookmark-active.svg"
                                 : "/images/app/bookmark-off.svg"
                             }
                             alt={""}
                             fontSize={18}
                             mx={"auto"}
+                            onClick={() => {
+                              if(token){
+                                bookmarkEvent(detail?.id, token, identityId)
+                              }
+                            }}
                           />
                         </Center>
                       </Box>
@@ -468,7 +496,8 @@ const Event = ({ page }) => {
           page?.content?.wordings,
           "contact_event_manager_label"
         )}
-        registerUrl={registerUrl}
+        registerUrl={detail?.registerUrl}
+        contactNumber={detail?.contactNumber}
       />
     </Box>
   );
@@ -615,7 +644,7 @@ const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
   );
 };
 
-const BannerSection = ({ type, url, name }) => {
+const BannerSection = ({ tags, url, name }) => {
   return (
     <Box
       bgImage={`url(${url})`}
@@ -627,8 +656,9 @@ const BannerSection = ({ type, url, name }) => {
     >
       <Box position={"absolute"} bottom={15} left={2} right={2} zIndex={2}>
         <Container>
-          {type && (
+          {tags?.map((d) => (
             <Box
+              key={d}
               bgColor="#FFF"
               color="#0D8282"
               px={2}
@@ -640,10 +670,11 @@ const BannerSection = ({ type, url, name }) => {
               fontSize={"12px"}
               d={"inline-block"}
               fontWeight={700}
+              mr={2}
             >
-              {type}
+              {d}
             </Box>
-          )}
+          ))}
           <Text fontSize={"20px"} fontWeight={700} color="#FFF">
             {name}
           </Text>
