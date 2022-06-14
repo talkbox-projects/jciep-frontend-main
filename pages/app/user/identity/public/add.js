@@ -70,11 +70,12 @@ const labelStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
-  const { user } = useAppContext();
+  const { user, postMessage } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
+  const [habInfo, setHabInfo] = useState({});
   const {
     handleSubmit,
     register,
@@ -85,6 +86,32 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     setError,
     getValues,
   } = useForm();
+
+  useEffect(()=>{
+
+    async function getRegistrationInfoFromApp() {
+      let json = {
+        name: "getRegistrationInfo",
+        options: {
+            callback: "getRegistrationInfoHandler"
+        }
+      }
+      const HAB = await postMessage(json)
+
+      if(HAB){
+        alert('HAB getRegistrationInfo-',HAB)
+      }
+
+      setHabInfo(HAB)
+
+      setFormState({
+        ...formState,
+        id: formState.id ?? HAB?.result?.token
+      })
+    }
+    getRegistrationInfoFromApp();
+
+  },[])
 
   const watchFields = watch(
     [
@@ -185,7 +212,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: user.id,
+        userId: user?.id,
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
@@ -195,13 +222,13 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         email: email,
         phone: phone,
         jobFunction: job_function,
-        industry: industry.value,
-        industryOther: industry.value === "other" ? industry_other : "",
+        industry: industry?.value,
+        industryOther: industry?.value === "other" ? industry_other : "",
         isDisability: is_disability === "true",
-        wishToDo: wish_to_do.value,
-        wishToDoOther: wish_to_do.value === "other" ? wish_to_do_other : "",
+        wishToDo: wish_to_do?.value,
+        wishToDoOther: wish_to_do?.value === "other" ? wish_to_do_other : "",
         pwdType: pwd_type,
-        pwdOther: pwd_type.includes("other") ? pwd_other : "",
+        pwdOther: pwd_type?.includes("other") ? pwd_other : "",
         tncAccept: terms,
         phase2profile: true,
       }).filter(([v]) => v != null)
