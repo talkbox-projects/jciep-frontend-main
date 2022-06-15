@@ -44,8 +44,8 @@ const AppUserRegister = ({ page }) => {
 
   useEffect(()=> {
 
-    const WebContext = {};
-    WebContext.getRegistrationInfoHandler = (response) => {
+    window.WebContext = {};
+    window.WebContext.getRegistrationInfoHandler = (response) => {
       alert(JSON.stringify(response));
 
       alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
