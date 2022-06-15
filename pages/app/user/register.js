@@ -15,7 +15,7 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import { useCredential } from "../../../utils/user";
 import { useAppContext } from "../../../store/AppStore";
 import { useRouter } from "next/router";
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 const PAGE_KEY = "app_user_register";
 
@@ -35,11 +35,55 @@ const AppUserRegister = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [, removeCredential] = useCredential();
+  const [appRegistrationInfo, setAppRegistrationInfo] = useState({});
 
   const logout = () => {
     removeCredential();
     router.push("/");
   };
+
+  useEffect(()=> {
+
+    const WebContext = {};
+    WebContext.getRegistrationInfoHandler = (response) => {
+      alert(JSON.stringify(response));
+
+      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
+      alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
+      alert(`RESPONSE OPTIONS:::`, response?.options)
+
+      alert(`RESPONSE RESULT:::`, response?.result)
+
+      if(!response.result) {
+        alert("response.result null")
+      } else {
+        setAppRegistrationInfo(response?.result)
+      }
+
+      alert(`END CONDITION:::`)
+    }
+
+    const json = {
+      name: "getRegistrationInfo",
+      options: {
+          callback: "getRegistrationInfoHandler"
+      }
+    }
+
+    if(!window.AppContext){
+      alert("window.AppContext undefined")
+    }
+
+    if(!window.AppContext?.postMessage){
+      alert("window.AppContext.postMessage undefined")
+    }
+
+    if(window && window.AppContext && window.AppContext.postMessage){
+      window.AppContext.postMessage(json);
+    }
+  
+
+  },[])
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -128,7 +172,7 @@ const AppUserRegister = ({ page }) => {
                       dangerouslySetInnerHTML={{
                         __html: page?.content?.remark?.text?.replace(
                           " ",
-                          `<b>${user?.email}</b>`
+                          `<b>${user?.email??appRegistrationInfo?.email}</b>`
                         ),
                       }}
                     />

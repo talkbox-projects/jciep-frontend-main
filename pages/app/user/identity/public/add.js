@@ -93,11 +93,19 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     WebContext.getRegistrationInfoHandler = (response) => {
       alert(JSON.stringify(response));
 
+      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
+      alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
+      alert(`RESPONSE OPTIONS:::`, response?.options)
+
+      alert(`RESPONSE RESULT:::`, response?.result)
+
       if(!response.result) {
         alert("response.result null")
       } else {
-        setAppRegistrationInfo(response.result)
+        setAppRegistrationInfo(response?.result)
       }
+
+      alert(`END CONDITION:::`)
     }
 
     const json = {
@@ -146,6 +154,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   );
 
   const handlePostData = async (input, invitationCode) => {
+
+    alert(`FORM DATA::: ${JSON.stringify(input)}`)
+
+
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
