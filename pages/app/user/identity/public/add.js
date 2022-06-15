@@ -91,8 +91,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
     window.WebContext = {};
     window.WebContext.getRegistrationInfoHandler = (response) => {
-      alert(JSON.stringify(response));
-
       alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
       alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
       alert(`RESPONSE OPTIONS:::`, response?.options)
@@ -123,6 +121,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     }
 
     if(window && window.AppContext && window.AppContext.postMessage){
+      alert(`window && window.AppContext && window.AppContext.postMessage BLOCK`)
       window.AppContext.postMessage(json);
     }
     
