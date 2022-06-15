@@ -133,12 +133,17 @@ const [AppProvider, useAppContext] = constate((props) => {
     });
   }, []);
 
-  const postMessage = useCallback((data) => {
-    if(window){
-      console.log('postMessage', data);
-      window.postMessage(data)
-    }
-  },[])
+  const AppContext = {
+    postMessage: (json) => {
+      window.postMessage(json);
+    },
+  };
+
+  const WebContext = {
+    getRegistrationInfoHandler: (result) => {
+      return result;
+    },
+  };
 
   return {
     wordings,
@@ -162,7 +167,8 @@ const [AppProvider, useAppContext] = constate((props) => {
     environmentSetting,
     setEnvironmentSetting,
 
-    postMessage
+    AppContext,
+    WebContext,
   };
 });
 

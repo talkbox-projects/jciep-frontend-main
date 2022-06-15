@@ -70,7 +70,7 @@ const labelStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
-  const { user, postMessage } = useAppContext();
+  const { user, AppContext, WebContext } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
@@ -89,27 +89,20 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
   useEffect(()=>{
 
-    async function getRegistrationInfoFromApp() {
-      let json = {
-        name: "getRegistrationInfo",
-        options: {
-            callback: "getRegistrationInfoHandler"
-        }
+    let json = {
+      name: "getRegistrationInfo",
+      options: {
+          callback: "getRegistrationInfoHandler"
       }
-      const HAB = await postMessage(json)
-
-      if(HAB){
-        alert('HAB getRegistrationInfo-',HAB)
-      }
-
-      setHabInfo(HAB)
-
-      setFormState({
-        ...formState,
-        id: formState.id ?? HAB?.result?.token
-      })
     }
-    getRegistrationInfoFromApp();
+
+    AppContext.postMessage(json)
+
+    const result = WebContext.getRegistrationInfoHandler()
+
+    // result try alert
+    alert(`result:`, JSON.stringify(result))
+
 
   },[])
 
