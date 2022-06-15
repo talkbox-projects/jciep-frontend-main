@@ -89,14 +89,13 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
   useEffect(()=> {
 
-    const WebContext = {};
-    WebContext.getRegistrationInfoHandler = (response) => {
+    window.WebContext = {};
+    window.WebContext.getRegistrationInfoHandler = (response) => {
       alert(JSON.stringify(response));
 
       alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
       alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
       alert(`RESPONSE OPTIONS:::`, response?.options)
-
       alert(`RESPONSE RESULT:::`, response?.result)
 
       if(!response.result) {
