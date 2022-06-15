@@ -14,14 +14,10 @@ export const likeEvent = async (id, token, identityId) => {
   }
 };
 
-export const bookmarkEvent = async (id, token, identityId) => {
+export const bookmarkEvent = async (id) => {
     try {
       const { data: { data } = {} } = await fetch(`/api/app/event/${id}/bookmark`, {
           method: 'POST',
-          headers: {
-            'jciep-token': token,
-            'jciep-identityId': identityId
-          }
         })
   
       return data;

@@ -37,10 +37,10 @@ import { gql } from "graphql-request";
 import { getStockPhoto } from "../../utils/event/getEvent";
 import { getGraphQLClient } from "../../utils/apollo";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-
+import { createEvent } from "../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import EventBiographySectionEditor from "../../components/profile/sections/EventBiographySectionEditor";
+import organizationSearch from "../../utils/api/OrganizationSearch";
 
 import { AiOutlineInfoCircle, AiFillMinusCircle } from "react-icons/ai";
 
@@ -60,19 +60,27 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const stockPhotos = (await getStockPhoto()) ?? {};
+  const stockPhotos = (await getStockPhoto()) ?? [];
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       stockPhotos,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true,
+          type: ["ngo"],
+        }),
+      },
     },
   };
 };
 
-const EventAdd = ({ page, stockPhotos }) => {
+const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
   const { user } = useAppContext();
+  const router = useRouter();
   const {
     handleSubmit,
     register,
@@ -85,6 +93,7 @@ const EventAdd = ({ page, stockPhotos }) => {
     defaultValues: {
       otherUrls: [""],
       additionalInformation: [{ file: "", content: "" }],
+      representOrganization: "false",
     },
   });
   const additionalFileRefs = useRef(null);
@@ -95,7 +104,7 @@ const EventAdd = ({ page, stockPhotos }) => {
   const [fileError, setFileError] = useState(false);
   const [additionalFileError, setAdditionalFileError] = useState(false);
   const [formState, setFormState] = useState([]);
-  const watchFields = watch(["type", "freeOrCharge"], { type: [] });
+  const watchFields = watch(["type", "freeOrCharge", "representOrganization"], { type: [], freeOrCharge: "free" });
   const getDescriptionCount = watch("description", 0);
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
   const watchAdditionalInformation = watch("additionalInformation");
@@ -114,12 +123,6 @@ const EventAdd = ({ page, stockPhotos }) => {
     let uploadedFiles = await e.target.files[0];
     setFileError("");
     setFiles([uploadedFiles]);
-  };
-
-  const onAdditionalFileUpload = async (e) => {
-    let uploadedFiles = await e.target.files[0];
-    setAdditionalFileError("");
-    setAdditionalFiles([uploadedFiles]);
   };
 
   const ImagesComponent = () => {
@@ -149,7 +152,7 @@ const EventAdd = ({ page, stockPhotos }) => {
           h={"100%"}
           ref={inputRef}
         />
-        <Center h={"100%"} fontSize={"14px"} pos={"relative"} zIndex={1}>
+        <Center h={"100%"} fontSize={"14px"} pos={"relative"} zIndex={1} py={4}>
           <Stack direction="column" alignItems={"center"} spacing={2}>
             <BsPlus />
             <Text>
@@ -196,20 +199,13 @@ const EventAdd = ({ page, stockPhotos }) => {
       });
     };
 
-    useEffect(() => {
-      if (files.length > 0) {
-        setStockPhotoId("");
-        setValue("stockPhotoId", "");
-      }
-    }, []);
-
     return (
       <Grid
         templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
         gap={"20px"}
         width="100%"
       >
-        {(stockPhotos || []).map((d) => (
+        {stockPhotos?.map((d) => (
           <GridItem
             borderRadius={"5px"}
             overflow={"hidden"}
@@ -301,7 +297,9 @@ const EventAdd = ({ page, stockPhotos }) => {
     banner,
     additionalInformation,
   }) => {
-    console.log("sub");
+
+    let bannerUploadData, filesAdditionalInformalUploadData
+
     const FileUploadmutation = gql`
       mutation FileUpload($file: FileUpload!) {
         FileUpload(files: $file) {
@@ -313,8 +311,14 @@ const EventAdd = ({ page, stockPhotos }) => {
       }
     `;
 
-    let filesUploadData = await getGraphQLClient().request(FileUploadmutation, {
-      file: additionalInformation[0]?.file,
+    if(files){
+      bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
+        file: files?.[0],
+      });
+    }
+
+    filesAdditionalInformalUploadData = await getGraphQLClient().request(FileUploadmutation, {
+      file: additionalInformation[0]?.file?.[0],
     });
 
     const input = Object.fromEntries(
@@ -343,10 +347,22 @@ const EventAdd = ({ page, stockPhotos }) => {
         representOrganization: representOrganization,
         organizationId: organizationId,
         organizationAdditionalInfo: organizationAdditionalInfo,
-        banner: additionalInformation[0]?.file,
-        additionalInformation: [additionalInformation[0]?.file],
+        banner:{
+          file: bannerUploadData?.file?.FileUpload?.[0],
+          stockPhotoId: stockPhotoId
+        },
+        additionalInformation: [filesAdditionalInformalUploadData?.[0]?.FileUpload?.[0]]
+        // banner: additionalInformation[0]?.file,
+        // additionalInformation: [additionalInformation[0]?.file],
       }).filter(([_, v]) => v != null)
     );
+
+    const response = await createEvent(input)
+
+    if(response?.data){
+      router.push(`/event/create/${response?.data.id}/success`);
+    }
+
     // setFormState(input);
     // setStep("step2");
   };
@@ -360,7 +376,7 @@ const EventAdd = ({ page, stockPhotos }) => {
       <Box
         bgImg={`url(${url})`}
         w={"100%"}
-        h={"75px"}
+        h={"100%"}
         bgSize={"cover"}
         bgPosition={"center center"}
       />
@@ -368,12 +384,12 @@ const EventAdd = ({ page, stockPhotos }) => {
   }, []);
 
   // Callback version of watch.  It's your responsibility to unsubscribe when done.
-  // React.useEffect(() => {
-  //   const subscription = watch((value, { name, type }) =>
-  //     console.log(value, name, type)
-  //   );
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
+  React.useEffect(() => {
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <>
@@ -551,7 +567,6 @@ const EventAdd = ({ page, stockPhotos }) => {
                       </Text>
                     </GridItem>
                   </Grid>
-
 
                   <Grid
                     templateColumns={{
@@ -1045,8 +1060,15 @@ const EventAdd = ({ page, stockPhotos }) => {
                     bgColor="#FFF"
                     borderRadius={"15px"}
                     p={6}
+                    className={'ok123'}
                   >
                     <GridItem colSpan={2}>
+                      <TitleWrap title= {wordExtractor(
+                            page?.content?.wordings,
+                            "more_information_label"
+                          )} />
+                    </GridItem>
+                    <GridItem colSpan={2} rowSpan={2}>
                       {additionalInformationFields.map((item, index) => {
                         return (
                           <Grid
@@ -1059,6 +1081,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                             borderRadius={"15px"}
                             mb={4}
                             alignItems="center"
+                            minH={'200px'}
                           >
                             <GridItem
                               borderRadius={"5px"}
@@ -1068,7 +1091,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                               cursor={"pointer"}
                               pos={"relative"}
                               height={`100%`}
-                              colSpan={2}
+                              colSpan={4}
                             >
                               {watchAdditionalInformation[index]?.file?.length >
                               0 ? (
@@ -1076,7 +1099,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                                   watchAdditionalInformation[index]?.file?.[0]
                                 )
                               ) : (
-                                <Box h={'100%'}>
+                                <Box h={'100%'} minHeight={'120px'}>
                                   <Center
                                     h={"100%"}
                                     fontSize={"14px"}
@@ -1117,20 +1140,6 @@ const EventAdd = ({ page, stockPhotos }) => {
                                 </Box>
                               )}
                             </GridItem>
-                            <GridItem
-                              borderRadius={"5px"}
-                              overflow={"hidden"}
-                              color={"#666666"}
-                              cursor={"pointer"}
-                              pos={"relative"}
-                              colSpan={2}
-                            >
-                              <Textarea
-                                {...register(
-                                  `additionalInformation[${index}].content`
-                                )}
-                              />
-                            </GridItem>
                             <GridItem colSpan={1}>
                               <Button
                                 colorScheme="red"
@@ -1153,7 +1162,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                         );
                       })}
 
-                      <Flex justify="end">
+                      {additionalInformationFields.length === 0 && (<Flex justify="end">
                         <Button
                           type="button"
                           onClick={() => {
@@ -1168,11 +1177,158 @@ const EventAdd = ({ page, stockPhotos }) => {
                             "add_information_label"
                           )}
                         </Button>
-                      </Flex>
+                      </Flex>)}
                     </GridItem>
                   </Grid>
 
-                  <Button
+                  <Grid
+                    templateColumns={{
+                      base: "repeat(2, 1fr)",
+                    }}
+                    gap={6}
+                    bgColor="#FFF"
+                    borderRadius={"15px"}
+                    p={6}
+                  >
+                    <GridItem colSpan={2}>
+                      <TitleWrap
+                        title={wordExtractor(
+                          page?.content?.wordings,
+                          "represent_organization_label"
+                        )}
+                      />
+                    </GridItem>
+
+                    <GridItem colSpan={2}>
+                      <FormControl>
+                        <Box>
+                          <Controller
+                            name="representOrganization"
+                            isClearable
+                            control={control}
+                            render={() => (
+                              <RadioGroup
+                                onChange={(value) =>
+                                  setValue("representOrganization", value)
+                                }
+                                defaultValue={"false"}
+                              >
+                                <Stack direction="column">
+                                  {page?.content?.form?.representOrganization?.options.map(
+                                    ({ label, value }) => (
+                                      <Radio
+                                        key={label}
+                                        value={value}
+                                        size="md"
+                                        colorScheme={"yellow"}
+                                        onChange={() =>
+                                          setValue("organizationAdditionalInfo", "")
+                                        }
+                                      >
+                                        {label}
+                                      </Radio>
+                                    )
+                                  )}
+                                </Stack>
+                              </RadioGroup>
+                            )}
+                          />
+                        </Box>
+                      </FormControl>
+                      {watchFields[2] === "false" && (
+                        <Box
+                          mt={4}
+                          p={6}
+                          bgColor={"#FAFAFA"}
+                          borderRadius={"15px"}
+                        >
+                          <FormControl>
+                            <FormLabel {...labelStyles}>
+                              <FormLabel {...labelStyles}>
+                                {wordExtractor(
+                                  page?.content?.wordings,
+                                  "organization_addtional_info_title"
+                                )}
+                              </FormLabel>
+                            </FormLabel>
+                            <Textarea
+                              type="text"
+                              variant="flushed"
+                              {...register("organizationAdditionalInfo", {
+                                required: watchFields[2] === "false",
+                              })}
+                              row={4}
+                            />
+                            <FormHelperText>
+                              {errors?.organizationAdditionalInfo?.type === "required" && (
+                                <Text color="red">
+                                  {wordExtractor(
+                                    page?.content?.wordings,
+                                    "input_required"
+                                  )}
+                                </Text>
+                              )}
+                            </FormHelperText>
+                          </FormControl>
+                        </Box>
+                      )}
+                    </GridItem>
+
+                  </Grid>
+
+
+                  {/* <Grid
+                    templateColumns={{
+                      base: "repeat(2, 1fr)",
+                    }}
+                    gap={6}
+                    bgColor="#FFF"
+                    borderRadius={"15px"}
+                    p={6}
+                  >
+                    <GridItem colSpan={2}>
+                      <TitleWrap
+                        title={wordExtractor(
+                          page?.content?.wordings,
+                          "date_venue_label"
+                        )}
+                      />
+                    </GridItem>
+
+                    <GridItem colSpan={2}>
+                      <FormControl>
+                        <FormLabel {...labelStyles}>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "venue_label"
+                          )}
+                        </FormLabel>
+                        <Input
+                          type="text"
+                          variant="flushed"
+                          placeholder={wordExtractor(
+                            page?.content?.wordings,
+                            "venue_placeholder"
+                          )}
+                          {...register("venue", {
+                            required: true,
+                          })}
+                        />
+                        <FormHelperText>
+                          {errors?.venue?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "input_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
+                      </FormControl>
+                    </GridItem>
+                  </Grid> */}
+
+                  {/* <Button
                     colorScheme="yellow"
                     color="black"
                     px={8}
@@ -1182,7 +1338,7 @@ const EventAdd = ({ page, stockPhotos }) => {
                     isLoading={isSubmitting}
                   >
                     {wordExtractor(page?.content?.wordings, "continue_label")}
-                  </Button>
+                  </Button> */}
                 </Flex>
               </Box>
 
@@ -1190,31 +1346,24 @@ const EventAdd = ({ page, stockPhotos }) => {
                 <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
                   <Box>
                     <Text fontWeight={700} mb={2}>
-                      關於活動
+                    {wordExtractor(page?.content?.wordings, "create_event_label")}
                     </Text>
                   </Box>
                   <Divider my={6} />
-                  <Box fontSize={"14px"}>
-                    <Text fontWeight={700} mb={2}>
-                      活動登記
-                    </Text>
-                    <Flex
-                      direction={"row"}
-                      justifyContent="space-between"
-                      mb={2}
-                    >
-                      <Text>活動負責人</Text>
-                    </Flex>
-                    <Flex direction={"row"} justifyContent="space-between">
-                      <Text>截止登記日子</Text>
-                    </Flex>
-                  </Box>
+                  <Button
+                    colorScheme="yellow"
+                    color="black"
+                    px={8}
+                    py={2}
+                    borderRadius="2em"
+                    type="submit"
+                    isLoading={isSubmitting}
+                    w={'100%'}
+                  >
+                    {wordExtractor(page?.content?.wordings, "submit_label")}
+                  </Button>
 
-                  {/* <Flex gap={2} direction={"column"} mt={10}>
-                    <Button borderRadius="20px" type="submit" w={"100%"}>
-                      提交
-                    </Button>
-                  </Flex> */}
+
                 </Box>
               </Box>
             </Flex>
@@ -1342,6 +1491,78 @@ export default withPageCMS(EventAdd, {
         {
           name: "type",
           label: "活動類別 Type Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "freeOrCharge",
+          label: "費用 Type Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "representOrganization",
+          label: "代表機構 Type Label",
           component: "group",
           fields: [
             {

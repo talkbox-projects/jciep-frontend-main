@@ -23,32 +23,28 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import wordExtractor from "../../../utils/wordExtractor";
 import Container from "../../../components/Container";
 import moment from "moment";
-import nookies from "nookies";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { CloseIcon } from "@chakra-ui/icons";
 import EVENT from "../../../utils/mock/api_event_id.json";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { useAppContext } from "../../../store/AppStore";
-import { likeEvent, bookmarkEvent } from "../../../utils/event/eventAction";
+import { bookmarkEvent } from "../../../utils/event/eventAction";
 
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
-  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props,
-      token: cookies["jciep-token"] ?? "",
-      identityId: cookies["jciep-identityId"] ?? "",
+      ...(await getSharedServerSideProps(context))?.props
     },
   };
 };
 
-const Event = ({ page, token, identityId }) => {
+const Event = ({ page }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -463,11 +459,7 @@ const Event = ({ page, token, identityId }) => {
                             alt={""}
                             fontSize={18}
                             mx={"auto"}
-                            onClick={() => {
-                              if(token){
-                                bookmarkEvent(detail?.id, token, identityId)
-                              }
-                            }}
+                            onClick={() => bookmarkEvent(detail?.id)}
                           />
                         </Center>
                       </Box>

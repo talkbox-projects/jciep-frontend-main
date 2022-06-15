@@ -40,14 +40,11 @@ import { useForm, Controller } from "react-hook-form";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
-import moment from "moment";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiFilter2Fill } from "react-icons/ri";
 import { getEvents } from "../../utils/event/getEvent";
-
-import getConfig from "next/config";
+import { bookmarkEvent } from "../../utils/event/eventAction";
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
@@ -58,13 +55,12 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props,
-      // events,
+      ...(await getSharedServerSideProps(context))?.props
     },
   };
 };
 
-const Event = ({ page, events }) => {
+const Event = ({ page}) => {
   const router = useRouter();
   const { query } = router;
   const [filteredEvents, setFiltered] = useState([]);
@@ -290,9 +286,7 @@ const Event = ({ page, events }) => {
                                   mx={"auto"}
                                 />
                               </Box>
-                              <Box>
-                                {d.venue}
-                              </Box>
+                              <Box>{d.venue}</Box>
                             </Flex>
                           </Stack>
                           <Divider mt={6} my={4} />
@@ -314,7 +308,13 @@ const Event = ({ page, events }) => {
                               </Button>
                             </Box>
 
-                            <Flex direction={"row"} align="center" gap={2}>
+                            <Flex
+                              direction={"row"}
+                              align="center"
+                              gap={2}
+                              onClick={() => bookmarkEvent(d?.id)}
+                              cursor={'pointer'}
+                            >
                               <Box w={"20px"}>
                                 <Image
                                   src={`/images/app/${
