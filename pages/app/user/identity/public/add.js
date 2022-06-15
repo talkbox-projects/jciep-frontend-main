@@ -70,12 +70,12 @@ const labelStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
-  const { user, AppContext, WebContext } = useAppContext();
+  const { user } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
-  const [habInfo, setHabInfo] = useState({});
+  const [appRegistrationInfo, setAppRegistrationInfo] = useState({});
   const {
     handleSubmit,
     register,
@@ -87,21 +87,49 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     getValues,
   } = useForm();
 
-  useEffect(()=>{
+  useEffect(()=> {
 
-    let json = {
+    const WebContext = {};
+    WebContext.getRegistrationInfoHandler = (response) => {
+      alert(JSON.stringify(response));
+
+      if(!response.result) {
+        alert("response.result null")
+      } else {
+        setAppRegistrationInfo(response.result)
+      }
+    }
+
+    const json = {
       name: "getRegistrationInfo",
       options: {
           callback: "getRegistrationInfoHandler"
       }
     }
 
-    AppContext.postMessage(json)
+    if(!window.AppContext){
+      alert("window.AppContext undefined")
+    }
 
-    const result = WebContext.getRegistrationInfoHandler()
+    if(!window.AppContext?.postMessage){
+      alert("window.AppContext.postMessage undefined")
+    }
 
-    // result try alert
-    alert(`result:`, JSON.stringify(result))
+    if(window && window.AppContext && window.AppContext.postMessage){
+      window.AppContext.postMessage(json);
+    }
+    
+
+    // if(window.AppContext.postMessage){
+    //   window.AppContext.postMessage(json)
+    // } else {
+    //   alert("AppContext undefined")
+    // }
+
+    // const result = WebContext.getRegistrationInfoHandler()
+
+    // // result try alert
+    // alert(`result:`, JSON.stringify(result))
 
 
   },[])
@@ -205,15 +233,15 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: user?.id,
+        userId: appRegistrationInfo?.token,
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
         age: age?.value,
         gender: gender?.value,
         district: resident_district?.value,
-        email: email,
-        phone: phone,
+        email: appRegistrationInfo?.email,
+        phone: appRegistrationInfo?.phone,
         jobFunction: job_function,
         industry: industry?.value,
         industryOther: industry?.value === "other" ? industry_other : "",
