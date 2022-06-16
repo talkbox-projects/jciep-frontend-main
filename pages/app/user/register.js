@@ -58,6 +58,8 @@ const AppUserRegister = ({ page }) => {
         alert("response.result null")
       } else {
         setAppRegistrationInfo(response?.result)
+
+        alert("SUCCESS RESPONSE:::", JSON.stringify(response))
       }
 
       alert(`END CONDITION:::`)
@@ -79,8 +81,10 @@ const AppUserRegister = ({ page }) => {
     }
 
     if(window && window.AppContext && window.AppContext.postMessage){
-      window.AppContext.postMessage(json);
+      window.AppContext.postMessage(JSON.stringify(json))
     }
+
+    alert(`END USE_EFFECT:::`)
   
 
   },[])

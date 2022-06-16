@@ -91,15 +91,20 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
     window.WebContext = {};
     window.WebContext.getRegistrationInfoHandler = (response) => {
+      alert(JSON.stringify(response));
+
       alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
       alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
       alert(`RESPONSE OPTIONS:::`, response?.options)
+
       alert(`RESPONSE RESULT:::`, response?.result)
 
       if(!response.result) {
         alert("response.result null")
       } else {
         setAppRegistrationInfo(response?.result)
+
+        alert("SUCCESS RESPONSE:::", JSON.stringify(response))
       }
 
       alert(`END CONDITION:::`)
@@ -121,22 +126,11 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     }
 
     if(window && window.AppContext && window.AppContext.postMessage){
-      alert(`window && window.AppContext && window.AppContext.postMessage BLOCK`)
-      window.AppContext.postMessage(json);
+      window.AppContext.postMessage(JSON.stringify(json))
     }
-    
 
-    // if(window.AppContext.postMessage){
-    //   window.AppContext.postMessage(json)
-    // } else {
-    //   alert("AppContext undefined")
-    // }
-
-    // const result = WebContext.getRegistrationInfoHandler()
-
-    // // result try alert
-    // alert(`result:`, JSON.stringify(result))
-
+    alert(`END USE_EFFECT:::`)
+  
 
   },[])
 
