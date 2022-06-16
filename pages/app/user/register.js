@@ -85,9 +85,30 @@ const AppUserRegister = ({ page }) => {
     }
 
     alert(`END USE_EFFECT:::`)
-  
-
   },[])
+
+
+  const handleCloseWebView = () => {
+
+    window.WebContext = {};
+    window.WebContext.closeWebViewHandler = () => {
+      alert("CLOSE WEB VIEW:::")
+    }
+
+    let json = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {}
+      }
+    };
+    
+    if(window && window.AppContext && window.AppContext.postMessage){
+      window.AppContext.postMessage(JSON.stringify(json))
+      alert("CLOSE WEB CALLED:::")
+    }
+
+  }
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -100,7 +121,7 @@ const AppUserRegister = ({ page }) => {
         backgroundColor="#F6D644"
       >
         <GridItem>
-          <Image src={"/images/app/close.svg"} alt={""} />
+          <Image src={"/images/app/close.svg"} alt={""} cursor="pointer" onClick={()=> handleCloseWebView()} />
         </GridItem>
       </Grid>
       <Box>

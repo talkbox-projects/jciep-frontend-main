@@ -133,12 +133,6 @@ const [AppProvider, useAppContext] = constate((props) => {
     });
   }, []);
 
-  const AppContext = {
-    postMessage: (json) => {
-      window.postMessage(json);
-    },
-  };
-
   const WebContext = {
     getRegistrationInfoHandler: (result) => {
       return result;
@@ -166,8 +160,6 @@ const [AppProvider, useAppContext] = constate((props) => {
 
     environmentSetting,
     setEnvironmentSetting,
-
-    AppContext,
     WebContext,
   };
 });

@@ -38,22 +38,39 @@ export const getServerSideProps = async (context) => {
 const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   const [, removeCredential] = useCredential();
 
-  const {postMessage} = useAppContext()
-
   const sendLoginSuccessResponse = () => {
 
-    let json = {
-      name: "sendLoginSuccessResponse",
-      options: { 
-        callback: "sendLoginSuccessResponseHandler",
-        params: {
-          token: token,
-          identityId: identityId
-        }
+    window.WebContext = {};
+    window.WebContext.sendLoginSuccessResponseHandler = (response) => {
+      alert(JSON.stringify(response));
+      if(!response) {
+        alert("response.result null")
       }
     }
 
-    postMessage(json)
+    const json = {
+      name: "sendLoginSuccessResponse",
+      options: {
+          callback: "sendLoginSuccessResponseHandler",
+          params: {
+            token: token,
+            identityId: identityId
+          }
+      }
+    }
+
+    if(!window.AppContext){
+      alert("window.AppContext undefined")
+    }
+
+    if(!window.AppContext?.postMessage){
+      alert("window.AppContext.postMessage undefined")
+    }
+
+    if(window && window.AppContext && window.AppContext.postMessage){
+      window.AppContext.postMessage(JSON.stringify(json))
+      alert(`POST MESSAGE CALL :::`)
+    }
   }
 
   return (

@@ -505,7 +505,6 @@ const RegistrationModal = ({
   registerUrl,
   contactNumber,
 }) => {
-  const { postMessage } = useAppContext();
 
   return (
     <Modal
@@ -545,7 +544,7 @@ const RegistrationModal = ({
                   gap={2}
                   align="center"
                   onClick={() => {
-                    let json = {
+                    const json = {
                       name: "openWebView",
                       options: {
                         callback: "openWebViewHandler",
@@ -556,7 +555,18 @@ const RegistrationModal = ({
                         },
                       },
                     };
-                    postMessage(json);
+
+                    window.WebContext = {};
+                    window.WebContext.openWebViewHandler = (response) => {
+                      alert(JSON.stringify(response));
+                      if(!response) {
+                        alert("response.result null")
+                      }
+                    }
+
+                    if(window && window.AppContext && window.AppContext.postMessage){
+                      window.AppContext.postMessage(JSON.stringify(json))
+                    }
                   }}
                 >
                   <Box w={"20px"}>
