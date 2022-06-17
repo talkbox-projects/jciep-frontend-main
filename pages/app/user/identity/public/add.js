@@ -129,10 +129,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
       window.AppContext.postMessage(JSON.stringify(json))
     }
 
-    alert(`END USE_EFFECT:::`)
-  
+    alert(`END USE_EFFECT:::`)  
 
   },[])
+
 
   const watchFields = watch(
     [
@@ -148,7 +148,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const handlePostData = async (input, invitationCode) => {
 
     alert(`FORM DATA::: ${JSON.stringify(input)}`)
-
 
     try {
       const mutation = gql`
@@ -237,7 +236,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: appRegistrationInfo?.token,
+        userId: user?.id,
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
