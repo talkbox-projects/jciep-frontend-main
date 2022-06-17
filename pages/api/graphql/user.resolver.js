@@ -50,6 +50,14 @@ export default {
       }
     },
 
+    UserEmailOTPValidityCheck: async (_parent, { email, otp }) => {
+      try {
+        return await EmailVerify.findOne({ email, otp });
+      } catch (error) {
+        return null;
+      }
+    },
+
     UserPhoneValidityCheck: async (_parent, { phone, otp }) => {
       try {
         return await PhoneVerify.findOne({ otp, phone });

@@ -9,13 +9,15 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { gql } from "graphql-request";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
+import { getGraphQLClient } from "../../../utils/apollo";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useCredential } from "../../../utils/user";
 import { useAppContext } from "../../../store/AppStore";
 import { useRouter } from "next/router";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 const PAGE_KEY = "app_user_register";
 
@@ -35,79 +37,133 @@ const AppUserRegister = ({ page }) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [, removeCredential] = useCredential();
-  const [appRegistrationInfo, setAppRegistrationInfo] = useState({});
+  const [appRegistrationInfo, setAppRegistrationInfo] = useState({
+    otp: "",
+    phone: "",
+    type: "",
+  }); // TODO: getRegistrationInfoHandler
 
   const logout = () => {
     removeCredential();
     router.push("/");
   };
 
-  useEffect(()=> {
-
-    window.WebContext = {};
-    window.WebContext.getRegistrationInfoHandler = (response) => {
-      alert(JSON.stringify(response));
-
-      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
-      alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
-      alert(`RESPONSE OPTIONS:::`, response?.options)
-
-      alert(`RESPONSE RESULT:::`, response?.result)
-
-      if(!response.result) {
-        alert("response.result null")
-      } else {
-        setAppRegistrationInfo(JSON.parse(response))
-
-        alert("SUCCESS RESPONSE:::", JSON.stringify(response))
-      }
-
-      alert(`END CONDITION:::`)
-    }
-
-    const json = {
-      name: "getRegistrationInfo",
-      options: {
-          callback: "getRegistrationInfoHandler"
-      }
-    }
-
-    if(!window.AppContext){
-      alert("window.AppContext undefined")
-    }
-
-    if(!window.AppContext?.postMessage){
-      alert("window.AppContext.postMessage undefined")
-    }
-
-    if(window && window.AppContext && window.AppContext.postMessage){
-      window.AppContext.postMessage(JSON.stringify(json))
-    }
-
-    alert(`END USE_EFFECT:::`)
-  },[])
-
+  useEffect(() => {
+    // window.WebContext = {};
+    // window.WebContext.getRegistrationInfoHandler = (response) => {
+    //   alert(JSON.stringify(response));
+    //   alert(`RESPONSE NAME:::`, response?.getRegistrationInfo);
+    //   alert(`RESPONSE ERROR CODE:::`, response?.errorCode);
+    //   alert(`RESPONSE OPTIONS:::`, response?.options);
+    //   alert(`RESPONSE RESULT:::`, response?.result);
+    //   if (!response.result) {
+    //     alert("response.result null");
+    //   } else {
+    //     setAppRegistrationInfo(JSON.parse(response));
+    //     alert("SUCCESS RESPONSE:::", JSON.stringify(response));
+    //   }
+    //   alert(`END CONDITION:::`);
+    // };
+    // const json = {
+    //   name: "getRegistrationInfo",
+    //   options: {
+    //     callback: "getRegistrationInfoHandler",
+    //   },
+    // };
+    // if (!window.AppContext) {
+    //   alert("window.AppContext undefined");
+    // }
+    // if (!window.AppContext?.postMessage) {
+    //   alert("window.AppContext.postMessage undefined");
+    // }
+    // if (window && window.AppContext && window.AppContext.postMessage) {
+    //   window.AppContext.postMessage(JSON.stringify(json));
+    // }
+    // alert(`END USE_EFFECT:::`);
+  }, []);
 
   const handleCloseWebView = () => {
-
     window.WebContext = {};
     window.WebContext.closeWebViewHandler = () => {
-      alert("CLOSE WEB VIEW:::")
-    }
+      alert("CLOSE WEB VIEW:::");
+    };
 
     let json = {
       name: "closeWebView",
       options: {
         callback: "closeWebViewHandler",
-        params: {}
-      }
+        params: {},
+      },
     };
-    
-    if(window && window.AppContext && window.AppContext.postMessage){
-      window.AppContext.postMessage(JSON.stringify(json))
-      alert("CLOSE WEB CALLED:::")
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+      alert("CLOSE WEB CALLED:::");
     }
-  }
+  };
+
+  const handleCheckOTP = async () => {
+    const { otp, phone, email } = appRegistrationInfo;
+    // TODO: getRegistrationInfoHandler
+
+    switch (appRegistrationInfo.type) {
+      case "phone":
+        try {
+          const query = gql`
+            query UserPhoneValidityCheck($phone: String!, $otp: String!) {
+              UserPhoneValidityCheck(phone: $phone, otp: $otp) {
+                phone
+                meta
+              }
+            }
+          `;
+
+          const data = await getGraphQLClient().request(query, {
+            otp,
+            phone,
+          });
+
+          if (data?.UserPhoneValidityCheck?.phone) {
+            router.push(`/app/user/setPassword?phone=${phone}&otp=${otp}`);
+          } else {
+            alert("invalid OTP");
+          }
+        } catch (e) {
+          alert("invalid OTP");
+        }
+        break;
+
+      case "email":
+        try {
+          const query = gql`
+            query UserEmailOTPValidityCheck($email: String!, $otp: String!) {
+              UserEmailOTPValidityCheck(email: $email, otp: $otp) {
+                email
+                meta
+              }
+            }
+          `;
+
+          const data = await getGraphQLClient().request(query, {
+            otp,
+            email,
+          });
+
+          if (data?.UserEmailOTPValidityCheck?.email) {
+            router.push(`/app/user/setPassword?email=${email}&otp=${otp}`);
+          } else {
+            alert("invalid OTP");
+          }
+        } catch (e) {
+          alert("invalid OTP");
+        }
+        break;
+
+      default:
+        alert("TYPE NOT FOUND");
+        break;
+    }
+  };
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -120,7 +176,12 @@ const AppUserRegister = ({ page }) => {
         backgroundColor="#F6D644"
       >
         <GridItem>
-          <Image src={"/images/app/close.svg"} alt={""} cursor="pointer" onClick={()=> handleCloseWebView()} />
+          <Image
+            src={"/images/app/close.svg"}
+            alt={""}
+            cursor="pointer"
+            onClick={() => handleCloseWebView()}
+          />
         </GridItem>
       </Grid>
       <Box>
@@ -174,16 +235,15 @@ const AppUserRegister = ({ page }) => {
               <Box>
                 <Box px={"15px"} py={"12px"} mt={10} w="100%">
                   <Box width="100%" textAlign="center">
-                    <Link href={`/app/user/verify/${appRegistrationInfo?.result?.token}`}>
-                      <Button
-                        backgroundColor="#F6D644"
-                        borderRadius="22px"
-                        height="44px"
-                        width="100%"
-                      >
-                        {page?.content?.continue}
-                      </Button>
-                    </Link>
+                    <Button
+                      backgroundColor="#F6D644"
+                      borderRadius="22px"
+                      height="44px"
+                      width="100%"
+                      onClick={() => handleCheckOTP()}
+                    >
+                      {page?.content?.continue}
+                    </Button>
                   </Box>
                   <Flex
                     direction={"column"}
@@ -203,7 +263,7 @@ const AppUserRegister = ({ page }) => {
                     <Box>
                       <Text as="span">{page?.content?.remark?.text02}</Text>{" "}
                       <Text as="span" onClick={() => logout()}>
-                      {page?.content?.logout}
+                        {page?.content?.logout}
                       </Text>
                     </Box>
                   </Flex>

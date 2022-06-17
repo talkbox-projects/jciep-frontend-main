@@ -240,6 +240,11 @@ export default gql`
     meta: JsonContent
   }
 
+  type UserEmailOTPValidityCheck {
+    email: String!
+    meta: JsonContent
+  }
+
   type UserPhoneValidityCheckOutput {
     phone: String!
     meta: JsonContent
@@ -248,6 +253,7 @@ export default gql`
   type Query {
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
     UserPhoneValidityCheck(phone: String!,otp: String!): UserPhoneValidityCheckOutput
+    UserEmailOTPValidityCheck(email: String!,otp: String!): UserEmailOTPValidityCheck
 
 
     UserMeGet: User
