@@ -67,10 +67,10 @@ const VerifyToken = ({ page }) => {
           emailVerificationToken,
           password,
         },
-      });
+      });      
       setCredential(user);
       setIdentityId(user?.identities?.[0]?.id ?? null);
-      router.push("/user/identity/select");
+      router.push("/app/user/identity/public/add");
     } catch (e) {
       console.error(e);
       setError("password_confirm", {
@@ -201,8 +201,7 @@ const VerifyToken = ({ page }) => {
               {errors?.password_confirm?.message}
             </FormErrorMessage>
           </FormControl>
-        </VStack>
-        <Box
+          <Box
           style={{
             background:
               "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
@@ -226,6 +225,8 @@ const VerifyToken = ({ page }) => {
             </Button>
           </FormControl>
         </Box>
+        </VStack>
+
         {page?.content?.bgImage && (
           <Container
             h="450px"

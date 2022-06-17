@@ -57,7 +57,7 @@ const AppUserRegister = ({ page }) => {
       if(!response.result) {
         alert("response.result null")
       } else {
-        setAppRegistrationInfo(response?.result)
+        setAppRegistrationInfo(JSON.parse(response))
 
         alert("SUCCESS RESPONSE:::", JSON.stringify(response))
       }
@@ -107,7 +107,6 @@ const AppUserRegister = ({ page }) => {
       window.AppContext.postMessage(JSON.stringify(json))
       alert("CLOSE WEB CALLED:::")
     }
-
   }
 
   return (
@@ -175,7 +174,7 @@ const AppUserRegister = ({ page }) => {
               <Box>
                 <Box px={"15px"} py={"12px"} mt={10} w="100%">
                   <Box width="100%" textAlign="center">
-                    <Link href="/app/user/identity/public/add">
+                    <Link href={`/app/user/verify/${appRegistrationInfo?.result?.token}`}>
                       <Button
                         backgroundColor="#F6D644"
                         borderRadius="22px"
@@ -197,7 +196,7 @@ const AppUserRegister = ({ page }) => {
                       dangerouslySetInnerHTML={{
                         __html: page?.content?.remark?.text?.replace(
                           " ",
-                          `<b>${user?.email??appRegistrationInfo?.email}</b>`
+                          `<b>${appRegistrationInfo?.email}</b>`
                         ),
                       }}
                     />
