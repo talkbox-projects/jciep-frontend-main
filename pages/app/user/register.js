@@ -49,37 +49,37 @@ const AppUserRegister = ({ page }) => {
   };
 
   useEffect(() => {
-    // window.WebContext = {};
-    // window.WebContext.getRegistrationInfoHandler = (response) => {
-    //   alert(JSON.stringify(response));
-    //   alert(`RESPONSE NAME:::`, response?.getRegistrationInfo);
-    //   alert(`RESPONSE ERROR CODE:::`, response?.errorCode);
-    //   alert(`RESPONSE OPTIONS:::`, response?.options);
-    //   alert(`RESPONSE RESULT:::`, response?.result);
-    //   if (!response.result) {
-    //     alert("response.result null");
-    //   } else {
-    //     setAppRegistrationInfo(JSON.parse(response));
-    //     alert("SUCCESS RESPONSE:::", JSON.stringify(response));
-    //   }
-    //   alert(`END CONDITION:::`);
-    // };
-    // const json = {
-    //   name: "getRegistrationInfo",
-    //   options: {
-    //     callback: "getRegistrationInfoHandler",
-    //   },
-    // };
-    // if (!window.AppContext) {
-    //   alert("window.AppContext undefined");
-    // }
-    // if (!window.AppContext?.postMessage) {
-    //   alert("window.AppContext.postMessage undefined");
-    // }
-    // if (window && window.AppContext && window.AppContext.postMessage) {
-    //   window.AppContext.postMessage(JSON.stringify(json));
-    // }
-    // alert(`END USE_EFFECT:::`);
+    window.WebContext = {};
+    window.WebContext.getRegistrationInfoHandler = (response) => {
+      alert(JSON.stringify(response));
+      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo);
+      alert(`RESPONSE ERROR CODE:::`, response?.errorCode);
+      alert(`RESPONSE OPTIONS:::`, response?.options);
+      alert(`RESPONSE RESULT:::`, response?.result);
+      if (!response.result) {
+        alert("response.result null");
+      } else {
+        setAppRegistrationInfo(JSON.parse(response));
+        alert("SUCCESS RESPONSE:::", JSON.stringify(response));
+      }
+      alert(`END CONDITION:::`);
+    };
+    const json = {
+      name: "getRegistrationInfo",
+      options: {
+        callback: "getRegistrationInfoHandler",
+      },
+    };
+    if (!window.AppContext) {
+      alert("window.AppContext undefined");
+    }
+    if (!window.AppContext?.postMessage) {
+      alert("window.AppContext.postMessage undefined");
+    }
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+    alert(`END USE_EFFECT:::`);
   }, []);
 
   const handleCloseWebView = () => {
