@@ -222,6 +222,8 @@ export default gql`
     education: [EducationInput]
     employment: [EmploymentInput]
     activity: [ActivityInput]
+
+    phase2profile: Boolean
   }
 
   input LoginInput {

@@ -15,6 +15,7 @@ import {
   Image,
   Center,
   Stack,
+  Code
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -29,6 +30,7 @@ import getSharedServerSideProps from "../../../../../utils/server/getSharedServe
 import wordExtractor from "../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../utils/general";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import nookies from "nookies";
 import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
@@ -36,14 +38,15 @@ import OrganizationInvitationCodeValidity from "../../../../../utils/api/Organiz
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
+  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      query: context.query,
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
@@ -51,6 +54,10 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
+      token: cookies['jciep-token']??null,
+      identityId: cookies['jciep-identityId']??null,
+      cToken: cookies['c-token']??null,
+      cIdentityId: cookies['c-identityId']??null
     },
   };
 };
@@ -68,14 +75,13 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations } }) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identityId, cToken, cIdentityId}) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
-  const [appRegistrationInfo, setAppRegistrationInfo] = useState({});
   const {
     handleSubmit,
     register,
@@ -87,51 +93,43 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
     getValues,
   } = useForm();
 
-  useEffect(()=> {
+  // useEffect(()=> {
 
-    window.WebContext = {};
-    window.WebContext.getRegistrationInfoHandler = (response) => {
-      alert(JSON.stringify(response));
+  //   window.WebContext = {};
+  //   window.WebContext.getRegistrationInfoHandler = (response) => {
+  //     alert(JSON.stringify(response));
+  //     alert(`RESPONSE RESULT:::`, response?.result)
 
-      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo)
-      alert(`RESPONSE ERROR CODE:::`, response?.errorCode)
-      alert(`RESPONSE OPTIONS:::`, response?.options)
+  //     if(!response.result) {
+  //       alert("response.result null")
+  //     } else {
+  //       setAppRegistrationInfo(response?.result)
 
-      alert(`RESPONSE RESULT:::`, response?.result)
+  //       alert("SUCCESS RESPONSE:::", JSON.stringify(response))
+  //     }
+  //   }
 
-      if(!response.result) {
-        alert("response.result null")
-      } else {
-        setAppRegistrationInfo(response?.result)
+  //   const json = {
+  //     name: "getRegistrationInfo",
+  //     options: {
+  //         callback: "getRegistrationInfoHandler"
+  //     }
+  //   }
 
-        alert("SUCCESS RESPONSE:::", JSON.stringify(response))
-      }
+  //   if(!window.AppContext){
+  //     alert("window.AppContext undefined")
+  //   }
 
-      alert(`END CONDITION:::`)
-    }
+  //   if(!window.AppContext?.postMessage){
+  //     alert("window.AppContext.postMessage undefined")
+  //   }
 
-    const json = {
-      name: "getRegistrationInfo",
-      options: {
-          callback: "getRegistrationInfoHandler"
-      }
-    }
+  //   if(window && window.AppContext && window.AppContext.postMessage){
+  //     window.AppContext.postMessage(JSON.stringify(json))
+  //     alert("POS MESSAGE CALLED:::")
+  //   }
 
-    if(!window.AppContext){
-      alert("window.AppContext undefined")
-    }
-
-    if(!window.AppContext?.postMessage){
-      alert("window.AppContext.postMessage undefined")
-    }
-
-    if(window && window.AppContext && window.AppContext.postMessage){
-      window.AppContext.postMessage(JSON.stringify(json))
-    }
-
-    alert(`END USE_EFFECT:::`)  
-
-  },[])
+  // },[])
 
 
   const watchFields = watch(
@@ -146,9 +144,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   );
 
   const handlePostData = async (input, invitationCode) => {
-
-    alert(`FORM DATA::: ${JSON.stringify(input)}`)
-
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -243,8 +238,8 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         age: age?.value,
         gender: gender?.value,
         district: resident_district?.value,
-        email: appRegistrationInfo?.email,
-        phone: appRegistrationInfo?.phone,
+        email: email,
+        phone: phone,
         jobFunction: job_function,
         industry: industry?.value,
         industryOther: industry?.value === "other" ? industry_other : "",
@@ -274,7 +269,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
   if (step === "step2") {
     return (
-      <Box pt={{ base: "64px" }}>
+      <Box pt={{ base: "12px" }}>
         <NAV
           title={page?.content?.step?.title}
           subTitle={page?.content?.step?.step2SubTitle}
@@ -478,13 +473,22 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
 
   if (step === "step1") {
     return (
-      <Box pt={{ base: "64px" }}>
+      <Box pt={{ base: "12px" }}>
         <NAV
           title={page?.content?.step?.title}
           subTitle={page?.content?.step?.subTitle}
           handleClickLeftIcon={() => router.push(`/app/user/register`)}
         />
-        <Text
+        {/** For testing, remove later */}
+        {query?.redirectFrom==='publicUpdatePage' && <Code fontSize="11px" colorScheme='red'>{'Redirect from app/user/identity/public/update || app/user/identity/update, cased by user without any identity'}</Code>}<br/>
+        <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/>
+      
+        <Box justifyContent="center" width="100%">
+          <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
+          <Text
           fontSize="20px"
           letterSpacing="1.5px"
           fontWeight={600}
@@ -493,9 +497,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         >
           {page?.content?.step?.title}
         </Text>
-
-        <Box justifyContent="center" width="100%">
-          <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
             <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns="repeat(1, 1fr)"

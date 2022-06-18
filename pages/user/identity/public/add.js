@@ -16,6 +16,7 @@ import {
   Center,
   Stack,
   Grid,
+  Code
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -33,9 +34,12 @@ import organizationSearch from "../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
 
+import nookies from "nookies";
+
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
+  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
   return {
@@ -51,6 +55,10 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
+      token: cookies['jciep-token']??null,
+      identityId: cookies['jciep-identityId']??null,
+      cToken: cookies['c-token']??null,
+      cIdentityId: cookies['c-identityId']??null
     },
   };
 };
@@ -70,7 +78,7 @@ const customStyles = {
   },
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations } }) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cToken, cIdentityId }) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [formState, setFormState] = useState();
@@ -387,6 +395,12 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
         <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
           {page?.content?.step?.title}
         </Text>
+         {/** For testing, remove later */}
+        {/* <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
+        <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/> */}
+
         <Text fontSize="16px">{page?.content?.step?.subTitle}</Text>
         <Box justifyContent="center" width="100%">
           <Box

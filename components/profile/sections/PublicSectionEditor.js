@@ -11,57 +11,145 @@ import {
   Input,
   FormHelperText,
   Select,
+  Box,
+  Grid,
+  GridItem,
+  Flex,
+  Divider,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import { useAppContext } from "../../../store/AppStore";
+import ReactSelect from "react-select";
+import { gql } from "graphql-request";
+import { getGraphQLClient } from "../../../utils/apollo";
+import OrganizationMemberJoin from "../../../utils/api/OrganizationMemberJoin";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
+import organizationSearch from "../../../utils/api/OrganizationSearch";
 import { useRouter } from "next/router";
+import OrganizationInvitationCodeValidity from "../../../utils/api/OrganizationInvitationCodeValidity";
 
 const PublicSectionEditor = () => {
   const router = useRouter();
-  const { page, enums, saveIdentity, identity, removeEditSection, token, identityId } =
+  const { page, enums, saveIdentity, identity, removeEditSection, identityId } =
     IdentityProfileStore.useContext();
+  const [showSelectCentre, setShowSelectCentre] = useState(false);
+  const [selectedOrganization, setOrganization] = useState(null);
+  const [currentFormState, setCurrentFormState] = useState();
+  const [organizationData, setOrganizationData] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
 
   const {
     handleSubmit,
     control,
     register,
     formState: { isSubmitting, errors },
-    watch
+    setError,
+    watch,
+    getValues,
   } = useForm({
     defaultValues: {
       id: identity.id,
       caption: identity.caption,
-      wishToDoStatus: identity.wishToDoStatus
+      wishToDoStatus: identity.wishToDoStatus,
     },
   });
 
   const wishToDoStatus = watch("wishToDo", identity.wishToDo);
 
-  const {postMessage} = useAppContext()
+  const handleSaveAction = async (data) => {
+    let submitData = await Object.fromEntries(
+      Object.entries({ ...data, phase2profile: true }).filter(
+        ([_, v]) => v != null
+      )
+    );
+    await saveIdentity(submitData);
+
+    removeEditSection();
+  };
+
+  const handleSubmitInvitation = async () => {
+    setError("invitationCode", {});
+
+    const formState = getValues();
+
+    setSubmitting(true);
+
+    const isValid = await OrganizationInvitationCodeValidity({
+      invitationCode: getValues("invitationCode"),
+      organizationType: "ngo",
+    });
+
+    setSubmitting(false);
+
+    if (!isValid) {
+      setError("invitationCode", {
+        message: wordExtractor(
+          page?.content?.wordings,
+          "invitation_code_error_message"
+        ),
+      });
+      return;
+    }
+
+    handleSaveAction(formState);
+  };
+
+  const handlePostData = async (input, invitationCode) => {
+    try {
+      const mutation = gql`
+        mutation IdentityCreate($input: IdentityCreateInput!) {
+          IdentityCreate(input: $input) {
+            id
+          }
+        }
+      `;
+      let data = await getGraphQLClient().request(mutation, {
+        input,
+      });
+      if (data && data.IdentityCreate) {
+        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
+        if (invitationCode) {
+          await OrganizationMemberJoin({
+            invitationCode: invitationCode,
+            identityId: data.IdentityCreate.id,
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchOrganization() {
+      // You can await here
+      const response = await organizationSearch({
+        status: ["approved"],
+        published: true,
+        type: ["ngo"],
+      });
+
+      setOrganizationData(response);
+    }
+    fetchOrganization();
+  }, []);
 
   return (
     <VStack
       as="form"
       onSubmit={handleSubmit(async (values) => {
         try {
+          // phase2profile: true, //Force to update
+          const submitData = Object.fromEntries(
+            Object.entries({ ...values, phase2profile: true }).filter(
+              ([_, v]) => v != null
+            )
+          );
+          console.log("submitData-", submitData);
           await saveIdentity(values);
-
-          let json = {
-            name: "sendLoginSuccessResponse",
-            options: { 
-              callback: "sendLoginSuccessResponseHandler",
-              params: {
-                token: token,
-                identityId: identityId
-              }
-            }
-          }
-          
-          postMessage(json)
 
           removeEditSection();
         } catch (error) {
@@ -383,20 +471,174 @@ const PublicSectionEditor = () => {
               )}
             </Select>
           </FormControl>
-          {wishToDoStatus === "other" && <FormControl>
-            <FormLabel color="#757575" mb={0}>
-              {wordExtractor(
-                page?.content?.wordings,
-                "field_label_wish_to_do_other"
-              )}
-            </FormLabel>
-            <Input
-              variant="flushed"
-              defaultValue={identity?.caption}
-              {...register("wishToDoOther", {})}
-            ></Input>
-          </FormControl>}
+          {wishToDoStatus === "other" && (
+            <FormControl>
+              <FormLabel color="#757575" mb={0}>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_wish_to_do_other"
+                )}
+              </FormLabel>
+              <Input
+                variant="flushed"
+                defaultValue={identity?.caption}
+                {...register("wishToDoOther", {})}
+              ></Input>
+            </FormControl>
+          )}
         </Stack>
+
+        {identity?.phase2profile === false && (
+          <Box>
+            <VStack pb={{ base: 12 }} pt={{ base: 6 }}>
+              <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
+                <GridItem colSpan={{ base: 2 }}>
+                  <FormLabel color="#757575" mb={4}>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "wish_to_create_organization_label"
+                    )}
+                  </FormLabel>
+                  <FormControl>
+                    <Flex gap={2}>
+                      <Button
+                        flex={1}
+                        backgroundColor={
+                          showSelectCentre ? "#F6D644" : "transparent"
+                        }
+                        border={`2px solid ${
+                          showSelectCentre ? "#FFFFFF" : "#999999"
+                        }`}
+                        height="38px"
+                        width="117px"
+                        onClick={() => setShowSelectCentre(true)}
+                      >
+                        {
+                          page?.content?.form?.createOrganization?.options[0]
+                            ?.label
+                        }
+                      </Button>
+
+                      <Button
+                        flex={1}
+                        backgroundColor={"transparent"}
+                        border={`2px solid #999999`}
+                        height="38px"
+                        width="117px"
+                        type="submit"
+                      >
+                        {
+                          page?.content?.form?.createOrganization?.options[1]
+                            ?.label
+                        }
+                      </Button>
+                    </Flex>
+                  </FormControl>
+                </GridItem>
+
+                {showSelectCentre && (
+                  <GridItem colSpan={{ base: 2 }} pt={6}>
+                    <FormControl>
+                      <FormLabel>
+                        {page?.content?.form?.selectOrganization?.label}
+                      </FormLabel>
+                      <Controller
+                        name="selectOrganization"
+                        isClearable
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <ReactSelect
+                            aria-label={
+                              page?.content?.form?.selectOrganization?.label
+                            }
+                            {...field}
+                            placeholder={wordExtractor(
+                              page?.content?.wordings,
+                              "select_organization_placeholder"
+                            )}
+                            options={(organizationData ?? []).map(
+                              ({ chineseCompanyName, id }) => ({
+                                label: chineseCompanyName,
+                                value: id,
+                              })
+                            )}
+                            onChange={(data) => {
+                              const organization = organizationData.find(
+                                (d) => d.id === data.value
+                              );
+                              setOrganization(organization);
+                            }}
+                          />
+                        )}
+                      />
+                      <FormHelperText>
+                        {
+                          page?.content?.form?.selectOrganizationContent
+                            ?.content01
+                        }
+                        <br />
+                        {
+                          page?.content?.form?.selectOrganizationContent
+                            ?.content02
+                        }
+                        <Text
+                          as="span"
+                          color="#017878"
+                          cursor="pointer"
+                          onClick={() => router.push(`/user/organization/ngo/${identity.id}/add`)}
+                        >
+                          {page?.content?.form?.selectOrganizationContent?.link}
+                        </Text>
+                        !
+                      </FormHelperText>
+                    </FormControl>
+                    {selectedOrganization && (
+                      <Box
+                        mt={8}
+                        p={6}
+                        bgColor={"#FAFAFA"}
+                        borderRadius={"15px"}
+                      >
+                        <FormControl>
+                          <FormLabel>
+                            {page?.content?.form?.invitationCode}
+                          </FormLabel>
+                          <Input
+                            type="text"
+                            name="invitationCode"
+                            variant="flushed"
+                            {...register("invitationCode")}
+                          />
+                          {errors?.invitationCode?.message && (
+                            <FormHelperText color="red">
+                              {errors?.invitationCode?.message}
+                            </FormHelperText>
+                          )}
+                        </FormControl>
+                      </Box>
+                    )}
+                  </GridItem>
+                )}
+              </Grid>
+              {selectedOrganization && (
+                <FormControl textAlign="center">
+                  <Button
+                    mt={4}
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="117.93px"
+                    onClick={() => handleSubmitInvitation()}
+                    isLoading={submitting}
+                  >
+                    {wordExtractor(page?.content?.wordings, "save_label")}
+                  </Button>
+                </FormControl>
+              )}
+            </VStack>
+          </Box>
+        )}
       </VStack>
     </VStack>
   );
