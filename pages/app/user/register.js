@@ -7,6 +7,7 @@ import {
   GridItem,
   Container,
   Flex,
+  Code,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { gql } from "graphql-request";
@@ -41,7 +42,9 @@ const AppUserRegister = ({ page }) => {
     otp: "",
     phone: "",
     type: "",
-  }); // TODO: getRegistrationInfoHandler
+  });
+
+  const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
 
   const logout = () => {
     removeCredential();
@@ -51,18 +54,15 @@ const AppUserRegister = ({ page }) => {
   useEffect(() => {
     window.WebContext = {};
     window.WebContext.getRegistrationInfoHandler = (response) => {
-      alert(JSON.stringify(response));
-      alert(`RESPONSE NAME:::`, response?.getRegistrationInfo);
-      alert(`RESPONSE ERROR CODE:::`, response?.errorCode);
-      alert(`RESPONSE OPTIONS:::`, response?.options);
-      alert(`RESPONSE RESULT:::`, response?.result);
-      if (!response.result) {
-        alert("response.result null");
+      const registrationInfo = JSON.parse(response)
+      // alert(JSON.stringify(response));
+      if (!registrationInfo.result) {
+        setAppRegistrationInfo({
+          status: "response not found",
+        });
       } else {
-        setAppRegistrationInfo(JSON.parse(response));
-        alert("SUCCESS RESPONSE:::", JSON.stringify(response));
+        setAppRegistrationInfo(registrationInfo.result);
       }
-      alert(`END CONDITION:::`);
     };
     const json = {
       name: "getRegistrationInfo",
@@ -70,22 +70,16 @@ const AppUserRegister = ({ page }) => {
         callback: "getRegistrationInfoHandler",
       },
     };
-    if (!window.AppContext) {
-      alert("window.AppContext undefined");
-    }
-    if (!window.AppContext?.postMessage) {
-      alert("window.AppContext.postMessage undefined");
-    }
+
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
     }
-    alert(`END USE_EFFECT:::`);
   }, []);
 
   const handleCloseWebView = () => {
     window.WebContext = {};
     window.WebContext.closeWebViewHandler = () => {
-      alert("CLOSE WEB VIEW:::");
+      console.log("close web view");
     };
 
     let json = {
@@ -98,15 +92,14 @@ const AppUserRegister = ({ page }) => {
 
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
-      alert("CLOSE WEB CALLED:::");
     }
   };
 
   const handleCheckOTP = async () => {
-    const { otp, phone, email } = appRegistrationInfo;
+    const { otp, phone, email, type } = appRegistrationInfo;
     // TODO: getRegistrationInfoHandler
 
-    switch (appRegistrationInfo.type) {
+    switch (type) {
       case "phone":
         try {
           const query = gql`
@@ -126,10 +119,10 @@ const AppUserRegister = ({ page }) => {
           if (data?.UserPhoneValidityCheck?.phone) {
             router.push(`/app/user/setPassword?phone=${phone}&otp=${otp}`);
           } else {
-            alert("invalid OTP");
+            setOtpVerifyStatus({ status: "Phone OTP invalid" });
           }
         } catch (e) {
-          alert("invalid OTP");
+          setOtpVerifyStatus({ status: "Phone OTP invalid" });
         }
         break;
 
@@ -152,15 +145,15 @@ const AppUserRegister = ({ page }) => {
           if (data?.UserEmailOTPValidityCheck?.email) {
             router.push(`/app/user/setPassword?email=${email}&otp=${otp}`);
           } else {
-            alert("invalid OTP");
+            setOtpVerifyStatus({ status: "Email OTP invalid" });
           }
         } catch (e) {
-          alert("invalid OTP");
+          setOtpVerifyStatus({ status: "Email OTP invalid" });
         }
         break;
 
       default:
-        alert("TYPE NOT FOUND");
+        setOtpVerifyStatus({ status: "type not found" });
         break;
     }
   };
@@ -185,6 +178,12 @@ const AppUserRegister = ({ page }) => {
         </GridItem>
       </Grid>
       <Box>
+        <Code>
+          getRegistrationInfoHandler: {JSON.stringify(appRegistrationInfo)}
+        </Code>
+        <br />
+        <Code>OTP Verify {JSON.stringify(otpVerifyStatus)}</Code>
+
         <Box justifyContent="center" width="100%">
           <Box width="100%" textAlign="center" margin="auto">
             <Box

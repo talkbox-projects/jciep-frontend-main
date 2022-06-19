@@ -269,7 +269,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
 
   if (step === "step2") {
     return (
-      <Box pt={{ base: "12px" }}>
+      <Box pt={{ base: "64px" }}>
         <NAV
           title={page?.content?.step?.title}
           subTitle={page?.content?.step?.step2SubTitle}
@@ -473,7 +473,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
 
   if (step === "step1") {
     return (
-      <Box pt={{ base: "12px" }}>
+      <Box pt={{ base: "64px" }}>
         <NAV
           title={page?.content?.step?.title}
           subTitle={page?.content?.step?.subTitle}

@@ -204,11 +204,11 @@ const App = ({ Component, pageProps }) => {
             <NextSeo title="賽馬會共融．知行計劃" />
           )}
           <VStack align="stretch" spacing={0}>
-            {showHeader && pageProps?.header ? (<Header {...pageProps}></Header>) : <Box d={'none'} className="appHeader"><Header {...pageProps}></Header></Box>}
+            {showHeader && pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>
               <Component {...pageProps} />
             </Box>
-            {showHeader && pageProps?.footer ? <Footer {...pageProps}></Footer> : <Box d={'none'} className="appHeader"><Footer {...pageProps}></Footer></Box>}
+            {showHeader && pageProps?.footer && <Footer {...pageProps}></Footer>}
           </VStack>
         </ChakraProvider>
       </AppProvider>
