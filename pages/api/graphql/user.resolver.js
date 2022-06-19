@@ -57,7 +57,7 @@ export default {
 
     UserEmailOTPValidityCheck: async (_parent, { email, otp }) => {
       try {
-        return await EmailVerify.findOne({ email, otp });
+        return await EmailOTPVerify.findOne({ email, otp });
       } catch (error) {
         return null;
       }
@@ -326,7 +326,7 @@ export default {
           otp: input?.otp,
         });
         if (!emailOTPVerify) {
-          throw new Error("Invalid OTP");
+          throw new Error("EmailOTP: Invalid OTP");
         } else {
           await emailOTPVerify.delete();
           const user = await User.findOneAndUpdate(

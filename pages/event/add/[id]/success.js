@@ -1,9 +1,12 @@
-import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
+import { Button, Box, Image, Heading, Text, VStack, Divider } from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
+import wordExtractor from "../../../../utils/wordExtractor";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import React from "react";
+import { useRouter } from "next/router";
+
 
 const PAGE_KEY = "event_add_success";
 
@@ -20,9 +23,9 @@ export const getServerSideProps = async (context) => {
   };
 };
 const EventAddSuccess = ({ page }) => {
+  const router = useRouter();
   return (
     <VStack py={36}>
-      <Text>{page?.content?.step?.title}</Text>
       <Box justifyContent="center" width="100%">
         <Box
           maxWidth={470}
@@ -41,8 +44,14 @@ const EventAddSuccess = ({ page }) => {
             margin="auto"
             src={page?.content?.eventSuccess?.image}
           />
+          
+          <Text fontWeight={700} fontSize="20px" pt={4}>{page?.content?.step?.title}</Text>
 
-          <Text marginTop="60px">{page?.content?.eventSuccess?.description}</Text>
+          {wordExtractor(page?.content?.wordings, "reference_label")}: {router?.query?.id}
+
+          <Divider my={2}/>
+
+          <Text>{page?.content?.eventSuccess?.description}</Text>
 
           <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">
@@ -96,7 +105,7 @@ export default withPageCMS(EventAddSuccess, {
     },
     {
       name: "eventSuccess",
-      label: "新增活動 PWD Success",
+      label: "新增活動 Add event Success",
       component: "group",
       fields: [
         {

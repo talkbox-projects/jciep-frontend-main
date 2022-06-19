@@ -5,8 +5,6 @@ export async function postData(url = "", data = {}) {
     cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
-      "jciep-token": "fe996608-c839-4b43-acb4-51cd0d810e47",
-      "jciep-identityId": "628afcb5d09a524847b26f7f"
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",

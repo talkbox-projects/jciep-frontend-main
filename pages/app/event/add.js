@@ -113,7 +113,6 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
       additionalInformation: [{ file: "", content: "" }],
       representOrganization: "false",
     },
-
   });
   const additionalFileRefs = useRef(null);
   const [step, setStep] = useState("step1");
@@ -123,7 +122,10 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
   const [fileError, setFileError] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedEventImage, setSelectedEventImage] = React.useState(null);
-  const watchFields = watch(["type", "freeOrCharge", "representOrganization"], { type: [], freeOrCharge: "free" });
+  const watchFields = watch(["type", "freeOrCharge", "representOrganization"], {
+    type: [],
+    freeOrCharge: "free",
+  });
   const getDescriptionCount = watch("description", 0);
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
   const watchAdditionalInformation = watch("additionalInformation");
@@ -323,8 +325,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     banner,
     additionalInformation,
   }) => {
-
-    let bannerUploadData, filesAdditionalInformalUploadData
+    let bannerUploadData, filesAdditionalInformalUploadData;
 
     const FileUploadmutation = gql`
       mutation FileUpload($file: FileUpload!) {
@@ -337,15 +338,30 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
       }
     `;
 
-    if(files){
+    if (files) {
       bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
         file: files?.[0],
       });
     }
 
-    filesAdditionalInformalUploadData = await getGraphQLClient().request(FileUploadmutation, {
-      file: additionalInformation[0]?.file?.[0],
-    });
+    if (additionalInformation) {
+      filesAdditionalInformalUploadData = await additionalInformation
+        .map((d) => {
+          if (d[0]) {
+            return d[0];
+          }
+        })
+        .filter((d) => d);
+    }
+
+    if (filesAdditionalInformalUploadData) {
+      filesAdditionalInformalUploadData = await getGraphQLClient().request(
+        FileUploadmutation,
+        {
+          file: filesAdditionalInformalUploadData,
+        }
+      );
+    }
 
     const input = Object.fromEntries(
       Object.entries({
@@ -370,27 +386,23 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         otherUrl: otherUrl,
         stockPhotoId: stockPhotoId,
         remark: remark,
-        representOrganization: representOrganization,
-        organizationId: organizationId,
-        organizationAdditionalInfo: organizationAdditionalInfo,
-        banner:{
-          file: bannerUploadData?.file?.FileUpload?.[0],
-          stockPhotoId: stockPhotoId
+        // representOrganization: representOrganization,
+        // organizationId: organizationId,
+        // organizationAdditionalInfo: organizationAdditionalInfo,
+        banner: {
+          file: bannerUploadData?.FileUpload?.[0],
+          stockPhotoId: stockPhotoId,
         },
-        additionalInformation: [filesAdditionalInformalUploadData?.[0]?.FileUpload?.[0]]
-        // banner: additionalInformation[0]?.file,
-        // additionalInformation: [additionalInformation[0]?.file],
+        additionalInformation:
+          filesAdditionalInformalUploadData?.FileUpload ?? [],
       }).filter(([_, v]) => v != null)
     );
 
-    const response = await createEvent(input)
+    const response = await createEvent(input);
 
-    if(response?.data){
+    if (response?.data) {
       router.push(`/event/create/${response?.data.id}/success`);
     }
-
-    // setFormState(input);
-    // setStep("step2");
   };
 
   const renderAdditionalImage = useCallback((data) => {
@@ -409,21 +421,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     );
   }, []);
 
-  // Callback version of watch.  It's your responsibility to unsubscribe when done.
-  React.useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
-    return () => subscription.unsubscribe();
-  }, [watch]);
-
   return (
     <Box pt={{ base: "64px" }}>
       {step === "step1" && (
         <Box>
           <NAV
             title={page?.content?.step?.title}
-            subTitle={page?.content?.step?.subTitle}
+            // subTitle={page?.content?.step?.subTitle}
             handleClickLeftIcon={() => router.push(`/`)}
           />
           <Box justifyContent="center" width="100%">
@@ -1053,7 +1057,129 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                 <SimpleDivider />
 
                 <TitleWrap title={page?.content?.step?.more_information} />
+
                 <Grid
+                  templateColumns="repeat(1, 1fr)"
+                  gap={"40px"}
+                  width="100%"
+                  px={"15px"}
+                >
+                  <GridItem colSpan={2} rowSpan={2}>
+                    {additionalInformationFields.map((item, index) => {
+                      return (
+                        <Grid
+                          key={item.id}
+                          templateColumns={{
+                            base: "repeat(5, 1fr)",
+                          }}
+                          gap={6}
+                          bgColor="#FFF"
+                          borderRadius={"15px"}
+                          mb={4}
+                          alignItems="center"
+                          minH={"200px"}
+                        >
+                          <GridItem
+                            borderRadius={"5px"}
+                            overflow={"hidden"}
+                            border={"1px solid #EFEFEF"}
+                            color={"#666666"}
+                            cursor={"pointer"}
+                            pos={"relative"}
+                            height={`100%`}
+                            colSpan={2}
+                          >
+                            {watchAdditionalInformation[index]?.length > 0 ? (
+                              renderAdditionalImage(
+                                watchAdditionalInformation[index]?.[0]
+                              )
+                            ) : (
+                              <Box
+                                h={"100%"}
+                                minHeight={"200px"}
+                                cursor="pointer"
+                              >
+                                <Center
+                                  h={"100%"}
+                                  fontSize={"14px"}
+                                  pos={"relative"}
+                                  zIndex={1}
+                                >
+                                  <Stack
+                                    direction="column"
+                                    alignItems={"center"}
+                                    spacing={2}
+                                  >
+                                    <BsPlus />
+                                    <Text>
+                                      {" "}
+                                      {wordExtractor(
+                                        page?.content?.wordings,
+                                        "add_custom_files_label"
+                                      )}
+                                    </Text>
+                                  </Stack>
+                                </Center>
+                                <Input
+                                  type="file"
+                                  multiple={false}
+                                  opacity={0}
+                                  zIndex={2}
+                                  top={0}
+                                  left={0}
+                                  right={0}
+                                  bottom={0}
+                                  height={"100%"}
+                                  position="absolute"
+                                  ref={additionalFileRefs}
+                                  accept=".pdf, .png, .jpg, .jpeg"
+                                  {...register(
+                                    `additionalInformation[${index}]`
+                                  )}
+                                />
+                              </Box>
+                            )}
+                          </GridItem>
+                          <GridItem colSpan={1}>
+                            <Button
+                              colorScheme="red"
+                              size="xs"
+                              onClick={() => additionalInformationRemove(index)}
+                            >
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "delete_information_label"
+                              )}
+                            </Button>
+                          </GridItem>
+
+                          <GridItem colSpan={5}>
+                            <Divider my={2} />
+                          </GridItem>
+                        </Grid>
+                      );
+                    })}
+
+                    <Flex>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          additionalInformationAppend({
+                            file: "",
+                            content: "",
+                          });
+                        }}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "add_information_label"
+                        )}
+                      </Button>
+                    </Flex>
+                  </GridItem>
+                </Grid>
+
+                {/* <Grid
                   templateColumns="repeat(1, 1fr)"
                   gap={"40px"}
                   width="100%"
@@ -1170,9 +1296,9 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                       </Flex>
                     )}
                   </GridItem>
-                </Grid>
+                </Grid> */}
 
-                <SimpleDivider />
+                {/* <SimpleDivider />
 
                 <TitleWrap
                   title={wordExtractor(
@@ -1265,7 +1391,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                       </Box>
                     )}
                   </GridItem>
-                </Grid>
+                </Grid> */}
 
                 {/* <Grid
                   templateColumns="repeat(3, 1fr)"
@@ -1341,7 +1467,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         </Box>
       )}
 
-      {step === "step2" && (
+      {/* {step === "step2" && (
         <Box>
           <NAV
             title={"代表機構"}
@@ -1360,61 +1486,6 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
             width="100%"
             px={"15px"}
           >
-            {/* <GridItem>
-              <FormControl>
-                <FormLabel {...labelStyles}></FormLabel>
-                <Box pt={4}>
-                  <Controller
-                    name="representOrganization"
-                    isClearable
-                    control={control}
-                    defaultValue={"free"}
-                    render={() => (
-                      <RadioGroup
-                        onChange={(value) =>
-                          setValue("representOrganization", value)
-                        }
-                        defaultValue={
-                          page?.content?.form?.representOrganization?.options[0]
-                            ?.value
-                        }
-                      >
-                        <Stack direction="row">
-                          {page?.content?.form?.representOrganization?.options.map(
-                            ({ label, value }) => (
-                              <Radio
-                                key={label}
-                                value={value}
-                                size="md"
-                                colorScheme={"yellow"}
-                              >
-                                {label}
-                              </Radio>
-                            )
-                          )}
-                        </Stack>
-                      </RadioGroup>
-                    )}
-                  />
-                </Box>
-              </FormControl>
-              {watchFields[1] === "charge" && (
-                <Box mt={4} p={6} bgColor={"#FAFAFA"} borderRadius={"15px"}>
-                  <FormControl>
-                    <FormLabel {...labelStyles}>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(page?.content?.wordings, "price_label")}
-                      </FormLabel>
-                    </FormLabel>
-                    <Input
-                      type="text"
-                      variant="flushed"
-                      {...register("price")}
-                    />
-                  </FormControl>
-                </Box>
-              )}
-            </GridItem> */}
           </Grid>
           <Box
             style={{
@@ -1439,7 +1510,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
             </FormControl>
           </Box>
         </Box>
-      )}
+      )} */}
     </Box>
   );
 };

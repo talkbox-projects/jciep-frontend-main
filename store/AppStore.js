@@ -133,12 +133,6 @@ const [AppProvider, useAppContext] = constate((props) => {
     });
   }, []);
 
-  const WebContext = {
-    getRegistrationInfoHandler: (result) => {
-      return result;
-    },
-  };
-
   return {
     wordings,
     loginModalDisclosure,
@@ -159,8 +153,7 @@ const [AppProvider, useAppContext] = constate((props) => {
     updateIdentity,
 
     environmentSetting,
-    setEnvironmentSetting,
-    WebContext,
+    setEnvironmentSetting
   };
 });
 

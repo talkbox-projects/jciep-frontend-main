@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useRef, useEffect } from "react";
-import axios from "axios";
+import React, { useCallback, useState, useRef } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -10,11 +9,9 @@ import {
   GridItem,
   Box,
   Text,
-  Link,
   Button,
   Stack,
   Flex,
-  Image,
   Input,
   Textarea,
   FormControl,
@@ -26,13 +23,11 @@ import {
   RadioGroup,
   Center,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import { useAppContext } from "../../store/AppStore";
 import ReactSelect from "react-select";
-import moment from "moment";
 import { gql } from "graphql-request";
 import { getStockPhoto } from "../../utils/event/getEvent";
 import { getGraphQLClient } from "../../utils/apollo";
@@ -91,9 +86,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     setError,
   } = useForm({
     defaultValues: {
-      otherUrls: [""],
-      additionalInformation: [{ file: "", content: "" }],
-      representOrganization: "false",
+      otherUrls: [""]
     },
   });
   const additionalFileRefs = useRef(null);
@@ -104,7 +97,10 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
   const [fileError, setFileError] = useState(false);
   const [additionalFileError, setAdditionalFileError] = useState(false);
   const [formState, setFormState] = useState([]);
-  const watchFields = watch(["type", "freeOrCharge", "representOrganization"], { type: [], freeOrCharge: "free" });
+  const watchFields = watch(["type", "freeOrCharge", "representOrganization"], {
+    type: [],
+    freeOrCharge: "free",
+  });
   const getDescriptionCount = watch("description", 0);
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
   const watchAdditionalInformation = watch("additionalInformation");
@@ -268,7 +264,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
       </Grid>
     );
   };
-  
+
   const onFormSubmit = async ({
     name,
     type,
@@ -297,8 +293,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     banner,
     additionalInformation,
   }) => {
-
-    let bannerUploadData, filesAdditionalInformalUploadData
+    let bannerUploadData, filesAdditionalInformalUploadData;
 
     const FileUploadmutation = gql`
       mutation FileUpload($file: FileUpload!) {
@@ -311,15 +306,26 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
       }
     `;
 
-    if(files){
+    if (files) {
       bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
         file: files?.[0],
       });
     }
 
-    filesAdditionalInformalUploadData = await getGraphQLClient().request(FileUploadmutation, {
-      file: additionalInformation[0]?.file?.[0],
-    });
+
+    if(additionalInformation){
+      filesAdditionalInformalUploadData = await additionalInformation.map(d=> {
+        if(d[0]){
+          return d[0];
+        }
+      }).filter(d=>d)
+    }
+
+    if(filesAdditionalInformalUploadData){
+      filesAdditionalInformalUploadData = await getGraphQLClient().request(FileUploadmutation, {
+        file: filesAdditionalInformalUploadData
+      });
+    }
 
     const input = Object.fromEntries(
       Object.entries({
@@ -344,27 +350,23 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         otherUrl: otherUrl,
         stockPhotoId: stockPhotoId,
         remark: remark,
-        representOrganization: representOrganization,
-        organizationId: organizationId,
-        organizationAdditionalInfo: organizationAdditionalInfo,
-        banner:{
-          file: bannerUploadData?.file?.FileUpload?.[0],
-          stockPhotoId: stockPhotoId
+        // representOrganization: representOrganization,
+        // organizationId: organizationId,
+        // organizationAdditionalInfo: organizationAdditionalInfo,
+        banner: {
+          file: bannerUploadData?.FileUpload?.[0],
+          stockPhotoId: stockPhotoId,
         },
-        additionalInformation: [filesAdditionalInformalUploadData?.[0]?.FileUpload?.[0]]
-        // banner: additionalInformation[0]?.file,
-        // additionalInformation: [additionalInformation[0]?.file],
+        additionalInformation: filesAdditionalInformalUploadData?.FileUpload??[],
       }).filter(([_, v]) => v != null)
     );
 
-    const response = await createEvent(input)
+    const response = await createEvent(input);
 
-    if(response?.data){
+    if (response?.data) {
       router.push(`/event/create/${response?.data.id}/success`);
     }
 
-    // setFormState(input);
-    // setStep("step2");
   };
 
   const renderAdditionalImage = useCallback((data) => {
@@ -379,17 +381,10 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         h={"100%"}
         bgSize={"cover"}
         bgPosition={"center center"}
+        minHeight={"180px"}
       />
     );
   }, []);
-
-  // Callback version of watch.  It's your responsibility to unsubscribe when done.
-  React.useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
-    return () => subscription.unsubscribe();
-  }, [watch]);
 
   return (
     <>
@@ -931,7 +926,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                             page?.content?.wordings,
                             "contact_number_placeholder"
                           )}
-                          {...register("contactNumber",{
+                          {...register("contactNumber", {
                             required: true,
                           })}
                         />
@@ -1060,13 +1055,14 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                     bgColor="#FFF"
                     borderRadius={"15px"}
                     p={6}
-                    className={'ok123'}
                   >
                     <GridItem colSpan={2}>
-                      <TitleWrap title= {wordExtractor(
-                            page?.content?.wordings,
-                            "more_information_label"
-                          )} />
+                      <TitleWrap
+                        title={wordExtractor(
+                          page?.content?.wordings,
+                          "more_information_label"
+                        )}
+                      />
                     </GridItem>
                     <GridItem colSpan={2} rowSpan={2}>
                       {additionalInformationFields.map((item, index) => {
@@ -1081,7 +1077,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                             borderRadius={"15px"}
                             mb={4}
                             alignItems="center"
-                            minH={'200px'}
+                            minH={"200px"}
                           >
                             <GridItem
                               borderRadius={"5px"}
@@ -1091,15 +1087,15 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                               cursor={"pointer"}
                               pos={"relative"}
                               height={`100%`}
-                              colSpan={4}
+                              colSpan={2}
                             >
-                              {watchAdditionalInformation[index]?.file?.length >
+                              {watchAdditionalInformation[index]?.length >
                               0 ? (
                                 renderAdditionalImage(
-                                  watchAdditionalInformation[index]?.file?.[0]
+                                  watchAdditionalInformation[index]?.[0]
                                 )
                               ) : (
-                                <Box h={'100%'} minHeight={'120px'}>
+                                <Box h={"100%"} minHeight={"200px"} cursor="pointer">
                                   <Center
                                     h={"100%"}
                                     fontSize={"14px"}
@@ -1116,7 +1112,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                                         {" "}
                                         {wordExtractor(
                                           page?.content?.wordings,
-                                          "add_custom_images_label"
+                                          "add_custom_files_label"
                                         )}
                                       </Text>
                                     </Stack>
@@ -1133,8 +1129,9 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                                     height={"100%"}
                                     position="absolute"
                                     ref={additionalFileRefs}
+                                    accept=".pdf, .png, .jpg, .jpeg"
                                     {...register(
-                                      `additionalInformation[${index}].file`
+                                      `additionalInformation[${index}]`
                                     )}
                                   />
                                 </Box>
@@ -1162,7 +1159,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                         );
                       })}
 
-                      {additionalInformationFields.length === 0 && (<Flex justify="end">
+                      <Flex>
                         <Button
                           type="button"
                           onClick={() => {
@@ -1177,11 +1174,11 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                             "add_information_label"
                           )}
                         </Button>
-                      </Flex>)}
+                      </Flex>
                     </GridItem>
                   </Grid>
 
-                  <Grid
+                  {/* <Grid
                     templateColumns={{
                       base: "repeat(2, 1fr)",
                     }}
@@ -1274,8 +1271,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                       )}
                     </GridItem>
 
-                  </Grid>
-
+                  </Grid> */}
 
                   {/* <Grid
                     templateColumns={{
@@ -1339,10 +1335,24 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                   >
                     {wordExtractor(page?.content?.wordings, "continue_label")}
                   </Button> */}
+                  <Button
+                    colorScheme="yellow"
+                    color="black"
+                    px={8}
+                    py={2}
+                    borderRadius="2em"
+                    type="submit"
+                    isLoading={isSubmitting}
+                    w={"100%"}
+                    maxWidth={"310px"}
+                    mx={"auto"}
+                  >
+                    {wordExtractor(page?.content?.wordings, "submit_label")}
+                  </Button>
                 </Flex>
               </Box>
 
-              <Box w={{ base: "100%", md: "310px" }}>
+              {/* <Box w={{ base: "100%", md: "310px" }}>
                 <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
                   <Box>
                     <Text fontWeight={700} mb={2}>
@@ -1365,7 +1375,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
 
 
                 </Box>
-              </Box>
+              </Box> */}
             </Flex>
           </Container>
         </Box>
