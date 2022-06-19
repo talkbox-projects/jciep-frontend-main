@@ -27,6 +27,7 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import { CloseIcon } from "@chakra-ui/icons";
 import EVENT from "../../../utils/mock/api_event_id.json";
 import { getEventDetail } from "../../../utils/event/getEvent";
+import { HiDownload } from "react-icons/hi";
 import { useAppContext } from "../../../store/AppStore";
 import { bookmarkEvent } from "../../../utils/event/eventAction";
 
@@ -39,7 +40,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
@@ -54,28 +55,6 @@ const Event = ({ page }) => {
     onClose: onCloseRegistrationModal,
   } = useDisclosure();
   const [popupImage, setPopupImage] = useState(null);
-  const {
-    name,
-    type,
-    banner,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    location,
-    likeCount,
-    description,
-    registerUrl,
-    otherUrl,
-    additionalInformation,
-    submissionDeadline,
-    eventManager,
-    remark,
-    freeOrCharge,
-    price,
-    contactNumber,
-    bookmarked,
-  } = EVENT?.data;
 
   useEffect(() => {
     const { query } = router;
@@ -141,9 +120,13 @@ const Event = ({ page }) => {
                       </Box>
                       <Box>
                         <b>
-                          {moment(detail?.startTime, ["HH.mm"]).format("hh:mm a")} -{" "}
+                          {moment(detail?.startTime, ["HH.mm"]).format(
+                            "hh:mm a"
+                          )}{" "}
+                          -{" "}
                           {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
-                          ({`${detail.datetimeRemark}`})
+                          
+                        {detail?.datetimeRemark && `(${detail?.datetimeRemark})`}
                         </b>
                       </Box>
                     </Flex>
@@ -164,20 +147,24 @@ const Event = ({ page }) => {
                     </Flex>
 
                     <Flex align="center" gap={2}>
-                      <Box w={"20px"} textAlign="center">
-                        <Image
-                          src={"/images/app/bookmark-off.svg"}
-                          alt={""}
-                          fontSize={18}
-                          mx={"auto"}
-                        />
-                      </Box>
-                      <Box fontWeight={700} color={"#0D8282"}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "bookmark_label"
-                        ).replace("$", detail?.bookmarkCount)}
-                      </Box>
+                    <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => bookmarkEvent(detail?.id)}>
+                      <Image
+                        src={"/images/app/bookmark-off.svg"}
+                        alt={""}
+                        fontSize={18}
+                      />
+                      <Text mt={6} color="#0D8282" fontWeight={700}>
+                        {detail?.liked
+                          ? wordExtractor(
+                              page?.content?.wordings,
+                              "you_and_other_liked"
+                            ).replace("$", detail?.bookmarkCount || 0)
+                          : wordExtractor(
+                              page?.content?.wordings,
+                              "other_liked"
+                            ).replace("$", detail?.bookmarkCount || 0)}
+                      </Text>
+                    </Stack>
                     </Flex>
                   </Stack>
                   <Divider my={4} />
@@ -212,25 +199,19 @@ const Event = ({ page }) => {
 
                   <Flex gap={4} direction="column" mb={4}>
                     <Text as="p">{detail?.description}</Text>
-                    {/* <Flex
-                      color="#0D8282"
-                      align="center"
-                      fontWeight={700}
-                      gap={2}
-                    >
-                      <Box w={"20px"} textAlign="center">
-                        <Image
-                          src={"/images/app/link.svg"}
-                          alt={""}
-                          fontSize={18}
-                          mx={"auto"}
-                        />
-                      </Box>
-                      <Link target="_blank" href={registerUrl}>
-                        {registerUrl}
-                      </Link>
-                    </Flex> */}
                   </Flex>
+
+                  <Flex color="#0D8282" align="center" fontWeight={700}>
+                          <Box>
+                            <HiDownload />
+                          </Box>
+                          <Text>
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "download_more_information"
+                            )}
+                          </Text>
+                        </Flex>
 
                   <Flex direction="column">
                     {detail?.otherUrls?.map((d) => (
@@ -331,7 +312,7 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "quota_label"
                       )}
-                      value={detail?.venue}
+                      value={detail?.quota}
                     />
 
                     <RegistrationRow
@@ -355,9 +336,11 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "submission_deadline_label"
                       )}
-                      value={moment(detail?.submissionDeadline).format(
+                      value={
+                        moment(detail?.submissionDeadline).format(
                           "YYYY-MM-DD"
-                        ) ?? ""}
+                        ) ?? ""
+                      }
                     />
 
                     <RegistrationRow
@@ -505,7 +488,6 @@ const RegistrationModal = ({
   registerUrl,
   contactNumber,
 }) => {
-
   return (
     <Modal
       blockScrollOnMount={true}
@@ -559,13 +541,17 @@ const RegistrationModal = ({
                     window.WebContext = {};
                     window.WebContext.openWebViewHandler = (response) => {
                       alert(JSON.stringify(response));
-                      if(!response) {
-                        alert("response.result null")
+                      if (!response) {
+                        alert("response.result null");
                       }
-                    }
+                    };
 
-                    if(window && window.AppContext && window.AppContext.postMessage){
-                      window.AppContext.postMessage(JSON.stringify(json))
+                    if (
+                      window &&
+                      window.AppContext &&
+                      window.AppContext.postMessage
+                    ) {
+                      window.AppContext.postMessage(JSON.stringify(json));
                     }
                   }}
                 >

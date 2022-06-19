@@ -21,7 +21,6 @@ import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import nookies from "nookies";
 
 import { TimeIcon } from "@chakra-ui/icons";
 import { IoLocationSharp } from "react-icons/io5";
@@ -34,7 +33,6 @@ import { likeEvent, bookmarkEvent } from "../../utils/event/eventAction";
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
-  const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
   return {
@@ -42,13 +40,11 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      token: cookies['jciep-token']??"",
-      identityId: cookies['jciep-identityId']??""
     },
   };
 };
 
-const Event = ({ page, token, identityId}) => {
+const Event = ({ page}) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
 
@@ -60,6 +56,17 @@ const Event = ({ page, token, identityId}) => {
     }
     fetchData();
   }, [router]);
+
+  const RegistrationRow = ({ title, value }) => {
+    return (
+      <Flex direction="row" gap={2} justifyContent="space-between" fontSize="14px">
+        <Box minW={"100px"}>
+          <Text>{title}</Text>
+        </Box>
+        <Text fontWeight={700}>{value}</Text>
+      </Flex>
+    );
+  };
 
   return (
     <>
@@ -101,34 +108,61 @@ const Event = ({ page, token, identityId}) => {
                   >
                     <Box p={"16px"} fontSize={"14px"}>
                       <Stack spacing={4} direction="column">
-                        <Flex align="center" gap={2}>
-                          <Box w={"20px"}>
-                            <TimeIcon color="gray.500" fontSize={18} />
-                          </Box>
-                          <Box>
-                            <b>
-                              {detail?.startDate}
-                              {`(${detail?.datetimeRemark})`}
-                            </b>
-                            - {detail?.startTime} - {detail?.endTime}
-                          </Box>
-                        </Flex>
-                        <Flex align="center" gap={2}>
-                          <Box w={"20px"}>
-                            <IoLocationSharp color="gray.500" fontSize={18} />
-                          </Box>
-                          <Box>
-                            <b>{detail?.venue}</b>
-                          </Box>
-                        </Flex>
-                        <Flex align="center" gap={2}>
-                          <Box w={"20px"}>
-                            <FaRegUserCircle color="gray.500" fontSize={18} />
-                          </Box>
-                          <Box>
-                            <b>{detail?.quota}</b>
-                          </Box>
-                        </Flex>
+                      <Flex align="center" gap={2}>
+                      <Box w={"20px"}>
+                        <Image
+                          src={"/images/app/calendar.svg"}
+                          alt={""}
+                          color="gray.500"
+                          fontSize={18}
+                        />
+                      </Box>
+                      <Box>
+                        <b>
+                          {wordExtractor(page?.content?.wordings, "from_label")}{" "}
+                          {moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
+                          {wordExtractor(page?.content?.wordings, "to_label")}{" "}
+                          {moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
+                        </b>
+                      </Box>
+                    </Flex>
+
+                    <Flex align="center" gap={2}>
+                      <Box w={"20px"}>
+                        <Image
+                          src={"/images/app/time.svg"}
+                          alt={""}
+                          color="gray.500"
+                          fontSize={18}
+                        />
+                      </Box>
+                      <Box>
+                        <b>
+                          {moment(detail?.startTime, ["HH.mm"]).format(
+                            "hh:mm a"
+                          )}{" "}
+                          -{" "}
+                          {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
+                          
+                        {detail?.datetimeRemark && `(${detail?.datetimeRemark})`}
+                        </b>
+                      </Box>
+                    </Flex>
+
+                    <Flex align="center" gap={2}>
+                      <Box w={"20px"} textAlign="center">
+                        <Image
+                          src={"/images/app/location-pin.svg"}
+                          alt={""}
+                          color="gray.500"
+                          fontSize={18}
+                          mx={"auto"}
+                        />
+                      </Box>
+                      <Box>
+                        <b>{detail?.venue}</b>
+                      </Box>
+                    </Flex>
                       </Stack>
                       <Divider my={4} />
                       <Flex gap={4} direction="column">
@@ -267,51 +301,71 @@ const Event = ({ page, token, identityId}) => {
                       {detail?.description}
                     </Text>
                   </Box>
-                  <Divider my={6} />
-                  <Box fontSize={"14px"}>
+                  <Divider my={6}/>
+                  <Stack direction={"column"} spacing={2} py={4} fontSize="14px">
                     <Text fontWeight={700} mb={2}>
                       {wordExtractor(
                         page?.content?.wordings,
                         "event_registration_label"
                       )}
                     </Text>
-                    <Flex
-                      direction={"row"}
-                      justifyContent="space-between"
-                      mb={2}
-                    >
-                      <Text>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "event_manager_label"
-                        )}
-                      </Text>
-                      <Text fontWeight={700}>{detail?.eventManager}</Text>
-                    </Flex>
-                    <Flex direction={"row"} justifyContent="space-between">
-                      <Text>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "submission_deadline_label"
-                        )}
-                      </Text>
-                      <Text fontWeight={700}>
-                        {moment(detail?.submissionDeadline).format(
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "quota_label"
+                      )}
+                      value={detail?.quota}
+                    />
+
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "free_or_charge_label"
+                      )}
+                      value={detail?.freeOrCharge}
+                    />
+
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "price_label"
+                      )}
+                      value={detail?.price}
+                    />
+
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "submission_deadline_label"
+                      )}
+                      value={
+                        moment(detail?.submissionDeadline).format(
                           "YYYY-MM-DD"
-                        ) ?? ""}
-                      </Text>
-                    </Flex>
-                    <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => {
-                      if(token){
-                        bookmarkEvent(detail?.id, token, identityId)
+                        ) ?? ""
                       }
-                    }}>
+                    />
+
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "event_manager_label"
+                      )}
+                      value={detail?.eventManager}
+                    />
+
+                    <RegistrationRow
+                      title={wordExtractor(
+                        page?.content?.wordings,
+                        "contact_number_label"
+                      )}
+                      value={detail?.contactNumber}
+                    />
+                    <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => bookmarkEvent(detail?.id)}>
                       <Image
                         src={"/images/app/bookmark-off.svg"}
                         alt={""}
                         fontSize={18}
                       />
-                      {/* `你及其他${detail?.bookmarkCount}人關注中` */}
                       <Text mt={6} color="#0D8282" fontWeight={700}>
                         {detail?.liked
                           ? wordExtractor(
@@ -324,7 +378,7 @@ const Event = ({ page, token, identityId}) => {
                             ).replace("$", detail?.bookmarkCount || 0)}
                       </Text>
                     </Stack>
-                  </Box>
+                  </Stack>
 
                   <Flex gap={2} direction={"column"} mt={10}>
                     <Button

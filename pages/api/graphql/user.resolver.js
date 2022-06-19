@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
+import { EmailVerify, EmailOTPVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
 import { AccessToken } from "./accessToken.model";
 import { uuidv4 } from "../../../utils/general";
