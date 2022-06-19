@@ -10,6 +10,7 @@ import {
   Image,
   Box,
   FormErrorMessage,
+  Code,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Container from "../../../components/Container";
@@ -26,7 +27,7 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import userLogin from "../../../utils/api/UserLogin";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 
-const PAGE_KEY = "verify_email";
+const PAGE_KEY = "password_reset";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -57,7 +58,7 @@ const VerifyToken = ({ page }) => {
 
   const onUserCreate = async ({ password }) => {
     try {
-      const user = await userLogin({ input: { email, otp, password } });
+      const user = await userLogin({ input: phone ? { phone, otp, password } : { email, otp, password } });
       setCredential(user);
       setIdentityId(user?.identities?.[0]?.id ?? null);
       router.push("/app/user/identity/public/add");
@@ -71,18 +72,33 @@ const VerifyToken = ({ page }) => {
 
   return (
     <Box py={{ base: 24 }}>
+        <Code>
+        phone: {phone}
+        </Code>
+        <br />
+        <Code>
+        email: {email}
+        </Code>
+        <br />
+        <Code>
+        otp: {otp}
+        </Code>
+        <br />
+
+
       <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
-        {getWording("otpVerify.heading")}
+      {getWording("emailVerify.heading")}
       </Text>
       <Box width="100%" background="#FFF">
         <VStack
           p={"15px"}
+          mx={'-15px'}
           spacing={8}
           as="form"
           onSubmit={handleSubmit(onUserCreate)}
         >
-          <FormControl isInvalid={!!errors?.password?.message}>
-            <FormLabel>{getWording("otpVerify.password_label")}</FormLabel>
+          <FormControl isInvalid={!!errors?.password?.message} px={'15px'}>
+            <FormLabel>{getWording("emailVerify.password_label")}</FormLabel>
             <Input
               backgroundColor="#fff !important"
               variant="flushed"
@@ -90,7 +106,7 @@ const VerifyToken = ({ page }) => {
               {...register("password", {
                 required: {
                   value: true,
-                  message: getWording("otpVerify.password_error_message"),
+                  message: getWording("emailVerify.password_error_message"),
                 },
                 pattern: {
                   value: passwordRegex,
@@ -98,24 +114,12 @@ const VerifyToken = ({ page }) => {
                 },
               })}
             />
-
-            {/* <Text marginTop="10px">
-              {getWording("otpVerify.description", {
-                params: {
-                  email: (
-                    <Text d="inline" fontWeight="bold">
-                      {emailVerify.email}
-                    </Text>
-                  ),
-                },
-              })}
-            </Text> */}
             <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors?.password_confirm?.message}>
+          <FormControl isInvalid={!!errors?.password_confirm?.message} px={'15px'}>
             <FormLabel>
-              {getWording("otpVerify.password_confirm_label")}
+              {getWording("emailVerify.password_confirm_label")}
             </FormLabel>
             <Input
               backgroundColor="#fff !important"

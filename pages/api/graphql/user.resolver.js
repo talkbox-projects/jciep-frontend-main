@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { EmailVerify, PhoneVerify, User, Identity } from "./user.model";
 import { Organization } from "./organization.model";
-import {AccessToken} from "./accessToken.model";
+import { AccessToken } from "./accessToken.model";
 import { uuidv4 } from "../../../utils/general";
 // import jwt from "jsonwebtoken";
 import sendSms from "../services/phone";
@@ -15,31 +15,36 @@ import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
 import nookies from "nookies";
 import getConfig from "next/config";
-import { checkIfAdmin, getIdentityOrganizationRole, isJoinedOrganizationStaff } from "../../../utils/auth";
+import {
+  checkIfAdmin,
+  getIdentityOrganizationRole,
+  isJoinedOrganizationStaff,
+} from "../../../utils/auth";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 const generateToken = (user) => {
-    return new AccessToken({
-      _id: uuidv4(),
-      userId: user._id,
-      createdAt: new Date()
-    }).save();
+  return new AccessToken({
+    _id: uuidv4(),
+    userId: user._id,
+    createdAt: new Date(),
+  }).save();
 };
 
 export default {
   Identity: {
     organizationRole: async (parent, args, context) => {
-      return await getIdentityOrganizationRole(parent._id)
+      return await getIdentityOrganizationRole(parent._id);
     },
   },
   User: {
     identities: async (parent) => {
-      return await Identity.find({ _id: { $in: parent.identities } })
-        .map((identity) => {
+      return await Identity.find({ _id: { $in: parent.identities } }).map(
+        (identity) => {
           identity.id = identity._id;
-          return identity
-        });
-    }
+          return identity;
+        }
+      );
+    },
   },
   Query: {
     UserEmailValidityCheck: async (_parent, { token }) => {
@@ -66,14 +71,11 @@ export default {
       }
     },
 
-
     UserMeGet: async (_parent, params, context) => {
-
       let id = context?.auth?.user?.id;
       const user = await User.findById(id);
       user.id = user._id;
       return user;
-
     },
 
     AdminIdentitySearch: async (_parent, input, context) => {
@@ -85,7 +87,6 @@ export default {
         throw new Error("Permission Denied!");
       }
       let keys = {};
-
 
       let date = new Date();
       if (input.days === "7 Days") {
@@ -139,18 +140,14 @@ export default {
         keys["$and"] = compoundQuery;
       }
 
-
       const identities = await Identity.find(keys)
         .skip((input.page - 1) * input?.limit)
         .limit(input?.limit);
-
-
 
       return identities;
     },
 
     TalantIdentitySearch: async (_parent, input) => {
-
       const keys = { publishStatus: "approved", published: true };
 
       if (input.organizationId) {
@@ -170,7 +167,6 @@ export default {
     },
 
     AdminIdentityGet: async (_parent, { id }, context) => {
-
       if (!checkIfAdmin(context?.auth?.identity)) {
         throw new Error("Permission Denied!");
       }
@@ -181,9 +177,11 @@ export default {
       return identity;
     },
 
-
-    OrganizationIdentityGet: async (_parent, { organizationId, identityId }, context) => {
-
+    OrganizationIdentityGet: async (
+      _parent,
+      { organizationId, identityId },
+      context
+    ) => {
       const identity = await Identity.findById(identityId);
       identity.id = identity._id;
 
@@ -206,7 +204,9 @@ export default {
         const phoneVerify = await PhoneVerify.create({ phone });
         let result = await sendSms(
           phoneVerify.phone,
-          encodeURIComponent(`賽馬會共融・知行計劃一次性電話驗證碼:${phoneVerify.otp}`)
+          encodeURIComponent(
+            `賽馬會共融・知行計劃一次性電話驗證碼:${phoneVerify.otp}`
+          )
         );
         if (result) {
           return true;
@@ -320,6 +320,34 @@ export default {
 
           return user;
         }
+      } else if (input?.email && input?.otp) {
+        const emailOTPVerify = await EmailOTPVerify.findOne({
+          email: input?.email,
+          otp: input?.otp,
+        });
+        if (!emailOTPVerify) {
+          throw new Error("Invalid OTP");
+        } else {
+          await emailOTPVerify.delete();
+          const user = await User.findOneAndUpdate(
+            { email: input.email },
+            {
+              email: input.email,
+              password: await User.generateHash(input?.password),
+            },
+            { upsert: true, new: true }
+          );
+
+          const tokenObject = await generateToken(user);
+          const token = tokenObject._id;
+
+          nookies.set(context, "jciep-token", token, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+          });
+          return user;
+        }
       } else if (input?.email && input?.password) {
         const user = await User.findOne({
           email: input?.email.trim(),
@@ -330,7 +358,11 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+          nookies.set(context, "jciep-token", token, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+          });
           return user;
         } else {
           throw new Error("Wrong Email and Password!");
@@ -348,7 +380,7 @@ export default {
             { phone: input.phone },
             {
               phone: input.phone,
-              password: await User.generateHash(input?.password)
+              password: await User.generateHash(input?.password),
             },
             { upsert: true, new: true }
           );
@@ -358,7 +390,11 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+          nookies.set(context, "jciep-token", token, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+          });
           return user;
         }
       } else if (input?.phone && input?.password) {
@@ -371,7 +407,11 @@ export default {
           const tokenObject = await generateToken(user);
           const token = tokenObject._id;
 
-          nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+          nookies.set(context, "jciep-token", token, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+          });
           return user;
         } else {
           throw new Error("Wrong Phone and Password!");
@@ -392,7 +432,11 @@ export default {
         const token = tokenObject._id;
         user.snsMeta = snsMeta;
         await user.save();
-        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+        nookies.set(context, "jciep-token", token, {
+          path: "/",
+          httpOnly: true,
+          secure: true,
+        });
         return user;
       } else if (input.googleToken) {
         let snsMeta = await google.getProfile(input.googleToken);
@@ -411,7 +455,11 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
 
-        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+        nookies.set(context, "jciep-token", token, {
+          path: "/",
+          httpOnly: true,
+          secure: true,
+        });
         return user;
       } else if (input.appleToken) {
         let snsMeta = await apple.getProfile(input.appleToken);
@@ -430,24 +478,25 @@ export default {
         user.snsMeta = snsMeta;
         await user.save();
 
-        nookies.set(context, "jciep-token", token, { path: "/", httpOnly: true, secure: true });
+        nookies.set(context, "jciep-token", token, {
+          path: "/",
+          httpOnly: true,
+          secure: true,
+        });
         return user;
       }
 
       return null;
     },
 
-
-
     UserLogout: async (_parent, params, context) => {
       const token = nookies.get(context)?.["jciep-token"];
       await AccessToken.findByIdAndDelete(token);
-      nookies.destroy(context, "jciep-token", { path: "/"});
+      nookies.destroy(context, "jciep-token", { path: "/" });
       return true;
     },
 
     UserPasswordResetPhoneSend: async (_parent, { phone }) => {
-
       try {
         const phoneVerify = await PhoneVerify.create({
           phone,
@@ -455,7 +504,9 @@ export default {
         });
         let result = await sendSms(
           phoneVerify.phone,
-          encodeURIComponent(`賽馬會共融・知行計劃一次性電話驗證碼:${phoneVerify.otp}`)
+          encodeURIComponent(
+            `賽馬會共融・知行計劃一次性電話驗證碼:${phoneVerify.otp}`
+          )
         );
         if (result) {
           return true;
@@ -515,7 +566,6 @@ export default {
         const emailVerify = await EmailVerify.findOne({
           token,
         });
-
 
         const { type } = emailVerify?.meta || {};
 
@@ -631,7 +681,6 @@ export default {
       }
     },
     IdentityRemove: async (_parent, { id }) => {
-
       try {
         await Identity.findByIdAndDelete(id);
         return true;
@@ -641,16 +690,19 @@ export default {
       }
     },
 
-    PortfolioPublishRequest: async (_parent, { organizationId, identityId }, context) => {
-
+    PortfolioPublishRequest: async (
+      _parent,
+      { organizationId, identityId },
+      context
+    ) => {
       const currentIdentity = context?.auth?.identity;
-      if (!checkIfAdmin(currentIdentity)
-        && !isJoinedOrganizationStaff(currentIdentity, organizationId)
-        && currentIdentity._id === identityId
+      if (
+        !checkIfAdmin(currentIdentity) &&
+        !isJoinedOrganizationStaff(currentIdentity, organizationId) &&
+        currentIdentity._id === identityId
       ) {
         throw new Error("Permission Denied!");
       }
-
 
       const identity = await Identity.findById(identityId);
       if (identity?.type !== "pwd") {
@@ -665,11 +717,16 @@ export default {
       return true;
     },
 
-    PortfolioPublishApprove: async (_parent, { organizationId, identityId }, context) => {
-
+    PortfolioPublishApprove: async (
+      _parent,
+      { organizationId, identityId },
+      context
+    ) => {
       const currentIdentity = context?.auth?.identity;
-      if (!checkIfAdmin(currentIdentity)
-        && !isJoinedOrganizationStaff(currentIdentity, organizationId)) {
+      if (
+        !checkIfAdmin(currentIdentity) &&
+        !isJoinedOrganizationStaff(currentIdentity, organizationId)
+      ) {
         throw new Error("Permission Denied!");
       }
 
@@ -686,11 +743,16 @@ export default {
       return true;
     },
 
-    PortfolioPublishReject: async (_parent, { organizationId, identityId }, context) => {
-
+    PortfolioPublishReject: async (
+      _parent,
+      { organizationId, identityId },
+      context
+    ) => {
       const currentIdentity = context?.auth?.identity;
-      if (!checkIfAdmin(currentIdentity)
-        && !isJoinedOrganizationStaff(currentIdentity, organizationId)) {
+      if (
+        !checkIfAdmin(currentIdentity) &&
+        !isJoinedOrganizationStaff(currentIdentity, organizationId)
+      ) {
         throw new Error("Permission Denied!");
       }
 
@@ -707,12 +769,16 @@ export default {
       return true;
     },
 
-    PortfolioUnpublish: async (_parent, { organizationId, identityId }, context) => {
-
+    PortfolioUnpublish: async (
+      _parent,
+      { organizationId, identityId },
+      context
+    ) => {
       const currentIdentity = context?.auth?.identity;
-      if (!checkIfAdmin(currentIdentity)
-        && !isJoinedOrganizationStaff(currentIdentity, organizationId)
-        && currentIdentity._id === identityId
+      if (
+        !checkIfAdmin(currentIdentity) &&
+        !isJoinedOrganizationStaff(currentIdentity, organizationId) &&
+        currentIdentity._id === identityId
       ) {
         throw new Error("Permission Denied!");
       }
