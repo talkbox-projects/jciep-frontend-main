@@ -87,7 +87,7 @@ const VerifyToken = ({ page }) => {
 
 
       <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
-      {getWording("emailVerify.heading")}
+      設定密碼
       </Text>
       <Box width="100%" background="#FFF">
         <VStack

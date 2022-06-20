@@ -321,6 +321,9 @@ export default {
           return user;
         }
       } else if (input?.email && input?.otp) {
+        console.log('input?.email',input?.email)
+        console.log('input?.otp',input?.otp)
+
         const emailOTPVerify = await EmailOTPVerify.findOne({
           email: input?.email,
           otp: input?.otp,

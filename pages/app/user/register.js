@@ -97,8 +97,6 @@ const AppUserRegister = ({ page }) => {
 
   const handleCheckOTP = async () => {
     const { otp, phone, email, type } = appRegistrationInfo;
-    // TODO: getRegistrationInfoHandler
-
     switch (type) {
       case "phone":
         try {

@@ -7,6 +7,7 @@ import {
   VStack,
   Grid,
   GridItem,
+  Code
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../../../../utils/page/getPage";
@@ -69,12 +70,32 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
 
     if(window && window.AppContext && window.AppContext.postMessage){
       window.AppContext.postMessage(JSON.stringify(json))
-      alert(`POST MESSAGE CALL :::`)
     }
   }
 
+  const closeWebViewHandler = () => {
+    window.WebContext = {};
+    window.WebContext.closeWebViewHandler = () => {
+      console.log("close web view");
+    };
+
+    let json = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {},
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
   return (
     <Box pt={{ base: '64px' }}>
+      <Code>token: {token}</Code>
+      <Code>identityId: {identityId}</Code>
       <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
         <GridItem>
           {/* <Image src={'/images/app/close.svg'} alt={''}/> */}
@@ -133,7 +154,10 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                       borderRadius="22px"
                       height="44px"
                       width="100%"
-                      onClick={()=> sendLoginSuccessResponse()}
+                      onClick={()=> {
+                        sendLoginSuccessResponse()
+                        closeWebViewHandler()
+                      }}
                     >
                       {page?.content?.publicSuccess?.button}
                     </Button>
