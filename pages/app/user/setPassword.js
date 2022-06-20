@@ -72,20 +72,6 @@ const VerifyToken = ({ page }) => {
 
   return (
     <Box py={{ base: 24 }}>
-        <Code>
-        phone: {phone}
-        </Code>
-        <br />
-        <Code>
-        email: {email}
-        </Code>
-        <br />
-        <Code>
-        otp: {otp}
-        </Code>
-        <br />
-
-
       <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
       設定密碼
       </Text>

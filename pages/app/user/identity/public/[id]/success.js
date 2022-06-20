@@ -94,8 +94,6 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
 
   return (
     <Box pt={{ base: '64px' }}>
-      <Code>token: {token}</Code>
-      <Code>identityId: {identityId}</Code>
       <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
         <GridItem>
           {/* <Image src={'/images/app/close.svg'} alt={''}/> */}
