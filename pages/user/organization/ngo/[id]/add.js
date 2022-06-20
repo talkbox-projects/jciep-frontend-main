@@ -137,48 +137,46 @@ const OrganizationNgoAdd = ({ page }) => {
         }
       );
 
-      console.log('file upload', filesUploadData)
+      const mutation = gql`
+        mutation OrganizationSubmissionCreate(
+          $input: OrganizationSubmissionCreateInput!
+        ) {
+          OrganizationSubmissionCreate(input: $input) {
+            id
+          }
+        }
+      `;
 
-      // const mutation = gql`
-      //   mutation OrganizationSubmissionCreate(
-      //     $input: OrganizationSubmissionCreateInput!
-      //   ) {
-      //     OrganizationSubmissionCreate(input: $input) {
-      //       id
-      //     }
-      //   }
-      // `;
+      let data = await getGraphQLClient().request(mutation, {
+        input: {
+          organizationType: organizationType.value,
+          chineseCompanyName: chineseOrganizationName,
+          englishCompanyName: englishOrganizationName,
+          centre: centre,
+          website: website,
+          description: description,
+          missionNVision: missionNVision,
+          targetGroup: targetGroup?.value,
+          targetGroupDisabilities: targetGroupDisabilities?.value,
+          targetGroupDisabilitiesOther:
+            targetGroupDisabilities?.value === "other"
+              ? targetGroupDisabilitiesOther
+              : "",
+          contactName: contactName,
+          contactPhone: contactPhone,
+          contactEmail: contactEmail,
+          postalAddress: postalAddress,
+          tncAccept: tncAccept,
+          identityId: id,
+          businessRegistration: filesUploadData?.FileUpload,
+        },
+      });
 
-      // let data = await getGraphQLClient().request(mutation, {
-      //   input: {
-      //     organizationType: organizationType.value,
-      //     chineseCompanyName: chineseOrganizationName,
-      //     englishCompanyName: englishOrganizationName,
-      //     centre: centre,
-      //     website: website,
-      //     description: description,
-      //     missionNVision: missionNVision,
-      //     targetGroup: targetGroup?.value,
-      //     targetGroupDisabilities: targetGroupDisabilities?.value,
-      //     targetGroupDisabilitiesOther:
-      //       targetGroupDisabilities?.value === "other"
-      //         ? targetGroupDisabilitiesOther
-      //         : "",
-      //     contactName: contactName,
-      //     contactPhone: contactPhone,
-      //     contactEmail: contactEmail,
-      //     postalAddress: postalAddress,
-      //     tncAccept: tncAccept,
-      //     identityId: id,
-      //     businessRegistration: filesUploadData.FileUpload,
-      //   },
-      // });
-
-      // if (data && data.OrganizationSubmissionCreate) {
-      //   router.push(
-      //     `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
-      //   );
-      // }
+      if (data && data.OrganizationSubmissionCreate) {
+        router.push(
+          `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
+        );
+      }
     } catch (e) {
       console.error(e);
     }
@@ -265,7 +263,7 @@ const OrganizationNgoAdd = ({ page }) => {
                       return (
                         <Box
                           key={url + index}
-                          w={["100%", "47.5%", "23.5%"]}
+                          w={["100%"]}
                           h={["250px", "210px", "180px"]}
                           display="inline-block"
                           verticalAlign="top"
@@ -276,6 +274,7 @@ const OrganizationNgoAdd = ({ page }) => {
                             <Image
                               alt=""
                               height="100%"
+                              width="100%"
                               display="inline-block"
                               border="1px solid lightgrey"
                               objectFit="cover"

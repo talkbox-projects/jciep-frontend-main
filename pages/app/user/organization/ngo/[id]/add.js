@@ -170,7 +170,7 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: filesUploadData.FileUpload,
+          businessRegistration: filesUploadData?.FileUpload,
         },
       });
 
@@ -279,7 +279,7 @@ const OrganizationNgoAdd = ({ page }) => {
                       return (
                         <Box
                           key={url + index}
-                          w={["100%", "47.5%", "23.5%"]}
+                          w={["100%"]}
                           h={["250px", "210px", "180px"]}
                           display="inline-block"
                           verticalAlign="top"
