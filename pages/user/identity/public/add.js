@@ -30,6 +30,7 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../utils/general";
+import { useCredential } from "../../../../utils/user";
 import organizationSearch from "../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
@@ -80,11 +81,12 @@ const customStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cToken, cIdentityId }) => {
   const router = useRouter();
-  const { user } = useAppContext();
+  const { user, updateIdentity, setUser } = useAppContext();
   const [formState, setFormState] = useState();
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
+  const [setCredential] = useCredential();
   const {
     handleSubmit,
     register,
@@ -127,6 +129,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
       let data = await getGraphQLClient().request(mutation, {
         input,
       });
+
       if (data && data.IdentityCreate) {
         router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
         if(invitationCode){
@@ -171,6 +174,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
       let data = await getGraphQLClient().request(mutation, {
         input,
       });
+
       if (data && data.IdentityCreate) {
         router.push(`/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }

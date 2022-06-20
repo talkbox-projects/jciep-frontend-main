@@ -40,7 +40,6 @@ const AppUserRegister = ({ page }) => {
   const [, removeCredential] = useCredential();
   const [appRegistrationInfo, setAppRegistrationInfo] = useState({
     otp: "",
-    phone: "",
     type: "",
   });
 
@@ -176,11 +175,11 @@ const AppUserRegister = ({ page }) => {
         </GridItem>
       </Grid>
       <Box>
-        <Code>
+        {/* <Code>
           getRegistrationInfoHandler: {JSON.stringify(appRegistrationInfo)}
         </Code>
         <br />
-        <Code>OTP Verify {JSON.stringify(otpVerifyStatus)}</Code>
+        <Code>OTP Verify {JSON.stringify(otpVerifyStatus)}</Code> */}
 
         <Box justifyContent="center" width="100%">
           <Box width="100%" textAlign="center" margin="auto">

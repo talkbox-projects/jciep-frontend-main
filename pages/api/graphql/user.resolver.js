@@ -57,7 +57,7 @@ export default {
 
     UserEmailOTPValidityCheck: async (_parent, { email, otp }) => {
       try {
-        return await EmailOTPVerify.findOne({ email, otp });
+        return await EmailVerify.findOne({ email, otp });
       } catch (error) {
         return null;
       }

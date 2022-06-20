@@ -368,11 +368,7 @@ const Event = ({ page, token }) => {
                                     direction={"row"}
                                     align="center"
                                     gap={2}
-                                    onClick={() =>
-                                      token
-                                        ? bookmarkEvent(d?.id, token)
-                                        : void 0
-                                    }
+                                    onClick={() =>bookmarkEvent(d?.id)}
                                     cursor={"pointer"}
                                   >
                                     <Box w={"20px"}>

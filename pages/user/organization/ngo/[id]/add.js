@@ -16,7 +16,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { RiAddFill, RiCloseCircleFill } from "react-icons/ri";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import ReactSelect from "react-select";
@@ -27,6 +27,7 @@ import { getGraphQLClient } from "../../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../utils/general";
+import nookies from "nookies";
 
 const PAGE_KEY = "organization_ngo_add";
 
@@ -59,6 +60,12 @@ const OrganizationNgoAdd = ({ page }) => {
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
   const { id } = router.query;
+
+  useEffect(()=>{
+    if(router.isReady){
+      nookies.set(null, "jciep-identityId", id, { path: "/" });
+    }
+  },[router, id])
 
   const {
     handleSubmit,
@@ -116,8 +123,6 @@ const OrganizationNgoAdd = ({ page }) => {
       if (validate()) {
         return;
       }
-
-      console.log('files-',files)
 
       const FileUploadmutation = gql`
         mutation FileUpload($file: FileUpload!) {

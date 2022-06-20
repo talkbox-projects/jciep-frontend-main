@@ -30,7 +30,6 @@ import getSharedServerSideProps from "../../../../../utils/server/getSharedServe
 import wordExtractor from "../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../utils/general";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
-import nookies from "nookies";
 import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
@@ -38,7 +37,7 @@ import OrganizationInvitationCodeValidity from "../../../../../utils/api/Organiz
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
-  const cookies = nookies.get(context);
+  // const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   return {
     props: {
@@ -54,10 +53,10 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
-      token: cookies['jciep-token']??null,
-      identityId: cookies['jciep-identityId']??null,
-      cToken: cookies['c-token']??null,
-      cIdentityId: cookies['c-identityId']??null
+      // token: cookies['jciep-token']??null,
+      // identityId: cookies['jciep-identityId']??null,
+      // cToken: cookies['c-token']??null,
+      // cIdentityId: cookies['c-identityId']??null
     },
   };
 };
@@ -192,6 +191,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
   };
 
   const startCreateOrganization = async (input) => {
+
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -203,6 +203,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
       let data = await getGraphQLClient().request(mutation, {
         input,
       });
+
       if (data && data.IdentityCreate) {
         router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }

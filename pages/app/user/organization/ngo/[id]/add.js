@@ -16,7 +16,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { RiAddFill, RiCloseCircleFill } from "react-icons/ri";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/router";
 import ReactSelect from "react-select";
@@ -24,6 +24,7 @@ import { getPage } from "../../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../../utils/page/withPageCMS";
 import { gql } from "graphql-request";
 import { getGraphQLClient } from "../../../../../../utils/apollo";
+import nookies from "nookies";
 import getSharedServerSideProps from "../../../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../../../utils/general";
@@ -45,6 +46,8 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+
+  // nookies.set(null, "jciep-identityId", identityId, { path: "/" });
 
   return {
     props: {
@@ -73,6 +76,13 @@ const OrganizationNgoAdd = ({ page }) => {
   const getDescriptionCount = watch("description", 0);
   const getMissionNVision = watch("missionNVision", 0);
   const watchFields = watch(["targetGroupDisabilities"]);
+
+  useEffect(()=>{
+    if(router.isReady){
+      console.log('router', router)
+    }
+    // nookies.set(null, "jciep-identityId", identityId, { path: "/" });
+  },[router])
 
   const validate = () => {
     if (files.length < 1) {

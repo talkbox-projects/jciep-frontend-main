@@ -78,15 +78,6 @@ const IdentityPublicAddSuccess = ({ page }) => {
             </Link>
           </Box>
           <br />
-
-          {/* <Text marginTop="10px" textAlign="center">
-            <Text as="span">
-              {page?.content?.footer?.drop?.text}
-              <Text as="span" cursor="pointer" onClick={logout}>
-                {page?.content?.footer?.drop?.button}
-              </Text>
-            </Text>
-          </Text> */}
         </Box>
       </Box>
     </VStack>
