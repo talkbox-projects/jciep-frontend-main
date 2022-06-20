@@ -414,9 +414,9 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
             margin="auto"
             padding="0px 25px"
           >
-            <Text fontSize="16px" textAlign="center">
+            {/* <Text fontSize="16px" textAlign="center">
               {page?.content?.heading?.description}
-            </Text>
+            </Text> */}
             <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns={"repeat(2, 1fr)"}

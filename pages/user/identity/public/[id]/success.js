@@ -1,4 +1,13 @@
-import { Button, Box, Image, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Image,
+  Heading,
+  Text,
+  VStack,
+  Flex,
+  Center,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
@@ -59,7 +68,20 @@ const IdentityPublicAddSuccess = ({ page }) => {
             src={page?.content?.publicSuccess?.image}
           />
 
-          <Text marginTop="30px" fontWeight={700} dangerouslySetInnerHTML={{__html: page?.content?.publicSuccess?.content}}/>
+          <Center>
+            <Flex direction="row" ml={'-30px'}>
+              <Image src={"/images/app/click.svg"} alt="" alignSelf={'self-end'} p={'5px'} />
+              <Box>
+                <Text
+                  marginTop="30px"
+                  fontWeight={700}
+                  dangerouslySetInnerHTML={{
+                    __html: page?.content?.publicSuccess?.content,
+                  }}
+                />
+              </Box>
+            </Flex>
+          </Center>
 
           <Box width="100%" textAlign="center" marginBottom="120px">
             <Link href="/">

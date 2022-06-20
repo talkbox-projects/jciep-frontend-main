@@ -7,7 +7,9 @@ import {
   VStack,
   Grid,
   GridItem,
-  Code
+  Code,
+  Center,
+  Flex,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../../../../utils/page/getPage";
@@ -30,8 +32,8 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
-      token: cookies['jciep-token'],
-      identityId: cookies['jciep-identityId']
+      token: cookies["jciep-token"],
+      identityId: cookies["jciep-identityId"],
     },
   };
 };
@@ -40,38 +42,37 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   const [, removeCredential] = useCredential();
 
   const sendLoginSuccessResponse = () => {
-
     window.WebContext = {};
     window.WebContext.sendLoginSuccessResponseHandler = (response) => {
       alert(JSON.stringify(response));
-      if(!response) {
-        alert("response.result null")
+      if (!response) {
+        alert("response.result null");
       }
-    }
+    };
 
     const json = {
       name: "sendLoginSuccessResponse",
       options: {
-          callback: "sendLoginSuccessResponseHandler",
-          params: {
-            token: token,
-            identityId: identityId
-          }
-      }
+        callback: "sendLoginSuccessResponseHandler",
+        params: {
+          token: token,
+          identityId: identityId,
+        },
+      },
+    };
+
+    if (!window.AppContext) {
+      alert("window.AppContext undefined");
     }
 
-    if(!window.AppContext){
-      alert("window.AppContext undefined")
+    if (!window.AppContext?.postMessage) {
+      alert("window.AppContext.postMessage undefined");
     }
 
-    if(!window.AppContext?.postMessage){
-      alert("window.AppContext.postMessage undefined")
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
     }
-
-    if(window && window.AppContext && window.AppContext.postMessage){
-      window.AppContext.postMessage(JSON.stringify(json))
-    }
-  }
+  };
 
   const closeWebViewHandler = () => {
     window.WebContext = {};
@@ -93,11 +94,17 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   };
 
   return (
-    <Box pt={{ base: '64px' }}>
-      <Grid templateColumns="repeat(3, 1fr)" width="100%" px={"20px"} alignItems="center" h={'48px'} backgroundColor="#F6D644">
+    <Box pt={{ base: "64px" }}>
+      <Grid
+        templateColumns="repeat(3, 1fr)"
+        width="100%"
+        px={"20px"}
+        alignItems="center"
+        h={"48px"}
+        backgroundColor="#F6D644"
+      >
         <GridItem>
-          {/* <Image src={'/images/app/close.svg'} alt={''}/> */}
-          {" "}
+          {/* <Image src={'/images/app/close.svg'} alt={''}/> */}{" "}
         </GridItem>
         <GridItem textAlign="center">
           <Text fontWeight={700}>{page?.content?.heading?.title}</Text>
@@ -110,7 +117,7 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
             <Box backgroundColor="#F6D644" position={"relative"} h={"100px"} />
             <Image
               src={"/images/app/border.svg"}
-              w={'100%'}
+              w={"100%"}
               alt={""}
               pos={"relative"}
               zIndex={1}
@@ -126,13 +133,25 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
               marginTop={"-100px"}
             />
 
-            <Text
-              marginTop="30px"
-              fontWeight={700}
-              dangerouslySetInnerHTML={{
-                __html: page?.content?.publicSuccess?.content,
-              }}
-            />
+            <Center>
+              <Flex direction="row" ml={"-30px"}>
+                <Image
+                  src={"/images/app/click.svg"}
+                  alt=""
+                  alignSelf={"self-end"}
+                  p={"5px"}
+                />
+                <Box>
+                  <Text
+                    marginTop="30px"
+                    fontWeight={700}
+                    dangerouslySetInnerHTML={{
+                      __html: page?.content?.publicSuccess?.content,
+                    }}
+                  />
+                </Box>
+              </Flex>
+            </Center>
 
             <Box bgColor="#FFF">
               <Box
@@ -147,18 +166,18 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
               />
               <Box px={"15px"} py={"12px"} w="100%">
                 <Box width="100%" textAlign="center">
-                    <Button
-                      backgroundColor="#F6D644"
-                      borderRadius="22px"
-                      height="44px"
-                      width="100%"
-                      onClick={()=> {
-                        sendLoginSuccessResponse()
-                        closeWebViewHandler()
-                      }}
-                    >
-                      {page?.content?.publicSuccess?.button}
-                    </Button>
+                  <Button
+                    backgroundColor="#F6D644"
+                    borderRadius="22px"
+                    height="44px"
+                    width="100%"
+                    onClick={() => {
+                      sendLoginSuccessResponse();
+                      closeWebViewHandler();
+                    }}
+                  >
+                    {page?.content?.publicSuccess?.button}
+                  </Button>
                 </Box>
               </Box>
             </Box>

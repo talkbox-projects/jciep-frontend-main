@@ -176,12 +176,6 @@ const AppUserRegister = ({ page }) => {
         </GridItem>
       </Grid>
       <Box>
-        {/* <Code>
-          getRegistrationInfoHandler: {JSON.stringify(appRegistrationInfo)}
-        </Code>
-        <br />
-        <Code>OTP Verify {JSON.stringify(otpVerifyStatus)}</Code> */}
-
         <Box justifyContent="center" width="100%">
           <Box width="100%" textAlign="center" margin="auto">
             <Box

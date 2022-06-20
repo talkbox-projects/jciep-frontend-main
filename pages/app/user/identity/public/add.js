@@ -482,11 +482,11 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
         />
         {/** For testing, remove later */}
         {query?.redirectFrom==='publicUpdatePage' && <Code fontSize="11px" colorScheme='red'>{'Redirect from app/user/identity/public/update || app/user/identity/update, cased by user without any identity'}</Code>}<br/>
-        <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
+        {/* <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/>
-      
+       */}
         <Box justifyContent="center" width="100%">
           <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
           <Text
