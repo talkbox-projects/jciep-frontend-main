@@ -23,19 +23,6 @@ emailVerifySchema.pre("validate", async function (next) {
   next();
 });
 
-const emailOTPVerifySchema = Schema({
-  email: { type: String, required: true },
-  otp: { type: String, required: true },
-  meta: { type: Schema.Types.Mixed },
-});
-
-emailOTPVerifySchema.pre("validate", async function (next) {
-  if (this.isNew) {
-    this.otp = parseInt(Math.random() * 900000 + 100000).toString();
-  }
-  next();
-});
-
 const phoneVerifySchema = Schema({
   phone: { type: String, required: true },
   otp: { type: String, required: true },
@@ -311,7 +298,5 @@ export const Identity = models["Identity"] ?? model("Identity", identitySchema);
 export const User = models["User"] ?? model("User", userSchema);
 export const EmailVerify =
   models["EmailVerify"] ?? model("EmailVerify", emailVerifySchema);
-export const EmailOTPVerify =
-  models["EmailOTPVerify"] ?? model("EmailOTPVerify", emailOTPVerifySchema);
 export const PhoneVerify =
   models["PhoneVerify"] ?? model("PhoneVerify", phoneVerifySchema);

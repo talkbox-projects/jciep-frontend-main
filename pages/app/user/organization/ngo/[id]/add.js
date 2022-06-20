@@ -65,6 +65,12 @@ const OrganizationNgoAdd = ({ page }) => {
   const [fileError, setFileError] = useState(false);
   const { id } = router.query;
 
+  useEffect(()=>{
+    if(router.isReady){
+      nookies.set(null, "jciep-identityId", id, { path: "/" });
+    }
+  },[router, id])
+
   const {
     handleSubmit,
     register,
@@ -79,10 +85,9 @@ const OrganizationNgoAdd = ({ page }) => {
 
   useEffect(()=>{
     if(router.isReady){
-      console.log('router', router)
+      nookies.set(null, "jciep-identityId", id, { path: "/" });
     }
-    // nookies.set(null, "jciep-identityId", identityId, { path: "/" });
-  },[router])
+  },[router, id])
 
   const validate = () => {
     if (files.length < 1) {

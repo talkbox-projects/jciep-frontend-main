@@ -41,6 +41,7 @@ const AppUserRegister = ({ page }) => {
   const [appRegistrationInfo, setAppRegistrationInfo] = useState({
     otp: "",
     type: "",
+    email: ""
   });
 
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
