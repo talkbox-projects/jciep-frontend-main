@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
 
   {/** Redirect to '/app/user/identity/public/add' if user without 'any' Identity  */}
 
-  if(!context.auth){
+  if(!cookies['jciep-identityId']){
     return {
       redirect: {
         permanent: false,
@@ -49,20 +49,8 @@ export const getServerSideProps = async (context) => {
 };
 
 
-const IdentityProfile = ({ api: { identity }, enums, page, token, identityId, cToken, cIdentityId  }) => {
+const IdentityProfile = ({ api: { identity }, enums, page }) => {
   let comp = null;
-
-  // switch (identity?.type) {
-  //   case "public":
-  //     comp = <IdentityPublicProfile />;
-  //     break;
-  //   case "admin":
-  //     comp = <IdentityAdminProfile />;
-  //     break;
-  //   default:
-  //     comp = <Box></Box>;
-  // }
-
   return (
     <IdentityProfileStore.Provider
       userFieldVisible={true}
@@ -72,10 +60,6 @@ const IdentityProfile = ({ api: { identity }, enums, page, token, identityId, cT
       editable={true}
     >
       <Box w="100%" bgColor="#fafafa">
-      <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/>
         <IdentityPublicProfile />
         {/* {comp} */}
       </Box>

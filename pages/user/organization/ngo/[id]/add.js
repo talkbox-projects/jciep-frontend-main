@@ -316,9 +316,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.chineseOrganizationName}
-                  </FormLabel>
+                  <LABEL name={page?.content?.form?.chineseOrganizationName} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -342,9 +340,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.englishOrganizationName}
-                  </FormLabel>
+                  <LABEL name={page?.content?.form?.englishOrganizationName} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -428,9 +424,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.organizationType?.label}
-                  </FormLabel>
+                  <LABEL name={page?.content?.form?.organizationType?.label} required={true}/>
 
                   <Controller
                     name="organizationType"
@@ -466,9 +460,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.targetGroup?.label}
-                  </FormLabel>
+                  <LABEL name={page?.content?.form?.targetGroup?.label} required={true}/>
 
                   <Controller
                     name="targetGroup"
@@ -504,9 +496,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>
-                    {page?.content?.form?.targetGroupDisabilities?.label}
-                  </FormLabel>
+                  <LABEL name={page?.content?.form?.targetGroupDisabilities?.label} required={true}/>
 
                   <Controller
                     name="targetGroupDisabilities"
@@ -545,6 +535,8 @@ const OrganizationNgoAdd = ({ page }) => {
                       <FormLabel>
                         {page?.content?.form?.targetGroupDisabilitiesOther}
                       </FormLabel>
+
+                      <LABEL name={page?.content?.form?.targetGroupDisabilitiesOther} required={true}/>
                       <Input
                         type="text"
                         placeholder={wordExtractor(
@@ -573,7 +565,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactName}</FormLabel>
+                  <LABEL name={page?.content?.form?.contactName} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -597,7 +589,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactPhone}</FormLabel>
+                  <LABEL name={page?.content?.form?.contactPhone} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -621,7 +613,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.contactEmail}</FormLabel>
+                  <LABEL name={page?.content?.form?.contactEmail} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -654,7 +646,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.postalAddress}</FormLabel>
+                  <LABEL name={page?.content?.form?.postalAddress} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -678,7 +670,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.website}</FormLabel>
+                  <LABEL name={page?.content?.form?.website} required={true}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
@@ -747,6 +739,24 @@ const OrganizationNgoAdd = ({ page }) => {
         </Box>
       </Box>
     </VStack>
+  );
+};
+
+const LABEL = ({ name, required }) => {
+  if (!name) {
+    return "";
+  }
+
+  return (
+    <FormLabel>
+      {name}
+      {required && (
+        <Text as="span" color="red">
+          {" "}
+          *
+        </Text>
+      )}
+    </FormLabel>
   );
 };
 

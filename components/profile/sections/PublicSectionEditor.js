@@ -35,7 +35,7 @@ const PublicSectionEditor = () => {
   const router = useRouter();
   const { page, enums, saveIdentity, identity, removeEditSection, identityId } =
     IdentityProfileStore.useContext();
-  const [showSelectCentre, setShowSelectCentre] = useState(false);
+  const [showSelectCentre, setShowSelectCentre] = useState(null);
   const [selectedOrganization, setOrganization] = useState(null);
   const [currentFormState, setCurrentFormState] = useState();
   const [organizationData, setOrganizationData] = useState([]);
@@ -54,18 +54,15 @@ const PublicSectionEditor = () => {
       id: identity.id,
       caption: identity.caption,
       wishToDoStatus: identity.wishToDoStatus,
+      phase2profile: true
     },
   });
 
   const wishToDoStatus = watch("wishToDo", identity.wishToDo);
 
   const handleSaveAction = async (data) => {
-    let submitData = await Object.fromEntries(
-      Object.entries({ ...data, phase2profile: true }).filter(
-        ([_, v]) => v != null
-      )
-    );
-    await saveIdentity(submitData);
+
+    await saveIdentity(data);
 
     removeEditSection();
   };
@@ -97,31 +94,11 @@ const PublicSectionEditor = () => {
     handleSaveAction(formState);
   };
 
-  const handlePostData = async (input, invitationCode) => {
-    try {
-      const mutation = gql`
-        mutation IdentityCreate($input: IdentityCreateInput!) {
-          IdentityCreate(input: $input) {
-            id
-          }
-        }
-      `;
-      let data = await getGraphQLClient().request(mutation, {
-        input,
-      });
-      if (data && data.IdentityCreate) {
-        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
-        if (invitationCode) {
-          await OrganizationMemberJoin({
-            invitationCode: invitationCode,
-            identityId: data.IdentityCreate.id,
-          });
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const handleCreateOrganization = () => {
+    const formState = getValues();
+    handleSaveAction(formState);
+    router.push(`/user/organization/ngo/${identity.id}/add`)
+  }
 
   useEffect(() => {
     async function fetchOrganization() {
@@ -489,7 +466,7 @@ const PublicSectionEditor = () => {
         </Stack>
 
         {identity?.phase2profile === false && (
-          <Box>
+          <Box bgColor="#F9F9F9" borderRadius={'15px'} p={4}>
             <VStack pb={{ base: 12 }} pt={{ base: 6 }}>
               <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
                 <GridItem colSpan={{ base: 2 }}>
@@ -521,11 +498,13 @@ const PublicSectionEditor = () => {
 
                       <Button
                         flex={1}
-                        backgroundColor={"transparent"}
+                        backgroundColor={
+                          showSelectCentre === false ? "#F6D644" : "transparent"
+                        }
                         border={`2px solid #999999`}
                         height="38px"
                         width="117px"
-                        type="submit"
+                        onClick={() => setShowSelectCentre(false)}
                       >
                         {
                           page?.content?.form?.createOrganization?.options[1]
@@ -586,7 +565,7 @@ const PublicSectionEditor = () => {
                           as="span"
                           color="#017878"
                           cursor="pointer"
-                          onClick={() => router.push(`/user/organization/ngo/${identity.id}/add`)}
+                          onClick={() => handleCreateOrganization()}
                         >
                           {page?.content?.form?.selectOrganizationContent?.link}
                         </Text>

@@ -80,6 +80,7 @@ const Event = ({ page, token }) => {
 
   useEffect(() => {
     const { asPath } = router;
+
     const getURLParameter = asPath.replace("/event", "");
 
     async function fetchData() {
@@ -108,21 +109,6 @@ const Event = ({ page, token }) => {
       onClose();
     }, 500);
   };
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const collectData = await getDateArr(filteredEvents.list)
-
-  //     if(!_.isEmpty(collectData)){
-  //       setFiltered({
-  //         ...filteredEvents,
-  //         list: collectData
-  //       })
-  //     }
-  //   }
-  //   fetchData()
-
-  // }, [filteredEvents]);
 
   function getDateArr(arr) {
     if (_.isEmpty(arr)) {
@@ -270,9 +256,8 @@ const Event = ({ page, token }) => {
             </Flex>
             {filteredEvents &&
               Object.keys(filteredEvents).map((detail) => (
-                <>
+                <Box key={detail}>
                   <Flex
-                    key={detail}
                     direction={{ base: "column", md: "row" }}
                     gap={{ md: 12 }}
                   >
@@ -404,7 +389,7 @@ const Event = ({ page, token }) => {
                     </Box>
                   </Flex>
                   <Divider my={6} />
-                </>
+                </Box>
               ))}
           </Container>
         </Box>
