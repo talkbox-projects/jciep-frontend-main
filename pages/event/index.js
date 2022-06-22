@@ -353,10 +353,8 @@ const Event = ({ page, token }) => {
                                     direction={"row"}
                                     align="center"
                                     gap={2}
-                                    onClick={() =>bookmarkEvent(d?.id)}
-                                    cursor={"pointer"}
                                   >
-                                    <Box w={"20px"}>
+                                    {/* <Box w={"20px"}>
                                       <Image
                                         src={`/images/app/${
                                           d.bookmarked
@@ -367,7 +365,7 @@ const Event = ({ page, token }) => {
                                         color="gray.500"
                                         fontSize={14}
                                       />
-                                    </Box>
+                                    </Box> */}
                                     <Box>
                                       {d.bookmarked
                                         ? wordExtractor(

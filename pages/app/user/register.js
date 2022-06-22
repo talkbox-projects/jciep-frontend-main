@@ -96,8 +96,20 @@ const AppUserRegister = ({ page }) => {
   };
 
   const handleCheckOTP = async () => {
-    const { otp, phone, email, type } = appRegistrationInfo;
+    const { otp, phone, email, type, token } = appRegistrationInfo;
     switch (type) {
+      case "google":
+        router.replace(`/app/oauth/google/?accessToken=${token}`);
+        break;
+
+      case "facebook":
+        router.replace(`/app/oauth/facebook/?accessToken=${token}`);
+        break;
+
+      case "apple":
+        router.replace(`/app/oauth/apple/?accessToken=${token}`);
+        break;
+        
       case "phone":
         try {
           const query = gql`
