@@ -41,7 +41,8 @@ const AppUserRegister = ({ page }) => {
   const [appRegistrationInfo, setAppRegistrationInfo] = useState({
     otp: "",
     type: "",
-    email: ""
+    email: "",
+    token: ""
   });
 
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
@@ -170,6 +171,11 @@ const AppUserRegister = ({ page }) => {
 
   return (
     <Box pt={{ base: "64px" }}>
+    <Code>
+      [Debug: getRegistrationInfoHandler]: {JSON.stringify(appRegistrationInfo)}
+    </Code>
+
+
       <Grid
         templateColumns="repeat(3, 1fr)"
         width="100%"
