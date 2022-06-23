@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -15,20 +15,15 @@ import {
   Flex,
   Image,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-
-import { TimeIcon } from "@chakra-ui/icons";
-import { IoLocationSharp } from "react-icons/io5";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
-import { FaRegUserCircle } from "react-icons/fa";
 import { getEventDetail } from "../../utils/event/getEvent";
-import { likeEvent, bookmarkEvent } from "../../utils/event/eventAction";
+import { bookmarkEvent } from "../../utils/event/eventAction";
 
 const PAGE_KEY = "event";
 
@@ -361,11 +356,6 @@ const Event = ({ page}) => {
                       value={detail?.contactNumber}
                     />
                     <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => bookmarkEvent(detail?.id)}>
-                      <Image
-                        src={"/images/app/bookmark-off.svg"}
-                        alt={""}
-                        fontSize={18}
-                      />
                       <Text mt={6} color="#0D8282" fontWeight={700}>
                         {detail?.liked
                           ? wordExtractor(
@@ -381,7 +371,7 @@ const Event = ({ page}) => {
                   </Stack>
 
                   <Flex gap={2} direction={"column"} mt={10}>
-                    <Button
+                    {/* <Button
                       borderRadius="20px"
                       w={"100%"}
                       variant="outline"
@@ -392,7 +382,7 @@ const Event = ({ page}) => {
                         page?.content?.wordings,
                         "registration_label"
                       )}
-                    </Button>
+                    </Button> */}
                     {detail?.registerUrl && (
                       <a
                         href={`${detail?.registerUrl}`}

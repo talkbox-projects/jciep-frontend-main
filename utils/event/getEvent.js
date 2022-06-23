@@ -4,7 +4,7 @@ const defaultParams = {
   orderBy: "createdAt",
   orderByAsc: false,
   ended: false,
-}
+};
 
 export const getEvents = async (params) => {
   try {
@@ -20,9 +20,7 @@ export const getEvents = async (params) => {
 
 export const getEventDetail = async (id) => {
   try {
-    const { data: { data } = {} } = await axios.get(
-      `/api/app/event/${id}`
-    );
+    const { data: { data } = {} } = await axios.get(`/api/app/event/${id}`);
 
     return data;
   } catch (e) {
@@ -30,12 +28,9 @@ export const getEventDetail = async (id) => {
   }
 };
 
-export const getStockPhoto = async (params) => {
+export const getStockPhoto = async () => {
   try {
-    const { data: { data } = {} } = await axios.get(
-      `/api/app/stockPhoto`
-    );
-
+    const { data: { data } = {} } = await axios.get(`/api/app/stockPhoto`);
     return data;
   } catch (e) {
     return null;

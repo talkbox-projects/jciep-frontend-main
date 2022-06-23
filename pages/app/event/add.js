@@ -8,10 +8,8 @@ import {
   Textarea,
   Grid,
   GridItem,
-  Checkbox,
   FormHelperText,
   FormLabel,
-  Link,
   Flex,
   Image,
   Center,
@@ -20,21 +18,15 @@ import {
   RadioGroup,
   InputGroup,
   InputRightElement,
-  HStack,
-  IconButton,
-  AspectRatio,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  Switch,
   Divider,
 } from "@chakra-ui/react";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import _ from "lodash";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../utils/page/getPage";
@@ -43,18 +35,10 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getStockPhoto } from "../../../utils/event/getEvent";
-import organizationSearch from "../../../utils/api/OrganizationSearch";
 import { getGraphQLClient } from "../../../utils/apollo";
 import { createEvent } from "../../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
-import ProfileDropzone from "../../../components/profile/fragments/ProfileDropzone";
-import BiographyTypeSelector from "../../../components/profile/fragments/BiographyTypeSelector";
-import {
-  AiOutlineInfoCircle,
-  AiFillMinusCircle,
-  AiFillCheckCircle,
-  AiOutlineDelete,
-} from "react-icons/ai";
+import { AiOutlineInfoCircle, AiFillMinusCircle } from "react-icons/ai";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../utils/wordExtractor";
 import { urlRegex } from "../../../utils/general";
@@ -76,27 +60,17 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const stockPhotos = (await getStockPhoto()) ?? [];
-
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      lang: context.locale,
-      stockPhotos,
-      api: {
-        organizations: await organizationSearch({
-          status: ["approved"],
-          published: true,
-          type: ["ngo"],
-        }),
-      },
+      lang: context.locale
     },
   };
 };
 
-const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
+const EventAdd = ({ page }) => {
   const { user } = useAppContext();
   const router = useRouter();
   const {
@@ -107,6 +81,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     watch,
     setValue,
     setError,
+    getValues
   } = useForm({
     defaultValues: {
       otherUrls: [""],
@@ -116,12 +91,12 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
   });
   const additionalFileRefs = useRef(null);
   const [step, setStep] = useState("step1");
-  const [additionalFiles, setAdditionalFiles] = useState([]);
   const [stockPhotoId, setStockPhotoId] = useState("");
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
+  const [stockPhoto, setStockPhoto] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedEventImage, setSelectedEventImage] = React.useState(null);
+  const [additionalFileError, setAdditionalFileError] = useState(false);
   const watchFields = watch(["type", "freeOrCharge", "representOrganization"], {
     type: [],
     freeOrCharge: "free",
@@ -134,18 +109,19 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     name: "otherUrls",
   });
 
+  useEffect(() => {
+    async function getStockPhotoData() {
+      const data = (await getStockPhoto()) ?? [];
+      setStockPhoto(data)
+    }
+    getStockPhotoData();
+  }, [router]);
+
   const {
     fields: additionalInformationFields,
     append: additionalInformationAppend,
     remove: additionalInformationRemove,
   } = useFieldArray({ control, name: "additionalInformation" });
-
-  // const {
-  //   fields: moreInfoFields,
-  //   append: moreInfoAppend,
-  //   remove: moreInfoRemove,
-  //   insert: moreInfoInsert,
-  // } = useFieldArray({ control, name: "moreInfo" });
 
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
@@ -233,15 +209,21 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         gap={"20px"}
         width="100%"
       >
-        {stockPhotos?.map((d) => (
+        {stockPhoto?.map((d) => (
           <GridItem
             borderRadius={"5px"}
             overflow={"hidden"}
             key={d.id}
             onClick={() => {
+              const currentStockPhotoId = getValues("stockPhotoId")
+              console.log('currentStockPhotoId-',currentStockPhotoId)
+              if(currentStockPhotoId === d.id){
+                setValue("stockPhotoId", "");
+                setStockPhotoId("")
+                return;
+              }
               setStockPhotoId(d.id);
               setValue("stockPhotoId", d.id);
-              setFiles([]);
             }}
             cursor="pointer"
           >
@@ -319,12 +301,9 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
     otherUrl,
     stockPhotoId,
     remark,
-    representOrganization,
-    organizationId,
-    organizationAdditionalInfo,
-    banner,
     additionalInformation,
   }) => {
+    setAdditionalFileError(false);
     let bannerUploadData, filesAdditionalInformalUploadData;
 
     const FileUploadmutation = gql`
@@ -338,13 +317,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
       }
     `;
 
-    if (files) {
+    if (!_.isEmpty(files)) {
       bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
-        file: files?.[0],
+        file: files,
       });
     }
 
-    if (additionalInformation) {
+    if (!_.isEmpty(additionalInformation)) {
       filesAdditionalInformalUploadData = await additionalInformation
         .map((d) => {
           if (d[0]) {
@@ -352,6 +331,9 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
           }
         })
         .filter((d) => d);
+    } else {
+      setAdditionalFileError(true);
+      return
     }
 
     if (filesAdditionalInformalUploadData) {
@@ -386,23 +368,20 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         otherUrl: otherUrl,
         stockPhotoId: stockPhotoId,
         remark: remark,
-        // representOrganization: representOrganization,
-        // organizationId: organizationId,
-        // organizationAdditionalInfo: organizationAdditionalInfo,
         banner: {
           file: bannerUploadData?.FileUpload?.[0],
           stockPhotoId: stockPhotoId,
         },
         additionalInformation:
-          filesAdditionalInformalUploadData?.FileUpload ?? [],
+          filesAdditionalInformalUploadData?.FileUpload.map((d) => d) ?? [],
       }).filter(([_, v]) => v != null)
     );
 
     const response = await createEvent(input);
 
-    if (response?.data) {
-      router.push(`/event/create/${response?.data.id}/success`);
-    }
+    // if (response?.data) {
+    //   router.push(`/event/create/${response?.data.id}/success`);
+    // }
   };
 
   const renderAdditionalImage = useCallback((data) => {
@@ -427,7 +406,6 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         <Box>
           <NAV
             title={page?.content?.step?.title}
-            // subTitle={page?.content?.step?.subTitle}
             handleClickLeftIcon={() => router.push(`/`)}
           />
           <Box justifyContent="center" width="100%">
@@ -445,9 +423,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                 >
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(page?.content?.wordings, "name_label")}
-                      </FormLabel>
+                      <LABEL
+                        name={wordExtractor(
+                          page?.content?.wordings,
+                          "name_label"
+                        )}
+                        required={true}
+                      />
                       <Input
                         type="text"
                         variant="flushed"
@@ -472,9 +454,10 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
 
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {page?.content?.form?.type?.label}
-                      </FormLabel>
+                      <LABEL
+                        name={page?.content?.form?.type?.label}
+                        required={true}
+                      />
                       <Controller
                         name="type"
                         isClearable
@@ -550,12 +533,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
 
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "description_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       <Textarea
                         variant="flushed"
                         placeholder={wordExtractor(
@@ -597,12 +581,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                 >
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "start_date_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       <Stack direction={"row"} align="center">
                         <Input
                           type="date"
@@ -629,12 +614,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
 
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "end_date_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       <Stack direction={"row"} align="center">
                         <Input
                           type="date"
@@ -742,9 +728,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                 >
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(page?.content?.wordings, "venue_label")}
-                      </FormLabel>
+                      <LABEL
+                        name={wordExtractor(
+                          page?.content?.wordings,
+                          "venue_label"
+                        )}
+                        required={true}
+                      />
                       <Input
                         type="text"
                         variant="flushed"
@@ -772,12 +762,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
 
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "free_or_charge_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       <Box pt={4}>
                         <Controller
                           name="freeOrCharge"
@@ -876,12 +867,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                   {" "}
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "submission_deadline_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       <Input
                         type="date"
                         variant="flushed"
@@ -923,12 +915,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                   </GridItem>
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "contact_number_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
 
                       <Input
                         type="text"
@@ -974,12 +967,13 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                   </GridItem>
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
+                      <LABEL
+                        name={wordExtractor(
                           page?.content?.wordings,
                           "other_url_label"
                         )}
-                      </FormLabel>
+                        required={true}
+                      />
                       {fields.map(({ id }, index) => (
                         <Box key={id} pb={2}>
                           <InputGroup>
@@ -1065,6 +1059,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                   px={"15px"}
                 >
                   <GridItem colSpan={2} rowSpan={2}>
+                    <span className="chakra-text css-tokvmb">*</span>
                     {additionalInformationFields.map((item, index) => {
                       return (
                         <Grid
@@ -1077,7 +1072,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                           borderRadius={"15px"}
                           mb={4}
                           alignItems="center"
-                          minH={"200px"}
+                          minH={"320px"}
                         >
                           <GridItem
                             borderRadius={"5px"}
@@ -1087,7 +1082,7 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                             cursor={"pointer"}
                             pos={"relative"}
                             height={`100%`}
-                            colSpan={2}
+                            colSpan={4}
                           >
                             {watchAdditionalInformation[index]?.length > 0 ? (
                               renderAdditionalImage(
@@ -1175,6 +1170,14 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
                           "add_information_label"
                         )}
                       </Button>
+                      {additionalFileError && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "input_required"
+                          )}
+                        </Text>
+                      )}
                     </Flex>
                   </GridItem>
                 </Grid>
@@ -1512,6 +1515,24 @@ const EventAdd = ({ page, stockPhotos, api: { organizations } }) => {
         </Box>
       )} */}
     </Box>
+  );
+};
+
+const LABEL = ({ name, required }) => {
+  if (!name) {
+    return "";
+  }
+
+  return (
+    <FormLabel {...labelStyles}>
+      {name}
+      {required && (
+        <Text as="span" color="red">
+          {" "}
+          *
+        </Text>
+      )}
+    </FormLabel>
   );
 };
 
