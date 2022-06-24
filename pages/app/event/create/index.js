@@ -11,7 +11,6 @@ import {
   FormHelperText,
   FormLabel,
   Flex,
-  Image,
   Center,
   Stack,
   Radio,
@@ -59,6 +58,14 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
+function stringifyFile(obj) {
+  const replacer = [];
+  for (const key in obj) {
+      replacer.push(key);
+  }
+  return JSON.stringify(obj, replacer);
+}
+
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   return {
@@ -96,6 +103,7 @@ const EventAdd = ({ page }) => {
   const [debugResult, setDebugResult] = useState("");
   const [stockPhoto, setStockPhoto] = useState([]);
   const [files, setFiles] = useState([]);
+  const [singleFileStatus, setSingleFileStatus] = useState(false);
   const [fileError, setFileError] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [additionalFileError, setAdditionalFileError] = useState(false);
@@ -126,6 +134,7 @@ const EventAdd = ({ page }) => {
   } = useFieldArray({ control, name: "additionalInformation" });
 
   const onFileUpload = async (e) => {
+    //e?.target?.files[0] && setSingleFileStatus(e?.target?.files[0])
     let uploadedFiles = await e.target.files[0];
     setFileError("");
     setFiles([uploadedFiles]);
@@ -275,6 +284,7 @@ const EventAdd = ({ page }) => {
               )}
             </Text>
           </Stack>
+          {/* <Code>Here::{JSON.stringify(singleFileStatus)}</Code> */}
         </GridItem>
       </Grid>
     );
@@ -299,8 +309,8 @@ const EventAdd = ({ page }) => {
     eventManager,
     contactNumber,
     registerUrl,
-    otherUrl,
     stockPhotoId,
+    otherUrls,
     remark,
     additionalInformation,
   }) => {
@@ -366,7 +376,7 @@ const EventAdd = ({ page }) => {
         eventManager: eventManager,
         contactNumber: contactNumber,
         registerUrl: registerUrl,
-        otherUrl: otherUrl,
+        otherUrls: otherUrls,
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
@@ -1186,263 +1196,6 @@ const EventAdd = ({ page }) => {
                     </Flex>
                   </GridItem>
                 </Grid>
-
-                {/* <Grid
-                  templateColumns="repeat(1, 1fr)"
-                  gap={"40px"}
-                  width="100%"
-                  px={"15px"}
-                >
-                  <GridItem colSpan={2} rowSpan={2}>
-                    {additionalInformationFields.map((item, index) => {
-                      return (
-                        <Grid
-                          key={item.id}
-                          templateColumns={{
-                            base: "repeat(5, 1fr)",
-                          }}
-                          gap={6}
-                          bgColor="#FFF"
-                          borderRadius={"15px"}
-                          mb={4}
-                          alignItems="center"
-                          minH={"200px"}
-                        >
-                          <GridItem
-                            borderRadius={"5px"}
-                            overflow={"hidden"}
-                            border={"1px solid #EFEFEF"}
-                            color={"#666666"}
-                            cursor={"pointer"}
-                            pos={"relative"}
-                            height={`100%`}
-                            colSpan={4}
-                          >
-                            {watchAdditionalInformation[index]?.file?.length >
-                            0 ? (
-                              renderAdditionalImage(
-                                watchAdditionalInformation[index]?.file?.[0]
-                              )
-                            ) : (
-                              <Box h={"100%"} minHeight={"120px"}>
-                                <Center
-                                  h={"100%"}
-                                  fontSize={"14px"}
-                                  pos={"relative"}
-                                  zIndex={1}
-                                >
-                                  <Stack
-                                    direction="column"
-                                    alignItems={"center"}
-                                    spacing={2}
-                                  >
-                                    <BsPlus />
-                                    <Text>
-                                      {" "}
-                                      {wordExtractor(
-                                        page?.content?.wordings,
-                                        "add_custom_images_label"
-                                      )}
-                                    </Text>
-                                  </Stack>
-                                </Center>
-                                <Input
-                                  type="file"
-                                  multiple={false}
-                                  opacity={0}
-                                  zIndex={2}
-                                  top={0}
-                                  left={0}
-                                  right={0}
-                                  bottom={0}
-                                  height={"100%"}
-                                  position="absolute"
-                                  ref={additionalFileRefs}
-                                  {...register(
-                                    `additionalInformation[${index}].file`
-                                  )}
-                                />
-                              </Box>
-                            )}
-                          </GridItem>
-                          <GridItem colSpan={1}>
-                            <Button
-                              colorScheme="red"
-                              size="xs"
-                              onClick={() => additionalInformationRemove(index)}
-                            >
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "delete_information_label"
-                              )}
-                            </Button>
-                          </GridItem>
-
-                          <GridItem colSpan={5}>
-                            <Divider my={2} />
-                          </GridItem>
-                        </Grid>
-                      );
-                    })}
-
-                    {additionalInformationFields.length === 0 && (
-                      <Flex justify="end">
-                        <Button
-                          type="button"
-                          onClick={() => {
-                            additionalInformationAppend({
-                              file: "",
-                              content: "",
-                            });
-                          }}
-                        >
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "add_information_label"
-                          )}
-                        </Button>
-                      </Flex>
-                    )}
-                  </GridItem>
-                </Grid> */}
-
-                {/* <SimpleDivider />
-
-                <TitleWrap
-                  title={wordExtractor(
-                    page?.content?.wordings,
-                    "represent_organization_label"
-                  )}
-                />
-
-                <Grid
-                  templateColumns="repeat(1, 1fr)"
-                  gap={"40px"}
-                  width="100%"
-                  px={"15px"}
-                >
-                  <GridItem colSpan={2}>
-                    <FormControl>
-                      <Box>
-                        <Controller
-                          name="representOrganization"
-                          isClearable
-                          control={control}
-                          render={() => (
-                            <RadioGroup
-                              onChange={(value) =>
-                                setValue("representOrganization", value)
-                              }
-                              defaultValue={"false"}
-                            >
-                              <Stack direction="column">
-                                {page?.content?.form?.representOrganization?.options.map(
-                                  ({ label, value }) => (
-                                    <Radio
-                                      key={label}
-                                      value={value}
-                                      size="md"
-                                      colorScheme={"yellow"}
-                                      onChange={() =>
-                                        setValue(
-                                          "organizationAdditionalInfo",
-                                          ""
-                                        )
-                                      }
-                                    >
-                                      {label}
-                                    </Radio>
-                                  )
-                                )}
-                              </Stack>
-                            </RadioGroup>
-                          )}
-                        />
-                      </Box>
-                    </FormControl>
-                    {watchFields[2] === "false" && (
-                      <Box
-                        mt={4}
-                        p={6}
-                        bgColor={"#FAFAFA"}
-                        borderRadius={"15px"}
-                      >
-                        <FormControl>
-                          <FormLabel {...labelStyles}>
-                            <FormLabel {...labelStyles}>
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "organization_addtional_info_title"
-                              )}
-                            </FormLabel>
-                          </FormLabel>
-                          <Textarea
-                            type="text"
-                            variant="flushed"
-                            {...register("organizationAdditionalInfo", {
-                              required: watchFields[2] === "false",
-                            })}
-                            row={4}
-                          />
-                          <FormHelperText>
-                            {errors?.organizationAdditionalInfo?.type ===
-                              "required" && (
-                              <Text color="red">
-                                {wordExtractor(
-                                  page?.content?.wordings,
-                                  "input_required"
-                                )}
-                              </Text>
-                            )}
-                          </FormHelperText>
-                        </FormControl>
-                      </Box>
-                    )}
-                  </GridItem>
-                </Grid> */}
-
-                {/* <Grid
-                  templateColumns="repeat(3, 1fr)"
-                  gap={"40px"}
-                  width="100%"
-                  px={"15px"}
-                >
-                  <GridItem
-                    borderRadius={"5px"}
-                    overflow={"hidden"}
-                    border={"1px solid #EFEFEF"}
-                    color={"#666666"}
-                    cursor={"pointer"}
-                    pos={"relative"}
-                    h={"84px"}
-                  >
-                    <Center
-                      h={"100%"}
-                      fontSize={"14px"}
-                      pos={"relative"}
-                      zIndex={1}
-                      onClick={onOpen}
-                    >
-                      <Stack alignItems={"center"} spacing={2}>
-                        <BsPlus />
-                        <Text>增加</Text>
-                      </Stack>
-                    </Center>
-                  </GridItem>
-
-                  <GridItem colSpan={3}>
-                    <Stack
-                      direction="row"
-                      fontSize="12px"
-                      color="#666666"
-                      alignItems="center"
-                      spacing={1}
-                    >
-                      <AiOutlineInfoCircle />
-                      <Text>加入照片及更多關於活動的文檔</Text>
-                    </Stack>
-                  </GridItem>
-                </Grid> */}
 
                 <Box
                   style={{

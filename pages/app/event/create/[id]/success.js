@@ -1,4 +1,12 @@
-import { Button, Box, Image, Heading, Text, VStack, Divider } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Image,
+  Heading,
+  Text,
+  VStack,
+  Divider,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { getPage } from "../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../utils/page/withPageCMS";
@@ -34,7 +42,6 @@ const EventAddSuccess = ({ page }) => {
           padding="0 25px"
         >
           <Heading textAlign="center">{page?.content?.heading?.title}</Heading>
-
           <Image
             alt=""
             height="150px"
@@ -43,32 +50,49 @@ const EventAddSuccess = ({ page }) => {
             margin="auto"
             src={page?.content?.eventSuccess?.image}
           />
-          
-          <Text fontWeight={700} fontSize="20px" pt={4}>{page?.content?.step?.title}</Text>
-
-          {wordExtractor(page?.content?.wordings, "reference_label")}: {router?.query?.id}
-
-          <Divider my={2}/>
-
+          <Text fontWeight={700} fontSize="20px" pt={4}>
+            {page?.content?.step?.title}
+          </Text>
+          {wordExtractor(page?.content?.wordings, "reference_label")}:{" "}
+          {router?.query?.id}
+          <Divider my={2} />
           <Text>{page?.content?.eventSuccess?.description}</Text>
-
           <Box width="100%" textAlign="center" marginBottom="120px">
-            <Link href="/">
-              <Button
-                color="#1E1E1E"
-                boxSizing="border-box"
-                height="46px"
-                width="114px"
-                border="2px solid #C6C6C6"
-                marginTop="30px !important"
-                borderRadius="50px"
-                bgColor="primary.400"
-              >
-                {page?.content?.eventSuccess?.button}
-              </Button>
-            </Link>
-          </Box>
+            <Button
+              color="#1E1E1E"
+              boxSizing="border-box"
+              height="46px"
+              width="114px"
+              border="2px solid #C6C6C6"
+              marginTop="30px !important"
+              borderRadius="50px"
+              bgColor="primary.400"
+              onClick={() => {
+                window.WebContext = {};
+                window.WebContext.closeWebViewHandler = () => {
+                  console.log("close web view");
+                };
 
+                let json = {
+                  name: "closeWebView",
+                  options: {
+                    callback: "closeWebViewHandler",
+                    params: {},
+                  },
+                };
+
+                if (
+                  window &&
+                  window.AppContext &&
+                  window.AppContext.postMessage
+                ) {
+                  window.AppContext.postMessage(JSON.stringify(json));
+                }
+              }}
+            >
+              {page?.content?.eventSuccess?.button}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </VStack>

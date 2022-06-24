@@ -289,7 +289,7 @@ const EventAdd = ({ page }) => {
     eventManager,
     contactNumber,
     registerUrl,
-    otherUrl,
+    otherUrls,
     stockPhotoId,
     remark,
     additionalInformation,
@@ -356,7 +356,7 @@ const EventAdd = ({ page }) => {
         eventManager: eventManager,
         contactNumber: contactNumber,
         registerUrl: registerUrl,
-        otherUrl: otherUrl,
+        otherUrls: otherUrls,
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
