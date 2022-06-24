@@ -22,6 +22,7 @@ import {
   Radio,
   RadioGroup,
   Center,
+  Code
 } from "@chakra-ui/react";
 import _ from "lodash";
 import DividerSimple from "../../../components/DividerSimple";
@@ -82,6 +83,7 @@ const EventAdd = ({ page }) => {
   });
   const additionalFileRefs = useRef(null);
   const [files, setFiles] = useState([]);
+  const [debugResult, setDebugResult] = useState("");
   const [stockPhotoId, setStockPhotoId] = useState("");
   const [stockPhoto, setStockPhoto] = useState([]);
   const [step, setStep] = useState("step1");
@@ -358,7 +360,7 @@ const EventAdd = ({ page }) => {
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
-          file: bannerUploadData?.FileUpload?.[0],
+          file: bannerUploadData?.FileUpload?.[0]??"",
           stockPhotoId: stockPhotoId ?? "",
         },
         additionalInformation:
@@ -368,7 +370,9 @@ const EventAdd = ({ page }) => {
 
     const response = await createEvent(input);
 
-    if (response?.data) {
+    setDebugResult(JSON.stringify(response));
+
+    if (response?.data?.id) {
       router.push(`/event/create/${response?.data.id}/success`);
     }
   };
@@ -912,12 +916,13 @@ const EventAdd = ({ page }) => {
                     </GridItem>
                     <GridItem>
                       <FormControl>
-                        <FormLabel {...labelStyles}>
-                          {wordExtractor(
+                        <LABEL
+                          name={wordExtractor(
                             page?.content?.wordings,
                             "event_manager_label"
                           )}
-                        </FormLabel>
+                          required={true}
+                        />
                         <Input
                           type="text"
                           variant="flushed"
@@ -925,7 +930,9 @@ const EventAdd = ({ page }) => {
                             page?.content?.wordings,
                             "event_manager_placeholder"
                           )}
-                          {...register("eventManager")}
+                          {...register("eventManager", {
+                            required: true,
+                          })}
                         />
                       </FormControl>
                     </GridItem>
@@ -1373,6 +1380,9 @@ const EventAdd = ({ page }) => {
                   >
                     {wordExtractor(page?.content?.wordings, "submit_label")}
                   </Button>
+
+                  {debugResult && <Code>{debugResult}</Code>}
+
                 </Flex>
               </Box>
 

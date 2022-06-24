@@ -608,9 +608,6 @@ const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
               <Center h={"100%"}>
                 <Box>
                   <Image src={popupSrc} width="100%" />
-                  <Text p={2} color="#FFF">
-                    內容....(API)
-                  </Text>
                 </Box>
               </Center>
             </Box>

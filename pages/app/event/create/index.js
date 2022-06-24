@@ -24,6 +24,7 @@ import {
   ModalBody,
   useDisclosure,
   Divider,
+  Code
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -92,6 +93,7 @@ const EventAdd = ({ page }) => {
   const additionalFileRefs = useRef(null);
   const [step, setStep] = useState("step1");
   const [stockPhotoId, setStockPhotoId] = useState("");
+  const [debugResult, setDebugResult] = useState("");
   const [stockPhoto, setStockPhoto] = useState([]);
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
@@ -368,7 +370,7 @@ const EventAdd = ({ page }) => {
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
-          file: bannerUploadData?.FileUpload?.[0],
+          file: bannerUploadData?.FileUpload?.[0]??"",
           stockPhotoId: stockPhotoId,
         },
         additionalInformation:
@@ -378,9 +380,11 @@ const EventAdd = ({ page }) => {
 
     const response = await createEvent(input);
 
-    // if (response?.data) {
-    //   router.push(`/event/create/${response?.data.id}/success`);
-    // }
+    setDebugResult(JSON.stringify(response));
+
+    if (response?.data?.id) {
+      router.push(`/event/create/${response?.data.id}/success`);
+    }
   };
 
   const renderAdditionalImage = useCallback((data) => {
@@ -894,12 +898,13 @@ const EventAdd = ({ page }) => {
                   </GridItem>
                   <GridItem>
                     <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "event_manager_label"
-                        )}
-                      </FormLabel>
+                    <LABEL
+                          name={wordExtractor(
+                            page?.content?.wordings,
+                            "event_manager_label"
+                          )}
+                          required={true}
+                        />
                       <Input
                         type="text"
                         variant="flushed"
@@ -907,7 +912,9 @@ const EventAdd = ({ page }) => {
                           page?.content?.wordings,
                           "event_manager_placeholder"
                         )}
-                        {...register("eventManager")}
+                        {...register("eventManager", {
+                            required: true,
+                          })}
                       />
                     </FormControl>
                   </GridItem>
@@ -1461,6 +1468,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
+                {debugResult && <Code>{debugResult}</Code>}
               </VStack>
             </Box>
             <MoreInformationModal onClose={onClose} />
