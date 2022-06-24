@@ -15,10 +15,11 @@ export async function postData(url = "", data = {}) {
 
 export const createEvent = async (submitData) => {
   try {
-    postData(
-      `/api/app/event/create`,
-      submitData
-    ).then((data) => data);
+    const result = postData(`/api/app/event/create`, submitData).then(
+      (data) => data
+    );
+
+    return result
   } catch (e) {
     return null;
   }

@@ -22,7 +22,7 @@ import {
   Radio,
   RadioGroup,
   Center,
-  Code
+  Code,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import DividerSimple from "../../../components/DividerSimple";
@@ -59,7 +59,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props
+      ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
@@ -75,7 +75,7 @@ const EventAdd = ({ page }) => {
     watch,
     setValue,
     setError,
-    getValues
+    getValues,
   } = useForm({
     defaultValues: {
       otherUrls: [""],
@@ -104,7 +104,7 @@ const EventAdd = ({ page }) => {
   useEffect(() => {
     async function getStockPhotoData() {
       const data = (await getStockPhoto()) ?? [];
-      setStockPhoto(data)
+      setStockPhoto(data);
     }
     getStockPhotoData();
   }, [router]);
@@ -207,10 +207,10 @@ const EventAdd = ({ page }) => {
             overflow={"hidden"}
             key={d.id}
             onClick={() => {
-              const currentStockPhotoId = getValues("stockPhotoId")
-              if(currentStockPhotoId === d.id){
+              const currentStockPhotoId = getValues("stockPhotoId");
+              if (currentStockPhotoId === d.id) {
                 setValue("stockPhotoId", "");
-                setStockPhotoId("")
+                setStockPhotoId("");
                 return;
               }
               setStockPhotoId(d.id);
@@ -324,7 +324,7 @@ const EventAdd = ({ page }) => {
         .filter((d) => d);
     } else {
       setAdditionalFileError(true);
-      return
+      return;
     }
 
     if (filesAdditionalInformalUploadData) {
@@ -360,7 +360,7 @@ const EventAdd = ({ page }) => {
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
-          file: bannerUploadData?.FileUpload?.[0]??"",
+          file: bannerUploadData?.FileUpload?.[0] ?? "",
           stockPhotoId: stockPhotoId ?? "",
         },
         additionalInformation:
@@ -372,7 +372,7 @@ const EventAdd = ({ page }) => {
 
     setDebugResult(JSON.stringify(response));
 
-    if (response?.data?.id) {
+    if (!response?.error) {
       router.push(`/event/create/${response?.data.id}/success`);
     }
   };
@@ -1198,13 +1198,13 @@ const EventAdd = ({ page }) => {
                           )}
                         </Button>
                         {additionalFileError && (
-                        <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "input_required"
-                          )}
-                        </Text>
-                      )}
+                          <Text color="red">
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "input_required"
+                            )}
+                          </Text>
+                        )}
                       </Flex>
                     </GridItem>
                   </Grid>
@@ -1382,7 +1382,6 @@ const EventAdd = ({ page }) => {
                   </Button>
 
                   {debugResult && <Code>{debugResult}</Code>}
-
                 </Flex>
               </Box>
 

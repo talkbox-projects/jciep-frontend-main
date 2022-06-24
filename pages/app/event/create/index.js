@@ -382,7 +382,7 @@ const EventAdd = ({ page }) => {
 
     setDebugResult(JSON.stringify(response));
 
-    if (response?.data?.id) {
+    if (!response?.error) {
       router.push(`/event/create/${response?.data.id}/success`);
     }
   };
