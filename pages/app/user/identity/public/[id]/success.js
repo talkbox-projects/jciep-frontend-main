@@ -41,7 +41,10 @@ export const getServerSideProps = async (context) => {
 const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   const [, removeCredential] = useCredential();
 
-  const sendLoginSuccessResponse = () => {
+  console.log("identityId-", identityId);
+  console.log("token-", token);
+
+  const handleSendLoginSuccessResponse = () => {
     window.WebContext = {};
     window.WebContext.sendLoginSuccessResponseHandler = (response) => {
       alert(JSON.stringify(response));
@@ -152,6 +155,14 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                 </Box>
               </Flex>
             </Center>
+            <br/>
+
+            <Code>
+                identityId: {identityId}
+                <br />
+                token: {token}
+                <br />
+              </Code>
 
             <Box bgColor="#FFF">
               <Box
@@ -172,7 +183,7 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                     height="44px"
                     width="100%"
                     onClick={() => {
-                      sendLoginSuccessResponse();
+                      handleSendLoginSuccessResponse();
                       closeWebViewHandler();
                     }}
                   >
