@@ -24,7 +24,7 @@ import {
   useDisclosure,
   Divider,
   Code,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -62,7 +62,7 @@ const labelStyles = {
 function stringifyFile(obj) {
   const replacer = [];
   for (const key in obj) {
-      replacer.push(key);
+    replacer.push(key);
   }
   return JSON.stringify(obj, replacer);
 }
@@ -74,7 +74,7 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      lang: context.locale
+      lang: context.locale,
     },
   };
 };
@@ -90,11 +90,12 @@ const EventAdd = ({ page }) => {
     watch,
     setValue,
     setError,
-    getValues
+    getValues,
   } = useForm({
     defaultValues: {
       otherUrls: [""],
       additionalInformation: [{ file: "", content: "" }],
+      bannerImage: [{ file: "", content: "" }],
       representOrganization: "false",
     },
   });
@@ -115,6 +116,7 @@ const EventAdd = ({ page }) => {
   const getDescriptionCount = watch("description", 0);
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
   const watchAdditionalInformation = watch("additionalInformation");
+  const watchBannerImage = watch("bannerImage");
   const { fields, append, remove } = useFieldArray({
     control,
     name: "otherUrls",
@@ -123,7 +125,7 @@ const EventAdd = ({ page }) => {
   useEffect(() => {
     async function getStockPhotoData() {
       const data = (await getStockPhoto()) ?? [];
-      setStockPhoto(data)
+      setStockPhoto(data);
     }
     getStockPhotoData();
   }, [router]);
@@ -133,6 +135,12 @@ const EventAdd = ({ page }) => {
     append: additionalInformationAppend,
     remove: additionalInformationRemove,
   } = useFieldArray({ control, name: "additionalInformation" });
+
+  const {
+    fields: bannerField,
+    append: bannerAppend,
+    remove: bannerRemove,
+  } = useFieldArray({ control, name: "bannerImage" });
 
   const onFileUpload = async (e) => {
     //e?.target?.files[0] && setSingleFileStatus(e?.target?.files[0])
@@ -144,166 +152,165 @@ const EventAdd = ({ page }) => {
   function stringify(obj) {
     const replacer = [];
     for (const key in obj) {
-        replacer.push(key);
+      replacer.push(key);
     }
     return JSON.stringify(obj, replacer);
-}
+  }
 
+  // const ImagesComponent = () => {
+  //   const inputRef = useRef(null);
+  //   const UploadBox = () => (
+  //     <GridItem
+  //       borderRadius={"5px"}
+  //       overflow={"hidden"}
+  //       border={"1px solid #EFEFEF"}
+  //       color={"#666666"}
+  //       cursor={"pointer"}
+  //       pos={"relative"}
+  //       onClick={() => {
+  //         inputRef.current.click();
+  //       }}
+  //     >
+  //       <Input
+  //         type="file"
+  //         opacity={0}
+  //         onInput={onFileUpload}
+  //         pos={"absolute"}
+  //         top={0}
+  //         left={0}
+  //         right={0}
+  //         bottom={0}
+  //         zIndex={2}
+  //         h={"100%"}
+  //         ref={inputRef}
+  //         accept="image/*"
+  //       />
+  //       <Center h={"100%"} fontSize={"14px"} pos={"relative"} zIndex={1} py={4}>
+  //         <Stack direction="column" alignItems={"center"} spacing={2}>
+  //           <BsPlus />
+  //           <Text>
+  //             {" "}
+  //             {wordExtractor(
+  //               page?.content?.wordings,
+  //               "add_custom_images_label"
+  //             )}
+  //           </Text>
+  //         </Stack>
+  //       </Center>
+  //     </GridItem>
+  //   );
 
-  const ImagesComponent = () => {
-    const inputRef = useRef(null);
-    const UploadBox = () => (
-      <GridItem
-        borderRadius={"5px"}
-        overflow={"hidden"}
-        border={"1px solid #EFEFEF"}
-        color={"#666666"}
-        cursor={"pointer"}
-        pos={"relative"}
-        onClick={() => {
-          inputRef.current.click();
-        }}
-      >
-        <Input
-          type="file"
-          opacity={0}
-          onInput={onFileUpload}
-          pos={"absolute"}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={2}
-          h={"100%"}
-          ref={inputRef}
-          accept="image/*"
-        />
-        <Center h={"100%"} fontSize={"14px"} pos={"relative"} zIndex={1} py={4}>
-          <Stack direction="column" alignItems={"center"} spacing={2}>
-            <BsPlus />
-            <Text>
-              {" "}
-              {wordExtractor(
-                page?.content?.wordings,
-                "add_custom_images_label"
-              )}
-            </Text>
-          </Stack>
-        </Center>
-      </GridItem>
-    );
+  //   const ImagesBox = () => {
+  //     return files?.map((file, index) => {
+  //       let url = URL.createObjectURL(file);
+  //       return (
+  //         <GridItem
+  //           borderRadius={"5px"}
+  //           overflow={"hidden"}
+  //           key={url + index}
+  //           border="2px solid #007878"
+  //           pos="relative"
+  //           cursor="pointer"
+  //         >
+  //           <Box position="absolute" top={2} right={2}>
+  //             <AiFillMinusCircle
+  //               color="#007878"
+  //               fontSize={18}
+  //               cursor="pointer"
+  //               onClick={() => setFiles([])}
+  //             />
+  //           </Box>
+  //           <Box
+  //             bgImg={`url(${url})`}
+  //             w={"100%"}
+  //             h={"75px"}
+  //             bgSize={"cover"}
+  //             bgPosition={"center center"}
+  //           />
+  //           <br />
+  //           <Image src={url} alt={""} />
+  //         </GridItem>
+  //       );
+  //     });
+  //   };
 
-    const ImagesBox = () => {
-      return files?.map((file, index) => {
-        let url = URL.createObjectURL(file);
-        return (
-          <GridItem
-            borderRadius={"5px"}
-            overflow={"hidden"}
-            key={url + index}
-            border="2px solid #007878"
-            pos="relative"
-            cursor="pointer"
-          >
-            <Box position="absolute" top={2} right={2}>
-              <AiFillMinusCircle
-                color="#007878"
-                fontSize={18}
-                cursor="pointer"
-                onClick={() => setFiles([])}
-              />
-            </Box>
-            <Box
-              bgImg={`url(${url})`}
-              w={"100%"}
-              h={"75px"}
-              bgSize={"cover"}
-              bgPosition={"center center"}
-            />
-            <br/>
-            <Image src={url} alt={""} />
-          </GridItem>
-        );
-      });
-    };
+  //   return (
+  //     <Grid
+  //       templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+  //       gap={"20px"}
+  //       width="100%"
+  //     >
+  //       {stockPhoto?.map((d) => (
+  //         <GridItem
+  //           borderRadius={"5px"}
+  //           overflow={"hidden"}
+  //           key={d.id}
+  //           onClick={() => {
+  //             const currentStockPhotoId = getValues("stockPhotoId");
+  //             if (currentStockPhotoId === d.id) {
+  //               setValue("stockPhotoId", "");
+  //               setStockPhotoId("");
+  //               return;
+  //             }
+  //             setStockPhotoId(d.id);
+  //             setValue("stockPhotoId", d.id);
+  //           }}
+  //           cursor="pointer"
+  //         >
+  //           <Box
+  //             bgImg={`url('${d?.url}')`}
+  //             w={"100%"}
+  //             h={"75px"}
+  //             bgSize={"cover"}
+  //             border={`3px solid ${stockPhotoId === d.id ? "#F6D644" : "#FFF"}`}
+  //           />
+  //         </GridItem>
+  //       ))}
 
-    return (
-      <Grid
-        templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-        gap={"20px"}
-        width="100%"
-      >
-        {stockPhoto?.map((d) => (
-          <GridItem
-            borderRadius={"5px"}
-            overflow={"hidden"}
-            key={d.id}
-            onClick={() => {
-              const currentStockPhotoId = getValues("stockPhotoId")
-              if(currentStockPhotoId === d.id){
-                setValue("stockPhotoId", "");
-                setStockPhotoId("")
-                return;
-              }
-              setStockPhotoId(d.id);
-              setValue("stockPhotoId", d.id);
-            }}
-            cursor="pointer"
-          >
-            <Box
-              bgImg={`url('${d?.url}')`}
-              w={"100%"}
-              h={"75px"}
-              bgSize={"cover"}
-              border={`3px solid ${stockPhotoId === d.id ? "#F6D644" : "#FFF"}`}
-            />
-          </GridItem>
-        ))}
+  //       <Code>Debug::{stringify(files)}</Code>
 
-        <Code>Debug::{stringify(files)}</Code>
+  //       {files.length > 0 ? <ImagesBox /> : <UploadBox />}
 
-        {files.length > 0 ? <ImagesBox /> : <UploadBox />}
+  //       {/* {files.length > 0 && (
+  //         <GridItem borderRadius={"5px"} overflow={"hidden"}>
+  //           <Box position={"relative"}>
+  //             <Input
+  //               type="file"
+  //               opacity={0}
+  //               onChange={onFileUpload}
+  //               onClick={(event) => (event.currentTarget.value = null)}
+  //               pos={"absolute"}
+  //               top={0}
+  //               left={0}
+  //               right={0}
+  //               bottom={0}
+  //               zIndex={2}
+  //             />
+  //           </Box>
+  //         </GridItem>
+  //       )} */}
 
-        {/* {files.length > 0 && (
-          <GridItem borderRadius={"5px"} overflow={"hidden"}>
-            <Box position={"relative"}>
-              <Input
-                type="file"
-                opacity={0}
-                onChange={onFileUpload}
-                onClick={(event) => (event.currentTarget.value = null)}
-                pos={"absolute"}
-                top={0}
-                left={0}
-                right={0}
-                bottom={0}
-                zIndex={2}
-              />
-            </Box>
-          </GridItem>
-        )} */}
-
-        <GridItem colSpan={{ base: 2, md: 4 }}>
-          <Stack
-            direction="row"
-            fontSize="12px"
-            color="#666666"
-            alignItems="center"
-            spacing={1}
-          >
-            <AiOutlineInfoCircle />
-            <Text>
-              {wordExtractor(
-                page?.content?.wordings,
-                "add_custom_image_description_label"
-              )}
-            </Text>
-          </Stack>
-          {/* <Code>Here::{JSON.stringify(singleFileStatus)}</Code> */}
-        </GridItem>
-      </Grid>
-    );
-  };
+  //       <GridItem colSpan={{ base: 2, md: 4 }}>
+  //         <Stack
+  //           direction="row"
+  //           fontSize="12px"
+  //           color="#666666"
+  //           alignItems="center"
+  //           spacing={1}
+  //         >
+  //           <AiOutlineInfoCircle />
+  //           <Text>
+  //             {wordExtractor(
+  //               page?.content?.wordings,
+  //               "add_custom_image_description_label"
+  //             )}
+  //           </Text>
+  //         </Stack>
+  //         {/* <Code>Here::{JSON.stringify(singleFileStatus)}</Code> */}
+  //       </GridItem>
+  //     </Grid>
+  //   );
+  // };
 
   const onFormSubmit = async ({
     name,
@@ -328,6 +335,7 @@ const EventAdd = ({ page }) => {
     otherUrls,
     remark,
     additionalInformation,
+    bannerImage
   }) => {
     setAdditionalFileError(false);
     let bannerUploadData, filesAdditionalInformalUploadData;
@@ -343,10 +351,29 @@ const EventAdd = ({ page }) => {
       }
     `;
 
-    if (!_.isEmpty(files)) {
-      bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
-        file: files,
-      });
+    // if (!_.isEmpty(files)) {
+    //   bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
+    //     file: files,
+    //   });
+    // }
+
+    if (!_.isEmpty(bannerImage)) {
+      bannerUploadData = await bannerImage
+        .map((d) => {
+          if (d[0]) {
+            return d[0];
+          }
+        })
+        .filter((d) => d);
+    } 
+
+    if (bannerUploadData) {
+      bannerUploadData = await getGraphQLClient().request(
+        FileUploadmutation,
+        {
+          file: bannerUploadData,
+        }
+      );
     }
 
     if (!_.isEmpty(additionalInformation)) {
@@ -359,7 +386,7 @@ const EventAdd = ({ page }) => {
         .filter((d) => d);
     } else {
       setAdditionalFileError(true);
-      return
+      return;
     }
 
     if (filesAdditionalInformalUploadData) {
@@ -395,7 +422,7 @@ const EventAdd = ({ page }) => {
         stockPhotoId: stockPhotoId,
         remark: remark,
         banner: {
-          file: bannerUploadData?.FileUpload?.[0]??"",
+          file: bannerUploadData?.FileUpload?.[0] ?? "",
           stockPhotoId: stockPhotoId,
         },
         additionalInformation:
@@ -433,9 +460,7 @@ const EventAdd = ({ page }) => {
     <Box pt={{ base: "64px" }}>
       {step === "step1" && (
         <Box>
-          <NAV
-            title={page?.content?.step?.title}
-          />
+          <NAV title={page?.content?.step?.title} />
           <Box justifyContent="center" width="100%">
             <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
               <VStack
@@ -924,13 +949,13 @@ const EventAdd = ({ page }) => {
                   </GridItem>
                   <GridItem>
                     <FormControl>
-                    <LABEL
-                          name={wordExtractor(
-                            page?.content?.wordings,
-                            "event_manager_label"
-                          )}
-                          required={true}
-                        />
+                      <LABEL
+                        name={wordExtractor(
+                          page?.content?.wordings,
+                          "event_manager_label"
+                        )}
+                        required={true}
+                      />
                       <Input
                         type="text"
                         variant="flushed"
@@ -939,8 +964,8 @@ const EventAdd = ({ page }) => {
                           "event_manager_placeholder"
                         )}
                         {...register("eventManager", {
-                            required: true,
-                          })}
+                          required: true,
+                        })}
                       />
                     </FormControl>
                   </GridItem>
@@ -1074,7 +1099,180 @@ const EventAdd = ({ page }) => {
                   width="100%"
                   px={"15px"}
                 >
-                    <ImagesComponent />
+                  {/* <ImagesComponent /> */}
+                  <Grid
+                    templateColumns={{
+                      base: "repeat(2, 1fr)",
+                      md: "repeat(4, 1fr)",
+                    }}
+                    gap={"20px"}
+                    width="100%"
+                  >
+                    {stockPhoto?.map((d) => (
+                      <GridItem
+                        borderRadius={"5px"}
+                        overflow={"hidden"}
+                        key={d.id}
+                        onClick={() => {
+                          const currentStockPhotoId = getValues("stockPhotoId");
+                          if (currentStockPhotoId === d.id) {
+                            setValue("stockPhotoId", "");
+                            setStockPhotoId("");
+                            return;
+                          }
+                          setStockPhotoId(d.id);
+                          setValue("stockPhotoId", d.id);
+                        }}
+                        cursor="pointer"
+                      >
+                        <Box
+                          bgImg={`url('${d?.url}')`}
+                          w={"100%"}
+                          h={"75px"}
+                          bgSize={"cover"}
+                          border={`3px solid ${
+                            stockPhotoId === d.id ? "#F6D644" : "#FFF"
+                          }`}
+                        />
+                      </GridItem>
+                    ))}
+                    <GridItem colSpan={{ base: 2, md: 4 }}>
+                      <Stack
+                        direction="row"
+                        fontSize="12px"
+                        color="#666666"
+                        alignItems="center"
+                        spacing={1}
+                      >
+                        <AiOutlineInfoCircle />
+                        <Text>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "add_custom_image_description_label"
+                          )}
+                        </Text>
+                      </Stack>
+                      {/* <Code>Here::{JSON.stringify(singleFileStatus)}</Code> */}
+                    </GridItem>
+                  </Grid>
+
+                  {bannerField.map((item, index) => {
+                    return (
+                      <Grid
+                        key={item.id}
+                        templateColumns={{
+                          base: "repeat(5, 1fr)",
+                        }}
+                        gap={6}
+                        bgColor="#FFF"
+                        borderRadius={"15px"}
+                        mb={4}
+                        alignItems="center"
+                        minH={"320px"}
+                      >
+                        <GridItem
+                          borderRadius={"5px"}
+                          overflow={"hidden"}
+                          border={"1px solid #EFEFEF"}
+                          color={"#666666"}
+                          cursor={"pointer"}
+                          pos={"relative"}
+                          height={`100%`}
+                          colSpan={4}
+                        >
+                          {watchBannerImage[index]?.length > 0 ? (
+                            renderAdditionalImage(watchBannerImage[index]?.[0])
+                          ) : (
+                            <Box
+                              h={"100%"}
+                              minHeight={"200px"}
+                              cursor="pointer"
+                            >
+                              <Center
+                                h={"100%"}
+                                fontSize={"14px"}
+                                pos={"relative"}
+                                zIndex={1}
+                              >
+                                <Stack
+                                  direction="column"
+                                  alignItems={"center"}
+                                  spacing={2}
+                                >
+                                  <BsPlus />
+                                  <Text>
+                                    {" "}
+                                    {wordExtractor(
+                                      page?.content?.wordings,
+                                      "add_custom_file_label"
+                                    )}
+                                  </Text>
+                                </Stack>
+                              </Center>
+                              <Input
+                                type="file"
+                                multiple={false}
+                                opacity={0}
+                                zIndex={2}
+                                top={0}
+                                left={0}
+                                right={0}
+                                bottom={0}
+                                height={"100%"}
+                                position="absolute"
+                                ref={additionalFileRefs}
+                                maxFileCount={1}
+                                accept=".png, .jpg, .jpeg"
+                                {...register(`bannerImage[${index}]`)}
+                              />
+                            </Box>
+                          )}
+                        </GridItem>
+                        <GridItem colSpan={1}>
+                          <Button
+                            colorScheme="red"
+                            size="xs"
+                            onClick={() => bannerRemove(index)}
+                          >
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "delete_information_label"
+                            )}
+                          </Button>
+                        </GridItem>
+
+                        <GridItem colSpan={5}>
+                          <Divider my={2} />
+                        </GridItem>
+                      </Grid>
+                    );
+                  })}
+
+                  {!watchBannerImage?.[0] && (
+                    <Flex>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          bannerAppend({
+                            file: "",
+                          });
+                        }}
+                      >
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "add_image_label"
+                        )}
+                      </Button>
+                      {additionalFileError && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "input_required"
+                          )}
+                        </Text>
+                      )}
+                    </Flex>
+                  )}
                 </Grid>
 
                 <SimpleDivider />
@@ -1469,8 +1667,7 @@ const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
       borderBottom="1px solid #EFEFEF"
       mb={"40px"}
     >
-      <GridItem>
-      </GridItem>
+      <GridItem></GridItem>
       <GridItem textAlign="center">
         {title && <Text fontWeight={700}>{title}</Text>}
         {subTitle && (
