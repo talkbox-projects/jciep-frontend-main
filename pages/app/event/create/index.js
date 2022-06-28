@@ -23,7 +23,8 @@ import {
   ModalBody,
   useDisclosure,
   Divider,
-  Code
+  Code,
+  Image
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -140,6 +141,15 @@ const EventAdd = ({ page }) => {
     setFiles([uploadedFiles]);
   };
 
+  function stringify(obj) {
+    const replacer = [];
+    for (const key in obj) {
+        replacer.push(key);
+    }
+    return JSON.stringify(obj, replacer);
+}
+
+
   const ImagesComponent = () => {
     const inputRef = useRef(null);
     const UploadBox = () => (
@@ -209,6 +219,8 @@ const EventAdd = ({ page }) => {
               bgSize={"cover"}
               bgPosition={"center center"}
             />
+            <br/>
+            <Image src={url} alt={""} />
           </GridItem>
         );
       });
@@ -247,9 +259,11 @@ const EventAdd = ({ page }) => {
           </GridItem>
         ))}
 
+        <Code>Debug::{stringify(files)}</Code>
+
         {files.length > 0 ? <ImagesBox /> : <UploadBox />}
 
-        {files.length > 0 && (
+        {/* {files.length > 0 && (
           <GridItem borderRadius={"5px"} overflow={"hidden"}>
             <Box position={"relative"}>
               <Input
@@ -266,7 +280,7 @@ const EventAdd = ({ page }) => {
               />
             </Box>
           </GridItem>
-        )}
+        )} */}
 
         <GridItem colSpan={{ base: 2, md: 4 }}>
           <Stack
@@ -390,7 +404,8 @@ const EventAdd = ({ page }) => {
 
     const response = await createEvent(input);
 
-    setDebugResult(JSON.stringify(response));
+    // For iOS mobile debug
+    // setDebugResult(JSON.stringify(response));
 
     if (!response?.error) {
       router.push(`/event/create/${response?.data.id}/success`);
@@ -1058,9 +1073,7 @@ const EventAdd = ({ page }) => {
                   width="100%"
                   px={"15px"}
                 >
-                  <GridItem>
                     <ImagesComponent />
-                  </GridItem>
                 </Grid>
 
                 <SimpleDivider />
