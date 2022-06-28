@@ -175,6 +175,10 @@ const AppUserRegister = ({ page }) => {
       [Debug: getRegistrationInfoHandler]: {JSON.stringify(appRegistrationInfo)}
     </Code>
 
+    <Code>
+      [otpVerifyStatus]: {JSON.stringify(otpVerifyStatus)}
+    </Code>
+
 
       <Grid
         templateColumns="repeat(3, 1fr)"

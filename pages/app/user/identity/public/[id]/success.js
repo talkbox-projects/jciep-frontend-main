@@ -33,16 +33,15 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
       token: cookies["jciep-token"],
-      identityId: cookies["jciep-identityId"],
     },
   };
 };
 
 const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
   const [, removeCredential] = useCredential();
+  const router = useRouter();
 
-  console.log("identityId-", identityId);
-  console.log("token-", token);
+  const {id} = router.query;
 
   const handleSendLoginSuccessResponse = () => {
     window.WebContext = {};
@@ -59,7 +58,7 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
         callback: "sendLoginSuccessResponseHandler",
         params: {
           token: token,
-          identityId: identityId,
+          identityId: id,
         },
       },
     };
@@ -71,25 +70,6 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
     if (!window.AppContext?.postMessage) {
       alert("window.AppContext.postMessage undefined");
     }
-
-    if (window && window.AppContext && window.AppContext.postMessage) {
-      window.AppContext.postMessage(JSON.stringify(json));
-    }
-  };
-
-  const closeWebViewHandler = () => {
-    window.WebContext = {};
-    window.WebContext.closeWebViewHandler = () => {
-      console.log("close web view");
-    };
-
-    let json = {
-      name: "closeWebView",
-      options: {
-        callback: "closeWebViewHandler",
-        params: {},
-      },
-    };
 
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
@@ -137,7 +117,7 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
             />
 
             <Center>
-              <Flex direction="row" ml={"-30px"}>
+              <Flex direction="row" ml={"-30px"} h={'80px'}>
                 <Image
                   src={"/images/app/click.svg"}
                   alt=""
@@ -158,7 +138,7 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
             <br/>
 
             <Code>
-                identityId: {identityId}
+                identityId: {id}
                 <br />
                 token: {token}
                 <br />
@@ -184,7 +164,6 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                     width="100%"
                     onClick={() => {
                       handleSendLoginSuccessResponse();
-                      closeWebViewHandler();
                     }}
                   >
                     {page?.content?.publicSuccess?.button}
