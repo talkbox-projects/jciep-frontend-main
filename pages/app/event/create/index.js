@@ -167,7 +167,7 @@ const EventAdd = ({ page }) => {
         <Input
           type="file"
           opacity={0}
-          onChange={onFileUpload}
+          onInput={onFileUpload}
           pos={"absolute"}
           top={0}
           left={0}
@@ -176,6 +176,7 @@ const EventAdd = ({ page }) => {
           zIndex={2}
           h={"100%"}
           ref={inputRef}
+          accept="image/*"
         />
         <Center h={"100%"} fontSize={"14px"} pos={"relative"} zIndex={1} py={4}>
           <Stack direction="column" alignItems={"center"} spacing={2}>
@@ -1234,7 +1235,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                {debugResult && <Code>{debugResult}</Code>}
+                {/* {debugResult && <Code>{debugResult}</Code>} */}
               </VStack>
             </Box>
             <MoreInformationModal onClose={onClose} />
