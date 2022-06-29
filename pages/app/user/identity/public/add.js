@@ -15,7 +15,7 @@ import {
   Image,
   Center,
   Stack,
-  Code
+  Code,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -53,10 +53,6 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
-      // token: cookies['jciep-token']??null,
-      // identityId: cookies['jciep-identityId']??null,
-      // cToken: cookies['c-token']??null,
-      // cIdentityId: cookies['c-identityId']??null
     },
   };
 };
@@ -74,7 +70,7 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identityId, cToken, cIdentityId}) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   const router = useRouter();
   const { user } = useAppContext();
   const [formState, setFormState] = useState([]);
@@ -91,45 +87,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
     setError,
     getValues,
   } = useForm();
-
-  // useEffect(()=> {
-
-  //   window.WebContext = {};
-  //   window.WebContext.getRegistrationInfoHandler = (response) => {
-  //     alert(JSON.stringify(response));
-  //     alert(`RESPONSE RESULT:::`, response?.result)
-
-  //     if(!response.result) {
-  //       alert("response.result null")
-  //     } else {
-  //       setAppRegistrationInfo(response?.result)
-
-  //       alert("SUCCESS RESPONSE:::", JSON.stringify(response))
-  //     }
-  //   }
-
-  //   const json = {
-  //     name: "getRegistrationInfo",
-  //     options: {
-  //         callback: "getRegistrationInfoHandler"
-  //     }
-  //   }
-
-  //   if(!window.AppContext){
-  //     alert("window.AppContext undefined")
-  //   }
-
-  //   if(!window.AppContext?.postMessage){
-  //     alert("window.AppContext.postMessage undefined")
-  //   }
-
-  //   if(window && window.AppContext && window.AppContext.postMessage){
-  //     window.AppContext.postMessage(JSON.stringify(json))
-  //     alert("POS MESSAGE CALLED:::")
-  //   }
-
-  // },[])
-
 
   const watchFields = watch(
     [
@@ -155,15 +112,15 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
         input,
       });
       if (data && data.IdentityCreate) {
-        router.push(
-          `/app/user/identity/public/${data.IdentityCreate.id}/success`
-        );
         if (invitationCode) {
           await OrganizationMemberJoin({
             invitationCode: invitationCode,
             identityId: data.IdentityCreate.id,
           });
         }
+        router.push(
+          `/app/user/identity/public/${data.IdentityCreate.id}/success`
+        );
       }
     } catch (e) {
       console.error(e);
@@ -191,7 +148,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
   };
 
   const startCreateOrganization = async (input) => {
-
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -257,16 +213,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
     setFormState(input);
     setStep("step2");
   };
-
-  useEffect(() => {
-    // var json = {
-    //   name: "getRegistrationInfo",
-    //   options: {
-    //     callback: "getRegistrationInfoHandler",
-    //   },
-    // };
-    // window.AppContext.postMessage(json);
-  }, [formState]);
 
   if (step === "step2") {
     return (
@@ -445,6 +391,17 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
                                 </Box>
                               </Flex>
                             </FormHelperText>
+
+                            <FormHelperText>
+                              {errors?.invitationCode && (
+                                <Text color="red">
+                                  {wordExtractor(
+                                    page?.content?.wordings,
+                                    errors?.invitationCode?.message
+                                  )}{" "}
+                                </Text>
+                              )}
+                            </FormHelperText>
                           </FormControl>
                         </Box>
                       )}
@@ -481,7 +438,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
           handleClickLeftIcon={() => router.push(`/app/user/register`)}
         />
         {/** For testing, remove later */}
-        {query?.redirectFrom==='publicUpdatePage' && <Code fontSize="11px" colorScheme='red'>{'Redirect from app/user/identity/public/update || app/user/identity/update, cased by user without any identity'}</Code>}<br/>
+        {/* {query?.redirectFrom==='publicUpdatePage' && <Code fontSize="11px" colorScheme='red'>{'Redirect from app/user/identity/public/update || app/user/identity/update, cased by user without any identity'}</Code>}<br/> */}
         {/* <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
@@ -489,15 +446,15 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token, identit
        */}
         <Box justifyContent="center" width="100%">
           <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
-          <Text
-          fontSize="20px"
-          letterSpacing="1.5px"
-          fontWeight={600}
-          px={"15px"}
-          mt={0}
-        >
-          {page?.content?.step?.title}
-        </Text>
+            <Text
+              fontSize="20px"
+              letterSpacing="1.5px"
+              fontWeight={600}
+              px={"15px"}
+              mt={0}
+            >
+              {page?.content?.step?.title}
+            </Text>
             <VStack pt={"16px"} as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns="repeat(1, 1fr)"
