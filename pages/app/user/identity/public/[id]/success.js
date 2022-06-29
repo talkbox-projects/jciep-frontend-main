@@ -135,14 +135,14 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                 </Box>
               </Flex>
             </Center>
-            <br/>
+            {/* <br/>
 
             <Code>
                 identityId: {id}
                 <br />
                 token: {token}
                 <br />
-              </Code>
+              </Code> */}
 
             <Box bgColor="#FFF">
               <Box

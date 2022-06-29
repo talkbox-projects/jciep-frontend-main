@@ -15,9 +15,8 @@ import {
   Image,
   Center,
   Stack,
-  Code,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../../../utils/page/getPage";
@@ -37,7 +36,6 @@ import OrganizationInvitationCodeValidity from "../../../../../utils/api/Organiz
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
-  // const cookies = nookies.get(context);
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   return {
     props: {
