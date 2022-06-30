@@ -47,8 +47,6 @@ const labelStyles = {
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
-  // nookies.set(null, "jciep-identityId", identityId, { path: "/" });
-
   return {
     props: {
       page,
@@ -65,12 +63,6 @@ const OrganizationNgoAdd = ({ page }) => {
   const [fileError, setFileError] = useState(false);
   const { id } = router.query;
 
-  useEffect(()=>{
-    if(router.isReady){
-      nookies.set(null, "jciep-identityId", id, { path: "/" });
-    }
-  },[router, id])
-
   const {
     handleSubmit,
     register,
@@ -82,12 +74,6 @@ const OrganizationNgoAdd = ({ page }) => {
   const getDescriptionCount = watch("description", 0);
   const getMissionNVision = watch("missionNVision", 0);
   const watchFields = watch(["targetGroupDisabilities"]);
-
-  useEffect(()=>{
-    if(router.isReady){
-      nookies.set(null, "jciep-identityId", id, { path: "/" });
-    }
-  },[router, id])
 
   const validate = () => {
     if (files.length < 1) {
