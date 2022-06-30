@@ -75,6 +75,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
+
+  const [debug, setDebug] = useState({});
+
+
   const {
     handleSubmit,
     register,
@@ -98,6 +102,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   );
 
   const handlePostData = async (input, invitationCode) => {
+    setDebug({
+      input: input,
+      invitationCode: invitationCode
+    })
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -283,6 +291,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                         </Button>
                       </Flex>
                     </FormControl>
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 2 }}>
+                  <div>
+                    {JSON.stringify(debug)}
+                    </div>
                   </GridItem>
 
                   {showSelectCentre && (
