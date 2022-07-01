@@ -49,9 +49,9 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
-      // isLangAvailable: context.locale === page.lang,
-      // ...(await getSharedServerSideProps(context))?.props,
-      // lang: context.locale,
+      isLangAvailable: context.locale === page.lang,
+      ...(await getSharedServerSideProps(context))?.props,
+      lang: context.locale,
     },
   };
 };
@@ -186,12 +186,11 @@ const OrganizationNgoAdd = ({ page }) => {
 
   return (
     <Box pt={{ base: "64px" }}>
-    {/* {JSON.stringify(page)} */}
-      {/* <NAV
+      <NAV
         title={page?.content?.step?.title}
         subTitle={page?.content?.step?.subTitle}
         handleClickLeftIcon={() => router.push("/app/user/identity/public/add")}
-      /> */}
+      />
       <Box justifyContent="center" width="100%">
         <Box maxWidth={"md"} width="100%" textAlign="left" margin="auto">
           <Text

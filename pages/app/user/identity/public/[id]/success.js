@@ -37,7 +37,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
+const IdentityPublicAddSuccess = ({ page, token }) => {
   const [, removeCredential] = useCredential();
   const router = useRouter();
 
@@ -135,14 +135,14 @@ const IdentityPublicAddSuccess = ({ page, token, identityId }) => {
                 </Box>
               </Flex>
             </Center>
-            {/* <br/>
+            <br/>
 
             <Code>
                 identityId: {id}
                 <br />
                 token: {token}
                 <br />
-              </Code> */}
+              </Code>
 
             <Box bgColor="#FFF">
               <Box
