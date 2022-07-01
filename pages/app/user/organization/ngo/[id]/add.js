@@ -186,12 +186,12 @@ const OrganizationNgoAdd = ({ page }) => {
 
   return (
     <Box pt={{ base: "64px" }}>
-    {JSON.stringify(page)}
+    {/* {JSON.stringify(page)} */}
       {/* <NAV
         title={page?.content?.step?.title}
         subTitle={page?.content?.step?.subTitle}
         handleClickLeftIcon={() => router.push("/app/user/identity/public/add")}
-      />
+      /> */}
       <Box justifyContent="center" width="100%">
         <Box maxWidth={"md"} width="100%" textAlign="left" margin="auto">
           <Text
@@ -278,7 +278,7 @@ const OrganizationNgoAdd = ({ page }) => {
                       </FormLabel>
                     </Box>
 
-                    {files.map((file, index) => {
+                    {files?.map((file, index) => {
                       let url = URL.createObjectURL(file);
                       return (
                         <Box
@@ -802,7 +802,7 @@ const OrganizationNgoAdd = ({ page }) => {
             </Box>
           </VStack>
         </Box>
-      </Box> */}
+      </Box>
     </Box>
   );
 };
