@@ -36,7 +36,6 @@ export const getServerSideProps = async (context) => {
 };
 const AppUserRegister = ({ page }) => {
   const router = useRouter();
-  const { user } = useAppContext();
   const [, removeCredential] = useCredential();
   const [appRegistrationInfo, setAppRegistrationInfo] = useState({
     otp: "",
@@ -171,12 +170,12 @@ const AppUserRegister = ({ page }) => {
 
   return (
     <Box pt={{ base: "64px" }}>
-    <Code>
+    {/* <Code>
       [Debug: getRegistrationInfoHandler]: {JSON.stringify(appRegistrationInfo)}
-    </Code>
+    </Code> */}
 
     <Code>
-      [otpVerifyStatus]: {JSON.stringify(otpVerifyStatus)}
+      [Debug OTP]: {JSON.stringify(otpVerifyStatus)}
     </Code>
 
 
