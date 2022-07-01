@@ -49,9 +49,9 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
-      isLangAvailable: context.locale === page.lang,
-      ...(await getSharedServerSideProps(context))?.props,
-      lang: context.locale,
+      // isLangAvailable: context.locale === page.lang,
+      // ...(await getSharedServerSideProps(context))?.props,
+      // lang: context.locale,
     },
   };
 };
@@ -186,7 +186,8 @@ const OrganizationNgoAdd = ({ page }) => {
 
   return (
     <Box pt={{ base: "64px" }}>
-      <NAV
+    {JSON.stringify(page)}
+      {/* <NAV
         title={page?.content?.step?.title}
         subTitle={page?.content?.step?.subTitle}
         handleClickLeftIcon={() => router.push("/app/user/identity/public/add")}
@@ -216,7 +217,7 @@ const OrganizationNgoAdd = ({ page }) => {
             >
               <GridItem colSpan={{ base: 2 }}>
                 <LABEL
-                  name={page?.content?.form?.businessRegistration.label}
+                  name={page?.content?.form?.businessRegistration?.label}
                   required={true}
                 />
                 <FormControl>
@@ -801,7 +802,7 @@ const OrganizationNgoAdd = ({ page }) => {
             </Box>
           </VStack>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
