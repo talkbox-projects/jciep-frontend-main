@@ -21,12 +21,23 @@ import {
   MenuOptionGroup,
   MenuItemOption,
   Link,
+  Checkbox,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Center
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
 import wordExtractor from "../../utils/wordExtractor";
 import Card from "../../components/CarouselCard";
+import ModalCard from "../../components/ModalCard";
 import Container from "../../components/Container";
 import DividerSimple from "../../components/DividerSimple";
 import DividerA from "../../components/DividerA";
@@ -39,6 +50,11 @@ import Anchor from "../../components/Anchor";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { NextArrow, PrevArrow } from "../../components/SliderArrow";
+import { CloseIcon } from '@chakra-ui/icons'
+
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import { TiThList } from "react-icons/ti";
+import { FaColumns } from "react-icons/fa";
 
 const PAGE_KEY = "resources";
 
@@ -123,9 +139,14 @@ export const getServerSideProps = async (context) => {
 };
 
 const Resources = ({ page, enums, setting }) => {
+  const disableClick = {
+    pointerEvents: "none",
+  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+  const [modalData, setModalData] = useState([]);
   const [showItems, setShowItems] = useState(3);
-
+  const [listStyle, setListStyle] = useState("table");
   const [activeSldie, setActiveSldie] = useState(0);
   const sliderRef = useRef(null);
   const settings = {
@@ -141,6 +162,11 @@ const Resources = ({ page, enums, setting }) => {
   const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
   const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
   const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
+
+  const handleRowOnClick = (data) => {
+    onOpen();
+    setModalData(data);
+  };
 
   const reset = () => {
     setServiceOrgFilter([]);
@@ -246,7 +272,7 @@ const Resources = ({ page, enums, setting }) => {
         </Box>
       </Box>
       {/* Dialogue Section */}
-      <Box bg="#F6D644">
+      {/* <Box bg="#F6D644">
         <Container pos="relative">
           <VStack align="stretch" spacing={0} pt={16}>
             <Box alignSelf="center" fontSize={["2xl", "4xl"]}>
@@ -462,7 +488,7 @@ const Resources = ({ page, enums, setting }) => {
       </Box>
       <Box bg="#FEB534">
         <DividerSimple nextColor="#F3F3F3" />
-      </Box>
+      </Box> */}
       {/* resource Section */}
 
       <Box bg="#F3F3F3">
@@ -500,133 +526,355 @@ const Resources = ({ page, enums, setting }) => {
               {wordExtractor(page?.content?.wordings, "reset_label")}
             </Button>
           </Stack>
-          <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
+          <Flex flexDirection="row" justifyContent="space-between">
+            <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
+            <Box>
+              <Flex flexDirection="row" align="center" gap={2}>
+                <Box>檢視方式:</Box>
+                <FaColumns
+                  size={20}
+                  style={{
+                    cursor: "pointer",
+                    opacity: listStyle === "card" ? 1 : 0.5,
+                  }}
+                  onClick={() => setListStyle("card")}
+                />
+                <TiThList
+                  size={20}
+                  style={{
+                    cursor: "pointer",
+                    opacity: listStyle === "table" ? 1 : 0.5,
+                  }}
+                  onClick={() => setListStyle("table")}
+                />
+              </Flex>
+            </Box>
+          </Flex>
         </Container>
 
-        <Box
-          d={["none", "none", "block"]}
-          p={4}
-          pos="relative"
-          w="100vw"
-          minH="600px"
-        >
-          <Slider
-            {...settings}
-            initialSlide={0}
-            draggable={false}
-            prevArrow={<PrevArrow />}
-            nextArrow={<NextArrow />}
-            accessibility={false}
-          >
-            {(filteredResourceList ?? []).map((resource, index) => {
-              const {
-                name,
-                category,
-                organization,
-                serviceTarget,
-                services,
-                internship,
-                probationOrReferral,
-                subsidy,
-                remark,
-                topColor,
-                contact,
-                reminder,
-              } = resource;
-              return (
-                <Box
-                  {...(index === 0 && { ml: "150px" })}
-                  key={resource?.id}
-                  px={1}
-                  h="100%"
-                  maxW={"336px"}
-                >
-                  <Card
-                    name={name}
-                    topColor={topColor}
-                    organization={organization}
-                    category={category}
-                    serviceTarget={serviceTarget}
-                    services={services}
-                    internship={internship}
-                    probationOrReferral={probationOrReferral}
-                    subsidy={subsidy}
-                    remark={remark}
-                    contact={contact}
-                    reminder={reminder}
-                    page={page}
-                    isActive={activeSldie === index}
-                  />
+        {listStyle === "table" && (
+          <>
+            <Container>
+              <Box d={["none", "none", "block"]} pos="relative" minH="600px">
+                <Box pos="relative" minH="600px">
+                  <Table
+                    style={{
+                      borderTopLeftRadius: "15px",
+                      borderTopRightRadius: "15px",
+                      overflow: "hidden",
+                      margin: "15px 0",
+                    }}
+                  >
+                    <Thead
+                      style={{ backgroundColor: "#FEB534", height: "70px" }}
+                    >
+                      <Tr
+                        style={{
+                          textAlign: "left",
+                          padding: "0 10px",
+                          fontSize: "14px",
+                        }}
+                      >
+                        <Th style={{ padding: "0 15px" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_1")}
+                        </Th>
+                        <Th style={{ padding: "0 15px" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_2")}
+                        </Th>
+                        <Th style={{ padding: "0 15px" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_3")}
+                        </Th>
+                        <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_4")}
+                        </Th>
+                        <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_5")}
+                        </Th>
+                        <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_6")}
+                        </Th>
+                        <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                          {wordExtractor(page?.content?.wordings, "table_th_7")}
+                        </Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody
+                      style={{ backgroundColor: "#FFF", fontSize: "14px" }}
+                    >
+                      {(filteredResourceList ?? []).map((resource, index) => {
+                        return (
+                          <TableRow
+                            key={resource?.id}
+                            resource={resource}
+                            {...resource}
+                            handleRowOnClick={handleRowOnClick}
+                          />
+                        );
+                      })}
+                    </Tbody>
+                  </Table>
                 </Box>
-              );
-            })}
-          </Slider>
-        </Box>
-        <VStack
-          w="100%"
-          p={[2, 4]}
-          justifyContent="center"
-          d={["block", "block", "none"]}
-        >
-          <Box>
-            {(filteredResourceList?.slice(0, showItems) ?? []).map(
-              (resource, index) => {
-                const {
-                  name,
-                  category,
-                  organization,
-                  serviceTarget,
-                  services,
-                  internship,
-                  probationOrReferral,
-                  subsidy,
-                  remark,
-                  topColor,
-                  contact,
-                  reminder,
-                } = resource;
-                return (
-                  <VStack key={index} px={2} alignItems="stretch">
-                    <Card
-                      name={name}
-                      topColor={topColor}
-                      organization={organization}
-                      category={category}
-                      serviceTarget={serviceTarget}
-                      services={services}
-                      internship={internship}
-                      probationOrReferral={probationOrReferral}
-                      subsidy={subsidy}
-                      remark={remark}
-                      contact={contact}
-                      reminder={reminder}
-                      page={page}
-                    />
-                  </VStack>
-                );
-              }
-            )}
-            {showItems < filteredResourceList?.length && (
-              <VStack mt={6} w="100%" align="center">
-                <Button
-                  variant="outline"
-                  borderColor="black"
-                  borderWidth={2}
-                  p={3}
-                  size="xl"
-                  borderRadius="2em"
-                  onClick={() =>
-                    setShowItems((i) =>
-                      Math.min(i + 3, filteredResourceList?.length)
-                    )
-                  }
+              </Box>
+            </Container>
+
+            <Container>
+              <Box d={["block", "block", "none"]} pos="relative" minH="600px">
+                <Table
+                  style={{
+                    borderTopLeftRadius: "15px",
+                    borderTopRightRadius: "15px",
+                    overflow: "hidden",
+                    margin: "15px 0",
+                  }}
                 >
-                  {wordExtractor(page?.content?.wordings, "showMore")}
-                </Button>
-              </VStack>
-            )}
+                  <Thead style={{ backgroundColor: "#FEB534" }}>
+                    <Tr
+                      style={{
+                        textAlign: "left",
+                        padding: "0 10px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <Th style={{ padding: "0 15px" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_1")}
+                      </Th>
+                      <Th style={{ padding: "0 15px" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_2")}
+                      </Th>
+                      <Th style={{ padding: "0 15px" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_3")}
+                      </Th>
+                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_4")}
+                      </Th>
+                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_5")}
+                      </Th>
+                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_6")}
+                      </Th>
+                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                        {wordExtractor(page?.content?.wordings, "table_th_7")}
+                      </Th>
+
+                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody style={{ backgroundColor: "#FFF", fontSize: "14px" }}>
+                    {(filteredResourceList ?? []).map((resource, index) => {
+                      const {
+                        name,
+                        category,
+                        organization,
+                        serviceTarget,
+                        services,
+                        internship,
+                        probationOrReferral,
+                        subsidy,
+                        remark,
+                        topColor,
+                        contact,
+                        reminder,
+                      } = resource;
+
+                      return (
+                        <Tr
+                          key={resource?.id}
+                          style={{
+                            border: "none",
+                            borderBottom: "1px solid #EAEAEA",
+                            padding: "20px 10px",
+                          }}
+                          onClick={()=>handleRowOnClick(resource)}
+                        >
+                          <Td style={{ padding: "0 15px" }}>{name?.text}</Td>
+                          <Td style={{ padding: "0 15px" }}>
+                            {organization?.text}
+                          </Td>
+                          <Td style={{ padding: "0 15px" }}>
+                            {serviceTarget?.text}
+                          </Td>
+                          <Td
+                            style={{
+                              textAlign: "center",
+                              minHeight: "45px",
+                              align: "center",
+                            }}
+                          >
+                            <Checkbox
+                              size="md"
+                              colorScheme="green"
+                              defaultChecked={services?.length > 0}
+                              style={{ ...disableClick, paddingTop: "15px" }}
+                            />
+                          </Td>
+                          <Td style={{ textAlign: "center" }}>
+                            <Checkbox
+                              size="md"
+                              colorScheme="green"
+                              defaultChecked={internship?.value}
+                              style={disableClick}
+                            />
+                          </Td>
+                          <Td style={{ textAlign: "center" }}>
+                            <Checkbox
+                              size="md"
+                              colorScheme="green"
+                              defaultChecked={probationOrReferral}
+                              style={disableClick}
+                            />
+                          </Td>
+                          <Td style={{ textAlign: "center" }}>
+                            <Checkbox
+                              size="md"
+                              colorScheme="green"
+                              defaultChecked={subsidy?.length > 0}
+                              style={disableClick}
+                            />
+                          </Td>
+                          <Td style={{ textAlign: "center" }}>
+                          {wordExtractor(page?.content?.wordings, "click_for_detail")}
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                  </Tbody>
+                </Table>
+              </Box>
+            </Container>
+          </>
+        )}
+
+        {listStyle === "card" && (
+          <Box className="cardDisplay">
+            <Box
+              d={["none", "none", "block"]}
+              p={4}
+              pos="relative"
+              w="100vw"
+              minH="600px"
+            >
+              <Slider
+                {...settings}
+                initialSlide={0}
+                draggable={false}
+                prevArrow={<PrevArrow />}
+                nextArrow={<NextArrow />}
+                accessibility={false}
+              >
+                {(filteredResourceList ?? []).map((resource, index) => {
+                  const {
+                    name,
+                    category,
+                    organization,
+                    serviceTarget,
+                    services,
+                    internship,
+                    probationOrReferral,
+                    subsidy,
+                    remark,
+                    topColor,
+                    contact,
+                    reminder,
+                  } = resource;
+                  return (
+                    <Box
+                      {...(index === 0 && { ml: "150px" })}
+                      key={resource?.id}
+                      px={1}
+                      h="100%"
+                      maxW={"336px"}
+                    >
+                      <Card
+                        name={name}
+                        topColor={topColor}
+                        organization={organization}
+                        category={category}
+                        serviceTarget={serviceTarget}
+                        services={services}
+                        internship={internship}
+                        probationOrReferral={probationOrReferral}
+                        subsidy={subsidy}
+                        remark={remark}
+                        contact={contact}
+                        reminder={reminder}
+                        page={page}
+                        isActive={activeSldie === index}
+                      />
+                    </Box>
+                  );
+                })}
+              </Slider>
+            </Box>
+            <VStack
+              w="100%"
+              p={[2, 4]}
+              justifyContent="center"
+              d={["block", "block", "none"]}
+            >
+              <Box>
+                {(filteredResourceList?.slice(0, showItems) ?? []).map(
+                  (resource, index) => {
+                    const {
+                      name,
+                      category,
+                      organization,
+                      serviceTarget,
+                      services,
+                      internship,
+                      probationOrReferral,
+                      subsidy,
+                      remark,
+                      topColor,
+                      contact,
+                      reminder,
+                    } = resource;
+                    return (
+                      <VStack key={index} px={2} alignItems="stretch">
+                        <Card
+                          name={name}
+                          topColor={topColor}
+                          organization={organization}
+                          category={category}
+                          serviceTarget={serviceTarget}
+                          services={services}
+                          internship={internship}
+                          probationOrReferral={probationOrReferral}
+                          subsidy={subsidy}
+                          remark={remark}
+                          contact={contact}
+                          reminder={reminder}
+                          page={page}
+                        />
+                      </VStack>
+                    );
+                  }
+                )}
+                {showItems < filteredResourceList?.length && (
+                  <VStack mt={6} w="100%" align="center">
+                    <Button
+                      variant="outline"
+                      borderColor="black"
+                      borderWidth={2}
+                      p={3}
+                      size="xl"
+                      borderRadius="2em"
+                      onClick={() =>
+                        setShowItems((i) =>
+                          Math.min(i + 3, filteredResourceList?.length)
+                        )
+                      }
+                    >
+                      {wordExtractor(page?.content?.wordings, "showMore")}
+                    </Button>
+                  </VStack>
+                )}
+              </Box>
+            </VStack>
           </Box>
-        </VStack>
+        )}
+
         <Container>
           <Button
             mt={3}
@@ -876,7 +1124,115 @@ const Resources = ({ page, enums, setting }) => {
           zIndex="1"
         />
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>
+            <CloseIcon onClick={()=>onClose()} position="absolute" top={'15px'} right={'15px'} cursor={'pointer'}/>
+            <VStack px={2} alignItems="stretch">
+              <ModalCard
+                name={modalData?.name}
+                topColor={modalData?.topColor}
+                organization={modalData?.organization}
+                category={modalData?.category}
+                serviceTarget={modalData?.serviceTarget}
+                services={modalData?.services}
+                internship={modalData?.internship}
+                probationOrReferral={modalData?.probationOrReferral}
+                subsidy={modalData?.subsidy}
+                remark={modalData?.remark}
+                contact={modalData?.contact}
+                reminder={modalData?.reminder}
+                page={page}
+              />
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </VStack>
+  );
+};
+
+const TableRow = ({
+  name,
+  organization,
+  serviceTarget,
+  services,
+  internship,
+  probationOrReferral,
+  subsidy,
+  resource,
+  handleRowOnClick,
+}) => {
+  const disableClick = {
+    pointerEvents: "none",
+  };
+  const rowStyle = {
+    borderBottom: "1px solid #EAEAEA",
+    cursor: "pointer",
+    boxShadow: "0 0 15px 1px rgb(0 0 0 / 15%)",
+  };
+
+  const [active, setActive] = useState(false);
+
+  return (
+    <Tr
+      key={resource?.id}
+      style={{
+        ...rowStyle,
+        boxShadow: active ? "0 0 15px 1px rgb(0 0 0 / 15%)" : "",
+      }}
+      onMouseEnter={() => setActive(true)}
+      onMouseLeave={() => setActive(false)}
+      onClick={() => handleRowOnClick(resource)}
+    >
+      <Td style={{ width: "200px", padding: "0 15px" }}>
+      {name?.text}</Td>
+      <Td style={{ width: "200px", padding: "0 15px" }}>
+        {organization?.text}
+      </Td>
+      <Td style={{ width: "200px", padding: "0 15px" }}>
+        {serviceTarget?.text}
+      </Td>
+      <Td style={{ textAlign: "center" }}>
+        <Checkbox
+          size="md"
+          colorScheme="green"
+          defaultChecked={services?.length > 0}
+          style={disableClick}
+        />
+      </Td>
+      <Td style={{ textAlign: "center" }}>
+        <Checkbox
+          size="md"
+          colorScheme="green"
+          defaultChecked={internship?.value}
+          style={disableClick}
+        />
+      </Td>
+      <Td style={{ textAlign: "center" }}>
+        <Checkbox
+          size="md"
+          colorScheme="green"
+          defaultChecked={probationOrReferral}
+          style={disableClick}
+        />
+      </Td>
+      <Td style={{ minWidth: "80px", textAlign: "center" }}>
+      <div style={{ height: "100px", margin: "20px 0"}}>
+          <Center h={"100%"}>
+          <Checkbox
+          size="md"
+          colorScheme="green"
+          defaultChecked={subsidy?.length > 0}
+          style={disableClick}
+        />
+          </Center>
+        </div>
+       
+      </Td>
+    </Tr>
   );
 };
 

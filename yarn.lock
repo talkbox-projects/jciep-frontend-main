@@ -6816,6 +6816,11 @@ react-style-singleton@^2.1.0:
     invariant "^2.2.4"
     tslib "^1.0.0"
 
+react-super-responsive-table@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-super-responsive-table/-/react-super-responsive-table-5.2.1.tgz#e9c3113d7676e74db9110f8385a3dddce45ee00f"
+  integrity sha512-93DAJbI4FjR0Yops+0v1MZIUhIMRQOm/N//o35mk/g4NCZ99HIOB+gdZPorZwKX3mfr3h3H3ATcU4jLMfpuC9Q==
+
 react-swipeable@^6.0.0:
   version "6.1.2"
   resolved "https://registry.npmjs.org/react-swipeable/-/react-swipeable-6.1.2.tgz"

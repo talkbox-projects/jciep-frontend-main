@@ -11,6 +11,7 @@ import { AppProvider } from "../store/AppStore";
 import Head from "next/head";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import SimpleReactLightbox from "simple-react-lightbox";
 import { init } from "../utils/ga";
 

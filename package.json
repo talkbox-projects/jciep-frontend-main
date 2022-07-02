@@ -59,6 +59,7 @@
     "react-select": "^4.3.1",
     "react-share": "^4.4.0",
     "react-slick": "^0.28.1",
+    "react-super-responsive-table": "^5.2.1",
     "react-tinacms-editor": "0.41.1",
     "react-tinacms-inline": "0.41.1",
     "react-use-clipboard": "^1.0.7",
