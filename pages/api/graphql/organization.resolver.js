@@ -351,14 +351,16 @@ export default {
         return false;
       }
 
-      if (
-        !(
-          ["pwd", "staff"].includes(identity.type) &&
-          organization.organizationType === "ngo"
-        )
-      ) {
-        return false;
-      }
+      {/** Phase 2: public type only*/}
+
+      // if (
+      //   !(
+      //     ["pwd", "staff"].includes(identity.type) &&
+      //     organization.organizationType === "ngo"
+      //   )
+      // ) {
+      //   return false;
+      // }
 
       const exists = !!(organization.member ?? []).find(
         (m) => String(m.identityId) === String(identityId)
