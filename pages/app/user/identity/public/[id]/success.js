@@ -2,16 +2,13 @@ import {
   Button,
   Box,
   Image,
-  Heading,
   Text,
-  VStack,
   Grid,
   GridItem,
   Code,
   Center,
   Flex,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { getPage } from "../../../../../../utils/page/getPage";
 import withPageCMS from "../../../../../../utils/page/withPageCMS";
 import getSharedServerSideProps from "../../../../../../utils/server/getSharedServerSideProps";
@@ -19,7 +16,6 @@ import { useCredential } from "../../../../../../utils/user";
 import { useRouter } from "next/router";
 import React from "react";
 import nookies from "nookies";
-import { useAppContext } from "../../../../../../store/AppStore";
 
 const PAGE_KEY = "identity_public_add_success";
 
@@ -46,10 +42,13 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
   const handleSendLoginSuccessResponse = () => {
     window.WebContext = {};
     window.WebContext.sendLoginSuccessResponseHandler = (response) => {
-      alert(JSON.stringify(response));
       if (!response) {
         alert("response.result null");
       }
+    };
+
+    window.WebContext.closeWebViewHandler = () => {
+      console.log("close web view");
     };
 
     const json = {
@@ -60,6 +59,14 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
           token: token,
           identityId: id,
         },
+      },
+    };
+  
+    let closeWebViewJson = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {},
       },
     };
 
@@ -73,6 +80,7 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
 
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
+      window.AppContext.postMessage(JSON.stringify(closeWebViewJson));
     }
   };
 
