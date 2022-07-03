@@ -42,13 +42,7 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
   const handleSendLoginSuccessResponse = () => {
     window.WebContext = {};
     window.WebContext.sendLoginSuccessResponseHandler = (response) => {
-      if (!response) {
-        alert("response.result null");
-      }
-    };
-
-    window.WebContext.closeWebViewHandler = () => {
-      console.log("close web view");
+      console.log('response-',response)
     };
 
     const json = {
@@ -59,14 +53,6 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
           token: token,
           identityId: id,
         },
-      },
-    };
-  
-    let closeWebViewJson = {
-      name: "closeWebView",
-      options: {
-        callback: "closeWebViewHandler",
-        params: {},
       },
     };
 
@@ -80,7 +66,25 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
 
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
-      window.AppContext.postMessage(JSON.stringify(closeWebViewJson));
+    }
+  };
+
+  const handleCloseWebView = () => {
+    window.WebContext = {};
+    window.WebContext.closeWebViewHandler = () => {
+      console.log("close web view");
+    };
+
+    let json = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {},
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
     }
   };
 
@@ -172,6 +176,7 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
                     width="100%"
                     onClick={() => {
                       handleSendLoginSuccessResponse();
+                      handleCloseWebView();
                     }}
                   >
                     {page?.content?.publicSuccess?.button}
