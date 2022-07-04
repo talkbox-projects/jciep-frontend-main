@@ -100,6 +100,13 @@ const [AppProvider, useAppContext] = constate((props) => {
   const [identityId, setIdentityId] = useState(null);
   const isLoggedIn = useMemo(() => !!user, [user]);
   const [email, setEmail] = useState(null);
+  const [resetPasswordStatus, setResetPasswordStatus] = useState({
+    type: '',
+    otp: '',
+    phone: '',
+    email: '',
+    step: 'requestOtp'
+  });
 
   const identity = useMemo(
     () => (user?.identities ?? []).find(({ id }) => id === identityId),
@@ -151,6 +158,9 @@ const [AppProvider, useAppContext] = constate((props) => {
     identityId,
     setIdentityId,
     updateIdentity,
+
+    setResetPasswordStatus,
+    resetPasswordStatus,
 
     environmentSetting,
     setEnvironmentSetting
