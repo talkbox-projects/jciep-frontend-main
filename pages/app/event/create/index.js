@@ -818,6 +818,26 @@ const EventAdd = ({ page }) => {
                       <LABEL
                         name={wordExtractor(
                           page?.content?.wordings,
+                          "quota_label"
+                        )}
+                      />
+                      <Input
+                        type="text"
+                        variant="flushed"
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "quota_placeholder"
+                        )}
+                        {...register("quota")}
+                      />
+                    </FormControl>
+                  </GridItem>
+
+                  <GridItem>
+                    <FormControl>
+                      <LABEL
+                        name={wordExtractor(
+                          page?.content?.wordings,
                           "free_or_charge_label"
                         )}
                         required={true}
