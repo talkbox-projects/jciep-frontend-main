@@ -125,8 +125,7 @@ const PublicSectionEditor = () => {
               ([_, v]) => v != null
             )
           );
-          console.log("submitData-", submitData);
-          await saveIdentity(values);
+          await saveIdentity(submitData);
 
           removeEditSection();
         } catch (error) {

@@ -189,6 +189,7 @@ export default gql`
     gender: EnumGender
     district: EnumDistrict
     pwdType: [EnumPwdType]
+    pwdOther: String
     interestedEmploymentMode: [EnumEmploymentMode]
     interestedIndustry: [EnumInterestedIndustry]
     interestedIndustryOther: String
