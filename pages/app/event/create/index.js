@@ -283,9 +283,6 @@ const EventAdd = ({ page }) => {
         }
       );
     }
-
-    console.log('filesAdditionalInformalUploadData-',filesAdditionalInformalUploadData)
-
     const input = Object.fromEntries(
       Object.entries({
         name: name,
@@ -324,7 +321,7 @@ const EventAdd = ({ page }) => {
     // setDebugResult(JSON.stringify(response));
 
     if (!response?.error) {
-      router.push(`/event/create/${response?.data.id}/success`);
+      router.push(`/app/event/create/${response?.data.id}/success`);
     }
   };
 

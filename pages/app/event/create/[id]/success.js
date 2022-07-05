@@ -30,6 +30,26 @@ export const getServerSideProps = async (context) => {
   };
 };
 const EventAddSuccess = ({ page }) => {
+
+  const handleCloseWebView = () => {
+    window.WebContext = {};
+    window.WebContext.closeWebViewHandler = () => {
+      console.log("close web view");
+    };
+
+    let json = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {},
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
   const router = useRouter();
   return (
     <VStack py={36}>
@@ -67,28 +87,7 @@ const EventAddSuccess = ({ page }) => {
               marginTop="30px !important"
               borderRadius="50px"
               bgColor="primary.400"
-              onClick={() => {
-                window.WebContext = {};
-                window.WebContext.closeWebViewHandler = () => {
-                  console.log("close web view");
-                };
-
-                let json = {
-                  name: "closeWebView",
-                  options: {
-                    callback: "closeWebViewHandler",
-                    params: {},
-                  },
-                };
-
-                if (
-                  window &&
-                  window.AppContext &&
-                  window.AppContext.postMessage
-                ) {
-                  window.AppContext.postMessage(JSON.stringify(json));
-                }
-              }}
+              onClick={() => handleCloseWebView()}
             >
               {page?.content?.eventSuccess?.button}
             </Button>
