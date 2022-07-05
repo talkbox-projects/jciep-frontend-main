@@ -25,10 +25,8 @@ import Container from "../../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { CloseIcon } from "@chakra-ui/icons";
-import EVENT from "../../../utils/mock/api_event_id.json";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
-import { useAppContext } from "../../../store/AppStore";
 import { bookmarkEvent } from "../../../utils/event/eventAction";
 
 const PAGE_KEY = "event";
@@ -43,6 +41,31 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
     },
   };
+};
+
+const handleOpenWebView = (url) => {
+  const json = {
+    name: "openWebView",
+    options: {
+      callback: "openWebViewHandler",
+      params: {
+        value: url.replace(" ",""),
+        type: "external",
+        isRedirect: false,
+      },
+    },
+  };
+
+  window.WebContext = {};
+  window.WebContext.openWebViewHandler = (response) => {
+    if (!response) {
+      alert("response.result null");
+    }
+  };
+
+  if (window && window.AppContext && window.AppContext.postMessage) {
+    window.AppContext.postMessage(JSON.stringify(json));
+  }
 };
 
 const Event = ({ page }) => {
@@ -89,7 +112,6 @@ const Event = ({ page }) => {
               >
                 <Box p={"16px"} fontSize={"14px"}>
                   <Stack>
-                    {/* <Box color={"#0D8282"}>#tag(API)</Box> */}
                     <Flex align="center" gap={2}>
                       <Box w={"20px"}>
                         <Image
@@ -125,8 +147,8 @@ const Event = ({ page }) => {
                           )}{" "}
                           -{" "}
                           {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
-                          
-                        {detail?.datetimeRemark && `(${detail?.datetimeRemark})`}
+                          {detail?.datetimeRemark &&
+                            `(${detail?.datetimeRemark})`}
                         </b>
                       </Box>
                     </Flex>
@@ -147,24 +169,30 @@ const Event = ({ page }) => {
                     </Flex>
 
                     <Flex align="center" gap={2}>
-                    <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => bookmarkEvent(detail?.id)}>
-                      <Image
-                        src={"/images/app/bookmark-off.svg"}
-                        alt={""}
-                        fontSize={18}
-                      />
-                      <Text mt={6} color="#0D8282" fontWeight={700}>
-                        {detail?.liked
-                          ? wordExtractor(
-                              page?.content?.wordings,
-                              "you_and_other_liked"
-                            ).replace("$", detail?.bookmarkCount || 0)
-                          : wordExtractor(
-                              page?.content?.wordings,
-                              "other_liked"
-                            ).replace("$", detail?.bookmarkCount || 0)}
-                      </Text>
-                    </Stack>
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        mt={4}
+                        cursor="pointer"
+                        onClick={() => bookmarkEvent(detail?.id)}
+                      >
+                        <Image
+                          src={"/images/app/bookmark-off.svg"}
+                          alt={""}
+                          fontSize={18}
+                        />
+                        <Text mt={6} color="#0D8282" fontWeight={700}>
+                          {detail?.liked
+                            ? wordExtractor(
+                                page?.content?.wordings,
+                                "you_and_other_liked"
+                              ).replace("$", detail?.bookmarkCount || 0)
+                            : wordExtractor(
+                                page?.content?.wordings,
+                                "other_liked"
+                              ).replace("$", detail?.bookmarkCount || 0)}
+                        </Text>
+                      </Stack>
                     </Flex>
                   </Stack>
                   <Divider my={4} />
@@ -202,16 +230,16 @@ const Event = ({ page }) => {
                   </Flex>
 
                   <Flex color="#0D8282" align="center" fontWeight={700}>
-                          <Box>
-                            <HiDownload />
-                          </Box>
-                          <Text>
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "download_more_information"
-                            )}
-                          </Text>
-                        </Flex>
+                    <Box>
+                      <HiDownload />
+                    </Box>
+                    <Text>
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "download_more_information"
+                      )}
+                    </Text>
+                  </Flex>
 
                   <Flex direction="column">
                     {detail?.otherUrls?.map((d) => (
@@ -221,6 +249,7 @@ const Event = ({ page }) => {
                         align="center"
                         fontWeight={700}
                         gap={2}
+                        onClick={() => handleOpenWebView(d)}
                       >
                         <Box w={"20px"}>
                           <Image
@@ -230,9 +259,9 @@ const Event = ({ page }) => {
                             mx={"auto"}
                           />
                         </Box>
-                        <Link to={d} target="_blank">
+                        <Box>
                           {d}
-                        </Link>
+                        </Box>
                       </Flex>
                     ))}
                   </Flex>
@@ -391,9 +420,9 @@ const Event = ({ page }) => {
                               mx={"auto"}
                             />
                           </Box>
-                          <Link target="_blank" href={detail?.registerUrl}>
-                            {detail?.registerUrl}
-                          </Link>
+                          <Box color="#0D8282" onClick={() => handleOpenWebView(detail?.registerUrl)}>
+                          {detail?.registerUrl}
+                          </Box>
                         </Flex>
                       </Box>
                     </Flex>
@@ -505,7 +534,7 @@ const RegistrationModal = ({
             <Box flex={1} />
             <Box m={"15px"}>
               <Box bgColor={"#FFF"} borderRadius={"15px"} p={6}>
-                <Link target="_blank" href={registerUrl}>
+                <Box onClick={()=> handleOpenWebView(registerUrl)}>
                   <Flex direction="row" gap={2} align="center">
                     <Box w={"20px"}>
                       <Image
@@ -517,7 +546,7 @@ const RegistrationModal = ({
                     </Box>
                     <Text fontWeight={700}>{registrationLabel}</Text>
                   </Flex>
-                </Link>
+                </Box>
 
                 <Divider my={4} />
 
@@ -525,35 +554,7 @@ const RegistrationModal = ({
                   direction="row"
                   gap={2}
                   align="center"
-                  onClick={() => {
-                    const json = {
-                      name: "openWebView",
-                      options: {
-                        callback: "openWebViewHandler",
-                        params: {
-                          value: `${`tel:${contactNumber}`}`,
-                          type: "external",
-                          isRedirect: false,
-                        },
-                      },
-                    };
-
-                    window.WebContext = {};
-                    window.WebContext.openWebViewHandler = (response) => {
-                      alert(JSON.stringify(response));
-                      if (!response) {
-                        alert("response.result null");
-                      }
-                    };
-
-                    if (
-                      window &&
-                      window.AppContext &&
-                      window.AppContext.postMessage
-                    ) {
-                      window.AppContext.postMessage(JSON.stringify(json));
-                    }
-                  }}
+                  onClick={() => handleOpenWebView(`tel:${contactNumber}`)}
                 >
                   <Box w={"20px"}>
                     <Image

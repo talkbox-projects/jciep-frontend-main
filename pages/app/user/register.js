@@ -14,6 +14,7 @@ import { gql } from "graphql-request";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import { getGraphQLClient } from "../../../utils/apollo";
+import wordExtractor from "../../../utils/wordExtractor";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useCredential } from "../../../utils/user";
 import { useAppContext } from "../../../store/AppStore";
@@ -41,8 +42,10 @@ const AppUserRegister = ({ page }) => {
     otp: "",
     type: "",
     email: "",
-    token: ""
+    token: "",
+    phone: "",
   });
+  const [otpValid, setOtpValid] = useState(null);
 
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
 
@@ -54,7 +57,7 @@ const AppUserRegister = ({ page }) => {
   useEffect(() => {
     window.WebContext = {};
     window.WebContext.getRegistrationInfoHandler = (response) => {
-      const registrationInfo = JSON.parse(response)
+      const registrationInfo = JSON.parse(response);
       // alert(JSON.stringify(response));
       if (!registrationInfo.result) {
         setAppRegistrationInfo({
@@ -109,7 +112,7 @@ const AppUserRegister = ({ page }) => {
       case "apple":
         router.replace(`/app/oauth/apple/?accessToken=${token}`);
         break;
-        
+
       case "phone":
         try {
           const query = gql`
@@ -168,17 +171,79 @@ const AppUserRegister = ({ page }) => {
     }
   };
 
+  useEffect(() => {
+    const { otp, phone, email, type } = appRegistrationInfo;
+    async function checkOTP() {
+      switch (type) {
+        case "phone":
+          try {
+            const query = gql`
+              query UserPhoneValidityCheck($phone: String!, $otp: String!) {
+                UserPhoneValidityCheck(phone: $phone, otp: $otp) {
+                  phone
+                  meta
+                }
+              }
+            `;
+
+            const data = await getGraphQLClient().request(query, {
+              otp,
+              phone,
+            });
+
+            if (!data?.UserPhoneValidityCheck?.phone) {
+              setOtpVerifyStatus({ status: "Phone OTP invalid" });
+              setOtpValid(false);
+            }
+          } catch (e) {
+            setOtpVerifyStatus({ status: "Phone OTP invalid" });
+            setOtpValid(false);
+          }
+          break;
+
+        case "email":
+          try {
+            const query = gql`
+              query UserEmailOTPValidityCheck($email: String!, $otp: String!) {
+                UserEmailOTPValidityCheck(email: $email, otp: $otp) {
+                  email
+                  meta
+                }
+              }
+            `;
+
+            const data = await getGraphQLClient().request(query, {
+              otp,
+              email,
+            });
+
+            if (!data?.UserEmailOTPValidityCheck?.email) {
+              setOtpVerifyStatus({ status: "Email OTP invalid" });
+              setOtpValid(false);
+            }
+          } catch (e) {
+            setOtpVerifyStatus({ status: "Email OTP invalid" });
+            setOtpValid(false);
+          }
+          break;
+      }
+    }
+    checkOTP();
+  }, [appRegistrationInfo]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAppRegistrationInfo({
+        email: "demo@mail.com",
+        otp: "asdsss",
+        type: "email",
+      });
+    }, 1000);
+  }, []);
+
   return (
     <Box pt={{ base: "64px" }}>
-    {/* <Code>
-      [Debug: getRegistrationInfoHandler]: {JSON.stringify(appRegistrationInfo)}
-    </Code> */}
-
-    <Code>
-      [Debug OTP]: {JSON.stringify(otpVerifyStatus)}
-    </Code>
-
-
+      <Code>[Debug OTP]: {JSON.stringify(otpVerifyStatus)}</Code>
       <Grid
         templateColumns="repeat(3, 1fr)"
         width="100%"
@@ -236,12 +301,16 @@ const AppUserRegister = ({ page }) => {
                 <Text fontWeight={700} fontSize={"24px"}>
                   {page?.content?.heading?.title}
                 </Text>
-                <Text
-                  marginTop="10px"
-                  dangerouslySetInnerHTML={{
-                    __html: page?.content?.startRegistration?.content,
-                  }}
-                />
+                {otpValid === false ? (
+                  wordExtractor(page?.content?.wordings, "invalid_otp")
+                ) : (
+                  <Text
+                    marginTop="10px"
+                    dangerouslySetInnerHTML={{
+                      __html: page?.content?.startRegistration?.content,
+                    }}
+                  />
+                )}
               </Container>
 
               <Box>
@@ -253,6 +322,7 @@ const AppUserRegister = ({ page }) => {
                       height="44px"
                       width="100%"
                       onClick={() => handleCheckOTP()}
+                      disabled={otpValid===false}
                     >
                       {page?.content?.continue}
                     </Button>
@@ -268,7 +338,10 @@ const AppUserRegister = ({ page }) => {
                       dangerouslySetInnerHTML={{
                         __html: page?.content?.remark?.text?.replace(
                           " ",
-                          `<b>${appRegistrationInfo?.email}</b>`
+                          `<b>${
+                            appRegistrationInfo?.email ??
+                            appRegistrationInfo?.phone
+                          }</b>`
                         ),
                       }}
                     />
