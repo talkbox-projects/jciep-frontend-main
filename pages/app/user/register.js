@@ -231,19 +231,8 @@ const AppUserRegister = ({ page }) => {
     checkOTP();
   }, [appRegistrationInfo]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setAppRegistrationInfo({
-        email: "demo@mail.com",
-        otp: "asdsss",
-        type: "email",
-      });
-    }, 1000);
-  }, []);
-
   return (
     <Box pt={{ base: "64px" }}>
-      <Code>[Debug OTP]: {JSON.stringify(otpVerifyStatus)}</Code>
       <Grid
         templateColumns="repeat(3, 1fr)"
         width="100%"
@@ -299,7 +288,7 @@ const AppUserRegister = ({ page }) => {
             >
               <Container>
                 <Text fontWeight={700} fontSize={"24px"}>
-                  {page?.content?.heading?.title}
+                  {otpValid === false ? wordExtractor(page?.content?.wordings, "invalid_otp_title") : page?.content?.heading?.title}
                 </Text>
                 {otpValid === false ? (
                   wordExtractor(page?.content?.wordings, "invalid_otp")
