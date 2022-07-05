@@ -866,12 +866,13 @@ const EventAdd = ({ page }) => {
                     </GridItem>
                     <GridItem>
                       <FormControl>
-                        <FormLabel {...labelStyles}>
-                          {wordExtractor(
+                        <LABEL
+                          name={wordExtractor(
                             page?.content?.wordings,
                             "quota_label"
                           )}
-                        </FormLabel>
+                          required={true}
+                        />
                         <Input
                           type="number"
                           variant="flushed"
@@ -879,8 +880,20 @@ const EventAdd = ({ page }) => {
                             page?.content?.wordings,
                             "quota_placeholder"
                           )}
-                          {...register("quota")}
+                          {...register("quota",{
+                            required: true,
+                          })}
                         />
+                        <FormHelperText>
+                          {errors?.quota?.type === "required" && (
+                            <Text color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "submission_deadline_required"
+                              )}
+                            </Text>
+                          )}
+                        </FormHelperText>
                       </FormControl>
                     </GridItem>
 

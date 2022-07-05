@@ -201,6 +201,7 @@ const EventAdd = ({ page }) => {
     startTime,
     endTime,
     datetimeRemark,
+    quota,
     venue,
     location,
     freeOrCharge,
@@ -296,6 +297,7 @@ const EventAdd = ({ page }) => {
         startTime: startTime,
         endTime: endTime,
         datetimeRemark: datetimeRemark,
+        quota:quota,
         venue: venue,
         location: location,
         freeOrCharge: freeOrCharge,
@@ -688,6 +690,39 @@ const EventAdd = ({ page }) => {
 
                       <FormHelperText>
                         {errors?.venue?.type === "required" && (
+                          <Text color="red">
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "input_required"
+                            )}
+                          </Text>
+                        )}
+                      </FormHelperText>
+                    </FormControl>
+                  </GridItem>
+
+                  <GridItem>
+                    <FormControl>
+                      <LABEL
+                        name={wordExtractor(
+                          page?.content?.wordings,
+                          "quota_label"
+                        )}
+                        required={true}
+                      />
+                      <Input
+                        type="text"
+                        variant="flushed"
+                        placeholder={wordExtractor(
+                          page?.content?.wordings,
+                          "quota_placeholder"
+                        )}
+                        {...register("quota",{
+                          required: true,
+                        })}
+                      />
+                      <FormHelperText>
+                        {errors?.quota?.type === "required" && (
                           <Text color="red">
                             {wordExtractor(
                               page?.content?.wordings,
