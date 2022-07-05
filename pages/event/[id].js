@@ -25,6 +25,9 @@ import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
 import { bookmarkEvent } from "../../utils/event/eventAction";
 
+import eventTypes from "../api/graphql/enum/eventTypes";
+import charge from "../api/graphql/enum/freeOrCharge";
+
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
@@ -187,7 +190,7 @@ const Event = ({ page}) => {
                                   "event_type_label"
                                 )}
                               </Text>
-                              <Text fontWeight={700}>{detail?.type}</Text>
+                              <Text fontWeight={700}>{detail?.type ? detail?.typeOther??eventTypes?.[detail?.type][page?.lang] : ""}</Text>
                             </Flex>
                           </Box>
                         </Flex>
@@ -317,7 +320,7 @@ const Event = ({ page}) => {
                         page?.content?.wordings,
                         "free_or_charge_label"
                       )}
-                      value={detail?.freeOrCharge}
+                      value={detail?.freeOrCharge ? charge?.[detail?.freeOrCharge][page?.lang] : ""}
                     />
 
                     <RegistrationRow
