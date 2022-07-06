@@ -2,7 +2,7 @@ import axios from "axios";
 
 const defaultParams = {
   orderBy: "createdAt",
-  orderByAsc: false,
+  orderByAsc: true,
   ended: false,
 };
 

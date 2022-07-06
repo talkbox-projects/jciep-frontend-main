@@ -221,9 +221,9 @@ const Event = ({ page}) => {
                             <Box>
                               <AiOutlineLink />
                             </Box>
-                            <Link to={d} target="_blank">
+                            <a href={d} target="_blank" rel="noreferrer">
                               {d}
-                            </Link>
+                            </a>
                           </Flex>
                         ))}
                       </Flex>

@@ -255,7 +255,7 @@ const Event = ({ page, token }) => {
               </Box>
             </Flex>
             {filteredEvents &&
-              Object.keys(filteredEvents).map((detail) => (
+              Object.keys(filteredEvents).reverse().map((detail) => (
                 <Box key={detail}>
                   <Flex
                     direction={{ base: "column", md: "row" }}
@@ -269,7 +269,7 @@ const Event = ({ page, token }) => {
                       <Text as="span" fontWeight={700}>
                         {moment(detail).format("MMMM")}
                       </Text>{" "}
-                      <Text as="span">2022</Text>
+                      <Text as="span">{moment(detail).format("YYYY")}</Text>
                     </Box>
                     <Box flex={1}>
                       <Grid
@@ -279,7 +279,7 @@ const Event = ({ page, token }) => {
                         }}
                         gap={6}
                       >
-                        {(filteredEvents[detail] || []).map((d, i) => {
+                        {(filteredEvents[detail].reverse() || []).map((d, i) => {
                           return (
                             <GridItem
                               key={`${d.id}${i}`}
