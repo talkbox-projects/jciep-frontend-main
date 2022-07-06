@@ -60,30 +60,30 @@ const Event = ({ page }) => {
     onClose: onCloseRegistrationModal,
   } = useDisclosure();
   const [popupImage, setPopupImage] = useState(null);
-  const [bookmarkActive, setBookmarkActive] = useState(false);
 
   const { identityId: currentIdentityId } = useAppContext();
 
-  useEffect(() => {
+  const fetchEventSingle = async () => {
     const { query } = router;
-    async function fetchData() {
-      const data = (await getEventDetail(query?.id)) ?? {};
-      setDetail(data);
-    }
-    fetchData();
-  }, [router, bookmarkActive]);
+    const data = (await getEventDetail(query?.id)) ?? {};
+    setDetail(data);
+  }
+
+  useEffect(() => {
+    fetchEventSingle()
+  }, [router]);
 
   const handleBookmark = async (id) => {
     const result = await bookmarkEvent(id);
     if (result) {
-      setBookmarkActive(true);
+      fetchEventSingle()
     }
   };
 
   const handleUnBookmark = async (id) => {
     const result = await unBookmarkEvent(id);
     if (result) {
-      setBookmarkActive(false);
+      fetchEventSingle()
     }
   };
 
@@ -213,7 +213,7 @@ const Event = ({ page }) => {
                           mt={4}
                           cursor="pointer"
                           onClick={() =>
-                            detail?.liked
+                            detail?.bookmarked
                               ? handleUnBookmark(detail?.id)
                               : handleBookmark(detail?.id)
                           }
@@ -512,7 +512,7 @@ const Event = ({ page }) => {
                       background:
                         "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
                     }}
-                    h={"16px"}
+                    h={"10px"}
                     w={"100%"}
                     opacity={0.2}
                   />
@@ -549,7 +549,7 @@ const Event = ({ page }) => {
                               fontSize={18}
                               mx={"auto"}
                               onClick={() =>
-                                detail?.liked
+                                detail?.bookmarked
                                   ? handleUnBookmark(detail?.id)
                                   : handleBookmark(detail?.id)
                               }
