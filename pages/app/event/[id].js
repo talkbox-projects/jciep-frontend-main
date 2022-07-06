@@ -28,7 +28,10 @@ import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
-import { bookmarkEvent } from "../../../utils/event/eventAction";
+import {
+  bookmarkEvent,
+  unBookmarkEvent,
+} from "../../../utils/event/eventAction";
 
 import eventTypes from "../../api/graphql/enum/eventTypes";
 import charge from "../../api/graphql/enum/freeOrCharge";
@@ -74,6 +77,13 @@ const Event = ({ page }) => {
     const result = await bookmarkEvent(id);
     if (result) {
       setBookmarkActive(true);
+    }
+  };
+
+  const handleUnBookmark = async (id) => {
+    const result = await unBookmarkEvent(id);
+    if (result) {
+      setBookmarkActive(false);
     }
   };
 
@@ -124,7 +134,7 @@ const Event = ({ page }) => {
                 borderRadius={"10px"}
                 overflow={"hidden"}
               >
-                <Box p={"16px"} fontSize={"14px"}>
+                <Box p={"16px"} pb={"32px"} fontSize={"14px"}>
                   <Stack>
                     <Flex align="center" gap={2}>
                       <Box w={"20px"}>
@@ -133,14 +143,25 @@ const Event = ({ page }) => {
                           alt={""}
                           color="gray.500"
                           fontSize={18}
+                          minW={"18px"}
                         />
                       </Box>
                       <Box>
                         <b>
-                          {wordExtractor(page?.content?.wordings, "from_label")}{" "}
-                          {moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
-                          {wordExtractor(page?.content?.wordings, "to_label")}{" "}
-                          {moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
+                          {detail?.startDate &&
+                            wordExtractor(
+                              page?.content?.wordings,
+                              "from_label"
+                            )}{" "}
+                          {detail?.startDate &&
+                            moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
+                          {detail?.endDate &&
+                            wordExtractor(
+                              page?.content?.wordings,
+                              "to_label"
+                            )}{" "}
+                          {detail?.endDate &&
+                            moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
                         </b>
                       </Box>
                     </Flex>
@@ -152,6 +173,7 @@ const Event = ({ page }) => {
                           alt={""}
                           color="gray.500"
                           fontSize={18}
+                          minW={"18px"}
                         />
                       </Box>
                       <Box>
@@ -174,6 +196,7 @@ const Event = ({ page }) => {
                           alt={""}
                           color="gray.500"
                           fontSize={18}
+                          minW={"12px"}
                           mx={"auto"}
                         />
                       </Box>
@@ -189,7 +212,11 @@ const Event = ({ page }) => {
                           spacing={1}
                           mt={4}
                           cursor="pointer"
-                          onClick={() => handleBookmark(detail?.id)}
+                          onClick={() =>
+                            detail?.liked
+                              ? handleUnBookmark(detail?.id)
+                              : handleBookmark(detail?.id)
+                          }
                         >
                           <Image
                             src={"/images/app/bookmark-off.svg"}
@@ -472,12 +499,18 @@ const Event = ({ page }) => {
                   </Stack>
                 </Box>
 
-                <Box>
+                <Box
+                  sx={{
+                    position: "fixed",
+                    bottom: "0",
+                    width: "100%",
+                    backgroundColor: "#FFF",
+                  }}
+                >
                   <Box
                     style={{
                       background:
                         "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
-                      marginTop: "60px",
                     }}
                     h={"16px"}
                     w={"100%"}
@@ -498,26 +531,31 @@ const Event = ({ page }) => {
                           "registration_label"
                         )}
                       </Button>
-                      {currentIdentityId && (<Box
-                        border="1px solid #EFEFEF"
-                        borderRadius="50%"
-                        p={2}
-                        minW={"45px"}
-                      >
-                        <Center h={"100%"}>
-                          <Image
-                            src={
-                              detail?.bookmarked
-                                ? "/images/app/bookmark-active.svg"
-                                : "/images/app/bookmark-off.svg"
-                            }
-                            alt={""}
-                            fontSize={18}
-                            mx={"auto"}
-                            onClick={() => handleBookmark(detail?.id)}
-                          />
-                        </Center>
-                      </Box>
+                      {currentIdentityId && (
+                        <Box
+                          border="1px solid #EFEFEF"
+                          borderRadius="50%"
+                          p={2}
+                          minW={"45px"}
+                        >
+                          <Center h={"100%"}>
+                            <Image
+                              src={
+                                detail?.bookmarked
+                                  ? "/images/app/bookmark-active.svg"
+                                  : "/images/app/bookmark-off.svg"
+                              }
+                              alt={""}
+                              fontSize={18}
+                              mx={"auto"}
+                              onClick={() =>
+                                detail?.liked
+                                  ? handleUnBookmark(detail?.id)
+                                  : handleBookmark(detail?.id)
+                              }
+                            />
+                          </Center>
+                        </Box>
                       )}
                     </Flex>
                   </Box>

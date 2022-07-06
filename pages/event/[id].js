@@ -24,7 +24,7 @@ import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
-import { bookmarkEvent } from "../../utils/event/eventAction";
+import { bookmarkEvent, unBookmarkEvent} from "../../utils/event/eventAction";
 
 import eventTypes from "../api/graphql/enum/eventTypes";
 import charge from "../api/graphql/enum/freeOrCharge";
@@ -45,6 +45,7 @@ export const getServerSideProps = async (context) => {
 
 const Event = ({ page }) => {
   const router = useRouter();
+  const { identityId: currentIdentityId } = useAppContext();
   const [detail, setDetail] = useState([]);
   const [bookmarkActive, setBookmarkActive] = useState(false);
 
@@ -81,6 +82,13 @@ const Event = ({ page }) => {
     const result = await bookmarkEvent(id);
     if (result) {
       setBookmarkActive(true);
+    }
+  };
+
+  const handleUnBookmark = async (id) => {
+    const result = await unBookmarkEvent(id);
+    if (result) {
+      setBookmarkActive(false);
     }
   };
 
@@ -131,6 +139,7 @@ const Event = ({ page }) => {
                               alt={""}
                               color="gray.500"
                               fontSize={18}
+                              minW={"18px"}
                             />
                           </Box>
                           <Box>
@@ -156,6 +165,7 @@ const Event = ({ page }) => {
                               alt={""}
                               color="gray.500"
                               fontSize={18}
+                              minW={"18px"}
                             />
                           </Box>
                           <Box>
@@ -180,6 +190,7 @@ const Event = ({ page }) => {
                               alt={""}
                               color="gray.500"
                               fontSize={18}
+                              minW={"12px"}
                               mx={"auto"}
                             />
                           </Box>

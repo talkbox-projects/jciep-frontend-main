@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 export const likeEvent = async (id) => {
   try {
@@ -13,16 +13,22 @@ export const likeEvent = async (id) => {
 
 export const bookmarkEvent = async (id) => {
   try {
-    const { data: { data } = {} } = await axios.post(`/api/app/event/${id}/bookmark`);
+    const { data: { data } = {} } = await fetch(`/api/app/event/${id}/bookmark`, {
+      method: "POST",
+    });
     return data;
   } catch (e) {
     return null;
   }
-  // axios.post(`/api/app/event/${id}/bookmark`)
-  // .then(function (response) {
-  //   console.log(response);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
+};
+
+export const unBookmarkEvent = async (id) => {
+  try {
+    const { data: { data } = {} } = await fetch(`/api/app/event/${id}/unbookmark`, {
+      method: "POST",
+    });
+    return data;
+  } catch (e) {
+    return null;
+  }
 };
