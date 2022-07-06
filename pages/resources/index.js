@@ -30,7 +30,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Center
+  Center,
+  Input,
 } from "@chakra-ui/react";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
@@ -50,7 +51,7 @@ import Anchor from "../../components/Anchor";
 import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { NextArrow, PrevArrow } from "../../components/SliderArrow";
-import { CloseIcon } from '@chakra-ui/icons'
+import { CloseIcon } from "@chakra-ui/icons";
 
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import { TiThList } from "react-icons/ti";
@@ -100,7 +101,7 @@ const ServiceFilter = ({
 }) => (
   <Menu>
     <MenuButton
-      minW={["120px", "120px", "180px", "240px"]}
+      minW={["120px", "120px", "180px", "220px"]}
       as={Button}
       variant="outline"
       rightIcon={<ChevronDownIcon />}
@@ -162,6 +163,7 @@ const Resources = ({ page, enums, setting }) => {
   const [serviceOrgFilter, setServiceOrgFilter] = useState([]);
   const [serviceTargetFilter, setServiceTargetFilter] = useState([]);
   const [serviceDetailFilter, setServiceDetailFilter] = useState([]);
+  const [serviceTextFilter, setServiceTextFilter] = useState("");
 
   const handleRowOnClick = (data) => {
     onOpen();
@@ -172,6 +174,7 @@ const Resources = ({ page, enums, setting }) => {
     setServiceOrgFilter([]);
     setServiceTargetFilter([]);
     setServiceDetailFilter([]);
+    setServiceTextFilter("")
   };
 
   const serviceTargetList = useMemo(
@@ -189,9 +192,9 @@ const Resources = ({ page, enums, setting }) => {
       serviceTargetFilter.length === 0 &&
       serviceDetailFilter.length === 0
     )
-      return page?.content?.resourceSection?.resources;
+      return page?.content?.resourceSection?.resources.filter(d=>d?.name?.text.search(new RegExp(serviceTextFilter.replace(/\s+/, '|'))) != -1);
 
-    return page?.content?.resourceSection?.resources.filter((resource) => {
+    const filtered = page?.content?.resourceSection?.resources.filter((resource) => {
       const isServiceOrgMatched =
         serviceOrgFilter.length === 0 ||
         serviceOrgFilter?.includes(resource?.category);
@@ -218,21 +221,32 @@ const Resources = ({ page, enums, setting }) => {
         );
 
         return isSupport || isInternship || isProbationOrReferral || isSubsidy;
-      })();
+      })();      
 
       return isServiceOrgMatched && isServiceTarget && isServiceDetail;
-    });
+    })
+
+    return filtered.filter(d=>d?.name?.text.search(new RegExp(serviceTextFilter.replace(/\s+/, '|'))) != -1);
+
+
   }, [
     page?.content?.resourceSection?.resources,
     serviceDetailFilter,
     serviceOrgFilter,
     serviceTargetFilter,
+    serviceTextFilter
   ]);
 
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
     return (categories ?? []).find((c) => c.key === key);
   };
+
+  const handleTextFilter = (e) => {
+    e.preventDefault();
+    const {value} = e.target;
+    setServiceTextFilter(value)
+  }
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
@@ -272,7 +286,7 @@ const Resources = ({ page, enums, setting }) => {
         </Box>
       </Box>
       {/* Dialogue Section */}
-      {/* <Box bg="#F6D644">
+      <Box bg="#F6D644">
         <Container pos="relative">
           <VStack align="stretch" spacing={0} pt={16}>
             <Box alignSelf="center" fontSize={["2xl", "4xl"]}>
@@ -488,7 +502,7 @@ const Resources = ({ page, enums, setting }) => {
       </Box>
       <Box bg="#FEB534">
         <DividerSimple nextColor="#F3F3F3" />
-      </Box> */}
+      </Box>
       {/* resource Section */}
 
       <Box bg="#F3F3F3">
@@ -498,6 +512,15 @@ const Resources = ({ page, enums, setting }) => {
             {page?.content?.resourceSection["title 標題"]}
           </Text>
           <Stack direction={["column", "row"]} spacing={8} pb={4}>
+            <Input
+              h={"44px"}
+              onChange={handleTextFilter}
+              placeholder={wordExtractor(
+                page?.content?.wordings,
+                "search_placeholder"
+              )}
+            />
+
             <ServiceFilter
               label="服務提供機構"
               value={serviceOrgFilter}
@@ -657,8 +680,9 @@ const Resources = ({ page, enums, setting }) => {
                         {wordExtractor(page?.content?.wordings, "table_th_7")}
                       </Th>
 
-                      <Th style={{ padding: "0 15px", textAlign: "center" }}>
-                      </Th>
+                      <Th
+                        style={{ padding: "0 15px", textAlign: "center" }}
+                      ></Th>
                     </Tr>
                   </Thead>
                   <Tbody style={{ backgroundColor: "#FFF", fontSize: "14px" }}>
@@ -686,7 +710,7 @@ const Resources = ({ page, enums, setting }) => {
                             borderBottom: "1px solid #EAEAEA",
                             padding: "20px 10px",
                           }}
-                          onClick={()=>handleRowOnClick(resource)}
+                          onClick={() => handleRowOnClick(resource)}
                         >
                           <Td style={{ padding: "0 15px" }}>{name?.text}</Td>
                           <Td style={{ padding: "0 15px" }}>
@@ -734,7 +758,10 @@ const Resources = ({ page, enums, setting }) => {
                             />
                           </Td>
                           <Td style={{ textAlign: "center" }}>
-                          {wordExtractor(page?.content?.wordings, "click_for_detail")}
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "click_for_detail"
+                            )}
                           </Td>
                         </Tr>
                       );
@@ -1129,7 +1156,13 @@ const Resources = ({ page, enums, setting }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <CloseIcon onClick={()=>onClose()} position="absolute" top={'15px'} right={'15px'} cursor={'pointer'}/>
+            <CloseIcon
+              onClick={() => onClose()}
+              position="absolute"
+              top={"15px"}
+              right={"15px"}
+              cursor={"pointer"}
+            />
             <VStack px={2} alignItems="stretch">
               <ModalCard
                 name={modalData?.name}
@@ -1187,8 +1220,7 @@ const TableRow = ({
       onMouseLeave={() => setActive(false)}
       onClick={() => handleRowOnClick(resource)}
     >
-      <Td style={{ width: "200px", padding: "0 15px" }}>
-      {name?.text}</Td>
+      <Td style={{ width: "200px", padding: "0 15px" }}>{name?.text}</Td>
       <Td style={{ width: "200px", padding: "0 15px" }}>
         {organization?.text}
       </Td>
@@ -1220,17 +1252,16 @@ const TableRow = ({
         />
       </Td>
       <Td style={{ minWidth: "80px", textAlign: "center" }}>
-      <div style={{ height: "100px", margin: "20px 0"}}>
+        <div style={{ height: "100px", margin: "20px 0" }}>
           <Center h={"100%"}>
-          <Checkbox
-          size="md"
-          colorScheme="green"
-          defaultChecked={subsidy?.length > 0}
-          style={disableClick}
-        />
+            <Checkbox
+              size="md"
+              colorScheme="green"
+              defaultChecked={subsidy?.length > 0}
+              style={disableClick}
+            />
           </Center>
         </div>
-       
       </Td>
     </Tr>
   );
