@@ -24,6 +24,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import Container from "../../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
@@ -46,31 +47,6 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const handleOpenWebView = (url) => {
-  const json = {
-    name: "openWebView",
-    options: {
-      callback: "openWebViewHandler",
-      params: {
-        value: url.replace(" ",""),
-        type: "external",
-        isRedirect: false,
-      },
-    },
-  };
-
-  window.WebContext = {};
-  window.WebContext.openWebViewHandler = (response) => {
-    if (!response) {
-      alert("response.result null");
-    }
-  };
-
-  if (window && window.AppContext && window.AppContext.postMessage) {
-    window.AppContext.postMessage(JSON.stringify(json));
-  }
-};
-
 const Event = ({ page }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
@@ -81,6 +57,9 @@ const Event = ({ page }) => {
     onClose: onCloseRegistrationModal,
   } = useDisclosure();
   const [popupImage, setPopupImage] = useState(null);
+  const [bookmarkActive, setBookmarkActive] = useState(false);
+
+  const { identityId: currentIdentityId } = useAppContext();
 
   useEffect(() => {
     const { query } = router;
@@ -89,7 +68,39 @@ const Event = ({ page }) => {
       setDetail(data);
     }
     fetchData();
-  }, [router]);
+  }, [router, bookmarkActive]);
+
+  const handleBookmark = async (id) => {
+    const result = await bookmarkEvent(id);
+    if (result) {
+      setBookmarkActive(true);
+    }
+  };
+
+  const handleOpenWebView = (url) => {
+    const json = {
+      name: "openWebView",
+      options: {
+        callback: "openWebViewHandler",
+        params: {
+          value: url.replace(" ", ""),
+          type: "external",
+          isRedirect: false,
+        },
+      },
+    };
+
+    window.WebContext = {};
+    window.WebContext.openWebViewHandler = (response) => {
+      if (!response) {
+        alert("response.result null");
+      }
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -172,30 +183,47 @@ const Event = ({ page }) => {
                     </Flex>
 
                     <Flex align="center" gap={2}>
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        mt={4}
-                        cursor="pointer"
-                        onClick={() => bookmarkEvent(detail?.id)}
-                      >
-                        <Image
-                          src={"/images/app/bookmark-off.svg"}
-                          alt={""}
-                          fontSize={18}
-                        />
-                        <Text mt={6} color="#0D8282" fontWeight={700}>
-                          {detail?.liked
-                            ? wordExtractor(
-                                page?.content?.wordings,
-                                "you_and_other_liked"
-                              ).replace("$", detail?.bookmarkCount || 0)
-                            : wordExtractor(
-                                page?.content?.wordings,
-                                "other_liked"
-                              ).replace("$", detail?.bookmarkCount || 0)}
-                        </Text>
-                      </Stack>
+                      {currentIdentityId ? (
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          mt={4}
+                          cursor="pointer"
+                          onClick={() => handleBookmark(detail?.id)}
+                        >
+                          <Image
+                            src={"/images/app/bookmark-off.svg"}
+                            alt={""}
+                            fontSize={18}
+                          />
+                          <Text mt={6} color="#0D8282" fontWeight={700}>
+                            {detail?.liked
+                              ? wordExtractor(
+                                  page?.content?.wordings,
+                                  "you_and_other_liked"
+                                ).replace("$", detail?.bookmarkCount || 0)
+                              : wordExtractor(
+                                  page?.content?.wordings,
+                                  "other_liked"
+                                ).replace("$", detail?.bookmarkCount || 0)}
+                          </Text>
+                        </Stack>
+                      ) : (
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          mt={4}
+                          cursor="pointer"
+                          onClick={() => handleBookmark(detail?.id)}
+                        >
+                          <Text mt={6} color="#0D8282" fontWeight={700}>
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "other_liked"
+                            ).replace("$", detail?.bookmarkCount || 0)}
+                          </Text>
+                        </Stack>
+                      )}
                     </Flex>
                   </Stack>
                   <Divider my={4} />
@@ -223,7 +251,12 @@ const Event = ({ page }) => {
                             "event_type_label"
                           )}
                         </Text>
-                        <Text fontWeight={700}>{detail?.type ? detail?.typeOther??eventTypes?.[detail?.type][page?.lang] : ""}</Text>
+                        <Text fontWeight={700}>
+                          {detail?.type
+                            ? detail?.typeOther ??
+                              eventTypes?.[detail?.type][page?.lang]
+                            : ""}
+                        </Text>
                       </Flex>
                     </Box>
                   </Flex>
@@ -262,9 +295,7 @@ const Event = ({ page }) => {
                             mx={"auto"}
                           />
                         </Box>
-                        <Box>
-                          {d}
-                        </Box>
+                        <Box>{d}</Box>
                       </Flex>
                     ))}
                   </Flex>
@@ -352,7 +383,11 @@ const Event = ({ page }) => {
                         page?.content?.wordings,
                         "free_or_charge_label"
                       )}
-                      value={detail?.freeOrCharge ? charge?.[detail?.freeOrCharge][page?.lang] : ""}
+                      value={
+                        detail?.freeOrCharge
+                          ? charge?.[detail?.freeOrCharge][page?.lang]
+                          : ""
+                      }
                     />
 
                     <RegistrationRow
@@ -423,8 +458,13 @@ const Event = ({ page }) => {
                               mx={"auto"}
                             />
                           </Box>
-                          <Box color="#0D8282" onClick={() => handleOpenWebView(detail?.registerUrl)}>
-                          {detail?.registerUrl}
+                          <Box
+                            color="#0D8282"
+                            onClick={() =>
+                              handleOpenWebView(detail?.registerUrl)
+                            }
+                          >
+                            {detail?.registerUrl}
                           </Box>
                         </Flex>
                       </Box>
@@ -458,7 +498,7 @@ const Event = ({ page }) => {
                           "registration_label"
                         )}
                       </Button>
-                      <Box
+                      {currentIdentityId && (<Box
                         border="1px solid #EFEFEF"
                         borderRadius="50%"
                         p={2}
@@ -474,10 +514,11 @@ const Event = ({ page }) => {
                             alt={""}
                             fontSize={18}
                             mx={"auto"}
-                            onClick={() => bookmarkEvent(detail?.id)}
+                            onClick={() => handleBookmark(detail?.id)}
                           />
                         </Center>
                       </Box>
+                      )}
                     </Flex>
                   </Box>
                 </Box>
@@ -520,6 +561,31 @@ const RegistrationModal = ({
   registerUrl,
   contactNumber,
 }) => {
+  const handleOpenWebView = (url) => {
+    const json = {
+      name: "openWebView",
+      options: {
+        callback: "openWebViewHandler",
+        params: {
+          value: url.replace(" ", ""),
+          type: "external",
+          isRedirect: false,
+        },
+      },
+    };
+
+    window.WebContext = {};
+    window.WebContext.openWebViewHandler = (response) => {
+      if (!response) {
+        alert("response.result null");
+      }
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
   return (
     <Modal
       blockScrollOnMount={true}
@@ -537,7 +603,7 @@ const RegistrationModal = ({
             <Box flex={1} />
             <Box m={"15px"}>
               <Box bgColor={"#FFF"} borderRadius={"15px"} p={6}>
-                <Box onClick={()=> handleOpenWebView(registerUrl)}>
+                <Box onClick={() => handleOpenWebView(registerUrl)}>
                   <Flex direction="row" gap={2} align="center">
                     <Box w={"20px"}>
                       <Image

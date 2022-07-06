@@ -20,6 +20,7 @@ import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
@@ -42,9 +43,10 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Event = ({ page}) => {
+const Event = ({ page }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [bookmarkActive, setBookmarkActive] = useState(false);
 
   useEffect(() => {
     const { query } = router;
@@ -53,17 +55,33 @@ const Event = ({ page}) => {
       setDetail(data);
     }
     fetchData();
-  }, [router]);
+
+    if (bookmarkActive) {
+      fetchData();
+    }
+  }, [router, bookmarkActive]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
-      <Flex direction="row" gap={2} justifyContent="space-between" fontSize="14px">
+      <Flex
+        direction="row"
+        gap={2}
+        justifyContent="space-between"
+        fontSize="14px"
+      >
         <Box minW={"100px"}>
           <Text>{title}</Text>
         </Box>
         <Text fontWeight={700}>{value}</Text>
       </Flex>
     );
+  };
+
+  const handleBookmark = async (id) => {
+    const result = await bookmarkEvent(id);
+    if (result) {
+      setBookmarkActive(true);
+    }
   };
 
   return (
@@ -106,61 +124,69 @@ const Event = ({ page}) => {
                   >
                     <Box p={"16px"} fontSize={"14px"}>
                       <Stack spacing={4} direction="column">
-                      <Flex align="center" gap={2}>
-                      <Box w={"20px"}>
-                        <Image
-                          src={"/images/app/calendar.svg"}
-                          alt={""}
-                          color="gray.500"
-                          fontSize={18}
-                        />
-                      </Box>
-                      <Box>
-                        <b>
-                          {wordExtractor(page?.content?.wordings, "from_label")}{" "}
-                          {moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
-                          {wordExtractor(page?.content?.wordings, "to_label")}{" "}
-                          {moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
-                        </b>
-                      </Box>
-                    </Flex>
+                        <Flex align="center" gap={2}>
+                          <Box w={"20px"}>
+                            <Image
+                              src={"/images/app/calendar.svg"}
+                              alt={""}
+                              color="gray.500"
+                              fontSize={18}
+                            />
+                          </Box>
+                          <Box>
+                            <b>
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "from_label"
+                              )}{" "}
+                              {moment(detail?.startDate).format("YYYY-MM-DD")}{" "}
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "to_label"
+                              )}{" "}
+                              {moment(detail?.endDate).format("YYYY-MM-DD")}{" "}
+                            </b>
+                          </Box>
+                        </Flex>
 
-                    <Flex align="center" gap={2}>
-                      <Box w={"20px"}>
-                        <Image
-                          src={"/images/app/time.svg"}
-                          alt={""}
-                          color="gray.500"
-                          fontSize={18}
-                        />
-                      </Box>
-                      <Box>
-                        <b>
-                          {moment(detail?.startTime, ["HH.mm"]).format(
-                            "hh:mm a"
-                          )}{" "}
-                          -{" "}
-                          {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
-                          
-                        {detail?.datetimeRemark && `(${detail?.datetimeRemark})`}
-                        </b>
-                      </Box>
-                    </Flex>
+                        <Flex align="center" gap={2}>
+                          <Box w={"20px"}>
+                            <Image
+                              src={"/images/app/time.svg"}
+                              alt={""}
+                              color="gray.500"
+                              fontSize={18}
+                            />
+                          </Box>
+                          <Box>
+                            <b>
+                              {moment(detail?.startTime, ["HH.mm"]).format(
+                                "hh:mm a"
+                              )}{" "}
+                              -{" "}
+                              {moment(detail?.endTime, ["HH.mm"]).format(
+                                "hh:mm a"
+                              )}{" "}
+                              {detail?.datetimeRemark &&
+                                `(${detail?.datetimeRemark})`}
+                            </b>
+                          </Box>
+                        </Flex>
 
-                    <Flex align="center" gap={2}>
-                      <Box w={"20px"} textAlign="center">
-                        <Image
-                          src={"/images/app/location-pin.svg"}
-                          alt={""}
-                          color="gray.500"
-                          fontSize={18}
-                          mx={"auto"}
-                        />
-                      </Box>
-                      <Box>
-                        <b>{detail?.venue}</b>
-                      </Box>
-                    </Flex>
+                        <Flex align="center" gap={2}>
+                          <Box w={"20px"} textAlign="center">
+                            <Image
+                              src={"/images/app/location-pin.svg"}
+                              alt={""}
+                              color="gray.500"
+                              fontSize={18}
+                              mx={"auto"}
+                            />
+                          </Box>
+                          <Box>
+                            <b>{detail?.venue}</b>
+                          </Box>
+                        </Flex>
                       </Stack>
                       <Divider my={4} />
                       <Flex gap={4} direction="column">
@@ -190,7 +216,12 @@ const Event = ({ page}) => {
                                   "event_type_label"
                                 )}
                               </Text>
-                              <Text fontWeight={700}>{detail?.type ? detail?.typeOther??eventTypes?.[detail?.type][page?.lang] : ""}</Text>
+                              <Text fontWeight={700}>
+                                {detail?.type
+                                  ? detail?.typeOther ??
+                                    eventTypes?.[detail?.type][page?.lang]
+                                  : ""}
+                              </Text>
                             </Flex>
                           </Box>
                         </Flex>
@@ -299,8 +330,13 @@ const Event = ({ page}) => {
                       {detail?.description}
                     </Text>
                   </Box>
-                  <Divider my={6}/>
-                  <Stack direction={"column"} spacing={2} py={4} fontSize="14px">
+                  <Divider my={6} />
+                  <Stack
+                    direction={"column"}
+                    spacing={2}
+                    py={4}
+                    fontSize="14px"
+                  >
                     <Text fontWeight={700} mb={2}>
                       {wordExtractor(
                         page?.content?.wordings,
@@ -320,7 +356,11 @@ const Event = ({ page}) => {
                         page?.content?.wordings,
                         "free_or_charge_label"
                       )}
-                      value={detail?.freeOrCharge ? charge?.[detail?.freeOrCharge][page?.lang] : ""}
+                      value={
+                        detail?.freeOrCharge
+                          ? charge?.[detail?.freeOrCharge][page?.lang]
+                          : ""
+                      }
                     />
 
                     <RegistrationRow
@@ -358,7 +398,13 @@ const Event = ({ page}) => {
                       )}
                       value={detail?.contactNumber}
                     />
-                    <Stack direction="row" spacing={1} mt={4} cursor="pointer" onClick={() => bookmarkEvent(detail?.id)}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      mt={4}
+                      cursor="pointer"
+                      onClick={() => handleBookmark(detail?.id)}
+                    >
                       <Text mt={6} color="#0D8282" fontWeight={700}>
                         {detail?.liked
                           ? wordExtractor(
