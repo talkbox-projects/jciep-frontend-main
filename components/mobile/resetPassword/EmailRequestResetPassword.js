@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { phoneRegex, emailRegex } from "../../../utils/general";
 import { useGetWording } from "../../../utils/wordings/useWording";
-import UserPasswordResetEmailSend from "../../../utils/api/UserPasswordResetEmailSend";
+import UserPasswordResetEmailOTPSend from "../../../utils/api/UserPasswordResetEmailOTPSend";
 
 const EmailRequestResetPassword = () => {
   const {
@@ -39,7 +39,7 @@ const EmailRequestResetPassword = () => {
   const toast = useToast();
   const onResetPasswordEmailSent = async ({ email }) => {
     try {
-      const sent = await UserPasswordResetEmailSend({ email });
+      const sent = await UserPasswordResetEmailOTPSend({ email });
       toast({
         status: "success",
         title: getWording("resentPassword.reset_password_email_sent_success"),
@@ -49,12 +49,12 @@ const EmailRequestResetPassword = () => {
         throw new Error("Failed!");
       }
 
-      // setResetPasswordStatus({
-      //   ...resetPasswordStatus,
-      //   email: email,
-      //   type: "resetPassword",
-      //   step: "verify",
-      // });
+      setResetPasswordStatus({
+        ...resetPasswordStatus,
+        email: email,
+        type: "resetPassword",
+        step: "verify",
+      });
 
     } catch (error) {
       console.error(error);

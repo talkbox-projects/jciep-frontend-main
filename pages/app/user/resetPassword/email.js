@@ -1,8 +1,8 @@
 import { useAppContext } from "../../../../store/AppStore";
 import React from "react";
 import EmailRequestResetPassword from "../../../../components/mobile/resetPassword/EmailRequestResetPassword"
-import OtpVerify from "../../../../components/mobile/resetPassword/OtpVerify"
-import PhoneResetPassword from "../../../../components/mobile/resetPassword/PhoneResetPassword"
+import EmailOtpVerify from "../../../../components/mobile/resetPassword/EmailOtpVerify"
+import EmailResetPassword from "../../../../components/mobile/resetPassword/EmailResetPassword"
 
 const EmailResetPasswordWrap = () => {
   const {
@@ -14,10 +14,10 @@ const EmailResetPasswordWrap = () => {
         return (<EmailRequestResetPassword/>)
 
     case "verify":
-        return (<OtpVerify/>)
+        return (<EmailOtpVerify/>)
 
     case "resetPassword":
-        return (<PhoneResetPassword/>)
+        return (<EmailResetPassword/>)
   
     default:
         return (<></>)

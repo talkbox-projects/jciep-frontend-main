@@ -557,6 +557,41 @@ export default {
       }
     },
 
+    UserPasswordResetEmailOTPSend: async (_parent, { email }) => {
+      try {
+        const emailVerify = await EmailVerify.create({
+          email,
+          meta: { type: "resetPassword" },
+        });
+
+        await send(
+          email,
+          {
+            description: emailVerify.otp,
+            button_text: "重設密碼",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+
     UserPasswordReset: async (_parent, { token, password }) => {
       /**
        * email is decoded from token

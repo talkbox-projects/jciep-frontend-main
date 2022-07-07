@@ -293,11 +293,11 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                     </FormControl>
                   </GridItem>
 
-                  <GridItem colSpan={{ base: 2 }}>
+                  {/* <GridItem colSpan={{ base: 2 }}>
                   <div>
                     {JSON.stringify(debug)}
                     </div>
-                  </GridItem>
+                  </GridItem> */}
 
                   {showSelectCentre && (
                     <GridItem colSpan={{ base: 2 }} pt={6}>

@@ -149,12 +149,12 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
             </Center>
             <br/>
 
-            <Code>
+            {/* <Code>
                 identityId: {id}
                 <br />
                 token: {token}
                 <br />
-              </Code>
+              </Code> */}
 
             <Box bgColor="#FFF">
               <Box

@@ -296,6 +296,7 @@ export default gql`
     UserLogout: Boolean
 
     UserPasswordResetEmailSend(email: String!): Boolean
+    UserPasswordResetEmailOTPSend(email: String!): Boolean
     UserPasswordResetPhoneSend(phone: String!): Boolean
     UserPasswordReset(token: String!, password: String!): Boolean
 

@@ -15,11 +15,13 @@ import wishToDo from "./enum/wishToDo";
 const emailVerifySchema = Schema({
   email: { type: String, required: true },
   token: { type: String, required: true },
+  otp: { type: String, required: true },
   meta: { type: Schema.Types.Mixed },
 });
 
 emailVerifySchema.pre("validate", async function (next) {
   this.token = uuidv4();
+  this.otp = parseInt(Math.random() * 900000 + 100000).toString();
   next();
 });
 
