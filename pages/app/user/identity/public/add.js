@@ -33,6 +33,8 @@ import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
 
+import nookies from "nookies";
+
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
@@ -70,14 +72,13 @@ const labelStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   const router = useRouter();
-  const { user } = useAppContext();
+  const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
 
   const [debug, setDebug] = useState({});
-
 
   const {
     handleSubmit,
@@ -89,6 +90,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
     setError,
     getValues,
   } = useForm();
+  
 
   const watchFields = watch(
     [
@@ -118,6 +120,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
         input,
       });
       if (data && data.IdentityCreate) {
+
+        setIdentityId(data.IdentityCreate?.id);
+        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, { path: "/" });
+
         if (invitationCode) {
           await OrganizationMemberJoin({
             invitationCode: invitationCode,

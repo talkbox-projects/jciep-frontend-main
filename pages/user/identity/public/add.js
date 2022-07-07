@@ -81,12 +81,13 @@ const customStyles = {
 
 const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cToken, cIdentityId }) => {
   const router = useRouter();
-  const { user, updateIdentity, setUser } = useAppContext();
+  const { user, updateIdentity, setUser, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState();
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
   const [setCredential] = useCredential();
+
   const {
     handleSubmit,
     register,
@@ -131,13 +132,18 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
       });
 
       if (data && data.IdentityCreate) {
-        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
+
+        setIdentityId(data.IdentityCreate?.id);
+        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, { path: "/" });
+
         if(invitationCode){
           await OrganizationMemberJoin({
             invitationCode: invitationCode,
             identityId: data.IdentityCreate.id,
           });
         }
+
+        router.push(`/user/identity/public/${data.IdentityCreate.id}/success`);
       }
     } catch (e) {
       console.error(e);
