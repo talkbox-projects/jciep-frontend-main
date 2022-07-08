@@ -32,7 +32,10 @@ import {
   useDisclosure,
   Center,
   Input,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
 import "react-multi-carousel/lib/styles.css";
 import MultiTextRenderer from "../../components/MultiTextRenderer";
@@ -101,13 +104,14 @@ const ServiceFilter = ({
 }) => (
   <Menu>
     <MenuButton
-      minW={["120px", "120px", "180px", "220px"]}
+      flex={1}
       as={Button}
-      variant="outline"
+      variant="ghost"
       rightIcon={<ChevronDownIcon />}
       borderBottomWidth="2px"
       size="lg"
       textAlign="left"
+      borderRadius={0}
     >
       <Text w="100%">
         {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
@@ -174,7 +178,7 @@ const Resources = ({ page, enums, setting }) => {
     setServiceOrgFilter([]);
     setServiceTargetFilter([]);
     setServiceDetailFilter([]);
-    setServiceTextFilter("")
+    setServiceTextFilter("");
   };
 
   const serviceTargetList = useMemo(
@@ -192,49 +196,61 @@ const Resources = ({ page, enums, setting }) => {
       serviceTargetFilter.length === 0 &&
       serviceDetailFilter.length === 0
     )
-      return page?.content?.resourceSection?.resources.filter(d=>d?.name?.text.search(new RegExp(serviceTextFilter.replace(/\s+/, '|'))) != -1);
+      return page?.content?.resourceSection?.resources.filter(
+        (d) =>
+          d?.name?.text.search(
+            new RegExp(serviceTextFilter.replace(/\s+/, "|"))
+          ) != -1
+      );
 
-    const filtered = page?.content?.resourceSection?.resources.filter((resource) => {
-      const isServiceOrgMatched =
-        serviceOrgFilter.length === 0 ||
-        serviceOrgFilter?.includes(resource?.category);
+    const filtered = page?.content?.resourceSection?.resources.filter(
+      (resource) => {
+        const isServiceOrgMatched =
+          serviceOrgFilter.length === 0 ||
+          serviceOrgFilter?.includes(resource?.category);
 
-      const isServiceTarget =
-        serviceTargetFilter.length === 0 ||
-        !!resource?.serviceTarget?.tags?.find(({ value }) =>
-          serviceTargetFilter?.includes(value)
-        );
+        const isServiceTarget =
+          serviceTargetFilter.length === 0 ||
+          !!resource?.serviceTarget?.tags?.find(({ value }) =>
+            serviceTargetFilter?.includes(value)
+          );
 
-      const isServiceDetail = (() => {
-        if (serviceDetailFilter.length === 0) return true;
-        const isSupport = !!resource?.services?.find(({ category }) =>
-          serviceDetailFilter?.includes(category)
-        );
-        const isInternship =
-          serviceDetailFilter?.includes("internship") &&
-          resource?.internship?.value === true;
-        const isProbationOrReferral =
-          serviceDetailFilter?.includes("probationOrReferral") &&
-          resource?.probationOrReferral?.value === true;
-        const isSubsidy = !!resource?.subsidy?.find(({ target }) =>
-          serviceDetailFilter?.includes(target)
-        );
+        const isServiceDetail = (() => {
+          if (serviceDetailFilter.length === 0) return true;
+          const isSupport = !!resource?.services?.find(({ category }) =>
+            serviceDetailFilter?.includes(category)
+          );
+          const isInternship =
+            serviceDetailFilter?.includes("internship") &&
+            resource?.internship?.value === true;
+          const isProbationOrReferral =
+            serviceDetailFilter?.includes("probationOrReferral") &&
+            resource?.probationOrReferral?.value === true;
+          const isSubsidy = !!resource?.subsidy?.find(({ target }) =>
+            serviceDetailFilter?.includes(target)
+          );
 
-        return isSupport || isInternship || isProbationOrReferral || isSubsidy;
-      })();      
+          return (
+            isSupport || isInternship || isProbationOrReferral || isSubsidy
+          );
+        })();
 
-      return isServiceOrgMatched && isServiceTarget && isServiceDetail;
-    })
+        return isServiceOrgMatched && isServiceTarget && isServiceDetail;
+      }
+    );
 
-    return filtered.filter(d=>d?.name?.text.search(new RegExp(serviceTextFilter.replace(/\s+/, '|'))) != -1);
-
-
+    return filtered.filter(
+      (d) =>
+        d?.name?.text.search(
+          new RegExp(serviceTextFilter.replace(/\s+/, "|"))
+        ) != -1
+    );
   }, [
     page?.content?.resourceSection?.resources,
     serviceDetailFilter,
     serviceOrgFilter,
     serviceTargetFilter,
-    serviceTextFilter
+    serviceTextFilter,
   ]);
 
   const categories = setting?.value?.categories;
@@ -244,9 +260,9 @@ const Resources = ({ page, enums, setting }) => {
 
   const handleTextFilter = (e) => {
     e.preventDefault();
-    const {value} = e.target;
-    setServiceTextFilter(value)
-  }
+    const { value } = e.target;
+    setServiceTextFilter(value);
+  };
 
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
@@ -511,16 +527,8 @@ const Resources = ({ page, enums, setting }) => {
           <Text my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
           </Text>
-          <Stack direction={["column", "row"]} spacing={8} pb={4}>
-            <Input
-              h={"44px"}
-              onChange={handleTextFilter}
-              placeholder={wordExtractor(
-                page?.content?.wordings,
-                "search_placeholder"
-              )}
-            />
 
+          <Flex direction={["column", "row"]} gap={8} pb={4} justifyContent="flex-end" pos={'relative'} zIndex={2}>
             <ServiceFilter
               label="服務提供機構"
               value={serviceOrgFilter}
@@ -539,6 +547,32 @@ const Resources = ({ page, enums, setting }) => {
               onChange={setServiceDetailFilter}
               list={serviceDetailList}
             />
+            
+            <Stack mt={2} pos={'relative'} zIndex={1} d={["block", "none", "none"]}>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                left={"4px"}
+                top={"3px"}
+                cursor="pointer"
+              >
+                <SearchIcon color="gray.700" />
+              </InputLeftElement>
+              <Input
+                bgColor={"#FFF"}
+                borderRadius={"25px"}
+                border={"none"}
+                px={4}
+                minHeight={"45px"}
+                onChange={handleTextFilter}
+                placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "search_placeholder"
+                )}
+              />
+            </InputGroup>
+          </Stack>
+
             <Button
               colorScheme="black"
               type="reset"
@@ -548,7 +582,33 @@ const Resources = ({ page, enums, setting }) => {
             >
               {wordExtractor(page?.content?.wordings, "reset_label")}
             </Button>
+          </Flex>
+
+          <Stack mt={2} mb={4} pos={'relative'} zIndex={1} d={["none", "none", "block"]}>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                left={"4px"}
+                top={"3px"}
+                cursor="pointer"
+              >
+                <SearchIcon color="gray.700" />
+              </InputLeftElement>
+              <Input
+                bgColor={"#FFF"}
+                borderRadius={"25px"}
+                border={"none"}
+                px={4}
+                minHeight={"45px"}
+                onChange={handleTextFilter}
+                placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "search_placeholder"
+                )}
+              />
+            </InputGroup>
           </Stack>
+
           <Flex flexDirection="row" justifyContent="space-between">
             <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
             <Box>
@@ -624,7 +684,7 @@ const Resources = ({ page, enums, setting }) => {
                     <Tbody
                       style={{ backgroundColor: "#FFF", fontSize: "14px" }}
                     >
-                      {(filteredResourceList ?? []).map((resource, index) => {
+                      {(filteredResourceList ?? []).map((resource) => {
                         return (
                           <TableRow
                             key={resource?.id}
@@ -686,20 +746,15 @@ const Resources = ({ page, enums, setting }) => {
                     </Tr>
                   </Thead>
                   <Tbody style={{ backgroundColor: "#FFF", fontSize: "14px" }}>
-                    {(filteredResourceList ?? []).map((resource, index) => {
+                    {(filteredResourceList ?? []).map((resource) => {
                       const {
                         name,
-                        category,
                         organization,
                         serviceTarget,
                         services,
                         internship,
                         probationOrReferral,
                         subsidy,
-                        remark,
-                        topColor,
-                        contact,
-                        reminder,
                       } = resource;
 
                       return (
