@@ -6,7 +6,6 @@ import {
   GridItem,
   Box,
   Text,
-  Link,
   Button,
   Stack,
   Flex,
@@ -53,6 +52,7 @@ export const getServerSideProps = async (context) => {
 const Event = ({ page }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenRegistrationModal,
@@ -73,11 +73,16 @@ const Event = ({ page }) => {
     fetchEventSingle()
   }, [router]);
 
+  useEffect(() => {
+    setBookmarked(detail?.bookmarked)
+  }, [detail?.bookmarked])
+
   const handleBookmark = async (id) => {
     const result = await bookmarkEvent(id);
     if (result) {
       fetchEventSingle()
     }
+    setBookmarked(true)
   };
 
   const handleUnBookmark = async (id) => {
@@ -85,6 +90,7 @@ const Event = ({ page }) => {
     if (result) {
       fetchEventSingle()
     }
+    setBookmarked(false)
   };
 
   const handleOpenWebView = (url) => {
@@ -213,18 +219,18 @@ const Event = ({ page }) => {
                           mt={4}
                           cursor="pointer"
                           onClick={() =>
-                            detail?.bookmarked
+                            bookmarked
                               ? handleUnBookmark(detail?.id)
                               : handleBookmark(detail?.id)
                           }
                         >
                           <Image
-                            src={"/images/app/bookmark-off.svg"}
+                            src={bookmarked ? "/images/app/bookmark-active.svg" : "/images/app/bookmark-off.svg"}
                             alt={""}
                             fontSize={18}
                           />
                           <Text mt={6} color="#0D8282" fontWeight={700}>
-                            {detail?.liked
+                            {bookmarked
                               ? wordExtractor(
                                   page?.content?.wordings,
                                   "you_and_other_liked"
@@ -541,7 +547,7 @@ const Event = ({ page }) => {
                           <Center h={"100%"}>
                             <Image
                               src={
-                                detail?.bookmarked
+                                bookmarked
                                   ? "/images/app/bookmark-active.svg"
                                   : "/images/app/bookmark-off.svg"
                               }
@@ -549,7 +555,7 @@ const Event = ({ page }) => {
                               fontSize={18}
                               mx={"auto"}
                               onClick={() =>
-                                detail?.bookmarked
+                                bookmarked
                                   ? handleUnBookmark(detail?.id)
                                   : handleBookmark(detail?.id)
                               }
