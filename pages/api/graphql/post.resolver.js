@@ -9,12 +9,12 @@ export default {
       { lang, limit, page, category, featureDisplay },
       context
     ) => {
-      let status = [];
-      if (!checkIfAdmin(context?.auth?.identity)) {
-        status = ["published", "draft"];
-      } else {
-        status = ["removed", "published", "draft"];
-      }
+      let status = ["published"];
+      // if (!checkIfAdmin(context?.auth?.identity)) {
+      //   status = ["published", "draft"];
+      // } else {
+      //   status = ["removed", "published"];
+      // }
 
       const articlesData = await PostModel.aggregate([
         {
@@ -73,10 +73,13 @@ export default {
       }
     },
     PostGetHotest: async (_parent, { limit = 3 }) => {
-      const articles = await PostModel.find()
+      const articles = await PostModel.find({
+        status: "published",
+      })
         .sort({ viewCount: -1, _id: 1 })
         .limit(limit)
         .exec();
+
       return articles;
     },
     PostGetRelated: async (_parent, { category, limit, id }) => {
