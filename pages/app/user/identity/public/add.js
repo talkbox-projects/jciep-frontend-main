@@ -103,6 +103,32 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
     { pwd_type: [] }
   );
 
+  const handleOpenWebView = (url) => {
+    const json = {
+      name: "openWebView",
+      options: {
+        callback: "openWebViewHandler",
+        params: {
+          value: url.replace(" ", ""),
+          type: "external",
+          isRedirect: false,
+        },
+      },
+    };
+
+    window.WebContext = {};
+    window.WebContext.openWebViewHandler = (response) => {
+      if (!response) {
+        alert("response.result null");
+      }
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
+
   const handlePostData = async (input, invitationCode) => {
     setDebug({
       input: input,
@@ -1095,13 +1121,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                     {...register("terms", { required: true })}
                   >
                     {page?.content?.form?.terms?.text}{" "}
-                    <Link
-                      target="_blank"
-                      href={page?.content?.form?.terms?.url}
+                    <span
+                      onClick={() => handleOpenWebView(page?.content?.form?.terms?.url)}
                     >
                       {" "}
                       {page?.content?.form?.terms?.link}{" "}
-                    </Link>
+                    </span>
                   </Checkbox>
                   <FormHelperText>
                     {errors?.terms?.type === "required" && (

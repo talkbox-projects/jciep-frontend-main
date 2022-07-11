@@ -49,6 +49,7 @@ export const getHottestPosts = async ({ limit }, context) => {
         tags
         publishDate
         coverImage
+        status
       }
     }
   `;
@@ -95,6 +96,7 @@ export const getFilteredPosts = async (
           tags
           publishDate
           coverImage
+          status
         }
       }
     }
