@@ -16,6 +16,8 @@ import {
   ModalContent,
   ModalBody,
   Center,
+  VStack,
+  AspectRatio
 } from "@chakra-ui/react";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
@@ -27,6 +29,8 @@ import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
+import { getYoutubeLink } from "../../../utils/general";
+import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import {
   bookmarkEvent,
   unBookmarkEvent,
@@ -59,7 +63,17 @@ const Event = ({ page }) => {
     onOpen: onOpenRegistrationModal,
     onClose: onCloseRegistrationModal,
   } = useDisclosure();
+
+
+  const {
+    isOpen: isOpenVideoModal,
+    onOpen: onOpenVideoModal,
+    onClose: onCloseVideoModal,
+  } = useDisclosure();
+
+
   const [popupImage, setPopupImage] = useState(null);
+  const [popupVideo, setPopupVideo] = useState(null);
 
   const { identityId: currentIdentityId } = useAppContext();
 
@@ -67,30 +81,30 @@ const Event = ({ page }) => {
     const { query } = router;
     const data = (await getEventDetail(query?.id)) ?? {};
     setDetail(data);
-  }
+  };
 
   useEffect(() => {
-    fetchEventSingle()
+    fetchEventSingle();
   }, [router]);
 
   useEffect(() => {
-    setBookmarked(detail?.bookmarked)
-  }, [detail?.bookmarked])
+    setBookmarked(detail?.bookmarked);
+  }, [detail?.bookmarked]);
 
   const handleBookmark = async (id) => {
     const result = await bookmarkEvent(id);
     if (result) {
-      fetchEventSingle()
+      fetchEventSingle();
     }
-    setBookmarked(true)
+    setBookmarked(true);
   };
 
   const handleUnBookmark = async (id) => {
     const result = await unBookmarkEvent(id);
     if (result) {
-      fetchEventSingle()
+      fetchEventSingle();
     }
-    setBookmarked(false)
+    setBookmarked(false);
   };
 
   const handleOpenWebView = (url) => {
@@ -115,6 +129,93 @@ const Event = ({ page }) => {
 
     if (window && window.AppContext && window.AppContext.postMessage) {
       window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
+  const RenderAdditionalContent = ({data}) => {
+    if (!data) {
+      return <></>;
+    }
+
+    switch (data?.contentType) {
+      case "application/pdf":
+        return (
+          <GridItem
+            flex={1}
+            bgColor={"#FFF"}
+            overflow={"hidden"}
+            onClick={() => {
+              if (data.url) {
+                handleOpenWebView(data.url);
+              }
+            }}
+          >
+            <Box
+              bgColor="#F2F2F2"
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
+            >
+
+            <Center h={'100%'}><AiOutlineFilePdf style={{width: '30px', height: '30px'}}/></Center>
+
+            </Box>
+          </GridItem>
+        );
+
+        case "video/mp4":
+          return (
+            <GridItem
+              flex={1}
+              bgColor={"#FFF"}
+              overflow={"hidden"}
+              onClick={() => {
+                if (data.url) {
+                  onOpenVideoModal()
+                  setPopupVideo(`https://jciep.talkbox.io${data.url}`);
+                }
+              }}
+            >
+              <Box
+                bgColor="#F2F2F2"
+                h={"110px"}
+                w={"100%"}
+                bgSize={{ base: "cover" }}
+                bgPosition={"center center"}
+                position={"relative"}
+              >
+  
+              <Center h={'100%'}><AiOutlinePlayCircle style={{width: '30px', height: '30px'}}/></Center>
+  
+              </Box>
+            </GridItem>
+          );
+    
+      default:
+        return (
+          <GridItem
+            flex={1}
+            bgColor={"#FFF"}
+            overflow={"hidden"}
+            onClick={() => {
+              if (data.url) {
+                onOpen();
+                setPopupImage(data.url);
+              }
+            }}
+          >
+            <Box
+              bgImage={`url(${data?.url})`}
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
+            />
+          </GridItem>
+        );
     }
   };
 
@@ -225,7 +326,11 @@ const Event = ({ page }) => {
                           }
                         >
                           <Image
-                            src={bookmarked ? "/images/app/bookmark-active.svg" : "/images/app/bookmark-off.svg"}
+                            src={
+                              bookmarked
+                                ? "/images/app/bookmark-active.svg"
+                                : "/images/app/bookmark-off.svg"
+                            }
                             alt={""}
                             fontSize={18}
                           />
@@ -359,27 +464,7 @@ const Event = ({ page }) => {
                     py={4}
                   >
                     {detail?.additionalInformation?.map((d) => (
-                      <GridItem
-                        key={d.id}
-                        flex={1}
-                        bgColor={"#FFF"}
-                        overflow={"hidden"}
-                        onClick={() => {
-                          if (d.url) {
-                            onOpen();
-                            setPopupImage(d.url);
-                          }
-                        }}
-                      >
-                        <Box
-                          bgImage={`url(${d?.url})`}
-                          h={"110px"}
-                          w={"100%"}
-                          bgSize={{ base: "cover" }}
-                          bgPosition={"center center"}
-                          position={"relative"}
-                        />
-                      </GridItem>
+                      <RenderAdditionalContent key={d?.id} data={d} />
                     ))}
                   </Grid>
 
@@ -576,6 +661,13 @@ const Event = ({ page }) => {
         isOpen={isOpen}
         popupSrc={popupImage}
       />
+      
+      <VideoModal
+        onClose={onCloseVideoModal}
+        isOpen={isOpenVideoModal}
+        popupSrc={popupVideo}
+      />
+
       <RegistrationModal
         onClose={onCloseRegistrationModal}
         isOpen={isOpenRegistrationModal}
@@ -723,6 +815,51 @@ const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
                 <Box>
                   <Image src={popupSrc} width="100%" />
                 </Box>
+              </Center>
+            </Box>
+            <Box
+              bgColor="#FFF"
+              borderRadius={"50%"}
+              w={"50px"}
+              h={"50px"}
+              mx={"auto"}
+            >
+              <Center h={"100%"} onClick={() => onClose()}>
+                <CloseIcon color="#1E1E1E" w={"20px"} h={"20px"} />
+              </Center>
+            </Box>
+          </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
+  if(!popupSrc){
+    return <></>
+  }
+  return (
+    <Modal
+      blockScrollOnMount={true}
+      onClose={onClose}
+      size={size}
+      isOpen={isOpen}
+      isCentered
+    >
+      <ModalOverlay
+        bgColor="rgba(51, 51, 51, 0.9)"
+        backdropFilter={"blur(20px)"}
+      />
+      <ModalContent bgColor="transparent" boxShadow={"none"}>
+        <ModalBody p={0}>
+          <Flex h={"100vh"} direction="column" pb={"40px"}>
+            <Box h={"60px"}></Box>
+            <Box flex={1}>
+              <Center h={"100%"} w={'100%'}>
+              <video width="100%" controls >
+                <source src={popupSrc} type="video/mp4"/>
+              </video>
               </Center>
             </Box>
             <Box
