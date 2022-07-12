@@ -199,6 +199,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
       });
 
       if (data && data.IdentityCreate) {
+
+        setIdentityId(data.IdentityCreate?.id);
+        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, { path: "/" });
+
         router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }
     } catch (e) {
