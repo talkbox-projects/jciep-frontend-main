@@ -176,7 +176,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
       if (data && data.OrganizationSubmissionCreate) {
         router.push(
-          `/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
+          `/app/user/organization/ngo/${data.OrganizationSubmissionCreate.id}/pending`
         );
       }
     } catch (e) {

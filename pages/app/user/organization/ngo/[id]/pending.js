@@ -23,14 +23,24 @@ export const getServerSideProps = async (context) => {
   };
 };
 const OrganizationNgoPending = ({ page }) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const { user } = useAppContext();
-  const [setCredential, removeCredential] = useCredential();
 
-  const logout = () => {
-    removeCredential();
-    router.push("/");
+  const handleCloseWebView = () => {
+    window.WebContext = {};
+    window.WebContext.closeWebViewHandler = () => {
+      console.log("close web view");
+    };
+
+    let json = {
+      name: "closeWebView",
+      options: {
+        callback: "closeWebViewHandler",
+        params: {},
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
   };
 
   return (
@@ -87,16 +97,15 @@ const OrganizationNgoPending = ({ page }) => {
               />
               <Box px={"15px"} py={"12px"} w="100%">
                 <Box width="100%" textAlign="center">
-                  <Link href="/">
                     <Button
                       backgroundColor="#F6D644"
                       borderRadius="22px"
                       height="44px"
                       width="100%"
+                      onClick={() => handleCloseWebView()}
                     >
                       {page?.content?.ngoSuccess?.button}
                     </Button>
-                  </Link>
                 </Box>
               </Box>
             </Box>
