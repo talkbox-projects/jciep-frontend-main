@@ -46,7 +46,6 @@ const AppUserRegister = ({ page }) => {
     phone: "",
   });
   const [otpValid, setOtpValid] = useState(null);
-
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
 
   const logout = () => {
@@ -171,6 +170,69 @@ const AppUserRegister = ({ page }) => {
     }
   };
 
+  const RenderRegistrationType = () => {
+    switch (appRegistrationInfo?.type) {
+      case "email":
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b>${appRegistrationInfo?.email}</b>`
+              ),
+            }}
+          />
+        );
+      case "phone":
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b>${appRegistrationInfo?.phone}</b>`
+              ),
+            }}
+          />
+        );
+
+      case "google":
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b>${page?.content?.remark?.googleText}</b>`
+              ),
+            }}
+          />
+        );
+
+      case "facebook":
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b>${page?.content?.remark?.facebookText}</b>`
+              ),
+            }}
+          />
+        );
+
+      default:
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b></b>`
+              ),
+            }}
+          />
+        )
+    }
+  };
+
   useEffect(() => {
     const { otp, phone, email, type } = appRegistrationInfo;
     async function checkOTP() {
@@ -288,7 +350,12 @@ const AppUserRegister = ({ page }) => {
             >
               <Container>
                 <Text fontWeight={700} fontSize={"24px"}>
-                  {otpValid === false ? wordExtractor(page?.content?.wordings, "invalid_otp_title") : page?.content?.heading?.title}
+                  {otpValid === false
+                    ? wordExtractor(
+                        page?.content?.wordings,
+                        "invalid_otp_title"
+                      )
+                    : page?.content?.heading?.title}
                 </Text>
                 {otpValid === false ? (
                   wordExtractor(page?.content?.wordings, "invalid_otp")
@@ -311,7 +378,7 @@ const AppUserRegister = ({ page }) => {
                       height="44px"
                       width="100%"
                       onClick={() => handleCheckOTP()}
-                      disabled={otpValid===false}
+                      disabled={otpValid === false}
                     >
                       {page?.content?.continue}
                     </Button>
@@ -323,17 +390,7 @@ const AppUserRegister = ({ page }) => {
                     mt={10}
                     color={"#666666"}
                   >
-                    <Text
-                      dangerouslySetInnerHTML={{
-                        __html: page?.content?.remark?.text?.replace(
-                          " ",
-                          `<b>${
-                            appRegistrationInfo?.email ??
-                            appRegistrationInfo?.phone
-                          }</b>`
-                        ),
-                      }}
-                    />
+                    <RenderRegistrationType/>
                     <Box>
                       <Text as="span">{page?.content?.remark?.text02}</Text>{" "}
                       <Text as="span" onClick={() => logout()}>
@@ -421,6 +478,16 @@ export default withPageCMS(AppUserRegister, {
         {
           name: "text02",
           label: "文本 text",
+          component: "text",
+        },
+        {
+          name: "googleText",
+          label: "Google 文本 text",
+          component: "text",
+        },
+        {
+          name: "facebookText",
+          label: "Facebook 文本 text",
           component: "text",
         },
         {
