@@ -231,7 +231,7 @@ const EventAdd = ({ page }) => {
       }
     `;
 
-    if (_.isEmpty(bannerImage?.[0]?.[0]?.name)) {
+    if (_.isEmpty(bannerImage?.[0]?.[0]?.name) && _.isEmpty(stockPhotoId)) {
       setBannerFileError(wordExtractor(
         page?.content?.wordings,
         "submission_deadline_required"
@@ -239,7 +239,7 @@ const EventAdd = ({ page }) => {
       return;
     }
 
-    if (!_.isEmpty(bannerImage)) {
+    if (!_.isEmpty(bannerImage?.[0]?.[0]?.name)) {
       bannerUploadData = await bannerImage
         .map((d) => {
           if (d[0]) {
@@ -283,6 +283,13 @@ const EventAdd = ({ page }) => {
         }
       );
     }
+
+    const submitBanner = bannerUploadData?.FileUpload?.[0] ? {
+      file: bannerUploadData?.FileUpload?.[0]
+    } : {
+      stockPhotoId: stockPhotoId
+    }
+
     const input = Object.fromEntries(
       Object.entries({
         name: name,
@@ -304,18 +311,19 @@ const EventAdd = ({ page }) => {
         contactNumber: contactNumber,
         registerUrl: registerUrl,
         otherUrls: otherUrls,
-        stockPhotoId: stockPhotoId,
         remark: remark,
-        banner: {
-          file: bannerUploadData?.FileUpload?.[0] ?? "",
-          stockPhotoId: stockPhotoId,
-        },
+        banner: submitBanner,
         additionalInformation:
           filesAdditionalInformalUploadData?.FileUpload.map((d) => d) ?? [],
+        stockPhotoId: null,
       }).filter(([_, v]) => v != null)
     );
 
+    console.log('input-',input)
+
     const response = await createEvent(input);
+
+    console.log('response-',response)
 
     // For iOS mobile debug
     // setDebugResult(JSON.stringify(response));
