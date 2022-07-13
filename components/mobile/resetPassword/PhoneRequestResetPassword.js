@@ -51,8 +51,6 @@ const PhoneRequestResetPassword = () => {
         title: getWording("resentPassword.reset_password_phone_sent_success"),
       });
 
-      //   onClose();
-      //   otpVerifyModalDisclosure.onOpen({ phone, type: "resetPassword" });
 
       setResetPasswordStatus({
         ...resetPasswordStatus,

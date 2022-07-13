@@ -4,20 +4,20 @@ import PhoneRequestResetPassword from "../../../../components/mobile/resetPasswo
 import OtpVerify from "../../../../components/mobile/resetPassword/OtpVerify"
 import PhoneResetPassword from "../../../../components/mobile/resetPassword/PhoneResetPassword"
 
-const PhoneResetPasswordWrap = () => {
+const PhoneResetPasswordWrap = ({page}) => {
   const {
     resetPasswordStatus
   } = useAppContext();
 
   switch (resetPasswordStatus?.step) {
     case "requestOtp":
-        return (<PhoneRequestResetPassword/>)
+        return (<PhoneRequestResetPassword page={page}/>)
 
     case "verify":
-        return (<OtpVerify/>)
+        return (<OtpVerify page={page}/>)
 
     case "resetPassword":
-        return (<PhoneResetPassword/>)
+        return (<PhoneResetPassword page={page}/>)
   
     default:
         return (<></>)
@@ -25,3 +25,4 @@ const PhoneResetPasswordWrap = () => {
 };
 
 export default PhoneResetPasswordWrap;
+

@@ -10,18 +10,13 @@ import {
   VStack,
   Button,
   Box,
+  FormHelperText,
 } from "@chakra-ui/react";
-import { phoneRegex, emailRegex } from "../../../utils/general";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import UserPasswordResetEmailOTPSend from "../../../utils/api/UserPasswordResetEmailOTPSend";
 
-const EmailRequestResetPassword = () => {
-  const {
-    user,
-    resetPasswordPhoneModalDisclosure: { isOpen, onClose },
-    resetPasswordStatus,
-    setResetPasswordStatus,
-  } = useAppContext();
+const EmailRequestResetPassword = ({ page }) => {
+  const { user, resetPasswordStatus, setResetPasswordStatus } = useAppContext();
 
   const getWording = useGetWording();
 
@@ -32,7 +27,7 @@ const EmailRequestResetPassword = () => {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      phone: user?.phone,
+      email: user?.email,
     },
   });
 
@@ -65,12 +60,6 @@ const EmailRequestResetPassword = () => {
     }
   };
 
-
-  useEffect(() => {
-    if (isOpen) {
-      reset({ phone: user?.phone ?? "" });
-    }
-  }, [isOpen, user, reset]);
   return (
     <Box py={{ base: 24 }}>
       <Box mb={{ base: 4 }}>
@@ -80,10 +69,10 @@ const EmailRequestResetPassword = () => {
           fontWeight={600}
           px={"15px"}
         >
-          {getWording("resentPassword.reset_password_email_title")}
+          {page?.content?.emailResetPassword?.email_title_label}
         </Text>
         <Text color="#757575" w="100%" fontSize="sm" px={"15px"}>
-          {getWording("resentPassword.reset_password_email_description")}
+          {page?.content?.emailResetPassword?.email_description}
         </Text>
       </Box>
       <Box width="100%" background="#FFF">
@@ -95,22 +84,25 @@ const EmailRequestResetPassword = () => {
           <Box px={"15px"} width="100%">
             <FormControl isInvalid={errors?.email?.message}>
               <FormLabel m={0} p={0}>
-                {getWording("resentPassword.reset_password_email_label")}
+                {page?.content?.emailResetPassword?.email_label}
               </FormLabel>
               <Input
+                type="email"
                 variant="flushed"
                 {...register("email", {
-                  required: getWording(
-                    "resentPassword.reset_password_email_error_message"
-                  ),
                   pattern: {
-                    value: emailRegex,
-                    message: getWording(
-                      "resentPassword.reset_password_email_error_message"
-                    ),
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message:
+                      page?.content?.emailResetPassword?.email_format_error,
                   },
+                  required:
+                    page?.content?.emailResetPassword?.email_required_error,
                 })}
               ></Input>
+              <FormHelperText color="red">
+                {errors?.email?.message}
+              </FormHelperText>
             </FormControl>
           </Box>
           <Box
@@ -133,7 +125,7 @@ const EmailRequestResetPassword = () => {
                 type="submit"
                 isLoading={isSubmitting}
               >
-                {getWording("resentPassword.send_email_button_label")}
+                {page?.content?.emailResetPassword?.email_button_label}
               </Button>
             </FormControl>
           </Box>

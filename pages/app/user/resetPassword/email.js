@@ -4,20 +4,20 @@ import EmailRequestResetPassword from "../../../../components/mobile/resetPasswo
 import EmailOtpVerify from "../../../../components/mobile/resetPassword/EmailOtpVerify"
 import EmailResetPassword from "../../../../components/mobile/resetPassword/EmailResetPassword"
 
-const EmailResetPasswordWrap = () => {
+const EmailResetPasswordWrap = ({page}) => {
   const {
     resetPasswordStatus
   } = useAppContext();
 
   switch (resetPasswordStatus?.step) {
     case "requestOtp":
-        return (<EmailRequestResetPassword/>)
+        return (<EmailRequestResetPassword page={page}/>)
 
     case "verify":
-        return (<EmailOtpVerify/>)
+        return (<EmailOtpVerify page={page}/>)
 
     case "resetPassword":
-        return (<EmailResetPassword/>)
+        return (<EmailResetPassword page={page}/>)
   
     default:
         return (<></>)

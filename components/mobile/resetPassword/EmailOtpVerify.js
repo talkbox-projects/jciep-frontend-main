@@ -22,9 +22,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { gql } from "graphql-request";
 
-const OtpVerify = () => {
+const OtpVerify = ({page}) => {
   const {
-    user,
     resetPasswordPhoneModalDisclosure: { isOpen, onClose },
     resetPasswordStatus,
     setResetPasswordStatus,
@@ -56,16 +55,22 @@ const OtpVerify = () => {
         email: resetPasswordStatus?.email,
       });
 
+      console.log('data-',data)
+
       if (data?.UserEmailOTPValidityCheck?.email) {
         setResetPasswordStatus({
           ...resetPasswordStatus,
           otp: otp,
           step: 'resetPassword'
         });
+      } else {
+        setError("otp", {
+          message: page?.content?.otpVerify?.invalid_otp_message,
+        });
       }
     } catch (e) {
       setError("otp", {
-        message: getWording("otpVerify.invalid_otp_message"),
+        message: page?.content?.otpVerify?.invalid_otp_message,
       });
     }
   };
@@ -85,7 +90,7 @@ const OtpVerify = () => {
               });
             }}
           />
-          <Text>{getWording("otpVerify.otpVerify_title")}</Text>
+          <Text>{page?.content?.otpVerify?.otpVerify_title}</Text>
         </Flex>
       </Box>
       <Box width="100%" background="#FFF">
@@ -93,9 +98,10 @@ const OtpVerify = () => {
           <Box px={"15px"} width="100%">
             <FormControl>
               <FormLabel color="gray.800" fontWeight="normal">
-                {getWording("otpVerify.sms_sent_message", {
+                {/* {getWording("otpVerify.sms_sent_message", {
                   params: { phone: resetPasswordStatus?.phone },
-                })}
+                })} */}
+                {page?.content?.otpVerify?.otpVerify_title_description}
               </FormLabel>
               <HStack
                 w="100%"
@@ -139,14 +145,16 @@ const OtpVerify = () => {
                 </FormHelperText>
               )}
               <FormHelperText color="gray.900">
-                {getWording("otpVerify.failed_to_receive_message")}
+                {/* {getWording("otpVerify.failed_to_receive_message")} */}
+                {page?.content?.otpVerify?.failed_to_receive_message}
                 <Button size="sm" variant="link" color="gray.900">
-                  {getWording("otpVerify.resend_link_label")}
+                  {/* {getWording("otpVerify.resend_link_label")} */}
+                  {page?.content?.otpVerify?.resend_link_label}
                 </Button>
               </FormHelperText>
             </FormControl>
           </Box>
-          <Box
+          {/* <Box
             style={{
               background:
                 "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
@@ -155,8 +163,8 @@ const OtpVerify = () => {
             h={"16px"}
             w={"100%"}
             opacity={0.2}
-          />
-          <Box px={"15px"} py={"12px"} w="100%">
+          /> */}
+          {/* <Box px={"15px"} py={"12px"} w="100%">
             <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"
@@ -166,10 +174,10 @@ const OtpVerify = () => {
                 type="submit"
                 isLoading={isSubmitting}
               >
-                {getWording("resentPassword.send_phone_button_label")}
+                {page?.content?.otpVerify?.submit_button}
               </Button>
             </FormControl>
-          </Box>
+          </Box> */}
         </VStack>
       </Box>
     </Box>

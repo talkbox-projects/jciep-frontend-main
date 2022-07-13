@@ -16,7 +16,7 @@ import { passwordRegex } from "../../../utils/general";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import userLogin from "../../../utils/api/UserLogin";
 
-const EmailResetPassword = () => {
+const EmailResetPassword = ({page}) => {
   const getWording = useGetWording();
 
   const {
@@ -73,6 +73,8 @@ const EmailResetPassword = () => {
     }
   };
 
+  console.log('page-',page)
+
   return (
     <Box py={{ base: 24 }}>
       <Box mb={{ base: 4 }}>
@@ -82,7 +84,7 @@ const EmailResetPassword = () => {
           fontWeight={600}
           px={"15px"}
         >
-          {getWording("resetPasswordResetModal.reset_password_phone_title")}
+          {page?.content?.resetPassword?.reset_password_title}
         </Text>
         <Text color="#757575" w="100%" fontSize="sm" px={"15px"}>
           {getWording(
@@ -95,14 +97,11 @@ const EmailResetPassword = () => {
           <Box px={"15px"} width="100%">
             <FormControl>
               <FormLabel>
-                {getWording("resetPasswordResetModal.password_label")}
+                {page?.content?.resetPassword?.reset_password_label}
               </FormLabel>
               <Input
                 variant="flushed"
                 type="password"
-                placeholder={getWording(
-                  "resetPasswordResetModal.password_placeholder"
-                )}
                 {...register("password", {
                   required: {
                     value: true,
@@ -124,14 +123,11 @@ const EmailResetPassword = () => {
             </FormControl>
             <FormControl>
               <FormLabel>
-                {getWording("resetPasswordResetModal.confirm_password_label")}
+                {page?.content?.resetPassword?.confirm_reset_password_label}
               </FormLabel>
               <Input
                 type="password"
                 variant="flushed"
-                placeholder={getWording(
-                  "resetPasswordResetModal.confirm_password_placeholder"
-                )}
                 {...register("confirm_password", {
                   required: {
                     value: true,
@@ -169,7 +165,7 @@ const EmailResetPassword = () => {
                 type="submit"
                 isLoading={isSubmitting}
               >
-                {getWording("resetPasswordResetModal.reset_button_label")}
+              {page?.content?.resetPassword?.reset_password_submit}
               </Button>
             </FormControl>
           </Box>
