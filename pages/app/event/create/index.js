@@ -319,14 +319,10 @@ const EventAdd = ({ page }) => {
       }).filter(([_, v]) => v != null)
     );
 
-    console.log('input-',input)
-
     const response = await createEvent(input);
 
-    console.log('response-',response)
-
     // For iOS mobile debug
-    // setDebugResult(JSON.stringify(response));
+    setDebugResult(JSON.stringify(response));
 
     if (!response?.error) {
       router.push(`/app/event/create/${response?.data.id}/success`);
@@ -1471,7 +1467,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                {/* {debugResult && <Code>{debugResult}</Code>} */}
+                {debugResult && <Code>{debugResult}</Code>}
               </VStack>
             </Box>
             {/* <MoreInformationModal onClose={onClose} /> */}

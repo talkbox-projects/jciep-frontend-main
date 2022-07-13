@@ -175,7 +175,7 @@ export default withPageCMS(ResetPasswordPage, {
     },
     {
       name: "emailResetPassword",
-      label: "電郵重設密碼 content",
+      label: "電郵及電話重設密碼 content",
       component: "group",
       fields: [
         {
@@ -189,8 +189,18 @@ export default withPageCMS(ResetPasswordPage, {
           component: "text",
         },
         {
+          name: "phone_description",
+          label: "標題電話簡介 text",
+          component: "text",
+        },
+        {
           name: "email_label",
           label: "電郵 text",
+          component: "text",
+        },
+        {
+          name: "phone_label",
+          label: "電話 text",
           component: "text",
         },
         {

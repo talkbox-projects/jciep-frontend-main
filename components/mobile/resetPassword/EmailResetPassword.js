@@ -86,11 +86,6 @@ const EmailResetPassword = ({page}) => {
         >
           {page?.content?.resetPassword?.reset_password_title}
         </Text>
-        <Text color="#757575" w="100%" fontSize="sm" px={"15px"}>
-          {getWording(
-            "resetPasswordResetModal.reset_password_phone_description"
-          )}
-        </Text>
       </Box>
       <Box width="100%" background="#FFF">
         <VStack spacing={8} as="form" onSubmit={handleSubmit(onReset)}>
@@ -155,7 +150,7 @@ const EmailResetPassword = ({page}) => {
             w={"100%"}
             opacity={0.2}
           />
-          <Box px={"15px"} py={"12px"} w="100%">
+          <Box px={"15px"} w="100%">
             <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"

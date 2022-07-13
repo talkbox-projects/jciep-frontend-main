@@ -16,7 +16,7 @@ import { phoneRegex } from "../../../utils/general";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import UserPasswordResetPhoneSend from "../../../utils/api/UserPasswordResetPhoneSend";
 
-const PhoneRequestResetPassword = () => {
+const PhoneRequestResetPassword = ({page}) => {
   const {
     user,
     resetPasswordPhoneModalDisclosure: { isOpen, onClose },
@@ -80,10 +80,10 @@ const PhoneRequestResetPassword = () => {
           fontWeight={600}
           px={"15px"}
         >
-          {getWording("resentPassword.reset_password_phone_title")}
+          {page?.content?.emailResetPassword?.email_title_label}
         </Text>
         <Text color="#757575" w="100%" fontSize="sm" px={"15px"}>
-          {getWording("resentPassword.reset_password_phone_description")}
+          {page?.content?.emailResetPassword?.phone_description}
         </Text>
       </Box>
       <Box width="100%" background="#FFF">
@@ -95,7 +95,7 @@ const PhoneRequestResetPassword = () => {
           <Box px={"15px"} width="100%">
             <FormControl isInvalid={errors?.phone?.message}>
               <FormLabel m={0} p={0}>
-                {getWording("resentPassword.reset_password_phone_label")}
+              {page?.content?.emailResetPassword?.phone_label}
               </FormLabel>
               <Input
                 variant="flushed"
@@ -133,7 +133,7 @@ const PhoneRequestResetPassword = () => {
                 type="submit"
                 isLoading={isSubmitting}
               >
-                {getWording("resentPassword.send_phone_button_label")}
+              {page?.content?.emailResetPassword?.email_button_label}
               </Button>
             </FormControl>
           </Box>

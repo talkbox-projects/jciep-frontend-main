@@ -16,7 +16,7 @@ import { passwordRegex } from "../../../utils/general";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import userLogin from "../../../utils/api/UserLogin";
 
-const PhoneResetPassword = ({ phone, otp }) => {
+const PhoneResetPassword = ({ phone, otp, page }) => {
   const getWording = useGetWording();
 
   const {
@@ -84,12 +84,7 @@ const PhoneResetPassword = ({ phone, otp }) => {
           fontWeight={600}
           px={"15px"}
         >
-          {getWording("resetPasswordResetModal.reset_password_phone_title")}
-        </Text>
-        <Text color="#757575" w="100%" fontSize="sm" px={"15px"}>
-          {getWording(
-            "resetPasswordResetModal.reset_password_phone_description"
-          )}
+          {page?.content?.resetPassword?.reset_password_title}
         </Text>
       </Box>
       <Box width="100%" background="#FFF">
@@ -97,14 +92,11 @@ const PhoneResetPassword = ({ phone, otp }) => {
           <Box px={"15px"} width="100%">
             <FormControl>
               <FormLabel>
-                {getWording("resetPasswordResetModal.password_label")}
+              {page?.content?.resetPassword?.reset_password_label}
               </FormLabel>
               <Input
                 variant="flushed"
                 type="password"
-                placeholder={getWording(
-                  "resetPasswordResetModal.password_placeholder"
-                )}
                 {...register("password", {
                   required: {
                     value: true,
@@ -131,9 +123,6 @@ const PhoneResetPassword = ({ phone, otp }) => {
               <Input
                 type="password"
                 variant="flushed"
-                placeholder={getWording(
-                  "resetPasswordResetModal.confirm_password_placeholder"
-                )}
                 {...register("confirm_password", {
                   required: {
                     value: true,
@@ -161,7 +150,7 @@ const PhoneResetPassword = ({ phone, otp }) => {
             w={"100%"}
             opacity={0.2}
           />
-          <Box px={"15px"} py={"12px"} w="100%">
+          <Box px={"15px"} w="100%">
             <FormControl textAlign="center">
               <Button
                 backgroundColor="#F6D644"

@@ -55,8 +55,6 @@ const OtpVerify = ({page}) => {
         email: resetPasswordStatus?.email,
       });
 
-      console.log('data-',data)
-
       if (data?.UserEmailOTPValidityCheck?.email) {
         setResetPasswordStatus({
           ...resetPasswordStatus,
