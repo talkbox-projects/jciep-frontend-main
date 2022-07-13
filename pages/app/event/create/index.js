@@ -43,6 +43,7 @@ import { AiOutlineInfoCircle, AiFillMinusCircle } from "react-icons/ai";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
 import { urlRegex } from "../../../../utils/general";
+import moment from "moment";
 
 const PAGE_KEY = "event_add";
 
@@ -289,7 +290,6 @@ const EventAdd = ({ page }) => {
     } : {
       stockPhotoId: stockPhotoId
     }
-
     const input = Object.fromEntries(
       Object.entries({
         name: name,
@@ -298,8 +298,8 @@ const EventAdd = ({ page }) => {
         description: description,
         startDate: startDate,
         endDate: endDate,
-        startTime: startTime,
-        endTime: endTime,
+        startTime: _.isEmpty(startTime) ? "00:00" : startTime,
+        endTime: _.isEmpty(endTime) ? "00:00" : endTime,
         datetimeRemark: datetimeRemark,
         quota:quota,
         venue: venue,
@@ -322,10 +322,11 @@ const EventAdd = ({ page }) => {
     const response = await createEvent(input);
 
     // For iOS mobile debug
-    setDebugResult(JSON.stringify(response));
 
     if (!response?.error) {
       router.push(`/app/event/create/${response?.data.id}/success`);
+    } else {
+      setDebugResult(JSON.stringify(response));
     }
   };
 
@@ -344,6 +345,7 @@ const EventAdd = ({ page }) => {
       />
     );
   }, []);
+
 
   return (
     <Box pt={{ base: "64px" }}>
