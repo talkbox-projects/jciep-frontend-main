@@ -47,6 +47,7 @@ const AppUserRegister = ({ page }) => {
   });
   const [otpValid, setOtpValid] = useState(null);
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
+  const [isUserExist, setIsUserExist] = useState(false);
 
   const logout = () => {
     removeCredential();
@@ -223,18 +224,15 @@ const AppUserRegister = ({ page }) => {
         return (
           <Text
             dangerouslySetInnerHTML={{
-              __html: page?.content?.remark?.text?.replace(
-                " ",
-                `<b></b>`
-              ),
+              __html: page?.content?.remark?.text?.replace(" ", `<b></b>`),
             }}
           />
-        )
+        );
     }
   };
 
   useEffect(() => {
-    const { otp, phone, email, type } = appRegistrationInfo;
+    const { otp, phone, email, type, token } = appRegistrationInfo;
     async function checkOTP() {
       switch (type) {
         case "phone":
@@ -290,6 +288,115 @@ const AppUserRegister = ({ page }) => {
           break;
       }
     }
+
+    async function checkIsUserExist() {
+      switch (type) {
+        case "phone":
+          try {
+            const queryUserExist = gql`
+              query UserExist($phone: String!) {
+                UserExist(phone: $phone) {
+                  phone
+                }
+              }
+            `;
+
+            const {UserExist} = await getGraphQLClient().request(
+              queryUserExist,
+              {
+                phone,
+              }
+            );
+
+            if(UserExist?.phone){
+              setIsUserExist(true)
+            }
+
+          } catch (e) {
+            console.log("e", e);
+          }
+          break;
+
+        case "email":
+          try {
+            const queryUserExist = gql`
+              query UserExist($email: String!) {
+                UserExist(email: $email) {
+                  email
+                }
+              }
+            `;
+
+            const {UserExist} = await getGraphQLClient().request(
+              queryUserExist,
+              {
+                email,
+              }
+            );
+
+            if(UserExist?.email){
+              setIsUserExist(true)
+            }
+
+          } catch (e) {
+            console.log("e", e);
+          }
+          break;
+
+        case "facebook":
+          try {
+            const queryUserExist = gql`
+              query UserExist($facebookId: String!) {
+                UserExist(facebookId: $facebookId) {
+                  facebookId
+                }
+              }
+            `;
+
+            const {UserExist} = await getGraphQLClient().request(
+              queryUserExist,
+              {
+                facebookId: token,
+              }
+            );
+
+            if(UserExist?.facebookId){
+              setIsUserExist(true)
+            }
+
+          } catch (e) {
+            console.log("e", e);
+          }
+          break;
+
+        case "google":
+          try {
+            const queryUserExist = gql`
+              query UserExist($googleId: String!) {
+                UserExist(googleId: $googleId) {
+                  googleId
+                }
+              }
+            `;
+
+            const {UserExist} = await getGraphQLClient().request(
+              queryUserExist,
+              {
+                googleId: token,
+              }
+            );
+
+            if(UserExist?.googleId){
+              setIsUserExist(true)
+            }
+
+          } catch (e) {
+            console.log("e", e);
+          }
+          break;
+      }
+    }
+    checkIsUserExist();
     checkOTP();
   }, [appRegistrationInfo]);
 
@@ -357,9 +464,7 @@ const AppUserRegister = ({ page }) => {
                       )
                     : page?.content?.heading?.title}
                 </Text>
-                {otpValid === false ? (
-                  wordExtractor(page?.content?.wordings, "invalid_otp")
-                ) : (
+                {otpValid === false ? (<Text color={"red"}>{ wordExtractor(page?.content?.wordings, "invalid_otp")}</Text>) : (
                   <Text
                     marginTop="10px"
                     dangerouslySetInnerHTML={{
@@ -368,6 +473,8 @@ const AppUserRegister = ({ page }) => {
                   />
                 )}
               </Container>
+
+              {isUserExist && <Box color="red">{page?.content?.isUserExistContent}</Box>}
 
               <Box>
                 <Box px={"15px"} py={"12px"} mt={10} w="100%">
@@ -378,7 +485,7 @@ const AppUserRegister = ({ page }) => {
                       height="44px"
                       width="100%"
                       onClick={() => handleCheckOTP()}
-                      disabled={otpValid === false}
+                      disabled={otpValid === false || isUserExist}
                     >
                       {page?.content?.continue}
                     </Button>
@@ -390,7 +497,7 @@ const AppUserRegister = ({ page }) => {
                     mt={10}
                     color={"#666666"}
                   >
-                    <RenderRegistrationType/>
+                    <RenderRegistrationType />
                     <Box>
                       <Text as="span">{page?.content?.remark?.text02}</Text>{" "}
                       <Text as="span" onClick={() => logout()}>
@@ -496,6 +603,11 @@ export default withPageCMS(AppUserRegister, {
           component: "text",
         },
       ],
+    },
+    {
+      name: "isUserExistContent",
+      label: "此帳戶已存在 User Exist Label",
+      component: "text",
     },
     {
       name: "continue",

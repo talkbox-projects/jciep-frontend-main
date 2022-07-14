@@ -63,6 +63,34 @@ export default {
       }
     },
 
+    UserExist: async (_parent, { email, phone, googleId, facebookId }) => {
+      if(email){
+        try {
+          return await User.findOne({ email });
+        } catch (error) {
+          return null;
+        }
+      } else if(phone){
+        try {
+          return await User.findOne({ phone });
+        } catch (error) {
+          return null;
+        }
+      } else if(googleId){
+        try {
+          return await User.findOne({ googleId });
+        } catch (error) {
+          return null;
+        }
+      } else if(facebookId){
+        try {
+          return await User.findOne({ facebookId });
+        } catch (error) {
+          return null;
+        }
+      }
+    },
+
     UserPhoneValidityCheck: async (_parent, { phone, otp }) => {
       try {
         return await PhoneVerify.findOne({ otp, phone });

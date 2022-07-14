@@ -248,6 +248,13 @@ export default gql`
     meta: JsonContent
   }
 
+  type UserExistOutput {
+    email: String
+    phone: String
+    facebookId: String
+    googleId: String
+  }
+
   type UserPhoneValidityCheckOutput {
     phone: String!
     meta: JsonContent
@@ -257,7 +264,7 @@ export default gql`
     UserEmailValidityCheck(token: String!): UserEmailValidityCheckOutput
     UserPhoneValidityCheck(phone: String!,otp: String!): UserPhoneValidityCheckOutput
     UserEmailOTPValidityCheck(email: String!,otp: String!): UserEmailOTPValidityCheckOutput
-
+    UserExist(email: String, phone: String, facebookId: String, googleId: String): UserExistOutput
 
     UserMeGet: User
 
