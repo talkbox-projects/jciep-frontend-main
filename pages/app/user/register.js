@@ -7,9 +7,8 @@ import {
   GridItem,
   Container,
   Flex,
-  Code,
+  Code
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { gql } from "graphql-request";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
@@ -17,9 +16,11 @@ import { getGraphQLClient } from "../../../utils/apollo";
 import wordExtractor from "../../../utils/wordExtractor";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useCredential } from "../../../utils/user";
-import { useAppContext } from "../../../store/AppStore";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+
+import facebook from "../../api/services/facebook";
+import google from "../../api/services/google";
 
 const PAGE_KEY = "app_user_register";
 
@@ -47,6 +48,7 @@ const AppUserRegister = ({ page }) => {
   });
   const [otpValid, setOtpValid] = useState(null);
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
+  const [errorCode, setErrorCode] = useState({ status: "" });
   const [isUserExist, setIsUserExist] = useState(false);
 
   const logout = () => {
@@ -345,6 +347,13 @@ const AppUserRegister = ({ page }) => {
 
         case "facebook":
           try {
+
+            const snsMeta = await facebook.getProfile(token);
+            if (!snsMeta) {
+              setErrorCode(snsMeta)
+              throw new Error("failed to login via facebook");
+            }
+
             const queryUserExist = gql`
               query UserExist($facebookId: String!) {
                 UserExist(facebookId: $facebookId) {
@@ -356,7 +365,7 @@ const AppUserRegister = ({ page }) => {
             const {UserExist} = await getGraphQLClient().request(
               queryUserExist,
               {
-                facebookId: token,
+                facebookId: snsMeta.id,
               }
             );
 
@@ -371,6 +380,13 @@ const AppUserRegister = ({ page }) => {
 
         case "google":
           try {
+
+            let snsMeta = await google.getProfile(token);
+            if (!snsMeta) {
+              setErrorCode(snsMeta)
+              throw new Error("failed to login via google");
+            }
+
             const queryUserExist = gql`
               query UserExist($googleId: String!) {
                 UserExist(googleId: $googleId) {
@@ -382,7 +398,7 @@ const AppUserRegister = ({ page }) => {
             const {UserExist} = await getGraphQLClient().request(
               queryUserExist,
               {
-                googleId: token,
+                googleId: snsMeta.id,
               }
             );
 
@@ -507,9 +523,12 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              {/* <Code fontSize={8}>
+              <Code fontSize={8}>
                 {JSON.stringify(appRegistrationInfo)}
-              </Code> */}
+              </Code>
+              <Code fontSize={8}>
+                {JSON.stringify(errorCode)}
+              </Code>
             </Box>
           </Box>
         </Box>

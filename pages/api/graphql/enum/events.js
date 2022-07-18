@@ -10,7 +10,7 @@ export default {
     endTime: { en: "End Time", zh: "時間 （結束）" },
     venue: { en: "Venue", zh: "場地" },
     freeOrCharge: { en: "Free or Charge", zh: "免費/收費" },
-    price: { en: "Price", zh: "費用" },
+    price: { en: "Price", zh: "價錢" },
     submissionDeadline: { en: "Deadline", zh: "截止登記日期" },
     eventManager: { en: "Event Manager", zh: "聯絡活動籌辦人" },
     contactNumber: { en: "Contact Number", zh: "聯絡電話" },
