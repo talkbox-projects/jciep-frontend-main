@@ -507,9 +507,9 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              <Code fontSize={8}>
+              {/* <Code fontSize={8}>
                 {JSON.stringify(appRegistrationInfo)}
-              </Code>
+              </Code> */}
             </Box>
           </Box>
         </Box>
