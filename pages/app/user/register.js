@@ -7,7 +7,7 @@ import {
   GridItem,
   Container,
   Flex,
-  Code
+  Code,
 } from "@chakra-ui/react";
 import { gql } from "graphql-request";
 import { getPage } from "../../../utils/page/getPage";
@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 
 import facebook from "../../api/services/facebook";
 import google from "../../api/services/google";
-import apple from "../../api/services/apple";
+// import apple from "../../api/services/apple";
 
 const PAGE_KEY = "app_user_register";
 
@@ -304,17 +304,16 @@ const AppUserRegister = ({ page }) => {
               }
             `;
 
-            const {UserExist} = await getGraphQLClient().request(
+            const { UserExist } = await getGraphQLClient().request(
               queryUserExist,
               {
                 phone,
               }
             );
 
-            if(UserExist?.phone){
-              setIsUserExist(true)
+            if (UserExist?.phone) {
+              setIsUserExist(true);
             }
-
           } catch (e) {
             console.log("e", e);
           }
@@ -330,17 +329,16 @@ const AppUserRegister = ({ page }) => {
               }
             `;
 
-            const {UserExist} = await getGraphQLClient().request(
+            const { UserExist } = await getGraphQLClient().request(
               queryUserExist,
               {
                 email,
               }
             );
 
-            if(UserExist?.email){
-              setIsUserExist(true)
+            if (UserExist?.email) {
+              setIsUserExist(true);
             }
-
           } catch (e) {
             console.log("e", e);
           }
@@ -348,10 +346,9 @@ const AppUserRegister = ({ page }) => {
 
         case "facebook":
           try {
-
             const snsMeta = await facebook.getProfile(token);
             if (!snsMeta) {
-              setErrorCode(snsMeta)
+              setErrorCode(snsMeta);
               throw new Error("failed to login via facebook");
             }
 
@@ -363,17 +360,16 @@ const AppUserRegister = ({ page }) => {
               }
             `;
 
-            const {UserExist} = await getGraphQLClient().request(
+            const { UserExist } = await getGraphQLClient().request(
               queryUserExist,
               {
                 facebookId: snsMeta.id,
               }
             );
 
-            if(UserExist?.facebookId){
-              setIsUserExist(true)
+            if (UserExist?.facebookId) {
+              setIsUserExist(true);
             }
-
           } catch (e) {
             console.log("e", e);
           }
@@ -381,10 +377,9 @@ const AppUserRegister = ({ page }) => {
 
         case "google":
           try {
-
             let snsMeta = await google.getProfile(token);
             if (!snsMeta) {
-              setErrorCode(snsMeta)
+              setErrorCode(snsMeta);
               throw new Error("failed to login via google");
             }
 
@@ -396,56 +391,52 @@ const AppUserRegister = ({ page }) => {
               }
             `;
 
-            const {UserExist} = await getGraphQLClient().request(
+            const { UserExist } = await getGraphQLClient().request(
               queryUserExist,
               {
                 googleId: snsMeta.id,
               }
             );
 
-            if(UserExist?.googleId){
-              setIsUserExist(true)
+            if (UserExist?.googleId) {
+              setIsUserExist(true);
             }
-
           } catch (e) {
             console.log("e", e);
           }
           break;
 
-          case "apple":
-            try {
-  
-              let snsMeta = await apple.getProfile(token);
-              if (!snsMeta) {
-                setErrorCode(snsMeta)
-                throw new Error("failed to login via apple");
-              }
-  
-              const queryUserExist = gql`
-                query UserExist($appleId: String!) {
-                  UserExist(appleId: $appleId) {
-                    appleId
-                  }
-                }
-              `;
-  
-              const {UserExist} = await getGraphQLClient().request(
-                queryUserExist,
-                {
-                  appleId: snsMeta.id,
-                }
-              );
-  
-              if(UserExist?.appleId){
-                setIsUserExist(true)
-              }
-  
-            } catch (e) {
-              console.log("e", e);
-            }
-            break;
+        // case "apple":
+        //   try {
+        //     let snsMeta = await apple.getProfile(token);
+        //     if (!snsMeta) {
+        //       setErrorCode(snsMeta);
+        //       throw new Error("failed to login via apple");
+        //     }
+
+        //     const queryUserExist = gql`
+        //       query UserExist($appleId: String!) {
+        //         UserExist(appleId: $appleId) {
+        //           appleId
+        //         }
+        //       }
+        //     `;
+
+        //     const { UserExist } = await getGraphQLClient().request(
+        //       queryUserExist,
+        //       {
+        //         appleId: snsMeta.id,
+        //       }
+        //     );
+
+        //     if (UserExist?.appleId) {
+        //       setIsUserExist(true);
+        //     }
+        //   } catch (e) {
+        //     console.log("e", e);
+        //   }
+        //   break;
       }
-      
     }
     checkIsUserExist();
     checkOTP();
@@ -515,7 +506,11 @@ const AppUserRegister = ({ page }) => {
                       )
                     : page?.content?.heading?.title}
                 </Text>
-                {otpValid === false ? (<Text color={"red"}>{ wordExtractor(page?.content?.wordings, "invalid_otp")}</Text>) : (
+                {otpValid === false ? (
+                  <Text color={"red"}>
+                    {wordExtractor(page?.content?.wordings, "invalid_otp")}
+                  </Text>
+                ) : (
                   <Text
                     marginTop="10px"
                     dangerouslySetInnerHTML={{
@@ -525,7 +520,9 @@ const AppUserRegister = ({ page }) => {
                 )}
               </Container>
 
-              {isUserExist && <Box color="red">{page?.content?.isUserExistContent}</Box>}
+              {isUserExist && (
+                <Box color="red">{page?.content?.isUserExistContent}</Box>
+              )}
 
               <Box>
                 <Box px={"15px"} py={"12px"} mt={10} w="100%">
@@ -558,6 +555,7 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
+              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code> */}
             </Box>
           </Box>
         </Box>
