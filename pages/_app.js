@@ -194,6 +194,7 @@ const App = ({ Component, pageProps }) => {
             content="/favicon/ms-icon-144x144.png"
           />
           <meta name="theme-color" content="#ffffff"></meta>
+          <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0"></meta>
         </Head>
         <ChakraProvider theme={theme} resetCSS={true}>
           {pageProps?.page?.content?.seo?.title ? (
