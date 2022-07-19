@@ -21,6 +21,7 @@ import React, { useEffect, useState } from "react";
 
 import facebook from "../../api/services/facebook";
 import google from "../../api/services/google";
+import apple from "../../api/services/apple";
 
 const PAGE_KEY = "app_user_register";
 
@@ -410,7 +411,41 @@ const AppUserRegister = ({ page }) => {
             console.log("e", e);
           }
           break;
+
+          case "apple":
+            try {
+  
+              let snsMeta = await apple.getProfile(token);
+              if (!snsMeta) {
+                setErrorCode(snsMeta)
+                throw new Error("failed to login via apple");
+              }
+  
+              const queryUserExist = gql`
+                query UserExist($appleId: String!) {
+                  UserExist(appleId: $appleId) {
+                    appleId
+                  }
+                }
+              `;
+  
+              const {UserExist} = await getGraphQLClient().request(
+                queryUserExist,
+                {
+                  appleId: snsMeta.id,
+                }
+              );
+  
+              if(UserExist?.appleId){
+                setIsUserExist(true)
+              }
+  
+            } catch (e) {
+              console.log("e", e);
+            }
+            break;
       }
+      
     }
     checkIsUserExist();
     checkOTP();
@@ -523,12 +558,12 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              <Code fontSize={8}>
+              {/* <Code fontSize={8}>
                 {JSON.stringify(appRegistrationInfo)}
               </Code>
               <Code fontSize={8}>
                 {JSON.stringify(errorCode)}
-              </Code>
+              </Code> */}
             </Box>
           </Box>
         </Box>
