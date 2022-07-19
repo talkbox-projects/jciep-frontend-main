@@ -558,12 +558,6 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              {/* <Code fontSize={8}>
-                {JSON.stringify(appRegistrationInfo)}
-              </Code>
-              <Code fontSize={8}>
-                {JSON.stringify(errorCode)}
-              </Code> */}
             </Box>
           </Box>
         </Box>
