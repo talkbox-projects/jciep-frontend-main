@@ -28,6 +28,7 @@ import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useCallback, useState } from "react";
+import UserGroupModal from "../components/UserGroupModal";
 import DividerSimple from "../components/DividerSimple";
 import MultiTextRenderer from "../components/MultiTextRenderer";
 import HighlightHeadline from "../components/HighlightHeadline";
@@ -94,7 +95,11 @@ const Home = ({ setting, page }) => {
     if (isMobile || !isMobile) setHasVideoEnded(false);
   }, [isMobile]);
 
-  const { registerModalDisclosure, loginModalDisclosure } = useAppContext();
+  const {
+    registerModalDisclosure,
+    loginModalDisclosure,
+    userGroupModalDisclosure,
+  } = useAppContext();
   useEffect(() => {
     if (router?.query?.register) {
       registerModalDisclosure.onOpen();
@@ -234,7 +239,16 @@ const Home = ({ setting, page }) => {
               {(page?.content?.animation?.startFrame?.roles ?? []).map(
                 ({ icon, name, caption }, index) => {
                   return (
-                    <GridItem key={index}>
+                    <GridItem
+                      key={index}
+                      cursor={"pointer"}
+                      onClick={() => {
+                        userGroupModalDisclosure.onOpen(
+                          page?.content?.animation?.startFrame?.roles?.[index]
+                        );
+                      }}
+                      _hover={{opacity:.75}}
+                    >
                       <VStack textAlign="center" fontSize={["xl"]}>
                         <Image alt={name} w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
@@ -707,6 +721,8 @@ const Home = ({ setting, page }) => {
           </Box>
         </Container>
       </Box>
+
+      <UserGroupModal />
     </VStack>
   );
 };
@@ -812,6 +828,31 @@ export default withPageCMS(Home, {
                   name: "caption",
                   label: "描述  Caption",
                   component: "text",
+                },
+
+                {
+                  name: "links",
+                  label: "連結 Links",
+                  component: "group-list",
+                  itemProps: ({ id: key, question: label }) => ({
+                    key,
+                    label,
+                  }),
+                  defaultItem: () => ({
+                    id: Math.random().toString(36).substr(2, 9),
+                  }),
+                  fields: [
+                    {
+                      name: "name",
+                      label: "名稱 Name",
+                      component: "text",
+                    },
+                    {
+                      name: "link",
+                      label: "連結 Link",
+                      component: "text",
+                    },
+                  ],
                 },
               ],
             },
