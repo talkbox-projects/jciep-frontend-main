@@ -456,9 +456,12 @@ const IdentityOpportunities = ({
                 ))}
               </Select>
             </Box> */}
+
+            {identities.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
             <HStack mt={4} align="stretch" spacing={4}>
               {identityList}
               {/* desktop detail page */}
+             
               {identity && details}
             </HStack>
           </Container>
@@ -547,6 +550,7 @@ const IdentityOpportunities = ({
               </GridItem>
             </Grid>
             </Box>
+            {identities.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
             {identityList}
           </Box>
         )}

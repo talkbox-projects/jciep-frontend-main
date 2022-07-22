@@ -67,7 +67,10 @@ const UserGroupModal = () => {
                       borderColor={"#C6C6C6"}
                       color={"#C6C6C6"}
                       fontWeight={500}
-                      onClick={() =>  router.push(d?.link)}
+                      onClick={() =>  {
+                        router.push(d?.link)
+                        userGroupModalDisclosure.onClose()
+                        }}
                     >
                       {d?.name}
                     </Button>

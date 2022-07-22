@@ -566,10 +566,12 @@ const JobOpportunities = ({ page, enums }) => {
               </Grid>
             </Box>
 
+            {jobListData.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+
             <HStack align="start" spacing={4}>
               {jobList}
               {/* desktop detail page */}
-              <VStack
+              {jobListData.length !== 0 && (<VStack
                 bg="white"
                 flex={1}
                 minW={0}
@@ -581,8 +583,8 @@ const JobOpportunities = ({ page, enums }) => {
                 minH={256}
                 p={4}
               >
-                {details}
-              </VStack>
+                 {details}
+              </VStack>)}
             </HStack>
           </Container>
         </Box>
@@ -640,10 +642,13 @@ const JobOpportunities = ({ page, enums }) => {
                 {wordExtractor(page?.content?.wordings, "back_button_label")}
               </Button>
             </NextLink>
-            {details}
+            {jobListData.length !== 0 && details}
           </VStack>
         ) : (
-          <Box p={4}>{jobList}</Box>
+          <Box p={4}>
+          {jobListData.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+          {jobList}
+          </Box>
         )}
       </Box>
     </>
