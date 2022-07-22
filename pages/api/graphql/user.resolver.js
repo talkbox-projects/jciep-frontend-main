@@ -64,25 +64,25 @@ export default {
     },
 
     UserExist: async (_parent, { email, phone, googleId, facebookId }) => {
-      if(email){
+      if (email) {
         try {
           return await User.findOne({ email });
         } catch (error) {
           return null;
         }
-      } else if(phone){
+      } else if (phone) {
         try {
           return await User.findOne({ phone });
         } catch (error) {
           return null;
         }
-      } else if(googleId){
+      } else if (googleId) {
         try {
           return await User.findOne({ googleId });
         } catch (error) {
           return null;
         }
-      } else if(facebookId){
+      } else if (facebookId) {
         try {
           return await User.findOne({ facebookId });
         } catch (error) {
@@ -177,6 +177,9 @@ export default {
 
     TalantIdentitySearch: async (_parent, input) => {
       const keys = { publishStatus: "approved", published: true };
+      let identities = []
+
+      console.log('input-',input)
 
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
@@ -187,7 +190,17 @@ export default {
         };
       }
 
-      const identities = await Identity.find(keys)
+      if (input.jobType) {
+        keys.interestedEmploymentMode = { "$in": input?.jobType?.split(',') }
+      }
+
+      if (input.jobInterested) {
+        keys.interestedIndustry = { "$in": input?.jobInterested?.split(',') }
+      }
+
+      console.log('keys-',keys)
+
+      identities = await Identity.find(keys)
         .skip((input.page - 1) * input?.limit)
         .limit(input?.limit);
 

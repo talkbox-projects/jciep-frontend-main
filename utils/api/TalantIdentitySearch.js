@@ -6,6 +6,8 @@ const talantIdentitySearch = async (
     limit,
     page,
     organizationId,
+    jobType,
+    jobInterested
   },
   context
 ) => {
@@ -14,11 +16,15 @@ const talantIdentitySearch = async (
       $limit: Int!
       $page: Int!
       $organizationId: ID
+      $jobType: String
+      $jobInterested: String
     ) {
       TalantIdentitySearch(
         limit: $limit
         page: $page
         organizationId: $organizationId
+        jobType: $jobType
+        jobInterested: $jobInterested
       ) {
         id
         type
@@ -122,6 +128,8 @@ const talantIdentitySearch = async (
     page,
     limit,
     organizationId,
+    jobType,
+    jobInterested
   });
 
   return data?.TalantIdentitySearch;

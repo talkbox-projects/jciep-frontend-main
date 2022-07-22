@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -16,6 +16,15 @@ import {
   Button,
   Avatar,
   Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
+  Portal,
+  Flex,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
@@ -34,6 +43,8 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import organizationSearch from "../../utils/api/OrganizationSearch";
 import ConnectedOrganization from "../../components/profile/sections/ConnectedOrganization";
 import { NextSeo } from "next-seo";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { set } from "react-hook-form";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -53,6 +64,8 @@ export const getServerSideProps = async (context) => {
           published: true,
           identityType: ["pwd"],
           organizationId: context.query.organizationId,
+          jobType: context.query.jobType,
+          jobInterested: context.query.jobInterested,
           limit: 100,
           page: 1,
         }),
@@ -63,6 +76,48 @@ export const getServerSideProps = async (context) => {
   };
 };
 
+const SearchFilter = ({
+  label,
+  value = [],
+  onChange = () => undefined,
+  list = [],
+}) => (
+  <Menu>
+    <MenuButton
+      flex={1}
+      as={Button}
+      variant="ghost"
+      rightIcon={<ChevronDownIcon />}
+      borderBottomWidth="2px"
+      size="lg"
+      textAlign="left"
+      borderRadius={0}
+      w="100%"
+    >
+      <Text w="100%">
+        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {label}
+      </Text>
+    </MenuButton>
+    <Portal>
+      <MenuList
+        maxW="100vw"
+        minWidth="240px"
+        maxHeight={"300px"}
+        overflowY={"scroll"}
+      >
+        <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
+          {list?.map((target, i) => (
+            <MenuItemOption key={i} value={target.value}>
+              {target.label}
+            </MenuItemOption>
+          ))}
+        </MenuOptionGroup>
+      </MenuList>
+    </Portal>
+  </Menu>
+);
+
 const IdentityOpportunities = ({
   api: { organizations, identities },
   page,
@@ -70,21 +125,53 @@ const IdentityOpportunities = ({
 }) => {
   const router = useRouter();
 
+  const [jobType, setJobType] = useState(router?.query?.jobType?.split(',')??[]);
+  const [jobInterested, setJobInterested] = useState(router?.query?.jobInterested?.split(',')??[]);
+
+  const jobTypeList = useMemo(
+    () =>
+      enums?.EnumEmploymentModeList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumEmploymentModeList, router.locale]
+  );
+
+  const jobInterestedList = useMemo(
+    () =>
+      enums?.EnumInterestedIndustryList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumInterestedIndustryList, router.locale]
+  );
+
   const identityId = router.query.identityId ?? identities?.[0]?.id;
 
   const identity = identities?.find((x) => x.id === identityId);
 
   const generateUrlParameter = useCallback(
-    ({ identityId, organizationId }) => {
+    ({ identityId, organizationId, jobType, jobInterested }) => {
       let query = "";
       if (identityId ?? router.query.identityId) {
         query += `identityId=${identityId ?? router.query.identityId}&`;
       }
-      if (organizationId ?? router.query.organizationId) {
-        query += `organizationId=${
-          organizationId ?? router.query.organizationId
+      // if (organizationId ?? router.query.organizationId) {
+      //   query += `organizationId=${
+      //     organizationId ?? router.query.organizationId
+      //   }&`;
+      // }
+
+      if (jobType ?? router.query.jobType) {
+        query += `jobType=${jobType ?? router.query.jobType}&`;
+      }
+
+      if (jobInterested ?? router.query.jobInterested) {
+        query += `jobInterested=${
+          jobInterested ?? router.query.jobInterested
         }&`;
       }
+
       return `/talants/individuals?${query}`;
     },
     [router]
@@ -306,7 +393,47 @@ const IdentityOpportunities = ({
 
         <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
           <Container>
-            <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
+            <Grid
+              templateRows="repeat(1, 1fr)"
+              templateColumns="repeat(4, 1fr)"
+              gap={4}
+            >
+              <GridItem colSpan={1}>
+                <SearchFilter
+                  label="工作類型"
+                  value={jobType}
+                  onChange={(value) => {
+                    setJobType(value);
+                    router.push(
+                      generateUrlParameter({
+                        identityId: "",
+                        jobType: encodeURIComponent(value),
+                      })
+                    );
+                  }}
+                  list={jobTypeList}
+                />
+              </GridItem>
+              <GridItem colSpan={1}>
+                <SearchFilter
+                  label="工作類別"
+                  value={jobInterested}
+                  onChange={(value) => {
+                    setJobInterested(value);
+                    router.push(
+                      generateUrlParameter({
+                        identityId: "",
+                        jobInterested: encodeURIComponent(value),
+                      })
+                    );
+                  }}
+                  list={jobInterestedList}
+                />
+              </GridItem>
+            </Grid>
+
+            {/* <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
+
               <Select
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
@@ -320,7 +447,6 @@ const IdentityOpportunities = ({
                 variant="flushed"
               >
                 <option key="" value="">
-                  {/* Organization */}
                   {wordExtractor(page?.content?.wordings, "organization_text")}
                 </option>
                 {(organizations ?? []).map(({ id, chineseCompanyName }) => (
@@ -329,7 +455,7 @@ const IdentityOpportunities = ({
                   </option>
                 ))}
               </Select>
-            </Box>
+            </Box> */}
             <HStack mt={4} align="stretch" spacing={4}>
               {identityList}
               {/* desktop detail page */}
@@ -370,7 +496,6 @@ const IdentityOpportunities = ({
                 variant="flushed"
               >
                 <option key="" value="">
-                  {/* Organization */}
                   {wordExtractor(page?.content?.wordings, "organization_text")}
                 </option>
                 {(organizations ?? []).map(

@@ -283,6 +283,8 @@ export default gql`
 
     TalantIdentitySearch(
       organizationId: ID
+      jobType: String
+      jobInterested: String
       limit: Int!
       page: Int!
     ): [Identity]
