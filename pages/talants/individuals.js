@@ -483,7 +483,7 @@ const IdentityOpportunities = ({
         ) : (
           <Box p={4}>
             <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
-              <Select
+              {/* <Select
                 value={router.query.organizationId ?? ""}
                 onChange={(e) =>
                   router.push(
@@ -507,7 +507,45 @@ const IdentityOpportunities = ({
                     </option>
                   )
                 )}
-              </Select>
+              </Select> */}
+              <Grid
+              templateRows="repeat(1, 1fr)"
+              templateColumns="repeat(4, 1fr)"
+              gap={4}
+            >
+              <GridItem colSpan={4}>
+                <SearchFilter
+                  label="工作類型"
+                  value={jobType}
+                  onChange={(value) => {
+                    setJobType(value);
+                    router.push(
+                      generateUrlParameter({
+                        identityId: "",
+                        jobType: encodeURIComponent(value),
+                      })
+                    );
+                  }}
+                  list={jobTypeList}
+                />
+              </GridItem>
+              <GridItem colSpan={4}>
+                <SearchFilter
+                  label="工作類別"
+                  value={jobInterested}
+                  onChange={(value) => {
+                    setJobInterested(value);
+                    router.push(
+                      generateUrlParameter({
+                        identityId: "",
+                        jobInterested: encodeURIComponent(value),
+                      })
+                    );
+                  }}
+                  list={jobInterestedList}
+                />
+              </GridItem>
+            </Grid>
             </Box>
             {identityList}
           </Box>

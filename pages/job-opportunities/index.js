@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useMemo, useEffect } from "react";
 import { getConfiguration } from "../../utils/configuration/getConfiguration";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
@@ -17,6 +17,13 @@ import {
   Link,
   Button,
   Stack,
+  Menu,
+  MenuButton,
+  Portal,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
+  Grid,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import DividerSimple from "../../components/DividerSimple";
@@ -26,8 +33,52 @@ import moment from "moment";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { htmlStyles } from "../../utils/general";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import _ from "lodash";
 
 const PAGE_KEY = "jobOpportunities";
+
+const SearchFilter = ({
+  label,
+  value = [],
+  onChange = () => undefined,
+  list = [],
+}) => (
+  <Menu>
+    <MenuButton
+      flex={1}
+      as={Button}
+      variant="ghost"
+      rightIcon={<ChevronDownIcon />}
+      borderBottomWidth="2px"
+      size="lg"
+      textAlign="left"
+      borderRadius={0}
+      w="100%"
+    >
+      <Text w="100%">
+        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {label}
+      </Text>
+    </MenuButton>
+    <Portal>
+      <MenuList
+        maxW="100vw"
+        minWidth="240px"
+        maxHeight={"300px"}
+        overflowY={"scroll"}
+      >
+        <MenuOptionGroup value={value} onChange={onChange} type="checkbox">
+          {list?.map((target, i) => (
+            <MenuItemOption key={i} value={target.value}>
+              {target.label}
+            </MenuItemOption>
+          ))}
+        </MenuOptionGroup>
+      </MenuList>
+    </Portal>
+  </Menu>
+);
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -41,12 +92,70 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const JobOpportunities = ({ page }) => {
+const JobOpportunities = ({ page, enums }) => {
   const router = useRouter();
+  const [jobListData, setJobListData] = useState(page?.content?.jobs ?? []);
+  const [jobInterested, setJobInterested] = useState(
+    router?.query?.jobInterested?.split(",") ?? []
+  );
 
-  const jobId = router.query.jobId ?? page?.content?.jobs?.[0]?.id;
+  useEffect(() => {
+    if (router?.query) {
+      const updateJobList = page?.content?.jobs
+        .filter((d) => checkHasMatchValue(district, d?.location))
+        .filter((d) => checkHasMatchValue(jobInterested, d?.jobFunction));
 
-  const job = page?.content?.jobs?.find((x) => x.id === jobId);
+      setJobListData(updateJobList);
+    }
+  }, [router]);
+
+  const [district, setDistrict] = useState(
+    router?.query?.district?.split(",") ?? []
+  );
+
+  const jobInterestedList = useMemo(
+    () =>
+      enums?.EnumInterestedIndustryList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumInterestedIndustryList, router.locale]
+  );
+
+  const districtList = useMemo(
+    () =>
+      enums?.EnumDistrictList?.map((target) => ({
+        value: target.key,
+        label: target.value[router.locale],
+      })),
+    [enums?.EnumDistrictList, router.locale]
+  );
+
+  const generateUrlParameter = useCallback(
+    ({ jobId, jobInterested, district }) => {
+      let query = "";
+      if (jobId ?? router.query.jobId) {
+        query += `jobId=${jobId ?? router.query.jobId}&`;
+      }
+
+      if (jobInterested ?? router.query.jobInterested) {
+        query += `jobInterested=${
+          jobInterested ?? router.query.jobInterested
+        }&`;
+      }
+
+      if (district ?? router.query.district) {
+        query += `district=${district ?? router.query.district}&`;
+      }
+
+      return `/job-opportunities?${query}`;
+    },
+    [router]
+  );
+
+  const jobId = router.query.jobId ?? jobListData?.[0]?.id;
+
+  const job = jobListData?.find((x) => x.id === jobId);
 
   const jobLocationRenderer = useCallback(
     (job) =>
@@ -94,7 +203,9 @@ const JobOpportunities = ({ page }) => {
   const details = (
     <>
       <Stack spacing={2}>
-        {job?.companyLogo && <Image alt={job?.companyName} src={job?.companyLogo} w="120px" />}
+        {job?.companyLogo && (
+          <Image alt={job?.companyName} src={job?.companyLogo} w="120px" />
+        )}
         <Text fontSize={["lg"]}>{job?.companyName}</Text>
       </Stack>
       <Text fontSize={["2xl"]} pb={3} fontWeight="bold">
@@ -102,27 +213,53 @@ const JobOpportunities = ({ page }) => {
       </Text>
       <VStack py={4} spacing={3} align="start">
         <HStack>
-          <Image alt={wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)} src={page?.content?.icon?.modeIcon} w={6} h={6} />
+          <Image
+            alt={wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
+            src={page?.content?.icon?.modeIcon}
+            w={6}
+            h={6}
+          />
           <Text>
             {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
           </Text>
         </HStack>
         <HStack>
-          <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")} src={page?.content?.icon?.locationIcon} w={6} h={6} />
+          <Image
+            alt={wordExtractor(page?.content?.wordings, "job_location_label")}
+            src={page?.content?.icon?.locationIcon}
+            w={6}
+            h={6}
+          />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_location_label")}
             {jobLocationRenderer(job)}
           </Text>
         </HStack>
         <HStack>
-          <Image alt={wordExtractor(page?.content?.wordings, "job_publishDate_label")} src={page?.content?.icon?.timeIcon} w={6} h={6} />
+          <Image
+            alt={wordExtractor(
+              page?.content?.wordings,
+              "job_publishDate_label"
+            )}
+            src={page?.content?.icon?.timeIcon}
+            w={6}
+            h={6}
+          />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_publishDate_label")}
             {moment(job?.publishDate)?.format("YYYY-MM-DD hh:mm a")}
           </Text>
         </HStack>
         <HStack>
-          <Image alt={wordExtractor(page?.content?.wordings, "job_applyMethods_label")} src={page?.content?.icon?.applyMethodsIcon} w={6} h={6} />
+          <Image
+            alt={wordExtractor(
+              page?.content?.wordings,
+              "job_applyMethods_label"
+            )}
+            src={page?.content?.icon?.applyMethodsIcon}
+            w={6}
+            h={6}
+          />
           <Text>
             {wordExtractor(page?.content?.wordings, "job_applyMethods_label")}
             {job?.applyMethods}
@@ -220,6 +357,15 @@ const JobOpportunities = ({ page }) => {
     </>
   );
 
+  const checkHasMatchValue = (type, listData) => {
+    if (type.length === 0) {
+      return true;
+    }
+    const intersection = type.filter((element) => listData.includes(element));
+
+    return intersection?.length > 0;
+  };
+
   const jobList = (
     <VStack
       d={!router.query.jobId ? "block" : ["none", "none", "block", "block"]}
@@ -230,67 +376,96 @@ const JobOpportunities = ({ page }) => {
       w={["100%", "100%", "33%", "33%"]}
       cursor="pointer"
     >
-      {(page?.content?.jobs ?? []).map((job, index) => (
-        <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
-          <VStack
-            borderColor="#eee"
-            borderWidth={1}
-            p={4}
-            px={6}
-            spacing={3}
-            align="stretch"
-            key={job?.id}
-            _hover={{
-              boxShadow: "md",
-            }}
-            {...(job?.id === jobId && {
-              borderColor: "#F6D644",
-              borderWidth: 2,
-              borderTopWidth: 8,
-            })}
-            borderRadius={8}
-          >
-            <Stack spacing={2}>
-              {job?.companyLogo && <Image alt={job?.companyName} src={job?.companyLogo} w="60px" />}
-              <Text fontSize={["md"]}>{job?.companyName}</Text>
-            </Stack>
-            <Text pb={3} fontWeight="bold">
-              {job?.title}
-            </Text>
-            <Wrap>{jobFunctionRenderer(job)}</Wrap>
-            <HStack>
-              <Image alt={wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)} src={page?.content?.icon?.modeIcon} w={6} h={6} />
-              <Text>
-                {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
-              </Text>
-            </HStack>
-            <HStack>
-              <Image alt={wordExtractor(
-                page?.content?.wordings,
-                `yearOfExperience_${job?.yearOfExperience}`
-              )} src={page?.content?.icon?.expIcon} w={6} h={6} />
-              <Text>
-                {wordExtractor(
-                  page?.content?.wordings,
-                  `yearOfExperience_${job?.yearOfExperience}`
+      {(jobListData ?? []).map((job, index) => {
+        return (
+          <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
+            <VStack
+              borderColor="#eee"
+              borderWidth={1}
+              p={4}
+              px={6}
+              spacing={3}
+              align="stretch"
+              key={job?.id}
+              _hover={{
+                boxShadow: "md",
+              }}
+              {...(job?.id === jobId && {
+                borderColor: "#F6D644",
+                borderWidth: 2,
+                borderTopWidth: 8,
+              })}
+              borderRadius={8}
+            >
+              <Stack spacing={2}>
+                {job?.companyLogo && (
+                  <Image
+                    alt={job?.companyName}
+                    src={job?.companyLogo}
+                    w="60px"
+                  />
                 )}
+                <Text fontSize={["md"]}>{job?.companyName}</Text>
+              </Stack>
+              <Text pb={3} fontWeight="bold">
+                {job?.title}
               </Text>
-            </HStack>
-            <Divider borderColor="gray.200" />
-            <HStack w="100%">
-              <Box flex={1} minW={0} w="100%">
-                <HStack>
-                  <Image alt={wordExtractor(page?.content?.wordings, "job_location_label")} src={page?.content?.icon?.locationIcon} w={6} h={6} />
-                  <Text isTruncated maxW="100%">
-                    {jobLocationRenderer(job)}
-                  </Text>
-                </HStack>
-              </Box>
-              <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
-            </HStack>
-          </VStack>
-        </NextLink>
-      ))}
+              <Wrap>{jobFunctionRenderer(job)}</Wrap>
+              <HStack>
+                <Image
+                  alt={wordExtractor(
+                    page?.content?.wordings,
+                    `mode_${job?.mode}`
+                  )}
+                  src={page?.content?.icon?.modeIcon}
+                  w={6}
+                  h={6}
+                />
+                <Text>
+                  {wordExtractor(page?.content?.wordings, `mode_${job?.mode}`)}
+                </Text>
+              </HStack>
+              <HStack>
+                <Image
+                  alt={wordExtractor(
+                    page?.content?.wordings,
+                    `yearOfExperience_${job?.yearOfExperience}`
+                  )}
+                  src={page?.content?.icon?.expIcon}
+                  w={6}
+                  h={6}
+                />
+                <Text>
+                  {wordExtractor(
+                    page?.content?.wordings,
+                    `yearOfExperience_${job?.yearOfExperience}`
+                  )}
+                </Text>
+              </HStack>
+              <Divider borderColor="gray.200" />
+              <HStack w="100%">
+                <Box flex={1} minW={0} w="100%">
+                  <HStack>
+                    <Image
+                      alt={wordExtractor(
+                        page?.content?.wordings,
+                        "job_location_label"
+                      )}
+                      src={page?.content?.icon?.locationIcon}
+                      w={6}
+                      h={6}
+                    />
+                    <Text isTruncated maxW="100%">
+                      {jobLocationRenderer(job)}
+                    </Text>
+                  </HStack>
+                </Box>
+                <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
+              </HStack>
+            </VStack>
+          </NextLink>
+        );
+      })}
     </VStack>
   );
 
@@ -312,7 +487,13 @@ const JobOpportunities = ({ page }) => {
               </Text>
               <Text fontSize="xl">
                 {wordExtractor(page?.content?.wordings, "page_subtitle_1")}
-                <Link decoration="underline" href={wordExtractor(page?.content?.wordings, "page_subtitle_url")}>
+                <Link
+                  decoration="underline"
+                  href={wordExtractor(
+                    page?.content?.wordings,
+                    "page_subtitle_url"
+                  )}
+                >
                   {wordExtractor(page?.content?.wordings, "page_subtitle_link")}
                 </Link>
               </Text>
@@ -328,13 +509,12 @@ const JobOpportunities = ({ page }) => {
                   bg: "rgba(255,255,255, 0.3)",
                 }}
                 borderColor="#000"
-
               >
                 {wordExtractor(page?.content?.wordings, "page_contact_us_link")}
               </Button>
-
             </Box>
-            <Image alt=""
+            <Image
+              alt=""
               position="absolute"
               bottom={2}
               right={2}
@@ -346,6 +526,46 @@ const JobOpportunities = ({ page }) => {
 
         <Box d={["none", "none", "block"]} bg="#fafafa" py={16}>
           <Container>
+            <Box mb={4}>
+              <Grid
+                templateRows="repeat(1, 1fr)"
+                templateColumns="repeat(4, 1fr)"
+                gap={4}
+              >
+                <GridItem colSpan={1}>
+                  <SearchFilter
+                    label="工作類別"
+                    value={jobInterested}
+                    onChange={(value) => {
+                      setJobInterested(value);
+                      router.push(
+                        generateUrlParameter({
+                          jobInterested: encodeURIComponent(value),
+                        })
+                      );
+                    }}
+                    list={jobInterestedList}
+                  />
+                </GridItem>
+
+                <GridItem colSpan={1}>
+                  <SearchFilter
+                    label="工作地點"
+                    value={district}
+                    onChange={(value) => {
+                      setDistrict(value);
+                      router.push(
+                        generateUrlParameter({
+                          district: encodeURIComponent(value),
+                        })
+                      );
+                    }}
+                    list={districtList}
+                  />
+                </GridItem>
+              </Grid>
+            </Box>
+
             <HStack align="start" spacing={4}>
               {jobList}
               {/* desktop detail page */}
@@ -369,6 +589,45 @@ const JobOpportunities = ({ page }) => {
       </VStack>
       {/* mobile detail page */}
       <Box mt={16} d={["block", "block", "none"]}>
+      <Box mb={4} p={4}>
+          <Grid
+            templateRows="repeat(1, 1fr)"
+            templateColumns="repeat(4, 1fr)"
+            gap={4}
+          >
+            <GridItem colSpan={4}>
+              <SearchFilter
+                label="工作類別"
+                value={jobInterested}
+                onChange={(value) => {
+                  setJobInterested(value);
+                  router.push(
+                    generateUrlParameter({
+                      jobInterested: encodeURIComponent(value),
+                    })
+                  );
+                }}
+                list={jobInterestedList}
+              />
+            </GridItem>
+
+            <GridItem colSpan={4}>
+              <SearchFilter
+                label="工作地點"
+                value={district}
+                onChange={(value) => {
+                  setDistrict(value);
+                  router.push(
+                    generateUrlParameter({
+                      district: encodeURIComponent(value),
+                    })
+                  );
+                }}
+                list={districtList}
+              />
+            </GridItem>
+          </Grid>
+        </Box>
         {router.query.jobId ? (
           <VStack align="stretch" p={4} spacing={0}>
             <NextLink href="/job-opportunities">
@@ -812,10 +1071,10 @@ export default withPageCMS(JobOpportunities, {
           ],
         },
         {
-          name: 'publishDate',
-          label: 'Created At',
-          component: 'date',
-          dateFormat: 'MMMM DD YYYY',
+          name: "publishDate",
+          label: "Created At",
+          component: "date",
+          dateFormat: "MMMM DD YYYY",
           timeFormat: true,
         },
       ],

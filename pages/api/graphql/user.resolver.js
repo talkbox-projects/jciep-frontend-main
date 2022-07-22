@@ -179,8 +179,6 @@ export default {
       const keys = { publishStatus: "approved", published: true };
       let identities = []
 
-      console.log('input-',input)
-
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
         keys._id = {
@@ -197,8 +195,6 @@ export default {
       if (input.jobInterested) {
         keys.interestedIndustry = { "$in": input?.jobInterested?.split(',') }
       }
-
-      console.log('keys-',keys)
 
       identities = await Identity.find(keys)
         .skip((input.page - 1) * input?.limit)

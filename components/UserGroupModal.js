@@ -1,11 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useAppContext } from "../store/AppStore";
 import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   Button,
@@ -17,11 +15,12 @@ import {
   Box,
   Stack,
 } from "@chakra-ui/react";
+import { useRouter } from 'next/router'
 
 const UserGroupModal = () => {
   const { userGroupModalDisclosure } = useAppContext();
   const { params } = userGroupModalDisclosure;
-
+  const router = useRouter()
   return (
     <>
       <Modal
@@ -68,6 +67,7 @@ const UserGroupModal = () => {
                       borderColor={"#C6C6C6"}
                       color={"#C6C6C6"}
                       fontWeight={500}
+                      onClick={() =>  router.push(d?.link)}
                     >
                       {d?.name}
                     </Button>
