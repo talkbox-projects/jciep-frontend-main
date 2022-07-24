@@ -1,5 +1,14 @@
 import React from "react";
-import { AspectRatio, Avatar, Button, Image, VStack } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Avatar,
+  Button,
+  Image,
+  VStack,
+  Box,
+  Tooltip
+} from "@chakra-ui/react";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDisclosureWithParams } from "../../../store/AppStore";
 import { getYoutubeLink } from "../../../utils/general";
@@ -18,6 +27,44 @@ const BannerFragment = ({
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
 
+  console.log("entity?.bannerMedia-", entity?.bannerMedia);
+
+  const RenderBanner = (entity) => {
+    if (!entity?.bannerMedia?.videoUrl && !entity?.bannerMedia?.file?.url) {
+      return (
+        <AspectRatio ratio={16 / 9}>
+          <Box fontSize={12} px={2}>
+            可擺放相片或插入YouTube擺放自己的作品或與個人興趣、成就相關的相片/影片，注意每張相片不能大於4MB
+          </Box>
+        </AspectRatio>
+      );
+    }
+
+    if (entity?.bannerMedia?.videoUrl) {
+      return (
+        <AspectRatio ratio={16 / 9}>
+          <iframe
+            src={getYoutubeLink(entity?.bannerMedia?.videoUrl)}
+            w="100%"
+          />
+        </AspectRatio>
+      );
+    }
+
+    return (
+      <AspectRatio ratio={2.5}>
+        <Image
+          alt={wordExtractor(page?.content?.wordings, "banner_media_alt_text")}
+          w="100%"
+          src={
+            entity?.bannerMedia?.file?.url ??
+            page?.content?.headerSection?.bannerPlaceholder
+          }
+        />
+      </AspectRatio>
+    );
+  };
+
   return (
     <VStack align="stretch" spacing={0} position="relative">
       {editable && enableBannerMedia && (
@@ -35,40 +82,30 @@ const BannerFragment = ({
           {wordExtractor(page?.content?.wordings, "add_banner_media_label")}
         </Button>
       )}
-      {entity?.bannerMedia?.videoUrl ? (
-        <AspectRatio ratio={16 / 9}>
-          <iframe
-            src={getYoutubeLink(entity?.bannerMedia?.videoUrl)}
-            w="100%"
-          />
-        </AspectRatio>
-      ) : (
-        <AspectRatio ratio={2.5}>
-          <Image
-            alt={wordExtractor(page?.content?.wordings, "banner_media_alt_text")}
-            w="100%"
-            src={
-              entity?.bannerMedia?.file?.url ??
-              page?.content?.headerSection?.bannerPlaceholder
-            }
-          ></Image>
-        </AspectRatio>
-      )}
-      <Avatar
-        {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
-        {...(editable && {
-          cursor: "pointer",
-          onClick: profilePicDisclosure.onOpen,
-        })}
-        size="xl"
-        position="absolute"
-        left={8}
-        bottom={-12}
-        borderWidth={2}
-        borderColor="white"
-        objectFit="contain"
-        src={entity?.[profilePicPropName]?.url}
-      ></Avatar>
+      <RenderBanner />
+      <Box position={"relative"}>
+        <Avatar
+          {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
+          {...(editable && {
+            cursor: "pointer",
+            onClick: profilePicDisclosure.onOpen,
+          })}
+          size="xl"
+          position="absolute"
+          left={8}
+          bottom={-12}
+          borderWidth={2}
+          borderColor="white"
+          objectFit="contain"
+          src={entity?.[profilePicPropName]?.url}
+        >
+          <Box position={"absolute"} top={0} right={0} fontSize={12}>
+            <Tooltip label="建議使用較為端莊的相片，注意每張相片不能大於4MB" aria-label='建議使用較為端莊的相片，注意每張相片不能大於4MB'>
+            <InfoOutlineIcon />
+            </Tooltip>
+          </Box>
+        </Avatar>
+      </Box>
       <BannerMediaUploadModal
         params={{ entity, page, save }}
         isOpen={bannerMediaDisclosure.isOpen}

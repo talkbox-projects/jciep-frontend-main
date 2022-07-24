@@ -21,6 +21,8 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 
+{/** TODO: Translation */}
+
 const PwdSectionEditor = () => {
   const router = useRouter();
   const { page, enums, saveIdentity, identity, removeEditSection } =
@@ -87,12 +89,13 @@ const PwdSectionEditor = () => {
         <FormControl isInvalid={errors?.caption?.message}>
           <Input
             variant="flushed"
-            placeholder={wordExtractor(
-              page?.content?.wordings,
-              "field_label_caption"
-            )}
+            // placeholder={wordExtractor(
+            //   page?.content?.wordings,
+            //   "field_label_caption"
+            // )}
             defaultValue={identity?.caption}
             {...register("caption", {})}
+            placeholder={'可填寫自己的學歷或職業'}
           ></Input>
           <FormHelperText color="red">
             {errors?.caption?.message}
@@ -170,6 +173,7 @@ const PwdSectionEditor = () => {
                   "field_error_message_required"
                 ),
               })}
+              placeholder={'只供網頁管理員參考，不會公開顯示'}
             ></Input>
             <FormHelperText color="red">
               {errors?.email?.message}
@@ -188,6 +192,7 @@ const PwdSectionEditor = () => {
                   "field_error_message_required"
                 ),
               })}
+              placeholder={'只供網頁管理員參考，不會公開顯示'}
             ></Input>
             <FormHelperText color="red">
               {errors?.phone?.message}
@@ -461,6 +466,9 @@ const PwdSectionEditor = () => {
                 );
               }}
             ></Controller>
+            <FormHelperText>
+            現時或曾經擔任過的工作類別，可揀選多於一項
+            </FormHelperText>
             <FormHelperText color="red">
               {errors?.interestedIndustry?.message}
             </FormHelperText>
