@@ -240,7 +240,7 @@ const PostDetail = ({ post, setting, page }) => {
           </HoverCard>
         </Box>
 
-        <VStack align="stretch" textAlign="left" spacing={2}>
+        <VStack align="stretch" textAlign="left" spacing={2} w="100%">
           {post?.excerpt && (
             <Text
               bgColor="gray.50"
@@ -253,9 +253,9 @@ const PostDetail = ({ post, setting, page }) => {
               {post?.excerpt}
             </Text>
           )}
-          <VStack align="stretch" spacing={4}>
+          <VStack align="stretch" spacing={4} w="100%">
             {(post?.content?.blocks ?? []).map(
-              ({ _template, content, caption, image, link }, index) => {
+              ({ _template, content, caption, image, link, video }, index) => {
                 const imageName = image?.substring(
                   image.lastIndexOf("images/") + 7
                 );
@@ -304,10 +304,11 @@ const PostDetail = ({ post, setting, page }) => {
                       </VStack>
                     );
                   case "video-block": {
-                    const youtubeLink = getYoutubeLink(link);
+                    const youtubeLink = getYoutubeLink(video ?? link);
+                    console.log('youtubeLink-',youtubeLink)
                     return (
                       <VStack align="stretch">
-                        <AspectRatio ratio={5 / 3}>
+                        <AspectRatio w="100%" ratio={16 / 9}>
                           <iframe
                             title="post"
                             src={youtubeLink}

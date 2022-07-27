@@ -26,9 +26,6 @@ const BannerFragment = ({
 }) => {
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
-
-  console.log("entity?.bannerMedia-", entity?.bannerMedia);
-
   const RenderBanner = (entity) => {
     if (!entity?.bannerMedia?.videoUrl && !entity?.bannerMedia?.file?.url) {
       return (
