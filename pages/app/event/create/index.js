@@ -17,14 +17,8 @@ import {
   RadioGroup,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
   useDisclosure,
-  Divider,
   Code,
-  Image,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -42,8 +36,6 @@ import { BsPlus } from "react-icons/bs";
 import { AiOutlineInfoCircle, AiFillMinusCircle } from "react-icons/ai";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
-import { urlRegex } from "../../../../utils/general";
-import moment from "moment";
 
 const PAGE_KEY = "event_add";
 
@@ -59,14 +51,6 @@ const customStyles = {
 const labelStyles = {
   marginBottom: "0px",
 };
-
-function stringifyFile(obj) {
-  const replacer = [];
-  for (const key in obj) {
-    replacer.push(key);
-  }
-  return JSON.stringify(obj, replacer);
-}
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -105,10 +89,6 @@ const EventAdd = ({ page }) => {
   const [stockPhotoId, setStockPhotoId] = useState("");
   const [debugResult, setDebugResult] = useState("");
   const [stockPhoto, setStockPhoto] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [singleFileStatus, setSingleFileStatus] = useState(false);
-  const [fileError, setFileError] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [bannerFileError, setBannerFileError] = useState(false);
   const [additionalFileError, setAdditionalFileError] = useState(false);
   const watchFields = watch(["type", "freeOrCharge", "representOrganization"], {
@@ -146,7 +126,7 @@ const EventAdd = ({ page }) => {
 
   const onFileUpload = async (e) => {
     const fileSize = e.target.files[0]?.size;
-    const isLt1M = fileSize / 1024 / 1024 < 1;
+    const isLt1M = fileSize / 1024 / 1024 < 4;
 
     if (fileSize && !isLt1M) {
       bannerRemove(0);
@@ -156,7 +136,7 @@ const EventAdd = ({ page }) => {
         });
       }, 100);
 
-      setBannerFileError("檔案大小不能超過 1MB");
+      setBannerFileError("檔案大小不能超過 4MB");
 
       return;
     }
@@ -166,7 +146,7 @@ const EventAdd = ({ page }) => {
 
   const onAdditionalFileUpload = async (e, index) => {
     const fileSize = e.target.files[0]?.size;
-    const isLt1M = fileSize / 1024 / 1024 < 1;
+    const isLt1M = fileSize / 1024 / 1024 < 4;
 
     if (fileSize && !isLt1M) {
       additionalInformationRemove(index);
@@ -176,21 +156,13 @@ const EventAdd = ({ page }) => {
         });
       }, 100);
 
-      setAdditionalFileError("檔案大小不能超過 1MB");
+      setAdditionalFileError("檔案大小不能超過 4MB");
 
       return;
     }
 
     setAdditionalFileError("");
   };
-
-  function stringify(obj) {
-    const replacer = [];
-    for (const key in obj) {
-      replacer.push(key);
-    }
-    return JSON.stringify(obj, replacer);
-  }
 
   const onFormSubmit = async ({
     name,

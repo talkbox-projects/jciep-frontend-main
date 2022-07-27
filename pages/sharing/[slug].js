@@ -305,7 +305,6 @@ const PostDetail = ({ post, setting, page }) => {
                     );
                   case "video-block": {
                     const youtubeLink = getYoutubeLink(video ?? link);
-                    console.log('youtubeLink-',youtubeLink)
                     return (
                       <VStack align="stretch">
                         <AspectRatio w="100%" ratio={16 / 9}>
