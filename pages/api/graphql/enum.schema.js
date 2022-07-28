@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import degrees from "./enum/degrees";
 import districts from "./enum/districts";
+import jobDistricts from "./enum/jobDistricts";
 import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
@@ -58,6 +59,7 @@ export default gql`
   ${generateEnumSchema("targetGroupDisability", targetGroupDisabilities)}
   ${generateEnumSchema("degree", degrees)}
   ${generateEnumSchema("district", districts)}
+  ${generateEnumSchema("jobDistrict", jobDistricts)}
   ${generateEnumSchema("employmentMode", employmentModes)}
   ${generateEnumSchema("gender", genders)}
   ${generateEnumSchema("identityType", identityTypes)}

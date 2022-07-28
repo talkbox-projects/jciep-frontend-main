@@ -124,11 +124,11 @@ const JobOpportunities = ({ page, enums }) => {
 
   const districtList = useMemo(
     () =>
-      enums?.EnumDistrictList?.map((target) => ({
+      enums?.EnumJobDistrictList?.map((target) => ({
         value: target.key,
         label: target.value[router.locale],
       })),
-    [enums?.EnumDistrictList, router.locale]
+    [enums?.EnumJobDistrictList, router.locale]
   );
 
   const generateUrlParameter = useCallback(

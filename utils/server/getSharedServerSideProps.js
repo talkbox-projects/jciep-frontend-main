@@ -26,6 +26,7 @@ const getSharedServerSideProps = async (context) => {
             "EnumTargetGroupDisabilityList",
             "EnumGenderList",
             "EnumDistrictList",
+            "EnumJobDistrictList",
             "EnumIndustryList",
             "EnumInterestedIndustryList",
             "EnumEmploymentModeList",

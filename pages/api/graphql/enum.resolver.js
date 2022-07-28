@@ -1,5 +1,6 @@
 import degrees from "./enum/degrees";
 import districts from "./enum/districts";
+import jobDistricts from "./enum/jobDistricts";
 import employmentModes from "./enum/employmentModes";
 import genders from "./enum/genders";
 import identityTypes from "./enum/identityTypes";
@@ -45,6 +46,7 @@ export default {
     ...generateEnumResolver("wishToDo", wishToDos),
     ...generateEnumResolver("degree", degrees),
     ...generateEnumResolver("district", districts),
+    ...generateEnumResolver("jobDistrict", jobDistricts),
     ...generateEnumResolver("identityType", identityTypes),
     ...generateEnumResolver("employmentMode", employmentModes),
     ...generateEnumResolver("gender", genders),
