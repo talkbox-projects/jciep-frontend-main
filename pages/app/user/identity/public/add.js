@@ -10,7 +10,6 @@ import {
   Checkbox,
   FormHelperText,
   FormLabel,
-  Link,
   Flex,
   Image,
   Center,
@@ -76,6 +75,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
+  const [submitInvitation, setSubmitInvitation] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
 
   const [debug, setDebug] = useState({});
@@ -130,10 +130,11 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
 
 
   const handlePostData = async (input, invitationCode) => {
-    setDebug({
-      input: input,
-      invitationCode: invitationCode
-    })
+    // setDebug({
+    //   input: input,
+    //   invitationCode: invitationCode
+    // })
+    setSubmitInvitation(false)
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -167,6 +168,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
 
   const handleSubmitInvitation = async (formState) => {
     setError("invitationCode", {});
+    setSubmitInvitation(true)
     const isValid = await OrganizationInvitationCodeValidity({
       invitationCode: getValues("invitationCode"),
       organizationType: "ngo",
@@ -179,9 +181,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
           "invitation_code_error_message"
         ),
       });
+      setSubmitInvitation(false)
       return;
     }
-
+    setSubmitInvitation(false)
     handlePostData(formState, getValues("invitationCode"));
   };
 
@@ -463,6 +466,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                       borderRadius="22px"
                       height="44px"
                       width="117.93px"
+                      isLoading={submitInvitation}
                       onClick={() => handleSubmitInvitation(formState)}
                     >
                       {page?.content?.form?.continue}
