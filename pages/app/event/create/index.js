@@ -205,10 +205,9 @@ const EventAdd = ({ page }) => {
     `;
 
     if (_.isEmpty(bannerImage?.[0]?.[0]?.name) && _.isEmpty(stockPhotoId)) {
-      setBannerFileError(wordExtractor(
-        page?.content?.wordings,
-        "submission_deadline_required"
-      ));
+      setBannerFileError(
+        wordExtractor(page?.content?.wordings, "submission_deadline_required")
+      );
       return;
     }
 
@@ -228,14 +227,14 @@ const EventAdd = ({ page }) => {
       });
     }
 
-    if (_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
-      setAdditionalFileError(
-        wordExtractor(page?.content?.wordings, "submission_deadline_required")
-      );
-      return;
-    }
+    // if (_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
+    //   setAdditionalFileError(
+    //     wordExtractor(page?.content?.wordings, "submission_deadline_required")
+    //   );
+    //   return;
+    // }
 
-    if (!_.isEmpty(additionalInformation)) {
+    if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
       filesAdditionalInformalUploadData = await additionalInformation
         .map((d) => {
           if (d[0]) {
@@ -243,9 +242,6 @@ const EventAdd = ({ page }) => {
           }
         })
         .filter((d) => d);
-    } else {
-      setAdditionalFileError(true);
-      return;
     }
 
     if (filesAdditionalInformalUploadData) {
@@ -257,11 +253,13 @@ const EventAdd = ({ page }) => {
       );
     }
 
-    const submitBanner = bannerUploadData?.FileUpload?.[0] ? {
-      file: bannerUploadData?.FileUpload?.[0]
-    } : {
-      stockPhotoId: stockPhotoId
-    }
+    const submitBanner = bannerUploadData?.FileUpload?.[0]
+      ? {
+          file: bannerUploadData?.FileUpload?.[0],
+        }
+      : {
+          stockPhotoId: stockPhotoId,
+        };
     const input = Object.fromEntries(
       Object.entries({
         name: name,
@@ -273,7 +271,7 @@ const EventAdd = ({ page }) => {
         startTime: _.isEmpty(startTime) ? "00:00" : startTime,
         endTime: _.isEmpty(endTime) ? "00:00" : endTime,
         datetimeRemark: datetimeRemark,
-        quota:quota,
+        quota: quota,
         venue: venue,
         location: location,
         freeOrCharge: freeOrCharge,
@@ -317,7 +315,6 @@ const EventAdd = ({ page }) => {
       />
     );
   }, []);
-
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -692,7 +689,7 @@ const EventAdd = ({ page }) => {
                           page?.content?.wordings,
                           "quota_placeholder"
                         )}
-                        {...register("quota",{
+                        {...register("quota", {
                           required: true,
                         })}
                       />
@@ -863,6 +860,16 @@ const EventAdd = ({ page }) => {
                           required: true,
                         })}
                       />
+                      <FormHelperText>
+                        {errors?.eventManager?.type === "required" && (
+                          <Text color="red">
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "contact_number_required"
+                            )}
+                          </Text>
+                        )}
+                      </FormHelperText>
                     </FormControl>
                   </GridItem>
                   <GridItem>
@@ -1047,7 +1054,7 @@ const EventAdd = ({ page }) => {
                             height={`100%`}
                             margin="0 2px"
                           >
-                            {watchBannerImage[index]?.length > 0 && (
+                            {/* {watchBannerImage[index]?.length > 0 && (
                               <Button
                                 colorScheme="red"
                                 size="xs"
@@ -1068,7 +1075,7 @@ const EventAdd = ({ page }) => {
                                   "delete_information_label"
                                 )}
                               </Button>
-                            )}
+                            )} */}
                             {watchBannerImage[index]?.length > 0 ? (
                               renderAdditionalImage(
                                 watchBannerImage[index]?.[0]
@@ -1126,9 +1133,7 @@ const EventAdd = ({ page }) => {
                     {bannerFileError && (
                       <FormControl>
                         <FormHelperText>
-                          <Text color="red">
-                            {bannerFileError}
-                          </Text>
+                          <Text color="red">{bannerFileError}</Text>
                         </FormHelperText>
                       </FormControl>
                     )}
@@ -1180,10 +1185,7 @@ const EventAdd = ({ page }) => {
                 </Grid>
                 <SimpleDivider />
 
-                <TitleWrap
-                  title={page?.content?.step?.more_information}
-                  required={true}
-                />
+                <TitleWrap title={page?.content?.step?.more_information} />
 
                 <Box width="100%">
                   {additionalInformationFields.map((item, index) => {
@@ -1201,7 +1203,7 @@ const EventAdd = ({ page }) => {
                         m={2}
                         className="additionalInformationWrap"
                       >
-                        {watchAdditionalInformation[index]?.[0] && (
+                        {/* {watchAdditionalInformation[index]?.[0] && (
                           <Button
                             colorScheme="red"
                             size="xs"
@@ -1215,11 +1217,64 @@ const EventAdd = ({ page }) => {
                               "delete_information_label"
                             )}
                           </Button>
-                        )}
+                        )} */}
                         {watchAdditionalInformation[index]?.length > 0 ? (
-                          renderAdditionalImage(
-                            watchAdditionalInformation[index]?.[0]
-                          )
+                          <Box pos="relative" h={"100%"}>
+                            <Box
+                              h={"100%"}
+                              minHeight={"200px"}
+                              width="100%"
+                              cursor="pointer"
+                              position="absolute"
+                              opacity={0}
+                              zIndex={3}
+                            >
+                              <Center
+                                h={"100%"}
+                                fontSize={"14px"}
+                                pos={"relative"}
+                                zIndex={1}
+                              >
+                                <Stack
+                                  direction="column"
+                                  alignItems={"center"}
+                                  spacing={2}
+                                >
+                                  <BsPlus />
+                                  <Text>
+                                    {" "}
+                                    {wordExtractor(
+                                      page?.content?.wordings,
+                                      "add_custom_files_label"
+                                    )}
+                                  </Text>
+                                </Stack>
+                              </Center>
+                              <Input
+                                type="file"
+                                multiple={false}
+                                opacity={0}
+                                zIndex={2}
+                                top={0}
+                                left={0}
+                                right={0}
+                                bottom={0}
+                                height={"100%"}
+                                position="absolute"
+                                ref={additionalFileRefs}
+                                onInput={(e) =>
+                                  onAdditionalFileUpload(e, index)
+                                }
+                                accept=".pdf, .png, .jpg, .jpeg"
+                                {...register(`additionalInformation[${index}]`)}
+                              />
+                            </Box>
+                            <Box pos="relative" zIndex={2} h={"100%"}>
+                              {renderAdditionalImage(
+                                watchAdditionalInformation[index]?.[0]
+                              )}
+                            </Box>
+                          </Box>
                         ) : (
                           <Box
                             h={"100%"}
@@ -1291,132 +1346,6 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </Flex>
                 </Box>
-
-                {/* <Grid
-                  templateColumns="repeat(1, 1fr)"
-                  gap={"20px"}
-                  width="100%"
-                  px={"15px"}
-                >
-                  <GridItem>
-                    {additionalInformationFields.map((item, index) => {
-                      return (
-                        <Grid
-                          key={item.id}
-                          templateColumns={{
-                            base: "repeat(5, 1fr)",
-                          }}
-                          gap={6}
-                          bgColor="#FFF"
-                          borderRadius={"15px"}
-                          mb={4}
-                          alignItems="center"
-                        >
-                          <GridItem
-                            borderRadius={"5px"}
-                            overflow={"hidden"}
-                            border={"1px solid #EFEFEF"}
-                            color={"#666666"}
-                            cursor={"pointer"}
-                            pos={"relative"}
-                            height={`100%`}
-                            colSpan={4}
-                          >
-                            {watchAdditionalInformation[index]?.length > 0 ? (
-                              renderAdditionalImage(
-                                watchAdditionalInformation[index]?.[0]
-                              )
-                            ) : (
-                              <Box
-                                h={"100%"}
-                                minHeight={"200px"}
-                                cursor="pointer"
-                              >
-                                <Center
-                                  h={"100%"}
-                                  fontSize={"14px"}
-                                  pos={"relative"}
-                                  zIndex={1}
-                                >
-                                  <Stack
-                                    direction="column"
-                                    alignItems={"center"}
-                                    spacing={2}
-                                  >
-                                    <BsPlus />
-                                    <Text>
-                                      {" "}
-                                      {wordExtractor(
-                                        page?.content?.wordings,
-                                        "add_custom_files_label"
-                                      )}
-                                    </Text>
-                                  </Stack>
-                                </Center>
-                                <Input
-                                  type="file"
-                                  multiple={false}
-                                  opacity={0}
-                                  zIndex={2}
-                                  top={0}
-                                  left={0}
-                                  right={0}
-                                  bottom={0}
-                                  height={"100%"}
-                                  position="absolute"
-                                  ref={additionalFileRefs}
-                                  onInput={(e)=>onAdditionalFileUpload(e, index)}
-                                  accept=".pdf, .png, .jpg, .jpeg"
-                                  {...register(
-                                    `additionalInformation[${index}]`
-                                  )}
-                                />
-                              </Box>
-                            )}
-                          </GridItem>
-                          <GridItem colSpan={1}>
-                            {additionalFileError && (
-                              <Text color="red">
-                                {additionalFileError}
-                              </Text>
-                            )}
-                            {watchAdditionalInformation[index]?.[0] && (<Button
-                              colorScheme="red"
-                              size="xs"
-                              onClick={() => additionalInformationRemove(index)}
-                            >
-                              {wordExtractor(
-                                page?.content?.wordings,
-                                "delete_information_label"
-                              )}
-                            </Button>)}
-                          </GridItem>
-
-                          <GridItem colSpan={5}>
-                            <Divider mt={1} />
-                          </GridItem>
-                        </Grid>
-                      );
-                    })}
-
-                    <Flex>
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          additionalInformationAppend({
-                            FileList: ""
-                          });
-                        }}
-                      >
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "add_information_label"
-                        )}
-                      </Button>
-                    </Flex>
-                  </GridItem>
-                </Grid> */}
-
                 <Box
                   style={{
                     background:
