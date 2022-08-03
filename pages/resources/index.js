@@ -25,10 +25,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Center,
   Input,
@@ -63,37 +60,43 @@ import { FaColumns } from "react-icons/fa";
 const PAGE_KEY = "resources";
 
 const serviceOrgList = [
-  { value: "gov", label: "政府主導的計劃" },
-  { value: "non-gov", label: "非政府組織提供的服務" },
+  { value: "gov", label: "政府主導的計劃", label_en: "Government initiated projects" },
+  { value: "non-gov", label: "非政府組織提供的服務", label_en: "Services provided by Non-governmental Organizations" },
 ];
 
 const serviceDetailList = [
   {
     value: "assessment",
     label: "為殘疾人士提供的就業支援服務 (工作/就業評估)",
+    label_en: "Employment Support Services for Handicapped (Employment/ Career Assessment)"
   },
   {
     value: "counseling",
     label: "為殘疾人士提供的就業支援服務 (工作/就業輔導)",
+    label_en: "Employment Support Services for Handicapped (Employment/ Career Counselling)"
   },
-  { value: "matching", label: "為殘疾人士提供的就業支援服務 (工作配對)" },
-  { value: "followUp", label: "為殘疾人士提供的就業支援服務 (就業後跟進)" },
+  { value: "matching", label: "為殘疾人士提供的就業支援服務 (工作配對)", label_en: "Employment Support Services for Handicapped (Job Matching)"},
+  { value: "followUp", label: "為殘疾人士提供的就業支援服務 (就業後跟進)",
+  label_en: "Employment Support Services for Handicapped (Post-employment Follow Up)" },
   {
     value: "training",
     label: "為殘疾人士提供的就業支援服務 (職業訓練/就業培訓)",
+    label_en: "Employment Support Services for Handicapped (Vocational Training/ Career Training)"
   },
   {
     value: "instruction",
     label: "為殘疾人士提供的就業支援服務 (職場督導/指導)",
+    label_en: "Employment Support Services for Handicapped (On-the-job Supervision/ Coaching)"
   },
   {
     value: "guidance",
     label: "為殘疾人士提供的就業支援服務 (為僱主和職員提供培訓/指導)",
+    label_en: "Employment Support Services for Handicapped (Training/Coaching for Employers and Employees)"
   },
-  { value: "internship", label: "實習機會" },
-  { value: "probationOrReferral", label: "在職試用和/或工作轉介" },
-  { value: "employer", label: "為僱主提供的津貼" },
-  { value: "trainee", label: "為僱員/實習生/訓練生提供的津貼" },
+  { value: "internship", label: "實習機會",label_en: "Placement Opportunities" },
+  { value: "probationOrReferral", label: "在職試用和/或工作轉介",label_en: "Probation Opportunities and/ or Job Referrals" },
+  { value: "employer", label: "為僱主提供的津貼",label_en: "Subsidy for Employers" },
+  { value: "trainee", label: "為僱員/實習生/訓練生提供的津貼",label_en: "Subsidies for Employees/ Placement Workers/ Trainees" },
 ];
 
 const ServiceFilter = ({
@@ -101,6 +104,7 @@ const ServiceFilter = ({
   value = [],
   onChange = () => undefined,
   list = [],
+  page
 }) => (
   <Menu>
     <MenuButton
@@ -114,7 +118,7 @@ const ServiceFilter = ({
       borderRadius={0}
     >
       <Text w="100%">
-        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {value.length > 0 ? `${wordExtractor(page?.content?.wordings, "filtered")} ${value.length} ${wordExtractor(page?.content?.wordings, "item")}` : ""}
         {label}
       </Text>
     </MenuButton>
@@ -189,6 +193,20 @@ const Resources = ({ page, enums, setting }) => {
       })),
     [enums?.EnumServiceTargetList, router.locale]
   );
+
+  const renderServiceOrgList = serviceOrgList?.map(d=> {
+    return ({
+      value: d.value,
+      label: router.locale === 'zh' ? d.label : d.label_en
+    })
+  })
+
+  const renderServiceDetailList = serviceDetailList?.map(d=> {
+    return ({
+      value: d.value,
+      label: router.locale === 'zh' ? d.label : d.label_en
+    })
+  })
 
   const filteredResourceList = useMemo(() => {
     if (
@@ -530,22 +548,25 @@ const Resources = ({ page, enums, setting }) => {
 
           <Flex direction={["column", "row"]} gap={8} pb={4} justifyContent="flex-end" pos={'relative'} zIndex={2}>
             <ServiceFilter
-              label="服務提供機構"
+              label={wordExtractor(page?.content?.wordings, "service_provider")}
               value={serviceOrgFilter}
               onChange={setServiceOrgFilter}
-              list={serviceOrgList}
+              list={renderServiceOrgList}
+              page={page}
             />
             <ServiceFilter
-              label="服務對象"
+              label={wordExtractor(page?.content?.wordings, "service_target")}
               value={serviceTargetFilter}
               onChange={setServiceTargetFilter}
               list={serviceTargetList}
+              page={page}
             />
             <ServiceFilter
-              label="服務內容"
+              label={wordExtractor(page?.content?.wordings, "service_content")}
               value={serviceDetailFilter}
               onChange={setServiceDetailFilter}
-              list={serviceDetailList}
+              list={renderServiceDetailList}
+              page={page}
             />
             
             <Stack mt={2} pos={'relative'} zIndex={1} d={["block", "none", "none"]}>
@@ -608,12 +629,11 @@ const Resources = ({ page, enums, setting }) => {
               />
             </InputGroup>
           </Stack>
-
           <Flex flexDirection="row" justifyContent="space-between">
-            <Text>{`共${filteredResourceList?.length}項搜尋結果`}</Text>
+            <Text>{wordExtractor(page?.content?.wordings, "total")}{`${filteredResourceList?.length}`}{wordExtractor(page?.content?.wordings, "search_results")}</Text>
             <Box>
               <Flex flexDirection="row" align="center" gap={2}>
-                <Box>檢視方式:</Box>
+                <Box>{wordExtractor(page?.content?.wordings, "list_view")}:</Box>
                 <FaColumns
                   size={20}
                   style={{
