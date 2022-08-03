@@ -43,6 +43,7 @@ const SearchFilter = ({
   value = [],
   onChange = () => undefined,
   list = [],
+  page
 }) => (
   <Menu>
     <MenuButton
@@ -57,7 +58,7 @@ const SearchFilter = ({
       w="100%"
     >
       <Text w="100%">
-        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {value.length > 0 ? `${wordExtractor(page?.content?.wordings, "filtered")} ${value.length} ${wordExtractor(page?.content?.wordings, "item")}` : ""}
         {label}
       </Text>
     </MenuButton>
@@ -534,7 +535,7 @@ const JobOpportunities = ({ page, enums }) => {
               >
                 <GridItem colSpan={1}>
                   <SearchFilter
-                    label="工作類別"
+                    label={wordExtractor(page?.content?.wordings, "job_type")}
                     value={jobInterested}
                     onChange={(value) => {
                       setJobInterested(value);
@@ -545,12 +546,13 @@ const JobOpportunities = ({ page, enums }) => {
                       );
                     }}
                     list={jobInterestedList}
+                    page={page}
                   />
                 </GridItem>
 
                 <GridItem colSpan={1}>
                   <SearchFilter
-                    label="工作地點"
+                    label={wordExtractor(page?.content?.wordings, "district")}
                     value={district}
                     onChange={(value) => {
                       setDistrict(value);
@@ -561,12 +563,13 @@ const JobOpportunities = ({ page, enums }) => {
                       );
                     }}
                     list={districtList}
+                    page={page}
                   />
                 </GridItem>
               </Grid>
             </Box>
 
-            {jobListData.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+            {jobListData.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
 
             <HStack align="start" spacing={4}>
               {jobList}
@@ -599,7 +602,7 @@ const JobOpportunities = ({ page, enums }) => {
           >
             <GridItem colSpan={4}>
               <SearchFilter
-                label="工作類別"
+                label={wordExtractor(page?.content?.wordings, "job_type")}
                 value={jobInterested}
                 onChange={(value) => {
                   setJobInterested(value);
@@ -610,12 +613,13 @@ const JobOpportunities = ({ page, enums }) => {
                   );
                 }}
                 list={jobInterestedList}
+                page={page}
               />
             </GridItem>
 
             <GridItem colSpan={4}>
               <SearchFilter
-                label="工作地點"
+                label={wordExtractor(page?.content?.wordings, "district")}
                 value={district}
                 onChange={(value) => {
                   setDistrict(value);
@@ -626,6 +630,7 @@ const JobOpportunities = ({ page, enums }) => {
                   );
                 }}
                 list={districtList}
+                page={page}
               />
             </GridItem>
           </Grid>
@@ -646,7 +651,7 @@ const JobOpportunities = ({ page, enums }) => {
           </VStack>
         ) : (
           <Box p={4}>
-          {jobListData.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+          {jobListData.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
           {jobList}
           </Box>
         )}

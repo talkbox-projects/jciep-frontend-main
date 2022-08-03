@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import { VStack, Box, Text, Grid } from "@chakra-ui/layout";
+import {
+  VStack,
+  Box,
+  Text,
+  Grid,
+  AspectRatio,
+  Container,
+} from "@chakra-ui/layout";
 import NextLink from "next/link";
 import { Image, Link } from "@chakra-ui/react";
 import { getPage } from "../../utils/page/getPage";
@@ -12,6 +19,7 @@ import ApostropheHeadline from "../../components/ApostropheHeadline";
 import HighlightHeadline from "../../components/HighlightHeadline";
 import Anchor from "../../components/Anchor";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import { getYoutubeLink } from "../../utils/general";
 
 const PAGE_KEY = "pwd";
 
@@ -78,7 +86,8 @@ const PwdMain = ({ page }) => {
             zIndex="-1"
           />
         </Box>
-        <Image alt=""
+        <Image
+          alt=""
           position="absolute"
           bottom="-74px"
           left={["0", "0", "0", "0", "149"]}
@@ -88,7 +97,8 @@ const PwdMain = ({ page }) => {
           maxW="334"
           zIndex="1"
         />
-        <Image alt=""
+        <Image
+          alt=""
           position="absolute"
           bottom="-27px"
           right={["20px", "20px", "0", "0", "100"]}
@@ -98,7 +108,8 @@ const PwdMain = ({ page }) => {
           maxW="551"
           zIndex="1"
         />
-        <Image alt=""
+        <Image
+          alt=""
           position="absolute"
           bottom="-1px"
           src={page?.content?.banner?.bgImageBottom}
@@ -139,6 +150,19 @@ const PwdMain = ({ page }) => {
             data={page?.content?.excerpt?.content}
           />
         </Box>
+
+        <Container maxWidth={"966px"} pt={12}>
+          <Box w="100%" border={"6px solid #fff"} borderRadius="22px" p={4} bgColor={'#FFF'}>
+            <AspectRatio ratio={16 / 9}>
+              <iframe
+                src={getYoutubeLink(
+                  "https://www.youtube.com/watch?v=sczMPpIaK-Q"
+                )}
+                w="100%"
+              />
+            </AspectRatio>
+          </Box>
+        </Container>
       </Box>
 
       {/* PWDs List */}
@@ -178,7 +202,11 @@ const PwdMain = ({ page }) => {
           justifyContent="center"
         >
           {(page?.content?.pwdList?.pwds ?? []).map((data, i) => (
-            <NextLink key={i} passHref href={`people-with-disabilities/${data.slug}`}>
+            <NextLink
+              key={i}
+              passHref
+              href={`people-with-disabilities/${data.slug}`}
+            >
               <Link>
                 <Box
                   w="100%"
@@ -197,9 +225,7 @@ const PwdMain = ({ page }) => {
                   justifyContent="center"
                   alignItems="center"
                   px="12px"
-                  onClick={() =>
-                    router.push()
-                  }
+                  onClick={() => router.push()}
                   zIndex={1}
                 >
                   <Image alt={data.name} src={data.icon} h="48px" w="48px" />
@@ -216,14 +242,16 @@ const PwdMain = ({ page }) => {
           ))}
         </Grid>
 
-        <Image alt=""
+        <Image
+          alt=""
           pos="absolute"
           src={page?.content?.pwdList?.bgStyle?.bgGradient1}
           bottom={0}
           right={0}
         />
         <Box pos="relative" pb={["124px", "124px", "380px"]}>
-          <Image alt=""
+          <Image
+            alt=""
             pos="absolute"
             right={["22px", "35px", "35px", "81px"]}
             bottom="0"
