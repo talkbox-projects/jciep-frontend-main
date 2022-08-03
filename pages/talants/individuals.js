@@ -15,14 +15,12 @@ import {
   Link,
   Button,
   Avatar,
-  Select,
   Menu,
   MenuButton,
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
   Portal,
-  Flex,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
@@ -44,7 +42,6 @@ import organizationSearch from "../../utils/api/OrganizationSearch";
 import ConnectedOrganization from "../../components/profile/sections/ConnectedOrganization";
 import { NextSeo } from "next-seo";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { set } from "react-hook-form";
 
 const PAGE_KEY = "identity_id_profile";
 
@@ -81,6 +78,7 @@ const SearchFilter = ({
   value = [],
   onChange = () => undefined,
   list = [],
+  page
 }) => (
   <Menu>
     <MenuButton
@@ -95,7 +93,11 @@ const SearchFilter = ({
       w="100%"
     >
       <Text w="100%">
-        {value.length > 0 ? `已篩選 ${value.length} 個` : ""}
+        {value.length > 0
+          ? `${wordExtractor(page?.content?.wordings, "filtered")} ${
+              value.length
+            } ${wordExtractor(page?.content?.wordings, "item")}`
+          : ""}
         {label}
       </Text>
     </MenuButton>
@@ -400,7 +402,7 @@ const IdentityOpportunities = ({
             >
               <GridItem colSpan={1}>
                 <SearchFilter
-                  label="工作類型"
+                  label={wordExtractor(page?.content?.wordings, "job_type")}
                   value={jobType}
                   onChange={(value) => {
                     setJobType(value);
@@ -416,7 +418,7 @@ const IdentityOpportunities = ({
               </GridItem>
               <GridItem colSpan={1}>
                 <SearchFilter
-                  label="工作類別"
+                  label={wordExtractor(page?.content?.wordings, "job_category")}
                   value={jobInterested}
                   onChange={(value) => {
                     setJobInterested(value);
@@ -432,32 +434,7 @@ const IdentityOpportunities = ({
               </GridItem>
             </Grid>
 
-            {/* <Box w={["100%", "100%", "250px", "330px"]} marginBottom="15px">
-
-              <Select
-                value={router.query.organizationId ?? ""}
-                onChange={(e) =>
-                  router.push(
-                    generateUrlParameter({
-                      identityId: "",
-                      organizationId: e.target.value,
-                    })
-                  )
-                }
-                variant="flushed"
-              >
-                <option key="" value="">
-                  {wordExtractor(page?.content?.wordings, "organization_text")}
-                </option>
-                {(organizations ?? []).map(({ id, chineseCompanyName }) => (
-                  <option key={id} value={id}>
-                    {chineseCompanyName}
-                  </option>
-                ))}
-              </Select>
-            </Box> */}
-
-            {identities.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+            {identities.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
             <HStack mt={4} align="stretch" spacing={4}>
               {identityList}
               {/* desktop detail page */}
@@ -518,7 +495,7 @@ const IdentityOpportunities = ({
             >
               <GridItem colSpan={4}>
                 <SearchFilter
-                  label="工作類型"
+                  label={wordExtractor(page?.content?.wordings, "job_type")}
                   value={jobType}
                   onChange={(value) => {
                     setJobType(value);
@@ -534,7 +511,7 @@ const IdentityOpportunities = ({
               </GridItem>
               <GridItem colSpan={4}>
                 <SearchFilter
-                  label="工作類別"
+                  label={wordExtractor(page?.content?.wordings, "job_category")}
                   value={jobInterested}
                   onChange={(value) => {
                     setJobInterested(value);
@@ -550,7 +527,7 @@ const IdentityOpportunities = ({
               </GridItem>
             </Grid>
             </Box>
-            {identities.length === 0 && <Box py={2}>沒有相關資料</Box>} {/** TODO */}
+            {identities.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
             {identityList}
           </Box>
         )}

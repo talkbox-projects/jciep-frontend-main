@@ -43,7 +43,7 @@ const SearchFilter = ({
   value = [],
   onChange = () => undefined,
   list = [],
-  page
+  page,
 }) => (
   <Menu>
     <MenuButton
@@ -58,7 +58,11 @@ const SearchFilter = ({
       w="100%"
     >
       <Text w="100%">
-        {value.length > 0 ? `${wordExtractor(page?.content?.wordings, "filtered")} ${value.length} ${wordExtractor(page?.content?.wordings, "item")}` : ""}
+        {value.length > 0
+          ? `${wordExtractor(page?.content?.wordings, "filtered")} ${
+              value.length
+            } ${wordExtractor(page?.content?.wordings, "item")}`
+          : ""}
         {label}
       </Text>
     </MenuButton>
@@ -569,32 +573,41 @@ const JobOpportunities = ({ page, enums }) => {
               </Grid>
             </Box>
 
-            {jobListData.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
+            {jobListData.length === 0 && (
+              <Box py={2}>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "information_not_found"
+                )}
+              </Box>
+            )}
 
             <HStack align="start" spacing={4}>
               {jobList}
               {/* desktop detail page */}
-              {jobListData.length !== 0 && (<VStack
-                bg="white"
-                flex={1}
-                minW={0}
-                w="100%"
-                align="stretch"
-                borderRadius={8}
-                borderColor="#eee"
-                borderWidth={2}
-                minH={256}
-                p={4}
-              >
-                 {details}
-              </VStack>)}
+              {jobListData.length !== 0 && (
+                <VStack
+                  bg="white"
+                  flex={1}
+                  minW={0}
+                  w="100%"
+                  align="stretch"
+                  borderRadius={8}
+                  borderColor="#eee"
+                  borderWidth={2}
+                  minH={256}
+                  p={4}
+                >
+                  {details}
+                </VStack>
+              )}
             </HStack>
           </Container>
         </Box>
       </VStack>
       {/* mobile detail page */}
       <Box mt={16} d={["block", "block", "none"]}>
-      <Box mb={4} p={4}>
+        <Box mb={4} p={4}>
           <Grid
             templateRows="repeat(1, 1fr)"
             templateColumns="repeat(4, 1fr)"
@@ -651,8 +664,15 @@ const JobOpportunities = ({ page, enums }) => {
           </VStack>
         ) : (
           <Box p={4}>
-          {jobListData.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
-          {jobList}
+            {jobListData.length === 0 && (
+              <Box py={2}>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "information_not_found"
+                )}
+              </Box>
+            )}
+            {jobList}
           </Box>
         )}
       </Box>

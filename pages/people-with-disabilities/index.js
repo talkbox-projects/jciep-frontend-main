@@ -20,6 +20,7 @@ import HighlightHeadline from "../../components/HighlightHeadline";
 import Anchor from "../../components/Anchor";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { getYoutubeLink } from "../../utils/general";
+import wordExtractor from "../../utils/wordExtractor";
 
 const PAGE_KEY = "pwd";
 
@@ -123,7 +124,6 @@ const PwdMain = ({ page }) => {
         bg={page?.content?.excerpt?.bgColor}
         w="100%"
         paddingTop={["59px", "59px", "151px"]}
-        paddingBottom={["56px", "56px", "80px"]}
         display="flex"
         flexDirection="column"
         justifyContent="center"
@@ -150,13 +150,23 @@ const PwdMain = ({ page }) => {
             data={page?.content?.excerpt?.content}
           />
         </Box>
+      </Box>
 
-        <Container maxWidth={"966px"} pt={12}>
+      <Box
+        bg={page?.content?.excerpt?.bgColor}
+        w="100%"
+        paddingBottom={["56px", "56px", "80px"]}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Container maxWidth={"966px"} pt={12} position="relative">
           <Box w="100%" border={"6px solid #fff"} borderRadius="22px" p={4} bgColor={'#FFF'}>
             <AspectRatio ratio={16 / 9}>
               <iframe
                 src={getYoutubeLink(
-                  "https://www.youtube.com/watch?v=sczMPpIaK-Q"
+                  wordExtractor(page?.content?.wordings, "youtube_link")
                 )}
                 w="100%"
               />

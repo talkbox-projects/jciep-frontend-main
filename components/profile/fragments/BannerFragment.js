@@ -31,7 +31,8 @@ const BannerFragment = ({
       return (
         <AspectRatio ratio={16 / 9}>
           <Box fontSize={12} px={2}>
-            可擺放相片或插入YouTube擺放自己的作品或與個人興趣、成就相關的相片/影片，注意每張相片不能大於4MB
+            {/* 可擺放相片或插入YouTube擺放自己的作品或與個人興趣、成就相關的相片/影片，注意每張相片不能大於4MB */}
+            {wordExtractor(page?.content?.wordings, "banner_placeholder")}
           </Box>
         </AspectRatio>
       );
