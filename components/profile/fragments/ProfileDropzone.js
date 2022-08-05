@@ -37,7 +37,7 @@ const ProfileDropzone = ({
         //   page?.content?.wordings,
         //   "dropzone_error_file_too_large"
         // );
-        return "檔案大小不能超過 4 MB";
+        return "檔案大小不能超過 1 MB";
       default:
         // return wordExtractor(page?.content?.wordings, "dropzone_error_general");
         return "不支援的檔案類別";
@@ -47,7 +47,7 @@ const ProfileDropzone = ({
   const { getRootProps, getInputProps } = useDropzone({
     multiple,
     accept: "image/*,application/pdf",
-    maxSize: 1024 * 1024 * 4,
+    maxSize: 1024 * 1024,
     onDrop: async (files) => {
       try {
         if (files?.length === 0) return;

@@ -21,8 +21,6 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 
-{/** TODO: Translation */}
-
 const PwdSectionEditor = () => {
   const router = useRouter();
   const { page, enums, saveIdentity, identity, removeEditSection } =
@@ -95,7 +93,10 @@ const PwdSectionEditor = () => {
             // )}
             defaultValue={identity?.caption}
             {...register("caption", {})}
-            placeholder={wordExtractor(page?.content?.wordings, "placeholder_qualification_or_title")}
+            placeholder={wordExtractor(
+              page?.content?.wordings,
+              "placeholder_qualification_or_title"
+            )}
           ></Input>
           <FormHelperText color="red">
             {errors?.caption?.message}
@@ -174,9 +175,9 @@ const PwdSectionEditor = () => {
                 ),
               })}
               placeholder={wordExtractor(
-                  page?.content?.wordings,
-                  "placeholder_private_only"
-                )}
+                page?.content?.wordings,
+                "placeholder_private_only"
+              )}
             ></Input>
             <FormHelperText color="red">
               {errors?.email?.message}
@@ -196,9 +197,9 @@ const PwdSectionEditor = () => {
                 ),
               })}
               placeholder={wordExtractor(
-                  page?.content?.wordings,
-                  "placeholder_private_only"
-                )}
+                page?.content?.wordings,
+                "placeholder_private_only"
+              )}
             ></Input>
             <FormHelperText color="red">
               {errors?.phone?.message}
@@ -473,7 +474,7 @@ const PwdSectionEditor = () => {
               }}
             ></Controller>
             <FormHelperText>
-            {wordExtractor(
+              {wordExtractor(
                 page?.content?.wordings,
                 "field_label_current_or_pervious_jobs"
               )}
