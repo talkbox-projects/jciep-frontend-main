@@ -95,7 +95,7 @@ const PwdSectionEditor = () => {
             // )}
             defaultValue={identity?.caption}
             {...register("caption", {})}
-            placeholder={'可填寫自己的學歷或職業'}
+            placeholder={wordExtractor(page?.content?.wordings, "placeholder_qualification_or_title")}
           ></Input>
           <FormHelperText color="red">
             {errors?.caption?.message}
@@ -173,7 +173,10 @@ const PwdSectionEditor = () => {
                   "field_error_message_required"
                 ),
               })}
-              placeholder={'只供網頁管理員參考，不會公開顯示'}
+              placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "placeholder_private_only"
+                )}
             ></Input>
             <FormHelperText color="red">
               {errors?.email?.message}
@@ -192,7 +195,10 @@ const PwdSectionEditor = () => {
                   "field_error_message_required"
                 ),
               })}
-              placeholder={'只供網頁管理員參考，不會公開顯示'}
+              placeholder={wordExtractor(
+                  page?.content?.wordings,
+                  "placeholder_private_only"
+                )}
             ></Input>
             <FormHelperText color="red">
               {errors?.phone?.message}
@@ -467,7 +473,10 @@ const PwdSectionEditor = () => {
               }}
             ></Controller>
             <FormHelperText>
-            現時或曾經擔任過的工作類別，可揀選多於一項
+            {wordExtractor(
+                page?.content?.wordings,
+                "field_label_current_or_pervious_jobs"
+              )}
             </FormHelperText>
             <FormHelperText color="red">
               {errors?.interestedIndustry?.message}

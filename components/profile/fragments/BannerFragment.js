@@ -97,9 +97,10 @@ const BannerFragment = ({
           objectFit="contain"
           src={entity?.[profilePicPropName]?.url}
         >
-          <Box position={"absolute"} top={0} right={0} fontSize={12}>
-            <Tooltip label="建議使用較為端莊的相片，注意每張相片不能大於4MB" aria-label='建議使用較為端莊的相片，注意每張相片不能大於4MB'>
-            <InfoOutlineIcon />
+          <Box position={"absolute"} bottom={0} right={-6} fontSize={24}>
+            <Tooltip  label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} aria-label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} color={'gray.100'}>
+            {/** 建議使用較為端莊的相片，注意每張相片不能大於4MB */}
+            <InfoOutlineIcon color='gray.500' />
             </Tooltip>
           </Box>
         </Avatar>
