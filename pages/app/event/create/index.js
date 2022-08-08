@@ -112,6 +112,31 @@ const EventAdd = ({ page }) => {
     getStockPhotoData();
   }, [router]);
 
+  const handlePickFile = () => {
+    window.WebContext = {};
+    window.WebContext.pickFileHandler = (result) => {
+      // setValue("bannerImage", result?.data)
+      setDebugResult(JSON.stringify(result));
+    };
+
+    let json = {
+      name: "pickFile",
+      options: {
+        callback: "pickFileHandler",
+        params: {
+          maxFileSize: 2097452,
+          maxFileCount: 1,
+          minFileCount: 1,
+          mimeType: "Image/*"
+        },
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
   const {
     fields: additionalInformationFields,
     append: additionalInformationAppend,
@@ -226,13 +251,6 @@ const EventAdd = ({ page }) => {
         file: bannerUploadData,
       });
     }
-
-    // if (_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
-    //   setAdditionalFileError(
-    //     wordExtractor(page?.content?.wordings, "submission_deadline_required")
-    //   );
-    //   return;
-    // }
 
     if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
       filesAdditionalInformalUploadData = await additionalInformation
@@ -1085,6 +1103,7 @@ const EventAdd = ({ page }) => {
                                 h={"100%"}
                                 minHeight={"74px"}
                                 cursor="pointer"
+                                onClick={() => handlePickFile()}
                               >
                                 <Center
                                   h={"100%"}
@@ -1107,7 +1126,7 @@ const EventAdd = ({ page }) => {
                                     </Text>
                                   </Stack>
                                 </Center>
-                                <Input
+                                {/* <Input
                                   type="file"
                                   multiple={false}
                                   opacity={0}
@@ -1122,7 +1141,7 @@ const EventAdd = ({ page }) => {
                                   accept=".png, .jpg, .jpeg"
                                   onInput={onFileUpload}
                                   {...register(`bannerImage[${index}]`)}
-                                />
+                                /> */}
                               </Box>
                             )}
                           </GridItem>
