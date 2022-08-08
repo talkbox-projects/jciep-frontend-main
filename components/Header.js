@@ -51,10 +51,7 @@ import ResetPasswordEmailModal from "./ResetPasswordEmailModal";
 import ResetPasswordPhoneModal from "./ResetPasswordPhoneModal";
 import userMeGet from "../utils/api/UserMeGet";
 import ResetPasswordResetModal from "./ResetPasswordResetModal";
-const Header = ({
-  navigation,
-  isShowLangSwitcher = false,
-}) => {
+const Header = ({ navigation, isShowLangSwitcher = false }) => {
   const getWording = useGetWording();
   const [EnumIdentityTypeList, setEnumIdentityTypeList] = useState([]);
 
@@ -114,8 +111,6 @@ const Header = ({
       }
     }
   }, [loginModalDisclosure, registerModalDisclosure, router]);
-
-
 
   useEffect(() => {
     (async () => {
@@ -202,7 +197,13 @@ const Header = ({
           <HStack h="100%" py={2} fontSize="sm" alignItems="center" spacing={4}>
             <Box as="h1" h="100%">
               <LinkOverlay as={NextLink} href="/home">
-                <Image h="100%" alt={navigation?.title} cursor="pointer" p={2} src={navigation?.logo} />
+                <Image
+                  h="100%"
+                  alt={navigation?.title}
+                  cursor="pointer"
+                  p={2}
+                  src={navigation?.logo}
+                />
               </LinkOverlay>
             </Box>
             {identity?.type === "admin" && (
@@ -245,38 +246,57 @@ const Header = ({
               </Link>
             </NextLink>
             <NextLink href="/contact-us" passHref>
-              <Link fontSize="sm">
-                {getWording("header.contact_us_label")}
-              </Link>
+              <Link fontSize="sm">{getWording("header.contact_us_label")}</Link>
             </NextLink>
             <Text>
               {(navigation.social ?? []).map(({ icon, url, label }, i) => {
                 return (
                   <a key={i} href={url}>
-                    <Image alt={label} display="inline-flex" height="25px" src={icon} />
+                    <Image
+                      alt={label}
+                      display="inline-flex"
+                      height="25px"
+                      src={icon}
+                    />
                   </a>
                 );
               })}
             </Text>
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
-                {
-                  !isLoggedIn ?
-                    <Button aria-label={router.locale === "en" ? "Login/Logout" : "登入/登出"} variant="unstyled">
-                      <Avatar size="xs" alt=" "></Avatar>
-                    </Button> :
-                    <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
-                      <Avatar size="xs" alt=" "></Avatar>
-                    </Button>
-                }
+                {!isLoggedIn ? (
+                  <Button
+                    aria-label={
+                      router?.locale === "en" ? "Login/Logout" : "登入/登出"
+                    }
+                    variant="unstyled"
+                  >
+                    <Avatar size="xs" alt=" "></Avatar>
+                  </Button>
+                ) : (
+                  <Button
+                    aria-label={
+                      router?.locale === "en" ? "User Management" : "用戶管理"
+                    }
+                    variant="unstyled"
+                  >
+                    <Avatar size="xs" alt=" "></Avatar>
+                  </Button>
+                )}
               </PopoverTrigger>
               {!isLoggedIn ? (
                 <PopoverContent p={3} w={48}>
                   <VStack align="stretch">
-                    <Button variant="link" onClick={loginModalDisclosure.onOpen}>
+                    <Button
+                      variant="link"
+                      onClick={loginModalDisclosure.onOpen}
+                    >
                       {getWording("header.login_label")}
                     </Button>
-                    <Button variant="link" onClick={registerModalDisclosure.onOpen}>
+                    <Button
+                      variant="link"
+                      onClick={registerModalDisclosure.onOpen}
+                    >
                       {getWording("header.register_label")}
                     </Button>
                   </VStack>
@@ -370,7 +390,13 @@ const Header = ({
             borderWidth={1}
             px={6}
           >
-            <HStack spacing={0} w="100%" justifyContent="center" h="100%" border={0}>
+            <HStack
+              spacing={0}
+              w="100%"
+              justifyContent="center"
+              h="100%"
+              border={0}
+            >
               {(navigation.menu ?? []).map(
                 ({ id, submenu = [], label, path = "/" }, index, arr) => (
                   <HStack
@@ -401,6 +427,12 @@ const Header = ({
                                 variant="unstyled"
                                 borderRadius={0}
                                 fontWeight="normal"
+                                fontSize={router?.locale === "zh" ? "md" : "sm"}
+                                maxW={router?.locale === "zh" ? "auto" : "120px"}
+                                style={{
+                                  whiteSpace: "normal",
+                                  wordWrap: "break-word",
+                                }}
                               >
                                 {label}
                               </Button>
@@ -434,6 +466,12 @@ const Header = ({
                             variant="unstyled"
                             borderRadius={0}
                             fontWeight="normal"
+                            fontSize={router?.locale === "zh" ? "md" : "sm"}
+                            maxW={router?.locale === "zh" ? "auto" : "120px"}
+                            style={{
+                              whiteSpace: "normal",
+                              wordWrap: "break-word",
+                            }}
                           >
                             {label}
                           </Button>
@@ -456,6 +494,12 @@ const Header = ({
                   py={0.5}
                   fontWeight="normal"
                   borderWidth={2}
+                  fontSize={router?.locale === "zh" ? "md" : "sm"}
+                  maxW={router?.locale === "zh" ? "auto" : "160px"}
+                  style={{
+                    whiteSpace: "normal",
+                    wordWrap: "break-word",
+                  }}
                 >
                   {navigation?.actionButton?.label}
                 </Button>
@@ -481,7 +525,12 @@ const Header = ({
       >
         <HStack align="center" h={24} p={3}>
           <LinkOverlay as={NextLink} href="/home">
-            <Image alt={navigation?.title} cursor="pointer" h="100%" src={navigation?.logo} />
+            <Image
+              alt={navigation?.title}
+              cursor="pointer"
+              h="100%"
+              src={navigation?.logo}
+            />
           </LinkOverlay>
           <Box minW={0} w="100%" flex={1} />
           <IconButton
@@ -526,28 +575,39 @@ const Header = ({
                     </Select>
                   )}
                   <Text>
-                    {(navigation.social ?? []).map(({ icon, url, label }, i) => {
-                      return (
-                        <a key={i} href={url}>
-                          <Image alt={label}
-                            display="inline-flex"
-                            height="25px"
-                            src={icon}
-                          />
-                        </a>
-                      );
-                    })}
+                    {(navigation.social ?? []).map(
+                      ({ icon, url, label }, i) => {
+                        return (
+                          <a key={i} href={url}>
+                            <Image
+                              alt={label}
+                              display="inline-flex"
+                              height="25px"
+                              src={icon}
+                            />
+                          </a>
+                        );
+                      }
+                    )}
                   </Text>
                   <Popover placement="bottom-end" gutter={20}>
                     <PopoverTrigger>
-                      <Button aria-label={router.locale === "en" ? "User Management" : "用戶管理"} variant="unstyled">
+                      <Button
+                        aria-label={
+                          router?.locale === "en"
+                            ? "User Management"
+                            : "用戶管理"
+                        }
+                        variant="unstyled"
+                      >
                         <Avatar size="xs"></Avatar>
                       </Button>
                     </PopoverTrigger>
                     {!isLoggedIn ? (
                       <PopoverContent p={3} w={48}>
                         <VStack align="stretch">
-                          <Button variant="link"
+                          <Button
+                            variant="link"
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               loginModalDisclosure.onOpen();
@@ -555,7 +615,8 @@ const Header = ({
                           >
                             {getWording("header.login_label")}
                           </Button>
-                          <Button variant="link"
+                          <Button
+                            variant="link"
                             onClick={() => {
                               mobileMenuDisclosure.onClose();
                               registerModalDisclosure.onOpen();

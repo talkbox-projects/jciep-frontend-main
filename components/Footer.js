@@ -14,8 +14,11 @@ import {
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
-const Footer = ({ footer }) => {
+const Footer = ({ footer}) => {
+  const router = useRouter()
+  const footerContentSize = router?.local === 'zh' ? ["xl", "xl", "lg"] : ["lg", "lg", "md"]
   return (
     <Box py={8} backgroundColor="#FAFAFA">
       <Container>
@@ -83,7 +86,11 @@ const Footer = ({ footer }) => {
                           variant="link"
                           color="black"
                           fontWeight="bold"
-                          fontSize={["xl", "xl", "lg"]}
+                          fontSize={footerContentSize}
+                          style={{
+                                whiteSpace: "normal",
+                                wordWrap: "break-word",
+                          }}
                         >
                           {title}
                         </Button>
@@ -109,11 +116,15 @@ const Footer = ({ footer }) => {
                         return (
                           <NextLink id={_id} href={url} key={i}>
                             <Button
-                              fontSize={["xl", "xl", "lg"]}
+                              fontSize={footerContentSize}
                               textAlign="left"
                               variant="link"
                               fontWeight="normal"
                               color="black"
+                              style={{
+          whiteSpace: "normal",
+          wordWrap: "break-word",
+     }}
                             >
                               {label}
                             </Button>

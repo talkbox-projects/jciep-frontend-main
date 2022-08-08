@@ -203,7 +203,7 @@ const App = ({ Component, pageProps }) => {
               description={pageProps?.page?.content?.seo?.description}
             ></NextSeo>
           ) : (
-            <NextSeo title="賽馬會共融．知行計劃" />
+            <NextSeo title={router.locale === 'zh' ? '賽馬會共融．知行計劃' : 'Jockey Club Collaborative Project for Inclusive Employment'} />
           )}
           <VStack align="stretch" spacing={0}>
             {showHeader && pageProps?.header && <Header {...pageProps}></Header>}

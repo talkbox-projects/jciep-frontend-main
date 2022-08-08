@@ -347,7 +347,7 @@ const Home = ({ setting, page }) => {
                     <Box textAlign="center">
                       {caption && (
                         <Box h={8} mb={8}>
-                          <ApostropheHeadline fontSize={"xl"}>
+                          <ApostropheHeadline fontSize={router.locale === 'zh' ? "xl" : "md"}>
                             {caption}
                           </ApostropheHeadline>
                         </Box>
