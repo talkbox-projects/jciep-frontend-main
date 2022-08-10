@@ -427,7 +427,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 variant="unstyled"
                                 borderRadius={0}
                                 fontWeight="normal"
-                                fontSize={router?.locale === "zh" ? "md" : "sm"}
+                                fontSize={router?.locale === "zh" ? "17.5px" : "sm"}
                                 maxW={router?.locale === "zh" ? "auto" : "120px"}
                                 style={{
                                   whiteSpace: "normal",
@@ -466,7 +466,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             variant="unstyled"
                             borderRadius={0}
                             fontWeight="normal"
-                            fontSize={router?.locale === "zh" ? "md" : "sm"}
+                            fontSize={router?.locale === "zh" ? "17.5px" : "sm"}
                             maxW={router?.locale === "zh" ? "auto" : "120px"}
                             style={{
                               whiteSpace: "normal",
