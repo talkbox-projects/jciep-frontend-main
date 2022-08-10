@@ -88,6 +88,7 @@ const EventAdd = ({ page }) => {
   const [step, setStep] = useState("step1");
   const [stockPhotoId, setStockPhotoId] = useState("");
   const [debugResult, setDebugResult] = useState("");
+  const [pickImageDebugResult, setPickImageDebugResult] = useState("");
   const [stockPhoto, setStockPhoto] = useState([]);
   const [bannerFileError, setBannerFileError] = useState(false);
   const [additionalFileError, setAdditionalFileError] = useState(false);
@@ -114,11 +115,12 @@ const EventAdd = ({ page }) => {
 
   const handlePickFile = () => {
     window.WebContext = {};
-    window.WebContext.pickFileHandler = (result) => {
-      if(result?.data){
-        setValue("bannerImage",  [{ FileList: result?.data }])
+    window.WebContext.pickFileHandler = (response) => {
+      if(response?.result){
+        setValue("bannerImage",  [{ FileList: response?.result?.data }])
       }
-      setDebugResult(result?.data);
+      setDebugResult(JSON.stringify(response?.result?.data));
+      setPickImageDebugResult(JSON.stringify(response))
     };
 
     let json = {
@@ -1392,6 +1394,7 @@ const EventAdd = ({ page }) => {
                   </FormControl>
                 </Box>
                 {debugResult && <Code>{debugResult}</Code>}
+                {pickImageDebugResult && <Code>{pickImageDebugResult}</Code>}
               </VStack>
             </Box>
             {/* <MoreInformationModal onClose={onClose} /> */}
