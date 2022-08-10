@@ -284,7 +284,7 @@ const PostDetail = ({ post, setting, page }) => {
                         w="100%"
                         pt="40px"
                         dangerouslySetInnerHTML={{
-                          __html: content,
+                          __html: content.html??content,
                         }}
                         key={index}
                         fontSize={"lg"}
