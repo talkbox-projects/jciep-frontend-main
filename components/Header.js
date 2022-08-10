@@ -224,7 +224,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
-            {isShowLangSwitcher && (
+            {/* {isShowLangSwitcher && (
               <Select
                 border="none"
                 size="sm"
@@ -239,7 +239,21 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                 <option value="zh">繁</option>
                 <option value="en">EN</option>
               </Select>
-            )}
+            )} */}
+            <Select
+                border="none"
+                size="sm"
+                w={16}
+                autoFocus={false}
+                variant="flushed"
+                value={router.locale}
+                onChange={(e) => {
+                  window.location.href = `/${e.target.value}${router.asPath}`;
+                }}
+              >
+                <option value="zh">繁</option>
+                <option value="en">EN</option>
+              </Select>
             <NextLink href="/text-size" passHref>
               <Link fontSize="sm">
                 {getWording("header.font_size_level_label")}
@@ -427,7 +441,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 variant="unstyled"
                                 borderRadius={0}
                                 fontWeight="normal"
-                                fontSize={router?.locale === "zh" ? "17px" : "sm"}
+                                fontSize={router?.locale === "zh" ? "lg" : "sm"}
                                 maxW={router?.locale === "zh" ? "auto" : "120px"}
                                 style={{
                                   whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
@@ -466,7 +480,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             variant="unstyled"
                             borderRadius={0}
                             fontWeight="normal"
-                            fontSize={router?.locale === "zh" ? "17px" : "sm"}
+                            fontSize={router?.locale === "zh" ? "lg" : "sm"}
                             maxW={router?.locale === "zh" ? "auto" : "120px"}
                             style={{
                               whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
@@ -559,8 +573,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     </Link>
                   </NextLink>
                   <Box flex={1} minW={0} w="100%" />
-                  {isShowLangSwitcher && (
-                    <Select
+                  {/* {isShowLangSwitcher && (
+
+                  )} */}
+                  <Select
                       border="none"
                       size="sm"
                       w={16}
@@ -573,7 +589,6 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       <option value="zh">繁</option>
                       <option value="en">EN</option>
                     </Select>
-                  )}
                   <Text>
                     {(navigation.social ?? []).map(
                       ({ icon, url, label }, i) => {
