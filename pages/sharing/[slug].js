@@ -262,6 +262,7 @@ const PostDetail = ({ post, setting, page }) => {
                 switch (_template) {
                   case "content-block":
                     return (
+                      <Box className="content-block-wrap">
                       <Box
                         sx={{
                           a: {
@@ -289,6 +290,7 @@ const PostDetail = ({ post, setting, page }) => {
                         key={index}
                         fontSize={"lg"}
                       />
+                      </Box>
                     );
                   case "image-block":
                     return (

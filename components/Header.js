@@ -427,10 +427,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 variant="unstyled"
                                 borderRadius={0}
                                 fontWeight="normal"
-                                fontSize={router?.locale === "zh" ? "17.5px" : "sm"}
+                                fontSize={router?.locale === "zh" ? "17px" : "sm"}
                                 maxW={router?.locale === "zh" ? "auto" : "120px"}
                                 style={{
-                                  whiteSpace: "normal",
+                                  whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                                   wordWrap: "break-word",
                                 }}
                               >
@@ -466,10 +466,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             variant="unstyled"
                             borderRadius={0}
                             fontWeight="normal"
-                            fontSize={router?.locale === "zh" ? "17.5px" : "sm"}
+                            fontSize={router?.locale === "zh" ? "17px" : "sm"}
                             maxW={router?.locale === "zh" ? "auto" : "120px"}
                             style={{
-                              whiteSpace: "normal",
+                              whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                               wordWrap: "break-word",
                             }}
                           >
