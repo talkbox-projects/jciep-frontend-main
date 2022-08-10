@@ -115,11 +115,10 @@ const EventAdd = ({ page }) => {
   const handlePickFile = () => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = (result) => {
-      // setValue("bannerImage", result?.data)
       if(result?.data){
-        setValue("bannerImage", result?.data)
+        setValue("bannerImage",  [{ FileList: result?.data }])
       }
-      setDebugResult(result);
+      setDebugResult(result?.data);
     };
 
     let json = {
@@ -1097,9 +1096,9 @@ const EventAdd = ({ page }) => {
                                 )}
                               </Button>
                             )} */}
-                            {watchBannerImage[index] ? (
+                            {watchBannerImage[index]?.length > 0 ? (
                               renderAdditionalImage(
-                                watchBannerImage[index]
+                                watchBannerImage[index]?.[0]
                               )
                             ) : (
                               <Box
