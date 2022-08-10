@@ -116,7 +116,10 @@ const EventAdd = ({ page }) => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = (result) => {
       // setValue("bannerImage", result?.data)
-      setDebugResult(JSON.stringify(result));
+      if(result?.data){
+        setValue("bannerImage", result?.data)
+      }
+      setDebugResult(result);
     };
 
     let json = {
@@ -124,10 +127,10 @@ const EventAdd = ({ page }) => {
       options: {
         callback: "pickFileHandler",
         params: {
-          maxFileSize: 2097452,
+          maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
-          mimeType: "Image/*"
+          mimeType: "Image/*" 
         },
       },
     };
@@ -1094,9 +1097,9 @@ const EventAdd = ({ page }) => {
                                 )}
                               </Button>
                             )} */}
-                            {watchBannerImage[index]?.length > 0 ? (
+                            {watchBannerImage[index] ? (
                               renderAdditionalImage(
-                                watchBannerImage[index]?.[0]
+                                watchBannerImage[index]
                               )
                             ) : (
                               <Box
