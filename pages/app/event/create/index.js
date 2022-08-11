@@ -176,7 +176,10 @@ const EventAdd = ({ page }) => {
   const handlePickFile = () => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = async (response) => {
-      if (_.isEmpty(response?.result?.data[0])) {
+      setPickImageDebugResult(JSON.stringify({
+        start: response
+      }));
+      if (_.isEmpty(response?.result)) {
         return;
       }
 
@@ -184,6 +187,10 @@ const EventAdd = ({ page }) => {
         response?.result?.data[0]?.data,
         response?.result?.data[0]?.name
       );
+
+      setPickImageDebugResult(JSON.stringify({
+        file: file
+      }));
 
       const FileUploadmutation = gql`
         mutation FileUpload($file: FileUpload!) {
@@ -210,7 +217,6 @@ const EventAdd = ({ page }) => {
       setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
 
       setDebugResult(JSON.stringify(watchBannerImage));
-      // setPickImageDebugResult(JSON.stringify(response));
     };
 
     let json = {
@@ -1255,6 +1261,8 @@ const EventAdd = ({ page }) => {
                         </Grid>
                       );
                     })}
+
+                    {debugResult && <Code>{debugResult}</Code>}
 
                     {bannerFileError && (
                       <FormControl>
