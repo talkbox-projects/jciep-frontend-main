@@ -17,8 +17,6 @@ import {
   RadioGroup,
   InputGroup,
   InputRightElement,
-  useDisclosure,
-  Code,
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -1545,6 +1543,8 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
+                <Box>
+                debugResult
                 {debugResult && (
                     <Box
                       style={{
@@ -1556,6 +1556,7 @@ const EventAdd = ({ page }) => {
                       {debugResult}
                     </Box>
                 )}
+                </Box>
 
                 {pickImageDebugResult && (
                     <Box
