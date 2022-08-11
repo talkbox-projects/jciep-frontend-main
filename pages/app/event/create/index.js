@@ -111,6 +111,7 @@ const EventAdd = ({ page }) => {
       setStockPhoto(data);
     }
     getStockPhotoData();
+    
   }, [router]);
 
   const dataURLtoFile = (dataurl, filename) => {
@@ -175,40 +176,40 @@ const EventAdd = ({ page }) => {
 
   const handlePickFile = () => {
     window.WebContext = {};
-    window.WebContext.pickFileHandler = async (response) => {
-      const FileUploadmutation = gql`
-        mutation FileUpload($file: FileUpload!) {
-          FileUpload(files: $file) {
-            id
-            url
-            contentType
-            fileSize
-          }
-        }
-      `;
+    window.WebContext.pickFileHandler = (response) => {
+      // const FileUploadmutation = gql`
+      //   mutation FileUpload($file: FileUpload!) {
+      //     FileUpload(files: $file) {
+      //       id
+      //       url
+      //       contentType
+      //       fileSize
+      //     }
+      //   }
+      // `;
 
-      let bannerUploadData;
+      // let bannerUploadData;
 
       setDebugResult(JSON.stringify(response));
 
-      let file = dataURLtoFile(
-        response?.result?.data[0]?.data,
-        response?.result?.data[0]?.name
-      );
+      // let file = dataURLtoFile(
+      //   response?.result?.data[0]?.data,
+      //   response?.result?.data[0]?.name
+      // );
 
-      setDebugResult(JSON.stringify(file));
+      // setDebugResult(JSON.stringify(file));
 
 
-      if (file) {
-        bannerUploadData = await getGraphQLClient().request(
-          FileUploadmutation,
-          {
-            file: file,
-          }
-        );
-        setDebugResult(JSON.stringify(bannerUploadData));
-        setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
-      }
+      // if (file) {
+      //   bannerUploadData = await getGraphQLClient().request(
+      //     FileUploadmutation,
+      //     {
+      //       file: file,
+      //     }
+      //   );
+      //   setDebugResult(JSON.stringify(bannerUploadData));
+      //   setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
+      // }
     };
 
     let json = {
