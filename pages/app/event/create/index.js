@@ -189,16 +189,16 @@ const EventAdd = ({ page }) => {
 
       // let bannerUploadData;
 
-      setDebugResult(response[0]?.data);
-
-      setPickImageDebugResult(response?.data[0]?.name)
-
       const getResponse = JSON.parse(response)
 
       let file = dataURLtoFile(
         getResponse?.data[0]?.data,
         getResponse?.data[0]?.name
       );
+
+      setDebugResult(getResponse[0]?.data);
+
+      setPickImageDebugResult(getResponse?.data[0]?.name)
 
       if (file) {
         setPickImageDebugResult(JSON.stringify(file))
