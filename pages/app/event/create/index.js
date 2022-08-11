@@ -190,14 +190,21 @@ const EventAdd = ({ page }) => {
 
       // let bannerUploadData;
 
-      setDebugResult(JSON.stringify(response));
+      setDebugResult(JSON.stringify(response[0]?.data));
 
-      // let file = dataURLtoFile(
-      //   response?.result?.data[0]?.data,
-      //   response?.result?.data[0]?.name
-      // );
+      let file = dataURLtoFile(
+        response?.data[0]?.data,
+        response?.data[0]?.name
+      );
 
-      // setDebugResult(JSON.stringify(file));
+      if(file){
+        setDebugResult(JSON.stringify(file));
+      } else {
+        setDebugResult(JSON.stringify({
+          'status': 'dataURLtoFile error'
+        }));
+      }
+
 
 
       // if (file) {
