@@ -176,50 +176,36 @@ const EventAdd = ({ page }) => {
   const handlePickFile = () => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = (response) => {
-      // const FileUploadmutation = gql`
-      //   mutation FileUpload($file: FileUpload!) {
-      //     FileUpload(files: $file) {
-      //       id
-      //       url
-      //       contentType
-      //       fileSize
-      //     }
-      //   }
-      // `;
 
-      // let bannerUploadData;
-
-      const getResponse = JSON.parse(response)
-
-      let file = dataURLtoFile(
-        getResponse?.data[0]?.data,
-        getResponse?.data[0]?.name
-      );
-
-      setDebugResult(getResponse[0]?.data);
-
-      setPickImageDebugResult(getResponse?.data[0]?.name)
-
-      if (file) {
-        setPickImageDebugResult(JSON.stringify(file))
-      } else {
-        setPickImageDebugResult(
+      const fileInfo = JSON.parse(response);
+      // alert(JSON.stringify(response));
+      if (!fileInfo.result) {
+        setDebugResult(
           JSON.stringify({
-            status: "dataURLtoFile error",
-          })
+            status: "response not found",
+          }, null, 4)
+          );
+      } else {
+        setDebugResult(JSON.stringify(fileInfo.result, null, 4));
+      }
+      
+      if(response){
+        setDebugResult(JSON.stringify(response, null, 4));
+        JSON.stringify({
+          status: "dataURLtoFile start",
+        }, null, 4)
+        let file = dataURLtoFile(
+          fileInfo.result?.data[0]?.data,
+          fileInfo.result?.data[0]?.name
         );
+
+        JSON.stringify({
+          status: "dataURLtoFile end",
+        }, null, 4)
+
+        setDebugResult(file.stringify(response, null, 4));
       }
 
-      // if (file) {
-      //   bannerUploadData = await getGraphQLClient().request(
-      //     FileUploadmutation,
-      //     {
-      //       file: file,
-      //     }
-      //   );
-      //   setDebugResult(JSON.stringify(bannerUploadData));
-      //   setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
-      // }
     };
 
     let json = {
@@ -238,7 +224,7 @@ const EventAdd = ({ page }) => {
     if (window && window.AppContext && window.AppContext.postMessage) {
       setDebugResult(JSON.stringify("before called"));
       window.AppContext.postMessage(JSON.stringify(json));
-      setDebugResult(JSON.stringify("called"));
+      setDebugResult(JSON.stringify("called AppContext"));
     }
   };
 
@@ -1579,7 +1565,7 @@ const EventAdd = ({ page }) => {
                       }}
                       maxWidth={"360px"}
                     >
-                      {debugResult}
+                      {pickImageDebugResult}
                     </Box>
                 )}
 
