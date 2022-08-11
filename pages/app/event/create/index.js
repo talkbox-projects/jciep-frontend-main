@@ -77,7 +77,7 @@ const EventAdd = ({ page }) => {
   } = useForm({
     defaultValues: {
       otherUrls: [""],
-      additionalInformation: [{ FileList: "" }],
+      additionalInformation: [{}],
       bannerImage: [{}],
       representOrganization: "false",
     },
@@ -111,6 +111,17 @@ const EventAdd = ({ page }) => {
     getStockPhotoData();
   }, [router]);
 
+  const FileUploadmutation = gql`
+    mutation FileUpload($file: FileUpload!) {
+      FileUpload(files: $file) {
+        id
+        url
+        contentType
+        fileSize
+      }
+    }
+  `;
+
   const dataURLtoFile = (dataurl, filename) => {
     var arr = dataurl.split(","),
       mime = arr[0].match(/:(.*?);/)[1],
@@ -125,12 +136,11 @@ const EventAdd = ({ page }) => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  const handlePickFile = () => {
+  const handlePickFile = (fieldName) => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = async (response) => {
 
       const fileInfo = JSON.parse(response);
-      // alert(JSON.stringify(response));
       if (!fileInfo.result) {
         setDebugResult(
           JSON.stringify({
@@ -138,38 +148,29 @@ const EventAdd = ({ page }) => {
           }, null, 4)
           );
       } else {
-        const FileUploadmutation = gql`
-          mutation FileUpload($file: FileUpload!) {
-            FileUpload(files: $file) {
-              id
-              url
-              contentType
-              fileSize
-            }
-          }
-        `;
-
         let file = dataURLtoFile(
           fileInfo.result?.data[0]?.data,
           fileInfo.result?.data[0]?.name
         );
+        let bannerUploadData;
 
-          let bannerUploadData;
+        if (file) {
+          bannerUploadData = await getGraphQLClient().request(
+            FileUploadmutation,
+            {
+              file: file,
+            }
+          );
 
-          if (file) {
-            bannerUploadData = await getGraphQLClient().request(
-              FileUploadmutation,
-              {
-                file: file,
-              }
-            );
-            setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
-
-            setPickImageDebugResult(JSON.stringify([bannerUploadData?.FileUpload?.[0]], null, 4))
+          if(fieldName==='bannerImage') {
+            setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
+          } else {
+            setValue(fieldName, [...watchAdditionalInformation, bannerUploadData?.FileUpload?.[0]]);
           }
-      }
-    
 
+          setPickImageDebugResult(JSON.stringify([bannerUploadData?.FileUpload?.[0]], null, 4))
+        }
+      }
     };
 
     let json = {
@@ -186,13 +187,11 @@ const EventAdd = ({ page }) => {
     };
 
     if (window && window.AppContext && window.AppContext.postMessage) {
-      setDebugResult(JSON.stringify("before called"));
       window.AppContext.postMessage(JSON.stringify(json));
-      setDebugResult(JSON.stringify("called AppContext"));
     }
   };
 
-  const renderPickedImage = useCallback((data) => {
+  const renderPickedImage = useCallback((data, fieldName) => {
     if (!data) {
       return;
     }
@@ -204,7 +203,7 @@ const EventAdd = ({ page }) => {
         h={"100%"}
         bgSize={"cover"}
         bgPosition={"center center"}
-        onClick={() => handlePickFile()}
+        onClick={() => handlePickFile(fieldName)}
       />
     );
   }, []);
@@ -221,45 +220,45 @@ const EventAdd = ({ page }) => {
     remove: bannerRemove,
   } = useFieldArray({ control, name: "bannerImage" });
 
-  const onFileUpload = async (e) => {
-    const fileSize = e.target.files[0]?.size;
-    const isLt1M = fileSize / 1024 / 1024 < 4;
+  // const onFileUpload = async (e) => {
+  //   const fileSize = e.target.files[0]?.size;
+  //   const isLt1M = fileSize / 1024 / 1024 < 4;
 
-    if (fileSize && !isLt1M) {
-      bannerRemove(0);
-      setTimeout(() => {
-        bannerAppend({
-          FileList: "",
-        });
-      }, 100);
+  //   if (fileSize && !isLt1M) {
+  //     bannerRemove(0);
+  //     setTimeout(() => {
+  //       bannerAppend({
+  //         FileList: "",
+  //       });
+  //     }, 100);
 
-      setBannerFileError("檔案大小不能超過 4MB");
+  //     setBannerFileError("檔案大小不能超過 4MB");
 
-      return;
-    }
+  //     return;
+  //   }
 
-    setBannerFileError("");
-  };
+  //   setBannerFileError("");
+  // };
 
-  const onAdditionalFileUpload = async (e, index) => {
-    const fileSize = e.target.files[0]?.size;
-    const isLt1M = fileSize / 1024 / 1024 < 4;
+  // const onAdditionalFileUpload = async (e, index) => {
+  //   const fileSize = e.target.files[0]?.size;
+  //   const isLt1M = fileSize / 1024 / 1024 < 4;
 
-    if (fileSize && !isLt1M) {
-      additionalInformationRemove(index);
-      setTimeout(() => {
-        additionalInformationAppend({
-          FileList: "",
-        });
-      }, 100);
+  //   if (fileSize && !isLt1M) {
+  //     additionalInformationRemove(index);
+  //     setTimeout(() => {
+  //       additionalInformationAppend({
+  //         FileList: "",
+  //       });
+  //     }, 100);
 
-      setAdditionalFileError("檔案大小不能超過 4MB");
+  //     setAdditionalFileError("檔案大小不能超過 4MB");
 
-      return;
-    }
+  //     return;
+  //   }
 
-    setAdditionalFileError("");
-  };
+  //   setAdditionalFileError("");
+  // };
 
   const onFormSubmit = async ({
     name,
@@ -374,21 +373,20 @@ const EventAdd = ({ page }) => {
     }
   };
 
-  const renderAdditionalImage = useCallback((data) => {
-    if (!data) {
-      return;
-    }
-    let url = URL.createObjectURL(data);
-    return (
-      <Box
-        bgImg={`url(${url})`}
-        w={"100%"}
-        h={"100%"}
-        bgSize={"cover"}
-        bgPosition={"center center"}
-      />
-    );
-  }, []);
+  // const renderAdditionalImage = useCallback((data) => {
+  //   if (!data) {
+  //     return;
+  //   }
+  //   return (
+  //     <Box
+  //       bgImg={`url(${data?.url})`}
+  //       w={"100%"}
+  //       h={"100%"}
+  //       bgSize={"cover"}
+  //       bgPosition={"center center"}
+  //     />
+  //   );
+  // }, []);
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -1128,16 +1126,14 @@ const EventAdd = ({ page }) => {
                             height={`100%`}
                             margin="0 2px"
                           >
-                            {watchBannerImage[index]?.length > 0 && (
+                            {watchBannerImage[index] && (
                               <Button
                                 colorScheme="red"
                                 size="xs"
                                 onClick={() => {
                                   bannerRemove(index);
                                   setTimeout(() => {
-                                    bannerAppend({
-                                      FileList: "",
-                                    });
+                                    bannerAppend({});
                                   }, 200);
                                 }}
                                 position="absolute"
@@ -1151,13 +1147,13 @@ const EventAdd = ({ page }) => {
                               </Button>
                             )}
                             {!_.isEmpty(watchBannerImage[index]) ? (
-                              renderPickedImage(watchBannerImage[index])
+                              renderPickedImage(watchBannerImage[index], "bannerImage")
                             ) : (
                               <Box
                                 h={"100%"}
                                 minHeight={"74px"}
                                 cursor="pointer"
-                                onClick={() => handlePickFile()}
+                                onClick={() => handlePickFile('bannerImage')}
                               >
                                 <Center
                                   h={"100%"}
@@ -1180,22 +1176,6 @@ const EventAdd = ({ page }) => {
                                     </Text>
                                   </Stack>
                                 </Center>
-                                {/* <Input
-                                  type="file"
-                                  multiple={false}
-                                  opacity={0}
-                                  zIndex={2}
-                                  top={0}
-                                  left={0}
-                                  right={0}
-                                  bottom={0}
-                                  height={"100%"}
-                                  position="absolute"
-                                  maxFileCount={1}
-                                  accept=".png, .jpg, .jpeg"
-                                  onInput={onFileUpload}
-                                  {...register(`bannerImage[${index}]`)}
-                                /> */}
                               </Box>
                             )}
                           </GridItem>
@@ -1229,32 +1209,6 @@ const EventAdd = ({ page }) => {
                       </Stack>
                     </GridItem>
                   </Grid>
-
-                  {/* {!watchBannerImage?.[0] && (
-                    <Flex>
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          bannerAppend({
-                            file: "",
-                          });
-                        }}
-                      >
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "add_image_label"
-                        )}
-                      </Button>
-                      {additionalFileError && (
-                        <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "input_required"
-                          )}
-                        </Text>
-                      )}
-                    </Flex>
-                  )} */}
                 </Grid>
                 <SimpleDivider />
 
@@ -1291,7 +1245,7 @@ const EventAdd = ({ page }) => {
                             )}
                           </Button>
                         )} */}
-                        {watchAdditionalInformation[index]?.length > 0 ? (
+                        {watchAdditionalInformation[index] ? (
                           <Box pos="relative" h={"100%"}>
                             <Box
                               h={"100%"}
@@ -1323,7 +1277,7 @@ const EventAdd = ({ page }) => {
                                   </Text>
                                 </Stack>
                               </Center>
-                              <Input
+                              {/* <Input
                                 type="file"
                                 multiple={false}
                                 opacity={0}
@@ -1340,12 +1294,14 @@ const EventAdd = ({ page }) => {
                                 }
                                 accept=".pdf, .png, .jpg, .jpeg"
                                 {...register(`additionalInformation[${index}]`)}
-                              />
+                              /> */}
                             </Box>
                             <Box pos="relative" zIndex={2} h={"100%"}>
-                              {renderAdditionalImage(
-                                watchAdditionalInformation[index]?.[0]
-                              )}
+                              {/* {renderAdditionalImage(
+                                watchAdditionalInformation[index]
+                              )} */}
+
+                              {renderPickedImage(watchAdditionalInformation[index], "additionalInformation")}
                             </Box>
                           </Box>
                         ) : (
@@ -1355,6 +1311,7 @@ const EventAdd = ({ page }) => {
                             width="100%"
                             cursor="pointer"
                             pos="relative"
+                            onClick={() => handlePickFile('additionalInformation')}
                           >
                             <Center
                               h={"100%"}
@@ -1377,7 +1334,7 @@ const EventAdd = ({ page }) => {
                                 </Text>
                               </Stack>
                             </Center>
-                            <Input
+                            {/* <Input
                               type="file"
                               multiple={false}
                               opacity={0}
@@ -1392,7 +1349,7 @@ const EventAdd = ({ page }) => {
                               onInput={(e) => onAdditionalFileUpload(e, index)}
                               accept=".pdf, .png, .jpg, .jpeg"
                               {...register(`additionalInformation[${index}]`)}
-                            />
+                            /> */}
                           </Box>
                         )}
                       </Box>
@@ -1407,9 +1364,7 @@ const EventAdd = ({ page }) => {
                     <Button
                       type="button"
                       onClick={() => {
-                        additionalInformationAppend({
-                          FileList: "",
-                        });
+                        additionalInformationAppend({});
                       }}
                     >
                       {wordExtractor(
@@ -1459,7 +1414,6 @@ const EventAdd = ({ page }) => {
                 </Box> */}
 
                 <Box>
-                pickImageDebugResult:
                 {pickImageDebugResult && (
                     <Box
                       style={{
