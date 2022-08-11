@@ -1,25 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
   Text,
   VStack,
   Image,
   Box,
   FormErrorMessage,
-  Code,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import Container from "../../../components/Container";
 import { useGetWording } from "../../../utils/wordings/useWording";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { getPage } from "../../../utils/page/getPage";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../../utils/apollo";
 import { useAppContext } from "../../../store/AppStore";
 import { useCredential } from "../../../utils/user";
 import { passwordRegex } from "../../../utils/general";

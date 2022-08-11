@@ -59,7 +59,7 @@ const PhoneResetPassword = ({ phone, otp, page }) => {
       toast({
         status: "success",
         title: getWording(
-          "resetPasswordResetModal.reset_password_phone_success"
+          "resetPasswordResetModal.reset_password_successful_message"
         ),
       });
       if (user) {
