@@ -441,7 +441,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 variant="unstyled"
                                 borderRadius={0}
                                 fontWeight="normal"
-                                fontSize={router?.locale === "zh" ? "lg" : "sm"}
+                                fontSize={router?.locale === "zh" ? "md" : "sm"}
                                 maxW={router?.locale === "zh" ? "auto" : "120px"}
                                 style={{
                                   whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
@@ -480,7 +480,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             variant="unstyled"
                             borderRadius={0}
                             fontWeight="normal"
-                            fontSize={router?.locale === "zh" ? "lg" : "sm"}
+                            fontSize={router?.locale === "zh" ? "md" : "sm"}
                             maxW={router?.locale === "zh" ? "auto" : "120px"}
                             style={{
                               whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
@@ -511,7 +511,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                   fontSize={router?.locale === "zh" ? "md" : "sm"}
                   maxW={router?.locale === "zh" ? "auto" : "160px"}
                   style={{
-                    whiteSpace: "normal",
+                    whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                     wordWrap: "break-word",
                   }}
                 >
