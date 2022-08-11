@@ -125,52 +125,6 @@ const EventAdd = ({ page }) => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  // const demoPickFile = async (response) => {
-  //   if(_.isEmpty(response?.result?.data[0])){
-  //     return
-  //   }
-
-  //   let file = dataURLtoFile(response?.result?.data[0]?.data,response?.result?.data[0]?.name);
-
-  //   const FileUploadmutation = gql`
-  //   mutation FileUpload($file: FileUpload!) {
-  //     FileUpload(files: $file) {
-  //       id
-  //       url
-  //       contentType
-  //       fileSize
-  //     }
-  //   }
-  // `;
-
-  //   let bannerUploadData
-
-  //   if (file) {
-  //     bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
-  //       file: file,
-  //     });
-  //   }
-
-  //   setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
-
-  // };
-
-  const renderPickedImage = useCallback((data) => {
-    if (!data) {
-      return;
-    }
-
-    return (
-      <Box
-        bgImg={`url(${data?.url})`}
-        w={"100%"}
-        h={"100%"}
-        bgSize={"cover"}
-        bgPosition={"center center"}
-      />
-    );
-  }, []);
-
   const handlePickFile = () => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = async (response) => {
@@ -194,7 +148,6 @@ const EventAdd = ({ page }) => {
             }
           }
         `;
-        setDebugResult(JSON.stringify(fileInfo.result, null, 4));
 
         let file = dataURLtoFile(
           fileInfo.result?.data[0]?.data,
@@ -212,10 +165,8 @@ const EventAdd = ({ page }) => {
             );
             setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
 
-            setPickImageDebugResult(JSON.stringify(watchBannerImage, null, 4));
+            setPickImageDebugResult(JSON.stringify([bannerUploadData?.FileUpload?.[0]], null, 4))
           }
-
-        setPickImageDebugResult(JSON.stringify(file, null, 4))
       }
     
 
@@ -241,72 +192,22 @@ const EventAdd = ({ page }) => {
     }
   };
 
-  // const handlePickFile = () => {
-  //   window.WebContext = {};
-  //   window.WebContext.pickFileHandler = async (response) => {
-  //     setPickImageDebugResult(JSON.stringify({
-  //       start: response
-  //     }));
-  //     if (_.isEmpty(response?.result)) {
-  //       return;
-  //     }
+  const renderPickedImage = useCallback((data) => {
+    if (!data) {
+      return;
+    }
 
-  //     let file = dataURLtoFile(
-  //       response?.result?.data[0]?.data,
-  //       response?.result?.data[0]?.name
-  //     );
-
-  //     setPickImageDebugResult(JSON.stringify({
-  //       file: file
-  //     }));
-
-  //     const FileUploadmutation = gql`
-  //       mutation FileUpload($file: FileUpload!) {
-  //         FileUpload(files: $file) {
-  //           id
-  //           url
-  //           contentType
-  //           fileSize
-  //         }
-  //       }
-  //     `;
-
-  //     let bannerUploadData;
-
-  //     if (file) {
-  //       bannerUploadData = await getGraphQLClient().request(
-  //         FileUploadmutation,
-  //         {
-  //           file: file,
-  //         }
-  //       );
-  //       setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
-  //     }
-
-  //     setPickImageDebugResult(JSON.stringify({
-  //       before: response
-  //     }));
-
-  //     setDebugResult(JSON.stringify(watchBannerImage));
-  //   };
-
-  //   let json = {
-  //     name: "pickFile",
-  //     options: {
-  //       callback: "pickFileHandler",
-  //       params: {
-  //         maxFileSize: 4194304,
-  //         maxFileCount: 1,
-  //         minFileCount: 1,
-  //         mimeType: "image/*",
-  //       },
-  //     },
-  //   };
-
-  //   if (window && window.AppContext && window.AppContext.postMessage) {
-  //     window.AppContext.postMessage(JSON.stringify(json));
-  //   }
-  // };
+    return (
+      <Box
+        bgImg={`url(${data?.url})`}
+        w={"100%"}
+        h={"100%"}
+        bgSize={"cover"}
+        bgPosition={"center center"}
+        onClick={() => handlePickFile()}
+      />
+    );
+  }, []);
 
   const {
     fields: additionalInformationFields,
@@ -1243,7 +1144,7 @@ const EventAdd = ({ page }) => {
                             height={`100%`}
                             margin="0 2px"
                           >
-                            {/* {watchBannerImage[index]?.length > 0 && (
+                            {watchBannerImage[index]?.length > 0 && (
                               <Button
                                 colorScheme="red"
                                 size="xs"
@@ -1264,7 +1165,7 @@ const EventAdd = ({ page }) => {
                                   "delete_information_label"
                                 )}
                               </Button>
-                            )} */}
+                            )}
                             {!_.isEmpty(watchBannerImage[index]) ? (
                               renderPickedImage(watchBannerImage[index])
                             ) : (
