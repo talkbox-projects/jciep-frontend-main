@@ -111,7 +111,6 @@ const EventAdd = ({ page }) => {
       setStockPhoto(data);
     }
     getStockPhotoData();
-    
   }, [router]);
 
   const dataURLtoFile = (dataurl, filename) => {
@@ -192,20 +191,22 @@ const EventAdd = ({ page }) => {
 
       setDebugResult(JSON.stringify(response[0]?.data));
 
+      setPickImageDebugResult(JSON.stringify(response?.data[0]?.name))
+
       let file = dataURLtoFile(
         response?.data[0]?.data,
         response?.data[0]?.name
       );
 
-      if(file){
-        setDebugResult(JSON.stringify(file));
+      if (file) {
+        setPickImageDebugResult(JSON.stringify(file))
       } else {
-        setDebugResult(JSON.stringify({
-          'status': 'dataURLtoFile error'
-        }));
+        setPickImageDebugResult(
+          JSON.stringify({
+            status: "dataURLtoFile error",
+          })
+        );
       }
-
-
 
       // if (file) {
       //   bannerUploadData = await getGraphQLClient().request(
@@ -224,7 +225,7 @@ const EventAdd = ({ page }) => {
       options: {
         callback: "pickFileHandler",
         params: {
-          maxFileSize: 2097452,
+          maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
           mimeType: "image/*",
@@ -1369,7 +1370,6 @@ const EventAdd = ({ page }) => {
                     </Flex>
                   )} */}
                 </Grid>
-                {debugResult && <Code>{debugResult}</Code>}
                 <SimpleDivider />
 
                 <TitleWrap title={page?.content?.step?.more_information} />
@@ -1557,7 +1557,31 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                {debugResult && <Code>{debugResult}</Code>}
+                {debugResult && (
+                    <Box
+                      style={{
+                        whiteSpace: "normal",
+                        wordWrap: "break-word",
+                      }}
+                      maxWidth={"300px"}
+                    >
+                      {debugResult}
+                    </Box>
+                )}
+
+                {pickImageDebugResult && (
+                    <Box
+                      style={{
+                        whiteSpace: "normal",
+                        wordWrap: "break-word",
+                      }}
+                      maxWidth={"360px"}
+                    >
+                      {debugResult}
+                    </Box>
+                )}
+
+
               </VStack>
             </Box>
             {/* <MoreInformationModal onClose={onClose} /> */}
