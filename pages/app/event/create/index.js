@@ -288,7 +288,7 @@ const EventAdd = ({ page }) => {
   }) => {
     setAdditionalFileError("");
     setBannerFileError("");
-    let bannerUploadData, filesAdditionalInformalUploadData;
+    let filesAdditionalInformalUploadData;
 
     const FileUploadmutation = gql`
       mutation FileUpload($file: FileUpload!) {
@@ -301,27 +301,11 @@ const EventAdd = ({ page }) => {
       }
     `;
 
-    if (_.isEmpty(bannerImage?.[0]?.[0]?.name) && _.isEmpty(stockPhotoId)) {
+    if (_.isEmpty(bannerImage?.[0]) && _.isEmpty(stockPhotoId)) {
       setBannerFileError(
         wordExtractor(page?.content?.wordings, "submission_deadline_required")
       );
       return;
-    }
-
-    if (!_.isEmpty(bannerImage?.[0]?.[0]?.name)) {
-      bannerUploadData = await bannerImage
-        .map((d) => {
-          if (d[0]) {
-            return d[0];
-          }
-        })
-        .filter((d) => d);
-    }
-
-    if (bannerUploadData) {
-      bannerUploadData = await getGraphQLClient().request(FileUploadmutation, {
-        file: bannerUploadData,
-      });
     }
 
     if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
@@ -343,9 +327,9 @@ const EventAdd = ({ page }) => {
       );
     }
 
-    const submitBanner = bannerUploadData?.FileUpload?.[0]
+    const submitBanner = bannerImage?.[0]
       ? {
-          file: bannerUploadData?.FileUpload?.[0],
+          file: bannerImage?.[0],
         }
       : {
           stockPhotoId: stockPhotoId,
@@ -1459,7 +1443,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                <Box>
+                {/* <Box>
                 debugResult:
                 {debugResult && (
                     <Box
@@ -1472,7 +1456,7 @@ const EventAdd = ({ page }) => {
                       {debugResult}
                     </Box>
                 )}
-                </Box>
+                </Box> */}
 
                 <Box>
                 pickImageDebugResult:
@@ -1717,7 +1701,7 @@ const TitleWrap = ({ title, required = false }) => (
   </Box>
 );
 
-const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
+const NAV = ({ title, subTitle }) => {
   return (
     <Grid
       templateColumns="repeat(3, 1fr)"
