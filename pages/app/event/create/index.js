@@ -173,7 +173,7 @@ const EventAdd = ({ page }) => {
 
   const handlePickFile = () => {
     window.WebContext = {};
-    window.WebContext.pickFileHandler = (response) => {
+    window.WebContext.pickFileHandler = async (response) => {
 
       const fileInfo = JSON.parse(response);
       // alert(JSON.stringify(response));
@@ -184,25 +184,40 @@ const EventAdd = ({ page }) => {
           }, null, 4)
           );
       } else {
+        const FileUploadmutation = gql`
+          mutation FileUpload($file: FileUpload!) {
+            FileUpload(files: $file) {
+              id
+              url
+              contentType
+              fileSize
+            }
+          }
+        `;
         setDebugResult(JSON.stringify(fileInfo.result, null, 4));
-      }
-      
-      if(response){
-        setDebugResult(JSON.stringify(response, null, 4));
-        JSON.stringify({
-          status: "dataURLtoFile start",
-        }, null, 4)
+
         let file = dataURLtoFile(
           fileInfo.result?.data[0]?.data,
           fileInfo.result?.data[0]?.name
         );
 
-        JSON.stringify({
-          status: "dataURLtoFile end",
-        }, null, 4)
+          let bannerUploadData;
 
-        setDebugResult(file.stringify(response, null, 4));
+          if (file) {
+            bannerUploadData = await getGraphQLClient().request(
+              FileUploadmutation,
+              {
+                file: file,
+              }
+            );
+            setValue("bannerImage", [bannerUploadData?.FileUpload?.[0]]);
+
+            setPickImageDebugResult(JSON.stringify(watchBannerImage, null, 4));
+          }
+
+        setPickImageDebugResult(JSON.stringify(file, null, 4))
       }
+    
 
     };
 
@@ -1544,7 +1559,7 @@ const EventAdd = ({ page }) => {
                   </FormControl>
                 </Box>
                 <Box>
-                debugResult
+                debugResult:
                 {debugResult && (
                     <Box
                       style={{
@@ -1558,6 +1573,8 @@ const EventAdd = ({ page }) => {
                 )}
                 </Box>
 
+                <Box>
+                pickImageDebugResult:
                 {pickImageDebugResult && (
                     <Box
                       style={{
@@ -1569,6 +1586,7 @@ const EventAdd = ({ page }) => {
                       {pickImageDebugResult}
                     </Box>
                 )}
+                </Box>
 
 
               </VStack>
