@@ -175,7 +175,7 @@ const Event = ({ page }) => {
               onClick={() => {
                 if (data.url) {
                   onOpenVideoModal()
-                  setPopupVideo(`https://jciep.talkbox.io${data.url}`);
+                  setPopupVideo(`${data.url}`);
                 }
               }}
             >
@@ -423,8 +423,10 @@ const Event = ({ page }) => {
                         color="#0D8282"
                         align="center"
                         fontWeight={700}
-                        gap={2}
+                        gap={1}
                         onClick={() => handleOpenWebView(d)}
+                        pt={1}
+                        alignItems="normal"
                       >
                         <Box w={"20px"}>
                           <Image
@@ -432,9 +434,10 @@ const Event = ({ page }) => {
                             alt={""}
                             fontSize={18}
                             mx={"auto"}
+                            minW={"20px"}
                           />
                         </Box>
-                        <Box>{d}</Box>
+                        <Box style={{wordBreak: 'break-all'}}>{d}</Box>
                       </Flex>
                     ))}
                   </Flex>

@@ -9,11 +9,11 @@ import {
   GridItem,
   Box,
   Text,
-  Link,
   Button,
   Stack,
   Flex,
   Image,
+  Center,
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
@@ -24,7 +24,8 @@ import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
-import { bookmarkEvent, unBookmarkEvent} from "../../utils/event/eventAction";
+import { bookmarkEvent, unBookmarkEvent } from "../../utils/event/eventAction";
+import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 
 import eventTypes from "../api/graphql/enum/eventTypes";
 import charge from "../api/graphql/enum/freeOrCharge";
@@ -89,6 +90,70 @@ const Event = ({ page }) => {
     const result = await unBookmarkEvent(id);
     if (result) {
       setBookmarkActive(false);
+    }
+  };
+
+  const RenderAdditionalContent = ({ data }) => {
+    if (!data) {
+      return <></>;
+    }
+
+    switch (data?.contentType) {
+      case "application/pdf":
+        return (
+          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
+            <Box
+              bgColor="#F2F2F2"
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
+            >
+              <a href={data.url} target="_blank" rel="noreferrer">
+                <Center h={"100%"}>
+                  <AiOutlineFilePdf style={{ width: "30px", height: "30px" }} />
+                </Center>
+              </a>
+            </Box>
+          </GridItem>
+        );
+
+      case "video/mp4":
+        return (
+          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
+            <Box
+              bgColor="#F2F2F2"
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
+            >
+              <a href={data.url} target="_blank" rel="noreferrer">
+                <Center h={"100%"}>
+                  <AiOutlinePlayCircle
+                    style={{ width: "30px", height: "30px" }}
+                  />
+                </Center>
+              </a>
+            </Box>
+          </GridItem>
+        );
+
+      default:
+        return (
+          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
+            <Box
+              bgImage={`url(${data?.url})`}
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
+            />
+          </GridItem>
+        );
     }
   };
 
@@ -259,11 +324,17 @@ const Event = ({ page }) => {
                             color="#0D8282"
                             align="center"
                             fontWeight={700}
+                            alignItems="baseline"
                           >
                             <Box>
                               <AiOutlineLink />
                             </Box>
-                            <a href={d} target="_blank" rel="noreferrer">
+                            <a
+                              href={d}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ wordBreak: "break-all" }}
+                            >
                               {d}
                             </a>
                           </Flex>
@@ -306,21 +377,7 @@ const Event = ({ page }) => {
                           gap={2}
                         >
                           {detail?.additionalInformation?.map((d) => (
-                            <GridItem
-                              key={d.id}
-                              flex={1}
-                              bgColor={"#FFF"}
-                              overflow={"hidden"}
-                            >
-                              <Box
-                                bgImage={`url(${d?.url})`}
-                                h={"110px"}
-                                w={"100%"}
-                                bgSize={{ base: "cover" }}
-                                bgPosition={"center center"}
-                                position={"relative"}
-                              />
-                            </GridItem>
+                            <RenderAdditionalContent key={d?.id} data={d} />
                           ))}
                         </Grid>
                       </Flex>

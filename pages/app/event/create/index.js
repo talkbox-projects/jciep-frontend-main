@@ -171,7 +171,8 @@ const EventAdd = ({ page }) => {
                 status: "added additional images",
               }, null, 4)
               );
-            let updateData = watchAdditionalInformation[index] = bannerUploadData?.FileUpload?.[0]
+            let updateData = watchAdditionalInformation 
+            updateData[index] = bannerUploadData?.FileUpload?.[0]
             setPickImageDebugResult(JSON.stringify(updateData, null, 4))
             setValue(fieldName, updateData);
           }
