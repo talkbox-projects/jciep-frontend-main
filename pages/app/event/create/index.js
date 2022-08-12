@@ -165,6 +165,11 @@ const EventAdd = ({ page }) => {
           if(fieldName==='bannerImage') {
             setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
           } else {
+            setDebugResult(
+              JSON.stringify({
+                status: "added additional images",
+              }, null, 4)
+              );
             setValue(fieldName, [...watchAdditionalInformation, bannerUploadData?.FileUpload?.[0]]);
           }
 
@@ -307,24 +312,24 @@ const EventAdd = ({ page }) => {
       return;
     }
 
-    if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
-      filesAdditionalInformalUploadData = await additionalInformation
-        .map((d) => {
-          if (d[0]) {
-            return d[0];
-          }
-        })
-        .filter((d) => d);
-    }
+    // if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
+    //   filesAdditionalInformalUploadData = await additionalInformation
+    //     .map((d) => {
+    //       if (d[0]) {
+    //         return d[0];
+    //       }
+    //     })
+    //     .filter((d) => d);
+    // }
 
-    if (filesAdditionalInformalUploadData) {
-      filesAdditionalInformalUploadData = await getGraphQLClient().request(
-        FileUploadmutation,
-        {
-          file: filesAdditionalInformalUploadData,
-        }
-      );
-    }
+    // if (filesAdditionalInformalUploadData) {
+    //   filesAdditionalInformalUploadData = await getGraphQLClient().request(
+    //     FileUploadmutation,
+    //     {
+    //       file: filesAdditionalInformalUploadData,
+    //     }
+    //   );
+    // }
 
     const submitBanner = bannerImage?.[0]
       ? {
@@ -356,8 +361,7 @@ const EventAdd = ({ page }) => {
         otherUrls: otherUrls,
         remark: remark,
         banner: submitBanner,
-        additionalInformation:
-          filesAdditionalInformalUploadData?.FileUpload.map((d) => d) ?? [],
+        additionalInformation: additionalInformation ?? [],
         stockPhotoId: null,
       }).filter(([_, v]) => v != null)
     );
@@ -1296,7 +1300,7 @@ const EventAdd = ({ page }) => {
                                 {...register(`additionalInformation[${index}]`)}
                               /> */}
                             </Box>
-                            <Box pos="relative" zIndex={2} h={"100%"}>
+                            <Box pos="relative" zIndex={4} h={"100%"}>
                               {/* {renderAdditionalImage(
                                 watchAdditionalInformation[index]
                               )} */}
@@ -1355,11 +1359,11 @@ const EventAdd = ({ page }) => {
                       </Box>
                     );
                   })}
-                  {additionalFileError && (
+                  {/* {additionalFileError && (
                     <Text color="red" mx={2}>
                       {additionalFileError}
                     </Text>
-                  )}
+                  )} */}
                   <Flex m={2}>
                     <Button
                       type="button"
