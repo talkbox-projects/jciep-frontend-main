@@ -57,18 +57,18 @@ const EmailResetPassword = ({page}) => {
       toast({
         status: "success",
         title: getWording(
-          "resetPasswordResetModal.reset_password_phone_success"
+          "resetPasswordResetModal.reset_password_successful_message"
         ),
       });
       if (user) {
         setTimeout(() => {
           handleCloseWebView()
-        }, 1000);
+        }, 500);
       }
     } catch (error) {
       toast({
         status: "error",
-        title: getWording("resetPasswordResetModal.reset_password_phone_fail"),
+        title: getWording("resetPasswordResetModal.reset_password_fail_message"),
       });
     }
   };

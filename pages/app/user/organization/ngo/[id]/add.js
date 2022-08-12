@@ -49,6 +49,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,

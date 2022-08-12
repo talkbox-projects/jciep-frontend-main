@@ -15,6 +15,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isApp: true,
       api: {
         identity: await identityMeGet(undefined, context),
       },

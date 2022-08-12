@@ -30,6 +30,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
     },
@@ -68,7 +69,7 @@ const VerifyToken = ({ page }) => {
   return (
     <Box py={{ base: 24 }}>
       <Text fontSize="24px" letterSpacing="1.5px" fontWeight={600} px={"15px"}>
-      設定密碼
+      {getWording("resentPassword.reset_password_phone_title")}
       </Text>
       <Box width="100%" background="#FFF">
         <VStack

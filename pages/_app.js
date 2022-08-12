@@ -97,21 +97,10 @@ const theme = extendTheme({
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter()
-  const [showHeader, setShowHeader] = useState(true)
     useEffect(() => {
       const gaCode = "G-PXJQB5QF90";
       init(publicRuntimeConfig.GA4_CODE || gaCode);
     }, []);
-
-    useEffect(() => {
-      if(router.isReady){
-        const regex = /app/gi;
-        if(router?.route.match(regex)){
-          setShowHeader(false)
-        }
-      }
-    }, [router]);
-
 
   return (
     <SimpleReactLightbox>
@@ -206,11 +195,11 @@ const App = ({ Component, pageProps }) => {
             <NextSeo title={router.locale === 'zh' ? '賽馬會共融．知行計劃' : 'Jockey Club Collaborative Project for Inclusive Employment'} />
           )}
           <VStack align="stretch" spacing={0}>
-            {showHeader && pageProps?.header && <Header {...pageProps}></Header>}
+            {!pageProps?.isApp && pageProps?.header && <Header {...pageProps}></Header>}
             <Box mt={[-16, -16, -12, -12]}>
               <Component {...pageProps} />
             </Box>
-            {showHeader && pageProps?.footer && <Footer {...pageProps}></Footer>}
+            {!pageProps?.isApp && pageProps?.footer && <Footer {...pageProps}></Footer>}
           </VStack>
         </ChakraProvider>
       </AppProvider>

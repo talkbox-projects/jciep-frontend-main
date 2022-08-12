@@ -55,6 +55,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       page,
+      isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
@@ -136,7 +137,7 @@ const EventAdd = ({ page }) => {
     return new File([u8arr], filename, { type: mime });
   };
 
-  const handlePickFile = (fieldName) => {
+  const handlePickFile = (fieldName, index) => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = async (response) => {
 
@@ -170,10 +171,10 @@ const EventAdd = ({ page }) => {
                 status: "added additional images",
               }, null, 4)
               );
-            setValue(fieldName, [...watchAdditionalInformation, bannerUploadData?.FileUpload?.[0]]);
+            let updateData = watchAdditionalInformation[index] = bannerUploadData?.FileUpload?.[0]
+            setPickImageDebugResult(JSON.stringify(updateData, null, 4))
+            setValue(fieldName, updateData);
           }
-
-          setPickImageDebugResult(JSON.stringify([bannerUploadData?.FileUpload?.[0]], null, 4))
         }
       }
     };
@@ -225,46 +226,6 @@ const EventAdd = ({ page }) => {
     remove: bannerRemove,
   } = useFieldArray({ control, name: "bannerImage" });
 
-  // const onFileUpload = async (e) => {
-  //   const fileSize = e.target.files[0]?.size;
-  //   const isLt1M = fileSize / 1024 / 1024 < 4;
-
-  //   if (fileSize && !isLt1M) {
-  //     bannerRemove(0);
-  //     setTimeout(() => {
-  //       bannerAppend({
-  //         FileList: "",
-  //       });
-  //     }, 100);
-
-  //     setBannerFileError("檔案大小不能超過 4MB");
-
-  //     return;
-  //   }
-
-  //   setBannerFileError("");
-  // };
-
-  // const onAdditionalFileUpload = async (e, index) => {
-  //   const fileSize = e.target.files[0]?.size;
-  //   const isLt1M = fileSize / 1024 / 1024 < 4;
-
-  //   if (fileSize && !isLt1M) {
-  //     additionalInformationRemove(index);
-  //     setTimeout(() => {
-  //       additionalInformationAppend({
-  //         FileList: "",
-  //       });
-  //     }, 100);
-
-  //     setAdditionalFileError("檔案大小不能超過 4MB");
-
-  //     return;
-  //   }
-
-  //   setAdditionalFileError("");
-  // };
-
   const onFormSubmit = async ({
     name,
     type,
@@ -292,18 +253,6 @@ const EventAdd = ({ page }) => {
   }) => {
     setAdditionalFileError("");
     setBannerFileError("");
-    let filesAdditionalInformalUploadData;
-
-    const FileUploadmutation = gql`
-      mutation FileUpload($file: FileUpload!) {
-        FileUpload(files: $file) {
-          id
-          url
-          contentType
-          fileSize
-        }
-      }
-    `;
 
     if (_.isEmpty(bannerImage?.[0]) && _.isEmpty(stockPhotoId)) {
       setBannerFileError(
@@ -1315,7 +1264,7 @@ const EventAdd = ({ page }) => {
                             width="100%"
                             cursor="pointer"
                             pos="relative"
-                            onClick={() => handlePickFile('additionalInformation')}
+                            onClick={() => handlePickFile('additionalInformation', index)}
                           >
                             <Center
                               h={"100%"}
@@ -1402,7 +1351,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                {/* <Box>
+                <Box>
                 debugResult:
                 {debugResult && (
                     <Box
@@ -1415,7 +1364,7 @@ const EventAdd = ({ page }) => {
                       {debugResult}
                     </Box>
                 )}
-                </Box> */}
+                </Box>
 
                 <Box>
                 {pickImageDebugResult && (
