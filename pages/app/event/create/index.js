@@ -201,7 +201,6 @@ const EventAdd = ({ page }) => {
             );
 
             updateData[index] = bannerUploadData?.FileUpload?.[0];
-            // setPickImageDebugResult(JSON.stringify(updateData, null, 4))
             setValue(fieldName, updateData);
             setDebugResult(
               JSON.stringify(
@@ -1382,7 +1381,7 @@ const EventAdd = ({ page }) => {
                     </Button>
                   </FormControl>
                 </Box>
-                <Box>
+                {/* <Box>
                   debug:
                   {debugResult && (
                     <Box
@@ -1395,7 +1394,7 @@ const EventAdd = ({ page }) => {
                       {debugResult}
                     </Box>
                   )}
-                </Box>
+                </Box> */}
 
                 <Box>
                   {pickImageDebugResult && (
