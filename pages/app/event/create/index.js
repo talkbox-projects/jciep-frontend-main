@@ -104,6 +104,18 @@ const EventAdd = ({ page }) => {
     name: "otherUrls",
   });
 
+  const {
+    fields: additionalInformationFields,
+    append: additionalInformationAppend,
+    remove: additionalInformationRemove,
+  } = useFieldArray({ control, name: "additionalInformation" });
+
+  const {
+    fields: bannerField,
+    append: bannerAppend,
+    remove: bannerRemove,
+  } = useFieldArray({ control, name: "bannerImage" });
+
   useEffect(() => {
     async function getStockPhotoData() {
       const data = (await getStockPhoto()) ?? [];
@@ -177,9 +189,15 @@ const EventAdd = ({ page }) => {
                 status: "add obj to additionalInformation",
               }, null, 4)
               );
-            // updateData[index] = bannerUploadData?.FileUpload?.[0]
-            setPickImageDebugResult(JSON.stringify(updateData, null, 4))
-            // setValue(fieldName, updateData);
+
+            updateData[index] = bannerUploadData?.FileUpload?.[0]
+            // setPickImageDebugResult(JSON.stringify(updateData, null, 4))
+            setValue(fieldName, updateData);
+            setDebugResult(
+              JSON.stringify({
+                status: updateData,
+              }, null, 4)
+              );
           }
         }
       }
@@ -219,18 +237,6 @@ const EventAdd = ({ page }) => {
       />
     );
   }, []);
-
-  const {
-    fields: additionalInformationFields,
-    append: additionalInformationAppend,
-    remove: additionalInformationRemove,
-  } = useFieldArray({ control, name: "additionalInformation" });
-
-  const {
-    fields: bannerField,
-    append: bannerAppend,
-    remove: bannerRemove,
-  } = useFieldArray({ control, name: "bannerImage" });
 
   const onFormSubmit = async ({
     name,
