@@ -73,8 +73,6 @@ const EmailResetPassword = ({page}) => {
     }
   };
 
-  console.log('page-',page)
-
   return (
     <Box py={{ base: 24 }}>
       <Box mb={{ base: 4 }}>

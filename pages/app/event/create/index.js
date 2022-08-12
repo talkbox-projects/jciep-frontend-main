@@ -172,9 +172,14 @@ const EventAdd = ({ page }) => {
               }, null, 4)
               );
             let updateData = watchAdditionalInformation 
-            updateData[index] = bannerUploadData?.FileUpload?.[0]
+            setDebugResult(
+              JSON.stringify({
+                status: "add obj to additionalInformation",
+              }, null, 4)
+              );
+            // updateData[index] = bannerUploadData?.FileUpload?.[0]
             setPickImageDebugResult(JSON.stringify(updateData, null, 4))
-            setValue(fieldName, updateData);
+            // setValue(fieldName, updateData);
           }
         }
       }
@@ -1353,7 +1358,7 @@ const EventAdd = ({ page }) => {
                   </FormControl>
                 </Box>
                 <Box>
-                debugResult:
+                debug:
                 {debugResult && (
                     <Box
                       style={{
