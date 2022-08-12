@@ -221,7 +221,7 @@ const EventAdd = ({ page }) => {
     }
   };
 
-  const renderPickedImage = useCallback((data, fieldName) => {
+  const renderPickedImage = useCallback((data, fieldName, index) => {
     if (!data) {
       return;
     }
@@ -233,7 +233,7 @@ const EventAdd = ({ page }) => {
         h={"100%"}
         bgSize={"cover"}
         bgPosition={"center center"}
-        onClick={() => handlePickFile(fieldName)}
+        onClick={() => handlePickFile(fieldName, index)}
       />
     );
   }, []);
