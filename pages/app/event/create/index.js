@@ -31,7 +31,12 @@ import { getStockPhoto } from "../../../../utils/event/getEvent";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import { createEvent } from "../../../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
-import { AiOutlineInfoCircle, AiFillMinusCircle } from "react-icons/ai";
+import {
+  AiOutlineInfoCircle,
+  AiFillMinusCircle,
+  AiOutlineFilePdf,
+  AiOutlinePlayCircle,
+} from "react-icons/ai";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
 
@@ -121,6 +126,21 @@ const EventAdd = ({ page }) => {
       setStockPhoto(data);
     }
     getStockPhotoData();
+
+    // setValue("additionalInformation", [
+    //   {
+    //     "id": "62f6091882cd2e001b093096",
+    //     "url": "/api/assets/files/GP0OLY_Web_size.jpg",
+    //     "contentType": "application/pdf",
+    //     "fileSize": 23446
+    //   },
+    //   {
+    //     "id": "62f6091e82cd2e001b09309c",
+    //     "url": "/api/assets/files/Black_Closed.png",
+    //     "contentType": "video/mp4",
+    //     "fileSize": 17798
+    //   }
+    // ]);
   }, [router]);
 
   const FileUploadmutation = gql`
@@ -180,37 +200,12 @@ const EventAdd = ({ page }) => {
           if (fieldName === "bannerImage") {
             setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
           } else {
-            setDebugResult(
-              JSON.stringify(
-                {
-                  status: "added additional images",
-                },
-                null,
-                4
-              )
-            );
+    
             let updateData = watchAdditionalInformation;
-            setDebugResult(
-              JSON.stringify(
-                {
-                  status: "add obj to additionalInformation",
-                },
-                null,
-                4
-              )
-            );
 
             updateData[index] = bannerUploadData?.FileUpload?.[0];
             setValue(fieldName, updateData);
-            setDebugResult(
-              JSON.stringify(
-                {
-                  status: updateData,
-                },
-                null,
-                4
-              )
-            );
+
           }
         }
       }
@@ -224,7 +219,10 @@ const EventAdd = ({ page }) => {
           maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
-          mimeType: "image/*",
+          mimeType:
+            fieldName === "bannerImage"
+              ? "image/*"
+              : "image/*,application/pdf,video/mp4",
         },
       },
     };
@@ -237,6 +235,40 @@ const EventAdd = ({ page }) => {
   const renderPickedImage = useCallback((data, fieldName, index) => {
     if (!data) {
       return;
+    }
+
+    if (data?.contentType === "application/pdf") {
+      return (
+        <Box
+          bgColor="#F2F2F2"
+          h={"100%"}
+          w={"100%"}
+          bgSize={{ base: "cover" }}
+          bgPosition={"center center"}
+          position={"relative"}
+        >
+          <Center h={"100%"}>
+            <AiOutlineFilePdf style={{ width: "30px", height: "30px" }} />
+          </Center>
+        </Box>
+      );
+    }
+
+    if (data?.contentType === "video/mp4") {
+      return (
+        <Box
+        bgColor="#F2F2F2"
+        h={"100%"}
+        w={"100%"}
+        bgSize={{ base: "cover" }}
+        bgPosition={"center center"}
+        position={"relative"}
+      >
+        <Center h={"100%"}>
+          <AiOutlinePlayCircle style={{ width: "30px", height: "30px" }} />
+        </Center>
+      </Box>
+      )
     }
 
     return (
@@ -350,21 +382,6 @@ const EventAdd = ({ page }) => {
       setDebugResult(JSON.stringify(response));
     }
   };
-
-  // const renderAdditionalImage = useCallback((data) => {
-  //   if (!data) {
-  //     return;
-  //   }
-  //   return (
-  //     <Box
-  //       bgImg={`url(${data?.url})`}
-  //       w={"100%"}
-  //       h={"100%"}
-  //       bgSize={"cover"}
-  //       bgPosition={"center center"}
-  //     />
-  //   );
-  // }, []);
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -1277,12 +1294,12 @@ const EventAdd = ({ page }) => {
                                 {...register(`additionalInformation[${index}]`)}
                               /> */}
                             </Box>
-                            <Box
-                              pos="relative"
-                              zIndex={4}
-                              h={"100%"}
-                            >
-                              {renderPickedImage(watchAdditionalInformation[index], "additionalInformation", index)}
+                            <Box pos="relative" zIndex={4} h={"100%"}>
+                              {renderPickedImage(
+                                watchAdditionalInformation[index],
+                                "additionalInformation",
+                                index
+                              )}
                             </Box>
                           </Box>
                         ) : (
