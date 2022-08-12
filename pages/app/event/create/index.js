@@ -83,7 +83,6 @@ const EventAdd = ({ page }) => {
       representOrganization: "false",
     },
   });
-  const additionalFileRefs = useRef(null);
   const [step, setStep] = useState("step1");
   const [stockPhotoId, setStockPhotoId] = useState("");
   const [debugResult, setDebugResult] = useState("");
@@ -152,14 +151,17 @@ const EventAdd = ({ page }) => {
   const handlePickFile = (fieldName, index) => {
     window.WebContext = {};
     window.WebContext.pickFileHandler = async (response) => {
-
       const fileInfo = JSON.parse(response);
       if (!fileInfo.result) {
         setDebugResult(
-          JSON.stringify({
-            status: "response not found",
-          }, null, 4)
-          );
+          JSON.stringify(
+            {
+              status: "response not found",
+            },
+            null,
+            4
+          )
+        );
       } else {
         let file = dataURLtoFile(
           fileInfo.result?.data[0]?.data,
@@ -175,29 +177,41 @@ const EventAdd = ({ page }) => {
             }
           );
 
-          if(fieldName==='bannerImage') {
+          if (fieldName === "bannerImage") {
             setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
           } else {
             setDebugResult(
-              JSON.stringify({
-                status: "added additional images",
-              }, null, 4)
-              );
-            let updateData = watchAdditionalInformation 
+              JSON.stringify(
+                {
+                  status: "added additional images",
+                },
+                null,
+                4
+              )
+            );
+            let updateData = watchAdditionalInformation;
             setDebugResult(
-              JSON.stringify({
-                status: "add obj to additionalInformation",
-              }, null, 4)
-              );
+              JSON.stringify(
+                {
+                  status: "add obj to additionalInformation",
+                },
+                null,
+                4
+              )
+            );
 
-            updateData[index] = bannerUploadData?.FileUpload?.[0]
+            updateData[index] = bannerUploadData?.FileUpload?.[0];
             // setPickImageDebugResult(JSON.stringify(updateData, null, 4))
             setValue(fieldName, updateData);
             setDebugResult(
-              JSON.stringify({
-                status: updateData,
-              }, null, 4)
-              );
+              JSON.stringify(
+                {
+                  status: updateData,
+                },
+                null,
+                4
+              )
+            );
           }
         }
       }
@@ -1112,13 +1126,16 @@ const EventAdd = ({ page }) => {
                               </Button>
                             )}
                             {!_.isEmpty(watchBannerImage[index]) ? (
-                              renderPickedImage(watchBannerImage[index], "bannerImage")
+                              renderPickedImage(
+                                watchBannerImage[index],
+                                "bannerImage"
+                              )
                             ) : (
                               <Box
                                 h={"100%"}
                                 minHeight={"74px"}
                                 cursor="pointer"
-                                onClick={() => handlePickFile('bannerImage')}
+                                onClick={() => handlePickFile("bannerImage")}
                               >
                                 <Center
                                   h={"100%"}
@@ -1261,12 +1278,12 @@ const EventAdd = ({ page }) => {
                                 {...register(`additionalInformation[${index}]`)}
                               /> */}
                             </Box>
-                            <Box pos="relative" zIndex={4} h={"100%"}>
-                              {/* {renderAdditionalImage(
-                                watchAdditionalInformation[index]
-                              )} */}
-
-                              {renderPickedImage(watchAdditionalInformation[index], "additionalInformation")}
+                            <Box
+                              pos="relative"
+                              zIndex={4}
+                              h={"100%"}
+                            >
+                              {renderPickedImage(watchAdditionalInformation[index], "additionalInformation", index)}
                             </Box>
                           </Box>
                         ) : (
@@ -1276,7 +1293,9 @@ const EventAdd = ({ page }) => {
                             width="100%"
                             cursor="pointer"
                             pos="relative"
-                            onClick={() => handlePickFile('additionalInformation', index)}
+                            onClick={() =>
+                              handlePickFile("additionalInformation", index)
+                            }
                           >
                             <Center
                               h={"100%"}
@@ -1364,8 +1383,8 @@ const EventAdd = ({ page }) => {
                   </FormControl>
                 </Box>
                 <Box>
-                debug:
-                {debugResult && (
+                  debug:
+                  {debugResult && (
                     <Box
                       style={{
                         whiteSpace: "normal",
@@ -1375,11 +1394,11 @@ const EventAdd = ({ page }) => {
                     >
                       {debugResult}
                     </Box>
-                )}
+                  )}
                 </Box>
 
                 <Box>
-                {pickImageDebugResult && (
+                  {pickImageDebugResult && (
                     <Box
                       style={{
                         whiteSpace: "normal",
@@ -1389,10 +1408,8 @@ const EventAdd = ({ page }) => {
                     >
                       {pickImageDebugResult}
                     </Box>
-                )}
+                  )}
                 </Box>
-
-
               </VStack>
             </Box>
             {/* <MoreInformationModal onClose={onClose} /> */}
