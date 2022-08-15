@@ -229,6 +229,7 @@ const Event = ({ page }) => {
               name={detail?.name}
               tags={detail?.tags}
               url={`${detail?.banner?.file?.url}`}
+              stockPhotoId={`${detail?.banner?.stockPhotoId}`}
             />
             <Grid
               templateColumns={{
@@ -884,10 +885,13 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name }) => {
+//
+
+const BannerSection = ({ tags, url, name, stockPhotoId }) => {
+  const imageUrl = url ?? `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`
   return (
     <Box
-      bgImage={`url(${url})`}
+      bgImage={`url(${imageUrl})`}
       h={{ base: "280px" }}
       w={"100%"}
       bgSize={{ base: "cover" }}
