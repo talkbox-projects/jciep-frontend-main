@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ import { getProjectDetail } from "../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { options } from "../../utils/project/resourceObj";
 
-const PAGE_KEY = "event";
+const PAGE_KEY = "project";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
@@ -51,7 +51,7 @@ export const getServerSideProps = async (context) => {
 const Project = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
-  const [organization, setOrganization] = useState(null)
+  const [organization, setOrganization] = useState(null);
 
   useEffect(() => {
     const { query } = router;
@@ -63,17 +63,12 @@ const Project = ({ page, api: { organizations } }) => {
   }, [router]);
 
   useEffect(() => {
-    const organizationId = detail?.createdBy
-    if(!organizationId){
-        setOrganization(null)
-        return
+    if (!detail?.organizationId) {
+      setOrganization(null);
+      return;
     }
-    console.log('organizations', organizations)
-    console.log('organizationId-',organizationId)
-
-    const result = organizations?.find((d) => d.id === organizationId);
-
-    setOrganization(result)
+    const result = organizations?.find((d) => d.id === detail?.organizationId);
+    setOrganization(result);
   }, [detail, organizations]);
 
   const RenderResourceListDetail = ({ data }) => {
@@ -84,156 +79,240 @@ const Project = ({ page, api: { organizations } }) => {
     switch (data?.type) {
       case "venue":
         return (
-          <Stack spacing={2} direction="column">
-            {data?.accessibilityRequirement && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {data?.accessibilityRequirement}
-                </Box>
-              </Flex>
-            )}
-            {data?.maxCapacity && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
-              </Flex>
-            )}
-            {data?.openingHours && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.openingHours}</Box>
-              </Flex>
-            )}
-            {data?.size && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.size}</Box>
-              </Flex>
-            )}
-          </Stack>
+          <Box>
+            <Flex color="#08A3A3" gap={2}>
+              <Box>#{data?.district}</Box>
+            </Flex>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              {data?.title}
+            </Text>
+            <Stack spacing={2} direction="column">
+              {data?.maxCapacity && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
+                </Flex>
+              )}
+              {data?.maxCapacity && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
+                </Flex>
+              )}
+              {data?.size && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.size}</Box>
+                </Flex>
+              )}
+              {data?.openingHours && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.openingHours}</Box>
+                </Flex>
+              )}
+              {data?.accessibilityRequirement && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>
+                    {data?.accessibilityRequirement}
+                  </Box>
+                </Flex>
+              )}
+            </Stack>
+          </Box>
         );
       case "manpower":
         return (
-          <Stack spacing={2} direction="column">
-            {data?.durationNeededValue && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {data?.durationNeededValue}{" "}
-                  {options["durationNeededUnit"][data?.durationNeededUnit]}
-                </Box>
-              </Flex>
-            )}
-            {data?.serviceNature && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {options["serviceNature"][data?.serviceNature]}
-                </Box>
-              </Flex>
-            )}
-            {data?.tasks && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.tasks}</Box>
-              </Flex>
-            )}
-          </Stack>
+          <Box>
+            <Flex color="#08A3A3" gap={2}>
+              {data?.tags?.map((d, i) => (
+                <Box key={`${d}-${i}`}>#{d}</Box>
+              ))}
+            </Flex>
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              {data?.tasks}
+            </Text>
+            <Stack spacing={2} direction="column">
+              {data?.tasksDescription && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.tasksDescription}</Box>
+                </Flex>
+              )}
+              {data?.skills && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>
+                    {data?.skills?.map((d) => (
+                      <Box key={d} pr={1}>
+                        {d}
+                      </Box>
+                    ))}
+                  </Box>
+                </Flex>
+              )}
+              {data?.serviceNature && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>
+                    {options["serviceNature"][data?.serviceNature]}
+                  </Box>
+                </Flex>
+              )}
+            </Stack>
+          </Box>
         );
       case "expertise":
         return (
-          <Stack spacing={2} direction="column">
-            {data?.description && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
-              </Flex>
-            )}
-
-            {data?.expertiseType && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {options["expertiseType"][data?.expertiseType]}
-                </Box>
-              </Flex>
-            )}
-          </Stack>
+          <Box>
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              {data?.expertiseType &&
+                options["expertiseType"][data?.expertiseType]}
+            </Text>
+            <Stack spacing={2} direction="column">
+              {data?.description && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+                </Flex>
+              )}
+            </Stack>
+          </Box>
         );
       case "network":
         return (
-          <Stack spacing={2} direction="column">
-            {data?.description && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
-              </Flex>
-            )}
-            {data?.networkType && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {options["networkType"][data?.networkType]}
-                </Box>
-              </Flex>
-            )}
-          </Stack>
+          <Box>
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              {data?.networkType && options["networkType"][data?.networkType]}
+            </Text>
+            <Stack spacing={2} direction="column">
+              {data?.description && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+                </Flex>
+              )}
+            </Stack>
+          </Box>
         );
       case "other":
         return (
-          <Stack spacing={2} direction="column">
-            {data?.otherResourcesNeeded && (
+          <Box>
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              任何支援
+            </Text>
+            <Stack spacing={2} direction="column">
+              {data?.otherResourcesNeeded && (
+                <Flex gap={2} alignItems="center">
+                  <Box>
+                    <Image src={"/images/app/resource_click.svg"} alt={""} />
+                  </Box>
+                  <Box fontSize={{ base: "sm" }}>
+                    {data?.otherResourcesNeeded}
+                  </Box>
+                </Flex>
+              )}
+            </Stack>
+          </Box>
+        );
+      case "funding":
+        return (
+          <Box>
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+              pb={2}
+            >
+              需要資金
+            </Text>
+            <Stack spacing={2} direction="column">
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
                 <Box fontSize={{ base: "sm" }}>
-                  {data?.otherResourcesNeeded}
+                  {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
                 </Box>
               </Flex>
-            )}
-          </Stack>
-        );
-      case "funding":
-        return (
-          <Stack spacing={2} direction="column">
-            {data?.items?.map((d, i) => (
-              <Flex gap={2} alignItems="center" key={`${d.name}-${i}`}>
+
+              <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
                 <Box fontSize={{ base: "sm" }}>
-                  <Box key={`${d.name}-${i}`}>
-                    {d?.name}
-                    (${new Intl.NumberFormat("zh-HK").format(d?.amount)})
+                  {data?.hasReceiveAnyFunding
+                    ? "沒有資金援助"
+                    : "有一些資金援助"}
+                </Box>
+              </Flex>
+              <Flex gap={2} alignItems="center">
+                <Box>總數(HKD)</Box>
+                <Box fontSize={{ base: "sm" }}>
+                  <Box>
+                    <b>{`${new Intl.NumberFormat("zh-HK").format(
+                      data?.items?.reduce(function (acc, obj) {
+                        return acc + obj.amount;
+                      }, 0)
+                    )}`}</b>
                   </Box>
                 </Box>
               </Flex>
-            ))}
-          </Stack>
+            </Stack>
+          </Box>
         );
 
       default:
@@ -338,320 +417,336 @@ const Project = ({ page, api: { organizations } }) => {
     }
   };
 
-  console.log('detail-',detail)
+  // const printIframe = (id) => {
+  //   const iframe = document.frames
+  //     ? document.frames[id]
+  //     : document.getElementById(id);
+  //   const iframeWindow = iframe.contentWindow || iframe;
+
+  //   iframe.focus();
+  //   iframeWindow.print();
+
+  //   return false;
+  // };
 
   return (
     <>
-      <VStack spacing={0} align="stretch" w="100%">
-        <Box bgColor="#F6D644" position="relative">
-          <Box position="absolute" bottom={0} w="100%">
-            <DividerSimple primary="#FD5F53" />
+      {/* <iframe
+        id="currentPage"
+        src={"/project/62ca8ddb3c2778a748d96bb5"}
+        style={{ display: "none" }}
+        title="currentPage"
+      /> */}
+      <Box>
+        <VStack spacing={0} align="stretch" w="100%">
+          <Box bgColor="#F6D644" position="relative">
+            <Box position="absolute" bottom={0} w="100%">
+              <DividerSimple primary="#FD5F53" />
+            </Box>
+            <Container pt={12} position="relative">
+              <Box minHeight={{ base: "240px", md: "480px" }} />
+            </Container>
           </Box>
-          <Container pt={12} position="relative">
-            <Box minHeight={{ base: "240px", md: "480px" }} />
-          </Container>
-        </Box>
 
-        <Box bg="#fafafa" pb={12}>
-          <Container
-            position={"relative"}
-            mt={{ base: "-192px", md: "-360px", lg: "-280px" }}
-            pb={8}
-            px={{ base: 0, md: "15px" }}
-          >
-            <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
-              <Box flex={1} px={{ base: "10px", md: 0 }}>
-                <Box mx={{ base: "-10px", md: 0 }}>
-                  <BannerSection
-                    name={detail?.name}
-                    tags={detail?.tags}
-                    url={`${detail?.banner?.file?.url}`}
-                  />
-                </Box>
-                <Grid
-                  templateColumns={{
-                    base: "repeat(1, 1fr)",
-                  }}
-                  gap={6}
-                >
-                  <GridItem flex={1}>
-                    <Stack spacing={4} direction="column">
-                      <Box
-                        p={"16px"}
-                        fontSize={"14px"}
-                        bgColor={"#FFF"}
-                        borderRadius={"10px"}
-                        overflow={"hidden"}
-                        boxShadow="xl"
-                      >
-                        <Stack spacing={4} direction="column">
-                          <Flex gap={2} direction="column">
-                            <Box
-                              fontWeight={700}
-                              fontSize={{ base: "md", md: "lg" }}
-                            >
-                              詳細
-                            </Box>
-                            <Box
-                              dangerouslySetInnerHTML={{
-                                __html: detail?.introduction,
-                              }}
-                            />
-
-                            {detail?.websites?.map((d) => (
-                              <Flex
-                                key={d}
-                                color="#0D8282"
-                                align="center"
+          <Box bg="#fafafa" pb={12}>
+            <Container
+              position={"relative"}
+              mt={{ base: "-192px", md: "-360px", lg: "-280px" }}
+              pb={8}
+              px={{ base: 0, md: "15px" }}
+            >
+              <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
+                <Box flex={1} px={{ base: "10px", md: 0 }}>
+                  <Box mx={{ base: "-10px", md: 0 }}>
+                    <BannerSection
+                      name={detail?.name}
+                      tags={detail?.tags}
+                      url={`${detail?.banner?.file?.url}`}
+                    />
+                  </Box>
+                  <Grid
+                    templateColumns={{
+                      base: "repeat(1, 1fr)",
+                    }}
+                    gap={6}
+                  >
+                    <GridItem flex={1}>
+                      <Stack spacing={4} direction="column">
+                        <Box
+                          p={"16px"}
+                          fontSize={"14px"}
+                          bgColor={"#FFF"}
+                          borderRadius={"10px"}
+                          overflow={"hidden"}
+                          boxShadow="xl"
+                        >
+                          <Stack spacing={4} direction="column">
+                            <Flex gap={2} direction="column">
+                              <Box
                                 fontWeight={700}
-                                alignItems="center"
+                                fontSize={{ base: "md", md: "lg" }}
                               >
-                                <Box pr={1}>
-                                  <AiOutlineLink />
-                                </Box>
-                                <a
-                                  href={d}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  style={{ wordBreak: "break-all" }}
+                                詳細
+                              </Box>
+                              <Box
+                                dangerouslySetInnerHTML={{
+                                  __html: detail?.introduction,
+                                }}
+                              />
+
+                              {detail?.websites?.map((d) => (
+                                <Flex
+                                  key={d}
+                                  color="#0D8282"
+                                  align="center"
+                                  fontWeight={700}
+                                  alignItems="center"
                                 >
-                                  {d}
-                                </a>
-                              </Flex>
-                            ))}
-                          </Flex>
+                                  <Box pr={1}>
+                                    <AiOutlineLink />
+                                  </Box>
+                                  <a
+                                    href={d}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{ wordBreak: "break-all" }}
+                                  >
+                                    {d}
+                                  </a>
+                                </Flex>
+                              ))}
+                            </Flex>
 
-                          <Divider my={4} />
+                            <Divider my={4} />
 
-                          <Flex gap={2} direction="column">
-                            <Box fontWeight={700}>發起機構</Box>
-                            <Text>{detail?.organization??'-'}</Text>
-                          </Flex>
-                        </Stack>
-                      </Box>
+                            <Flex gap={2} direction="column">
+                              <Box fontWeight={700}>發起機構</Box>
+                              {organization ? (
+                                <Flex gap={2} alignItems="center">
+                                  <Box maxW={"180px"}>
+                                    <Image
+                                      src={organization?.logo?.url}
+                                      alt={organization?.chineseCompanyName}
+                                    />
+                                  </Box>
+                                  <Box>{organization?.name}</Box>
+                                </Flex>
+                              ) : (
+                                "-"
+                              )}
+                            </Flex>
+                          </Stack>
+                        </Box>
 
-                      <Box
-                        p={"16px"}
-                        pb={"32px"}
-                        fontSize={"14px"}
-                        bgColor={"#FFF"}
-                        borderRadius={"10px"}
-                        overflow={"hidden"}
-                        boxShadow="xl"
-                      >
-                        <Stack spacing={4} direction="column">
-                          <Flex gap={2} direction="column">
-                            <Box
-                              fontWeight={700}
-                              fontSize={{ base: "md", md: "lg" }}
+                        <Box
+                          p={"16px"}
+                          pb={"32px"}
+                          fontSize={"14px"}
+                          bgColor={"#FFF"}
+                          borderRadius={"10px"}
+                          overflow={"hidden"}
+                          boxShadow="xl"
+                        >
+                          <Stack spacing={4} direction="column">
+                            <Flex gap={2} direction="column">
+                              <Box
+                                fontWeight={700}
+                                fontSize={{ base: "md", md: "lg" }}
+                              >
+                                欠缺資源
+                              </Box>
+                            </Flex>
+
+                            <Grid
+                              templateColumns={{
+                                base: "repeat(1, 1fr)",
+                                md: "repeat(2, 1fr)",
+                              }}
+                              gap={6}
                             >
-                              欠缺資源
-                            </Box>
-                          </Flex>
-
-                          <Grid
-                            templateColumns={{
-                              base: "repeat(1, 1fr)",
-                              md: "repeat(2, 1fr)",
-                            }}
-                            gap={6}
-                          >
-                            {detail?.requireResources?.map((d, i) => {
-                              return (
-                                <GridItem
-                                  colSpan={1}
-                                  flex={1}
-                                  key={`${d?.type}-${i}`}
-                                >
-                                  <Box
-                                    boxShadow="lg"
-                                    fontSize={"14px"}
-                                    bgColor={"#FFF"}
-                                    borderRadius={"10px"}
-                                    overflow="hidden"
+                              {detail?.requireResources?.map((d, i) => {
+                                return (
+                                  <GridItem
+                                    colSpan={1}
+                                    flex={1}
+                                    key={`${d?.type}-${i}`}
                                   >
                                     <Box
-                                      h={2}
-                                      bgColor={resourceData[d.type]?.color}
-                                    />
-                                    <Box
-                                      d={"inline-block"}
-                                      borderBottomRightRadius={"10px"}
-                                      bgColor={resourceData[d.type]?.color}
-                                      px={"12px"}
-                                      py={"6px"}
+                                      boxShadow="lg"
+                                      fontSize={"14px"}
+                                      bgColor={"#FFF"}
+                                      borderRadius={"10px"}
+                                      overflow="hidden"
                                     >
-                                      <Flex
-                                        justifyContent="flex-start"
-                                        gap={2}
-                                        alignItems="center"
+                                      <Box
+                                        h={2}
+                                        bgColor={resourceData[d.type]?.color}
+                                      />
+                                      <Box
+                                        d={"inline-block"}
+                                        borderBottomRightRadius={"10px"}
+                                        bgColor={resourceData[d.type]?.color}
+                                        px={"12px"}
+                                        py={"6px"}
                                       >
-                                        <Box>
-                                          <Image
-                                            src={resourceData[d.type]?.icon}
-                                            alt={""}
-                                            color="gray.500"
-                                            minW={"18px"}
-                                          />
-                                        </Box>
-                                        <Box fontSize={"12px"}>
-                                          {resourceData[d.type]?.typeName}
-                                        </Box>
-                                      </Flex>
-                                    </Box>
-
-                                    <Box py={"10px"} px={"15px"}>
-                                      <Flex color="#08A3A3" gap={2}>
-                                        {resourceData[d.type]?.tags?.map(
-                                          (d) => (
-                                            <Box key={d}>{`#${d}`}</Box>
-                                          )
-                                        )}
-                                      </Flex>
-
-                                      <Text
-                                        as="h2"
-                                        color="#1E1E1E"
-                                        fontSize={{ base: "md", md: "lg" }}
-                                        fontWeight={700}
-                                        pb={2}
-                                      >
-                                        {d?.title}
-                                      </Text>
-
-                                      <RenderResourceListDetail data={d} />
-
-                                      <Divider my={4} />
-
-                                      <Flex gap={3} alignItems="center">
-                                        <Box>
-                                          <Image
-                                            src={
-                                              "/images/app/resource_bookmark_off.svg"
-                                            }
-                                            alt={""}
-                                          />
-                                        </Box>
-                                        <Box
-                                          fontSize={{ base: "sm", lg: "sm" }}
+                                        <Flex
+                                          justifyContent="flex-start"
+                                          gap={2}
+                                          alignItems="center"
                                         >
-                                          {d?.bookmarkCount ?? "0"}人關注中
-                                        </Box>
-                                      </Flex>
+                                          <Box>
+                                            <Image
+                                              src={resourceData[d.type]?.icon}
+                                              alt={""}
+                                              color="gray.500"
+                                              minW={"18px"}
+                                            />
+                                          </Box>
+                                          <Box fontSize={"12px"}>
+                                            {resourceData[d.type]?.typeName}
+                                          </Box>
+                                        </Flex>
+                                      </Box>
+
+                                      <Box py={"10px"} px={"15px"}>
+                                        <RenderResourceListDetail data={d} />
+
+                                        <Divider my={4} />
+
+                                        <Flex gap={3} alignItems="center">
+                                          <Box>
+                                            <Image
+                                              src={
+                                                "/images/app/resource_bookmark_off.svg"
+                                              }
+                                              alt={""}
+                                            />
+                                          </Box>
+                                          <Box
+                                            fontSize={{ base: "sm", lg: "sm" }}
+                                          >
+                                            {d?.bookmarkCount ?? "0"}人關注中
+                                          </Box>
+                                        </Flex>
+                                      </Box>
                                     </Box>
-                                  </Box>
-                                </GridItem>
-                              );
-                            })}
-                          </Grid>
-                        </Stack>
-                      </Box>
+                                  </GridItem>
+                                );
+                              })}
+                            </Grid>
+                          </Stack>
+                        </Box>
 
-                      <Box
-                        p={"16px"}
-                        pb={"32px"}
-                        fontSize={"14px"}
-                        bgColor={"#FFF"}
-                        borderRadius={"10px"}
-                        overflow={"hidden"}
-                        boxShadow="xl"
-                      >
-                        <Stack spacing={4} direction="column">
-                          <Flex gap={2} direction="column">
-                            <Box
-                              fontWeight={700}
-                              fontSize={{ base: "md", md: "lg" }}
+                        <Box
+                          p={"16px"}
+                          pb={"32px"}
+                          fontSize={"14px"}
+                          bgColor={"#FFF"}
+                          borderRadius={"10px"}
+                          overflow={"hidden"}
+                          boxShadow="xl"
+                        >
+                          <Stack spacing={4} direction="column">
+                            <Flex gap={2} direction="column">
+                              <Box
+                                fontWeight={700}
+                                fontSize={{ base: "md", md: "lg" }}
+                              >
+                                媒體及影片
+                              </Box>
+                            </Flex>
+
+                            <Grid
+                              templateColumns={{
+                                base: "repeat(2, 1fr)",
+                              }}
+                              gap={2}
                             >
-                              媒體及影片
-                            </Box>
-                          </Flex>
+                              {detail?.files?.map((d) => (
+                                <RenderAdditionalContent key={d?.id} data={d} />
+                              ))}
+                            </Grid>
+                          </Stack>
+                        </Box>
+                      </Stack>
+                    </GridItem>
+                  </Grid>
+                </Box>
+                <Box
+                  w={{ base: "100%", md: "310px" }}
+                  px={{ base: "10px", md: 0 }}
+                >
+                  <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
+                    <Box>
+                      <Text fontWeight={700} mb={2}>
+                        描述
+                      </Text>
+                      <Text as="p" fontSize={"14px"}>
+                        {detail?.remark}
+                      </Text>
+                    </Box>
+                    <Divider my={4} />
+                    <Stack direction={"column"} spacing={4} fontSize="14px">
+                      <Flex align="center" gap={2} alignItems="flex-start">
+                        <Box w={"20px"}>
+                          <Image
+                            src={"/images/app/time.svg"}
+                            alt={""}
+                            color="gray.500"
+                            fontSize={18}
+                            minW={"18px"}
+                          />
+                        </Box>
+                        <Box>
+                          <Box fontWeight={700}>計劃期限</Box>
+                          {detail?.startDate} - {detail?.endDate}{" "}
+                        </Box>
+                      </Flex>
 
-                          <Grid
-                            templateColumns={{
-                              base: "repeat(2, 1fr)",
-                            }}
-                            gap={2}
+                      <Flex align="center" gap={2}>
+                        <Box w={"20px"} pl={"4px"}>
+                          <Image
+                            src={"/images/app/bookmark-active.svg"}
+                            alt={""}
+                            fontSize={18}
+                            maxW={"12px"}
+                          />
+                        </Box>
+                        <Box>
+                          <Box fontWeight={700} color="#0D8282">
+                            {detail?.bookmarkCount}人關注中
+                          </Box>
+                        </Box>
+                      </Flex>
+
+                      <Flex
+                        align="center"
+                        gap={2}
+                        d={{ base: "none", lg: "flex" }}
+                      >
+                        <Box w={"20px"} pl={"4px"}>
+                          <Image
+                            src={"/images/app/print.svg"}
+                            alt={""}
+                            fontSize={18}
+                            maxW={"13px"}
+                          />
+                        </Box>
+                        <Box>
+                          <Box
+                            fontWeight={700}
+                            color="#0D8282"
+                            cursor="pointer"
+                            onClick={() => window.print()}
                           >
-                            {detail?.files?.map((d) => (
-                              <RenderAdditionalContent key={d?.id} data={d} />
-                            ))}
-                          </Grid>
-                        </Stack>
-                      </Box>
+                            列印此頁
+                          </Box>
+                        </Box>
+                      </Flex>
                     </Stack>
-                  </GridItem>
-                </Grid>
-              </Box>
-              <Box
-                w={{ base: "100%", md: "310px" }}
-                px={{ base: "10px", md: 0 }}
-              >
-                <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
-                  <Box>
-                    <Text fontWeight={700} mb={2}>
-                      描述
-                    </Text>
-                    <Text as="p" fontSize={"14px"}>
-                      {detail?.remark}
-                    </Text>
-                  </Box>
-                  <Divider my={4} />
-                  <Stack direction={"column"} spacing={4} fontSize="14px">
-                    <Flex align="center" gap={2} alignItems="flex-start">
-                      <Box w={"20px"}>
-                        <Image
-                          src={"/images/app/time.svg"}
-                          alt={""}
-                          color="gray.500"
-                          fontSize={18}
-                          minW={"18px"}
-                        />
-                      </Box>
-                      <Box>
-                        <Box fontWeight={700}>計劃期限</Box>
-                        {detail?.startDate} - {detail?.endDate}{" "}
-                      </Box>
-                    </Flex>
 
-                    <Flex align="center" gap={2}>
-                      <Box w={"20px"} pl={"4px"}>
-                        <Image
-                          src={"/images/app/bookmark-active.svg"}
-                          alt={""}
-                          fontSize={18}
-                          maxW={"12px"}
-                        />
-                      </Box>
-                      <Box>
-                        <Box fontWeight={700} color="#0D8282">
-                          {detail?.bookmarkCount}人關注中
-                        </Box>
-                      </Box>
-                    </Flex>
-
-                    {/* <Flex
-                      align="center"
-                      gap={2}
-                      d={{ base: "none", lg: "flex" }}
-                    >
-                      <Box w={"20px"} pl={"4px"}>
-                        <Image
-                          src={"/images/app/print.svg"}
-                          alt={""}
-                          fontSize={18}
-                          maxW={"13px"}
-                        />
-                      </Box>
-                      <Box>
-                        <Box fontWeight={700} color="#0D8282">
-                          列印此頁
-                        </Box>
-                      </Box>
-                    </Flex> */}
-                  </Stack>
-
-                  <Flex gap={2} direction={"column"} mt={10}>
-                    {/* <Button
+                    <Flex gap={2} direction={"column"} mt={10}>
+                      {/* <Button
                       borderRadius="20px"
                       w={"100%"}
                       variant="outline"
@@ -663,7 +758,7 @@ const Project = ({ page, api: { organizations } }) => {
                         "registration_label"
                       )}
                     </Button> */}
-                    {/* {detail?.registerUrl && (
+                      {/* {detail?.registerUrl && (
                       <a
                         href={`${detail?.registerUrl}`}
                         target="_blank"
@@ -687,7 +782,7 @@ const Project = ({ page, api: { organizations } }) => {
                       </a>
                     )} */}
 
-                    {/* {detail?.contactNumber && (
+                      {/* {detail?.contactNumber && (
                       <a href={`tel:${detail?.contactNumber}`}>
                         <Button
                           borderRadius="20px"
@@ -706,13 +801,14 @@ const Project = ({ page, api: { organizations } }) => {
                         </Button>
                       </a>
                     )} */}
-                  </Flex>
+                    </Flex>
+                  </Box>
                 </Box>
-              </Box>
-            </Flex>
-          </Container>
-        </Box>
-      </VStack>
+              </Flex>
+            </Container>
+          </Box>
+        </VStack>
+      </Box>
     </>
   );
 };
