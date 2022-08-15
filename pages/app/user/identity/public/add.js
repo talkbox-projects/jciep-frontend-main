@@ -64,7 +64,7 @@ const customStyles = {
     border: "none",
     borderBottom: "1px solid #EFEFEF",
     overflow: "visible",
-  })
+  }),
 };
 
 const labelStyles = {
@@ -76,6 +76,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
   const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState([]);
   const [step, setStep] = useState("step1");
+  const [errorMsg, setErrorMsg] = useState("");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [submitInvitation, setSubmitInvitation] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
@@ -92,7 +93,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
     setError,
     getValues,
   } = useForm();
-  
 
   const watchFields = watch(
     [
@@ -130,13 +130,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
     }
   };
 
-
   const handlePostData = async (input, invitationCode) => {
     // setDebug({
     //   input: input,
     //   invitationCode: invitationCode
     // })
-    setSubmitInvitation(false)
+    setSubmitInvitation(false);
     try {
       const mutation = gql`
         mutation IdentityCreate($input: IdentityCreateInput!) {
@@ -149,9 +148,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
         input,
       });
       if (data && data.IdentityCreate) {
-
         setIdentityId(data.IdentityCreate?.id);
-        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, { path: "/" });
+        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, {
+          path: "/",
+        });
 
         if (invitationCode) {
           await OrganizationMemberJoin({
@@ -164,13 +164,16 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
         );
       }
     } catch (e) {
-      console.error(e);
+      setErrorMsg(wordExtractor(
+        page?.content?.wordings,
+        "general_error_message"
+      ))
     }
   };
 
   const handleSubmitInvitation = async (formState) => {
     setError("invitationCode", {});
-    setSubmitInvitation(true)
+    setSubmitInvitation(true);
     const isValid = await OrganizationInvitationCodeValidity({
       invitationCode: getValues("invitationCode"),
       organizationType: "ngo",
@@ -183,10 +186,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
           "invitation_code_error_message"
         ),
       });
-      setSubmitInvitation(false)
+      setSubmitInvitation(false);
       return;
     }
-    setSubmitInvitation(false)
+    setSubmitInvitation(false);
     handlePostData(formState, getValues("invitationCode"));
   };
 
@@ -204,14 +207,18 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
       });
 
       if (data && data.IdentityCreate) {
-
         setIdentityId(data.IdentityCreate?.id);
-        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, { path: "/" });
+        nookies.set(null, "jciep-identityId", data.IdentityCreate?.id, {
+          path: "/",
+        });
 
         router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }
     } catch (e) {
-      console.error(e);
+      setErrorMsg(wordExtractor(
+        page?.content?.wordings,
+        "general_error_message"
+      ))
     }
   };
 
@@ -310,6 +317,15 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           height="48px"
                           width="117px"
                           onClick={() => setShowSelectCentre(true)}
+                          _focus={{ boxShadow: "none" }}
+                          _hover={{
+                            backgroundColor: showSelectCentre
+                              ? "#F6D644"
+                              : "transparent",
+                            border: `2px solid ${
+                              showSelectCentre ? "#F6D644" : "#999999"
+                            }`,
+                          }}
                         >
                           {
                             page?.content?.form?.createOrganization?.options[0]
@@ -333,6 +349,8 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                       </Flex>
                     </FormControl>
                   </GridItem>
+
+                  {errorMsg && (<Box color="red">{errorMsg}</Box>)}
 
                   {/* <GridItem colSpan={{ base: 2 }}>
                   <div>
@@ -362,12 +380,17 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                                 page?.content?.wordings,
                                 "select_organization_placeholder"
                               )}
-                              options={([...organizations, ...organizations, ...organizations, ...organizations] ?? []).map(
-                                ({ chineseCompanyName, id }) => ({
-                                  label: chineseCompanyName,
-                                  value: id,
-                                })
-                              )}
+                              options={(
+                                [
+                                  ...organizations,
+                                  ...organizations,
+                                  ...organizations,
+                                  ...organizations,
+                                ] ?? []
+                              ).map(({ chineseCompanyName, id }) => ({
+                                label: chineseCompanyName,
+                                value: id,
+                              }))}
                               onChange={(data) => {
                                 const organization = organizations.find(
                                   (d) => d.id === data.value
@@ -883,13 +906,22 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                                     isActive ? "#F6D644" : "transparent"
                                   }
                                   border={`2px solid ${
-                                    isActive ? "#FFFFFF" : "#999999"
+                                    isActive ? "#F6D644" : "#999999"
                                   }`}
                                   height="38px"
                                   width="117px"
                                   onClick={() => {
                                     setValue("is_disability", d.value);
                                     setValue("pwd_type", []);
+                                  }}
+                                  _focus={{ boxShadow: "none" }}
+                                  _hover={{
+                                    backgroundColor: isActive
+                                      ? "#F6D644"
+                                      : "transparent",
+                                    border: `2px solid ${
+                                      isActive ? "#F6D644" : "#999999"
+                                    }`,
                                   }}
                                 >
                                   {d.label}
@@ -1138,7 +1170,9 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                   >
                     {page?.content?.form?.terms?.text}{" "}
                     <span
-                      onClick={() => handleOpenWebView(page?.content?.form?.terms?.url)}
+                      onClick={() =>
+                        handleOpenWebView(page?.content?.form?.terms?.url)
+                      }
                     >
                       {" "}
                       {page?.content?.form?.terms?.link}{" "}

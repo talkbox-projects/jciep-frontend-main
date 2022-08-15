@@ -100,6 +100,31 @@ const OrganizationNgoAdd = ({ page }) => {
     setFiles(newFiles);
   };
 
+  const handleOpenWebView = (url) => {
+    const json = {
+      name: "openWebView",
+      options: {
+        callback: "openWebViewHandler",
+        params: {
+          value: url.replace(" ", ""),
+          type: "external",
+          isRedirect: false,
+        },
+      },
+    };
+
+    window.WebContext = {};
+    window.WebContext.openWebViewHandler = (response) => {
+      if (!response) {
+        alert("response.result null");
+      }
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
   const onFormSubmit = async ({
     chineseOrganizationName,
     englishOrganizationName,
@@ -756,13 +781,14 @@ const OrganizationNgoAdd = ({ page }) => {
                 {...register("tncAccept", { required: true })}
               >
                 {page?.content?.form?.tncAccept?.text}{" "}
-                <Link
-                  target="_blank"
-                  href={page?.content?.form?.tncAccept?.url}
+                <span
+                  onClick={() =>
+                    handleOpenWebView(page?.content?.form?.tncAccept?.url)
+                  }
                 >
                   {" "}
                   {page?.content?.form?.tncAccept?.link}{" "}
-                </Link>
+                </span>
               </Checkbox>
               <FormHelperText>
                 {errors?.tncAccept?.type === "required" && (
