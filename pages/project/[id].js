@@ -316,8 +316,6 @@ const Project = ({ page }) => {
     }
   };
 
-  console.log("detail-", detail);
-
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
@@ -333,16 +331,19 @@ const Project = ({ page }) => {
         <Box bg="#fafafa" pb={12}>
           <Container
             position={"relative"}
-            mt={{ base: "-140px", md: "-360px", lg: "-280px" }}
+            mt={{ base: "-192px", md: "-360px", lg: "-280px" }}
             pb={8}
+            px={{ base: 0, md: "15px" }}
           >
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
-              <Box flex={1}>
-                <BannerSection
-                  name={detail?.name}
-                  tags={detail?.tags}
-                  url={`${detail?.banner?.file?.url}`}
-                />
+              <Box flex={1} px={{ base: "10px", md: 0 }}>
+                <Box mx={{ base: "-10px", md: 0 }}>
+                  <BannerSection
+                    name={detail?.name}
+                    tags={detail?.tags}
+                    url={`${detail?.banner?.file?.url}`}
+                  />
+                </Box>
                 <Grid
                   templateColumns={{
                     base: "repeat(1, 1fr)",
@@ -543,7 +544,7 @@ const Project = ({ page }) => {
 
                           <Grid
                             templateColumns={{
-                              base: "repeat(3, 1fr)",
+                              base: "repeat(2, 1fr)",
                             }}
                             gap={2}
                           >
@@ -557,7 +558,10 @@ const Project = ({ page }) => {
                   </GridItem>
                 </Grid>
               </Box>
-              <Box w={{ base: "100%", md: "310px" }}>
+              <Box
+                w={{ base: "100%", md: "310px" }}
+                px={{ base: "10px", md: 0 }}
+              >
                 <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
                   <Box>
                     <Text fontWeight={700} mb={2}>
@@ -635,7 +639,7 @@ const Project = ({ page }) => {
                         "registration_label"
                       )}
                     </Button> */}
-                    {detail?.registerUrl && (
+                    {/* {detail?.registerUrl && (
                       <a
                         href={`${detail?.registerUrl}`}
                         target="_blank"
@@ -657,9 +661,9 @@ const Project = ({ page }) => {
                           )}
                         </Button>
                       </a>
-                    )}
+                    )} */}
 
-                    {detail?.contactNumber && (
+                    {/* {detail?.contactNumber && (
                       <a href={`tel:${detail?.contactNumber}`}>
                         <Button
                           borderRadius="20px"
@@ -677,7 +681,7 @@ const Project = ({ page }) => {
                           )}
                         </Button>
                       </a>
-                    )}
+                    )} */}
                   </Flex>
                 </Box>
               </Box>
@@ -693,12 +697,12 @@ const BannerSection = ({ tags, url, name }) => {
   return (
     <Box
       bgImage={`url(${url})`}
-      h={{ base: "360px" }}
+      h={{ base: "320px", md: "360px" }}
       w={"100%"}
       bgSize={{ base: "cover" }}
       bgPosition={"center center"}
       position={"relative"}
-      borderRadius={"15px"}
+      borderRadius={{ base: "0px", md: "15px" }}
       mb={"15px"}
       overflow={"hidden"}
     >
