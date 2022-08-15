@@ -63,7 +63,8 @@ const customStyles = {
     borderRadius: "0px",
     border: "none",
     borderBottom: "1px solid #EFEFEF",
-  }),
+    overflow: "visible",
+  })
 };
 
 const labelStyles = {
@@ -361,7 +362,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                                 page?.content?.wordings,
                                 "select_organization_placeholder"
                               )}
-                              options={(organizations ?? []).map(
+                              options={([...organizations, ...organizations, ...organizations, ...organizations] ?? []).map(
                                 ({ chineseCompanyName, id }) => ({
                                   label: chineseCompanyName,
                                   value: id,
@@ -376,6 +377,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                               components={{
                                 IndicatorSeparator: () => null,
                               }}
+                              maxMenuHeight={200}
                             />
                           )}
                         />
@@ -596,6 +598,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
+                          maxMenuHeight={200}
                         />
                       )}
                     />
@@ -637,6 +640,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
+                          maxMenuHeight={200}
                         />
                       )}
                     />
@@ -681,6 +685,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
+                          maxMenuHeight={200}
                         />
                       )}
                     />
@@ -783,6 +788,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
+                          maxMenuHeight={200}
                         />
                       )}
                     />
@@ -1071,6 +1077,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
+                          maxMenuHeight={200}
                         />
                       )}
                     />
