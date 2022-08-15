@@ -20,6 +20,7 @@ import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
+import organizationSearch from "../../utils/api/OrganizationSearch";
 import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
@@ -36,14 +37,21 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true,
+        }),
+      },
       ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
 
-const Project = ({ page }) => {
+const Project = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [organization, setOrganization] = useState(null)
 
   useEffect(() => {
     const { query } = router;
@@ -53,6 +61,20 @@ const Project = ({ page }) => {
     }
     fetchData();
   }, [router]);
+
+  useEffect(() => {
+    const organizationId = detail?.createdBy
+    if(!organizationId){
+        setOrganization(null)
+        return
+    }
+    console.log('organizations', organizations)
+    console.log('organizationId-',organizationId)
+
+    const result = organizations?.find((d) => d.id === organizationId);
+
+    setOrganization(result)
+  }, [detail, organizations]);
 
   const RenderResourceListDetail = ({ data }) => {
     if (!data?.type) {
@@ -316,6 +338,8 @@ const Project = ({ page }) => {
     }
   };
 
+  console.log('detail-',detail)
+
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
@@ -401,7 +425,7 @@ const Project = ({ page }) => {
 
                           <Flex gap={2} direction="column">
                             <Box fontWeight={700}>發起機構</Box>
-                            <Text>{detail?.initiatingOrganizationName}</Text>
+                            <Text>{detail?.organization??'-'}</Text>
                           </Flex>
                         </Stack>
                       </Box>

@@ -706,9 +706,9 @@ const OrganizationNgoAdd = ({ page }) => {
                 <Link
                   target="_blank"
                   href={page?.content?.form?.tncAccept?.url}
+                  style={{textDecoration: 'underline'}}
                 >
-                  {" "}
-                  {page?.content?.form?.tncAccept?.link}{" "}
+                  {page?.content?.form?.tncAccept?.link}
                 </Link>
               </Checkbox>
               <FormHelperText>

@@ -1170,12 +1170,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                   >
                     {page?.content?.form?.terms?.text}{" "}
                     <span
+                      style={{textDecoration: 'underline'}}
                       onClick={() =>
                         handleOpenWebView(page?.content?.form?.terms?.url)
                       }
                     >
-                      {" "}
-                      {page?.content?.form?.terms?.link}{" "}
+                      {page?.content?.form?.terms?.link}
                     </span>
                   </Checkbox>
                   <FormHelperText>

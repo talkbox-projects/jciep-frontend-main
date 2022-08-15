@@ -59,6 +59,7 @@ export const getServerSideProps = async (context) => {
 
 const OrganizationNgoAdd = ({ page }) => {
   const router = useRouter();
+  const [debugResult, setDebugResult] = useState("");
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState(false);
   const { id } = router.query;
@@ -85,13 +86,13 @@ const OrganizationNgoAdd = ({ page }) => {
     }
   };
 
-  const onFileUpload = async (e) => {
-    let uploadedFiles = await e.target.files[0];
-    let previousFiles = files;
-    let newFiles = previousFiles.concat(uploadedFiles);
-    setFileError("");
-    setFiles(newFiles);
-  };
+  // const onFileUpload = async (e) => {
+  //   let uploadedFiles = await e.target.files[0];
+  //   let previousFiles = files;
+  //   let newFiles = previousFiles.concat(uploadedFiles);
+  //   setFileError("");
+  //   setFiles(newFiles);
+  // };
 
   const onRemoveImage = async (index) => {
     let previousFiles = files;
@@ -125,6 +126,88 @@ const OrganizationNgoAdd = ({ page }) => {
     }
   };
 
+  const FileUploadmutation = gql`
+  mutation FileUpload($file: FileUpload!) {
+    FileUpload(files: $file) {
+      id
+      url
+      contentType
+      fileSize
+    }
+  }`;
+
+  const dataURLtoFile = (dataurl, filename) => {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  };
+
+  const handlePickFile = () => {
+    window.WebContext = {};
+    window.WebContext.pickFileHandler = async (response) => {
+      const fileInfo = JSON.parse(response);
+      if (!fileInfo.result) {
+        setDebugResult(
+          JSON.stringify(
+            {
+              status: "response not found",
+            },
+            null,
+            4
+          )
+        );
+      } else {
+        let file = dataURLtoFile(
+          fileInfo.result?.data[0]?.data,
+          fileInfo.result?.data[0]?.name
+        );
+        let imageUploadData;
+
+        if (file) {
+          imageUploadData = await getGraphQLClient().request(
+            FileUploadmutation,
+            {
+              file: file,
+            }
+          );
+
+          setFiles(files.concat(imageUploadData?.FileUpload?.[0]));
+        }
+      }
+    };
+
+    let json = {
+      name: "pickFile",
+      options: {
+        callback: "pickFileHandler",
+        params: {
+          maxFileSize: 4194304,
+          maxFileCount: 1,
+          minFileCount: 1,
+          mimeType: "image/*",
+        },
+      },
+    };
+
+    if (window && window.AppContext && window.AppContext.postMessage) {
+      window.AppContext.postMessage(JSON.stringify(json));
+    }
+  };
+
+
+  // const handlePickFileDemo = () => {
+  //   const data =  { "id": "62f6091882cd2e001b093096", "url": "/api/assets/files/GP0OLY_Web_size.jpg", "contentType": "image/jpeg", "fileSize": 23446 }
+  //   setFiles(files.concat(data))
+  // }
+
   const onFormSubmit = async ({
     chineseOrganizationName,
     englishOrganizationName,
@@ -146,24 +229,6 @@ const OrganizationNgoAdd = ({ page }) => {
       if (validate()) {
         return;
       }
-
-      const FileUploadmutation = gql`
-        mutation FileUpload($file: FileUpload!) {
-          FileUpload(files: $file) {
-            id
-            url
-            contentType
-            fileSize
-          }
-        }
-      `;
-
-      let filesUploadData = await getGraphQLClient().request(
-        FileUploadmutation,
-        {
-          file: files,
-        }
-      );
 
       const mutation = gql`
         mutation OrganizationSubmissionCreate(
@@ -196,7 +261,7 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: filesUploadData?.FileUpload,
+          businessRegistration: files,
         },
       });
 
@@ -256,9 +321,10 @@ const OrganizationNgoAdd = ({ page }) => {
                       marginRight="10px"
                       marginBottom="10px"
                       borderRadius="15px"
+                      onClick={()=>handlePickFile()}
                     >
                       <FormLabel height="100%" width="100%" cursor="pointer">
-                        <Input
+                        {/* <Input
                           type="file"
                           multiple={true}
                           display="none"
@@ -266,7 +332,7 @@ const OrganizationNgoAdd = ({ page }) => {
                           onClick={(event) =>
                             (event.currentTarget.value = null)
                           }
-                        />
+                        /> */}
                         <Text
                           height="100%"
                           display="flex"
@@ -304,10 +370,9 @@ const OrganizationNgoAdd = ({ page }) => {
                     </Box>
 
                     {files?.map((file, index) => {
-                      let url = URL.createObjectURL(file);
                       return (
                         <Box
-                          key={url + index}
+                          key={file?.url + index}
                           w={["100%"]}
                           h={["250px", "210px", "180px"]}
                           display="inline-block"
@@ -322,7 +387,7 @@ const OrganizationNgoAdd = ({ page }) => {
                               display="inline-block"
                               border="1px solid lightgrey"
                               objectFit="cover"
-                              src={url}
+                              src={file?.url}
                             ></Image>
                             <IconButton
                               onClick={(e) => {
@@ -782,12 +847,12 @@ const OrganizationNgoAdd = ({ page }) => {
               >
                 {page?.content?.form?.tncAccept?.text}{" "}
                 <span
+                  style={{ textDecoration: "underline" }}
                   onClick={() =>
                     handleOpenWebView(page?.content?.form?.tncAccept?.url)
                   }
                 >
-                  {" "}
-                  {page?.content?.form?.tncAccept?.link}{" "}
+                  {page?.content?.form?.tncAccept?.link}
                 </span>
               </Checkbox>
               <FormHelperText>
@@ -826,6 +891,7 @@ const OrganizationNgoAdd = ({ page }) => {
                 </Button>
               </FormControl>
             </Box>
+            {debugResult && (<Box>{debugResult}</Box>)}
           </VStack>
         </Box>
       </Box>
