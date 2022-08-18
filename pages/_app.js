@@ -98,10 +98,10 @@ const theme = extendTheme({
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter()
-    // useEffect(() => {
-    //   const gaCode = "G-PXJQB5QF90";
-    //   init(publicRuntimeConfig.GA4_CODE || gaCode);
-    // }, []);
+    useEffect(() => {
+      const gaCode = "G-PXJQB5QF90";
+      init(publicRuntimeConfig.GA4_CODE || gaCode);
+    }, []);
 
   return (
     <SimpleReactLightbox>

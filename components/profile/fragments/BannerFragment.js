@@ -40,7 +40,7 @@ const BannerFragment = ({
 
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
-  const RenderBanner = (entity) => {
+  const RenderBanner = ({entity}) => {
     if (!entity?.bannerMedia?.videoUrl && !entity?.bannerMedia?.file?.url) {
       return (
         <AspectRatio ratio={16 / 9}>
@@ -93,7 +93,7 @@ const BannerFragment = ({
           {wordExtractor(page?.content?.wordings, "add_banner_media_label")}
         </Button>
       )}
-      <RenderBanner />
+      <RenderBanner entity={entity}/>
       <Box position={"relative"}>
         <Avatar
           {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
