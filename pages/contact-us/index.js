@@ -109,9 +109,11 @@ const ContactUs = ({ page }) => {
             >
               <SimpleGrid columns={[1, 1, 2, 2]} spacing={4}>
                 <Box>
+                  <a href={page?.content?.contactSection?.contactInfo?.logo_link??'#'} target="_blank" rel="noreferrer">
                   <Image alt={page?.content?.contactSection?.contactInfo?.title}
                     src={page?.content?.contactSection?.contactInfo?.logo}
                   />
+                  </a>
                   <Text mt={4}>
                     {page?.content?.contactSection?.contactInfo?.title}
                   </Text>

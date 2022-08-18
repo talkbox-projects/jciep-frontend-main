@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   AspectRatio,
   Avatar,
@@ -10,11 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useDisclosureWithParams } from "../../../store/AppStore";
+import { useDisclosureWithParams, useAppContext } from "../../../store/AppStore";
 import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
 import ProfilePicUploadModal from "./ProfilePicUploadModal";
+import { useRouter } from "next/router";
 
 const BannerFragment = ({
   enableBannerMedia = true,
@@ -24,6 +25,19 @@ const BannerFragment = ({
   profilePicPropName = "profilePic",
   editable = true,
 }) => {
+  const router = useRouter()
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) {
+      setTimeout(() => {
+        document.querySelector(`[data-tag='${hash}']`).scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
+      }, 300);
+    }
+  }, [router]);
+
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
   const RenderBanner = (entity) => {
@@ -31,8 +45,7 @@ const BannerFragment = ({
       return (
         <AspectRatio ratio={16 / 9}>
           <Box fontSize={12} px={2}>
-            {/* 可擺放相片或插入YouTube擺放自己的作品或與個人興趣、成就相關的相片/影片，注意每張相片不能大於4MB */}
-            {wordExtractor(page?.content?.wordings, "banner_placeholder")}
+            {editable && (wordExtractor(page?.content?.wordings, "banner_placeholder"))}
           </Box>
         </AspectRatio>
       );
@@ -97,12 +110,11 @@ const BannerFragment = ({
           objectFit="contain"
           src={entity?.[profilePicPropName]?.url}
         >
-          <Box position={"absolute"} bottom={0} right={-6} fontSize={24}>
+          {editable && (<Box position={"absolute"} bottom={0} right={-6} fontSize={24}>
             <Tooltip  label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} aria-label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} color={'gray.100'}>
-            {/** 建議使用較為端莊的相片，注意每張相片不能大於4MB */}
             <InfoOutlineIcon color='gray.500' />
             </Tooltip>
-          </Box>
+          </Box>)}
         </Avatar>
       </Box>
       <BannerMediaUploadModal

@@ -570,6 +570,13 @@ const JobOpportunities = ({ page, enums }) => {
                     page={page}
                   />
                 </GridItem>
+                <GridItem colSpan={2} align="right">
+                    <Box cursor="pointer" onClick={() => {
+                      setDistrict([]);
+                      setJobInterested([]);
+                      router.push(`/job-opportunities`)
+                    }}><Text lineHeight="48px">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
+                </GridItem>
               </Grid>
             </Box>
 
@@ -646,6 +653,13 @@ const JobOpportunities = ({ page, enums }) => {
                 page={page}
               />
             </GridItem>
+            <GridItem colSpan={4} align="center">
+                    <Box cursor="pointer" onClick={() => {
+                      setDistrict([]);
+                      setJobInterested([]);
+                      router.push(`/job-opportunities`)
+                    }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
+                </GridItem>
           </Grid>
         </Box>
         {router.query.jobId ? (

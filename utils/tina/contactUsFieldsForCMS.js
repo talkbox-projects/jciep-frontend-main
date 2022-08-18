@@ -99,6 +99,11 @@ export default [
             component: "text",
           },
           {
+            name: "logo_link",
+            label: "連結 Link",
+            component: "text",
+          },
+          {
             name: "facebookPage",
             label: "Facebook Page",
             component: "text",
