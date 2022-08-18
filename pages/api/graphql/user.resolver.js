@@ -10,6 +10,7 @@ import facebook from "../services/facebook";
 import google from "../services/google";
 import { Types } from "mongoose";
 import send from "./email/send";
+import {sendResetPassword} from "./email/send"
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
@@ -601,10 +602,10 @@ export default {
           meta: { type: "resetPassword" },
         });
 
-        await send(
+        await sendResetPassword(
           email,
           {
-            description: emailVerify.otp,
+            description: `請輸入以下驗證碼以繼續<br/>${emailVerify.otp}`,
             button_text: "重設密碼",
           },
           [

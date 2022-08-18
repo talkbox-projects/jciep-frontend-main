@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import html from "./templates/activation.js";
+import htmlResetPasswordTemplate from "./templates/resetPassword.js";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
@@ -48,6 +49,19 @@ const send = (receiver, params, attachments) => {
     Object.entries(params).reduce(
       (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
       html
+    ),
+    attachments
+  );
+};
+
+export const sendResetPassword = (receiver, params, attachments) => {
+  const subject = "《賽馬會共融・知行計劃》重設密碼";
+  sendMail(
+    receiver,
+    subject,
+    Object.entries(params).reduce(
+      (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
+      htmlResetPasswordTemplate
     ),
     attachments
   );
