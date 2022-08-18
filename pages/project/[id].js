@@ -138,11 +138,15 @@ const Project = ({ page, api: { organizations } }) => {
     }
 
     if (data?.type === "manpower") {
-      const tags = tags
+      const tags = tags;
       return (
         <Box>
           <Box>
-          {data?.tags?.map((d,i) => <Box color="#08A3A3" key={`${d}-${i}`} d={'inline-block'} pr={1}>#{d}</Box>)}
+            {data?.tags?.map((d, i) => (
+              <Box color="#08A3A3" key={`${d}-${i}`} d={"inline-block"} pr={1}>
+                #{d}
+              </Box>
+            ))}
           </Box>
           <Text
             as="h2"
@@ -173,7 +177,11 @@ const Project = ({ page, api: { organizations } }) => {
                       {d}
                     </Box>
                   ))} */}
-                  {data?.skills?.map((d,i) => <Box key={`${d}-${i}`} d={'inline-block'} pr={1}>{d}</Box>)}
+                  {data?.skills?.map((d, i) => (
+                    <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
+                      {d}
+                    </Box>
+                  ))}
                 </Box>
               </Flex>
             )}
@@ -407,14 +415,15 @@ const Project = ({ page, api: { organizations } }) => {
       default:
         return (
           <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
-            <Box
+            {/* <Box
               bgImage={`url(${data?.url})`}
               h={"110px"}
               w={"100%"}
               bgSize={{ base: "cover" }}
               bgPosition={"center center"}
               position={"relative"}
-            />
+            /> */}
+            <Image src={data?.url} width="100%" />
           </GridItem>
         );
     }
@@ -434,12 +443,6 @@ const Project = ({ page, api: { organizations } }) => {
 
   return (
     <>
-      {/* <iframe
-        id="currentPage"
-        src={"/project/62ca8ddb3c2778a748d96bb5"}
-        style={{ display: "none" }}
-        title="currentPage"
-      /> */}
       <Box id="section-to-print">
         <VStack spacing={0} align="stretch" w="100%">
           <Box bgColor="#F6D644" position="relative">
@@ -460,7 +463,7 @@ const Project = ({ page, api: { organizations } }) => {
             >
               <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
                 <Box flex={1} px={{ base: "10px", md: 0 }}>
-                  <Box mx={{ base: "-10px", md: 0 }}>
+                  <Box mx={{ base: "-10px", md: 0 }} className="print-banner-wrap">
                     <BannerSection
                       name={detail?.name}
                       tags={detail?.tags}
@@ -743,7 +746,9 @@ const Project = ({ page, api: { organizations } }) => {
                             fontWeight={700}
                             color="#0D8282"
                             cursor="pointer"
-                            onClick={() => window.print()}
+                            onClick={() => {
+                              window.print();
+                            }}
                           >
                             列印此頁
                           </Box>
@@ -767,16 +772,20 @@ const BannerSection = ({ tags, url, name, stockPhotoId }) => {
     `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`;
   return (
     <Box
-      bgImage={`url(${imageUrl})`}
       h={{ base: "320px", md: "360px" }}
       w={"100%"}
-      bgSize={{ base: "cover" }}
-      bgPosition={"center center"}
       position={"relative"}
       borderRadius={{ base: "0px", md: "15px" }}
       mb={"15px"}
       overflow={"hidden"}
+      className="print-banner"
     >
+      <Image
+        src={imageUrl}
+        width="100%"
+        height="100%"
+        borderRadius={{ base: "0px", md: "15px" }}
+      />
       <Box position={"absolute"} bottom={"30px"} left={"15px"} zIndex={2}>
         <Container>
           {tags?.map((d) => (
@@ -815,6 +824,7 @@ const BannerSection = ({ tags, url, name, stockPhotoId }) => {
         position={"absolute"}
         zIndex={1}
         bottom={0}
+        className="print-hidden"
       />
     </Box>
   );

@@ -2,7 +2,24 @@
     body{
       visibility: hidden !important;
     }
-    #section-to-print, #section-to-print{
+    #section-to-print{
       visibility: visible;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+    .print-banner-wrap{
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    .print-banner{
+      border-radius: 15px !important;
+      overflow: hidden !important;
+    }
+    .print-hidden{
+      visibility: hidden !important;
+      height: 0px !important;
     }
   }
