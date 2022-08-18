@@ -14,6 +14,7 @@ import "slick-carousel/slick/slick-theme.css";
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import SimpleReactLightbox from "simple-react-lightbox";
 import { init } from "../utils/ga";
+import '../print.css'
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -97,10 +98,10 @@ const theme = extendTheme({
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter()
-    useEffect(() => {
-      const gaCode = "G-PXJQB5QF90";
-      init(publicRuntimeConfig.GA4_CODE || gaCode);
-    }, []);
+    // useEffect(() => {
+    //   const gaCode = "G-PXJQB5QF90";
+    //   init(publicRuntimeConfig.GA4_CODE || gaCode);
+    // }, []);
 
   return (
     <SimpleReactLightbox>

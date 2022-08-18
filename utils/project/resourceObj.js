@@ -106,4 +106,23 @@ export const options = {
     other: "其他",
     all: "以上全部",
   },
+  district: {
+    "centralAndWestern": "中西區",
+    "eastern": "東區",
+    "southern": "南區",
+    "netwshamShuiPoork": "深水埗區",
+    "kowloonCity": "九龍城區",
+    "kwunTong": "觀塘區",
+    "wongTaiSin": "黃大仙區",
+    "yauTsimMong": "油尖旺區",
+    "islands": "離島區",
+    "kwaiTsing": "葵青區",
+    "north": "北區",
+    "saiKung": "西貢區",
+    "shaTin": "沙田區",
+    "taiPo": "大埔區",
+    "tsuenWan": "荃灣區",
+    "tuenMun": "屯門區",
+    "yuenLong": "元朗區"
+  }
 };

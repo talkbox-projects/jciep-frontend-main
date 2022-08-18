@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -18,11 +18,8 @@ import {
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
-import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import organizationSearch from "../../utils/api/OrganizationSearch";
-import { useAppContext } from "../../store/AppStore";
-import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getProjectDetail } from "../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
@@ -71,254 +68,260 @@ const Project = ({ page, api: { organizations } }) => {
     setOrganization(result);
   }, [detail, organizations]);
 
-  const RenderResourceListDetail = ({ data }) => {
+  const RenderResourceListDetail = useCallback(({ data }) => {
     if (!data?.type) {
       return <></>;
     }
 
-    switch (data?.type) {
-      case "venue":
-        return (
-          <Box>
-            <Flex color="#08A3A3" gap={2}>
-              <Box>#{data?.district}</Box>
-            </Flex>
+    if (data?.type === "venue") {
+      return (
+        <Box>
+          <Flex color="#08A3A3" gap={2}>
+            <Box>#{options["district"][data?.district]}</Box>
+          </Flex>
 
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              {data?.title}
-            </Text>
-            <Stack spacing={2} direction="column">
-              {data?.maxCapacity && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
-                </Flex>
-              )}
-              {data?.maxCapacity && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
-                </Flex>
-              )}
-              {data?.size && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.size}</Box>
-                </Flex>
-              )}
-              {data?.openingHours && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.openingHours}</Box>
-                </Flex>
-              )}
-              {data?.accessibilityRequirement && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>
-                    {data?.accessibilityRequirement}
-                  </Box>
-                </Flex>
-              )}
-            </Stack>
-          </Box>
-        );
-      case "manpower":
-        return (
-          <Box>
-            <Flex color="#08A3A3" gap={2}>
-              {data?.tags?.map((d, i) => (
-                <Box key={`${d}-${i}`}>#{d}</Box>
-              ))}
-            </Flex>
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              {data?.tasks}
-            </Text>
-            <Stack spacing={2} direction="column">
-              {data?.tasksDescription && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.tasksDescription}</Box>
-                </Flex>
-              )}
-              {data?.skills && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>
-                    {data?.skills?.map((d) => (
-                      <Box key={d} pr={1}>
-                        {d}
-                      </Box>
-                    ))}
-                  </Box>
-                </Flex>
-              )}
-              {data?.serviceNature && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>
-                    {options["serviceNature"][data?.serviceNature]}
-                  </Box>
-                </Flex>
-              )}
-            </Stack>
-          </Box>
-        );
-      case "expertise":
-        return (
-          <Box>
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              {data?.expertiseType &&
-                options["expertiseType"][data?.expertiseType]}
-            </Text>
-            <Stack spacing={2} direction="column">
-              {data?.description && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
-                </Flex>
-              )}
-            </Stack>
-          </Box>
-        );
-      case "network":
-        return (
-          <Box>
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              {data?.networkType && options["networkType"][data?.networkType]}
-            </Text>
-            <Stack spacing={2} direction="column">
-              {data?.description && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
-                </Flex>
-              )}
-            </Stack>
-          </Box>
-        );
-      case "other":
-        return (
-          <Box>
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              任何支援
-            </Text>
-            <Stack spacing={2} direction="column">
-              {data?.otherResourcesNeeded && (
-                <Flex gap={2} alignItems="center">
-                  <Box>
-                    <Image src={"/images/app/resource_click.svg"} alt={""} />
-                  </Box>
-                  <Box fontSize={{ base: "sm" }}>
-                    {data?.otherResourcesNeeded}
-                  </Box>
-                </Flex>
-              )}
-            </Stack>
-          </Box>
-        );
-      case "funding":
-        return (
-          <Box>
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-              pb={2}
-            >
-              需要資金
-            </Text>
-            <Stack spacing={2} direction="column">
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            {data?.title}
+          </Text>
+          <Stack spacing={2} direction="column">
+            {data?.maxCapacity && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
+              </Flex>
+            )}
+            {data?.maxCapacity && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
+              </Flex>
+            )}
+            {data?.size && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.size}</Box>
+              </Flex>
+            )}
+            {data?.openingHours && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.openingHours}</Box>
+              </Flex>
+            )}
+            {data?.accessibilityRequirement && (
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
                 <Box fontSize={{ base: "sm" }}>
-                  {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
+                  {data?.accessibilityRequirement}
                 </Box>
               </Flex>
-
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {data?.hasReceiveAnyFunding
-                    ? "沒有資金援助"
-                    : "有一些資金援助"}
-                </Box>
-              </Flex>
-              <Flex gap={2} alignItems="center">
-                <Box>總數(HKD)</Box>
-                <Box fontSize={{ base: "sm" }}>
-                  <Box>
-                    <b>{`${new Intl.NumberFormat("zh-HK").format(
-                      data?.items?.reduce(function (acc, obj) {
-                        return acc + obj.amount;
-                      }, 0)
-                    )}`}</b>
-                  </Box>
-                </Box>
-              </Flex>
-            </Stack>
-          </Box>
-        );
-
-      default:
-        return <Box></Box>;
+            )}
+          </Stack>
+        </Box>
+      );
     }
-  };
+
+    if (data?.type === "manpower") {
+      const tags = tags
+      return (
+        <Box>
+          <Box>
+          {data?.tags?.map((d,i) => <Box color="#08A3A3" key={`${d}-${i}`} d={'inline-block'} pr={1}>#{d}</Box>)}
+          </Box>
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            {data?.tasks}
+          </Text>
+          <Stack spacing={2} direction="column">
+            {data?.tasksDescripwtion && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.tasksDescription}</Box>
+              </Flex>
+            )}
+            {data?.skills && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>
+                  {/* {data?.skills?.map((d) => (
+                    <Box key={d} pr={1}>
+                      {d}
+                    </Box>
+                  ))} */}
+                  {data?.skills?.map((d,i) => <Box key={`${d}-${i}`} d={'inline-block'} pr={1}>{d}</Box>)}
+                </Box>
+              </Flex>
+            )}
+            {data?.serviceNature && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>
+                  {options["serviceNature"][data?.serviceNature]}
+                </Box>
+              </Flex>
+            )}
+          </Stack>
+        </Box>
+      );
+    }
+
+    if (data?.type === "expertise") {
+      return (
+        <Box>
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            {data?.expertiseType &&
+              options["expertiseType"][data?.expertiseType]}
+          </Text>
+          <Stack spacing={2} direction="column">
+            {data?.description && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+              </Flex>
+            )}
+          </Stack>
+        </Box>
+      );
+    }
+
+    if (data?.type === "network") {
+      return (
+        <Box>
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            {data?.networkType && options["networkType"][data?.networkType]}
+          </Text>
+          <Stack spacing={2} direction="column">
+            {data?.description && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+              </Flex>
+            )}
+          </Stack>
+        </Box>
+      );
+    }
+
+    if (data?.type === "other") {
+      return (
+        <Box>
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            任何支援
+          </Text>
+          <Stack spacing={2} direction="column">
+            {data?.otherResourcesNeeded && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <Box fontSize={{ base: "sm" }}>
+                  {data?.otherResourcesNeeded}
+                </Box>
+              </Flex>
+            )}
+          </Stack>
+        </Box>
+      );
+    }
+
+    if (data?.type === "funding") {
+      return (
+        <Box>
+          <Text
+            as="h2"
+            color="#1E1E1E"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={700}
+            pb={2}
+          >
+            需要資金
+          </Text>
+          <Stack spacing={2} direction="column">
+            <Flex gap={2} alignItems="center">
+              <Box>
+                <Image src={"/images/app/resource_click.svg"} alt={""} />
+              </Box>
+              <Box fontSize={{ base: "sm" }}>
+                {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
+              </Box>
+            </Flex>
+
+            <Flex gap={2} alignItems="center">
+              <Box>
+                <Image src={"/images/app/resource_click.svg"} alt={""} />
+              </Box>
+              <Box fontSize={{ base: "sm" }}>
+                {data?.hasReceiveAnyFunding ? "沒有資金援助" : "有一些資金援助"}
+              </Box>
+            </Flex>
+            <Flex gap={2} alignItems="center">
+              <Box>總數(HKD)</Box>
+              <Box fontSize={{ base: "sm" }}>
+                <Box>
+                  <b>{`${new Intl.NumberFormat("zh-HK").format(
+                    data?.items?.reduce(function (acc, obj) {
+                      return acc + obj.amount;
+                    }, 0)
+                  )}`}</b>
+                </Box>
+              </Box>
+            </Flex>
+          </Stack>
+        </Box>
+      );
+    }
+
+    return <></>;
+  }, []);
 
   const resourceData = {
     venue: {
@@ -437,7 +440,7 @@ const Project = ({ page, api: { organizations } }) => {
         style={{ display: "none" }}
         title="currentPage"
       /> */}
-      <Box>
+      <Box id="section-to-print">
         <VStack spacing={0} align="stretch" w="100%">
           <Box bgColor="#F6D644" position="relative">
             <Box position="absolute" bottom={0} w="100%">
@@ -610,7 +613,9 @@ const Project = ({ page, api: { organizations } }) => {
                                       </Box>
 
                                       <Box py={"10px"} px={"15px"}>
-                                        <RenderResourceListDetail data={d} />
+                                        {d?.type && (
+                                          <RenderResourceListDetail data={d} />
+                                        )}
 
                                         <Divider my={4} />
 
@@ -745,64 +750,6 @@ const Project = ({ page, api: { organizations } }) => {
                         </Box>
                       </Flex>
                     </Stack>
-
-                    <Flex gap={2} direction={"column"} mt={10}>
-                      {/* <Button
-                      borderRadius="20px"
-                      w={"100%"}
-                      variant="outline"
-                      borderColor={"gray.200"}
-                      _hover={{ borderColor: "#F6D644", bgColor: "#F6D644" }}
-                    >
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "registration_label"
-                      )}
-                    </Button> */}
-                      {/* {detail?.registerUrl && (
-                      <a
-                        href={`${detail?.registerUrl}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button
-                          borderRadius="20px"
-                          w={"100%"}
-                          variant="outline"
-                          borderColor={"gray.200"}
-                          _hover={{
-                            borderColor: "#F6D644",
-                            bgColor: "#F6D644",
-                          }}
-                        >
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "online_registration_label"
-                          )}
-                        </Button>
-                      </a>
-                    )} */}
-
-                      {/* {detail?.contactNumber && (
-                      <a href={`tel:${detail?.contactNumber}`}>
-                        <Button
-                          borderRadius="20px"
-                          w={"100%"}
-                          variant="outline"
-                          borderColor={"gray.200"}
-                          _hover={{
-                            borderColor: "#F6D644",
-                            bgColor: "#F6D644",
-                          }}
-                        >
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "contact_event_manager_label"
-                          )}
-                        </Button>
-                      </a>
-                    )} */}
-                    </Flex>
                   </Box>
                 </Box>
               </Flex>
@@ -815,7 +762,9 @@ const Project = ({ page, api: { organizations } }) => {
 };
 
 const BannerSection = ({ tags, url, name, stockPhotoId }) => {
-  const imageUrl = url ?? `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`
+  const imageUrl =
+    url ??
+    `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`;
   return (
     <Box
       bgImage={`url(${imageUrl})`}
