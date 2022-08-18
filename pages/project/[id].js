@@ -14,6 +14,16 @@ import {
   Flex,
   Image,
   Center,
+
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
+
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
@@ -49,6 +59,8 @@ const Project = ({ page, api: { organizations } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
+  const [popupImage, setPopupImage] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
     const { query } = router;
@@ -414,15 +426,10 @@ const Project = ({ page, api: { organizations } }) => {
 
       default:
         return (
-          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
-            {/* <Box
-              bgImage={`url(${data?.url})`}
-              h={"110px"}
-              w={"100%"}
-              bgSize={{ base: "cover" }}
-              bgPosition={"center center"}
-              position={"relative"}
-            /> */}
+          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"} cursor="pointer" onClick={() => {
+            onOpen()
+            setPopupImage(data?.url)
+          }}>
             <Image src={data?.url} width="100%" />
           </GridItem>
         );
@@ -486,6 +493,7 @@ const Project = ({ page, api: { organizations } }) => {
                           borderRadius={"10px"}
                           overflow={"hidden"}
                           boxShadow="xl"
+                          className="print-box"
                         >
                           <Stack spacing={4} direction="column">
                             <Flex gap={2} direction="column">
@@ -553,6 +561,7 @@ const Project = ({ page, api: { organizations } }) => {
                           borderRadius={"10px"}
                           overflow={"hidden"}
                           boxShadow="xl"
+                          className="print-box"
                         >
                           <Stack spacing={4} direction="column">
                             <Flex gap={2} direction="column">
@@ -584,6 +593,7 @@ const Project = ({ page, api: { organizations } }) => {
                                       bgColor={"#FFF"}
                                       borderRadius={"10px"}
                                       overflow="hidden"
+                                      className="print-box"
                                     >
                                       <Box
                                         h={2}
@@ -654,6 +664,7 @@ const Project = ({ page, api: { organizations } }) => {
                           borderRadius={"10px"}
                           overflow={"hidden"}
                           boxShadow="xl"
+                          className="print-box"
                         >
                           <Stack spacing={4} direction="column">
                             <Flex gap={2} direction="column">
@@ -762,6 +773,25 @@ const Project = ({ page, api: { organizations } }) => {
           </Box>
         </VStack>
       </Box>
+      <Modal 
+        isOpen={isOpen} 
+        isCentered
+        onClose={()=>{
+        onClose(
+          setPopupImage("")
+        )
+      }}>
+        <ModalOverlay />
+        <ModalContent maxW={720} w="95%">
+          <ModalCloseButton />
+          <ModalBody>
+          <Box px={'12px'} py={'32px'}>
+          {popupImage && (<Image src={popupImage} width="100%" />)}
+          </Box>
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
     </>
   );
 };

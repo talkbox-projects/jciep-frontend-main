@@ -18,6 +18,10 @@
       border-radius: 15px !important;
       overflow: hidden !important;
     }
+    .print-box{
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+    }
     .print-hidden{
       visibility: hidden !important;
       height: 0px !important;
