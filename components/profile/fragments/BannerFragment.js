@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   AspectRatio,
   Avatar,
@@ -6,11 +6,20 @@ import {
   Image,
   VStack,
   Box,
-  Tooltip
+  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  IconButton,
 } from "@chakra-ui/react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
-import { AiOutlinePlus } from "react-icons/ai";
-import { useDisclosureWithParams, useAppContext } from "../../../store/AppStore";
+import { AiOutlinePlus, AiOutlineInfoCircle } from "react-icons/ai";
+import {
+  useDisclosureWithParams,
+  useAppContext,
+} from "../../../store/AppStore";
 import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
 import BannerMediaUploadModal from "./BannerMediaUploadModal";
@@ -25,7 +34,7 @@ const BannerFragment = ({
   profilePicPropName = "profilePic",
   editable = true,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (hash) {
@@ -40,13 +49,26 @@ const BannerFragment = ({
 
   const bannerMediaDisclosure = useDisclosureWithParams();
   const profilePicDisclosure = useDisclosureWithParams();
-  const RenderBanner = ({entity}) => {
+  const RenderBanner = ({ entity }) => {
     if (!entity?.bannerMedia?.videoUrl && !entity?.bannerMedia?.file?.url) {
       return (
         <AspectRatio ratio={16 / 9}>
-          <Box fontSize={12} px={2}>
-            {editable && (wordExtractor(page?.content?.wordings, "banner_placeholder"))}
-          </Box>
+          {editable ? (
+            <Box fontSize={12} px={2}>
+              {wordExtractor(page?.content?.wordings, "banner_placeholder")}
+            </Box>
+          ) : (
+            <Image
+              alt={wordExtractor(
+                page?.content?.wordings,
+                "banner_media_alt_text"
+              )}
+              w="100%"
+              src={
+                page?.content?.headerSection?.bannerPlaceholder
+              }
+            />
+          )}
         </AspectRatio>
       );
     }
@@ -93,7 +115,7 @@ const BannerFragment = ({
           {wordExtractor(page?.content?.wordings, "add_banner_media_label")}
         </Button>
       )}
-      <RenderBanner entity={entity}/>
+      <RenderBanner entity={entity} />
       <Box position={"relative"}>
         <Avatar
           {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
@@ -110,11 +132,31 @@ const BannerFragment = ({
           objectFit="contain"
           src={entity?.[profilePicPropName]?.url}
         >
-          {editable && (<Box position={"absolute"} bottom={0} right={-6} fontSize={24}>
-            <Tooltip  label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} aria-label={wordExtractor(page?.content?.wordings, "profile_image_placeholder")} color={'gray.100'}>
-            <InfoOutlineIcon color='gray.500' />
-            </Tooltip>
-          </Box>)}
+          {editable && (
+            <Box position={"absolute"} bottom={"-16px"} right={"-32px"}>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <IconButton
+                    aria-label={wordExtractor(
+                      page?.content?.wordings,
+                      "profile_image_placeholder"
+                    )}
+                    icon={<AiOutlineInfoCircle fontSize={"32px"} />}
+                    variant="link"
+                  ></IconButton>
+                </PopoverTrigger>
+                <PopoverContent fontSize="sm" bg="black" color="white">
+                  <PopoverArrow bg="black" />
+                  <PopoverBody>
+                    {wordExtractor(
+                      page?.content?.wordings,
+                      "profile_image_placeholder"
+                    )}
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
+          )}
         </Avatar>
       </Box>
       <BannerMediaUploadModal
