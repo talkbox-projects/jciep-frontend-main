@@ -571,11 +571,11 @@ const JobOpportunities = ({ page, enums }) => {
                   />
                 </GridItem>
                 <GridItem colSpan={2} align="right">
-                    <Box cursor="pointer" onClick={() => {
+                    <Box cursor="pointer" d={'inline-block'} onClick={() => {
                       setDistrict([]);
                       setJobInterested([]);
                       router.push(`/job-opportunities`)
-                    }}><Text lineHeight="48px">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
+                    }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
                 </GridItem>
               </Grid>
             </Box>
