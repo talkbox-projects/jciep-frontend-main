@@ -53,7 +53,7 @@ const PublicSectionEditor = () => {
     defaultValues: {
       id: identity.id,
       caption: identity.caption,
-      wishToDoStatus: identity.wishToDoStatus,
+      wishToDo: identity.wishToDo,
       phase2profile: true
     },
   });

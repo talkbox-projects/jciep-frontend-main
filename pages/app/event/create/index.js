@@ -219,10 +219,7 @@ const EventAdd = ({ page }) => {
           maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
-          mimeType:
-            fieldName === "bannerImage"
-              ? "image/*"
-              : "image/*,application/pdf,video/mp4",
+          mimeType: "image/*",
         },
       },
     };
