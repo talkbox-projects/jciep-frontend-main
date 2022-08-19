@@ -3,6 +3,10 @@ import PageModel from "./page.model";
 
 export default {
   Query: {
+    PageAll: async () => {
+      const page = await PageModel.find().exec();
+      return page;
+    },
     PageGet: async (_parent, { lang, key }) => {
       const page = await PageModel.findOne({ lang, key }).exec();
       return page;

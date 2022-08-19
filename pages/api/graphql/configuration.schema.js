@@ -15,6 +15,7 @@ export default gql`
   }
 
   type Query {
+    ConfigurationAll: [Configuration]
     ConfigurationGet(key: String!, lang: Language!): Configuration
   }
 

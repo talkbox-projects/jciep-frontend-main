@@ -19,6 +19,7 @@ export default gql`
   }
 
   type Query {
+    PageAll: [Page]
     PageGet(key: String!, lang: Language!): Page
   }
   type Mutation {
