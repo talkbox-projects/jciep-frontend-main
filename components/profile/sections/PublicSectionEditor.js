@@ -239,6 +239,7 @@ const PublicSectionEditor = () => {
               type="email"
               variant="flushed"
               defaultValue={identity?.email}
+              placeholder={wordExtractor(page?.content?.wordings, "field_label_email_placeholder")}
               {...register("email", {
                 pattern: {
                   value:
@@ -265,6 +266,7 @@ const PublicSectionEditor = () => {
             <Input
               variant="flushed"
               defaultValue={identity?.phone}
+              placeholder={wordExtractor(page?.content?.wordings, "field_label_phone_placeholder")}
               {...register("phone", {
                 required: wordExtractor(
                   page?.content?.wordings,
@@ -411,6 +413,9 @@ const PublicSectionEditor = () => {
                 );
               }}
             ></Controller>
+            <FormHelperText>
+              {wordExtractor(page?.content?.wordings, "field_label_industry_placeholder")}
+            </FormHelperText>
             <FormHelperText color="red">
               {errors?.industry?.message}
             </FormHelperText>
