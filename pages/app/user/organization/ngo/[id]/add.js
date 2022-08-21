@@ -583,6 +583,7 @@ const OrganizationNgoAdd = ({ page }) => {
                         components={{
                           IndicatorSeparator: () => null,
                         }}
+                        isSearchable={false}
                       />
                     )}
                   />
@@ -625,6 +626,7 @@ const OrganizationNgoAdd = ({ page }) => {
                         components={{
                           IndicatorSeparator: () => null,
                         }}
+                        isSearchable={false}
                       />
                     )}
                   />

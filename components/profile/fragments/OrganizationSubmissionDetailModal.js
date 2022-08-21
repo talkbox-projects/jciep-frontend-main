@@ -21,6 +21,7 @@ import {
   FormControl,
   FormLabel,
   Alert,
+  Center,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -30,6 +31,7 @@ import wordExtractor from "../../../utils/wordExtractor";
 import { useForm } from "react-hook-form";
 import React, { useCallback, useEffect } from "react";
 import OrganizationSubmissionUpdate from "../../../utils/api/OrganizationSubmissionUpdate";
+import { AiOutlineFilePdf } from "react-icons/ai";
 
 const OrganizationSubmissionDetailModal = ({
   isOpen,
@@ -172,6 +174,29 @@ const OrganizationSubmissionDetailModal = ({
                 <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
                   {(submission?.businessRegistration ?? []).map(
                     ({ url }, index) => {
+                      const isPDF =
+                        url &&
+                        /[^.]*$/.exec(url)[0] === "pdf";
+                      if (isPDF) {
+                        return (
+                          <Box
+                            bgColor="#F2F2F2"
+                            h={"120px"}
+                            w={"100%"}
+                            bgSize={{ base: "cover" }}
+                            bgPosition={"center center"}
+                            position={"relative"}
+                          >
+                            <a href={url} target="_blank" rel="noreferrer">
+                              <Center h={"100%"}>
+                                <AiOutlineFilePdf
+                                  style={{ width: "30px", height: "30px" }}
+                                />
+                              </Center>
+                            </a>
+                          </Box>
+                        );
+                      }
                       return (
                         <AspectRatio key={index} ratio={1}>
                           <Image

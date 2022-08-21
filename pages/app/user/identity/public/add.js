@@ -401,6 +401,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                                 IndicatorSeparator: () => null,
                               }}
                               maxMenuHeight={200}
+                              isSearchable={false}
                             />
                           )}
                         />
@@ -622,6 +623,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                             IndicatorSeparator: () => null,
                           }}
                           maxMenuHeight={200}
+                          isSearchable={false}
                         />
                       )}
                     />
@@ -664,6 +666,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                             IndicatorSeparator: () => null,
                           }}
                           maxMenuHeight={200}
+                          isSearchable={false}
                         />
                       )}
                     />
@@ -709,6 +712,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                             IndicatorSeparator: () => null,
                           }}
                           maxMenuHeight={200}
+                          isSearchable={false}
                         />
                       )}
                     />
@@ -812,6 +816,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                             IndicatorSeparator: () => null,
                           }}
                           maxMenuHeight={200}
+                          isSearchable={false}
                         />
                       )}
                     />
@@ -1110,6 +1115,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                             IndicatorSeparator: () => null,
                           }}
                           maxMenuHeight={200}
+                          isSearchable={false}
                         />
                       )}
                     />
