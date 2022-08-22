@@ -19,13 +19,13 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import _ from "lodash";
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import ReactSelect from "react-select";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
-import { useAppContext } from "../../../../store/AppStore";
+// import { useAppContext } from "../../../../store/AppStore";
 import { gql } from "graphql-request";
 import { getStockPhoto } from "../../../../utils/event/getEvent";
 import { getGraphQLClient } from "../../../../utils/apollo";
@@ -70,7 +70,6 @@ export const getServerSideProps = async (context) => {
 };
 
 const EventAdd = ({ page }) => {
-  const { user } = useAppContext();
   const router = useRouter();
   const {
     handleSubmit,
@@ -127,21 +126,6 @@ const EventAdd = ({ page }) => {
       setStockPhoto(data);
     }
     getStockPhotoData();
-
-    // setValue("additionalInformation", [
-    //   {
-    //     "id": "62f6091882cd2e001b093096",
-    //     "url": "/api/assets/files/GP0OLY_Web_size.jpg",
-    //     "contentType": "application/pdf",
-    //     "fileSize": 23446
-    //   },
-    //   {
-    //     "id": "62f6091e82cd2e001b09309c",
-    //     "url": "/api/assets/files/Black_Closed.png",
-    //     "contentType": "video/mp4",
-    //     "fileSize": 17798
-    //   }
-    // ]);
   }, [router]);
 
   const FileUploadmutation = gql`
@@ -748,14 +732,14 @@ const EventAdd = ({ page }) => {
                         required={true}
                       />
                       <Input
-                        type="text"
+                        type="number"
                         variant="flushed"
                         placeholder={wordExtractor(
                           page?.content?.wordings,
                           "quota_placeholder"
                         )}
                         {...register("quota", {
-                          required: true,
+                          required: true
                         })}
                       />
                       <FormHelperText>
