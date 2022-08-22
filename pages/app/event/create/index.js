@@ -31,6 +31,7 @@ import { getStockPhoto } from "../../../../utils/event/getEvent";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import { createEvent } from "../../../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
+import { urlRegex, phoneRegex } from "../../../../utils/general";
 import {
   AiOutlineInfoCircle,
   AiFillMinusCircle,
@@ -200,12 +201,10 @@ const EventAdd = ({ page }) => {
           if (fieldName === "bannerImage") {
             setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
           } else {
-    
             let updateData = watchAdditionalInformation;
 
             updateData[index] = bannerUploadData?.FileUpload?.[0];
             setValue(fieldName, updateData);
-
           }
         }
       }
@@ -219,11 +218,8 @@ const EventAdd = ({ page }) => {
           maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
-          mimeType:
-            fieldName === "bannerImage"
-              ? "image/*"
-              : "*/*",
-          supportCrop: true
+          mimeType: fieldName === "bannerImage" ? "image/*" : "*/*",
+          supportCrop: true,
         },
       },
     };
@@ -258,18 +254,18 @@ const EventAdd = ({ page }) => {
     if (data?.contentType === "video/mp4") {
       return (
         <Box
-        bgColor="#F2F2F2"
-        h={"100%"}
-        w={"100%"}
-        bgSize={{ base: "cover" }}
-        bgPosition={"center center"}
-        position={"relative"}
-      >
-        <Center h={"100%"}>
-          <AiOutlinePlayCircle style={{ width: "30px", height: "30px" }} />
-        </Center>
-      </Box>
-      )
+          bgColor="#F2F2F2"
+          h={"100%"}
+          w={"100%"}
+          bgSize={{ base: "cover" }}
+          bgPosition={"center center"}
+          position={"relative"}
+        >
+          <Center h={"100%"}>
+            <AiOutlinePlayCircle style={{ width: "30px", height: "30px" }} />
+          </Center>
+        </Box>
+      );
     }
 
     return (
@@ -383,6 +379,8 @@ const EventAdd = ({ page }) => {
       setDebugResult(JSON.stringify(response));
     }
   };
+
+  console.log("errors-", errors);
 
   return (
     <Box pt={{ base: "64px" }}>
@@ -959,6 +957,13 @@ const EventAdd = ({ page }) => {
                         )}
                         {...register("contactNumber", {
                           required: true,
+                          pattern: {
+                            value: phoneRegex,
+                            message: wordExtractor(
+                              page?.content?.wordings,
+                              "field_error_message_invalid_url"
+                            ),
+                          },
                         })}
                       />
                       <FormHelperText>
@@ -971,10 +976,13 @@ const EventAdd = ({ page }) => {
                           </Text>
                         )}
                       </FormHelperText>
+                      <FormHelperText color="red">
+                        {errors?.contactNumber?.message}
+                      </FormHelperText>
                     </FormControl>
                   </GridItem>
                   <GridItem>
-                    <FormControl>
+                    <FormControl isInvalid={errors?.registerUrl?.message}>
                       <FormLabel {...labelStyles}>
                         {wordExtractor(
                           page?.content?.wordings,
@@ -988,8 +996,19 @@ const EventAdd = ({ page }) => {
                           page?.content?.wordings,
                           "register_url_placeholder"
                         )}
-                        {...register("registerUrl")}
+                        {...register("registerUrl", {
+                          pattern: {
+                            value: urlRegex,
+                            message: wordExtractor(
+                              page?.content?.wordings,
+                              "field_error_message_invalid_url"
+                            ),
+                          },
+                        })}
                       />
+                      <FormHelperText color="red">
+                        {errors?.registerUrl?.message}
+                      </FormHelperText>
                     </FormControl>
                   </GridItem>
                   <GridItem>
@@ -1013,6 +1032,13 @@ const EventAdd = ({ page }) => {
                               )}
                               {...register(`otherUrls[${index}]`, {
                                 required: true,
+                                pattern: {
+                                  value: urlRegex,
+                                  message: wordExtractor(
+                                    page?.content?.wordings,
+                                    "field_error_message_invalid_url"
+                                  ),
+                                },
                               })}
                             />
                             <InputRightElement>
@@ -1036,6 +1062,15 @@ const EventAdd = ({ page }) => {
                               "other_url_required"
                             )}
                           </Text>
+                        )}
+
+                        {errors?.otherUrls?.length > 0 && (
+                          errors?.otherUrls?.map((d,i) => <Text key={i} color="red">
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "field_error_message_invalid_url"
+                            )}
+                          </Text>)
                         )}
                       </FormHelperText>
                     </FormControl>
