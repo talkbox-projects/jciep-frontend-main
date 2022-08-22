@@ -222,7 +222,8 @@ const EventAdd = ({ page }) => {
           mimeType:
             fieldName === "bannerImage"
               ? "image/*"
-              : "image/*,application/pdf,video/mp4",
+              : "*/*",
+          supportCrop: true
         },
       },
     };

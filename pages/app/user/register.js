@@ -484,13 +484,13 @@ const AppUserRegister = ({ page }) => {
             </Box>
             <Image
               alt=""
-              height="200px"
-              width="300px"
-              margin="auto"
+              width="100%"
+              height="auto"
               src={page?.content?.startRegistration?.image}
               position={"relative"}
               zIndex={2}
               marginTop={"-120px"}
+              px={"30px"}
             />
 
             <Box

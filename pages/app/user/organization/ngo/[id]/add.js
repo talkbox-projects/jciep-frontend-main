@@ -192,7 +192,7 @@ const OrganizationNgoAdd = ({ page }) => {
           maxFileSize: 4194304,
           maxFileCount: 1,
           minFileCount: 1,
-          mimeType: "image/*",
+          mimeType: "*/*",
         },
       },
     };

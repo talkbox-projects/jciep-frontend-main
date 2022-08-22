@@ -505,7 +505,7 @@ const JobOpportunities = ({ page, enums }) => {
               <Button
                 mt={3}
                 as={Link}
-                href="/contact-us"
+                href={wordExtractor(page?.content?.wordings, "page_contact_us_url")}
                 borderRadius="full"
                 color="#000"
                 bg="transparent"
