@@ -360,8 +360,8 @@ const EventAdd = ({ page }) => {
         submissionDeadline: submissionDeadline,
         eventManager: eventManager,
         contactNumber: contactNumber,
-        registerUrl: registerUrl,
-        otherUrls: otherUrls,
+        registerUrl: registerUrl ? registerUrl.toLowerCase() : "",
+        otherUrls: !_.isEmpty(otherUrls) ? otherUrls.map(d=> d?.toLowerCase()) : [],
         remark: remark,
         banner: submitBanner,
         additionalInformation: additionalInformation ?? [],
@@ -379,8 +379,6 @@ const EventAdd = ({ page }) => {
       setDebugResult(JSON.stringify(response));
     }
   };
-
-  console.log("errors-", errors);
 
   return (
     <Box pt={{ base: "64px" }}>
