@@ -455,6 +455,7 @@ const EventAdd = ({ page }) => {
                             components={{
                               IndicatorSeparator: () => null,
                             }}
+                            isSearchable={false}
                           />
                         )}
                       />
