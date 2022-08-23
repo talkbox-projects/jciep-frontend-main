@@ -213,7 +213,10 @@ const Event = ({ page, hostname }) => {
                 <Input
                   type="text"
                   variant="flushed"
-                  placeholder="指定日子"
+                  placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "designated_day_placeholder"
+                    )}
                   onFocus={() => (designatedDayRef.current.type = "date")}
                   onBlur={(e) => {
                     designatedDayRef.current.type = "text"
@@ -259,7 +262,7 @@ const Event = ({ page, hostname }) => {
                       fontSize={{ base: 24, md: 36 }}
                       pb={{ base: 4, md: 0 }}
                     >
-                      <Text as="span" fontWeight={700}>
+                      <Text as="span" fontWeight={700}  whiteSpace="nowrap">
                         {moment(detail).format("MMMM")}
                       </Text>{" "}
                       <Text as="span">{moment(detail).format("YYYY")}</Text>

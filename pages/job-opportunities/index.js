@@ -366,7 +366,7 @@ const JobOpportunities = ({ page, enums }) => {
     if (type.length === 0) {
       return true;
     }
-    const intersection = type.filter((element) => listData.includes(element));
+    const intersection = type.filter((element) => listData?.includes(element));
 
     return intersection?.length > 0;
   };

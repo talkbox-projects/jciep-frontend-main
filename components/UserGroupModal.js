@@ -56,9 +56,10 @@ const UserGroupModal = () => {
                 py={4}
               >
                 {params?.links?.map((d) => (
-                  <GridItem key={d?.id} colSpan={1}>
+                  <GridItem key={d?.id} colSpan={router.locale === 'zh' ? 1 : 2}>
                     <Button
                       variant="outline"
+                      whiteSpace="pre-line"
                       w={"100%"}
                       fontSize={16}
                       p={6}
@@ -72,7 +73,7 @@ const UserGroupModal = () => {
                         userGroupModalDisclosure.onClose()
                         }}
                     >
-                      {d?.name}
+                    {d?.name}
                     </Button>
                   </GridItem>
                 ))}
