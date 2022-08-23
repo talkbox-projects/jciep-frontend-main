@@ -4,7 +4,8 @@ export default {
   getProfile: async (accessToken) => {
     try {
       const user = await appleSignIn.verifyIdToken(accessToken, {
-        audience: "hk.hkuinclusive.inmatch"
+        audience: "hk.hkuinclusive.inmatch",
+        ignoreExpiration: true,
       });
 
       return {
