@@ -4,9 +4,7 @@ export default {
   getProfile: async (accessToken) => {
     try {
       const user = await appleSignIn.verifyIdToken(accessToken, {
-        audience: "com.talkboxapp.teamwork.service.hku",
-
-        ignoreExpiration: true,
+        audience: "hk.hkuinclusive.inmatch"
       });
 
       return {
@@ -15,7 +13,6 @@ export default {
         profilePicUrl: "",
       };
     } catch (err) {
-      // Token is not verified
       console.error(err);
     }
   },

@@ -53,7 +53,7 @@ const AppUserRegister = ({ page }) => {
     otp: "",
     type: "apple",
     email: "",
-    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzMzg2NTgsImlhdCI6MTY2MTI1MjI1OCwic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6ImM0ODNiNzE2ZDY3Mjc2ZDZhNGJiM2Q3OGE3MGM0NzZhMDY5MmY0MTQxOWNkNGNiZDgyZDM0Nzg1YzE5MmQwNjAiLCJjX2hhc2giOiJtcjRod1Vfd0dXem8xbVNHaUlvME9BIiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjUyMjU4LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.vZaf1yC6seEZtjyInQWsVntZkP2Jj4M8Ggecrjkg9G1we8SPy3hXawfyc_R3x0bNxL384eRlBX4-v1K4ofmBiUwNv4nwdA-VbEUtOrFcHive0ULuzeZl7WCv7GNJABa15w-YhaXbfBivDpyX5BPHxrRad7PexoRPLZL_unXaMQTdhp1C8SUd-4vED889heKH2NNmBuST0zI5b9Ha6kSlm7RMsQR5j9YI-Yf7mCbDRoT5u0X0iGC524JZg6oUMr4GYF5EqLFenWwvEtdKMDskQEBP9T5PsaKfSiwbSJTu4sHBO9SgtzgiR7yURm2ycCjJXZvq_XDuYaR7hZQZu30Pnw",
+    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzNTYwOTYsImlhdCI6MTY2MTI2OTY5Niwic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6ImZmOWJiOWVhZWFkYzM2YzBjMWY4MjFhMDNkNjRlZjE3NWI2NzJjZDFkMjliZmM2MjAwOGM0OTI5YTk5NTBhYmEiLCJjX2hhc2giOiJKN2JHbHZIOEhTeDAtZVdjcWZ6dHNRIiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjY5Njk2LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qDYRkmDD5MSwDCkOeb_ixh4O87djmu18lD2gxxbgyX-TIFrSan1ECwoVpsFoxK6n-6cz5kHdv3_2vjUSIoqGpW73bRBQvZYX_NHvVoc4Q1lyuAD1S14oFzqzX3Lj8bE9TKaDVJm-oCy5j1i-ZYazv-2XNsRBTeZoL0zd7csVQf2sCI9Ncx0-RWffkgZJGscC0daqlxbFHLlOz0bBhS0xNXRhFdqLj4HLQzzh9CJKZISOAmZaa4JOH1ndrLRilV9n7oVHkC9J5DuZCwcFtJiGHF1nQi0wLTl-X0NOR1bbi4tGuRpwVvaxVVge2L3C2iFCouwrdgqwXPHlOugv75yqqg",
     phone: "",
   });
 
@@ -183,18 +183,18 @@ const AppUserRegister = ({ page }) => {
     }
   };
 
-  const handleAppleOTP = async () => {
-    const { type, token } = appleRegistrationInfo;
-    switch (type) {
-      case "apple":
-        router.replace(`/app/oauth/apple/?accessToken=${token}`);
-        break;
+  // const handleAppleOTP = async () => {
+  //   const { type, token } = appleRegistrationInfo;
+  //   switch (type) {
+  //     case "apple":
+  //       router.replace(`/app/oauth/apple/?accessToken=${token}`);
+  //       break;
 
-      default:
-        setOtpVerifyStatus({ status: "type not found" });
-        break;
-    }
-  };
+  //     default:
+  //       setOtpVerifyStatus({ status: "type not found" });
+  //       break;
+  //   }
+  // };
 
   const RenderRegistrationType = () => {
     switch (appRegistrationInfo?.type) {
@@ -573,7 +573,7 @@ const AppUserRegister = ({ page }) => {
                     </Button>
                   </Box>
 
-                  <Box width="100%" textAlign="center" mt={10}>
+                  {/* <Box width="100%" textAlign="center" mt={10}>
                     <Button
                       borderRadius="22px"
                       height="44px"
@@ -582,7 +582,7 @@ const AppUserRegister = ({ page }) => {
                     >
                       TEST APPLE SIGNIN
                     </Button>
-                  </Box>
+                  </Box> */}
 
 
                   <Flex
@@ -602,9 +602,9 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
+              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
 
-              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code>
+              <Code fontSize={8}>Test apple submit{JSON.stringify(appleRegistrationInfo)}</Code> */}
             </Box>
           </Box>
         </Box>
