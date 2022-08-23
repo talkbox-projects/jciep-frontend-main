@@ -53,7 +53,7 @@ const AppUserRegister = ({ page }) => {
     otp: "",
     type: "apple",
     email: "",
-    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzMjAyMzMsImlhdCI6MTY2MTIzMzgzMywic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6IjU3MDRkMmJlYTM2MTFhZjRkYmNjMTA4NDVjMTVlZDUyNGE1YjRiYzUzM2JhMGU2ZjQ2YzAyY2YzMmQxZmU4ZjUiLCJjX2hhc2giOiJzb0FCMUtzV012eVNpNmlmbTF6R1Z3IiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjMzODMzLCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.km5zjal2BqMqrHCSE67jsYluChgn8nEj0LRrUOi2nCllrGAaXJHUiy3dc5znugFkwEXliepSAE9Bcb1jpuf9UhX05jqeuHnIw9hdeczHJt7h6WgppIivEv5qb-Xuqr-XYWzR_gFB3eAqjtUwRqaSyBgduF7a1WTBsOOr1AAeFOr0YsK3STVqZbaLaGt1hnWinA1nXm6eVMWi6nEusEzTzpJsL0QckSAhb-cV--9FdCuCkhYYd3DA3ordfAQEiM4m_145wHjUsXDZqS6zIPe7tks8zC0FB9EGTaLq57-pM-88J9juR5bRSi04lU1x_peEFrWgTQsVYHp_R4mwFtDA",
+    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzMzg2NTgsImlhdCI6MTY2MTI1MjI1OCwic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6ImM0ODNiNzE2ZDY3Mjc2ZDZhNGJiM2Q3OGE3MGM0NzZhMDY5MmY0MTQxOWNkNGNiZDgyZDM0Nzg1YzE5MmQwNjAiLCJjX2hhc2giOiJtcjRod1Vfd0dXem8xbVNHaUlvME9BIiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjUyMjU4LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.vZaf1yC6seEZtjyInQWsVntZkP2Jj4M8Ggecrjkg9G1we8SPy3hXawfyc_R3x0bNxL384eRlBX4-v1K4ofmBiUwNv4nwdA-VbEUtOrFcHive0ULuzeZl7WCv7GNJABa15w-YhaXbfBivDpyX5BPHxrRad7PexoRPLZL_unXaMQTdhp1C8SUd-4vED889heKH2NNmBuST0zI5b9Ha6kSlm7RMsQR5j9YI-Yf7mCbDRoT5u0X0iGC524JZg6oUMr4GYF5EqLFenWwvEtdKMDskQEBP9T5PsaKfSiwbSJTu4sHBO9SgtzgiR7yURm2ycCjJXZvq_XDuYaR7hZQZu30Pnw",
     phone: "",
   });
 
@@ -573,7 +573,7 @@ const AppUserRegister = ({ page }) => {
                     </Button>
                   </Box>
 
-                  {/* <Box width="100%" textAlign="center" mt={10}>
+                  <Box width="100%" textAlign="center" mt={10}>
                     <Button
                       borderRadius="22px"
                       height="44px"
@@ -582,7 +582,8 @@ const AppUserRegister = ({ page }) => {
                     >
                       TEST APPLE SIGNIN
                     </Button>
-                  </Box> */}
+                  </Box>
+
 
                   <Flex
                     direction={"column"}
@@ -601,9 +602,9 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
+              <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
 
-              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code> */}
+              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code>
             </Box>
           </Box>
         </Box>
