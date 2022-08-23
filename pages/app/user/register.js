@@ -603,6 +603,8 @@ const AppUserRegister = ({ page }) => {
                 </Box>
               </Box>
               <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
+
+              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code>
             </Box>
           </Box>
         </Box>
