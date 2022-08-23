@@ -573,7 +573,7 @@ const AppUserRegister = ({ page }) => {
                     </Button>
                   </Box>
 
-                  <Box width="100%" textAlign="center" mt={10}>
+                  {/* <Box width="100%" textAlign="center" mt={10}>
                     <Button
                       borderRadius="22px"
                       height="44px"
@@ -582,8 +582,7 @@ const AppUserRegister = ({ page }) => {
                     >
                       TEST APPLE SIGNIN
                     </Button>
-                  </Box>
-
+                  </Box> */}
 
                   <Flex
                     direction={"column"}
@@ -602,9 +601,9 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
+              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
 
-              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code>
+              <Code fontSize={8}>Test apple submit data: {JSON.stringify(appleRegistrationInfo)}</Code> */}
             </Box>
           </Box>
         </Box>
