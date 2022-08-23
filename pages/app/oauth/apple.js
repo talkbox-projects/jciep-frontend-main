@@ -27,15 +27,18 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isApp: true,
-      id_token: body?.id_token || context.query.id_token,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      // id_token: body?.id_token || context.query.id_token,
+      // isLangAvailable: context.locale === page.lang,
+      // ...(await getSharedServerSideProps(context))?.props,
     },
   };
 };
 
-const AppleLogin = ({ id_token: accessToken }) => {
+const AppleLogin = () => {
   const router = useRouter();
+  const { accessToken } = router.query;
   const [setCredential] = useCredential();
 
   useEffect(() => {

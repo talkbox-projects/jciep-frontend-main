@@ -48,6 +48,15 @@ const AppUserRegister = ({ page }) => {
     token: "",
     phone: "",
   });
+
+  const [appleRegistrationInfo, setAppleRegistrationInfo] = useState({
+    otp: "",
+    type: "apple",
+    email: "",
+    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzMjAyMzMsImlhdCI6MTY2MTIzMzgzMywic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6IjU3MDRkMmJlYTM2MTFhZjRkYmNjMTA4NDVjMTVlZDUyNGE1YjRiYzUzM2JhMGU2ZjQ2YzAyY2YzMmQxZmU4ZjUiLCJjX2hhc2giOiJzb0FCMUtzV012eVNpNmlmbTF6R1Z3IiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjMzODMzLCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.km5zjal2BqMqrHCSE67jsYluChgn8nEj0LRrUOi2nCllrGAaXJHUiy3dc5znugFkwEXliepSAE9Bcb1jpuf9UhX05jqeuHnIw9hdeczHJt7h6WgppIivEv5qb-Xuqr-XYWzR_gFB3eAqjtUwRqaSyBgduF7a1WTBsOOr1AAeFOr0YsK3STVqZbaLaGt1hnWinA1nXm6eVMWi6nEusEzTzpJsL0QckSAhb-cV--9FdCuCkhYYd3DA3ordfAQEiM4m_145wHjUsXDZqS6zIPe7tks8zC0FB9EGTaLq57-pM-88J9juR5bRSi04lU1x_peEFrWgTQsVYHp_R4mwFtDA",
+    phone: "",
+  });
+
   const [otpValid, setOtpValid] = useState(null);
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
   const [errorCode, setErrorCode] = useState({ status: "" });
@@ -62,7 +71,6 @@ const AppUserRegister = ({ page }) => {
     window.WebContext = {};
     window.WebContext.getRegistrationInfoHandler = (response) => {
       const registrationInfo = JSON.parse(response);
-      // alert(JSON.stringify(response));
       if (!registrationInfo.result) {
         setAppRegistrationInfo({
           status: "response not found",
@@ -175,6 +183,19 @@ const AppUserRegister = ({ page }) => {
     }
   };
 
+  const handleAppleOTP = async () => {
+    const { type, token } = appleRegistrationInfo;
+    switch (type) {
+      case "apple":
+        router.replace(`/app/oauth/apple/?accessToken=${token}`);
+        break;
+
+      default:
+        setOtpVerifyStatus({ status: "type not found" });
+        break;
+    }
+  };
+
   const RenderRegistrationType = () => {
     switch (appRegistrationInfo?.type) {
       case "email":
@@ -218,7 +239,7 @@ const AppUserRegister = ({ page }) => {
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
                 " ",
-                `<b>${page?.content?.remark?.appleText}</b>`
+                `<b>APPLE</b>`
               ),
             }}
           />
@@ -551,6 +572,19 @@ const AppUserRegister = ({ page }) => {
                       {page?.content?.continue}
                     </Button>
                   </Box>
+
+                  <Box width="100%" textAlign="center" mt={10}>
+                    <Button
+                      borderRadius="22px"
+                      height="44px"
+                      width="100%"
+                      onClick={() => handleAppleOTP()}
+                    >
+                      TEST APPLE SIGNIN
+                    </Button>
+                  </Box>
+
+
                   <Flex
                     direction={"column"}
                     gap={2}
