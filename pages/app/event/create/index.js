@@ -1047,7 +1047,8 @@ const EventAdd = ({ page }) => {
                           </Text>
                         )}
 
-                        {errors?.otherUrls?.length > 0 && (
+                        {errors?.otherUrls?.[0]?.type !== "required" &&
+                          errors?.otherUrls?.length > 0 && (
                           errors?.otherUrls?.map((d,i) => <Text key={i} color="red">
                             {wordExtractor(
                               page?.content?.wordings,
