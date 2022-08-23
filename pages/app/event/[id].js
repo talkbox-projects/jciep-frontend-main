@@ -43,18 +43,19 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
+  const {req} = context;
   return {
     props: {
       page,
       isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      hostname: req?.headers?.host
     },
   };
 };
 
-const Event = ({ page }) => {
+const Event = ({ page, hostname }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
@@ -226,6 +227,7 @@ const Event = ({ page }) => {
         <Flex direction={{ base: "column", md: "row" }}>
           <Box flex={1}>
             <BannerSection
+              hostname={hostname}
               name={detail?.name}
               tags={detail?.tags}
               url={`${detail?.banner?.file?.url}`}
@@ -885,10 +887,8 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
   );
 };
 
-//
-
-const BannerSection = ({ tags, url, name, stockPhotoId }) => {
-  const imageUrl = url ?? `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`
+const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
+  const imageUrl = url ?? `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
   return (
     <Box
       bgImage={`url(${imageUrl})`}

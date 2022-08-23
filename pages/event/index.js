@@ -8,10 +8,8 @@ import {
   VStack,
   Grid,
   GridItem,
-  Tag,
   Box,
   Text,
-  Link,
   Button,
   Stack,
   Input,
@@ -19,14 +17,11 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Select,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   FormControl,
   FormLabel,
@@ -45,22 +40,23 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiFilter2Fill } from "react-icons/ri";
 import { getEvents } from "../../utils/event/getEvent";
-import { bookmarkEvent } from "../../utils/event/eventAction";
 
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const {req} = context;
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      hostname: req?.headers?.host
     },
   };
 };
 
-const Event = ({ page, token }) => {
+const Event = ({ page, hostname }) => {
   const router = useRouter();
   const { query } = router;
   const [filteredEvents, setFiltered] = useState([]);
@@ -72,10 +68,7 @@ const Event = ({ page, token }) => {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitting },
-    watch,
-    setValue,
-    setError,
+    formState: { errors },
   } = useForm();
 
   useEffect(() => {
@@ -280,6 +273,9 @@ const Event = ({ page, token }) => {
                         gap={6}
                       >
                         {(filteredEvents[detail].reverse() || []).map((d, i) => {
+                          const imageUrl =
+                          (d?.banner?.file?.url !== undefined && d?.banner?.file?.url !== null) ? d?.banner?.file?.url :
+                          `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.jpg`;
                           return (
                             <GridItem
                               key={`${d.id}${i}`}
@@ -290,7 +286,7 @@ const Event = ({ page, token }) => {
                               boxShadow="xl"
                             >
                               <Box
-                                bgImage={`url(${d?.banner?.file?.url})`}
+                                bgImage={`url(${imageUrl})`}
                                 h={{ base: "170px" }}
                                 w={"100%"}
                                 bgSize="cover"

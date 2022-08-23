@@ -34,19 +34,19 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
+  const {req} = context;
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      hostname: req?.headers?.host
     },
   };
 };
 
-const Event = ({ page }) => {
+const Event = ({ page, hostname }) => {
   const router = useRouter();
-  const { identityId: currentIdentityId } = useAppContext();
   const [detail, setDetail] = useState([]);
   const [bookmarkActive, setBookmarkActive] = useState(false);
 
@@ -83,13 +83,6 @@ const Event = ({ page }) => {
     const result = await bookmarkEvent(id);
     if (result) {
       setBookmarkActive(true);
-    }
-  };
-
-  const handleUnBookmark = async (id) => {
-    const result = await unBookmarkEvent(id);
-    if (result) {
-      setBookmarkActive(false);
     }
   };
 
@@ -178,6 +171,7 @@ const Event = ({ page }) => {
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
               <Box flex={1}>
                 <BannerSection
+                  hostname={hostname}
                   name={detail?.name}
                   tags={detail?.tags}
                   url={`${detail?.banner?.file?.url}`}
@@ -555,8 +549,10 @@ const Event = ({ page }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name, stockPhotoId }) => {
-  const imageUrl = url ?? `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`
+const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
+  const imageUrl =
+  (url !== 'undefined' && url !== null) ? url :
+  `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
   return (
     <Box
       bgImage={`url(${imageUrl})`}

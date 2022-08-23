@@ -9,24 +9,19 @@ import {
   GridItem,
   Box,
   Text,
-  Button,
   Stack,
   Flex,
   Image,
   Center,
-
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure
 
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
-import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import organizationSearch from "../../utils/api/OrganizationSearch";
@@ -39,7 +34,7 @@ const PAGE_KEY = "project";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
+  const {req} = context;
   return {
     props: {
       page,
@@ -51,11 +46,12 @@ export const getServerSideProps = async (context) => {
         }),
       },
       ...(await getSharedServerSideProps(context))?.props,
+      hostname: req?.headers?.host
     },
   };
 };
 
-const Project = ({ page, api: { organizations } }) => {
+const Project = ({ page, api: { organizations }, hostname }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -472,6 +468,7 @@ const Project = ({ page, api: { organizations } }) => {
                 <Box flex={1} px={{ base: "10px", md: 0 }}>
                   <Box mx={{ base: "-10px", md: 0 }} className="print-banner-wrap">
                     <BannerSection
+                      hostname={hostname}
                       name={detail?.name}
                       tags={detail?.tags}
                       url={`${detail?.banner?.file?.url}`}
@@ -796,10 +793,10 @@ const Project = ({ page, api: { organizations } }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name, stockPhotoId }) => {
+const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
   const imageUrl =
-    url ??
-    `https://${window?.location?.hostname}/api/app/static/file/stockPhotos/${stockPhotoId}`;
+    (url !== 'undefined' && url !== null) ? url :
+    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
   return (
     <Box
       h={{ base: "320px", md: "360px" }}

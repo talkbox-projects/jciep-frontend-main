@@ -7,7 +7,7 @@ import {
   GridItem,
   Container,
   Flex,
-  Code,
+  Code
 } from "@chakra-ui/react";
 import { gql } from "graphql-request";
 import { getPage } from "../../../utils/page/getPage";
@@ -207,6 +207,18 @@ const AppUserRegister = ({ page }) => {
               __html: page?.content?.remark?.text?.replace(
                 " ",
                 `<b>${page?.content?.remark?.googleText}</b>`
+              ),
+            }}
+          />
+        );
+
+      case "apple":
+        return (
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: page?.content?.remark?.text?.replace(
+                " ",
+                `<b>${page?.content?.remark?.appleText}</b>`
               ),
             }}
           />
@@ -556,7 +568,7 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code> */}
+              <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
             </Box>
           </Box>
         </Box>
