@@ -135,6 +135,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
     //   input: input,
     //   invitationCode: invitationCode
     // })
+    if(!user){
+      setErrorMsg(wordExtractor(
+        page?.content?.wordings,
+        "general_error_message"
+      ))
+    }
     setSubmitInvitation(false);
     try {
       const mutation = gql`

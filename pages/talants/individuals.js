@@ -414,6 +414,7 @@ const IdentityOpportunities = ({
                     );
                   }}
                   list={jobTypeList}
+                  page={page}
                 />
               </GridItem>
               <GridItem colSpan={1}>
@@ -432,6 +433,16 @@ const IdentityOpportunities = ({
                   list={jobInterestedList}
                 />
               </GridItem>
+
+              <GridItem colSpan={2} align="right">
+                  <Box cursor="pointer" d={'inline-block'} onClick={() => {
+                    setJobType([]);
+                    setJobInterested([]);
+                    router.push(`/talants/individuals`)
+                  }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
+              </GridItem>
+
+
             </Grid>
 
             {identities.length === 0 && <Box py={2}>{wordExtractor(page?.content?.wordings, "information_not_found")}</Box>}
@@ -524,6 +535,14 @@ const IdentityOpportunities = ({
                   }}
                   list={jobInterestedList}
                 />
+              </GridItem>
+
+              <GridItem colSpan={4} align="center">
+                  <Box cursor="pointer" d={'inline-block'} onClick={() => {
+                    setJobType([]);
+                    setJobInterested([]);
+                    router.push(`/talants/individuals`)
+                  }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
               </GridItem>
             </Grid>
             </Box>
