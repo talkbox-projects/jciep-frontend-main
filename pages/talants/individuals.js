@@ -431,6 +431,7 @@ const IdentityOpportunities = ({
                     );
                   }}
                   list={jobInterestedList}
+                  page={page}
                 />
               </GridItem>
 
@@ -518,6 +519,7 @@ const IdentityOpportunities = ({
                     );
                   }}
                   list={jobTypeList}
+                  page={page}
                 />
               </GridItem>
               <GridItem colSpan={4}>
@@ -534,6 +536,7 @@ const IdentityOpportunities = ({
                     );
                   }}
                   list={jobInterestedList}
+                  page={page}
                 />
               </GridItem>
 

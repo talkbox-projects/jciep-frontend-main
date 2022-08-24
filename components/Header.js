@@ -77,9 +77,19 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
       4: /^(\/job-opportunities)/g,
       5: /^(\/talants)/g,
       6: /^(\/sharing)/g,
+      7: /^(\/sharing?category)/g,
+      8: /^(\/event)/g,
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
+        if ('category' in router?.query){
+          return '7';
+        }
+
+        if (router?.query?.slug === 'mobileapp' ){
+          return tabIndex;
+        }
+
         if (router.pathname.match(regexr)) {
           return index;
         } else {
@@ -89,7 +99,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
         return tabIndex;
       }
     }, undefined);
-  }, [router.pathname]);
+  }, [router]);
 
   const [setCredential, removeCredential] = useCredential();
 
@@ -514,6 +524,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                     wordWrap: "break-word",
                   }}
+                  backgroundColor={router?.query?.slug === 'mobileapp' ? '#e5fffe' : 'transparent'}
                 >
                   {navigation?.actionButton?.label}
                 </Button>
