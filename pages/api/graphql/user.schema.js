@@ -233,6 +233,7 @@ export default gql`
     facebookToken: String
     googleToken: String
     appleToken: String
+    platform: String
     email: String
     emailVerificationToken: String
     password: String

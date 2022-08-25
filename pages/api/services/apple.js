@@ -1,10 +1,11 @@
 import appleSignIn from "apple-signin-auth";
 
 export default {
-  getProfile: async (accessToken) => {
+  getProfile: async (accessToken, platform) => {
+    const audience = platform === 'ios' ? "hk.hkuinclusive.inmatch" : "hk.hkuinclusive.inmatch.applesignin"
     try {
       const user = await appleSignIn.verifyIdToken(accessToken, {
-        audience: "hk.hkuinclusive.inmatch",
+        audience: audience,
         ignoreExpiration: true,
       });
 

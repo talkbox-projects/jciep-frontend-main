@@ -500,7 +500,7 @@ export default {
         });
         return user;
       } else if (input.appleToken) {
-        let snsMeta = await apple.getProfile(input.appleToken);
+        let snsMeta = await apple.getProfile(input.appleToken, input.platform);
         if (!snsMeta) {
           throw new Error("failed to login via apple");
         }
@@ -660,8 +660,6 @@ export default {
     },
 
     UserPasswordResetByConsole: async (_parent, { email, phone, password }) => {
-      console.log('email-',email)
-      console.log('phone-',phone)
       try {
         if(email){
           console.log('email-',email)

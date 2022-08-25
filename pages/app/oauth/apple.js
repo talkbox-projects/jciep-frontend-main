@@ -23,12 +23,28 @@ export const getServerSideProps = async (context) => {
     });
   });
 
+  const userAgent = context?.req?.headers['user-agent']
+
+  const platform = () => {
+    switch (userAgent) {
+      case userAgent?.match(/Android/i):
+        return 'android'
+      
+      case userAgent?.match(/iPhone|iPad|iPod/i):
+        return 'ios'
+    
+      default:
+        return 'web'
+    }
+  }
+
   return {
     props: {
       page,
       isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      platform: platform()
       // id_token: body?.id_token || context.query.id_token,
       // isLangAvailable: context.locale === page.lang,
       // ...(await getSharedServerSideProps(context))?.props,
@@ -36,7 +52,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const AppleLogin = () => {
+const AppleLogin = ({platform}) => {
   const router = useRouter();
   const { accessToken } = router.query;
   const [setCredential] = useCredential();
@@ -47,6 +63,7 @@ const AppleLogin = () => {
         const variables = {
           input: {
             appleToken: accessToken,
+            platform: platform
           },
         };
         const user = await userLogin(variables);
