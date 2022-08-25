@@ -49,14 +49,6 @@ const AppUserRegister = ({ page }) => {
     phone: "",
   });
 
-  const [appleRegistrationInfo, setAppleRegistrationInfo] = useState({
-    otp: "",
-    type: "apple",
-    email: "",
-    token: "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiaGsuaGt1aW5jbHVzaXZlLmlubWF0Y2giLCJleHAiOjE2NjEzNTYwOTYsImlhdCI6MTY2MTI2OTY5Niwic3ViIjoiMDAwNDYzLmQ5MTkyZDU4MzJhNjQxOWE4ODk1YjJiZTRiODgwNWZhLjEwMTMiLCJub25jZSI6ImZmOWJiOWVhZWFkYzM2YzBjMWY4MjFhMDNkNjRlZjE3NWI2NzJjZDFkMjliZmM2MjAwOGM0OTI5YTk5NTBhYmEiLCJjX2hhc2giOiJKN2JHbHZIOEhTeDAtZVdjcWZ6dHNRIiwiZW1haWwiOiJoZDk3OXBqNnZqQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlzX3ByaXZhdGVfZW1haWwiOiJ0cnVlIiwiYXV0aF90aW1lIjoxNjYxMjY5Njk2LCJub25jZV9zdXBwb3J0ZWQiOnRydWV9.qDYRkmDD5MSwDCkOeb_ixh4O87djmu18lD2gxxbgyX-TIFrSan1ECwoVpsFoxK6n-6cz5kHdv3_2vjUSIoqGpW73bRBQvZYX_NHvVoc4Q1lyuAD1S14oFzqzX3Lj8bE9TKaDVJm-oCy5j1i-ZYazv-2XNsRBTeZoL0zd7csVQf2sCI9Ncx0-RWffkgZJGscC0daqlxbFHLlOz0bBhS0xNXRhFdqLj4HLQzzh9CJKZISOAmZaa4JOH1ndrLRilV9n7oVHkC9J5DuZCwcFtJiGHF1nQi0wLTl-X0NOR1bbi4tGuRpwVvaxVVge2L3C2iFCouwrdgqwXPHlOugv75yqqg",
-    phone: "",
-  });
-
   const [otpValid, setOtpValid] = useState(null);
   const [otpVerifyStatus, setOtpVerifyStatus] = useState({ status: "" });
   const [errorCode, setErrorCode] = useState({ status: "" });

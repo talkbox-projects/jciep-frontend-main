@@ -137,8 +137,6 @@ const IdentityPublicAdd = ({
     try {
       const data = await identityUpdate({ input });
 
-      console.log('data-',data)
-
       if (data && data.id) {
         if (invitationCode) {
           await OrganizationMemberJoin({

@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import IdentityPublicProfile from "../../../../components/profile/IdentityPublicProfile";
+import AppIdentityPublicProfile from "../../../../components/profile/appIdentityPublicProfile";
 import { getPage } from "../../../../utils/page/getPage";
 import withPageCMS from "../../../../utils/page/withPageCMS";
 import IdentityProfileStore from "../../../../store/IdentityProfileStore";
@@ -37,7 +37,7 @@ const IdentityProfile = ({ api: { identity }, enums, page }) => {
       editable={true}
     >
       <Box w="100%" bgColor="#fafafa">
-        <IdentityPublicProfile />
+        <AppIdentityPublicProfile />
       </Box>
     </IdentityProfileStore.Provider>
   );
