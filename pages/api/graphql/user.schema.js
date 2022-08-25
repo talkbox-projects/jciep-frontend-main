@@ -308,6 +308,7 @@ export default gql`
     UserPasswordResetEmailOTPSend(email: String!): Boolean
     UserPasswordResetPhoneSend(phone: String!): Boolean
     UserPasswordReset(token: String!, password: String!): Boolean
+    UserPasswordResetByConsole(email: String!, phone: String!, password: String!): Boolean
 
     IdentityCreate(input: IdentityCreateInput!): Identity
     IdentityUpdate(input: IdentityUpdateInput!): Identity

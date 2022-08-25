@@ -659,6 +659,46 @@ export default {
       }
     },
 
+    UserPasswordResetByConsole: async (_parent, { email, phone, password }) => {
+      console.log('email-',email)
+      console.log('phone-',phone)
+      try {
+        if(email){
+          console.log('email-',email)
+          let user = await User.findOne({ email });
+          if(user?.id){
+            const user = await User.findOneAndUpdate(
+              { email: email },
+              {
+                email: email,
+                password: await User.generateHash(password),
+              },
+              { upsert: true, new: true }
+            );
+          }
+        }
+
+        if(phone){
+          console.log('phone-',phone)
+          let user = await User.findOne({ phone });
+          if(user?.id){
+            const user = await User.findOneAndUpdate(
+              { phone: phone },
+              {
+                phone: phone,
+                password: await User.generateHash(password),
+              },
+              { upsert: true, new: true }
+            );
+          }
+        }
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+
     IdentityCreate: async (_parent, { input }) => {
       /**
        * Admin can create an identity for any user
