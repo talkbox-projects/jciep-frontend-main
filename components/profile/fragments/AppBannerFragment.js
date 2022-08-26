@@ -13,6 +13,7 @@ import {
   PopoverBody,
   PopoverArrow,
   IconButton,
+  Code
 } from "@chakra-ui/react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { AiOutlinePlus, AiOutlineInfoCircle } from "react-icons/ai";
@@ -153,8 +154,20 @@ const AppBannerFragment = ({
               file: file,
             }
           );
+
+          const updateData = {
+            ...entity,
+            [fieldName]: bannerUploadData?.FileUpload?.[0]
+          }
+
+          try {
+            setDebugResult(updateData)
+            await save({ ...entity, [fieldName]: bannerUploadData?.FileUpload?.[0] });
+          } catch (error) {
+            setDebugResult(error)
+            console.error(error);
+          }
           
-          await save({ ...entity, [fieldName]: bannerUploadData?.FileUpload?.[0] });
         }
       }
     };
@@ -250,6 +263,7 @@ const AppBannerFragment = ({
         isOpen={profilePicDisclosure.isOpen}
         onClose={profilePicDisclosure.onClose}
       /> */}
+      {debugResult && <Code fontSize={10}>{JSON.stringify(debugResult)}</Code>}
     </VStack>
   );
 };
