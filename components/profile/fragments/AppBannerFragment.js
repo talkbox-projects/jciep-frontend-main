@@ -201,8 +201,7 @@ const AppBannerFragment = ({
           {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
           {...(editable && {
             cursor: "pointer",
-            onClick: handlePickFile('profilePic'),
-            // onClick: profilePicDisclosure.onOpen,
+            onClick: ()=>handlePickFile('profilePic'),
           })}
           size="xl"
           position="absolute"
