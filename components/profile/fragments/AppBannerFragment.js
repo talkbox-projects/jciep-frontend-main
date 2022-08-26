@@ -161,8 +161,8 @@ const AppBannerFragment = ({
           }
 
           try {
-            setDebugResult(updateData)
-            await save({ ...entity, [fieldName]: bannerUploadData?.FileUpload?.[0] });
+            // setDebugResult(updateData)
+            await save({...entity, [fieldName]: bannerUploadData?.FileUpload?.[0] });
           } catch (error) {
             setDebugResult(error)
             console.error(error);
@@ -211,7 +211,7 @@ const AppBannerFragment = ({
       <RenderBanner entity={entity} />
       <Box position={"relative"}>
         <Avatar
-          {...(!!entity?.[profilePicPropName]?.url && { bgColor: "white" })}
+          {...(!!entity?.profilePic?.url && { bgColor: "white" })}
           {...(editable && {
             cursor: "pointer",
             onClick: ()=>handlePickFile('profilePic'),
@@ -223,7 +223,7 @@ const AppBannerFragment = ({
           borderWidth={2}
           borderColor="white"
           objectFit="contain"
-          src={entity?.[profilePicPropName]?.url}
+          src={entity?.profilePic?.url}
         >
           {editable && (
             <Box position={"absolute"} bottom={"-16px"} right={"-32px"}>
