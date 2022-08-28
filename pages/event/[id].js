@@ -230,15 +230,12 @@ const Event = ({ page, hostname }) => {
                           </Box>
                           <Box>
                             <b>
-                              {moment(detail?.startTime, ["HH.mm"]).format(
-                                "hh:mm a"
-                              )}{" "}
-                              -{" "}
-                              {moment(detail?.endTime, ["HH.mm"]).format(
-                                "hh:mm a"
-                              )}{" "}
-                              {detail?.datetimeRemark &&
-                                `(${detail?.datetimeRemark})`}
+                            {moment(detail?.startTime, 'HH:mm', true).isValid() ? moment(detail?.startTime, ["HH.mm"]).format("hh:mm a") : ""}
+                            {" "}-{" "}
+                            {moment(detail?.endTime, 'HH:mm', true).isValid() ? moment(detail?.endTime, ["HH.mm"]).format("hh:mm a") : ""}
+                            {" "}
+                            {detail?.datetimeRemark &&
+                              `(${detail?.datetimeRemark})`}
                             </b>
                           </Box>
                         </Flex>
@@ -298,7 +295,7 @@ const Event = ({ page, hostname }) => {
                         </Flex>
 
                         <Flex gap={4} direction="column">
-                          <Text as="p">{detail?.description}</Text>
+                          <Text as="p" style={{ whiteSpace: "pre-line"}}>{detail?.description}</Text>
                         </Flex>
 
                         <Flex color="#0D8282" align="center" fontWeight={700}>
@@ -343,7 +340,7 @@ const Event = ({ page, hostname }) => {
                             "remark_label"
                           )}
                         </Box>
-                        <Text as="p">{detail?.remark}</Text>
+                        <Text as="p" style={{ whiteSpace: "pre-line"}}>{detail?.remark}</Text>
                       </Flex>
                       <Divider my={4} />
 
@@ -389,7 +386,7 @@ const Event = ({ page, hostname }) => {
                         "about_event_label"
                       )}
                     </Text>
-                    <Text as="p" fontSize={"14px"}>
+                    <Text as="p" fontSize={"14px"} style={{ whiteSpace: "pre-line"}}>
                       {detail?.description}
                     </Text>
                   </Box>

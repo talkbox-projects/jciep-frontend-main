@@ -45,13 +45,13 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const {req} = context;
+  const { req } = context;
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host
+      hostname: req?.headers?.host,
     },
   };
 };
@@ -79,7 +79,7 @@ const Event = ({ page, hostname }) => {
     async function fetchData() {
       const data = (await getEvents(getURLParameter)) ?? [];
 
-      const getData = await getDateArr(data.list.reverse());
+      const getData = await getDateArr(data.list);
       setFiltered(getData);
     }
     fetchData();
@@ -118,7 +118,15 @@ const Event = ({ page, hostname }) => {
         new_arr[startDate].push(arr[i]);
       }
     }
-    return new_arr.reverse();
+    const sorted = Object.keys(new_arr)
+      .sort((a, b) => moment(b) - moment(a))
+      .reduce((accumulator, key) => {
+        accumulator[key] = new_arr[key];
+
+        return accumulator;
+      }, {});
+
+    return sorted??[];
   }
 
   return (
@@ -214,44 +222,27 @@ const Event = ({ page, hostname }) => {
                   type="text"
                   variant="flushed"
                   placeholder={wordExtractor(
-                      page?.content?.wordings,
-                      "designated_day_placeholder"
-                    )}
+                    page?.content?.wordings,
+                    "designated_day_placeholder"
+                  )}
                   onFocus={() => (designatedDayRef.current.type = "date")}
                   onBlur={(e) => {
-                    designatedDayRef.current.type = "text"
-                    if(e.target.value){
+                    designatedDayRef.current.type = "text";
+                    if (e.target.value) {
                       router.replace({
-                        query: {formDate: e.target.value}
+                        query: { formDate: e.target.value },
                       });
                     }
                   }}
                   ref={designatedDayRef}
                 />
-                {/* <Select
-                  value={router.query.organizationId ?? ""}
-                  onChange={(e) =>
-                    router.push(
-                      generateUrlParameter({
-                        identityId: "",
-                        organizationId: e.target.value,
-                      })
-                    )
-                  }
-                  variant="flushed"
-                  _placeholder={{ color: "gray.200" }}
-                >
-                  <option key="" value="">
-                    {wordExtractor(page?.content?.wordings, "designated_day")}
-                  </option>
-                </Select> */}
               </Box>
               <Box flex={1}>
                 <FilterSection page={page} />
               </Box>
             </Flex>
             {filteredEvents &&
-              Object.keys(filteredEvents).reverse().map((detail) => (
+              Object.keys(filteredEvents).map((detail) => (
                 <Box key={detail}>
                   <Flex
                     direction={{ base: "column", md: "row" }}
@@ -262,7 +253,7 @@ const Event = ({ page, hostname }) => {
                       fontSize={{ base: 24, md: 36 }}
                       pb={{ base: 4, md: 0 }}
                     >
-                      <Text as="span" fontWeight={700}  whiteSpace="nowrap">
+                      <Text as="span" fontWeight={700} whiteSpace="nowrap">
                         {moment(detail).format("MMMM")}
                       </Text>{" "}
                       <Text as="span">{moment(detail).format("YYYY")}</Text>
@@ -275,10 +266,12 @@ const Event = ({ page, hostname }) => {
                         }}
                         gap={6}
                       >
-                        {(filteredEvents[detail].reverse() || []).map((d, i) => {
+                        {(filteredEvents[detail] || []).map((d, i) => {
                           const imageUrl =
-                          (d?.banner?.file?.url !== undefined && d?.banner?.file?.url !== null) ? d?.banner?.file?.url :
-                          `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.jpg`;
+                            d?.banner?.file?.url !== undefined &&
+                            d?.banner?.file?.url !== null
+                              ? d?.banner?.file?.url
+                              : `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.jpg`;
                           return (
                             <GridItem
                               key={`${d.id}${i}`}
@@ -353,18 +346,6 @@ const Event = ({ page, hostname }) => {
                                     align="center"
                                     gap={2}
                                   >
-                                    {/* <Box w={"20px"}>
-                                      <Image
-                                        src={`/images/app/${
-                                          d.bookmarked
-                                            ? "list-bookmark-active.svg"
-                                            : "list-bookmark.svg"
-                                        }`}
-                                        alt={""}
-                                        color="gray.500"
-                                        fontSize={14}
-                                      />
-                                    </Box> */}
                                     <Box>
                                       {d.bookmarked
                                         ? wordExtractor(
@@ -547,11 +528,7 @@ const FilterSection = ({ page }) => {
             key={d.label}
             onClick={() => {
               const filterObj = {
-                latest: {
-                  orderBy: "createdAt",
-                  orderByAsc: false,
-                  ended: false,
-                },
+                latest: {},
                 hot: {
                   orderBy: "bookmarkCount",
                   orderByAsc: false,
@@ -565,7 +542,7 @@ const FilterSection = ({ page }) => {
               };
 
               router.replace({
-                query: { ...router.query, ...filterObj[d.value] },
+                query: filterObj[d.value],
               });
 
               setSelected(d.value);
