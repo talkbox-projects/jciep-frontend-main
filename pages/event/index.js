@@ -74,7 +74,11 @@ const Event = ({ page, hostname }) => {
   useEffect(() => {
     const { asPath } = router;
 
-    const getURLParameter = asPath.replace("/event", "");
+    let getURLParameter = asPath.replace("/event", "");
+
+    if(!getURLParameter){
+      getURLParameter = "?orderBy=createdAt&orderByAsc=false&ended=false"
+    }
 
     async function fetchData() {
       const data = (await getEvents(getURLParameter)) ?? [];
@@ -126,7 +130,7 @@ const Event = ({ page, hostname }) => {
         return accumulator;
       }, {});
 
-    return sorted??[];
+    return sorted ?? [];
   }
 
   return (
@@ -303,8 +307,26 @@ const Event = ({ page, hostname }) => {
                                       />
                                     </Box>
                                     <Box>
-                                      <b>{d.startDate}</b> - {d.startTime} -{" "}
-                                      {d.endTime}
+                                      <b>{d.startDate}</b> -{" "}
+                                      {moment(
+                                        d?.startTime,
+                                        "HH:mm",
+                                        true
+                                      ).isValid()
+                                        ? moment(d?.startTime, [
+                                            "HH.mm",
+                                          ]).format("hh:mm")
+                                        : ""}{" "}
+                                      -{" "}
+                                      {moment(
+                                        d?.endTime,
+                                        "HH:mm",
+                                        true
+                                      ).isValid()
+                                        ? moment(d?.endTime, ["HH.mm"]).format(
+                                            "hh:mm"
+                                          )
+                                        : ""}
                                     </Box>
                                   </Flex>
                                   <Flex align="center" gap={2}>
@@ -528,7 +550,11 @@ const FilterSection = ({ page }) => {
             key={d.label}
             onClick={() => {
               const filterObj = {
-                latest: {},
+                latest: {
+                  orderBy: "createdAt",
+                  orderByAsc: false,
+                  ended: false,
+                },
                 hot: {
                   orderBy: "bookmarkCount",
                   orderByAsc: false,

@@ -466,7 +466,7 @@ const Home = ({ setting, page }) => {
                     <Box w={["100%", "60%", "50%", "50%", "40%"]}>
                       <Image
                         alt={post?.content?.feature?.tagline ?? post?.title}
-                        src={post?.content?.feature?.image}
+                        src={post?.content?.feature?.image ?? post?.content?.coverImage}
                       />
                     </Box>
                     <VStack
