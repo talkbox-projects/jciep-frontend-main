@@ -32,11 +32,12 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      lang: context.locale
     },
   };
 };
 
-const PwdMain = ({ page }) => {
+const PwdMain = ({ page, lang }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -241,7 +242,7 @@ const PwdMain = ({ page }) => {
                   <Image alt={data.name} src={data.icon} h="48px" w="48px" />
                   <Text
                     fontWeight="bold"
-                    fontSize={["16px", "16px", "24px"]}
+                    fontSize={lang === 'zh' ? ["16px", "16px", "24px"] : ["12px", "14px", "18px"]}
                     textAlign="center"
                   >
                     {data.name}

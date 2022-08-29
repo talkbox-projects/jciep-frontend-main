@@ -59,16 +59,13 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const identity = (await identityMeGet(undefined, context))
+  const identity = (await identityMeGet(undefined, context)) ?? {}
   return {
     props: {
       page,
       isApp: true,
-      // api: {
-      //   identity: context?.auth?.identity ? await identityMeGet(undefined, context) : {},
-      // },
       api: {
-        identity: identity??{},
+        identity,
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -122,6 +119,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         label: lang === "zh" ? d?.organization?.chineseCompanyName : d?.organization?.englishCompanyName??d?.organization?.chineseCompanyName
       };
     });
+  const organizationOption = organizationInfo ? [{label: "-", value: ""}, ...organizationInfo] : [{label: "-", value: ""}]
   const { fields, append, remove } = useFieldArray({
     control,
     name: "otherUrls",
@@ -146,6 +144,12 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
     }
     getStockPhotoData();
   }, [router]);
+
+  useEffect(() => {
+    if(organizationOption?.[1]){
+      setValue("organizationId", organizationOption?.[1])
+    }
+  }, [organizationOption]);
 
   const FileUploadmutation = gql`
     mutation FileUpload($file: FileUpload!) {
@@ -319,25 +323,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
       return;
     }
 
-    // if (!_.isEmpty(additionalInformation?.[0]?.[0]?.name)) {
-    //   filesAdditionalInformalUploadData = await additionalInformation
-    //     .map((d) => {
-    //       if (d[0]) {
-    //         return d[0];
-    //       }
-    //     })
-    //     .filter((d) => d);
-    // }
-
-    // if (filesAdditionalInformalUploadData) {
-    //   filesAdditionalInformalUploadData = await getGraphQLClient().request(
-    //     FileUploadmutation,
-    //     {
-    //       file: filesAdditionalInformalUploadData,
-    //     }
-    //   );
-    // }
-
     const submitBanner = bannerImage?.[0]
       ? {
           file: bannerImage?.[0],
@@ -364,7 +349,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         submissionDeadline: submissionDeadline,
         eventManager: eventManager,
         contactNumber: contactNumber,
-        organizationId: organizationId,
+        organizationId: organizationId?.value??"",
         registerUrl: registerUrl ? registerUrl.toLowerCase() : "",
         otherUrls: !_.isEmpty(otherUrls)
           ? otherUrls.map((d) => d?.toLowerCase())
@@ -572,15 +557,14 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           )}
                           {...field}
                           placeholder={""}
-                          options={organizationInfo?.map(({ label, value }) => ({
-                            label,
-                            value,
-                          }))}
+                          options={organizationOption?.map(
+                              ({ label, value }) => ({ label, value })
+                            )}
                           styles={customStyles}
                           components={{
                             IndicatorSeparator: () => null,
                           }}
-                          defaultValue={{ label: organizationInfo?.[0]?.label, value: organizationInfo?.[0]?.value }}
+                          defaultValue={organizationOption?.[1]??{}}
                           isSearchable={false}
                         />
                       )}
