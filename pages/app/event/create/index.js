@@ -59,12 +59,16 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const identity = (await identityMeGet(undefined, context))
   return {
     props: {
       page,
       isApp: true,
+      // api: {
+      //   identity: context?.auth?.identity ? await identityMeGet(undefined, context) : {},
+      // },
       api: {
-        identity: context?.auth?.identity ? await identityMeGet(undefined, context) : {},
+        identity: identity??{},
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
