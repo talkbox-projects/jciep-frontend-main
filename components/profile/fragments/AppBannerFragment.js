@@ -156,13 +156,14 @@ const AppBannerFragment = ({
           );
 
           const updateData = {
-            ...entity,
+            id: entity?.id,
+            bannerMedia: entity?.bannerMedia,
             [fieldName]: bannerUploadData?.FileUpload?.[0]
           }
 
           try {
-            // setDebugResult(updateData)
-            await save({...entity, [fieldName]: bannerUploadData?.FileUpload?.[0] });
+            setDebugResult(updateData)
+            await save(updateData);
           } catch (error) {
             setDebugResult(error)
             console.error(error);
