@@ -74,10 +74,10 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
 
   useEffect(() => {
     if (detail?.organizationId) {
-      const organization = organizations.find(d=>d.id === detail?.organizationId)
+      const organization = organizations?.find(d=>d.id === detail?.organizationId)
       setOrganizeBy(organization)
     }
-  }, [detail?.organizationId]);
+  }, [detail?.organizationId, organizations]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
@@ -166,6 +166,8 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
     }
   };
 
+  console.log('detail-',detail)
+  console.log('organizeBy-',organizeBy)
 
   return (
     <>
@@ -268,21 +270,6 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
                           </Box>
                         </Flex>
 
-                        {organizeBy && (<Flex align="center" gap={2}>
-                          <Box>
-                            <b>
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "organize_by_label"
-                            )}
-                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "organize_label"
-                            )}
-                          </Box>
-                        </Flex>)}
-
                         <Flex align="center" gap={2}>
                           <Box w={"20px"} textAlign="center">
                             <Image
@@ -298,6 +285,21 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
                             <b>{detail?.venue}</b>
                           </Box>
                         </Flex>
+
+                        {organizeBy && (<Flex align="center" gap={2}>
+                          <Box>
+                          {wordExtractor(
+                              page?.content?.wordings,
+                              "organize_by_label"
+                            )}
+                            <b>{" "}
+                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
+                            {" "}{wordExtractor(
+                              page?.content?.wordings,
+                              "hold_label"
+                            )}
+                          </Box>
+                        </Flex>)}
 
                       </Stack>
                       <Divider my={4} />

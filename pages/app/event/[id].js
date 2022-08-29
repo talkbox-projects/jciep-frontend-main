@@ -28,6 +28,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
 import { getYoutubeLink } from "../../../utils/general";
+import organizationSearch from "../../../utils/api/OrganizationSearch";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import {
   bookmarkEvent,
@@ -49,14 +50,22 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true
+        }),
+      },
+      lang: context.locale
     },
   };
 };
 
-const Event = ({ page, hostname }) => {
+const Event = ({ page, hostname, organizations, lang }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
+  const [organizeBy, setOrganizeBy] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenRegistrationModal,
@@ -88,6 +97,13 @@ const Event = ({ page, hostname }) => {
   useEffect(() => {
     setBookmarked(detail?.bookmarked);
   }, [detail?.bookmarked]);
+
+  useEffect(() => {
+    if (detail?.organizationId) {
+      const organization = organizations?.find(d=>d.id === detail?.organizationId)
+      setOrganizeBy(organization)
+    }
+  }, [detail?.organizationId, organizations]);
 
   const handleBookmark = async (id) => {
     const result = await bookmarkEvent(id);
@@ -287,13 +303,23 @@ const Event = ({ page, hostname }) => {
                       </Box>
                       <Box>
                         <b>
-                          {moment(detail?.startTime, ["HH.mm"]).format(
-                            "hh:mm a"
-                          )}{" "}
-                          -{" "}
-                          {moment(detail?.endTime, ["HH.mm"]).format("hh:mm a")}{" "}
-                          {detail?.datetimeRemark &&
-                            `(${detail?.datetimeRemark})`}
+                        {moment(
+                                detail?.startTime,
+                                "HH:mm",
+                                true
+                              ).isValid()
+                                ? moment(detail?.startTime, ["HH.mm"]).format(
+                                    "hh:mm a"
+                                  )
+                                : ""}{" "}
+                              -{" "}
+                              {moment(detail?.endTime, "HH:mm", true).isValid()
+                                ? moment(detail?.endTime, ["HH.mm"]).format(
+                                    "hh:mm a"
+                                  )
+                                : ""}{" "}
+                              {detail?.datetimeRemark &&
+                                `(${detail?.datetimeRemark})`}
                         </b>
                       </Box>
                     </Flex>
@@ -313,6 +339,20 @@ const Event = ({ page, hostname }) => {
                         <b>{detail?.venue}</b>
                       </Box>
                     </Flex>
+                    {organizeBy && (<Flex align="center" gap={2}>
+                          <Box>
+                          {wordExtractor(
+                              page?.content?.wordings,
+                              "organize_by_label"
+                            )}
+                            <b>{" "}
+                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
+                            {" "}{wordExtractor(
+                              page?.content?.wordings,
+                              "hold_label"
+                            )}
+                          </Box>
+                        </Flex>)}
 
                     <Flex align="center" gap={2}>
                       {currentIdentityId ? (
