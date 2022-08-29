@@ -32,6 +32,7 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import { createEvent } from "../../../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
 import { urlRegex, phoneRegex } from "../../../../utils/general";
+import identityMeGet from "../../../../utils/api/IdentityMeGet";
 import {
   AiOutlineInfoCircle,
   AiFillMinusCircle,
@@ -62,6 +63,9 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isApp: true,
+      api: {
+        identity: await identityMeGet(undefined, context),
+      },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
@@ -69,7 +73,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const EventAdd = ({ page }) => {
+const EventAdd = ({ page, api: { identity }, lang }) => {
   const router = useRouter();
   const {
     handleSubmit,
@@ -103,6 +107,17 @@ const EventAdd = ({ page }) => {
   const getDateTimeRemarkCount = watch("datetimeRemark", 0);
   const watchAdditionalInformation = watch("additionalInformation");
   const watchBannerImage = watch("bannerImage");
+  const organizationInfo = identity?.organizationRole
+    ?.filter(
+      (d) =>
+        (d?.role === "staff" || d.role === "admin") && d?.status === "joined"
+    )
+    .map((d) => {
+      return {
+        value: d?.organization?.id,
+        label: lang === "zh" ? d?.organization?.chineseCompanyName : d?.organization?.englishCompanyName??d?.organization?.chineseCompanyName
+      };
+    });
   const { fields, append, remove } = useFieldArray({
     control,
     name: "otherUrls",
@@ -288,6 +303,7 @@ const EventAdd = ({ page }) => {
     remark,
     additionalInformation,
     bannerImage,
+    organizationId,
   }) => {
     setAdditionalFileError("");
     setBannerFileError("");
@@ -333,8 +349,8 @@ const EventAdd = ({ page }) => {
         description: description,
         startDate: startDate,
         endDate: endDate,
-        startTime: _.isEmpty(startTime) ? "00:00" : startTime,
-        endTime: _.isEmpty(endTime) ? "00:00" : endTime,
+        startTime: _.isEmpty(startTime) ? null : startTime,
+        endTime: _.isEmpty(endTime) ? null : endTime,
         datetimeRemark: datetimeRemark,
         quota: quota,
         venue: venue,
@@ -344,8 +360,11 @@ const EventAdd = ({ page }) => {
         submissionDeadline: submissionDeadline,
         eventManager: eventManager,
         contactNumber: contactNumber,
+        organizationId: organizationId,
         registerUrl: registerUrl ? registerUrl.toLowerCase() : "",
-        otherUrls: !_.isEmpty(otherUrls) ? otherUrls.map(d=> d?.toLowerCase()) : [],
+        otherUrls: !_.isEmpty(otherUrls)
+          ? otherUrls.map((d) => d?.toLowerCase())
+          : [],
         remark: remark,
         banner: submitBanner,
         additionalInformation: additionalInformation ?? [],
@@ -529,6 +548,50 @@ const EventAdd = ({ page }) => {
                       ).replace("$", getDescriptionCount.length || 0)}
                     </Text>
                   </GridItem>
+
+                  <FormControl>
+                    <LABEL
+                      name={wordExtractor(
+                        page?.content?.wordings,
+                        "organized_by_label"
+                      )}
+                    />
+                    <Controller
+                      name="organizationId"
+                      isClearable
+                      control={control}
+                      render={({ field }) => (
+                        <ReactSelect
+                          aria-label={wordExtractor(
+                            page?.content?.wordings,
+                            "organized_by_label"
+                          )}
+                          {...field}
+                          placeholder={""}
+                          options={organizationInfo.map(({ label, value }) => ({
+                            label,
+                            value,
+                          }))}
+                          styles={customStyles}
+                          components={{
+                            IndicatorSeparator: () => null,
+                          }}
+                          defaultValue={{ label: organizationInfo[0]?.label, value: organizationInfo[0]?.value }}
+                          isSearchable={false}
+                        />
+                      )}
+                    />
+                    <FormHelperText>
+                      {errors?.type?.type === "required" && (
+                        <Text color="red">
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "input_required"
+                          )}
+                        </Text>
+                      )}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
 
                 <SimpleDivider />
@@ -739,7 +802,7 @@ const EventAdd = ({ page }) => {
                           "quota_placeholder"
                         )}
                         {...register("quota", {
-                          required: true
+                          required: true,
                         })}
                       />
                       <FormHelperText>
@@ -1048,14 +1111,15 @@ const EventAdd = ({ page }) => {
                         )}
 
                         {errors?.otherUrls?.[0]?.type !== "required" &&
-                          errors?.otherUrls?.length > 0 && (
-                          errors?.otherUrls?.map((d,i) => <Text key={i} color="red">
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "field_error_message_invalid_url"
-                            )}
-                          </Text>)
-                        )}
+                          errors?.otherUrls?.length > 0 &&
+                          errors?.otherUrls?.map((d, i) => (
+                            <Text key={i} color="red">
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "field_error_message_invalid_url"
+                              )}
+                            </Text>
+                          ))}
                       </FormHelperText>
                     </FormControl>
                     <Flex
@@ -1248,7 +1312,7 @@ const EventAdd = ({ page }) => {
                         m={2}
                         className="additionalInformationWrap"
                       >
-                        {/* {watchAdditionalInformation[index]?.[0] && (
+                        {watchAdditionalInformation[index]?.[0] && (
                           <Button
                             colorScheme="red"
                             size="xs"
@@ -1256,13 +1320,14 @@ const EventAdd = ({ page }) => {
                             position="absolute"
                             top={2}
                             right={2}
+                            zIndex={4}
                           >
                             {wordExtractor(
                               page?.content?.wordings,
                               "delete_information_label"
                             )}
                           </Button>
-                        )} */}
+                        )}
                         {watchAdditionalInformation[index] ? (
                           <Box pos="relative" h={"100%"}>
                             <Box

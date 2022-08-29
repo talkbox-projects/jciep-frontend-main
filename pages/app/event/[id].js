@@ -16,8 +16,6 @@ import {
   ModalContent,
   ModalBody,
   Center,
-  VStack,
-  AspectRatio
 } from "@chakra-ui/react";
 import { getPage } from "../../../utils/page/getPage";
 import withPageCMS from "../../../utils/page/withPageCMS";
@@ -43,14 +41,14 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const {req} = context;
+  const { req } = context;
   return {
     props: {
       page,
       isApp: true,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host
+      hostname: req?.headers?.host,
     },
   };
 };
@@ -66,13 +64,11 @@ const Event = ({ page, hostname }) => {
     onClose: onCloseRegistrationModal,
   } = useDisclosure();
 
-
   const {
     isOpen: isOpenVideoModal,
     onOpen: onOpenVideoModal,
     onClose: onCloseVideoModal,
   } = useDisclosure();
-
 
   const [popupImage, setPopupImage] = useState(null);
   const [popupVideo, setPopupVideo] = useState(null);
@@ -134,7 +130,7 @@ const Event = ({ page, hostname }) => {
     }
   };
 
-  const RenderAdditionalContent = ({data}) => {
+  const RenderAdditionalContent = ({ data }) => {
     if (!data) {
       return <></>;
     }
@@ -160,41 +156,43 @@ const Event = ({ page, hostname }) => {
               bgPosition={"center center"}
               position={"relative"}
             >
-
-            <Center h={'100%'}><AiOutlineFilePdf style={{width: '30px', height: '30px'}}/></Center>
-
+              <Center h={"100%"}>
+                <AiOutlineFilePdf style={{ width: "30px", height: "30px" }} />
+              </Center>
             </Box>
           </GridItem>
         );
 
-        case "video/mp4":
-          return (
-            <GridItem
-              flex={1}
-              bgColor={"#FFF"}
-              overflow={"hidden"}
-              onClick={() => {
-                if (data.url) {
-                  onOpenVideoModal()
-                  setPopupVideo(`${data.url}`);
-                }
-              }}
+      case "video/mp4":
+        return (
+          <GridItem
+            flex={1}
+            bgColor={"#FFF"}
+            overflow={"hidden"}
+            onClick={() => {
+              if (data.url) {
+                onOpenVideoModal();
+                setPopupVideo(`${data.url}`);
+              }
+            }}
+          >
+            <Box
+              bgColor="#F2F2F2"
+              h={"110px"}
+              w={"100%"}
+              bgSize={{ base: "cover" }}
+              bgPosition={"center center"}
+              position={"relative"}
             >
-              <Box
-                bgColor="#F2F2F2"
-                h={"110px"}
-                w={"100%"}
-                bgSize={{ base: "cover" }}
-                bgPosition={"center center"}
-                position={"relative"}
-              >
-  
-              <Center h={'100%'}><AiOutlinePlayCircle style={{width: '30px', height: '30px'}}/></Center>
-  
-              </Box>
-            </GridItem>
-          );
-    
+              <Center h={"100%"}>
+                <AiOutlinePlayCircle
+                  style={{ width: "30px", height: "30px" }}
+                />
+              </Center>
+            </Box>
+          </GridItem>
+        );
+
       default:
         return (
           <GridItem
@@ -440,7 +438,7 @@ const Event = ({ page, hostname }) => {
                             minW={"20px"}
                           />
                         </Box>
-                        <Box style={{wordBreak: 'break-all'}}>{d}</Box>
+                        <Box style={{ wordBreak: "break-all" }}>{d}</Box>
                       </Flex>
                     ))}
                   </Flex>
@@ -495,13 +493,24 @@ const Event = ({ page, hostname }) => {
                   </Flex>
 
                   <Stack direction={"column"} spacing={2} py={4}>
-                    <RegistrationRow
-                      title={wordExtractor(
-                        page?.content?.wordings,
-                        "quota_label"
-                      )}
-                      value={detail?.quota}
-                    />
+                    <Flex direction="row" gap={2}>
+                      <Box minW={"100px"}>
+                        <Text>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "quota_label"
+                          )}
+                        </Text>
+                      </Box>
+                      <Text fontWeight={700}>
+                        {detail?.quota === 0
+                          ? wordExtractor(
+                              page?.content?.wordings,
+                              "quota_unlimited"
+                            )
+                          : detail?.quota}
+                      </Text>
+                    </Flex>
 
                     <RegistrationRow
                       title={wordExtractor(
@@ -668,7 +677,7 @@ const Event = ({ page, hostname }) => {
         isOpen={isOpen}
         popupSrc={popupImage}
       />
-      
+
       <VideoModal
         onClose={onCloseVideoModal}
         isOpen={isOpenVideoModal}
@@ -843,8 +852,8 @@ const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
 };
 
 const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
-  if(!popupSrc){
-    return <></>
+  if (!popupSrc) {
+    return <></>;
   }
   return (
     <Modal
@@ -863,10 +872,10 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
           <Flex h={"100vh"} direction="column" pb={"40px"}>
             <Box h={"60px"}></Box>
             <Box flex={1}>
-              <Center h={"100%"} w={'100%'}>
-              <video width="100%" controls >
-                <source src={popupSrc} type="video/mp4"/>
-              </video>
+              <Center h={"100%"} w={"100%"}>
+                <video width="100%" controls>
+                  <source src={popupSrc} type="video/mp4" />
+                </video>
               </Center>
             </Box>
             <Box
@@ -888,7 +897,9 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
 };
 
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  const imageUrl = url ?? `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+  const imageUrl =
+    url ??
+    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
   return (
     <Box
       bgImage={`url(${imageUrl})`}

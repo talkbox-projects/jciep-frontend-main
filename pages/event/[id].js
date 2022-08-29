@@ -24,7 +24,8 @@ import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
-import { bookmarkEvent, unBookmarkEvent } from "../../utils/event/eventAction";
+import { bookmarkEvent } from "../../utils/event/eventAction";
+import organizationSearch from "../../utils/api/OrganizationSearch";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 
 import eventTypes from "../api/graphql/enum/eventTypes";
@@ -34,20 +35,28 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const {req} = context;
+  const { req } = context;
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host
+      hostname: req?.headers?.host,
+      api: {
+        organizations: await organizationSearch({
+          status: ["approved"],
+          published: true
+        }),
+      },
+      lang: context.locale
     },
   };
 };
 
-const Event = ({ page, hostname }) => {
+const Event = ({ page, hostname, api: {organizations}, lang }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [organizeBy, setOrganizeBy] = useState("");
   const [bookmarkActive, setBookmarkActive] = useState(false);
 
   useEffect(() => {
@@ -62,6 +71,13 @@ const Event = ({ page, hostname }) => {
       fetchData();
     }
   }, [router, bookmarkActive]);
+
+  useEffect(() => {
+    if (detail?.organizationId) {
+      const organization = organizations.find(d=>d.id === detail?.organizationId)
+      setOrganizeBy(organization)
+    }
+  }, [detail?.organizationId]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
@@ -150,6 +166,7 @@ const Event = ({ page, hostname }) => {
     }
   };
 
+
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
@@ -230,15 +247,41 @@ const Event = ({ page, hostname }) => {
                           </Box>
                           <Box>
                             <b>
-                            {moment(detail?.startTime, 'HH:mm', true).isValid() ? moment(detail?.startTime, ["HH.mm"]).format("hh:mm a") : ""}
-                            {" "}-{" "}
-                            {moment(detail?.endTime, 'HH:mm', true).isValid() ? moment(detail?.endTime, ["HH.mm"]).format("hh:mm a") : ""}
-                            {" "}
-                            {detail?.datetimeRemark &&
-                              `(${detail?.datetimeRemark})`}
+                              {moment(
+                                detail?.startTime,
+                                "HH:mm",
+                                true
+                              ).isValid()
+                                ? moment(detail?.startTime, ["HH.mm"]).format(
+                                    "hh:mm a"
+                                  )
+                                : ""}{" "}
+                              -{" "}
+                              {moment(detail?.endTime, "HH:mm", true).isValid()
+                                ? moment(detail?.endTime, ["HH.mm"]).format(
+                                    "hh:mm a"
+                                  )
+                                : ""}{" "}
+                              {detail?.datetimeRemark &&
+                                `(${detail?.datetimeRemark})`}
                             </b>
                           </Box>
                         </Flex>
+
+                        {organizeBy && (<Flex align="center" gap={2}>
+                          <Box>
+                            <b>
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "organize_by_label"
+                            )}
+                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
+                            {wordExtractor(
+                              page?.content?.wordings,
+                              "organize_label"
+                            )}
+                          </Box>
+                        </Flex>)}
 
                         <Flex align="center" gap={2}>
                           <Box w={"20px"} textAlign="center">
@@ -255,6 +298,7 @@ const Event = ({ page, hostname }) => {
                             <b>{detail?.venue}</b>
                           </Box>
                         </Flex>
+
                       </Stack>
                       <Divider my={4} />
                       <Flex gap={4} direction="column">
@@ -295,7 +339,9 @@ const Event = ({ page, hostname }) => {
                         </Flex>
 
                         <Flex gap={4} direction="column">
-                          <Text as="p" style={{ whiteSpace: "pre-line"}}>{detail?.description}</Text>
+                          <Text as="p" style={{ whiteSpace: "pre-line" }}>
+                            {detail?.description}
+                          </Text>
                         </Flex>
 
                         <Flex color="#0D8282" align="center" fontWeight={700}>
@@ -340,7 +386,9 @@ const Event = ({ page, hostname }) => {
                             "remark_label"
                           )}
                         </Box>
-                        <Text as="p" style={{ whiteSpace: "pre-line"}}>{detail?.remark}</Text>
+                        <Text as="p" style={{ whiteSpace: "pre-line" }}>
+                          {detail?.remark}
+                        </Text>
                       </Flex>
                       <Divider my={4} />
 
@@ -386,7 +434,11 @@ const Event = ({ page, hostname }) => {
                         "about_event_label"
                       )}
                     </Text>
-                    <Text as="p" fontSize={"14px"} style={{ whiteSpace: "pre-line"}}>
+                    <Text
+                      as="p"
+                      fontSize={"14px"}
+                      style={{ whiteSpace: "pre-line" }}
+                    >
                       {detail?.description}
                     </Text>
                   </Box>
@@ -548,8 +600,9 @@ const Event = ({ page, hostname }) => {
 
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
   const imageUrl =
-  (url !== 'undefined' && url !== null) ? url :
-  `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
+    url !== "undefined" && url !== null
+      ? url
+      : `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
   return (
     <Box
       bgImage={`url(${imageUrl})`}
