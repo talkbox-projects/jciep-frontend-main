@@ -64,7 +64,7 @@ export const getServerSideProps = async (context) => {
       page,
       isApp: true,
       api: {
-        identity: await identityMeGet(undefined, context),
+        identity: context?.auth?.identity ? await identityMeGet(undefined, context) : {},
       },
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
@@ -568,7 +568,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           )}
                           {...field}
                           placeholder={""}
-                          options={organizationInfo.map(({ label, value }) => ({
+                          options={organizationInfo?.map(({ label, value }) => ({
                             label,
                             value,
                           }))}
@@ -576,7 +576,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           components={{
                             IndicatorSeparator: () => null,
                           }}
-                          defaultValue={{ label: organizationInfo[0]?.label, value: organizationInfo[0]?.value }}
+                          defaultValue={{ label: organizationInfo?.[0]?.label, value: organizationInfo?.[0]?.value }}
                           isSearchable={false}
                         />
                       )}
@@ -1312,7 +1312,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         m={2}
                         className="additionalInformationWrap"
                       >
-                        {watchAdditionalInformation[index]?.[0] && (
+                        {watchAdditionalInformation[index] && (
                           <Button
                             colorScheme="red"
                             size="xs"
@@ -1320,7 +1320,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                             position="absolute"
                             top={2}
                             right={2}
-                            zIndex={4}
+                            zIndex={10}
                           >
                             {wordExtractor(
                               page?.content?.wordings,
@@ -1360,24 +1360,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                                   </Text>
                                 </Stack>
                               </Center>
-                              {/* <Input
-                                type="file"
-                                multiple={false}
-                                opacity={0}
-                                zIndex={2}
-                                top={0}
-                                left={0}
-                                right={0}
-                                bottom={0}
-                                height={"100%"}
-                                position="absolute"
-                                ref={additionalFileRefs}
-                                onInput={(e) =>
-                                  onAdditionalFileUpload(e, index)
-                                }
-                                accept=".pdf, .png, .jpg, .jpeg"
-                                {...register(`additionalInformation[${index}]`)}
-                              /> */}
                             </Box>
                             <Box pos="relative" zIndex={4} h={"100%"}>
                               {renderPickedImage(
@@ -1419,32 +1401,11 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                                 </Text>
                               </Stack>
                             </Center>
-                            {/* <Input
-                              type="file"
-                              multiple={false}
-                              opacity={0}
-                              zIndex={2}
-                              top={0}
-                              left={0}
-                              right={0}
-                              bottom={0}
-                              height={"100%"}
-                              position="absolute"
-                              ref={additionalFileRefs}
-                              onInput={(e) => onAdditionalFileUpload(e, index)}
-                              accept=".pdf, .png, .jpg, .jpeg"
-                              {...register(`additionalInformation[${index}]`)}
-                            /> */}
                           </Box>
                         )}
                       </Box>
                     );
                   })}
-                  {/* {additionalFileError && (
-                    <Text color="red" mx={2}>
-                      {additionalFileError}
-                    </Text>
-                  )} */}
                   <Flex m={2}>
                     <Button
                       type="button"
