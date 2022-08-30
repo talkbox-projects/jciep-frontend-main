@@ -24,7 +24,7 @@ import {
 import { gql } from "graphql-request";
 import { getYoutubeLink } from "../../../utils/general";
 import wordExtractor from "../../../utils/wordExtractor";
-import BannerMediaUploadModal from "./BannerMediaUploadModal";
+import AppBannerMediaUploadModal from "./AppBannerMediaUploadModal";
 import ProfilePicUploadModal from "./ProfilePicUploadModal";
 import { useRouter } from "next/router";
 import { getGraphQLClient } from "../../../utils/apollo";
@@ -162,7 +162,7 @@ const AppBannerFragment = ({
           }
 
           try {
-            setDebugResult(updateData)
+            // setDebugResult(updateData)
             await save(updateData);
           } catch (error) {
             setDebugResult(error)
@@ -253,7 +253,7 @@ const AppBannerFragment = ({
           )}
         </Avatar>
       </Box>
-      <BannerMediaUploadModal
+      <AppBannerMediaUploadModal
         params={{ entity, page, save }}
         isOpen={bannerMediaDisclosure.isOpen}
         onClose={bannerMediaDisclosure.onClose}
@@ -264,7 +264,7 @@ const AppBannerFragment = ({
         isOpen={profilePicDisclosure.isOpen}
         onClose={profilePicDisclosure.onClose}
       /> */}
-      {debugResult && <Code fontSize={10}>{JSON.stringify(debugResult)}</Code>}
+      {/* {debugResult && <Code fontSize={10}>{JSON.stringify(debugResult)}</Code>} */}
     </VStack>
   );
 };
