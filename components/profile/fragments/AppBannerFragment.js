@@ -51,7 +51,6 @@ const AppBannerFragment = ({
   }, [router]);
   const [debugResult, setDebugResult] = useState("");
   const bannerMediaDisclosure = useDisclosureWithParams();
-  const profilePicDisclosure = useDisclosureWithParams();
   const RenderBanner = ({ entity }) => {
     if (!entity?.bannerMedia?.videoUrl && !entity?.bannerMedia?.file?.url) {
       return (
