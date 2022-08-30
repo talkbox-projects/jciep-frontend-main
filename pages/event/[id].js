@@ -47,13 +47,14 @@ export const getServerSideProps = async (context) => {
           status: ["approved"],
           published: true
         }),
+        eventDetail: await getEventDetail(context?.query?.id)
       },
-      lang: context.locale
+      lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, api: {organizations}, lang }) => {
+const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organizeBy, setOrganizeBy] = useState("");
@@ -70,7 +71,7 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
     if (bookmarkActive) {
       fetchData();
     }
-  }, [router, bookmarkActive]);
+  }, [bookmarkActive]);
 
   useEffect(() => {
     if (detail?.organizationId) {
@@ -166,8 +167,8 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
     }
   };
 
-  console.log('detail-',detail)
-  console.log('organizeBy-',organizeBy)
+  console.log('organizations-',organizations)
+  console.log('eventDetail-',eventDetail)
 
   return (
     <>
@@ -534,18 +535,6 @@ const Event = ({ page, hostname, api: {organizations}, lang }) => {
                   </Stack>
 
                   <Flex gap={2} direction={"column"} mt={10}>
-                    {/* <Button
-                      borderRadius="20px"
-                      w={"100%"}
-                      variant="outline"
-                      borderColor={"gray.200"}
-                      _hover={{ borderColor: "#F6D644", bgColor: "#F6D644" }}
-                    >
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "registration_label"
-                      )}
-                    </Button> */}
                     {detail?.registerUrl && (
                       <a
                         href={`${detail?.registerUrl}`}

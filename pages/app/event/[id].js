@@ -53,15 +53,21 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
-          published: true
+          published: true,
         }),
+        eventDetail: await getEventDetail(context?.query?.id),
       },
-      lang: context.locale
+      lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, organizations, lang }) => {
+const Event = ({
+  page,
+  hostname,
+  api: { organizations, eventDetail },
+  lang,
+}) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
@@ -100,8 +106,10 @@ const Event = ({ page, hostname, organizations, lang }) => {
 
   useEffect(() => {
     if (detail?.organizationId) {
-      const organization = organizations?.find(d=>d.id === detail?.organizationId)
-      setOrganizeBy(organization)
+      const organization = organizations?.find(
+        (d) => d.id === detail?.organizationId
+      );
+      setOrganizeBy(organization);
     }
   }, [detail?.organizationId, organizations]);
 
@@ -303,23 +311,19 @@ const Event = ({ page, hostname, organizations, lang }) => {
                       </Box>
                       <Box>
                         <b>
-                        {moment(
-                                detail?.startTime,
-                                "HH:mm",
-                                true
-                              ).isValid()
-                                ? moment(detail?.startTime, ["HH.mm"]).format(
-                                    "hh:mm a"
-                                  )
-                                : ""}{" "}
-                              -{" "}
-                              {moment(detail?.endTime, "HH:mm", true).isValid()
-                                ? moment(detail?.endTime, ["HH.mm"]).format(
-                                    "hh:mm a"
-                                  )
-                                : ""}{" "}
-                              {detail?.datetimeRemark &&
-                                `(${detail?.datetimeRemark})`}
+                          {moment(detail?.startTime, "HH:mm", true).isValid()
+                            ? moment(detail?.startTime, ["HH.mm"]).format(
+                                "hh:mm a"
+                              )
+                            : ""}{" "}
+                          -{" "}
+                          {moment(detail?.endTime, "HH:mm", true).isValid()
+                            ? moment(detail?.endTime, ["HH.mm"]).format(
+                                "hh:mm a"
+                              )
+                            : ""}{" "}
+                          {detail?.datetimeRemark &&
+                            `(${detail?.datetimeRemark})`}
                         </b>
                       </Box>
                     </Flex>
@@ -339,27 +343,31 @@ const Event = ({ page, hostname, organizations, lang }) => {
                         <b>{detail?.venue}</b>
                       </Box>
                     </Flex>
-                    {organizeBy && (<Flex align="center" gap={2}>
-                          <Box>
+                    {organizeBy && (
+                      <Flex align="center" gap={2}>
+                        <Box>
                           {wordExtractor(
-                              page?.content?.wordings,
-                              "organize_by_label"
-                            )}
-                            <b>{" "}
-                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
-                            {" "}{wordExtractor(
-                              page?.content?.wordings,
-                              "hold_label"
-                            )}
-                          </Box>
-                        </Flex>)}
+                            page?.content?.wordings,
+                            "organize_by_label"
+                          )}
+                          <b>
+                            {" "}
+                            {lang === "zh"
+                              ? organizeBy?.chineseCompanyName
+                              : organizeBy?.englishCompanyName ??
+                                organizeBy?.chineseCompanyName}
+                          </b>{" "}
+                          {wordExtractor(page?.content?.wordings, "hold_label")}
+                        </Box>
+                      </Flex>
+                    )}
 
                     <Flex align="center" gap={2}>
                       {currentIdentityId ? (
                         <Stack
                           direction="row"
                           spacing={1}
-                          mt={4}
+                          mt={2}
                           cursor="pointer"
                           onClick={() =>
                             bookmarked
@@ -376,7 +384,7 @@ const Event = ({ page, hostname, organizations, lang }) => {
                             alt={""}
                             fontSize={18}
                           />
-                          <Text mt={6} color="#0D8282" fontWeight={700}>
+                          <Text mt={2} color="#0D8282" fontWeight={700}>
                             {bookmarked
                               ? wordExtractor(
                                   page?.content?.wordings,
@@ -392,11 +400,11 @@ const Event = ({ page, hostname, organizations, lang }) => {
                         <Stack
                           direction="row"
                           spacing={1}
-                          mt={4}
+                          mt={2}
                           cursor="pointer"
                           onClick={() => handleBookmark(detail?.id)}
                         >
-                          <Text mt={6} color="#0D8282" fontWeight={700}>
+                          <Text mt={2} color="#0D8282" fontWeight={700}>
                             {wordExtractor(
                               page?.content?.wordings,
                               "other_liked"
