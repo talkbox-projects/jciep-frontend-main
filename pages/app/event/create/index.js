@@ -59,7 +59,7 @@ const labelStyles = {
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const identity = (await identityMeGet(undefined, context)) ?? {}
+  const identity = (await identityMeGet(undefined, context)) ?? {};
   return {
     props: {
       page,
@@ -116,10 +116,28 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
     .map((d) => {
       return {
         value: d?.organization?.id,
-        label: lang === "zh" ? d?.organization?.chineseCompanyName : d?.organization?.englishCompanyName??d?.organization?.chineseCompanyName
+        label:
+          lang === "zh"
+            ? d?.organization?.chineseCompanyName
+            : d?.organization?.englishCompanyName ??
+              d?.organization?.chineseCompanyName,
       };
     });
-  const organizationOption = organizationInfo ? [{label: "-", value: ""}, ...organizationInfo] : [{label: "-", value: ""}]
+  const organizationOption = organizationInfo
+    ? [
+        {
+          label: wordExtractor(
+            page?.content?.wordings,
+            "not_presenting_any_organisation"
+          ),
+          value: null,
+        },
+        ...organizationInfo,
+      ]
+    : [{ label: wordExtractor(
+      page?.content?.wordings,
+      "not_presenting_any_organisation"
+    ), value: "" }];
   const { fields, append, remove } = useFieldArray({
     control,
     name: "otherUrls",
@@ -146,8 +164,8 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
   }, [router]);
 
   useEffect(() => {
-    if(organizationOption?.[1]){
-      setValue("organizationId", organizationOption?.[1])
+    if (organizationOption?.[1]) {
+      setValue("organizationId", organizationOption?.[1]);
     }
   }, [organizationOption]);
 
@@ -349,7 +367,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         submissionDeadline: submissionDeadline,
         eventManager: eventManager,
         contactNumber: contactNumber,
-        organizationId: organizationId?.value??"",
+        organizationId: organizationId?.value ?? "",
         registerUrl: registerUrl ? registerUrl.toLowerCase() : "",
         otherUrls: !_.isEmpty(otherUrls)
           ? otherUrls.map((d) => d?.toLowerCase())
@@ -542,7 +560,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                     <LABEL
                       name={wordExtractor(
                         page?.content?.wordings,
-                        "organized_by_label"
+                        "organisation"
                       )}
                     />
                     <Controller
@@ -553,18 +571,18 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         <ReactSelect
                           aria-label={wordExtractor(
                             page?.content?.wordings,
-                            "organized_by_label"
+                            "organisation"
                           )}
                           {...field}
                           placeholder={""}
                           options={organizationOption?.map(
-                              ({ label, value }) => ({ label, value })
-                            )}
+                            ({ label, value }) => ({ label, value })
+                          )}
                           styles={customStyles}
                           components={{
                             IndicatorSeparator: () => null,
                           }}
-                          defaultValue={organizationOption?.[1]??{}}
+                          defaultValue={organizationOption?.[1] ?? {}}
                           isSearchable={false}
                         />
                       )}
@@ -674,6 +692,29 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           "date_time_remark_placeholder"
                         )}
                         {...register("datetimeRemark")}
+                        maxLength={250}
+                      />
+                    </FormControl>
+                    <Text fontSize="12px" color="#666666" pt={2}>
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "word_suggestions"
+                      ).replace("$", getDateTimeRemarkCount.length || 0)}
+                    </Text>
+                  </GridItem>
+
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel {...labelStyles}>
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "remark_label"
+                        )}
+                      </FormLabel>
+                      <Textarea
+                        row={4}
+                        variant="flushed"
+                        {...register("remark")}
                         maxLength={250}
                       />
                     </FormControl>

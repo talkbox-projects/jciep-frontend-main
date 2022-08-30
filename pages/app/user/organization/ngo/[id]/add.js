@@ -193,6 +193,7 @@ const OrganizationNgoAdd = ({ page }) => {
           maxFileCount: 1,
           minFileCount: 1,
           mimeType: "*/*",
+          supportCrop: true,
         },
       },
     };

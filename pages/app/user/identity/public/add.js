@@ -389,9 +389,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
                               options={(
                                 [
                                   ...organizations,
-                                  ...organizations,
-                                  ...organizations,
-                                  ...organizations,
                                 ] ?? []
                               ).map(({ chineseCompanyName, id }) => ({
                                 label: chineseCompanyName,

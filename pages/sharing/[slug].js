@@ -38,15 +38,19 @@ const PAGE_KEY = "sharing";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const post = await getPost({
+    idOrSlug: context.params.slug,
+    lang: context.locale,
+  })
 
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      post: await getPost({
+      post: post ? post : await getPost({
         idOrSlug: context.params.slug,
-        lang: context.locale,
-      }),
+        lang: context.locale === 'zh' ? 'en' : 'zh',
+      })??{},
       ...(await getSharedServerSideProps(context))?.props,
     },
   };
