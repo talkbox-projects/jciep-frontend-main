@@ -45,16 +45,21 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
-          published: true
+          published: true,
         }),
-        eventDetail: await getEventDetail(context?.query?.id)
+        eventDetail: await getEventDetail(context?.query?.id),
       },
       lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
+const Event = ({
+  page,
+  hostname,
+  api: { organizations, eventDetail },
+  lang,
+}) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organizeBy, setOrganizeBy] = useState("");
@@ -75,8 +80,10 @@ const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
 
   useEffect(() => {
     if (detail?.organizationId) {
-      const organization = organizations?.find(d=>d.id === detail?.organizationId)
-      setOrganizeBy(organization)
+      const organization = organizations?.find(
+        (d) => d.id === detail?.organizationId
+      );
+      setOrganizeBy(organization);
     }
   }, [detail?.organizationId, organizations]);
 
@@ -166,9 +173,6 @@ const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
         );
     }
   };
-
-  console.log('organizations-',organizations)
-  console.log('eventDetail-',eventDetail)
 
   return (
     <>
@@ -287,21 +291,27 @@ const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
                           </Box>
                         </Flex>
 
-                        {organizeBy && (<Flex align="center" gap={2}>
-                          <Box>
-                          {wordExtractor(
-                              page?.content?.wordings,
-                              "organize_by_label"
-                            )}
-                            <b>{" "}
-                            {lang === 'zh' ? organizeBy?.chineseCompanyName : organizeBy?.englishCompanyName?? organizeBy?.chineseCompanyName }</b>
-                            {" "}{wordExtractor(
-                              page?.content?.wordings,
-                              "hold_label"
-                            )}
-                          </Box>
-                        </Flex>)}
-
+                        {organizeBy && (
+                          <Flex align="center" gap={2}>
+                            <Box>
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "organize_by_label"
+                              )}
+                              <b>
+                                {" "}
+                                {lang === "zh"
+                                  ? organizeBy?.chineseCompanyName
+                                  : organizeBy?.englishCompanyName ??
+                                    organizeBy?.chineseCompanyName}
+                              </b>{" "}
+                              {wordExtractor(
+                                page?.content?.wordings,
+                                "hold_label"
+                              )}
+                            </Box>
+                          </Flex>
+                        )}
                       </Stack>
                       <Divider my={4} />
                       <Flex gap={4} direction="column">
@@ -458,14 +468,30 @@ const Event = ({ page, hostname, api: {organizations, eventDetail}, lang }) => {
                         "event_registration_label"
                       )}
                     </Text>
-                    <RegistrationRow
-                      title={wordExtractor(
-                        page?.content?.wordings,
-                        "quota_label"
-                      )}
-                      value={detail?.quota}
-                    />
-
+                    <Flex
+                      direction="row"
+                      gap={2}
+                      justifyContent="space-between"
+                      fontSize="14px"
+                    >
+                      <Box minW={"100px"}>
+                        <Text>
+                          {wordExtractor(
+                            page?.content?.wordings,
+                            "quota_label"
+                          )}
+                        </Text>
+                      </Box>
+                      <Text fontWeight={700}>
+                        {detail?.quota === 0
+                          ? wordExtractor(
+                              page?.content?.wordings,
+                              "quota_unlimited"
+                            )
+                          : detail?.quota}
+                      </Text>
+                    </Flex>
+                    
                     <RegistrationRow
                       title={wordExtractor(
                         page?.content?.wordings,
