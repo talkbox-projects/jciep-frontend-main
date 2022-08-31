@@ -32,14 +32,14 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
-
+import { getCurrentUser } from "../../../../../utils/auth";
 import nookies from "nookies";
 
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const cookies = nookies.get(context);
+  const currentUser = await getCurrentUser(context);
   return {
     props: {
       page,
@@ -55,7 +55,7 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
-      token: cookies['jciep-token']??null,
+      currentUserId: JSON.stringify(currentUser?.user?._id)
     },
   };
 };
@@ -74,7 +74,7 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations }, query, token }) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
   const router = useRouter();
   const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState([]);
@@ -134,11 +134,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token }) => {
   };
 
   const handlePostData = async (input, invitationCode) => {
-    // setDebug({
-    //   input: input,
-    //   invitationCode: invitationCode
-    // })
-    if(!user){
+    if(!user&&!currentUserId){
       setErrorMsg(wordExtractor(
         page?.content?.wordings,
         "general_error_message"
@@ -251,7 +247,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: user?.id,
+        userId: user?.id??JSON.parse(currentUserId),
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
@@ -522,14 +518,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query, token }) => {
           subTitle={page?.content?.step?.subTitle}
           handleClickLeftIcon={() => router.push(`/app/user/register`)}
         />
-        {/** For testing, remove later */}
-        {/* {query?.redirectFrom==='publicUpdatePage' && <Code fontSize="11px" colorScheme='red'>{'Redirect from app/user/identity/public/update || app/user/identity/update, cased by user without any identity'}</Code>}<br/> */}
-        {/* <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/>
-       */}
-       <Code fontSize="10px">token[testing]:{token}</Code>
         <Box justifyContent="center" width="100%">
           <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
             <Text
