@@ -352,7 +352,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
       Object.entries({
         name: name,
         type: type?.value,
-        typeOther: type?.value === "other" ? typeOther : "",
+        typeOther: type?.value === "other" ? typeOther : null,
         description: description,
         startDate: startDate,
         endDate: endDate,
@@ -367,8 +367,8 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         submissionDeadline: submissionDeadline,
         eventManager: eventManager,
         contactNumber: contactNumber,
-        organizationId: organizationId?.value ?? "",
-        registerUrl: registerUrl ? registerUrl.toLowerCase() : "",
+        organizationId: organizationId?.value ?? null,
+        registerUrl: registerUrl ? registerUrl.toLowerCase() : null,
         otherUrls: !_.isEmpty(otherUrls)
           ? otherUrls.map((d) => d?.toLowerCase())
           : [],
