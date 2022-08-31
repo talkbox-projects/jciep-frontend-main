@@ -68,6 +68,22 @@ export const getCurrentUser = async (context) => {
     }
 }
 
+export const getCurrentUserId = async (context) => {
+    try {
+        const token = nookies.get(context)?.["jciep-token"];
+
+        if (token) {
+            const accessObject = await AccessToken.findById(token);
+            if (accessObject) {
+                return accessObject?.userId
+            }
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+}
+
 export const checkIfAdmin = (identity = null) => {
     return identity?.type === "admin";
 }

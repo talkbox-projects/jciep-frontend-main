@@ -32,14 +32,14 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 import organizationSearch from "../../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../../utils/api/OrganizationInvitationCodeValidity";
-import { getCurrentUser } from "../../../../../utils/auth";
+import { getCurrentUserId } from "../../../../../utils/auth";
 import nookies from "nookies";
 
 const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const currentUser = await getCurrentUser(context);
+  const currentUserId = await getCurrentUserId(context);
   return {
     props: {
       page,
@@ -55,7 +55,7 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
-      currentUserId: JSON.stringify(currentUser?.user?._id)
+      currentUserId: currentUserId ? currentUserId?.toString() : ""
     },
   };
 };
@@ -247,7 +247,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: user?.id??JSON.parse(currentUserId),
+        userId: user?.id??currentUserId,
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
@@ -272,6 +272,8 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
     setFormState(input);
     setStep("step2");
   };
+
+  console.log('currentUserId',currentUserId)
 
   if (step === "step2") {
     return (
