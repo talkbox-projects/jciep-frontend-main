@@ -14,6 +14,7 @@ import {
   Image,
   Center,
   Stack,
+  Code
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -38,6 +39,7 @@ const PAGE_KEY = "identity_public_add";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const cookies = nookies.get(context);
   return {
     props: {
       page,
@@ -53,6 +55,7 @@ export const getServerSideProps = async (context) => {
           type: ["ngo"],
         }),
       },
+      token: cookies['jciep-token']??null,
     },
   };
 };
@@ -71,7 +74,7 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, query, token }) => {
   const router = useRouter();
   const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState([]);
@@ -526,6 +529,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, query }) => {
         <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
         <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/>
        */}
+       <Code fontSize="10px">token[testing]:{token}</Code>
         <Box justifyContent="center" width="100%">
           <Box maxWidth={800} width="100%" textAlign="left" margin="auto">
             <Text
