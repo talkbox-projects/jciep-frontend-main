@@ -542,7 +542,7 @@ const Event = ({
 
                   <Stack direction={"column"} spacing={2} py={4}>
                     <Flex direction="row" gap={2}>
-                      <Box minW={"100px"}>
+                      <Box minW={"100px"} width={"100px"}>
                         <Text>
                           {wordExtractor(
                             page?.content?.wordings,
@@ -570,6 +570,7 @@ const Event = ({
                           ? charge?.[detail?.freeOrCharge][page?.lang]
                           : ""
                       }
+                      lang={lang}
                     />
 
                     <RegistrationRow
@@ -578,6 +579,7 @@ const Event = ({
                         "price_label"
                       )}
                       value={detail?.price}
+                      lang={lang}
                     />
 
                     <RegistrationRow
@@ -590,6 +592,7 @@ const Event = ({
                           "YYYY-MM-DD"
                         ) ?? ""
                       }
+                      lang={lang}
                     />
 
                     <RegistrationRow
@@ -598,6 +601,7 @@ const Event = ({
                         "event_manager_label"
                       )}
                       value={detail?.eventManager}
+                      lang={lang}
                     />
 
                     <RegistrationRow
@@ -606,6 +610,7 @@ const Event = ({
                         "contact_number_label"
                       )}
                       value={detail?.contactNumber}
+                      lang={lang}
                     />
 
                     <RegistrationRow
@@ -614,10 +619,11 @@ const Event = ({
                         "remark_label"
                       )}
                       value={detail?.remark}
+                      lang={lang}
                     />
 
                     <Flex direction="row" gap={2}>
-                      <Box minW={"100px"}>
+                      <Box minW={"100px"} width={"100px"}>
                         <Text>
                           {wordExtractor(
                             page?.content?.wordings,
@@ -1004,7 +1010,7 @@ const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
 const RegistrationRow = ({ title, value }) => {
   return (
     <Flex direction="row" gap={2}>
-      <Box minW={"100px"}>
+      <Box minW={"100px"} width={"100px"}>
         <Text>{title}</Text>
       </Box>
       <Text fontWeight={700}>{value}</Text>
