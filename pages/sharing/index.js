@@ -120,6 +120,15 @@ const Sharing = ({ page, setting, lang }) => {
         idOrSlug: slug,
         lang: lang,
       });
+
+      if(!post){
+        const otherLangPost = await getPost({
+          idOrSlug: slug,
+          lang: lang === 'zh' ? 'en' : 'zh',
+        });
+        setFeaturedArticle(otherLangPost);
+        return
+      }
       setFeaturedArticle(post);
     },
     [lang]
@@ -188,7 +197,7 @@ const Sharing = ({ page, setting, lang }) => {
           position="relative"
           zIndex={10}
           w="100%"
-          pb={12}
+          pb={!featuredArticle?0:12}
         >
           <VStack
             align="stretch"

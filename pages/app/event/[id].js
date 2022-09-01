@@ -477,7 +477,7 @@ const Event = ({
                         pt={1}
                         alignItems="normal"
                       >
-                        <Box w={"20px"}>
+                        <Box w={"20px"} minWidth={"20px"} alignSelf="baseline" pt={"2px"}>
                           <Image
                             src={"/images/app/link.svg"}
                             alt={""}
@@ -486,7 +486,7 @@ const Event = ({
                             minW={"20px"}
                           />
                         </Box>
-                        <Box style={{ wordBreak: "break-all" }}>{d}</Box>
+                        <Box style={{ wordBreak: "break-all", lineBreak: "anywhere" }}>{d}</Box>
                       </Flex>
                     ))}
                   </Flex>
@@ -632,7 +632,7 @@ const Event = ({
                           fontWeight={700}
                           gap={2}
                         >
-                          <Box w={"20px"} textAlign="center">
+                          <Box w={"20px"} textAlign="center" minWidth={"20px"} alignSelf="baseline" pt={"2px"}>
                             <Image
                               src={"/images/app/link.svg"}
                               alt={""}
@@ -645,6 +645,7 @@ const Event = ({
                             onClick={() =>
                               handleOpenWebView(detail?.registerUrl)
                             }
+                            style={{ wordBreak: "break-all", lineBreak: "anywhere" }}
                           >
                             {detail?.registerUrl}
                           </Box>
