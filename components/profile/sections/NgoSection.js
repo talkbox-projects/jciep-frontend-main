@@ -21,7 +21,7 @@ const NgoSection = () => {
       <VStack spacing={1} align="stretch" overflow="hidden" borderRadius="10px">
         <BannerFragment
           {...{
-            // enableBannerMedia: false,
+            enableBannerMedia: false,
             page,
             entity: organization,
             save: saveOrganization,

@@ -953,8 +953,9 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
 
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
   const imageUrl =
-    url ??
-    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
+    url !== "undefined" && url !== null
+      ? url
+      : `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
   return (
     <Box
       bgImage={`url(${imageUrl})`}
