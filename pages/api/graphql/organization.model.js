@@ -45,6 +45,17 @@ const organizationSchema = Schema({
   biography: {
     type: Object,
   },
+  bannerMedia: {
+    file: {
+      id: String,
+      url: String,
+      contentType: String,
+      fileSize: Number,
+    },
+    videoUrl: String,
+    title: String,
+    description: String,
+  },
   portfolio: [
     {
       file: {

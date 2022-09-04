@@ -56,6 +56,7 @@ export default gql`
     contactPhone: String
     contactEmail: String
 
+    bannerMedia: FileMeta
     biography: JsonContent
     portfolio: [FileMeta]
     member: [Member]
@@ -133,6 +134,7 @@ export default gql`
     contactPhone: String
     contactEmail: String
 
+    bannerMedia: FileMetaInput
     biography: JsonContent
     portfolio: [FileMetaInput]
     tncAccept: Boolean

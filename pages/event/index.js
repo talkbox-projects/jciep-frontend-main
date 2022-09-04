@@ -82,7 +82,6 @@ const Event = ({ page, hostname }) => {
 
     async function fetchData() {
       const data = (await getEvents(getURLParameter)) ?? [];
-
       const getData = await getDateArr(data.list);
       setFiltered(getData);
     }
@@ -108,13 +107,16 @@ const Event = ({ page, hostname }) => {
   };
 
   function getDateArr(arr) {
+    const { query } = router;
     if (_.isEmpty(arr)) {
       return;
     }
-    var new_arr = [];
-    for (var i = 0, len = arr.length; i < len; i++) {
-      var Month_index = arr[i].startDate.lastIndexOf("-");
-      var startDate = arr[i].startDate.substr(0, Month_index);
+    let new_arr = [];
+    let sorted;
+    
+    for (let i = 0, len = arr.length; i < len; i++) {
+      let Month_index = arr[i].startDate.lastIndexOf("-");
+      let startDate = arr[i].startDate.substr(0, Month_index);
       if (!new_arr[startDate]) {
         new_arr[startDate] = [];
         new_arr[startDate].push(arr[i]);
@@ -122,13 +124,18 @@ const Event = ({ page, hostname }) => {
         new_arr[startDate].push(arr[i]);
       }
     }
-    const sorted = Object.keys(new_arr)
+
+    if(query?.orderBy === "bookmarkCount"){
+      sorted = new_arr;
+    } else {
+      sorted = Object.keys(new_arr)
       .sort((a, b) => moment(b) - moment(a))
       .reduce((accumulator, key) => {
         accumulator[key] = new_arr[key];
 
         return accumulator;
-      }, {});
+      }, []);
+    }
 
     return sorted ?? [];
   }
@@ -173,7 +180,7 @@ const Event = ({ page, hostname }) => {
                     onChange={(e) => setKeyword(e.target.value)}
                     defaultValue={query.searchText}
                   />
-                  <InputRightElement width="4.5rem" mt={"2px"}>
+                  <InputRightElement width="4.5rem" mt={"2px"} mr={2}>
                     <Button
                       h="1.75rem"
                       size="sm"
@@ -525,7 +532,8 @@ const Event = ({ page, hostname }) => {
 
 const FilterSection = ({ page }) => {
   const router = useRouter();
-  const [selected, setSelected] = useState("latest");
+  const {query} = router
+  const [selected, setSelected] = useState("");
   const selectedStyles = {
     border: "none",
     color: "#FFF",
@@ -535,6 +543,22 @@ const FilterSection = ({ page }) => {
     boxShadow: "0px 0px 0px 1px #1E1E1E inset",
     color: "#1E1E1E",
   };
+
+  useEffect(()=>{
+    switch (query?.orderBy) {
+      case "bookmarkCount":
+        setSelected("hot")
+        break;
+
+      case "endDate":
+        setSelected("outdated")
+        break;
+    
+      default:
+        setSelected("latest")
+        break;
+    }
+  },[query])
 
   return (
     <Stack direction={{ base: "row" }} spacing={4} pt={{ base: 4, md: 0 }}>

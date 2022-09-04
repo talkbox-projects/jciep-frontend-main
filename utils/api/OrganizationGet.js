@@ -27,6 +27,17 @@ const organizationGet = async ({ id }, context) => {
         industryOther
         district
         companyBenefit
+        bannerMedia {
+          file {
+            id
+            url
+            contentType
+            fileSize
+          }
+          videoUrl
+          title
+          description
+        }
         biography
         portfolio {
           file {
