@@ -58,20 +58,16 @@ const TextTool = ({
       minHeight={minHeight}
     >
       {link && (
-        <chakra.span
-          _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
-          fontSize={fontSize}
-          fontWeight={bold ? "bold" : "normal"}
-        >
-          <Link
-            {...(!isActive && { tabIndex: -1 })}
-            isExternal={true}
-            href={url}
+        <Link {...!isActive} isExternal={true} href={url}>
+          <chakra.span
+            _hover={hover ? { cursor: "pointer", decoration: "underline" } : ""}
+            fontSize={fontSize}
+            fontWeight={bold ? "bold" : "normal"}
           >
             {" "}
             {text}
-          </Link>
-        </chakra.span>
+          </chakra.span>
+        </Link>
       )}
       {!link && (
         <chakra.span
@@ -90,8 +86,17 @@ const TextTool = ({
         </chakra.span>
       )}
       {description && description !== "" && (
-        <chakra.span pl="6px">
-          <Popover trigger="hover">
+        <chakra.span>
+          <Popover
+            trigger="hover"
+            as={Button}
+            style={{
+              backgroundColor: "transparent",
+              padding: 0,
+              minWidth: "auto",
+              paddingLeft: "6px",
+            }}
+          >
             <PopoverTrigger>
               <IconButton
                 aria-label={ariaLabel}
@@ -99,7 +104,7 @@ const TextTool = ({
                 variant="link"
                 size={2}
                 onClick={() => setIsLabelOpen(true)}
-                {...(!isActive && { tabIndex: -1 })}
+                {...!isActive}
               ></IconButton>
             </PopoverTrigger>
             <PopoverContent fontSize="sm" bg="black" color="white">
@@ -337,71 +342,71 @@ const ModalCard = ({
                 </UnorderedList>
               )}
             </Box>
-              <MotionBox
-                overflow="hidden"
-                transition={{ duration: 0.5 }}
-                alignItems="start"
-                spacing={0}
-                w="100%"
-                height="auto"
+            <MotionBox
+              overflow="hidden"
+              transition={{ duration: 0.5 }}
+              alignItems="start"
+              spacing={0}
+              w="100%"
+              height="auto"
+            >
+              <Divider />
+              <HStack pt="8px" spacing="5px" align="start">
+                <Image
+                  alt=""
+                  w="24px"
+                  h="20px"
+                  src={
+                    page?.content?.resourceSection?.resourceListIcons?.contact
+                  }
+                />
+                <Text color="#1E1E1E" fontSize="16px">
+                  {wordExtractor(page?.content?.wordings, "contactHeading")}
+                </Text>
+              </HStack>
+              <Text
+                pl="27px"
+                whiteSpace="pre-line"
+                color="#1E1E1E"
+                fontSize="16px"
               >
-                <Divider />
-                <HStack pt="8px" spacing="5px" align="start">
-                  <Image
-                    alt=""
-                    w="24px"
-                    h="20px"
-                    src={
-                      page?.content?.resourceSection?.resourceListIcons?.contact
-                    }
-                  />
-                  <Text color="#1E1E1E" fontSize="16px">
-                    {wordExtractor(page?.content?.wordings, "contactHeading")}
-                  </Text>
-                </HStack>
-                <Text
-                  pl="27px"
-                  whiteSpace="pre-line"
-                  color="#1E1E1E"
-                  fontSize="16px"
-                >
-                  {contact?.text}
+                {contact?.text}
+              </Text>
+              <VStack pl="27px" alignItems="start">
+                <Text color="#1E1E1E" fontSize="12px">
+                  {contact?.description}
                 </Text>
-                <VStack pl="27px" alignItems="start">
-                  <Text color="#1E1E1E" fontSize="12px">
-                    {contact?.description}
-                  </Text>
-                  <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
-                    <chakra.a href={contact?.link} target="_blank">
-                      {contact?.linkName}
-                      <Icon pl={1} size="sm" as={FaShareSquare} />
-                    </chakra.a>
-                  </Text>
-                </VStack>
-                <HStack pt="32px" spacing="5px">
-                  <Image
-                    alt=""
-                    w="24px"
-                    h="20px"
-                    src={
-                      page?.content?.resourceSection?.resourceListIcons?.remarks
-                    }
-                  />
-
-                  <Text color="#1E1E1E" fontSize="16px">
-                    {wordExtractor(page?.content?.wordings, "remarkHeading")}
-                  </Text>
-                </HStack>
-
-                <Text
-                  pl="27px"
-                  whiteSpace="pre-line"
-                  color="#1E1E1E"
-                  fontSize="12px"
-                >
-                  {remark}
+                <Text d="inline" pt="24px" color="#1E1E1E" fontSize="12px">
+                  <chakra.a href={contact?.link} target="_blank">
+                    {contact?.linkName}
+                    <Icon pl={1} size="sm" as={FaShareSquare} />
+                  </chakra.a>
                 </Text>
-              </MotionBox>
+              </VStack>
+              <HStack pt="32px" spacing="5px">
+                <Image
+                  alt=""
+                  w="24px"
+                  h="20px"
+                  src={
+                    page?.content?.resourceSection?.resourceListIcons?.remarks
+                  }
+                />
+
+                <Text color="#1E1E1E" fontSize="16px">
+                  {wordExtractor(page?.content?.wordings, "remarkHeading")}
+                </Text>
+              </HStack>
+
+              <Text
+                pl="27px"
+                whiteSpace="pre-line"
+                color="#1E1E1E"
+                fontSize="12px"
+              >
+                {remark}
+              </Text>
+            </MotionBox>
             <Box pt="32px"></Box>
           </VStack>
         </VStack>

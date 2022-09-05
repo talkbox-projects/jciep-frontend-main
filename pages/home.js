@@ -249,7 +249,7 @@ const Home = ({ setting, page }) => {
                       }}
                       _hover={{opacity:.75}}
                     >
-                      <VStack textAlign="center" fontSize={["xl"]}>
+                      <VStack textAlign="center" fontSize={["xl"]} tabIndex={1}>
                         <Image alt={name} w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
                         <Text>{caption}</Text>
@@ -571,7 +571,7 @@ const Home = ({ setting, page }) => {
               <TabPanels>
                 {(page?.content?.roleIntroduction?.roles ?? []).map(
                   ({ id, description, features }) => (
-                    <TabPanel px={0} key={id} py={12}>
+                    <TabPanel tabIndex={null} px={0} key={id} py={12}>
                       <Text w={["100%", "50%"]}>
                         {(description ?? []).map(
                           ({ _template, content, textcolor, bold }, index) => {

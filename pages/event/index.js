@@ -22,6 +22,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalBody,
+  ModalCloseButton,
   useDisclosure,
   FormControl,
   FormLabel,
@@ -52,11 +53,12 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
+      lang: context.locale
     },
   };
 };
 
-const Event = ({ page, hostname }) => {
+const Event = ({ page, hostname, lang }) => {
   const router = useRouter();
   const { query } = router;
   const [filteredEvents, setFiltered] = useState([]);
@@ -149,7 +151,7 @@ const Event = ({ page, hostname }) => {
           </Box>
           <Container pt={12} position="relative">
             <Box pb={48} pt={[36, 36, 36, 48]}>
-              <Text fontSize="5xl" fontWeight="bold" pb={4}>
+              <Text as="h1" fontSize="5xl" fontWeight="bold" pb={4}>
                 {wordExtractor(page?.content?.wordings, "page_title")}
               </Text>
               <Flex
@@ -179,6 +181,7 @@ const Event = ({ page, hostname }) => {
                     minHeight={"45px"}
                     onChange={(e) => setKeyword(e.target.value)}
                     defaultValue={query.searchText}
+                    aria-label={lang=="zh"?"文字搜尋":"keyword search"}
                   />
                   <InputRightElement width="4.5rem" mt={"2px"} mr={2}>
                     <Button
@@ -189,6 +192,7 @@ const Event = ({ page, hostname }) => {
                           query: { ...router.query, searchText: keyword },
                         })
                       }
+                      aria-label={lang=="zh"?"搜尋":"Search"}
                     >
                       {wordExtractor(page?.content?.wordings, "search_label")}
                     </Button>
@@ -199,6 +203,15 @@ const Event = ({ page, hostname }) => {
                   gap={1}
                   onClick={() => onOpen()}
                   cursor="pointer"
+                  as={Button}
+                  variant="ghost"
+                  style={{
+                    minWidth: "auto",
+                    padding: 0
+                  }}
+                  _hover={{
+                    backgroundColor: "transparent",
+                  }}
                 >
                   <RiFilter2Fill fontSize={18} pt={2} />
                   <Text textDecoration={"underline"} fontSize={"14px"}>
@@ -246,9 +259,10 @@ const Event = ({ page, hostname }) => {
                     }
                   }}
                   ref={designatedDayRef}
+                  aria-label={lang=="zh"?"指定日子":"Designated day"}
                 />
               </Box>
-              <Box flex={1}>
+              <Box flex={1} tabIndex={1}>
                 <FilterSection page={page} />
               </Box>
             </Flex>
@@ -401,9 +415,10 @@ const Event = ({ page, hostname }) => {
           </Container>
         </Box>
 
-        <Modal isOpen={isOpen} onClose={onClose} autoFocus={false} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} autoFocus={true} isCentered>
           <ModalOverlay />
           <ModalContent>
+            <ModalCloseButton/>
             <ModalBody>
               <VStack
                 py={"15px"}
@@ -561,7 +576,7 @@ const FilterSection = ({ page }) => {
   },[query])
 
   return (
-    <Stack direction={{ base: "row" }} spacing={4} pt={{ base: 4, md: 0 }}>
+    <Stack direction={{ base: "column", md: "row" }} spacing={4} pt={{ base: 4, md: 0 }}>
       {page?.content?.form?.filter?.options.map((d) => {
         const renderStyle = d.value === selected ? selectedStyles : stylesProps;
         return (
@@ -572,6 +587,9 @@ const FilterSection = ({ page }) => {
             py={"8px"}
             cursor="pointer"
             key={d.label}
+            textAlign="center"
+            as={Button}
+            variant="ghost"
             onClick={() => {
               const filterObj = {
                 latest: {
@@ -594,9 +612,9 @@ const FilterSection = ({ page }) => {
               router.replace({
                 query: filterObj[d.value],
               });
-
               setSelected(d.value);
             }}
+            tabIndex={1}
           >
             {d.label}
           </Box>

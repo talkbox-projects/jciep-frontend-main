@@ -82,11 +82,11 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
-        if ('category' in router?.query){
-          return '7';
+        if ("category" in router?.query) {
+          return "7";
         }
 
-        if (router?.query?.slug === 'mobileapp' ){
+        if (router?.query?.slug === "mobileapp") {
           return tabIndex;
         }
 
@@ -234,36 +234,21 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
               </Menu>
             )}
             <Box flex={1} minW={0} w="100%" />
-            {/* {isShowLangSwitcher && (
-              <Select
-                border="none"
-                size="sm"
-                w={16}
-                autoFocus={false}
-                variant="flushed"
-                value={router.locale}
-                onChange={(e) => {
-                  window.location.href = `/${e.target.value}${router.asPath}`;
-                }}
-              >
-                <option value="zh">繁</option>
-                <option value="en">EN</option>
-              </Select>
-            )} */}
             <Select
-                border="none"
-                size="sm"
-                w={16}
-                autoFocus={false}
-                variant="flushed"
-                value={router.locale}
-                onChange={(e) => {
-                  window.location.href = `/${e.target.value}${router.asPath}`;
-                }}
-              >
-                <option value="zh">繁</option>
-                <option value="en">EN</option>
-              </Select>
+              border="none"
+              size="sm"
+              w={16}
+              autoFocus={false}
+              variant="flushed"
+              value={router.locale}
+              onChange={(e) => {
+                window.location.href = `/${e.target.value}${router.asPath}`;
+              }}
+              aria-label={router?.locale === "en" ? "Language" : "語言"}
+            >
+              <option value="zh">繁</option>
+              <option value="en">EN</option>
+            </Select>
             <NextLink href="/text-size" passHref>
               <Link fontSize="sm">
                 {getWording("header.font_size_level_label")}
@@ -413,6 +398,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
             boxShadow="sm"
             borderWidth={1}
             px={6}
+            role="menubar"
           >
             <HStack
               spacing={0}
@@ -420,6 +406,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
               justifyContent="center"
               h="100%"
               border={0}
+              role="menu"
             >
               {(navigation.menu ?? []).map(
                 ({ id, submenu = [], label, path = "/" }, index, arr) => (
@@ -440,9 +427,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                         borderRightColor: "#eee",
                       })}
                       px={2}
+                      role="menu"
                     >
                       {submenu?.length > 0 ? (
-                        <Popover gutter={20}>
+                        <Popover gutter={20} role="menuitem">
                           <PopoverTrigger>
                             <Box h="100%">
                               {/* <NextLink href={path}> */}
@@ -452,9 +440,14 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 borderRadius={0}
                                 fontWeight="normal"
                                 fontSize={router?.locale === "zh" ? "md" : "sm"}
-                                maxW={router?.locale === "zh" ? "auto" : "120px"}
+                                maxW={
+                                  router?.locale === "zh" ? "auto" : "120px"
+                                }
                                 style={{
-                                  whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
+                                  whiteSpace:
+                                    router?.locale === "zh"
+                                      ? "nowrap"
+                                      : "normal",
                                   wordWrap: "break-word",
                                 }}
                               >
@@ -466,7 +459,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                           <PopoverContent w="fit-content">
                             <PopoverBody as={VStack} spacing={4} fontSize="md">
                               {submenu.map(({ id, label, path }) => (
-                                <NextLink key={id} href={path}>
+                                <NextLink key={id} href={path} role="menuitem">
                                   <Button
                                     h="100%"
                                     variant="unstyled"
@@ -484,7 +477,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                           </PopoverContent>
                         </Popover>
                       ) : (
-                        <NextLink href={path}>
+                        <NextLink href={path} role="menuitem">
                           <Button
                             h="100%"
                             variant="unstyled"
@@ -493,7 +486,8 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             fontSize={router?.locale === "zh" ? "md" : "sm"}
                             maxW={router?.locale === "zh" ? "auto" : "120px"}
                             style={{
-                              whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
+                              whiteSpace:
+                                router?.locale === "zh" ? "nowrap" : "normal",
                               wordWrap: "break-word",
                             }}
                           >
@@ -524,7 +518,11 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                     wordWrap: "break-word",
                   }}
-                  backgroundColor={router?.query?.slug === 'mobileapp' ? '#e5fffe' : 'transparent'}
+                  backgroundColor={
+                    router?.query?.slug === "mobileapp"
+                      ? "#e5fffe"
+                      : "transparent"
+                  }
                 >
                   {navigation?.actionButton?.label}
                 </Button>
@@ -588,18 +586,19 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
 
                   )} */}
                   <Select
-                      border="none"
-                      size="sm"
-                      w={16}
-                      variant="flushed"
-                      value={router.locale}
-                      onChange={(e) => {
-                        window.location.href = `/${e.target.value}${router.asPath}`;
-                      }}
-                    >
-                      <option value="zh">繁</option>
-                      <option value="en">EN</option>
-                    </Select>
+                    border="none"
+                    size="sm"
+                    w={16}
+                    variant="flushed"
+                    value={router.locale}
+                    onChange={(e) => {
+                      window.location.href = `/${e.target.value}${router.asPath}`;
+                    }}
+                    aria-label={router?.locale === "en" ? "Language" : "語言"}
+                  >
+                    <option value="zh">繁</option>
+                    <option value="en">EN</option>
+                  </Select>
                   <Text>
                     {(navigation.social ?? []).map(
                       ({ icon, url, label }, i) => {

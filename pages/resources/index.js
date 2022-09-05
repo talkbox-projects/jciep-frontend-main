@@ -26,6 +26,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalCloseButton,
   useDisclosure,
   Center,
   Input,
@@ -60,43 +61,80 @@ import { FaColumns } from "react-icons/fa";
 const PAGE_KEY = "resources";
 
 const serviceOrgList = [
-  { value: "gov", label: "政府主導的計劃", label_en: "Government initiated projects" },
-  { value: "non-gov", label: "非政府組織提供的服務", label_en: "Services provided by Non-governmental Organizations" },
+  {
+    value: "gov",
+    label: "政府主導的計劃",
+    label_en: "Government initiated projects",
+  },
+  {
+    value: "non-gov",
+    label: "非政府組織提供的服務",
+    label_en: "Services provided by Non-governmental Organizations",
+  },
 ];
 
 const serviceDetailList = [
   {
     value: "assessment",
     label: "為殘疾人士提供的就業支援服務 (工作/就業評估)",
-    label_en: "Employment Support Services for Handicapped (Employment/ Career Assessment)"
+    label_en:
+      "Employment Support Services for Handicapped (Employment/ Career Assessment)",
   },
   {
     value: "counseling",
     label: "為殘疾人士提供的就業支援服務 (工作/就業輔導)",
-    label_en: "Employment Support Services for Handicapped (Employment/ Career Counselling)"
+    label_en:
+      "Employment Support Services for Handicapped (Employment/ Career Counselling)",
   },
-  { value: "matching", label: "為殘疾人士提供的就業支援服務 (工作配對)", label_en: "Employment Support Services for Handicapped (Job Matching)"},
-  { value: "followUp", label: "為殘疾人士提供的就業支援服務 (就業後跟進)",
-  label_en: "Employment Support Services for Handicapped (Post-employment Follow Up)" },
+  {
+    value: "matching",
+    label: "為殘疾人士提供的就業支援服務 (工作配對)",
+    label_en: "Employment Support Services for Handicapped (Job Matching)",
+  },
+  {
+    value: "followUp",
+    label: "為殘疾人士提供的就業支援服務 (就業後跟進)",
+    label_en:
+      "Employment Support Services for Handicapped (Post-employment Follow Up)",
+  },
   {
     value: "training",
     label: "為殘疾人士提供的就業支援服務 (職業訓練/就業培訓)",
-    label_en: "Employment Support Services for Handicapped (Vocational Training/ Career Training)"
+    label_en:
+      "Employment Support Services for Handicapped (Vocational Training/ Career Training)",
   },
   {
     value: "instruction",
     label: "為殘疾人士提供的就業支援服務 (職場督導/指導)",
-    label_en: "Employment Support Services for Handicapped (On-the-job Supervision/ Coaching)"
+    label_en:
+      "Employment Support Services for Handicapped (On-the-job Supervision/ Coaching)",
   },
   {
     value: "guidance",
     label: "為殘疾人士提供的就業支援服務 (為僱主和職員提供培訓/指導)",
-    label_en: "Employment Support Services for Handicapped (Training/Coaching for Employers and Employees)"
+    label_en:
+      "Employment Support Services for Handicapped (Training/Coaching for Employers and Employees)",
   },
-  { value: "internship", label: "實習機會",label_en: "Placement Opportunities" },
-  { value: "probationOrReferral", label: "在職試用和/或工作轉介",label_en: "Probation Opportunities and/ or Job Referrals" },
-  { value: "employer", label: "為僱主提供的津貼",label_en: "Subsidy for Employers" },
-  { value: "trainee", label: "為僱員/實習生/訓練生提供的津貼",label_en: "Subsidies for Employees/ Placement Workers/ Trainees" },
+  {
+    value: "internship",
+    label: "實習機會",
+    label_en: "Placement Opportunities",
+  },
+  {
+    value: "probationOrReferral",
+    label: "在職試用和/或工作轉介",
+    label_en: "Probation Opportunities and/ or Job Referrals",
+  },
+  {
+    value: "employer",
+    label: "為僱主提供的津貼",
+    label_en: "Subsidy for Employers",
+  },
+  {
+    value: "trainee",
+    label: "為僱員/實習生/訓練生提供的津貼",
+    label_en: "Subsidies for Employees/ Placement Workers/ Trainees",
+  },
 ];
 
 const ServiceFilter = ({
@@ -104,7 +142,8 @@ const ServiceFilter = ({
   value = [],
   onChange = () => undefined,
   list = [],
-  page
+  page,
+  lang,
 }) => (
   <Menu>
     <MenuButton
@@ -116,9 +155,14 @@ const ServiceFilter = ({
       size="lg"
       textAlign="left"
       borderRadius={0}
+      aria-label={lang === "zh" ? "目錄" : "Menu"}
     >
       <Text w="100%">
-        {value.length > 0 ? `${wordExtractor(page?.content?.wordings, "filtered")} ${value.length} ${wordExtractor(page?.content?.wordings, "item")}` : ""}
+        {value.length > 0
+          ? `${wordExtractor(page?.content?.wordings, "filtered")} ${
+              value.length
+            } ${wordExtractor(page?.content?.wordings, "item")}`
+          : ""}
         {label}
       </Text>
     </MenuButton>
@@ -143,11 +187,12 @@ export const getServerSideProps = async (context) => {
       page,
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
+      lang: context.locale,
     },
   };
 };
 
-const Resources = ({ page, enums, setting }) => {
+const Resources = ({ page, enums, setting, lang }) => {
   const disableClick = {
     pointerEvents: "none",
   };
@@ -194,19 +239,19 @@ const Resources = ({ page, enums, setting }) => {
     [enums?.EnumServiceTargetList, router.locale]
   );
 
-  const renderServiceOrgList = serviceOrgList?.map(d=> {
-    return ({
+  const renderServiceOrgList = serviceOrgList?.map((d) => {
+    return {
       value: d.value,
-      label: router.locale === 'zh' ? d.label : d.label_en
-    })
-  })
+      label: router.locale === "zh" ? d.label : d.label_en,
+    };
+  });
 
-  const renderServiceDetailList = serviceDetailList?.map(d=> {
-    return ({
+  const renderServiceDetailList = serviceDetailList?.map((d) => {
+    return {
       value: d.value,
-      label: router.locale === 'zh' ? d.label : d.label_en
-    })
-  })
+      label: router.locale === "zh" ? d.label : d.label_en,
+    };
+  });
 
   const filteredResourceList = useMemo(() => {
     if (
@@ -542,17 +587,25 @@ const Resources = ({ page, enums, setting }) => {
       <Box bg="#F3F3F3">
         <Anchor id="list" />
         <Container>
-          <Text my={16} fontSize={"6xl"} fontWeight="bold">
+          <Text as="h1" my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
           </Text>
 
-          <Flex direction={["column", "row"]} gap={8} pb={4} justifyContent="flex-end" pos={'relative'} zIndex={2}>
+          <Flex
+            direction={["column", "row"]}
+            gap={8}
+            pb={4}
+            justifyContent="flex-end"
+            pos={"relative"}
+            zIndex={2}
+          >
             <ServiceFilter
               label={wordExtractor(page?.content?.wordings, "service_provider")}
               value={serviceOrgFilter}
               onChange={setServiceOrgFilter}
               list={renderServiceOrgList}
               page={page}
+              lang={lang}
             />
             <ServiceFilter
               label={wordExtractor(page?.content?.wordings, "service_target")}
@@ -560,6 +613,7 @@ const Resources = ({ page, enums, setting }) => {
               onChange={setServiceTargetFilter}
               list={serviceTargetList}
               page={page}
+              lang={lang}
             />
             <ServiceFilter
               label={wordExtractor(page?.content?.wordings, "service_content")}
@@ -567,32 +621,38 @@ const Resources = ({ page, enums, setting }) => {
               onChange={setServiceDetailFilter}
               list={renderServiceDetailList}
               page={page}
+              lang={lang}
             />
-            
-            <Stack mt={2} pos={'relative'} zIndex={1} d={["block", "none", "none"]}>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                left={"4px"}
-                top={"3px"}
-                cursor="pointer"
-              >
-                <SearchIcon color="gray.700" />
-              </InputLeftElement>
-              <Input
-                bgColor={"#FFF"}
-                borderRadius={"25px"}
-                border={"none"}
-                px={4}
-                minHeight={"45px"}
-                onChange={handleTextFilter}
-                placeholder={wordExtractor(
-                  page?.content?.wordings,
-                  "search_placeholder"
-                )}
-              />
-            </InputGroup>
-          </Stack>
+
+            <Stack
+              mt={2}
+              pos={"relative"}
+              zIndex={1}
+              d={["block", "none", "none"]}
+            >
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  left={"4px"}
+                  top={"3px"}
+                  cursor="pointer"
+                >
+                  <SearchIcon color="gray.700" />
+                </InputLeftElement>
+                <Input
+                  bgColor={"#FFF"}
+                  borderRadius={"25px"}
+                  border={"none"}
+                  px={4}
+                  minHeight={"45px"}
+                  onChange={handleTextFilter}
+                  placeholder={wordExtractor(
+                    page?.content?.wordings,
+                    "search_placeholder"
+                  )}
+                />
+              </InputGroup>
+            </Stack>
 
             <Button
               colorScheme="black"
@@ -605,7 +665,13 @@ const Resources = ({ page, enums, setting }) => {
             </Button>
           </Flex>
 
-          <Stack mt={2} mb={4} pos={'relative'} zIndex={1} d={["none", "none", "block"]}>
+          <Stack
+            mt={2}
+            mb={4}
+            pos={"relative"}
+            zIndex={1}
+            d={["none", "none", "block"]}
+          >
             <InputGroup>
               <InputLeftElement
                 pointerEvents="none"
@@ -626,30 +692,45 @@ const Resources = ({ page, enums, setting }) => {
                   page?.content?.wordings,
                   "search_placeholder"
                 )}
+                aria-label={lang === "zh" ? "文字搜尋" : "keyword search"}
               />
             </InputGroup>
           </Stack>
           <Flex flexDirection="row" justifyContent="space-between">
-            <Text>{wordExtractor(page?.content?.wordings, "total")}{`${filteredResourceList?.length}`}{wordExtractor(page?.content?.wordings, "search_results")}</Text>
+            <Text>
+              {wordExtractor(page?.content?.wordings, "total")}
+              {`${filteredResourceList?.length}`}
+              {wordExtractor(page?.content?.wordings, "search_results")}
+            </Text>
             <Box>
               <Flex flexDirection="row" align="center" gap={2}>
-                <Box>{wordExtractor(page?.content?.wordings, "list_view")}:</Box>
-                <FaColumns
-                  size={20}
-                  style={{
-                    cursor: "pointer",
-                    opacity: listStyle === "card" ? 1 : 0.5,
-                  }}
-                  onClick={() => setListStyle("card")}
-                />
-                <TiThList
-                  size={20}
-                  style={{
-                    cursor: "pointer",
-                    opacity: listStyle === "table" ? 1 : 0.5,
-                  }}
-                  onClick={() => setListStyle("table")}
-                />
+                <Box>
+                  {wordExtractor(page?.content?.wordings, "list_view")}:
+                </Box>
+                <Box as={Button} minWidth={'auto'} variant="ghost" p={0}>
+                  <FaColumns
+                    size={20}
+                    style={{
+                      cursor: "pointer",
+                      opacity: listStyle === "card" ? 1 : 0.5,
+                    }}
+                    onClick={() => setListStyle("card")}
+                    aria-label={lang === "zh" ? "檢視方式" : "List view"}
+                    pos={"relative"}
+                  />
+                </Box>
+                <Box as={Button} minWidth={'auto'} variant="ghost" p={0}>
+                  <TiThList
+                    size={20}
+                    style={{
+                      cursor: "pointer",
+                      opacity: listStyle === "table" ? 1 : 0.5,
+                    }}
+                    onClick={() => setListStyle("table")}
+                    aria-label={lang === "zh" ? "檢視方式" : "List view"}
+                    pos={"relative"}
+                  />
+                </Box>
               </Flex>
             </Box>
           </Flex>
@@ -1227,17 +1308,18 @@ const Resources = ({ page, enums, setting }) => {
         />
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} autoFocus={true}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <CloseIcon
+            {/* <CloseIcon
               onClick={() => onClose()}
               position="absolute"
               top={"15px"}
               right={"15px"}
               cursor={"pointer"}
-            />
+            /> */}
+            <ModalCloseButton aria-label="close" role="button"/>
             <VStack px={2} alignItems="stretch">
               <ModalCard
                 name={modalData?.name}
@@ -1294,6 +1376,7 @@ const TableRow = ({
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
       onClick={() => handleRowOnClick(resource)}
+      tabIndex="0"
     >
       <Td style={{ width: "200px", padding: "0 15px" }}>{name?.text}</Td>
       <Td style={{ width: "200px", padding: "0 15px" }}>

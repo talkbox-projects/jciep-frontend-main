@@ -1,9 +1,11 @@
 import { Box, HStack, Icon, IconButton } from "@chakra-ui/react";
 import React from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 export function PrevArrow(props) {
   const { onClick } = props;
+  const router = useRouter()
   return (
     <HStack
       pos="absolute"
@@ -30,7 +32,7 @@ export function PrevArrow(props) {
           variant="unstyled"
           icon={<Icon as={FaArrowLeft} fontSize="4xl" />}
           size="md"
-          aria-label="previous"
+          aria-label={router?.locale === "zh" ? "上一個" : "previous"}
         />
       </Box>
     </HStack>
@@ -39,6 +41,7 @@ export function PrevArrow(props) {
 
 export function NextArrow(props) {
   const { onClick } = props;
+  const router = useRouter()
   return (
     <HStack
       pos="absolute"
@@ -65,7 +68,7 @@ export function NextArrow(props) {
           variant="unstyled"
           icon={<Icon as={FaArrowRight} fontSize="4xl" />}
           size="md"
-          aria-label="next"
+          aria-label={router?.locale === "zh" ? "下一個" : "next"}
         />
       </Box>
     </HStack>
