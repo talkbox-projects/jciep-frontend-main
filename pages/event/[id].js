@@ -14,7 +14,14 @@ import {
   Flex,
   Image,
   Center,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
@@ -44,8 +51,7 @@ export const getServerSideProps = async (context) => {
       hostname: req?.headers?.host,
       api: {
         organizations: await organizationSearch({
-          status: ["approved"],
-          published: true,
+          status: ["approved"]
         }),
         eventDetail: await getEventDetail(context?.query?.id),
       },
@@ -64,6 +70,15 @@ const Event = ({
   const [detail, setDetail] = useState([]);
   const [organizeBy, setOrganizeBy] = useState("");
   const [bookmarkActive, setBookmarkActive] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenVideoModal,
+    onOpen: onOpenVideoModal,
+    onClose: onCloseVideoModal,
+  } = useDisclosure();
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [popupVideo, setPopupVideo] = useState(null);
 
   useEffect(() => {
     const { query } = router;
@@ -160,7 +175,18 @@ const Event = ({
 
       default:
         return (
-          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"}>
+          <GridItem
+            flex={1}
+            bgColor={"#FFF"}
+            overflow={"hidden"}
+            cursor="pointer"
+            onClick={() => {
+              if (data.url) {
+                onOpen();
+                setPopupImage(data.url);
+              }
+            }}
+          >
             <Box
               bgImage={`url(${data?.url})`}
               h={"110px"}
@@ -611,6 +637,11 @@ const Event = ({
           </Container>
         </Box>
       </VStack>
+      <InformationModal
+        onClose={onClose}
+        isOpen={isOpen}
+        popupSrc={popupImage}
+      />
     </>
   );
 };
@@ -672,6 +703,38 @@ const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
         bottom={0}
       />
     </Box>
+  );
+};
+
+const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
+  return (
+    <Modal
+      blockScrollOnMount={true}
+      onClose={onClose}
+      size={size}
+      isOpen={isOpen}
+      isCentered
+    >
+      <ModalOverlay
+        bgColor="rgba(51, 51, 51, 0.9)"
+        backdropFilter={"blur(20px)"}
+      />
+      <ModalContent bgColor="transparent" boxShadow={"none"}>
+      <ModalCloseButton color="white"/>
+        <ModalBody p={0}>
+          <Flex h={"100vh"} direction="column" pb={"40px"}>
+            <Box h={"60px"}></Box>
+            <Box flex={1}>
+              <Center h={"100%"}>
+                <Box>
+                  <Image src={popupSrc} width="100%" />
+                </Box>
+              </Center>
+            </Box>
+          </Flex>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

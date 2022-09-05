@@ -51,7 +51,6 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
-          published: true,
           type: ["ngo"],
         }),
       },
