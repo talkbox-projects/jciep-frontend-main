@@ -40,14 +40,11 @@ const OrganizationProfile = ({ api: { organization }, enums, page }) => {
   });
 
   switch (organization?.organizationType) {
-    case "ngo":
-      comp = <OrganizationNgoProfile />;
-      break;
     case "employment":
       comp = <OrganizationEmploymentProfile />;
       break;
     default:
-      comp = <Box></Box>;
+      comp = <OrganizationNgoProfile />;
   }
 
   return (
