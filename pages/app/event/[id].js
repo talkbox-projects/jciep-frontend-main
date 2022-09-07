@@ -29,6 +29,7 @@ import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
 import { getYoutubeLink } from "../../../utils/general";
 import organizationSearch from "../../../utils/api/OrganizationSearch";
+import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import {
   bookmarkEvent,
@@ -42,6 +43,8 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const event = await getEventDetail(context?.query?.id)
+  const {organizationId} = event
   const { req } = context;
   return {
     props: {
@@ -51,10 +54,7 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
       api: {
-        organizations: await organizationSearch({
-          status: ["approved"],
-          published: true,
-        }),
+        organization: await organizationGet({ id: organizationId }),
         eventDetail: await getEventDetail(context?.query?.id),
       },
       lang: context.locale,
@@ -65,7 +65,7 @@ export const getServerSideProps = async (context) => {
 const Event = ({
   page,
   hostname,
-  api: { organizations, eventDetail },
+  api: { organization },
   lang,
 }) => {
   const router = useRouter();
@@ -103,15 +103,6 @@ const Event = ({
   useEffect(() => {
     setBookmarked(detail?.bookmarked);
   }, [detail?.bookmarked]);
-
-  useEffect(() => {
-    if (detail?.organizationId) {
-      const organization = organizations?.find(
-        (d) => d.id === detail?.organizationId
-      );
-      setOrganizeBy(organization);
-    }
-  }, [detail?.organizationId, organizations]);
 
   const handleBookmark = async (id) => {
     const result = await bookmarkEvent(id);
@@ -343,7 +334,7 @@ const Event = ({
                         <b>{detail?.venue}</b>
                       </Box>
                     </Flex>
-                    {organizeBy && (
+                    {organization && (
                       <Flex align="center" gap={2}>
                         <Box>
                           {wordExtractor(
@@ -353,9 +344,9 @@ const Event = ({
                           <b>
                             {" "}
                             {lang === "zh"
-                              ? organizeBy?.chineseCompanyName
-                              : organizeBy?.englishCompanyName ??
-                                organizeBy?.chineseCompanyName}
+                              ? organization?.chineseCompanyName
+                              : organization?.englishCompanyName ??
+                              organization?.chineseCompanyName}
                           </b>{" "}
                           {wordExtractor(page?.content?.wordings, "hold_label")}
                         </Box>

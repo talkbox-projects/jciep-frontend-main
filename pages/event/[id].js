@@ -21,18 +21,16 @@ import {
   ModalCloseButton,
   useDisclosure
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
 import Container from "../../components/Container";
 import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import { useAppContext } from "../../store/AppStore";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail } from "../../utils/event/getEvent";
 import { bookmarkEvent } from "../../utils/event/eventAction";
-import organizationSearch from "../../utils/api/OrganizationSearch";
+import organizationGet from "../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 
 import eventTypes from "../api/graphql/enum/eventTypes";
@@ -42,6 +40,8 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
+  const event = await getEventDetail(context?.query?.id)
+  const {organizationId} = event
   const { req } = context;
   return {
     props: {
@@ -50,9 +50,7 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
       api: {
-        organizations: await organizationSearch({
-          status: ["approved"]
-        }),
+        organization: await organizationGet({ id: organizationId }),
         eventDetail: await getEventDetail(context?.query?.id),
       },
       lang: context.locale,
@@ -63,22 +61,14 @@ export const getServerSideProps = async (context) => {
 const Event = ({
   page,
   hostname,
-  api: { organizations, eventDetail },
+  api: { organization },
   lang,
 }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
-  const [organizeBy, setOrganizeBy] = useState("");
   const [bookmarkActive, setBookmarkActive] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenVideoModal,
-    onOpen: onOpenVideoModal,
-    onClose: onCloseVideoModal,
-  } = useDisclosure();
-
   const [popupImage, setPopupImage] = useState(null);
-  const [popupVideo, setPopupVideo] = useState(null);
 
   useEffect(() => {
     const { query } = router;
@@ -92,15 +82,6 @@ const Event = ({
       fetchData();
     }
   }, [bookmarkActive]);
-
-  useEffect(() => {
-    if (detail?.organizationId) {
-      const organization = organizations?.find(
-        (d) => d.id === detail?.organizationId
-      );
-      setOrganizeBy(organization);
-    }
-  }, [detail?.organizationId, organizations]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
@@ -317,7 +298,7 @@ const Event = ({
                           </Box>
                         </Flex>
 
-                        {organizeBy && (
+                        {organization && (
                           <Flex align="center" gap={2}>
                             <Box>
                               {wordExtractor(
@@ -327,9 +308,9 @@ const Event = ({
                               <b>
                                 {" "}
                                 {lang === "zh"
-                                  ? organizeBy?.chineseCompanyName
-                                  : organizeBy?.englishCompanyName ??
-                                    organizeBy?.chineseCompanyName}
+                                  ? organization?.chineseCompanyName
+                                  : organization?.englishCompanyName ??
+                                  organization?.chineseCompanyName}
                               </b>{" "}
                               {wordExtractor(
                                 page?.content?.wordings,
