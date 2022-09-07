@@ -27,8 +27,6 @@ import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
-import { getYoutubeLink } from "../../../utils/general";
-import organizationSearch from "../../../utils/api/OrganizationSearch";
 import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import {
@@ -44,7 +42,7 @@ const PAGE_KEY = "event";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const event = await getEventDetail(context?.query?.id)
-  const {organizationId} = event
+  const organizationId = event?.organizationId
   const { req } = context;
   return {
     props: {
@@ -55,7 +53,6 @@ export const getServerSideProps = async (context) => {
       hostname: req?.headers?.host,
       api: {
         organization: organizationId ? await organizationGet({ id: organizationId }) : null,
-        eventDetail: await getEventDetail(context?.query?.id),
       },
       lang: context.locale,
     },

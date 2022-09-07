@@ -41,7 +41,7 @@ const PAGE_KEY = "event";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const event = await getEventDetail(context?.query?.id)
-  const {organizationId} = event
+  const organizationId = event?.organizationId
   const { req } = context;
   return {
     props: {
@@ -50,8 +50,7 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
       api: {
-        organization: organizationId ? await organizationGet({ id: organizationId }) : null,
-        eventDetail: await getEventDetail(context?.query?.id),
+        organization: organizationId ? await organizationGet({ id: organizationId }) : null
       },
       lang: context.locale,
     },

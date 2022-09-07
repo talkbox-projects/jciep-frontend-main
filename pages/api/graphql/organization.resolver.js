@@ -66,9 +66,8 @@ export default {
 
   Query: {
     OrganizationGet: async (_parent, { id }) => {
-
       const organization = await Organization.findById(id);
-      if (!organization?.invitationCode) {
+      if (organization && !organization?.invitationCode) {
         organization.invitationCode = parseInt(
           Math.random() * 900000 + 100000
         ).toString();
