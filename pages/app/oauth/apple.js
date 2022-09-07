@@ -6,7 +6,7 @@ import { VStack } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import { Text, Box, Container, Spinner } from "@chakra-ui/react";
 import { useCredential } from "../../../utils/user";
-
+import nookies from "nookies";
 import formidable from "formidable";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import userLogin from "../../../utils/api/UserLogin";
@@ -16,22 +16,21 @@ const PAGE_KEY = "appleLogin";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const form = formidable({ multiples: true });
-
+  const cookies = nookies.get(context);
   const body = await new Promise((r) => {
     form.parse(context.req, (err, fields) => {
       r(fields);
     });
   });
-
-  const userAgent = context?.req?.headers['user-agent']
+  const clientType = cookies["jciep-client-type"] ? cookies["jciep-client-type"]?.toString() : ""
 
   const platform = () => {
-    switch (userAgent) {
-      case userAgent?.match(/Android/i):
-        return 'android'
-      
-      case userAgent?.match(/iPhone|iPad|iPod/i):
+    switch (clientType) {
+      case "0":
         return 'ios'
+      
+      case "1":
+        return 'android'
     
       default:
         return 'web'
