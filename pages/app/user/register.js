@@ -18,7 +18,7 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import { useCredential } from "../../../utils/user";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
+import nookies from "nookies";
 import facebook from "../../api/services/facebook";
 import google from "../../api/services/google";
 // import apple from "../../api/services/apple";
@@ -27,7 +27,7 @@ const PAGE_KEY = "app_user_register";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
+  const cookies = nookies.get(context);
   return {
     props: {
       page,
@@ -35,10 +35,11 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
+      clientType: cookies["jciep-client-type"] ?? null
     },
   };
 };
-const AppUserRegister = ({ page }) => {
+const AppUserRegister = ({ page, clientType }) => {
   const router = useRouter();
   const [, removeCredential] = useCredential();
   const [appRegistrationInfo, setAppRegistrationInfo] = useState({
@@ -594,7 +595,8 @@ const AppUserRegister = ({ page }) => {
                   </Flex>
                 </Box>
               </Box>
-              {/* <Code fontSize={8}>{JSON.stringify(appRegistrationInfo)}</Code>
+              <Code fontSize={8}>{JSON.stringify(clientType)}</Code>
+              {/* 
 
               <Code fontSize={8}>Test apple submit{JSON.stringify(appleRegistrationInfo)}</Code> */}
             </Box>
