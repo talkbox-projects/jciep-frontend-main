@@ -496,7 +496,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <LABEL name={page?.content?.form?.targetGroupDisabilities?.label} required={true}/>
+                  <LABEL name={page?.content?.form?.targetGroupDisabilities?.label}/>
 
                   <Controller
                     name="targetGroupDisabilities"

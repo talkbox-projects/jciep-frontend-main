@@ -40,8 +40,8 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const event = await getEventDetail(context?.query?.id)
-  const organizationId = event?.organizationId
+  // const event = await getEventDetail(context?.query?.id)
+  // const organizationId = event?.organizationId
   const { req } = context;
   return {
     props: {
@@ -49,9 +49,9 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
-      api: {
-        organization: organizationId ? await organizationGet({ id: organizationId }) : null
-      },
+      // api: {
+      //   organization: organizationId ? await organizationGet({ id: organizationId }) : null
+      // },
       lang: context.locale,
     },
   };
@@ -60,11 +60,11 @@ export const getServerSideProps = async (context) => {
 const Event = ({
   page,
   hostname,
-  api: { organization },
   lang,
 }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [organization, setOrganization] = useState(null);
   const [bookmarkActive, setBookmarkActive] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [popupImage, setPopupImage] = useState(null);
@@ -81,6 +81,16 @@ const Event = ({
       fetchData();
     }
   }, [bookmarkActive]);
+
+  useEffect(() => {
+    async function fetchOrganization() {
+      const organization = await organizationGet({ id: detail?.organizationId }) 
+      setOrganization(organization)
+    }
+    if(detail?.organizationId){
+      fetchOrganization()
+    }
+  }, [detail]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
