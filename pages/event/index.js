@@ -174,6 +174,7 @@ const Event = ({ page, hostname, lang }) => {
                       page?.content?.wordings,
                       "page_search"
                     )}
+                    _placeholder={{ color: 'gray.700' }}
                     bgColor={"#FFF"}
                     borderRadius={"25px"}
                     border={"none"}
@@ -249,6 +250,7 @@ const Event = ({ page, hostname, lang }) => {
                     page?.content?.wordings,
                     "designated_day_placeholder"
                   )}
+                  _placeholder={{ color: 'gray.700' }}
                   onFocus={() => (designatedDayRef.current.type = "date")}
                   onBlur={(e) => {
                     designatedDayRef.current.type = "text";
@@ -262,8 +264,8 @@ const Event = ({ page, hostname, lang }) => {
                   aria-label={lang=="zh"?"指定日子":"Designated day"}
                 />
               </Box>
-              <Box flex={1} tabIndex={1}>
-                <FilterSection page={page} />
+              <Box flex={1}>
+                <FilterSection page={page} tabIndex={2}/>
               </Box>
             </Flex>
             {filteredEvents &&
@@ -443,6 +445,7 @@ const Event = ({ page, hostname, lang }) => {
                         type="text"
                         variant="flushed"
                         {...register("searchText")}
+                        borderColor={"1px solid gray.500"}
                       />
                       <FormHelperText>
                         {errors?.name?.type === "required" && (
@@ -470,6 +473,7 @@ const Event = ({ page, hostname, lang }) => {
                         variant="flushed"
                         placeholder=""
                         {...register("fromDate")}
+                        borderColor={"1px solid gray.500"}
                       />
                     </FormControl>
                   </GridItem>
@@ -487,6 +491,7 @@ const Event = ({ page, hostname, lang }) => {
                         variant="flushed"
                         placeholder=""
                         {...register("toDate")}
+                        borderColor={"1px solid gray.500"}
                       />
                     </FormControl>
                   </GridItem>
@@ -510,7 +515,7 @@ const Event = ({ page, hostname, lang }) => {
                               {page?.content?.form?.type?.options.map(
                                 ({ label, value }) => {
                                   return (
-                                    <Checkbox key={label} value={value}>
+                                    <Checkbox colorScheme="green" key={label} value={value} borderColor={"gray.500"}>
                                       {label}
                                     </Checkbox>
                                   );
@@ -553,6 +558,12 @@ const FilterSection = ({ page }) => {
     border: "none",
     color: "#FFF",
     bgColor: "#1E1E1E",
+    _hover: {
+      backgroundColor: "#000"
+    },
+    _active: {
+      backgroundColor: "#000"
+    }
   };
   const stylesProps = {
     boxShadow: "0px 0px 0px 1px #1E1E1E inset",
@@ -614,7 +625,9 @@ const FilterSection = ({ page }) => {
               });
               setSelected(d.value);
             }}
-            tabIndex={1}
+            tabIndex={0}
+            aria-selected={ d.value === selected ? "true" : "false"}
+            role="tab"
           >
             {d.label}
           </Box>

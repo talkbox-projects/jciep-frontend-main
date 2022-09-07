@@ -22,11 +22,13 @@ import {
   IconButton,
   Button,
   useBreakpointValue,
+  Flex,
 } from "@chakra-ui/react";
 import Container from "../components/Container";
 import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useCallback, useState } from "react";
 import UserGroupModal from "../components/UserGroupModal";
 import DividerSimple from "../components/DividerSimple";
@@ -63,6 +65,7 @@ const Home = ({ setting, page }) => {
 
   const isMobile = useBreakpointValue([true, false]);
   const videoRef = useRef(undefined);
+  const [carouselAutoPlay, setCarouselAutoPlay] = useState(true);
   const [hasVideoEnded, setHasVideoEnded] = useState(false);
 
   const categories = setting?.value?.categories;
@@ -247,7 +250,15 @@ const Home = ({ setting, page }) => {
                           page?.content?.animation?.startFrame?.roles?.[index]
                         );
                       }}
-                      _hover={{opacity:.75}}
+                      _hover={{ opacity: 0.75 }}
+                      onKeyDown={(e) => {
+                        if (e?.key === "Enter") {
+                          e?.preventDefault();
+                          userGroupModalDisclosure.onOpen(
+                            page?.content?.animation?.startFrame?.roles?.[index]
+                          );
+                        }
+                      }}
                     >
                       <VStack textAlign="center" fontSize={["xl"]} tabIndex={1}>
                         <Image alt={name} w={100} src={icon}></Image>
@@ -347,7 +358,9 @@ const Home = ({ setting, page }) => {
                     <Box textAlign="center">
                       {caption && (
                         <Box h={8} mb={8}>
-                          <ApostropheHeadline fontSize={router.locale === 'zh' ? "xl" : "md"}>
+                          <ApostropheHeadline
+                            fontSize={router.locale === "zh" ? "xl" : "md"}
+                          >
                             {caption}
                           </ApostropheHeadline>
                         </Box>
@@ -402,131 +415,164 @@ const Home = ({ setting, page }) => {
       {/* Fifth Section */}
 
       <Box bg="#00BFBA" position="relative">
-        <Carousel
-          showArrows={true}
-          showIndicators={false}
-          autoPlay
-          infiniteLoop
-          interval={3000}
-          showStatus={false}
-          showThumbs={false}
-          renderArrowPrev={(clickHandler, hasPrev) => {
-            return hasPrev ? (
-              <HStack
-                px={3}
-                position="absolute"
-                h="100%"
-                zIndex={25}
-                align="center"
-                left={[2, 2, 2, 2, 8, "10vw"]}
-              >
-                <IconButton
-                  cursor="pointer"
-                  onClick={clickHandler}
-                  variant="unstyled"
-                  rounded="full"
-                  as={FaArrowLeft}
-                />
-              </HStack>
-            ) : null;
-          }}
-          renderArrowNext={(clickHandler, hasNext) => {
-            return hasNext ? (
-              <HStack
-                px={3}
-                top={0}
-                right={[2, 2, 2, 2, 8, "10vw"]}
-                position="absolute"
-                h="100%"
-                align="center"
-              >
-                <IconButton
-                  cursor="pointer"
-                  onClick={clickHandler}
-                  variant="unstyled"
-                  rounded="full"
-                  as={FaArrowRight}
-                />
-              </HStack>
-            ) : null;
-          }}
-        >
-          {(posts ?? []).map((post, index) => (
-            <Container key={index} py={28}>
-              <NextLink passHref href={`/sharing/${post?.slug}`}>
-                <Link d="block">
-                  <Stack
+        {posts?.length > 0 && (
+          <Carousel
+            showArrows={true}
+            showIndicators={false}
+            autoPlay={carouselAutoPlay}
+            infiniteLoop
+            interval={3000}
+            showStatus={false}
+            showThumbs={false}
+            renderArrowPrev={(clickHandler, hasPrev) => {
+              return hasPrev ? (
+                <HStack
+                  px={3}
+                  position="absolute"
+                  h="100%"
+                  zIndex={25}
+                  align="center"
+                  left={[2, 2, 2, 2, 8, "10vw"]}
+                >
+                  <IconButton
                     cursor="pointer"
-                    align="center"
-                    justifyContent="center"
-                    spacing={[6, 8, 10, 16]}
-                    px="50px"
-                    direction={["column", "column", "column", "row"]}
-                  >
-                    <Box w={["100%", "60%", "50%", "50%", "40%"]}>
-                      <Image
-                        alt={post?.content?.feature?.tagline ?? post?.title}
-                        src={post?.content?.feature?.image ?? post?.content?.coverImage}
-                      />
-                    </Box>
-                    <VStack
-                      px={8}
-                      align="start"
-                      flex={[0, 0, 0, 1]}
-                      minW={0}
-                      textAlign="left"
+                    onClick={clickHandler}
+                    variant="unstyled"
+                    rounded="full"
+                    as={FaArrowLeft}
+                  />
+                </HStack>
+              ) : null;
+            }}
+            renderArrowNext={(clickHandler, hasNext) => {
+              return hasNext ? (
+                <HStack
+                  px={3}
+                  top={0}
+                  right={[2, 2, 2, 2, 8, "10vw"]}
+                  position="absolute"
+                  h="100%"
+                  align="center"
+                >
+                  <IconButton
+                    cursor="pointer"
+                    onClick={clickHandler}
+                    variant="unstyled"
+                    rounded="full"
+                    as={FaArrowRight}
+                  />
+                </HStack>
+              ) : null;
+            }}
+          >
+            {(posts ?? []).map((post, index) => (
+              <Container key={index} py={28}>
+                <NextLink passHref href={`/sharing/${post?.slug}`}>
+                  <Link d="block">
+                    <Stack
+                      cursor="pointer"
+                      align="center"
+                      justifyContent="center"
+                      spacing={[6, 8, 10, 16]}
+                      px="50px"
+                      direction={["column", "column", "column", "row"]}
                     >
-                      <HStack>
-                        <Icon
-                          as={VscQuote}
-                          fontSize={36}
-                          color="white"
-                          fontWeight="bold"
+                      <Box
+                        w={["100%", "60%", "50%", "50%", "40%"]}
+                        tabIndex={0}
+                      >
+                        <Image
+                          alt={post?.content?.feature?.tagline ?? post?.title}
+                          src={
+                            post?.content?.feature?.image ??
+                            post?.content?.coverImage
+                          }
+                          tabIndex={0}
                         />
-                        <Box
-                          bgColor="#00F5E7"
-                          borderRadius={24}
-                          fontSize="xl"
-                          px={4}
-                          py={0.5}
+                      </Box>
+                      <VStack
+                        px={8}
+                        align="start"
+                        flex={[0, 0, 0, 1]}
+                        minW={0}
+                        textAlign="left"
+                      >
+                        <HStack>
+                          <Icon
+                            as={VscQuote}
+                            fontSize={36}
+                            color="white"
+                            fontWeight="bold"
+                          />
+                          <Box
+                            bgColor="#00F5E7"
+                            borderRadius={24}
+                            fontSize="xl"
+                            px={4}
+                            py={0.5}
+                          >
+                            <Text>
+                              {getCategoryData(post?.category)?.label}
+                            </Text>
+                          </Box>
+                        </HStack>
+                        <Text
+                          fontWeight="bold"
+                          d="block"
+                          pb={4}
+                          lineHeight="xl"
+                          fontSize={["2xl", "2xl", "2xl", "2xl"]}
                         >
-                          <Text>{getCategoryData(post?.category)?.label}</Text>
-                        </Box>
-                      </HStack>
-                      <Text
-                        fontWeight="bold"
-                        d="block"
-                        pb={4}
-                        lineHeight="xl"
-                        fontSize={["2xl", "2xl", "2xl", "2xl"]}
-                      >
-                        {post?.content?.feature?.persona}
-                      </Text>
-                      <Text
-                        lineHeight="xl"
-                        fontSize={["2xl", "3xl", "4xl", "4xl"]}
-                        whiteSpace="pre-wrap"
-                        bgColor="white"
-                        fontWeight="bold"
-                      >
-                        {post?.content?.feature?.tagline ?? post?.title}
-                      </Text>
-                      <Text
-                        d="block"
-                        pt={4}
-                        whiteSpace="pre-wrap"
-                        fontSize="2xl"
-                        borderRadius={4}
-                      >
-                        {post?.excerpt}
-                      </Text>
-                    </VStack>
-                  </Stack>
-                </Link>
-              </NextLink>
-            </Container>
-          ))}
-        </Carousel>
+                          {post?.content?.feature?.persona}
+                        </Text>
+                        <Text
+                          lineHeight="xl"
+                          fontSize={["2xl", "3xl", "4xl", "4xl"]}
+                          whiteSpace="pre-wrap"
+                          bgColor="white"
+                          fontWeight="bold"
+                        >
+                          {post?.content?.feature?.tagline ?? post?.title}
+                        </Text>
+                        <Text
+                          d="block"
+                          pt={4}
+                          whiteSpace="pre-wrap"
+                          fontSize="2xl"
+                          borderRadius={4}
+                        >
+                          {post?.excerpt}
+                        </Text>
+                      </VStack>
+                    </Stack>
+                  </Link>
+                </NextLink>
+              </Container>
+            ))}
+          </Carousel>
+        )}
+        {posts && (
+          <Flex justifyContent="center" pb={4} gap={2}>
+            <Button
+              onClick={() => {
+                setCarouselAutoPlay(true);
+              }}
+              opacity={carouselAutoPlay === true ? 0.5 : 1}
+              disabled={carouselAutoPlay === true}
+            >
+              <BsFillPlayFill fontSize={"24px"} />
+            </Button>
+            <Button
+              onClick={() => {
+                setCarouselAutoPlay(false);
+              }}
+              opacity={carouselAutoPlay === false ? 0.5 : 1}
+              disabled={carouselAutoPlay === false}
+            >
+              <BsFillPauseFill fontSize={"24px"} />
+            </Button>
+          </Flex>
+        )}
       </Box>
 
       {/* role introduction */}

@@ -430,7 +430,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       role="menu"
                     >
                       {submenu?.length > 0 ? (
-                        <Popover gutter={20} role="menuitem">
+                        <Popover gutter={20}>
                           <PopoverTrigger>
                             <Box h="100%">
                               {/* <NextLink href={path}> */}
@@ -450,6 +450,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                       : "normal",
                                   wordWrap: "break-word",
                                 }}
+                                role="menuitem"
                               >
                                 {label}
                               </Button>
@@ -459,7 +460,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                           <PopoverContent w="fit-content">
                             <PopoverBody as={VStack} spacing={4} fontSize="md">
                               {submenu.map(({ id, label, path }) => (
-                                <NextLink key={id} href={path} role="menuitem">
+                                <NextLink key={id} href={path}>
                                   <Button
                                     h="100%"
                                     variant="unstyled"
@@ -468,6 +469,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                     minW={200}
                                     fontWeight="normal"
                                     borderColor="transparent"
+                                    role="menuitem"
                                   >
                                     {label}
                                   </Button>
@@ -477,7 +479,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                           </PopoverContent>
                         </Popover>
                       ) : (
-                        <NextLink href={path} role="menuitem">
+                        <NextLink href={path}>
                           <Button
                             h="100%"
                             variant="unstyled"
@@ -490,6 +492,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 router?.locale === "zh" ? "nowrap" : "normal",
                               wordWrap: "break-word",
                             }}
+                            role="menuitem"
                           >
                             {label}
                           </Button>

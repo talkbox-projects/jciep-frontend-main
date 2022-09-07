@@ -32,6 +32,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Alert,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { VStack, HStack, Flex, Stack } from "@chakra-ui/layout";
@@ -53,7 +54,7 @@ import { useRouter } from "next/router";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { NextArrow, PrevArrow } from "../../components/SliderArrow";
 import { CloseIcon } from "@chakra-ui/icons";
-
+import { IoCheckboxSharp, IoSquareOutline } from "react-icons/io5";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import { TiThList } from "react-icons/ti";
 import { FaColumns } from "react-icons/fa";
@@ -155,7 +156,7 @@ const ServiceFilter = ({
       size="lg"
       textAlign="left"
       borderRadius={0}
-      aria-label={lang === "zh" ? "目錄" : "Menu"}
+      aria-label={label}
     >
       <Text w="100%">
         {value.length > 0
@@ -692,12 +693,13 @@ const Resources = ({ page, enums, setting, lang }) => {
                   page?.content?.wordings,
                   "search_placeholder"
                 )}
+                _placeholder={{ color: "gray.700" }}
                 aria-label={lang === "zh" ? "文字搜尋" : "keyword search"}
               />
             </InputGroup>
           </Stack>
           <Flex flexDirection="row" justifyContent="space-between">
-            <Text>
+            <Text role="alert">
               {wordExtractor(page?.content?.wordings, "total")}
               {`${filteredResourceList?.length}`}
               {wordExtractor(page?.content?.wordings, "search_results")}
@@ -707,27 +709,39 @@ const Resources = ({ page, enums, setting, lang }) => {
                 <Box>
                   {wordExtractor(page?.content?.wordings, "list_view")}:
                 </Box>
-                <Box as={Button} minWidth={'auto'} variant="ghost" p={0}>
+                <Box
+                  as={Button}
+                  minWidth={"auto"}
+                  variant="ghost"
+                  p={0}
+                  onClick={() => setListStyle("card")}
+                >
                   <FaColumns
                     size={20}
                     style={{
                       cursor: "pointer",
                       opacity: listStyle === "card" ? 1 : 0.5,
                     }}
-                    onClick={() => setListStyle("card")}
-                    aria-label={lang === "zh" ? "檢視方式" : "List view"}
+                    aria-label={lang === "zh" ? "卡片顯示" : "Card view"}
+                    aria-selected={listStyle === "card" ? "true" : "false"}
                     pos={"relative"}
                   />
                 </Box>
-                <Box as={Button} minWidth={'auto'} variant="ghost" p={0}>
+                <Box
+                  as={Button}
+                  minWidth={"auto"}
+                  variant="ghost"
+                  p={0}
+                  onClick={() => setListStyle("table")}
+                >
                   <TiThList
                     size={20}
                     style={{
                       cursor: "pointer",
                       opacity: listStyle === "table" ? 1 : 0.5,
                     }}
-                    onClick={() => setListStyle("table")}
-                    aria-label={lang === "zh" ? "檢視方式" : "List view"}
+                    aria-label={lang === "zh" ? "表格顯示" : "Table view"}
+                    aria-selected={listStyle === "table" ? "true" : "false"}
                     pos={"relative"}
                   />
                 </Box>
@@ -748,6 +762,7 @@ const Resources = ({ page, enums, setting, lang }) => {
                       overflow: "hidden",
                       margin: "15px 0",
                     }}
+                    tabIndex="1"
                   >
                     <Thead
                       style={{ backgroundColor: "#FEB534", height: "70px" }}
@@ -1308,18 +1323,11 @@ const Resources = ({ page, enums, setting, lang }) => {
         />
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} autoFocus={true}>
+      <Modal isOpen={isOpen} onClose={()=>onClose()} autoFocus={true}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            {/* <CloseIcon
-              onClick={() => onClose()}
-              position="absolute"
-              top={"15px"}
-              right={"15px"}
-              cursor={"pointer"}
-            /> */}
-            <ModalCloseButton aria-label="close" role="button"/>
+            <ModalCloseButton aria-label="close" role="button" />
             <VStack px={2} alignItems="stretch">
               <ModalCard
                 name={modalData?.name}
@@ -1355,8 +1363,10 @@ const TableRow = ({
   resource,
   handleRowOnClick,
 }) => {
-  const disableClick = {
-    pointerEvents: "none",
+  const checkBoxStyle = {
+    color: "#38A169",
+    margin: "0 auto",
+    fontSize: "24px",
   };
   const rowStyle = {
     borderBottom: "1px solid #EAEAEA",
@@ -1376,6 +1386,12 @@ const TableRow = ({
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
       onClick={() => handleRowOnClick(resource)}
+      onKeyDown={(e) => {
+        if(e?.key === 'Enter'){
+          e?.preventDefault();
+          handleRowOnClick(resource)
+        }
+      }}
       tabIndex="0"
     >
       <Td style={{ width: "200px", padding: "0 15px" }}>{name?.text}</Td>
@@ -1386,38 +1402,46 @@ const TableRow = ({
         {serviceTarget?.text}
       </Td>
       <Td style={{ textAlign: "center" }}>
-        <Checkbox
-          size="md"
-          colorScheme="green"
-          defaultChecked={services?.length > 0}
-          style={disableClick}
-        />
+        {services?.length > 0 ? (
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+        ) : (
+          <IoSquareOutline
+            style={{ margin: "0 auto", fontSize: "24px" }}
+            alt="checkbox"
+          />
+        )}
       </Td>
       <Td style={{ textAlign: "center" }}>
-        <Checkbox
-          size="md"
-          colorScheme="green"
-          defaultChecked={internship?.value}
-          style={disableClick}
-        />
+        {internship?.value > 0 ? (
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+        ) : (
+          <IoSquareOutline
+            style={{ margin: "0 auto", fontSize: "24px" }}
+            alt="checkbox"
+          />
+        )}
       </Td>
       <Td style={{ textAlign: "center" }}>
-        <Checkbox
-          size="md"
-          colorScheme="green"
-          defaultChecked={probationOrReferral}
-          style={disableClick}
-        />
+        {probationOrReferral ? (
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+        ) : (
+          <IoSquareOutline
+            style={{ margin: "0 auto", fontSize: "24px" }}
+            alt="checkbox"
+          />
+        )}
       </Td>
       <Td style={{ minWidth: "80px", textAlign: "center" }}>
         <div style={{ height: "100px", margin: "20px 0" }}>
           <Center h={"100%"}>
-            <Checkbox
-              size="md"
-              colorScheme="green"
-              defaultChecked={subsidy?.length > 0}
-              style={disableClick}
-            />
+            {subsidy?.length > 0 ? (
+              <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+            ) : (
+              <IoSquareOutline
+                style={{ margin: "0 auto", fontSize: "24px" }}
+                alt="checkbox"
+              />
+            )}
           </Center>
         </div>
       </Td>
