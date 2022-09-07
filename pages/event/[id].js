@@ -50,7 +50,7 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
       api: {
-        organization: organizationId ? await organizationGet({ id: organizationId }) : "",
+        organization: organizationId ? await organizationGet({ id: organizationId }) : null,
         eventDetail: await getEventDetail(context?.query?.id),
       },
       lang: context.locale,
