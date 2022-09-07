@@ -131,7 +131,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
               <Text pt={2} color="#000">
                 {router.locale === "zh"
                   ? organization?.chineseCompanyName
-                  : organization?.enghlishCompanyName??organization?.chineseCompanyName}
+                  : organization?.englishCompanyName??organization?.chineseCompanyName}
               </Text>
               <Text color="#757575">{organization?.description}</Text>
             </VStack>
