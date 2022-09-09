@@ -1522,46 +1522,52 @@ export default withPageCMS(EventAdd, {
       ],
     },
     {
+      name: "step",
+      label: "標題 step",
+      component: "group",
+      fields: [
+        {
+          name: "title",
+          label: "主標題 Title",
+          component: "text",
+        },
+        {
+          name: "subTitle",
+          label: "副標題 Sub title",
+          component: "text",
+        },
+        {
+          name: "event",
+          label: "日子 Sub title",
+          component: "text",
+        },
+        {
+          name: "date_time",
+          label: "時間 Sub title",
+          component: "text",
+        },
+        {
+          name: "event_registration",
+          label: "登記 Registration title",
+          component: "text",
+        },
+        {
+          name: "event_images",
+          label: "圖片 Images title",
+          component: "text",
+        },
+        {
+          name: "more_information",
+          label: "更多圖片 More Image title",
+          component: "text",
+        },
+      ],
+    },
+    {
       name: "form",
       label: "形式 Form",
       component: "group",
       fields: [
-        {
-          name: "filter",
-          label: "篩選 Filter Label",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
         {
           name: "type",
           label: "活動類別 Type Label",
@@ -1636,7 +1642,43 @@ export default withPageCMS(EventAdd, {
         },
         {
           name: "representOrganization",
-          label: "代表機構 Type Label",
+          label: "是否代表機構 Represent Organization Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "filter",
+          label: "篩選 Filter Label",
           component: "group",
           fields: [
             {

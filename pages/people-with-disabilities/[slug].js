@@ -704,7 +704,7 @@ const PwdDetail = ({ page }) => {
           >
             <Icon as={HiOutlineDotsHorizontal} h="48px" w="48px" />
             <Text fontSize={["16px", "16px", "24px"]} textAlign="center">
-              顯示更多
+            {pwd?.othersSection?.showMore}
             </Text>
           </Box>
         </Grid>

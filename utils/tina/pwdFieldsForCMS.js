@@ -654,6 +654,11 @@ export default [
                 parse: ({ previewSrc }) => previewSrc,
                 previewSrc: (src) => src,
               },
+              {
+                name: "showMore",
+                label: "顯示更多 Show More",
+                component: "text",
+              },
             ],
           },
         ],

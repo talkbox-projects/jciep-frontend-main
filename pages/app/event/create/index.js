@@ -134,10 +134,15 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         },
         ...organizationInfo,
       ]
-    : [{ label: wordExtractor(
-      page?.content?.wordings,
-      "not_presenting_any_organisation"
-    ), value: "" }];
+    : [
+        {
+          label: wordExtractor(
+            page?.content?.wordings,
+            "not_presenting_any_organisation"
+          ),
+          value: "",
+        },
+      ];
   const { fields, append, remove } = useFieldArray({
     control,
     name: "otherUrls",
@@ -706,10 +711,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                   <GridItem>
                     <FormControl>
                       <FormLabel {...labelStyles}>
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "remark_label"
-                        )}
+                        {wordExtractor(page?.content?.wordings, "remark_label")}
                       </FormLabel>
                       <Textarea
                         row={4}
@@ -1469,25 +1471,10 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                       type="submit"
                       isLoading={isSubmitting}
                     >
-                      {page?.content?.continue}
+                   {wordExtractor(page?.content?.wordings, "submit_label")}
                     </Button>
                   </FormControl>
                 </Box>
-                {/* <Box>
-                  debug:
-                  {debugResult && (
-                    <Box
-                      style={{
-                        whiteSpace: "normal",
-                        wordWrap: "break-word",
-                      }}
-                      maxWidth={"300px"}
-                    >
-                      {debugResult}
-                    </Box>
-                  )}
-                </Box> */}
-
                 <Box>
                   {pickImageDebugResult && (
                     <Box
@@ -1507,51 +1494,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
           </Box>
         </Box>
       )}
-
-      {/* {step === "step2" && (
-        <Box>
-          <NAV
-            title={"代表機構"}
-            subTitle={"步驟2/3"}
-            handleClickLeftIcon={() => router.push(`/`)}
-          />
-          <TitleWrap
-            title={wordExtractor(
-              page?.content?.wordings,
-              "represent_organization_label"
-            )}
-          />
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            gap={"40px"}
-            width="100%"
-            px={"15px"}
-          >
-          </Grid>
-          <Box
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(57, 57, 57, 0.0001) 0%, #393939 100%)",
-              marginTop: "60px",
-            }}
-            h={"16px"}
-            w={"100%"}
-            opacity={0.2}
-          />
-          <Box px={"15px"} py={"12px"} w="100%">
-            <FormControl textAlign="center">
-              <Button
-                backgroundColor="#F6D644"
-                borderRadius="22px"
-                height="44px"
-                width="100%"
-              >
-                {page?.content?.continue}
-              </Button>
-            </FormControl>
-          </Box>
-        </Box>
-      )} */}
     </Box>
   );
 };
@@ -1877,6 +1819,42 @@ export default withPageCMS(EventAdd, {
         {
           name: "representOrganization",
           label: "是否代表機構 Represent Organization Label",
+          component: "group",
+          fields: [
+            {
+              name: "label",
+              label: "標籤 Label",
+              component: "text",
+            },
+            {
+              name: "options",
+              label: "區段  Options",
+              component: "group-list",
+              itemProps: ({ id: key, caption: label }) => ({
+                key,
+                label,
+              }),
+              defaultItem: () => ({
+                id: Math.random().toString(36).substr(2, 9),
+              }),
+              fields: [
+                {
+                  name: "label",
+                  label: "標籤 Label",
+                  component: "text",
+                },
+                {
+                  name: "value",
+                  label: "價值 Value",
+                  component: "text",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "filter",
+          label: "篩選 Filter Label",
           component: "group",
           fields: [
             {
