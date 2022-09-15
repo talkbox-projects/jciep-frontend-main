@@ -89,7 +89,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
     defaultValues: {
       otherUrls: [""],
       bannerImage: [{}],
-      additionalInformation: [{}],
+      additionalInformation: [],
       representOrganization: "false",
     },
   });
@@ -231,7 +231,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
           if (fieldName === "bannerImage") {
             setValue(fieldName, [bannerUploadData?.FileUpload?.[0]]);
           } else {
-            let updateData = watchAdditionalInformation;
+            let updateData = watchAdditionalInformation??[];
 
             updateData[index] = bannerUploadData?.FileUpload?.[0];
             setValue(fieldName, updateData);

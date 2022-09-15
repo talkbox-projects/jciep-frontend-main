@@ -181,7 +181,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
     setSubmitInvitation(true);
     const isValid = await OrganizationInvitationCodeValidity({
       invitationCode: getValues("invitationCode"),
-      organizationType: "ngo",
+      organizationType: selectedOrganization?.organizationType ?? "ngo",
     });
 
     if (!isValid) {
