@@ -51,7 +51,7 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
-          type: ["ngo"],
+          type: ["ngo","business","socialEnterprise","other"],
         }),
       },
       currentUserId: currentUserId ? currentUserId?.toString() : ""

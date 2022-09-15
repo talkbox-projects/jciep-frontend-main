@@ -707,26 +707,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                       ).replace("$", getDateTimeRemarkCount.length || 0)}
                     </Text>
                   </GridItem>
-
-                  <GridItem>
-                    <FormControl>
-                      <FormLabel {...labelStyles}>
-                        {wordExtractor(page?.content?.wordings, "remark_label")}
-                      </FormLabel>
-                      <Textarea
-                        row={4}
-                        variant="flushed"
-                        {...register("remark")}
-                        maxLength={250}
-                      />
-                    </FormControl>
-                    <Text fontSize="12px" color="#666666" pt={2}>
-                      {wordExtractor(
-                        page?.content?.wordings,
-                        "word_suggestions"
-                      ).replace("$", getDateTimeRemarkCount.length || 0)}
-                    </Text>
-                  </GridItem>
                 </Grid>
 
                 <SimpleDivider />
@@ -1172,6 +1152,27 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                       </Text>
                     </Flex>
                   </GridItem>
+
+                  <GridItem>
+                    <FormControl>
+                      <FormLabel {...labelStyles}>
+                        {wordExtractor(page?.content?.wordings, "remark_label")}
+                      </FormLabel>
+                      <Textarea
+                        row={4}
+                        variant="flushed"
+                        {...register("remark")}
+                        maxLength={250}
+                      />
+                    </FormControl>
+                    <Text fontSize="12px" color="#666666" pt={2}>
+                      {wordExtractor(
+                        page?.content?.wordings,
+                        "word_suggestions"
+                      ).replace("$", getDateTimeRemarkCount.length || 0)}
+                    </Text>
+                  </GridItem>
+                  
                 </Grid>
 
                 <SimpleDivider />
