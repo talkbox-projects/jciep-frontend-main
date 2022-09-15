@@ -89,7 +89,6 @@ export default {
 
       const isAdmin = checkIfAdmin(context.auth?.identity);
 
-
       let date = new Date();
       if (days === "7 Days") {
         date.setDate(date.getDate() - 7);
@@ -113,7 +112,9 @@ export default {
       };
 
       if (!isAdmin) {
-        filters.published = true;
+        if(published!==false) { // Show all NGO options in public identity registration flow
+          filters.published = true;
+        }
         filters.status = "approved";
       } else {
         if (published !== undefined) {

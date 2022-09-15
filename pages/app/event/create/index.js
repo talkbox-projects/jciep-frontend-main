@@ -88,7 +88,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
   } = useForm({
     defaultValues: {
       otherUrls: [""],
-      additionalInformation: [{}],
       bannerImage: [{}],
       representOrganization: "false",
     },
@@ -1344,7 +1343,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         m={2}
                         className="additionalInformationWrap"
                       >
-                        {watchAdditionalInformation[index] && (
                           <Button
                             colorScheme="red"
                             size="xs"
@@ -1359,7 +1357,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                               "delete_information_label"
                             )}
                           </Button>
-                        )}
                         {watchAdditionalInformation[index] ? (
                           <Box pos="relative" h={"100%"}>
                             <Box

@@ -151,7 +151,7 @@ const Event = ({ page, hostname, lang }) => {
           </Box>
           <Container pt={12} position="relative">
             <Box pb={48} pt={[36, 36, 36, 48]}>
-              <Text as="h1" fontSize="5xl" fontWeight="bold" pb={4}>
+              <Text as="h2" fontSize="5xl" fontWeight="bold" pb={4}>
                 {wordExtractor(page?.content?.wordings, "page_title")}
               </Text>
               <Flex

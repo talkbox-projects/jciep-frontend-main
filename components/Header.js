@@ -398,7 +398,6 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
             boxShadow="sm"
             borderWidth={1}
             px={6}
-            role="menubar"
           >
             <HStack
               spacing={0}
@@ -406,7 +405,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
               justifyContent="center"
               h="100%"
               border={0}
-              role="menu"
+              role="menubar"
             >
               {(navigation.menu ?? []).map(
                 ({ id, submenu = [], label, path = "/" }, index, arr) => (
@@ -427,12 +426,11 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                         borderRightColor: "#eee",
                       })}
                       px={2}
-                      role="menu"
                     >
                       {submenu?.length > 0 ? (
                         <Popover gutter={20}>
                           <PopoverTrigger>
-                            <Box h="100%">
+                            <Box h="100%" role="menuitem">
                               {/* <NextLink href={path}> */}
                               <Button
                                 h="100%"
@@ -450,7 +448,6 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                       : "normal",
                                   wordWrap: "break-word",
                                 }}
-                                role="menuitem"
                               >
                                 {label}
                               </Button>
@@ -458,7 +455,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                             </Box>
                           </PopoverTrigger>
                           <PopoverContent w="fit-content">
-                            <PopoverBody as={VStack} spacing={4} fontSize="md">
+                            <PopoverBody as={VStack} spacing={4} fontSize="md" role="menu">
                               {submenu.map(({ id, label, path }) => (
                                 <NextLink key={id} href={path}>
                                   <Button
@@ -526,6 +523,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       ? "#e5fffe"
                       : "transparent"
                   }
+                  role="menuitem"
                 >
                   {navigation?.actionButton?.label}
                 </Button>

@@ -260,7 +260,7 @@ const Home = ({ setting, page }) => {
                         }
                       }}
                     >
-                      <VStack textAlign="center" fontSize={["xl"]} tabIndex={1}>
+                      <VStack textAlign="center" fontSize={["xl"]} tabIndex={1} role="button">
                         <Image alt={name} w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
                         <Text>{caption}</Text>
@@ -465,8 +465,11 @@ const Home = ({ setting, page }) => {
               ) : null;
             }}
           >
-            {(posts ?? []).map((post, index) => (
-              <Container key={index} py={28}>
+            {(posts ?? []).map((post, index) => {
+              const postImage = post?.content?.feature?.image ?? post?.content?.coverImage
+              console.log('postImage-', postImage)
+              return (
+                <Container key={index} py={28}>
                 <NextLink passHref href={`/sharing/${post?.slug}`}>
                   <Link d="block">
                     <Stack
@@ -477,7 +480,7 @@ const Home = ({ setting, page }) => {
                       px="50px"
                       direction={["column", "column", "column", "row"]}
                     >
-                      <Box
+                      {postImage && (<Box
                         w={["100%", "60%", "50%", "50%", "40%"]}
                         tabIndex={0}
                       >
@@ -489,7 +492,7 @@ const Home = ({ setting, page }) => {
                           }
                           tabIndex={0}
                         />
-                      </Box>
+                      </Box>)}
                       <VStack
                         px={8}
                         align="start"
@@ -548,7 +551,9 @@ const Home = ({ setting, page }) => {
                   </Link>
                 </NextLink>
               </Container>
-            ))}
+              )
+            }
+            )}
           </Carousel>
         )}
         {posts && (
@@ -559,6 +564,7 @@ const Home = ({ setting, page }) => {
               }}
               opacity={carouselAutoPlay === true ? 0.5 : 1}
               disabled={carouselAutoPlay === true}
+              aria-label={router.locale === "zh" ? "開始" : "start"}
             >
               <BsFillPlayFill fontSize={"24px"} />
             </Button>
@@ -568,6 +574,7 @@ const Home = ({ setting, page }) => {
               }}
               opacity={carouselAutoPlay === false ? 0.5 : 1}
               disabled={carouselAutoPlay === false}
+              aria-label={router.locale === "zh" ? "暫停" : "pause"}
             >
               <BsFillPauseFill fontSize={"24px"} />
             </Button>

@@ -65,8 +65,6 @@ const UserGroupModal = () => {
                       p={6}
                       borderRadius={"12px"}
                       borderWidth={"2px"}
-                      borderColor={"#C6C6C6"}
-                      color={"#C6C6C6"}
                       fontWeight={500}
                       onClick={() =>  {
                         router.push(d?.link)

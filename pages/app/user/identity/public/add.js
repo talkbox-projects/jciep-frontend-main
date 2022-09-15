@@ -52,6 +52,7 @@ export const getServerSideProps = async (context) => {
         organizations: await organizationSearch({
           status: ["approved"],
           type: ["ngo","business","socialEnterprise","other"],
+          published: false
         }),
       },
       currentUserId: currentUserId ? currentUserId?.toString() : ""
@@ -271,8 +272,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
     setFormState(input);
     setStep("step2");
   };
-
-  console.log('currentUserId',currentUserId)
 
   if (step === "step2") {
     return (

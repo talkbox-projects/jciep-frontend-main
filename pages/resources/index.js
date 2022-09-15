@@ -588,7 +588,7 @@ const Resources = ({ page, enums, setting, lang }) => {
       <Box bg="#F3F3F3">
         <Anchor id="list" />
         <Container>
-          <Text as="h1" my={16} fontSize={"6xl"} fontWeight="bold">
+          <Text as="h2" my={16} fontSize={"6xl"} fontWeight="bold">
             {page?.content?.resourceSection["title 標題"]}
           </Text>
 
@@ -715,6 +715,7 @@ const Resources = ({ page, enums, setting, lang }) => {
                   variant="ghost"
                   p={0}
                   onClick={() => setListStyle("card")}
+                  aria-current={listStyle === "card" ? "true" : "false"}
                 >
                   <FaColumns
                     size={20}
@@ -733,6 +734,7 @@ const Resources = ({ page, enums, setting, lang }) => {
                   variant="ghost"
                   p={0}
                   onClick={() => setListStyle("table")}
+                  aria-current={listStyle === "table" ? "true" : "false"}
                 >
                   <TiThList
                     size={20}
@@ -807,6 +809,7 @@ const Resources = ({ page, enums, setting, lang }) => {
                             resource={resource}
                             {...resource}
                             handleRowOnClick={handleRowOnClick}
+                            lang={lang}
                           />
                         );
                       })}
@@ -1327,7 +1330,7 @@ const Resources = ({ page, enums, setting, lang }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <ModalCloseButton aria-label="close" role="button" />
+            <ModalCloseButton aria-label={lang === "zh" ? "關閉" : "close"} role="button" />
             <VStack px={2} alignItems="stretch">
               <ModalCard
                 name={modalData?.name}
@@ -1362,6 +1365,7 @@ const TableRow = ({
   subsidy,
   resource,
   handleRowOnClick,
+  lang
 }) => {
   const checkBoxStyle = {
     color: "#38A169",
@@ -1375,6 +1379,9 @@ const TableRow = ({
   };
 
   const [active, setActive] = useState(false);
+
+  const ariaLabelClicked = lang === "zh" ? "有" : "yes"
+  const ariaLabel = lang === "zh" ? "沒有" : "no"
 
   return (
     <Tr
@@ -1393,6 +1400,7 @@ const TableRow = ({
         }
       }}
       tabIndex="0"
+      role="button"
     >
       <Td style={{ width: "200px", padding: "0 15px" }}>{name?.text}</Td>
       <Td style={{ width: "200px", padding: "0 15px" }}>
@@ -1403,31 +1411,34 @@ const TableRow = ({
       </Td>
       <Td style={{ textAlign: "center" }}>
         {services?.length > 0 ? (
-          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" aria-label={ariaLabelClicked} />
         ) : (
           <IoSquareOutline
             style={{ margin: "0 auto", fontSize: "24px" }}
             alt="checkbox"
+            aria-label={ariaLabel}
           />
         )}
       </Td>
       <Td style={{ textAlign: "center" }}>
         {internship?.value > 0 ? (
-          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" aria-label={ariaLabelClicked} />
         ) : (
           <IoSquareOutline
             style={{ margin: "0 auto", fontSize: "24px" }}
             alt="checkbox"
+            aria-label={ariaLabel}
           />
         )}
       </Td>
       <Td style={{ textAlign: "center" }}>
         {probationOrReferral ? (
-          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+          <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" aria-label={ariaLabelClicked} />
         ) : (
           <IoSquareOutline
             style={{ margin: "0 auto", fontSize: "24px" }}
             alt="checkbox"
+            aria-label={ariaLabel}
           />
         )}
       </Td>
@@ -1435,11 +1446,12 @@ const TableRow = ({
         <div style={{ height: "100px", margin: "20px 0" }}>
           <Center h={"100%"}>
             {subsidy?.length > 0 ? (
-              <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" />
+              <IoCheckboxSharp style={checkBoxStyle} alt="checkbox" aria-label={ariaLabelClicked} />
             ) : (
               <IoSquareOutline
                 style={{ margin: "0 auto", fontSize: "24px" }}
                 alt="checkbox"
+                aria-label={ariaLabel}
               />
             )}
           </Center>
