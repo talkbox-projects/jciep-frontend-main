@@ -89,6 +89,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
     defaultValues: {
       otherUrls: [""],
       bannerImage: [{}],
+      additionalInformation: [{}],
       representOrganization: "false",
     },
   });
