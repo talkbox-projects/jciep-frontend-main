@@ -55,11 +55,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Event = ({
-  page,
-  hostname,
-  lang,
-}) => {
+const Event = ({ page, hostname, lang }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
@@ -90,11 +86,13 @@ const Event = ({
 
   useEffect(() => {
     async function fetchOrganization() {
-      const organization = await organizationGet({ id: detail?.organizationId }) 
-      setOrganization(organization)
+      const organization = await organizationGet({
+        id: detail?.organizationId,
+      });
+      setOrganization(organization);
     }
-    if(detail?.organizationId){
-      fetchOrganization()
+    if (detail?.organizationId) {
+      fetchOrganization();
     }
   }, [detail]);
 
@@ -236,6 +234,21 @@ const Event = ({
     }
   };
 
+  const renderEventTime = (startTime, endTime) => {
+    const isStartTimeValid = moment(startTime, "HH:mm", true).isValid();
+    const isEndTimeValid = moment(endTime, "HH:mm", true).isValid();
+
+    if (!isStartTimeValid && !isEndTimeValid) {
+      return lang == "zh" ? "全日" : "full day";
+    } else if (isStartTimeValid && !isEndTimeValid) {
+      return `${startTime}`;
+    } else if (!isStartTimeValid && isEndTimeValid) {
+      return `${endTime}`;
+    } else {
+      return `${startTime} - ${endTime}`;
+    }
+  };
+
   return (
     <Box pt={{ base: "64px" }}>
       <Box bg="#FFF" pb={12}>
@@ -304,17 +317,8 @@ const Event = ({
                       </Box>
                       <Box>
                         <b>
-                          {moment(detail?.startTime, "HH:mm", true).isValid()
-                            ? moment(detail?.startTime, ["HH.mm"]).format(
-                                "hh:mm a"
-                              )
-                            : ""}{" "}
-                          -{" "}
-                          {moment(detail?.endTime, "HH:mm", true).isValid()
-                            ? moment(detail?.endTime, ["HH.mm"]).format(
-                                "hh:mm a"
-                              )
-                            : ""}{" "}
+                          {renderEventTime(detail?.startTime, detail?.endTime)}
+
                           {detail?.datetimeRemark &&
                             `(${detail?.datetimeRemark})`}
                         </b>
@@ -348,7 +352,7 @@ const Event = ({
                             {lang === "zh"
                               ? organization?.chineseCompanyName
                               : organization?.englishCompanyName ??
-                              organization?.chineseCompanyName}
+                                organization?.chineseCompanyName}
                           </b>{" "}
                           {wordExtractor(page?.content?.wordings, "hold_label")}
                         </Box>
@@ -470,7 +474,12 @@ const Event = ({
                         pt={1}
                         alignItems="normal"
                       >
-                        <Box w={"20px"} minWidth={"20px"} alignSelf="baseline" pt={"2px"}>
+                        <Box
+                          w={"20px"}
+                          minWidth={"20px"}
+                          alignSelf="baseline"
+                          pt={"2px"}
+                        >
                           <Image
                             src={"/images/app/link.svg"}
                             alt={""}
@@ -479,7 +488,14 @@ const Event = ({
                             minW={"20px"}
                           />
                         </Box>
-                        <Box style={{ wordBreak: "break-all", lineBreak: "anywhere" }}>{d}</Box>
+                        <Box
+                          style={{
+                            wordBreak: "break-all",
+                            lineBreak: "anywhere",
+                          }}
+                        >
+                          {d}
+                        </Box>
                       </Flex>
                     ))}
                   </Flex>
@@ -631,7 +647,13 @@ const Event = ({
                           fontWeight={700}
                           gap={2}
                         >
-                          <Box w={"20px"} textAlign="center" minWidth={"20px"} alignSelf="baseline" pt={"2px"}>
+                          <Box
+                            w={"20px"}
+                            textAlign="center"
+                            minWidth={"20px"}
+                            alignSelf="baseline"
+                            pt={"2px"}
+                          >
                             <Image
                               src={"/images/app/link.svg"}
                               alt={""}
@@ -644,7 +666,10 @@ const Event = ({
                             onClick={() =>
                               handleOpenWebView(detail?.registerUrl)
                             }
-                            style={{ wordBreak: "break-all", lineBreak: "anywhere" }}
+                            style={{
+                              wordBreak: "break-all",
+                              lineBreak: "anywhere",
+                            }}
                           >
                             {detail?.registerUrl}
                           </Box>

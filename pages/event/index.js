@@ -53,7 +53,7 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
-      lang: context.locale
+      lang: context.locale,
     },
   };
 };
@@ -78,8 +78,8 @@ const Event = ({ page, hostname, lang }) => {
 
     let getURLParameter = asPath.replace("/event", "");
 
-    if(!getURLParameter){
-      getURLParameter = "?orderBy=createdAt&orderByAsc=false&ended=false"
+    if (!getURLParameter) {
+      getURLParameter = "?orderBy=createdAt&orderByAsc=false&ended=false";
     }
 
     async function fetchData() {
@@ -115,7 +115,7 @@ const Event = ({ page, hostname, lang }) => {
     }
     let new_arr = [];
     let sorted;
-    
+
     for (let i = 0, len = arr.length; i < len; i++) {
       let Month_index = arr[i].startDate.lastIndexOf("-");
       let startDate = arr[i].startDate.substr(0, Month_index);
@@ -127,20 +127,35 @@ const Event = ({ page, hostname, lang }) => {
       }
     }
 
-    if(query?.orderBy === "bookmarkCount"){
+    if (query?.orderBy === "bookmarkCount") {
       sorted = new_arr;
     } else {
       sorted = Object.keys(new_arr)
-      .sort((a, b) => moment(b) - moment(a))
-      .reduce((accumulator, key) => {
-        accumulator[key] = new_arr[key];
+        .sort((a, b) => moment(b) - moment(a))
+        .reduce((accumulator, key) => {
+          accumulator[key] = new_arr[key];
 
-        return accumulator;
-      }, []);
+          return accumulator;
+        }, []);
     }
 
     return sorted ?? [];
   }
+
+  const renderEventTime = (startTime, endTime) => {
+    const isStartTimeValid = moment(startTime, "HH:mm", true).isValid();
+    const isEndTimeValid = moment(endTime, "HH:mm", true).isValid();
+
+    if (!isStartTimeValid && !isEndTimeValid) {
+      return lang == "zh" ? "全日" : "full day";
+    } else if (isStartTimeValid && !isEndTimeValid) {
+      return `${startTime}`;
+    } else if (!isStartTimeValid && isEndTimeValid) {
+      return `${endTime}`;
+    } else {
+      return `${startTime} - ${endTime}`;
+    }
+  };
 
   return (
     <>
@@ -174,7 +189,7 @@ const Event = ({ page, hostname, lang }) => {
                       page?.content?.wordings,
                       "page_search"
                     )}
-                    _placeholder={{ color: 'gray.700' }}
+                    _placeholder={{ color: "gray.700" }}
                     bgColor={"#FFF"}
                     borderRadius={"25px"}
                     border={"none"}
@@ -182,7 +197,7 @@ const Event = ({ page, hostname, lang }) => {
                     minHeight={"45px"}
                     onChange={(e) => setKeyword(e.target.value)}
                     defaultValue={query.searchText}
-                    aria-label={lang=="zh"?"文字搜尋":"keyword search"}
+                    aria-label={lang == "zh" ? "文字搜尋" : "keyword search"}
                   />
                   <InputRightElement width="4.5rem" mt={"2px"} mr={2}>
                     <Button
@@ -193,7 +208,7 @@ const Event = ({ page, hostname, lang }) => {
                           query: { ...router.query, searchText: keyword },
                         })
                       }
-                      aria-label={lang=="zh"?"搜尋":"Search"}
+                      aria-label={lang == "zh" ? "搜尋" : "Search"}
                     >
                       {wordExtractor(page?.content?.wordings, "search_label")}
                     </Button>
@@ -208,7 +223,7 @@ const Event = ({ page, hostname, lang }) => {
                   variant="ghost"
                   style={{
                     minWidth: "auto",
-                    padding: 0
+                    padding: 0,
                   }}
                   _hover={{
                     backgroundColor: "transparent",
@@ -250,7 +265,7 @@ const Event = ({ page, hostname, lang }) => {
                     page?.content?.wordings,
                     "designated_day_placeholder"
                   )}
-                  _placeholder={{ color: 'gray.700' }}
+                  _placeholder={{ color: "gray.700" }}
                   onFocus={() => (designatedDayRef.current.type = "date")}
                   onBlur={(e) => {
                     designatedDayRef.current.type = "text";
@@ -261,11 +276,11 @@ const Event = ({ page, hostname, lang }) => {
                     }
                   }}
                   ref={designatedDayRef}
-                  aria-label={lang=="zh"?"指定日子":"Designated day"}
+                  aria-label={lang == "zh" ? "指定日子" : "Designated day"}
                 />
               </Box>
               <Box flex={1}>
-                <FilterSection page={page} tabIndex={2}/>
+                <FilterSection page={page} tabIndex={2} />
               </Box>
             </Flex>
             {filteredEvents &&
@@ -331,25 +346,7 @@ const Event = ({ page, hostname, lang }) => {
                                     </Box>
                                     <Box>
                                       <b>{d.startDate}</b> -{" "}
-                                      {moment(
-                                        d?.startTime,
-                                        "HH:mm",
-                                        true
-                                      ).isValid()
-                                        ? moment(d?.startTime, [
-                                            "HH.mm",
-                                          ]).format("hh:mm")
-                                        : ""}{" "}
-                                      -{" "}
-                                      {moment(
-                                        d?.endTime,
-                                        "HH:mm",
-                                        true
-                                      ).isValid()
-                                        ? moment(d?.endTime, ["HH.mm"]).format(
-                                            "hh:mm"
-                                          )
-                                        : ""}
+                                      {renderEventTime(d?.startTime, d?.endTime)}
                                     </Box>
                                   </Flex>
                                   <Flex align="center" gap={2}>
@@ -420,7 +417,7 @@ const Event = ({ page, hostname, lang }) => {
         <Modal isOpen={isOpen} onClose={onClose} autoFocus={true} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalCloseButton/>
+            <ModalCloseButton />
             <ModalBody>
               <VStack
                 py={"15px"}
@@ -515,7 +512,12 @@ const Event = ({ page, hostname, lang }) => {
                               {page?.content?.form?.type?.options.map(
                                 ({ label, value }) => {
                                   return (
-                                    <Checkbox colorScheme="green" key={label} value={value} borderColor={"gray.500"}>
+                                    <Checkbox
+                                      colorScheme="green"
+                                      key={label}
+                                      value={value}
+                                      borderColor={"gray.500"}
+                                    >
                                       {label}
                                     </Checkbox>
                                   );
@@ -552,42 +554,46 @@ const Event = ({ page, hostname, lang }) => {
 
 const FilterSection = ({ page }) => {
   const router = useRouter();
-  const {query} = router
+  const { query } = router;
   const [selected, setSelected] = useState("");
   const selectedStyles = {
     border: "none",
     color: "#FFF",
     bgColor: "#1E1E1E",
     _hover: {
-      backgroundColor: "#000"
+      backgroundColor: "#000",
     },
     _active: {
-      backgroundColor: "#000"
-    }
+      backgroundColor: "#000",
+    },
   };
   const stylesProps = {
     boxShadow: "0px 0px 0px 1px #1E1E1E inset",
     color: "#1E1E1E",
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     switch (query?.orderBy) {
       case "bookmarkCount":
-        setSelected("hot")
+        setSelected("hot");
         break;
 
       case "endDate":
-        setSelected("outdated")
+        setSelected("outdated");
         break;
-    
+
       default:
-        setSelected("latest")
+        setSelected("latest");
         break;
     }
-  },[query])
+  }, [query]);
 
   return (
-    <Stack direction={{ base: "column", md: "row" }} spacing={4} pt={{ base: 4, md: 0 }}>
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      spacing={4}
+      pt={{ base: 4, md: 0 }}
+    >
       {page?.content?.form?.filter?.options.map((d) => {
         const renderStyle = d.value === selected ? selectedStyles : stylesProps;
         return (
@@ -626,7 +632,7 @@ const FilterSection = ({ page }) => {
               setSelected(d.value);
             }}
             tabIndex={0}
-            aria-selected={ d.value === selected ? "true" : "false"}
+            aria-selected={d.value === selected ? "true" : "false"}
             role="tab"
           >
             {d.label}

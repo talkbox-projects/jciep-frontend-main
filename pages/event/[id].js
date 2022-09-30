@@ -19,7 +19,7 @@ import {
   ModalContent,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
 import wordExtractor from "../../utils/wordExtractor";
@@ -57,11 +57,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Event = ({
-  page,
-  hostname,
-  lang,
-}) => {
+const Event = ({ page, hostname, lang }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -84,11 +80,13 @@ const Event = ({
 
   useEffect(() => {
     async function fetchOrganization() {
-      const organization = await organizationGet({ id: detail?.organizationId }) 
-      setOrganization(organization)
+      const organization = await organizationGet({
+        id: detail?.organizationId,
+      });
+      setOrganization(organization);
     }
-    if(detail?.organizationId){
-      fetchOrganization()
+    if (detail?.organizationId) {
+      fetchOrganization();
     }
   }, [detail]);
 
@@ -106,13 +104,6 @@ const Event = ({
         <Text fontWeight={700}>{value}</Text>
       </Flex>
     );
-  };
-
-  const handleBookmark = async (id) => {
-    const result = await bookmarkEvent(id);
-    if (result) {
-      setBookmarkActive(true);
-    }
   };
 
   const RenderAdditionalContent = ({ data }) => {
@@ -187,6 +178,28 @@ const Event = ({
             />
           </GridItem>
         );
+    }
+  };
+
+  const handleBookmark = async (id) => {
+    const result = await bookmarkEvent(id);
+    if (result) {
+      setBookmarkActive(true);
+    }
+  };
+
+  const renderEventTime = (startTime, endTime) => {
+    const isStartTimeValid = moment(startTime, "HH:mm", true).isValid();
+    const isEndTimeValid = moment(endTime, "HH:mm", true).isValid();
+
+    if (!isStartTimeValid && !isEndTimeValid) {
+      return lang == "zh" ? "全日" : "full day";
+    } else if (isStartTimeValid && !isEndTimeValid) {
+      return `${startTime}`;
+    } else if (!isStartTimeValid && isEndTimeValid) {
+      return `${endTime}`;
+    } else {
+      return `${startTime} - ${endTime}`;
     }
   };
 
@@ -270,21 +283,11 @@ const Event = ({
                           </Box>
                           <Box>
                             <b>
-                              {moment(
+                              {renderEventTime(
                                 detail?.startTime,
-                                "HH:mm",
-                                true
-                              ).isValid()
-                                ? moment(detail?.startTime, ["HH.mm"]).format(
-                                    "hh:mm a"
-                                  )
-                                : ""}{" "}
-                              -{" "}
-                              {moment(detail?.endTime, "HH:mm", true).isValid()
-                                ? moment(detail?.endTime, ["HH.mm"]).format(
-                                    "hh:mm a"
-                                  )
-                                : ""}{" "}
+                                detail?.endTime
+                              )}
+
                               {detail?.datetimeRemark &&
                                 `(${detail?.datetimeRemark})`}
                             </b>
@@ -319,7 +322,7 @@ const Event = ({
                                 {lang === "zh"
                                   ? organization?.chineseCompanyName
                                   : organization?.englishCompanyName ??
-                                  organization?.chineseCompanyName}
+                                    organization?.chineseCompanyName}
                               </b>{" "}
                               {wordExtractor(
                                 page?.content?.wordings,
@@ -507,7 +510,7 @@ const Event = ({
                           : detail?.quota}
                       </Text>
                     </Flex>
-                    
+
                     <RegistrationRow
                       title={wordExtractor(
                         page?.content?.wordings,
@@ -710,7 +713,7 @@ const InformationModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
         backdropFilter={"blur(20px)"}
       />
       <ModalContent bgColor="transparent" boxShadow={"none"}>
-      <ModalCloseButton color="white"/>
+        <ModalCloseButton color="white" />
         <ModalBody p={0}>
           <Flex h={"100vh"} direction="column" pb={"40px"}>
             <Box h={"60px"}></Box>
