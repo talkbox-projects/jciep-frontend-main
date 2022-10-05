@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { getPost, getRelatedPosts } from "../../utils/post/getPost";
@@ -41,16 +42,18 @@ export const getServerSideProps = async (context) => {
   const post = await getPost({
     idOrSlug: context.params.slug,
     lang: context.locale,
-  })
+  });
 
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
-      post: post ? post : await getPost({
-        idOrSlug: context.params.slug,
-        lang: context.locale === 'zh' ? 'en' : 'zh',
-      })??{},
+      post: post
+        ? post
+        : (await getPost({
+            idOrSlug: context.params.slug,
+            lang: context.locale === "zh" ? "en" : "zh",
+          })) ?? {},
       ...(await getSharedServerSideProps(context))?.props,
     },
   };
@@ -177,6 +180,13 @@ const PostDetail = ({ post, setting, page }) => {
 
   return (
     <VStack w="100%" spacing={0} align="center" pb={16} bgColor="#fafafa">
+      <NextSeo
+        title={
+          router.locale === "zh"
+            ? `${post?.title} | 賽馬會共融．知行計劃｜共融分享`
+            : `${post?.title} | Jockey Club Collaborative Project for Inclusive Employment ｜ Sharings on Inclusion`
+        }
+      />
       {/* Banner Section */}
       {post && <PostHeader categories={categories} post={post} />}
 
@@ -267,33 +277,33 @@ const PostDetail = ({ post, setting, page }) => {
                   case "content-block":
                     return (
                       <Box className="content-block-wrap">
-                      <Box
-                        sx={{
-                          a: {
-                            color: "green.700",
-                            textDecor: "underline",
-                          },
-                          table: {
-                            w: "100%",
-                            th: {
-                              borderWidth: "1px",
-                              borderColor: "gray.500",
-                              bg: "gray.100",
+                        <Box
+                          sx={{
+                            a: {
+                              color: "green.700",
+                              textDecor: "underline",
                             },
-                            td: {
-                              borderWidth: "1px",
-                              borderColor: "gray.500",
+                            table: {
+                              w: "100%",
+                              th: {
+                                borderWidth: "1px",
+                                borderColor: "gray.500",
+                                bg: "gray.100",
+                              },
+                              td: {
+                                borderWidth: "1px",
+                                borderColor: "gray.500",
+                              },
                             },
-                          },
-                        }}
-                        w="100%"
-                        pt="40px"
-                        dangerouslySetInnerHTML={{
-                          __html: content.html??content,
-                        }}
-                        key={index}
-                        fontSize={"lg"}
-                      />
+                          }}
+                          w="100%"
+                          pt="40px"
+                          dangerouslySetInnerHTML={{
+                            __html: content.html ?? content,
+                          }}
+                          key={index}
+                          fontSize={"lg"}
+                        />
                       </Box>
                     );
                   case "image-block":
