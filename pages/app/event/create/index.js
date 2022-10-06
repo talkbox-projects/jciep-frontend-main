@@ -353,7 +353,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
       : {
           stockPhotoId: stockPhotoId,
         };
-    const input = Object.fromEntries(
+    let input = Object.fromEntries(
       Object.entries({
         name: name,
         type: type?.value,
@@ -383,6 +383,15 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         stockPhotoId: null,
       }).filter(([_, v]) => v != null)
     );
+
+    if(!input?.startTime){
+      input.startTime = null
+    }
+
+    if(!input?.endTime){
+      input.endTime = null
+    }
+
 
     const response = await createEvent(input);
 
