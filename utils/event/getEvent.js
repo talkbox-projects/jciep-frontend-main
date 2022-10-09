@@ -1,5 +1,14 @@
 import axios from "axios";
 
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
+const domain =
+typeof window === "undefined"
+  ? publicRuntimeConfig.HOST_URL ?? "http://127.0.0.1:3000"
+  : window.location.origin;
+
+
 const defaultParams = {
   orderBy: "createdAt",
   orderByAsc: true,
@@ -20,7 +29,7 @@ export const getEvents = async (params) => {
 
 export const getEventDetail = async (id) => {
   try {
-    const { data: { data } = {} } = await axios.get(`/api/app/event/${id}`);
+    const { data: { data } = {} } = await axios.get(`${domain}/api/app/event/${id}`);
 
     return data;
   } catch (e) {

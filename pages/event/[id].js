@@ -41,7 +41,8 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const event = (await getEventDetail(context?.query?.id))
+  const event = (await getEventDetail(context?.query?.id, true)) ?? {}
+
   const { req } = context;
   return {
     props: {
@@ -49,9 +50,6 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
-      // api: {
-      //   organization: organizationId ? await organizationGet({ id: organizationId }) : null
-      // },
       event,
       lang: context.locale,
     },
@@ -90,13 +88,6 @@ const Event = ({ page, hostname, lang, event }) => {
       fetchOrganization();
     }
   }, [detail]);
-
-
-  useEffect(() => {
-    if(event){
-      setDetail(event);
-    }
-  }, [event]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
