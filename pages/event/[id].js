@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { NextSeo } from "next-seo";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
@@ -40,8 +41,7 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  // const event = await getEventDetail(context?.query?.id)
-  // const organizationId = event?.organizationId
+  const event = (await getEventDetail(context?.query?.id))
   const { req } = context;
   return {
     props: {
@@ -52,12 +52,13 @@ export const getServerSideProps = async (context) => {
       // api: {
       //   organization: organizationId ? await organizationGet({ id: organizationId }) : null
       // },
+      event,
       lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, lang }) => {
+const Event = ({ page, hostname, lang, event }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -89,6 +90,13 @@ const Event = ({ page, hostname, lang }) => {
       fetchOrganization();
     }
   }, [detail]);
+
+
+  useEffect(() => {
+    if(event){
+      setDetail(event);
+    }
+  }, [event]);
 
   const RegistrationRow = ({ title, value }) => {
     return (
@@ -202,10 +210,17 @@ const Event = ({ page, hostname, lang }) => {
       return `${startTime} - ${endTime}`;
     }
   };
-
+  
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
+      <NextSeo
+        title={
+          router.locale === "zh"
+            ? `賽馬會共融．知行計劃｜最新活動｜${event?.name}`
+            : `Jockey Club Collaborative Project for Inclusive Employment｜Events｜${event?.name}`
+        }
+      />
         <Box bgColor="#F6D644" position="relative">
           <Box position="absolute" bottom={0} w="100%">
             <DividerSimple primary="#FD5F53" />

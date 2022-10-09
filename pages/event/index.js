@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import {
   Divider,
@@ -160,6 +161,13 @@ const Event = ({ page, hostname, lang }) => {
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
+      <NextSeo
+        title={
+          router.locale === "zh"
+            ? `賽馬會共融．知行計劃｜最新活動`
+            : `Jockey Club Collaborative Project for Inclusive Employment｜Events`
+        }
+      />
         <Box bgColor="#F6D644" position="relative">
           <Box position="absolute" bottom={0} w="100%">
             <DividerSimple primary="#FD5F53" />

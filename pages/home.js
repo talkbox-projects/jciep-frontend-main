@@ -467,7 +467,6 @@ const Home = ({ setting, page }) => {
           >
             {(posts ?? []).map((post, index) => {
               const postImage = post?.content?.feature?.image ?? post?.content?.coverImage
-              console.log('postImage-', postImage)
               return (
                 <Container key={index} py={28}>
                 <NextLink passHref href={`/sharing/${post?.slug}`}>

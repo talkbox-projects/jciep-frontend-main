@@ -183,8 +183,8 @@ const PostDetail = ({ post, setting, page }) => {
       <NextSeo
         title={
           router.locale === "zh"
-            ? `${post?.title} | 賽馬會共融．知行計劃｜共融分享`
-            : `${post?.title} | Jockey Club Collaborative Project for Inclusive Employment ｜ Sharings on Inclusion`
+            ? `賽馬會共融．知行計劃｜共融分享｜${post?.title}`
+            : `Jockey Club Collaborative Project for Inclusive Employment｜Sharings on Inclusion｜${post?.title}`
         }
       />
       {/* Banner Section */}

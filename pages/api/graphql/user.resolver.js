@@ -662,7 +662,6 @@ export default {
     UserPasswordResetByConsole: async (_parent, { email, phone, password }) => {
       try {
         if(email){
-          console.log('email-',email)
           let user = await User.findOne({ email });
           if(user?.id){
             const user = await User.findOneAndUpdate(
@@ -677,7 +676,6 @@ export default {
         }
 
         if(phone){
-          console.log('phone-',phone)
           let user = await User.findOne({ phone });
           if(user?.id){
             const user = await User.findOneAndUpdate(

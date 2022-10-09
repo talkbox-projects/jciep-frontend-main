@@ -15,6 +15,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { NextSeo } from "next-seo";
 import { Text, VStack, Box, Grid, Stack, Flex } from "@chakra-ui/layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import React, { useCallback, useEffect, useRef } from "react";
@@ -188,6 +189,13 @@ const Sharing = ({ page, setting, lang }) => {
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
+      <NextSeo
+        title={
+          router.locale === "zh"
+            ? `賽馬會共融．知行計劃｜共融分享`
+            : `Jockey Club Collaborative Project for Inclusive Employment｜Sharings on Inclusion`
+        }
+      />
       {/* Featured Article Section */}
       <Box>
         <Box
