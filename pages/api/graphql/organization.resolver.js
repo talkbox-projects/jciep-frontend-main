@@ -177,7 +177,7 @@ export default {
        * else,
        *    create a new organization.
        *    create an organization submission with the id of newly-created organization.
-       * status = pendingApproval
+       * status = approved /PFI-342
        */
 
       const identityId = params?.input?.identityId;
@@ -200,7 +200,7 @@ export default {
           return await new Organization({
             organizationType: params.input.organizationType,
             remark: params?.input?.remark,
-            status: "pendingApproval",
+            status: "approved",
             chineseCompanyName: params?.input.chineseCompanyName,
             englishCompanyName: params?.input.englishCompanyName,
             website: params?.input?.website,
@@ -231,7 +231,7 @@ export default {
           organizationType: organization.organizationType,
           organization: organization._id,
           remark: params?.input.remark,
-          status: "pendingApproval",
+          status: "approved",
           chineseCompanyName: params?.input.chineseCompanyName,
           englishCompanyName: params?.input.englishCompanyName,
           centre: params?.input?.centre,
@@ -257,7 +257,7 @@ export default {
         }).save();
 
         organization.submission.push(organizationSubmission._id);
-        organization.status = "pendingApproval";
+        organization.status = "approved";
 
         const exists = !!organization.member.find((m) => m?.identityId);
 

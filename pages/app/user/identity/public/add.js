@@ -14,7 +14,7 @@ import {
   Image,
   Center,
   Stack,
-  Code
+  Code,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -51,11 +51,11 @@ export const getServerSideProps = async (context) => {
       api: {
         organizations: await organizationSearch({
           status: ["approved"],
-          type: ["ngo","business","socialEnterprise","other"],
-          published: false
+          type: ["ngo", "business", "socialEnterprise", "other"],
+          published: false,
         }),
       },
-      currentUserId: currentUserId ? currentUserId?.toString() : ""
+      currentUserId: currentUserId ? currentUserId?.toString() : "",
     },
   };
 };
@@ -134,11 +134,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
   };
 
   const handlePostData = async (input, invitationCode) => {
-    if(!user&&!currentUserId){
-      setErrorMsg(wordExtractor(
-        page?.content?.wordings,
-        "general_error_message"
-      ))
+    if (!user && !currentUserId) {
+      setErrorMsg(
+        wordExtractor(page?.content?.wordings, "general_error_message")
+      );
     }
     setSubmitInvitation(false);
     try {
@@ -169,10 +168,9 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
         );
       }
     } catch (e) {
-      setErrorMsg(wordExtractor(
-        page?.content?.wordings,
-        "general_error_message"
-      ))
+      setErrorMsg(
+        wordExtractor(page?.content?.wordings, "general_error_message")
+      );
     }
   };
 
@@ -220,10 +218,9 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
         router.push(`/app/user/organization/ngo/${data.IdentityCreate.id}/add`);
       }
     } catch (e) {
-      setErrorMsg(wordExtractor(
-        page?.content?.wordings,
-        "general_error_message"
-      ))
+      setErrorMsg(
+        wordExtractor(page?.content?.wordings, "general_error_message")
+      );
     }
   };
 
@@ -247,7 +244,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
   }) => {
     const input = Object.fromEntries(
       Object.entries({
-        userId: user?.id??currentUserId,
+        userId: user?.id ?? currentUserId,
         identity: "public",
         chineseName: chinese_name,
         englishName: english_name,
@@ -355,13 +352,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                     </FormControl>
                   </GridItem>
 
-                  {errorMsg && (<Box color="red">{errorMsg}</Box>)}
-
-                  {/* <GridItem colSpan={{ base: 2 }}>
-                  <div>
-                    {JSON.stringify(debug)}
-                    </div>
-                  </GridItem> */}
+                  {errorMsg && <Box color="red">{errorMsg}</Box>}
 
                   {showSelectCentre && (
                     <GridItem colSpan={{ base: 2 }} pt={6}>
@@ -385,14 +376,12 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                                 page?.content?.wordings,
                                 "select_organization_placeholder"
                               )}
-                              options={(
-                                [
-                                  ...organizations,
-                                ] ?? []
-                              ).map(({ chineseCompanyName, id }) => ({
-                                label: chineseCompanyName,
-                                value: id,
-                              }))}
+                              options={([...organizations] ?? []).map(
+                                ({ chineseCompanyName, id }) => ({
+                                  label: chineseCompanyName,
+                                  value: id,
+                                })
+                              )}
                               onChange={(data) => {
                                 const organization = organizations.find(
                                   (d) => d.id === data.value
@@ -457,6 +446,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                               type="text"
                               {...register("invitationCode")}
                               variant="flushed"
+                              placeholder={wordExtractor(
+                                page?.content?.wordings,
+                                "invitation_code_placeholder"
+                              )}
                             />
                             <FormHelperText>
                               <Flex direction="row" gap={1}>
@@ -1171,7 +1164,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                   >
                     {page?.content?.form?.terms?.text}{" "}
                     <span
-                      style={{textDecoration: 'underline'}}
+                      style={{ textDecoration: "underline" }}
                       onClick={() =>
                         handleOpenWebView(page?.content?.form?.terms?.url)
                       }
