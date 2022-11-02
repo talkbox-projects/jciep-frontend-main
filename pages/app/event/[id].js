@@ -616,7 +616,7 @@ const Event = ({ page, hostname, lang }) => {
                     <RegistrationRow
                       title={wordExtractor(
                         page?.content?.wordings,
-                        "contact_number_label"
+                        "contact_method_label"
                       )}
                       value={detail?.contactNumber}
                       lang={lang}
@@ -844,7 +844,7 @@ const RegistrationModal = ({
 
                 <Divider my={4} />
 
-                <Flex
+                {!isNaN(contactNumber) && (<Flex
                   direction="row"
                   gap={2}
                   align="center"
@@ -859,7 +859,7 @@ const RegistrationModal = ({
                     />
                   </Box>
                   <Text fontWeight={700}>{contactEventManager}</Text>
-                </Flex>
+                </Flex>)}
               </Box>
 
               <Box borderRadius={"50%"} h={"50px"} mt={6}>

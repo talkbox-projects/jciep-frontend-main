@@ -83,7 +83,7 @@ export default gql`
     type: EnumIdentityType!
     publishStatus: EnumPublishStatus!
     chineseName: String!
-    englishName: String!
+    englishName: String
     dob: Timestamp
     age: EnumAge
     gender: EnumGender
@@ -133,7 +133,7 @@ export default gql`
     inviteToken: String
     identity: EnumIdentityType!
     chineseName: String!
-    englishName: String!
+    englishName: String
     dob: Timestamp
     gender: EnumGender
     district: EnumDistrict

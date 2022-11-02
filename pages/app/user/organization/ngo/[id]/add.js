@@ -13,7 +13,6 @@ import {
   Checkbox,
   IconButton,
   Image,
-  Link,
 } from "@chakra-ui/react";
 import { RiAddFill, RiCloseCircleFill } from "react-icons/ri";
 import React, { useState } from "react";
@@ -70,21 +69,22 @@ const OrganizationNgoAdd = ({ page }) => {
     control,
     formState: { errors, isSubmitting },
     watch,
+    getValues
   } = useForm();
 
   const getDescriptionCount = watch("description", 0);
   const getMissionNVision = watch("missionNVision", 0);
   const watchFields = watch(["targetGroupDisabilities"]);
 
-  const validate = () => {
-    if (files.length < 1) {
-      setFileError(true);
-      return true;
-    } else {
-      setFileError(false);
-      return false;
-    }
-  };
+  // const validate = () => {
+  //   if (files.length < 1) {
+  //     setFileError(true);
+  //     return true;
+  //   } else {
+  //     setFileError(false);
+  //     return false;
+  //   }
+  // };
 
   // const onFileUpload = async (e) => {
   //   let uploadedFiles = await e.target.files[0];
@@ -203,12 +203,6 @@ const OrganizationNgoAdd = ({ page }) => {
     }
   };
 
-
-  // const handlePickFileDemo = () => {
-  //   const data =  { "id": "62f6091882cd2e001b093096", "url": "/api/assets/files/GP0OLY_Web_size.jpg", "contentType": "image/jpeg", "fileSize": 23446 }
-  //   setFiles(files.concat(data))
-  // }
-
   const onFormSubmit = async ({
     chineseOrganizationName,
     englishOrganizationName,
@@ -227,9 +221,9 @@ const OrganizationNgoAdd = ({ page }) => {
     tncAccept,
   }) => {
     try {
-      if (validate()) {
-        return;
-      }
+      // if (validate()) {
+      //   return;
+      // }
 
       const mutation = gql`
         mutation OrganizationSubmissionCreate(
@@ -250,7 +244,7 @@ const OrganizationNgoAdd = ({ page }) => {
           website: website,
           description: description,
           missionNVision: missionNVision,
-          targetGroup: targetGroup?.value,
+          targetGroup: targetGroup?.value?.map(d=>d.value)||[],
           targetGroupDisabilities: targetGroupDisabilities?.value,
           targetGroupDisabilitiesOther:
             targetGroupDisabilities?.value === "other"
@@ -262,7 +256,7 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: files,
+          businessRegistration: files??null,
         },
       });
 
@@ -309,7 +303,6 @@ const OrganizationNgoAdd = ({ page }) => {
               <GridItem colSpan={{ base: 2 }}>
                 <LABEL
                   name={page?.content?.form?.businessRegistration?.label}
-                  required={true}
                 />
                 <FormControl>
                   <Box width="100%">
@@ -325,15 +318,6 @@ const OrganizationNgoAdd = ({ page }) => {
                       onClick={()=>handlePickFile()}
                     >
                       <FormLabel height="100%" width="100%" cursor="pointer">
-                        {/* <Input
-                          type="file"
-                          multiple={true}
-                          display="none"
-                          onChange={onFileUpload}
-                          onClick={(event) =>
-                            (event.currentTarget.value = null)
-                          }
-                        /> */}
                         <Text
                           height="100%"
                           display="flex"
@@ -628,6 +612,7 @@ const OrganizationNgoAdd = ({ page }) => {
                           IndicatorSeparator: () => null,
                         }}
                         isSearchable={false}
+                        isMulti
                       />
                     )}
                   />
@@ -815,7 +800,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <LABEL name={page?.content?.form?.website} required={true} />
+                  <LABEL name={page?.content?.form?.website} />
                   <Input
                     type="text"
                     variant="flushed"
@@ -823,18 +808,8 @@ const OrganizationNgoAdd = ({ page }) => {
                       page?.content?.wordings,
                       "website_placeholder"
                     )}
-                    {...register("website", { required: true })}
+                    {...register("website")}
                   />
-                  <FormHelperText>
-                    {errors?.website?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "website_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </Grid>
@@ -905,7 +880,7 @@ const OrganizationNgoAdd = ({ page }) => {
 const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
   return (
     <Grid
-      templateColumns="repeat(3, 1fr)"
+    templateColumns="repeat(7, 1fr)"
       width="100%"
       px={"20px"}
       alignItems="center"
@@ -913,20 +888,22 @@ const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
       borderBottom="1px solid #EFEFEF"
       mb={"40px"}
     >
-      <GridItem>
+      <GridItem colSpan={1}>
         <Image
           src={"/images/app/back.svg"}
           alt={""}
           onClick={() => handleClickLeftIcon()}
         />
       </GridItem>
-      <GridItem textAlign="center">
+      <GridItem textAlign="center" colSpan={5}>
         {title && <Text fontWeight={700}>{title}</Text>}
         {subTitle && (
           <Text color="gray.500" fontSize={"12px"}>
             {subTitle}
           </Text>
         )}
+      </GridItem>
+      <GridItem colSpan={1}>
       </GridItem>
     </Grid>
   );

@@ -560,7 +560,7 @@ const Event = ({ page, hostname, lang, event }) => {
                     <RegistrationRow
                       title={wordExtractor(
                         page?.content?.wordings,
-                        "contact_number_label"
+                        "contact_method_label"
                       )}
                       value={detail?.contactNumber}
                     />
@@ -610,7 +610,7 @@ const Event = ({ page, hostname, lang, event }) => {
                       </a>
                     )}
 
-                    {detail?.contactNumber && (
+                    {!isNaN(detail?.contactNumber) && (
                       <a href={`tel:${detail?.contactNumber}`}>
                         <Button
                           borderRadius="20px"

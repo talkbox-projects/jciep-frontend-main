@@ -14,7 +14,6 @@ import {
   Image,
   Center,
   Stack,
-  Code,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -83,8 +82,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [submitInvitation, setSubmitInvitation] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
-
-  const [debug, setDebug] = useState({});
 
   const {
     handleSubmit,
@@ -226,7 +223,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
 
   const onFormSubmit = async ({
     chinese_name,
-    english_name,
     age,
     gender,
     resident_district,
@@ -247,7 +243,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
         userId: user?.id ?? currentUserId,
         identity: "public",
         chineseName: chinese_name,
-        englishName: english_name,
         age: age?.value,
         gender: gender?.value,
         district: resident_district?.value,
@@ -401,12 +396,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                             <Box>
                               <InfoOutlineIcon fontSize={"14px"} />
                             </Box>
-                            <Box fontSize={"12px"}>
-                              {
-                                page?.content?.form?.selectOrganizationContent
-                                  ?.content01
-                              }
-                              <br />
+                            <Box fontSize={"16px"}>
                               {
                                 page?.content?.form?.selectOrganizationContent
                                   ?.content02
@@ -532,7 +522,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                 <GridItem>
                   <FormControl>
                     <LABEL
-                      name={page?.content?.form?.chineseName}
+                      name={page?.content?.form?.fullName}
                       required={true}
                     />
                     <Input
@@ -551,33 +541,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                             page?.content?.wordings,
                             "chinese_name_required"
                           )}
-                        </Text>
-                      )}
-                    </FormHelperText>
-                  </FormControl>
-                </GridItem>
-                <GridItem>
-                  <FormControl>
-                    <LABEL
-                      name={page?.content?.form?.englishName}
-                      required={true}
-                    />
-                    <Input
-                      type="text"
-                      variant="flushed"
-                      placeholder={wordExtractor(
-                        page?.content?.wordings,
-                        "english_name_placeholder"
-                      )}
-                      {...register("english_name", { required: true })}
-                    />
-                    <FormHelperText>
-                      {errors?.english_name?.type === "required" && (
-                        <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "english_name_required"
-                          )}{" "}
                         </Text>
                       )}
                     </FormHelperText>
@@ -1216,7 +1179,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
 const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
   return (
     <Grid
-      templateColumns="repeat(3, 1fr)"
+      templateColumns="repeat(7, 1fr)"
       width="100%"
       px={"20px"}
       alignItems="center"
@@ -1224,20 +1187,22 @@ const NAV = ({ title, subTitle, handleClickLeftIcon }) => {
       borderBottom="1px solid #EFEFEF"
       mb={"40px"}
     >
-      <GridItem>
+      <GridItem colSpan={1}>
         <Image
           src={"/images/app/back.svg"}
           alt={""}
           onClick={() => handleClickLeftIcon()}
         />
       </GridItem>
-      <GridItem textAlign="center">
+      <GridItem textAlign="center" colSpan={5}>
         {title && <Text fontWeight={700}>{title}</Text>}
         {subTitle && (
           <Text color="gray.500" fontSize={"12px"}>
             {subTitle}
           </Text>
         )}
+      </GridItem>
+      <GridItem colSpan={1}>
       </GridItem>
     </Grid>
   );
@@ -1318,6 +1283,11 @@ export default withPageCMS(IdentityPublicAdd, {
       label: "形式 Form",
       component: "group",
       fields: [
+        {
+          name: "fullName",
+          label: "中文全名/英文全名 Chinese/English Name Label",
+          component: "text",
+        },
         {
           name: "chineseName",
           label: "中文名 Chinese Name Label",

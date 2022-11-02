@@ -15,8 +15,7 @@ import {
   Image,
   Center,
   Stack,
-  Grid,
-  Code
+  Grid
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -30,7 +29,6 @@ import { getGraphQLClient } from "../../../../utils/apollo";
 import getSharedServerSideProps from "../../../../utils/server/getSharedServerSideProps";
 import wordExtractor from "../../../../utils/wordExtractor";
 import { emailRegex } from "../../../../utils/general";
-import { useCredential } from "../../../../utils/user";
 import organizationSearch from "../../../../utils/api/OrganizationSearch";
 import OrganizationMemberJoin from "../../../../utils/api/OrganizationMemberJoin";
 import OrganizationInvitationCodeValidity from "../../../../utils/api/OrganizationInvitationCodeValidity";
@@ -78,14 +76,13 @@ const customStyles = {
   },
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cToken, cIdentityId }) => {
+const IdentityPublicAdd = ({ page, api: { organizations } }) => {
   const router = useRouter();
-  const { user, updateIdentity, setUser, setIdentityId } = useAppContext();
+  const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState();
   const [step, setStep] = useState("step1");
   const [showSelectCentre, setShowSelectCentre] = useState(false);
   const [selectedOrganization, setOrganization] = useState(null);
-  const [setCredential] = useCredential();
 
   const {
     handleSubmit,
@@ -190,7 +187,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
 
   const onFormSubmit = async ({
     chinese_name,
-    english_name,
     age,
     gender,
     resident_district,
@@ -211,7 +207,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
         userId: user.id,
         identity: "public",
         chineseName: chinese_name,
-        englishName: english_name,
         age: age?.value,
         gender: gender?.value,
         district: resident_district?.value,
@@ -239,7 +234,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
       <VStack py={{ base: 36, md: 48 }}>
         <Text
           mt={4}
-          fontSize="36px"
+          fontSize="24px"
           letterSpacing="1.5px"
           fontWeight={600}
           px={"15px"}
@@ -331,12 +326,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
                           />
                         )}
                       />
-                      <FormHelperText>
-                        {
-                          page?.content?.form?.selectOrganizationContent
-                            ?.content01
-                        }
-                        <br />
+                      <FormHelperText fontSize={'18px'}>
                         {
                           page?.content?.form?.selectOrganizationContent
                             ?.content02
@@ -404,12 +394,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
         <Text mt={10} fontSize="36px" letterSpacing="1.5px" fontWeight={600}>
           {page?.content?.step?.title}
         </Text>
-         {/** For testing, remove later */}
-        {/* <Code fontSize="11px" colorScheme='red'>{token? `token:${token}`:"token not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{identityId? `identityId:${identityId}`:"identityId not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cToken? `cToken:${cToken}`:"cToken not found"}</Code><br/>
-        <Code fontSize="11px" colorScheme='red'>{cIdentityId? `cIdentityId:${cIdentityId}`:"cIdentityId not found"}</Code><br/> */}
-
         <Text fontSize="16px">{page?.content?.step?.subTitle}</Text>
         <Box justifyContent="center" width="100%">
           <Box
@@ -419,9 +403,6 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
             margin="auto"
             padding="0px 25px"
           >
-            {/* <Text fontSize="16px" textAlign="center">
-              {page?.content?.heading?.description}
-            </Text> */}
             <VStack as="form" onSubmit={handleSubmit(onFormSubmit)}>
               <Grid
                 templateColumns={"repeat(2, 1fr)"}
@@ -431,7 +412,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
               >
                 <GridItem colSpan={{ base: 2, md: 1 }}>
                   <FormControl isRequired>
-                    <FormLabel>{page?.content?.form?.chineseName}</FormLabel>
+                    <FormLabel>{page?.content?.form?.fullName}</FormLabel>
                     <Input
                       type="text"
                       placeholder={wordExtractor(
@@ -452,7 +433,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
+                {/* <GridItem colSpan={{ base: 2, md: 1 }}>
                   <FormControl isRequired>
                     <FormLabel>{page?.content?.form?.englishName}</FormLabel>
                     <Input
@@ -474,7 +455,7 @@ const IdentityPublicAdd = ({ page, api: { organizations }, token, identityId, cT
                       )}
                     </FormHelperText>
                   </FormControl>
-                </GridItem>
+                </GridItem> */}
                 <GridItem colSpan={{ base: 2, md: 1 }}>
                   <FormControl isRequired>
                     <FormLabel>{page?.content?.form?.age?.label}</FormLabel>
@@ -1062,6 +1043,11 @@ export default withPageCMS(IdentityPublicAdd, {
       component: "group",
       fields: [
         {
+          name: "fullName",
+          label: "中文全名/英文全名 Chinese/English Name Label",
+          component: "text",
+        },
+        {
           name: "chineseName",
           label: "中文名 Chinese Name Label",
           component: "text",
@@ -1071,11 +1057,6 @@ export default withPageCMS(IdentityPublicAdd, {
           label: "英文名 English Name Label",
           component: "text",
         },
-        // {
-        //   name: "dob",
-        //   label: "出生日期 Date of Birth ",
-        //   component: "text",
-        // },
         {
           name: "gender",
           label: "性別 Gender Label",

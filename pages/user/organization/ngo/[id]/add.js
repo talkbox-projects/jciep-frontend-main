@@ -77,15 +77,15 @@ const OrganizationNgoAdd = ({ page }) => {
 
   const watchFields = watch(["targetGroupDisabilities"]);
 
-  const validate = () => {
-    if (files.length < 1) {
-      setFileError(true);
-      return true;
-    } else {
-      setFileError(false);
-      return false;
-    }
-  };
+  // const validate = () => {
+  //   if (files.length < 1) {
+  //     setFileError(true);
+  //     return true;
+  //   } else {
+  //     setFileError(false);
+  //     return false;
+  //   }
+  // };
 
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
@@ -120,9 +120,11 @@ const OrganizationNgoAdd = ({ page }) => {
     tncAccept,
   }) => {
     try {
-      if (validate()) {
-        return;
-      }
+      // if (validate()) {
+      //   return;
+      // }
+
+      let filesUploadData = null;
 
       const FileUploadmutation = gql`
         mutation FileUpload($file: FileUpload!) {
@@ -135,12 +137,14 @@ const OrganizationNgoAdd = ({ page }) => {
         }
       `;
 
-      let filesUploadData = await getGraphQLClient().request(
-        FileUploadmutation,
-        {
-          file: files,
-        }
-      );
+      if(files.length > 0){
+        filesUploadData = await getGraphQLClient().request(
+          FileUploadmutation,
+          {
+            file: files,
+          }
+        );
+      }
 
       const mutation = gql`
         mutation OrganizationSubmissionCreate(
@@ -161,7 +165,7 @@ const OrganizationNgoAdd = ({ page }) => {
           website: website,
           description: description,
           missionNVision: missionNVision,
-          targetGroup: targetGroup?.value,
+          targetGroup: targetGroup?.value?.map(d=>d.value)||[],
           targetGroupDisabilities: targetGroupDisabilities?.value,
           targetGroupDisabilitiesOther:
             targetGroupDisabilities?.value === "other"
@@ -173,7 +177,7 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: filesUploadData?.FileUpload,
+          businessRegistration: filesUploadData ? filesUploadData?.FileUpload : null,
         },
       });
 
@@ -478,6 +482,7 @@ const OrganizationNgoAdd = ({ page }) => {
                         options={page?.content?.form?.targetGroup?.options.map(
                           ({ label, value }) => ({ label, value })
                         )}
+                        isMulti
                       />
                     )}
                   />

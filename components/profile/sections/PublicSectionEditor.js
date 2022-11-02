@@ -15,17 +15,12 @@ import {
   Grid,
   GridItem,
   Flex,
-  Divider,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import MultiSelect from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
-import { useAppContext } from "../../../store/AppStore";
 import ReactSelect from "react-select";
-import { gql } from "graphql-request";
-import { getGraphQLClient } from "../../../utils/apollo";
-import OrganizationMemberJoin from "../../../utils/api/OrganizationMemberJoin";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import organizationSearch from "../../../utils/api/OrganizationSearch";
 import { useRouter } from "next/router";
@@ -51,17 +46,16 @@ const PublicSectionEditor = () => {
     getValues,
   } = useForm({
     defaultValues: {
-      id: identity.id,
-      caption: identity.caption,
-      wishToDo: identity.wishToDo,
-      phase2profile: true
+      id: identity?.id,
+      caption: identity?.caption,
+      wishToDo: identity?.wishToDo,
+      phase2profile: true,
     },
   });
 
-  const wishToDoStatus = watch("wishToDo", identity.wishToDo);
+  const wishToDoStatus = watch("wishToDo", identity?.wishToDo);
 
   const handleSaveAction = async (data) => {
-
     await saveIdentity(data);
 
     removeEditSection();
@@ -97,8 +91,8 @@ const PublicSectionEditor = () => {
   const handleCreateOrganization = () => {
     const formState = getValues();
     handleSaveAction(formState);
-    router.push(`/user/organization/ngo/${identity.id}/add`)
-  }
+    router.push(`/user/organization/ngo/${identity?.id}/add`);
+  };
 
   useEffect(() => {
     async function fetchOrganization() {
@@ -156,9 +150,7 @@ const PublicSectionEditor = () => {
       <VStack spacing={1} px={8} align="start">
         <Wrap>
           <Text fontSize="xl" fontWeight="bold">
-            {router.locale === "zh"
-              ? identity?.chineseName
-              : identity?.englishName}
+            {identity?.chineseName ?? identity?.englishName}
           </Text>
           <Tag>
             {
@@ -189,10 +181,7 @@ const PublicSectionEditor = () => {
             isInvalid={errors?.chineseName?.message}
           >
             <FormLabel color="#757575" mb={0}>
-              {wordExtractor(
-                page?.content?.wordings,
-                "field_label_chineseName"
-              )}
+              {wordExtractor(page?.content?.wordings, "field_label_fullName")}
             </FormLabel>
             <Input
               variant="flushed"
@@ -208,7 +197,7 @@ const PublicSectionEditor = () => {
               {errors?.chineseName?.message}
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired isInvalid={errors?.englishName?.message}>
+          {/* <FormControl isRequired isInvalid={errors?.englishName?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
@@ -228,9 +217,7 @@ const PublicSectionEditor = () => {
             <FormHelperText color="red">
               {errors?.englishName?.message}
             </FormHelperText>
-          </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
+          </FormControl> */}
           <FormControl isRequired isInvalid={errors?.email?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
@@ -239,7 +226,10 @@ const PublicSectionEditor = () => {
               type="email"
               variant="flushed"
               defaultValue={identity?.email}
-              placeholder={wordExtractor(page?.content?.wordings, "field_label_email_placeholder")}
+              placeholder={wordExtractor(
+                page?.content?.wordings,
+                "field_label_email_placeholder"
+              )}
               {...register("email", {
                 pattern: {
                   value:
@@ -259,6 +249,8 @@ const PublicSectionEditor = () => {
               {errors?.email?.message}
             </FormHelperText>
           </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.phone?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
@@ -266,7 +258,10 @@ const PublicSectionEditor = () => {
             <Input
               variant="flushed"
               defaultValue={identity?.phone}
-              placeholder={wordExtractor(page?.content?.wordings, "field_label_phone_placeholder")}
+              placeholder={wordExtractor(
+                page?.content?.wordings,
+                "field_label_phone_placeholder"
+              )}
               {...register("phone", {
                 required: wordExtractor(
                   page?.content?.wordings,
@@ -278,8 +273,6 @@ const PublicSectionEditor = () => {
               {errors?.phone?.message}
             </FormHelperText>
           </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.dob?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_age")}
@@ -310,6 +303,8 @@ const PublicSectionEditor = () => {
             </Select>
             <FormHelperText color="red">{errors?.age?.message}</FormHelperText>
           </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.gender?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_gender")}
@@ -336,8 +331,6 @@ const PublicSectionEditor = () => {
               {errors?.gender?.message}
             </FormHelperText>
           </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.district?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
@@ -369,6 +362,8 @@ const PublicSectionEditor = () => {
               {errors?.district?.message}
             </FormHelperText>
           </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.industry?.message}>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
@@ -414,7 +409,10 @@ const PublicSectionEditor = () => {
               }}
             ></Controller>
             <FormHelperText>
-              {wordExtractor(page?.content?.wordings, "field_label_industry_placeholder")}
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_industry_placeholder"
+              )}
             </FormHelperText>
             <FormHelperText color="red">
               {errors?.industry?.message}
@@ -470,7 +468,7 @@ const PublicSectionEditor = () => {
         </Stack>
 
         {identity?.phase2profile === false && (
-          <Box bgColor="#F9F9F9" borderRadius={'15px'} p={4}>
+          <Box bgColor="#F9F9F9" borderRadius={"15px"} p={4}>
             <VStack pb={{ base: 12 }} pt={{ base: 6 }}>
               <Grid templateColumns={"repeat(2, 1fr)"} width="100%" gap={6}>
                 <GridItem colSpan={{ base: 2 }}>

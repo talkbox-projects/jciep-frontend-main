@@ -14,7 +14,6 @@ import wordExtractor from "../../../utils/wordExtractor";
 import IdentityProfileStore from "../../../store/IdentityProfileStore";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
-import moment from "moment";
 import { getEnumText } from "../../../utils/enums/getEnums";
 
 const PublicSectionViewer = () => {
@@ -44,9 +43,7 @@ const PublicSectionViewer = () => {
       <VStack spacing={1} px={8} align="start">
         <Wrap>
           <Text fontSize="xl" fontWeight="bold">
-            {router.locale === "zh"
-              ? identity?.chineseName
-              : identity?.englishName}
+            {identity?.chineseName ?? identity?.englishName}
           </Text>
           <Tag>
             {
@@ -64,17 +61,14 @@ const PublicSectionViewer = () => {
         <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
-              {wordExtractor(
-                page?.content?.wordings,
-                "field_label_chineseName"
-              )}
+              {wordExtractor(page?.content?.wordings, "field_label_fullName")}
             </FormLabel>
             <Text>
               {identity?.chineseName ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
-          <FormControl>
+          {/* <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(
                 page?.content?.wordings,
@@ -85,9 +79,7 @@ const PublicSectionViewer = () => {
               {identity?.englishName ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
-          </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
+          </FormControl> */}
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_email")}
@@ -97,6 +89,8 @@ const PublicSectionViewer = () => {
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_phone")}
@@ -106,29 +100,17 @@ const PublicSectionViewer = () => {
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
-        <FormControl>
+          <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_age")}
             </FormLabel>
             <Text>
-            {getEnumText(
-                enums?.EnumAgeList,
-                identity?.age,
-                router.locale
-              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
-            </Text>
-          </FormControl>
-          {/* <FormControl>
-            <FormLabel color="#757575" mb={0}>
-              {wordExtractor(page?.content?.wordings, "field_label_dob")}
-            </FormLabel>
-            <Text>
-              {moment(identity?.dob).format("YYYY-MM-DD") ??
+              {getEnumText(enums?.EnumAgeList, identity?.age, router.locale) ??
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
-          </FormControl> */}
+          </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_gender")}
@@ -141,8 +123,6 @@ const PublicSectionViewer = () => {
               ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
-        </Stack>
-        <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_district")}
@@ -155,6 +135,8 @@ const PublicSectionViewer = () => {
               ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
@@ -168,22 +150,24 @@ const PublicSectionViewer = () => {
               ))}
             </Wrap>
           </FormControl>
-        </Stack>
-
-        <Stack direction={["column", "column", "row"]}>
           <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_wish_to_do")}
             </FormLabel>
             <Text>
-
-            {identity?.wishToDoOther ? identity?.wishToDoOther : getEnumText(
-                enums?.EnumWishToDoList,
-                identity?.wishToDo,
-                router.locale
-              ) ?? wordExtractor(page?.content?.wordings, "empty_text_label")}
+              {identity?.wishToDoOther
+                ? identity?.wishToDoOther
+                : getEnumText(
+                    enums?.EnumWishToDoList,
+                    identity?.wishToDo,
+                    router.locale
+                  ) ??
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
+        </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
           {/* <FormControl>
             <FormLabel color="#757575" mb={0}>
               {wordExtractor(page?.content?.wordings, "field_label_industry")}
@@ -198,9 +182,6 @@ const PublicSectionViewer = () => {
             </Wrap>
           </FormControl> */}
         </Stack>
-
-
-
       </VStack>
     </VStack>
   );

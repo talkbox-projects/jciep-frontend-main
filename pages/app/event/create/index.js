@@ -1009,9 +1009,8 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                       <LABEL
                         name={wordExtractor(
                           page?.content?.wordings,
-                          "contact_number_label"
+                          "contact_method_label"
                         )}
-                        required={true}
                       />
 
                       <Input
@@ -1023,13 +1022,13 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         )}
                         {...register("contactNumber", {
                           required: true,
-                          pattern: {
-                            value: phoneRegex,
-                            message: wordExtractor(
-                              page?.content?.wordings,
-                              "field_error_message_invalid_url"
-                            ),
-                          },
+                          // pattern: {
+                          //   value: phoneRegex,
+                          //   message: wordExtractor(
+                          //     page?.content?.wordings,
+                          //     "field_error_message_invalid_url"
+                          //   ),
+                          // },
                         })}
                       />
                       <FormHelperText>
@@ -1084,7 +1083,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           page?.content?.wordings,
                           "other_url_label"
                         )}
-                        required={true}
                       />
                       {fields.map(({ id }, index) => (
                         <Box key={id} pb={2}>
@@ -1097,7 +1095,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                                 "other_url_placeholder"
                               )}
                               {...register(`otherUrls[${index}]`, {
-                                required: true,
                                 pattern: {
                                   value: urlRegex,
                                   message: wordExtractor(
