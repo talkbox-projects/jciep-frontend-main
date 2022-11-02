@@ -72,7 +72,7 @@ const OrganizationNgoAdd = ({ page }) => {
     register,
     control,
     formState: { errors, isSubmitting },
-    watch,
+    watch
   } = useForm();
 
   const watchFields = watch(["targetGroupDisabilities"]);
@@ -155,7 +155,6 @@ const OrganizationNgoAdd = ({ page }) => {
           }
         }
       `;
-
       let data = await getGraphQLClient().request(mutation, {
         input: {
           organizationType: organizationType.value,
@@ -165,7 +164,7 @@ const OrganizationNgoAdd = ({ page }) => {
           website: website,
           description: description,
           missionNVision: missionNVision,
-          targetGroup: targetGroup?.value?.map(d=>d.value)||[],
+          targetGroup: targetGroup?.map(d=>d.value)||[],
           targetGroupDisabilities: targetGroupDisabilities?.value,
           targetGroupDisabilitiesOther:
             targetGroupDisabilities?.value === "other"
@@ -382,13 +381,13 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.description}</FormLabel>
+                  <LABEL name={page?.content?.form?.description} required={true}/>
                   <Textarea
                     placeholder={wordExtractor(
                       page?.content?.wordings,
                       "description_placeholder"
                     )}
-                    {...register("description")}
+                    {...register("description", { required: true })}
                   ></Textarea>
                   <FormHelperText>
                     {errors?.description?.type === "required" && (
@@ -405,13 +404,13 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2 }}>
                 <FormControl>
-                  <FormLabel>{page?.content?.form?.missionNVision}</FormLabel>
+                  <LABEL name={page?.content?.form?.missionNVision} required={true}/>
                   <Textarea
                     placeholder={wordExtractor(
                       page?.content?.wordings,
                       "mission_and_vision_placeholder"
                     )}
-                    {...register("missionNVision")}
+                    {...register("missionNVision", { required: true })}
                   ></Textarea>
                   <FormHelperText>
                     {errors?.missionNVision?.type === "required" && (
@@ -507,7 +506,6 @@ const OrganizationNgoAdd = ({ page }) => {
                     name="targetGroupDisabilities"
                     isClearable
                     control={control}
-                    rules={{ required: true }}
                     render={({ field }) => (
                       <ReactSelect
                         styles={customStyles}
@@ -522,16 +520,6 @@ const OrganizationNgoAdd = ({ page }) => {
                       />
                     )}
                   />
-                  <FormHelperText>
-                    {errors?.targetGroupDisabilities?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "target_group_disabilities_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
                 </FormControl>
 
                 {watchFields[0]?.value === "other" && (
@@ -675,25 +663,15 @@ const OrganizationNgoAdd = ({ page }) => {
 
               <GridItem colSpan={{ base: 2, md: 1 }}>
                 <FormControl>
-                  <LABEL name={page?.content?.form?.website} required={true}/>
+                  <LABEL name={page?.content?.form?.website}/>
                   <Input
                     type="text"
                     placeholder={wordExtractor(
                       page?.content?.wordings,
                       "website_placeholder"
                     )}
-                    {...register("website", { required: true })}
+                    {...register("website")}
                   />
-                  <FormHelperText>
-                    {errors?.website?.type === "required" && (
-                      <Text color="red">
-                        {wordExtractor(
-                          page?.content?.wordings,
-                          "website_required"
-                        )}
-                      </Text>
-                    )}
-                  </FormHelperText>
                 </FormControl>
               </GridItem>
             </Grid>

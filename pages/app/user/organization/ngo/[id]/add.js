@@ -86,14 +86,6 @@ const OrganizationNgoAdd = ({ page }) => {
   //   }
   // };
 
-  // const onFileUpload = async (e) => {
-  //   let uploadedFiles = await e.target.files[0];
-  //   let previousFiles = files;
-  //   let newFiles = previousFiles.concat(uploadedFiles);
-  //   setFileError("");
-  //   setFiles(newFiles);
-  // };
-
   const onRemoveImage = async (index) => {
     let previousFiles = files;
 
@@ -244,7 +236,7 @@ const OrganizationNgoAdd = ({ page }) => {
           website: website,
           description: description,
           missionNVision: missionNVision,
-          targetGroup: targetGroup?.value?.map(d=>d.value)||[],
+          targetGroup: targetGroup?.map(d=>d.value)||[],
           targetGroupDisabilities: targetGroupDisabilities?.value,
           targetGroupDisabilitiesOther:
             targetGroupDisabilities?.value === "other"
@@ -653,6 +645,7 @@ const OrganizationNgoAdd = ({ page }) => {
                         components={{
                           IndicatorSeparator: () => null,
                         }}
+                        isSearchable={false}
                       />
                     )}
                   />

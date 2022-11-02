@@ -72,7 +72,7 @@ export default gql`
     remark: String
     centre: String
     missionNVision: String
-    targetGroup: EnumTargetGroup
+    targetGroup: [EnumTargetGroup]
     targetGroupDisabilities: EnumTargetGroupDisability
     targetGroupDisabilitiesOther: String
     chineseCompanyName: String
