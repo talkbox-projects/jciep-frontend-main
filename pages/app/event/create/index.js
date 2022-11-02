@@ -17,6 +17,7 @@ import {
   RadioGroup,
   InputGroup,
   InputRightElement,
+  useToast
 } from "@chakra-ui/react";
 import _ from "lodash";
 import React, { useState, useCallback, useEffect } from "react";
@@ -31,7 +32,7 @@ import { getStockPhoto } from "../../../../utils/event/getEvent";
 import { getGraphQLClient } from "../../../../utils/apollo";
 import { createEvent } from "../../../../utils/event/createEvent";
 import { BsPlus } from "react-icons/bs";
-import { urlRegex, phoneRegex } from "../../../../utils/general";
+import { urlRegex } from "../../../../utils/general";
 import identityMeGet from "../../../../utils/api/IdentityMeGet";
 import {
   AiOutlineInfoCircle,
@@ -76,6 +77,7 @@ export const getServerSideProps = async (context) => {
 
 const EventAdd = ({ page, api: { identity }, lang }) => {
   const router = useRouter();
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -392,8 +394,14 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
       input.endTime = null
     }
 
-
     const response = await createEvent(input);
+
+    if(response?.error){
+      toast({
+        status: "error",
+        title: response?.error?.message,
+      });
+    }
 
     // For iOS mobile debug
 
@@ -1011,6 +1019,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                           page?.content?.wordings,
                           "contact_method_label"
                         )}
+                        required={true}
                       />
 
                       <Input
@@ -1118,15 +1127,6 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         </Box>
                       ))}
                       <FormHelperText>
-                        {errors?.otherUrls?.[0]?.type === "required" && (
-                          <Text color="red">
-                            {wordExtractor(
-                              page?.content?.wordings,
-                              "other_url_required"
-                            )}
-                          </Text>
-                        )}
-
                         {errors?.otherUrls?.[0]?.type !== "required" &&
                           errors?.otherUrls?.length > 0 &&
                           errors?.otherUrls?.map((d, i) => (
