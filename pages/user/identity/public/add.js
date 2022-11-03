@@ -339,7 +339,10 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                         >
                           {page?.content?.form?.selectOrganizationContent?.link}
                         </Text>
-                        !
+                        {
+                          page?.content?.form?.selectOrganizationContent
+                            ?.content03
+                        }
                       </FormHelperText>
                     </FormControl>
                     {selectedOrganization && (
@@ -1424,6 +1427,11 @@ export default withPageCMS(IdentityPublicAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "content02",
+              label: "文本3 text",
               component: "text",
             },
           ],
