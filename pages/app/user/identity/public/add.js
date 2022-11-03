@@ -1676,7 +1676,7 @@ export default withPageCMS(IdentityPublicAdd, {
               component: "text",
             },
             {
-              name: "content02",
+              name: "content03",
               label: "文本3 text",
               component: "text",
             },
