@@ -377,7 +377,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
         organizationId: organizationId?.value ?? null,
         registerUrl: registerUrl ? registerUrl.toLowerCase() : null,
         otherUrls: !_.isEmpty(otherUrls)
-          ? otherUrls.map((d) => d?.toLowerCase())
+          ? otherUrls.filter((d) => !_.isEmpty(d)).map((d) => d?.toLowerCase())
           : [],
         remark: remark,
         banner: submitBanner,
@@ -1127,8 +1127,7 @@ const EventAdd = ({ page, api: { identity }, lang }) => {
                         </Box>
                       ))}
                       <FormHelperText>
-                        {errors?.otherUrls?.[0]?.type !== "required" &&
-                          errors?.otherUrls?.length > 0 &&
+                        {errors?.otherUrls?.length > 0 &&
                           errors?.otherUrls?.map((d, i) => (
                             <Text key={i} color="red">
                               {wordExtractor(
