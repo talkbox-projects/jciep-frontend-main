@@ -415,7 +415,10 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                                     ?.link
                                 }
                               </Text>
-                              !
+                              {
+                                page?.content?.form?.selectOrganizationContent
+                                  ?.content03
+                              }
                             </Box>
                           </Flex>
                         </FormHelperText>
@@ -1670,6 +1673,11 @@ export default withPageCMS(IdentityPublicAdd, {
             {
               name: "link",
               label: "關聯 Link",
+              component: "text",
+            },
+            {
+              name: "content02",
+              label: "文本3 text",
               component: "text",
             },
           ],
