@@ -171,7 +171,7 @@ const OrganizationNgoAdd = ({ page }) => {
             }
           );
 
-          setFiles(files.concat(imageUploadData?.FileUpload?.[0]));
+          setFiles([imageUploadData?.FileUpload?.[0]]);
         }
       }
     };
@@ -248,7 +248,8 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: files??null,
+          businessRegistration: null,
+          logo: files ? files?.[0] : null,
         },
       });
 

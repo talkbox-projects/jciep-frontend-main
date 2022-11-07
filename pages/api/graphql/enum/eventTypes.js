@@ -12,5 +12,8 @@ export default {
     raceAndCompetition: { en: "Race And Competition", zh: "比賽" },
     exhibition: { en: "Exhibition", zh: "展覽" },
     market: { en: "Market", zh: "市集" },
+    volunteerService: { en: "Volunteer Service", zh: "義工服務" },
+    groupActivity: { en: "Group Activity", zh: "小組活動" },
+    sharingSession: { en: "Sharing Session", zh: "分享會" },
     other: { en: "Other", zh: "其他（請註明）" }
 };

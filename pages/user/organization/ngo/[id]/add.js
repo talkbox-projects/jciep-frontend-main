@@ -89,8 +89,7 @@ const OrganizationNgoAdd = ({ page }) => {
 
   const onFileUpload = async (e) => {
     let uploadedFiles = await e.target.files[0];
-    let previousFiles = files;
-    let newFiles = previousFiles.concat(uploadedFiles);
+    let newFiles = [uploadedFiles];
     setFileError("");
     setFiles(newFiles);
   };
@@ -176,7 +175,8 @@ const OrganizationNgoAdd = ({ page }) => {
           postalAddress: postalAddress,
           tncAccept: tncAccept,
           identityId: id,
-          businessRegistration: filesUploadData ? filesUploadData?.FileUpload : null,
+          businessRegistration: null,
+          logo: filesUploadData ? filesUploadData?.FileUpload[0] : null,
         },
       });
 
@@ -230,7 +230,7 @@ const OrganizationNgoAdd = ({ page }) => {
                       <FormLabel height="100%" width="100%" cursor="pointer">
                         <Input
                           type="file"
-                          multiple={true}
+                          // multiple={true}
                           display="none"
                           onChange={onFileUpload}
                           onClick={(event) =>
@@ -266,7 +266,7 @@ const OrganizationNgoAdd = ({ page }) => {
                       </FormLabel>
                     </Box>
 
-                    {files.map((file, index) => {
+                    {files?.map((file, index) => {
                       let url = URL.createObjectURL(file);
                       return (
                         <Box
