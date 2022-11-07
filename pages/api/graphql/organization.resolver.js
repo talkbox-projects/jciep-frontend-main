@@ -307,6 +307,10 @@ export default {
             contactName: submission?.contactName,
             industry: submission?.industry,
             industryOther: submission?.industryOther,
+            missionNVision: submission?.missionNVision,
+            targetGroup: submission?.targetGroup,
+            targetGroupDisabilities: submission?.targetGroupDisabilities,
+            targetGroupDisabilitiesOther: submission?.targetGroupDisabilitiesOther
           });
         }
       }
@@ -317,7 +321,6 @@ export default {
     },
 
     OrganizationUpdate: async (_parent, { input }, context) => {
-
 
       const identity = context?.auth?.identity;
       if (!checkIfAdmin(identity) && !isJoinedOrganizationStaff(identity, input.id)) {

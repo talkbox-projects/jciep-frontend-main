@@ -592,7 +592,7 @@ const OrganizationNgoAdd = ({ page }) => {
                     {...register("contactPhone", { required: true })}
                   />
                   <FormHelperText>
-                    {errors?.contactName?.type === "required" && (
+                    {errors?.contactPhone?.type === "required" && (
                       <Text color="red">
                         {wordExtractor(
                           page?.content?.wordings,
@@ -625,7 +625,7 @@ const OrganizationNgoAdd = ({ page }) => {
                     })}
                   />
                   <FormHelperText>
-                    {errors?.contactName?.type === "required" && (
+                    {errors?.contactEmail?.type === "required" && (
                       <Text color="red">
                         {wordExtractor(
                           page?.content?.wordings,

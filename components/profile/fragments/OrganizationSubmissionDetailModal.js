@@ -155,6 +155,18 @@ const OrganizationSubmissionDetailModal = ({
               <Text color="#757575">
                 {wordExtractor(
                   page?.content?.wordings,
+                  "field_label_mission_and_vision"
+                )}
+              </Text>
+              <Text>
+                {submission?.missionNVision ||
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Text>
+            </GridItem>
+            <GridItem>
+              <Text color="#757575">
+                {wordExtractor(
+                  page?.content?.wordings,
                   "field_label_submission_description"
                 )}
               </Text>
@@ -174,9 +186,7 @@ const OrganizationSubmissionDetailModal = ({
                 <SimpleGrid gap={2} w="100%" columns={[2, 2, 2]}>
                   {(submission?.businessRegistration ?? []).map(
                     ({ url }, index) => {
-                      const isPDF =
-                        url &&
-                        /[^.]*$/.exec(url)[0] === "pdf";
+                      const isPDF = url && /[^.]*$/.exec(url)[0] === "pdf";
                       if (isPDF) {
                         return (
                           <Box
@@ -240,6 +250,50 @@ const OrganizationSubmissionDetailModal = ({
                   wordExtractor(page?.content?.wordings, "empty_text_label")}
               </Text>
             </GridItem>
+
+            <GridItem>
+              <Text color="#757575">
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_target_group"
+                )}
+              </Text>
+              {Array.isArray(submission?.targetGroup) ? (
+                submission?.targetGroup?.map((d) => <Text key={d}>{d}</Text>)
+              ) : (
+                <Text>
+                  {submission?.targetGroup ||
+                    wordExtractor(page?.content?.wordings, "empty_text_label")}
+                </Text>
+              )}
+            </GridItem>
+
+            <GridItem>
+              <Text color="#757575">
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_target_group_disabilities"
+                )}
+              </Text>
+              <Text>
+                {submission?.targetGroupDisabilities ||
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Text>
+            </GridItem>
+
+            {submission?.targetGroupDisabilities==="other" && (<GridItem>
+              <Text color="#757575">
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_target_group_disabilities_other"
+                )}
+              </Text>
+              <Text>
+                {submission?.targetGroupDisabilities ||
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Text>
+            </GridItem>)}
+
             <GridItem>
               <Text color="#757575">
                 {wordExtractor(

@@ -17,6 +17,10 @@ const organizationUpdate = async ({ input }, context) => {
           url
         }
         website
+        missionNVision
+        targetGroup
+        targetGroupDisabilities
+        targetGroupDisabilitiesOther
         businessRegistration {
           id
           contentType

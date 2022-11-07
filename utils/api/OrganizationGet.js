@@ -74,6 +74,11 @@ const organizationGet = async ({ id }, context) => {
         invitationCode
         published
 
+        missionNVision
+        targetGroup
+        targetGroupDisabilities
+        targetGroupDisabilitiesOther
+
         submission {
           id
           status
@@ -90,6 +95,11 @@ const organizationGet = async ({ id }, context) => {
           businessRegistration {
             url
           }
+
+          missionNVision
+          targetGroup
+          targetGroupDisabilities
+          targetGroupDisabilitiesOther
 
           contactName
           contactEmail

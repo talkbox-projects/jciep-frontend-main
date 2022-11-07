@@ -34,6 +34,10 @@ const NgoSectionViewer = () => {
 
   const toast = useToast();
 
+  const { submission } = organization;
+  const targetGroupData =
+    organization?.targetGroup ?? submission[0]?.targetGroup;
+
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
@@ -195,7 +199,77 @@ const NgoSectionViewer = () => {
                 wordExtractor(page?.content?.wordings, "empty_text_label")}
             </Text>
           </FormControl>
+          <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_mission_and_vision"
+              )}
+            </FormLabel>
+            <Text whiteSpace="pre-wrap">
+              {organization?.missionNVision ?? submission[0]?.missionNVision}
+            </Text>
+          </FormControl>
         </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_target_group"
+              )}
+            </FormLabel>
+            {Array.isArray(targetGroupData) ? (
+              targetGroupData?.map((d) => {
+                return (
+                  <Tag key={d} mr={2} mt={1}>
+                    {
+                      enums?.EnumTargetGroupList?.find((x) => x.key === d)
+                        ?.value?.[router.locale]
+                    }
+                  </Tag>
+                );
+              })
+            ) : (
+              <Text>
+                {targetGroupData ||
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Text>
+            )}
+          </FormControl>
+
+          <FormControl>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_target_group_disabilities"
+              )}
+            </FormLabel>
+            <Text whiteSpace="pre-wrap">
+              {organization?.targetGroupDisabilities ??
+                submission[0]?.targetGroupDisabilities}
+            </Text>
+          </FormControl>
+        </Stack>
+
+        {(organization?.targetGroupDisabilitiesOther ||
+          submission[0]?.targetGroupDisabilitiesOther) && (
+          <Stack direction={["column", "column", "row"]}>
+            <FormControl>
+              <FormLabel color="#757575" mb={0}>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_organization_description"
+                )}
+              </FormLabel>
+              <Text whiteSpace="pre-wrap">
+                {organization?.description ??
+                  wordExtractor(page?.content?.wordings, "empty_text_label")}
+              </Text>
+            </FormControl>
+          </Stack>
+        )}
       </VStack>
     </VStack>
   );

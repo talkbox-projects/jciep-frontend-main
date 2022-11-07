@@ -11,9 +11,11 @@ import {
   Input,
   FormHelperText,
   Textarea,
+  Select,
 } from "@chakra-ui/react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import MultiSelect from "react-select";
+import { Controller, useForm } from "react-hook-form";
 import wordExtractor from "../../../utils/wordExtractor";
 import OrganizationProfileStore from "../../../store/OrganizationProfileStore";
 import { useRouter } from "next/router";
@@ -27,6 +29,7 @@ const NgoSectionEditor = () => {
   const {
     handleSubmit,
     register,
+    control,
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
@@ -35,6 +38,9 @@ const NgoSectionEditor = () => {
       englishCompanyName: organization.englishCompanyName,
     },
   });
+  const { submission } = organization;
+  const targetGroupData =
+    organization?.targetGroup ?? submission[0]?.targetGroup;
 
   return (
     <VStack
@@ -194,6 +200,138 @@ const NgoSectionEditor = () => {
             </FormHelperText>
           </FormControl>
         </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl isInvalid={errors?.targetGroup?.message}>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_target_group"
+              )}
+            </FormLabel>
+            <Controller
+              control={control}
+              name={"targetGroup"}
+              defaultValue={
+                Array.isArray(targetGroupData)
+                  ? targetGroupData
+                  : [targetGroupData]
+              }
+              render={({ field: { name, value, onChange } }) => {
+                const options = enums?.EnumTargetGroupList.map(
+                  ({ key: value, value: { [router.locale]: label } }) => ({
+                    value,
+                    label,
+                  })
+                );
+                return (
+                  <MultiSelect
+                    styles={{
+                      control: (_) => ({
+                        ..._,
+                        borderRadius: 0,
+                        borderColor: "#ddd",
+                        borderTop: 0,
+                        borderLeft: 0,
+                        borderRight: 0,
+                        borderBottomWidth: 1,
+                      }),
+                    }}
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "empty_text_label"
+                    )}
+                    isMulti={true}
+                    name={name}
+                    onChange={(s) => onChange(s.map((s) => s.value))}
+                    value={options.filter((o) =>
+                      (value ?? [])?.includes(o.value)
+                    )}
+                    options={options}
+                  />
+                );
+              }}
+            ></Controller>
+            <FormHelperText color="red">
+              {errors?.targetGroup?.message}
+            </FormHelperText>
+          </FormControl>
+        </Stack>
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl isInvalid={errors?.industry?.message}>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_target_group_disabilities"
+              )}
+            </FormLabel>
+            <Controller
+              control={control}
+              name={"targetGroupDisabilities"}
+              defaultValue={
+                organization?.targetGroupDisabilities ??
+                submission[0]?.targetGroupDisabilities
+              }
+              render={({ field: { name, value, onChange } }) => {
+                const options = enums?.EnumTargetGroupDisabilityList.map(
+                  ({ key: value, value: { [router.locale]: label } }) => ({
+                    value,
+                    label,
+                  })
+                );
+                return (
+                  <MultiSelect
+                    styles={{
+                      control: (_) => ({
+                        ..._,
+                        borderRadius: 0,
+                        borderColor: "#ddd",
+                        borderTop: 0,
+                        borderLeft: 0,
+                        borderRight: 0,
+                        borderBottomWidth: 1,
+                      }),
+                    }}
+                    placeholder={wordExtractor(
+                      page?.content?.wordings,
+                      "empty_text_label"
+                    )}
+                    name={name}
+                    onChange={(s) => onChange(s.value)}
+                    value={options.filter((o) =>
+                      (value ?? [])?.includes(o.value)
+                    )}
+                    options={options}
+                  />
+                );
+              }}
+            ></Controller>
+            <FormHelperText color="red">
+              {errors?.targetGroup?.message}
+            </FormHelperText>
+          </FormControl>
+
+          {organization?.targetGroupDisabilities === "other" && (
+            <FormControl>
+              <FormLabel color="#757575" mb={0}>
+                {wordExtractor(
+                  page?.content?.wordings,
+                  "field_label_target_group_disabilities"
+                )}
+              </FormLabel>
+              <Input
+                variant="flushed"
+                defaultValue={
+                  organization?.targetGroupDisabilitiesOther ??
+                  submission[0]?.targetGroupDisabilitiesOther
+                }
+                {...register("targetGroupDisabilitiesOther", {})}
+              ></Input>
+            </FormControl>
+          )}
+        </Stack>
+
+
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactPhone?.message}>
             <FormLabel color="#757575" mb={0}>
@@ -259,6 +397,29 @@ const NgoSectionEditor = () => {
             </FormHelperText>
           </FormControl>
         </Stack>
+
+        <Stack direction={["column", "column", "row"]}>
+          <FormControl isInvalid={errors?.description?.message}>
+            <FormLabel color="#757575" mb={0}>
+              {wordExtractor(
+                page?.content?.wordings,
+                "field_label_mission_and_vision"
+              )}
+            </FormLabel>
+            <Textarea
+              rows={5}
+              resize="none"
+              variant="flushed"
+              defaultValue={
+                organization?.description ??
+                organization?.submission[0]?.missionNVision
+              }
+              {...register("missionNVision", {})}
+            ></Textarea>
+          </FormControl>
+        </Stack>
+
+
       </VStack>
     </VStack>
   );

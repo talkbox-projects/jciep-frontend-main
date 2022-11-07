@@ -29,6 +29,11 @@ export default gql`
     contactPhone: String
     contactEmail: String
 
+    missionNVision: String
+    targetGroup: [String]
+    targetGroupDisabilities: String
+    targetGroupDisabilitiesOther: String
+
     tncAccept: Boolean
     createdAt: Timestamp
     updatedAt: Timestamp
@@ -55,6 +60,11 @@ export default gql`
     contactName: String
     contactPhone: String
     contactEmail: String
+
+    missionNVision: String
+    targetGroup: [EnumTargetGroup]
+    targetGroupDisabilities: EnumTargetGroupDisability
+    targetGroupDisabilitiesOther: String
 
     bannerMedia: FileMeta
     biography: JsonContent
@@ -133,6 +143,11 @@ export default gql`
     contactName: String
     contactPhone: String
     contactEmail: String
+
+    missionNVision: String
+    targetGroup: [EnumTargetGroup]
+    targetGroupDisabilities: EnumTargetGroupDisability
+    targetGroupDisabilitiesOther: String
 
     bannerMedia: FileMetaInput
     biography: JsonContent

@@ -154,7 +154,7 @@ const organizationSchema = Schema({
     type: String
   },
   targetGroup: {
-    type: String,
+    type: [String],
     enum: Object.keys(targetGroup),
   },
   targetGroupDisabilities: {

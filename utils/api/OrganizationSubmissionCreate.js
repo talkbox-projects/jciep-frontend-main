@@ -21,6 +21,11 @@ const OrganizationSubmissionCreate = async ({ input }, context) => {
         # employer only
         industryOther
 
+        missionNVision
+        targetGroup
+        targetGroupDisabilities
+        targetGroupDisabilitiesOther
+
         description
         website
         businessRegistration {
