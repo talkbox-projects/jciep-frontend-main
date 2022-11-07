@@ -38,6 +38,10 @@ const NgoSectionViewer = () => {
   const targetGroupData =
     organization?.targetGroup ?? submission[0]?.targetGroup;
 
+  const targetGroupDisabilities =
+    organization?.targetGroupDisabilities ??
+    submission[0]?.targetGroupDisabilities;
+
   return (
     <VStack spacing={1} align="stretch">
       <HStack py={2} px={4} minH={16} spacing={4} justifyContent="flex-end">
@@ -247,8 +251,11 @@ const NgoSectionViewer = () => {
               )}
             </FormLabel>
             <Text whiteSpace="pre-wrap">
-              {organization?.targetGroupDisabilities ??
-                submission[0]?.targetGroupDisabilities}
+              {
+                enums?.EnumTargetGroupDisabilityList?.find(
+                  (x) => x.key === targetGroupDisabilities
+                )?.value?.[router.locale]
+              }
             </Text>
           </FormControl>
         </Stack>
@@ -260,11 +267,12 @@ const NgoSectionViewer = () => {
               <FormLabel color="#757575" mb={0}>
                 {wordExtractor(
                   page?.content?.wordings,
-                  "field_label_organization_description"
+                  "field_label_target_group_disabilities_other"
                 )}
               </FormLabel>
               <Text whiteSpace="pre-wrap">
-                {organization?.description ??
+                {(organization?.targetGroupDisabilitiesOther ||
+                  submission[0]?.targetGroupDisabilitiesOther) ??
                   wordExtractor(page?.content?.wordings, "empty_text_label")}
               </Text>
             </FormControl>

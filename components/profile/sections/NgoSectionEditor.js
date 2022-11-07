@@ -10,8 +10,7 @@ import {
   Tag,
   Input,
   FormHelperText,
-  Textarea,
-  Select,
+  Textarea
 } from "@chakra-ui/react";
 import React from "react";
 import MultiSelect from "react-select";
@@ -30,24 +29,30 @@ const NgoSectionEditor = () => {
     handleSubmit,
     register,
     control,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
       id: organization.id,
       chineseCompanyName: organization.chineseCompanyName,
       englishCompanyName: organization.englishCompanyName,
+      targetGroupDisabilities: organization?.targetGroupDisabilities??organization?.submission[0]?.targetGroupDisabilities
     },
   });
   const { submission } = organization;
   const targetGroupData =
     organization?.targetGroup ?? submission[0]?.targetGroup;
+  const getTargetGroupDisabilities = watch("targetGroupDisabilities");
 
   return (
     <VStack
       as="form"
       onSubmit={handleSubmit(async (values) => {
         try {
-          await saveOrganization(values);
+          await saveOrganization({
+            ...values,
+            targetGroupDisabilitiesOther: values?.targetGroupDisabilities === 'other' ? values?.targetGroupDisabilitiesOther : null
+          });
           removeEditSection();
         } catch (error) {
           console.error(error);
@@ -310,8 +315,11 @@ const NgoSectionEditor = () => {
               {errors?.targetGroup?.message}
             </FormHelperText>
           </FormControl>
+        </Stack>
 
-          {organization?.targetGroupDisabilities === "other" && (
+
+        <Stack direction={["column", "column", "row"]}>
+        {getTargetGroupDisabilities === "other" && (
             <FormControl>
               <FormLabel color="#757575" mb={0}>
                 {wordExtractor(
@@ -330,7 +338,6 @@ const NgoSectionEditor = () => {
             </FormControl>
           )}
         </Stack>
-
 
         <Stack direction={["column", "column", "row"]}>
           <FormControl isInvalid={errors?.contactPhone?.message}>
