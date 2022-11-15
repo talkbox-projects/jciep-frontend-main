@@ -18,7 +18,7 @@ const IdentityPublicProfile = () => {
           </VStack>
           <VStack align="stretch" w={["100%", "100%", "33%"]}>
             {(isAdmin || editable) && <IdentityOperationSection />}
-            {identity?.organizationRole?.length && (<IdentityOrganizationListSection/>)}
+            <IdentityOrganizationListSection/>
           </VStack>
         </Stack>
       </Container>
