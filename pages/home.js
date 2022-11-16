@@ -115,7 +115,7 @@ const Home = ({ setting, page }) => {
       loginModalDisclosure.onOpen();
       router.push("/home");
     }
-  }, [loginModalDisclosure, router, router?.query?.login]);
+  }, [loginModalDisclosure, router, router?.query?.login]);  
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
@@ -417,6 +417,7 @@ const Home = ({ setting, page }) => {
       <Box bg="#00BFBA" position="relative">
         {posts?.length > 0 && (
           <Carousel
+            tabIndex={"-1"}
             showArrows={true}
             showIndicators={false}
             autoPlay={carouselAutoPlay}

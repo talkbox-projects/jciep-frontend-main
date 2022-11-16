@@ -312,11 +312,10 @@ const PostDetail = ({ post, setting, page }) => {
                         <Image
                           alt={caption ?? imageName}
                           w="100%"
-                          title="postImage"
                           src={image}
                           allowFullScreen
                         />
-                        <Text color="gray.500">{caption}</Text>
+                        <Text color="gray.800" fontSize={"lg"}>{caption}</Text>
                       </VStack>
                     );
                   case "video-block": {
@@ -330,7 +329,7 @@ const PostDetail = ({ post, setting, page }) => {
                             allowFullScreen
                           />
                         </AspectRatio>
-                        <Text color="gray.500">{caption}</Text>
+                        <Text color="gray.800" fontSize={"lg"}>{caption}</Text>
                       </VStack>
                     );
                   }

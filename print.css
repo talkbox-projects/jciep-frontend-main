@@ -27,3 +27,13 @@
       height: 0px !important;
     }
   }
+
+/** Main page slide banner */
+.carousel.carousel-slider li.slide {
+  visibility: hidden;
+}
+
+.carousel.carousel-slider li.slide.selected,
+.carousel.carousel-slider li.slide.previous{
+  visibility: visible;
+}

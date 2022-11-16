@@ -30,7 +30,7 @@ const UserGroupModal = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
+          <ModalCloseButton aria-label={router.locale === 'zh' ? "關閉" : "close"}/>
           <ModalBody py={6}>
             <Box>
               <Center>

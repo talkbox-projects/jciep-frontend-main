@@ -419,6 +419,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       fontWeight: "bold",
                     })}
                     align="center"
+                    role="none"
                   >
                     <Box
                       {...(arr.length - 1 > index && {
@@ -426,12 +427,14 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                         borderRightColor: "#eee",
                       })}
                       px={2}
+                      role="none"
                     >
                       {submenu?.length > 0 ? (
                         <Popover gutter={20}>
+                          {({ isOpen }) => (
+                             <>
                           <PopoverTrigger>
-                            <Box h="100%" role="menuitem">
-                              {/* <NextLink href={path}> */}
+                            <Box h="100%">
                               <Button
                                 h="100%"
                                 variant="unstyled"
@@ -448,13 +451,13 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                       : "normal",
                                   wordWrap: "break-word",
                                 }}
+                                role="none"
                               >
                                 {label}
                               </Button>
-                              {/* </NextLink> */}
                             </Box>
                           </PopoverTrigger>
-                          <PopoverContent w="fit-content">
+                          <PopoverContent w="fit-content" aria-expanded={isOpen}>
                             <PopoverBody as={VStack} spacing={4} fontSize="md" role="menu">
                               {submenu.map(({ id, label, path }) => (
                                 <NextLink key={id} href={path}>
@@ -474,6 +477,8 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                               ))}
                             </PopoverBody>
                           </PopoverContent>
+                          </>
+                          )}
                         </Popover>
                       ) : (
                         <NextLink href={path}>
