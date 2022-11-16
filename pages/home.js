@@ -417,7 +417,6 @@ const Home = ({ setting, page }) => {
       <Box bg="#00BFBA" position="relative">
         {posts?.length > 0 && (
           <Carousel
-            tabIndex={"-1"}
             showArrows={true}
             showIndicators={false}
             autoPlay={carouselAutoPlay}
@@ -425,6 +424,7 @@ const Home = ({ setting, page }) => {
             interval={3000}
             showStatus={false}
             showThumbs={false}
+            useKeyboardArrows={false}
             renderArrowPrev={(clickHandler, hasPrev) => {
               return hasPrev ? (
                 <HStack
