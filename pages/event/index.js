@@ -321,7 +321,7 @@ const Event = ({ page, hostname, lang }) => {
                             d?.banner?.file?.url !== undefined &&
                             d?.banner?.file?.url !== null
                               ? d?.banner?.file?.url
-                              : `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.jpg`;
+                              : `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.png`;
                           return (
                             <GridItem
                               key={`${d.id}${i}`}
