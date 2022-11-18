@@ -752,7 +752,7 @@ export default {
               member: {
                 identityId: identity.id,
                 role: input.identity === "pwd" ? "member" : "staff",
-                status: "pendingApproval",
+                status: "joined",
               },
             },
           }
