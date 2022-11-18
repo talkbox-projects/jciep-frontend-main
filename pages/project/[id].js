@@ -796,7 +796,7 @@ const Project = ({ page, api: { organizations }, hostname }) => {
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
   const imageUrl =
     (url !== 'undefined' && url !== null) ? url :
-    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`;
+    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.png`;
   return (
     <Box
       h={{ base: "320px", md: "360px" }}
