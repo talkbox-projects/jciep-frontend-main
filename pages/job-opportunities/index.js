@@ -158,7 +158,7 @@ const JobOpportunities = ({ page, enums }) => {
     [router]
   );
 
-  const jobId = router.query.jobId ?? jobListData?.[0]?.id;
+  const jobId = router.query.jobId ?? null;
 
   const job = jobListData?.find((x) => x.id === jobId);
 
@@ -505,7 +505,10 @@ const JobOpportunities = ({ page, enums }) => {
               <Button
                 mt={3}
                 as={Link}
-                href={wordExtractor(page?.content?.wordings, "page_contact_us_url")}
+                href={wordExtractor(
+                  page?.content?.wordings,
+                  "page_contact_us_url"
+                )}
                 borderRadius="full"
                 color="#000"
                 bg="transparent"
@@ -571,11 +574,19 @@ const JobOpportunities = ({ page, enums }) => {
                   />
                 </GridItem>
                 <GridItem colSpan={2} align="right">
-                    <Box cursor="pointer" d={'inline-block'} onClick={() => {
+                  <Box
+                    cursor="pointer"
+                    d={"inline-block"}
+                    onClick={() => {
                       setDistrict([]);
                       setJobInterested([]);
-                      router.push(`/job-opportunities`)
-                    }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
+                      router.push(`/job-opportunities`);
+                    }}
+                  >
+                    <Text lineHeight="48px" fontWeight="bold">
+                      {wordExtractor(page?.content?.wordings, "filter_reset")}
+                    </Text>
+                  </Box>
                 </GridItem>
               </Grid>
             </Box>
@@ -592,7 +603,51 @@ const JobOpportunities = ({ page, enums }) => {
             <HStack align="start" spacing={4}>
               {jobList}
               {/* desktop detail page */}
-              {jobListData.length !== 0 && (
+              {jobId === null && (
+                <VStack
+                  bg="white"
+                  flex={1}
+                  minW={0}
+                  w="100%"
+                  align="stretch"
+                  borderRadius={8}
+                  borderColor="#eee"
+                  borderWidth={2}
+                  minH={256}
+                  p={4}
+                >
+                  <>
+                    <Stack spacing={2} align="center" py={12}>
+                      <Image
+                        alt={wordExtractor(
+                          page?.content?.wordings,
+                          `mode_${job?.mode}`
+                        )}
+                        src={"page?.content?.icon?.jobOpportunitiesIcon"}
+                        w={"100%"}
+                        maxW={"480px"}
+                        h={"auto"}
+                        px={4}
+                        py={2}
+                      />
+
+                      <Text fontSize={["lg"]} fontWeight="bold">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "jobs_total"
+                        ).replace("$", jobListData?.length)}
+                      </Text>
+                      <Text fontSize={["md"]} align="center">
+                        {wordExtractor(
+                          page?.content?.wordings,
+                          "jobs_total_description"
+                        )}
+                      </Text>
+                    </Stack>
+                  </>
+                </VStack>
+              )}
+              {jobListData.length !== 0 && jobId !== null && (
                 <VStack
                   bg="white"
                   flex={1}
@@ -654,14 +709,30 @@ const JobOpportunities = ({ page, enums }) => {
               />
             </GridItem>
             <GridItem colSpan={4} align="center">
-                    <Box cursor="pointer" onClick={() => {
-                      setDistrict([]);
-                      setJobInterested([]);
-                      router.push(`/job-opportunities`)
-                    }}><Text lineHeight="48px" fontWeight="bold">{wordExtractor(page?.content?.wordings, "filter_reset")}</Text></Box>
-                </GridItem>
+              <Box
+                cursor="pointer"
+                onClick={() => {
+                  setDistrict([]);
+                  setJobInterested([]);
+                  router.push(`/job-opportunities`);
+                }}
+              >
+                <Text lineHeight="48px" fontWeight="bold">
+                  {wordExtractor(page?.content?.wordings, "filter_reset")}
+                </Text>
+              </Box>
+            </GridItem>
           </Grid>
         </Box>
+        <Text fontSize={["lg"]} fontWeight="bold" align="center" px={4}>
+          {wordExtractor(page?.content?.wordings, "jobs_total").replace(
+            "$",
+            jobListData?.length
+          )}
+        </Text>
+        <Text fontSize={["md"]} align="center" px={4}>
+          {wordExtractor(page?.content?.wordings, "jobs_total_description")}
+        </Text>
         {router.query.jobId ? (
           <VStack align="stretch" p={4} spacing={0}>
             <NextLink href="/job-opportunities">
@@ -718,6 +789,14 @@ export default withPageCMS(JobOpportunities, {
       component: "group",
       fields: [
         {
+          label: "工作機會圖標 Job opportunities icon",
+          name: "jobOpportunitiesIcon",
+          component: "image",
+          uploadDir: () => "/job-opportunities",
+          parse: ({ previewSrc }) => previewSrc,
+          previewSrc: (src) => src,
+        },
+        {
           label: "工作類型圖標 Employment mode icon",
           name: "modeIcon",
           component: "image",
@@ -769,7 +848,7 @@ export default withPageCMS(JobOpportunities, {
       }),
       defaultItem: () => ({
         id: Math.random().toString(36).substr(2, 9),
-        publishDate: moment()
+        publishDate: moment(),
       }),
       fields: [
         {

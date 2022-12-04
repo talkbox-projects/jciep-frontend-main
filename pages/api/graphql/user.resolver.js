@@ -10,7 +10,7 @@ import facebook from "../services/facebook";
 import google from "../services/google";
 import { Types } from "mongoose";
 import send from "./email/send";
-import {sendResetPassword} from "./email/send"
+import { sendResetPassword, sendPortfolioPublishRequest, sendPortfolioPublishApprove } from "./email/send";
 import bannerBase64 from "./email/templates/assets/img/bannerBase64";
 import logoBase64 from "./email/templates/assets/img/logoBase64";
 import apple from "../services/apple";
@@ -178,7 +178,7 @@ export default {
 
     TalantIdentitySearch: async (_parent, input) => {
       const keys = { publishStatus: "approved", published: true };
-      let identities = []
+      let identities = [];
 
       if (input.organizationId) {
         const organization = await Organization.findById(input.organizationId);
@@ -190,11 +190,11 @@ export default {
       }
 
       if (input.jobType) {
-        keys.interestedEmploymentMode = { "$in": input?.jobType?.split(',') }
+        keys.interestedEmploymentMode = { $in: input?.jobType?.split(",") };
       }
 
       if (input.jobInterested) {
-        keys.interestedIndustry = { "$in": input?.jobInterested?.split(',') }
+        keys.interestedIndustry = { $in: input?.jobInterested?.split(",") };
       }
 
       identities = await Identity.find(keys)
@@ -661,9 +661,9 @@ export default {
 
     UserPasswordResetByConsole: async (_parent, { email, phone, password }) => {
       try {
-        if(email){
+        if (email) {
           let user = await User.findOne({ email });
-          if(user?.id){
+          if (user?.id) {
             const user = await User.findOneAndUpdate(
               { email: email },
               {
@@ -675,9 +675,9 @@ export default {
           }
         }
 
-        if(phone){
+        if (phone) {
           let user = await User.findOne({ phone });
-          if(user?.id){
+          if (user?.id) {
             const user = await User.findOneAndUpdate(
               { phone: phone },
               {
@@ -823,6 +823,37 @@ export default {
       identity.publishStatus = "pending";
       identity.published = false;
       await identity.save();
+
+      if (organizationId) {
+        const organization = await Organization.findById(organizationId);
+        if (organization?.contactEmail) {
+          let host = publicRuntimeConfig.HOST_URL ?? "http://localhost:3000";
+
+          sendPortfolioPublishRequest(
+            organization?.contactEmail,
+            {
+              url: `${host}`,
+              description: `你好，<br/>你的機構會員 ${identity?.chineseName} 已於「人才庫」完成個人履歷，正等待批核，請登入網頁處理申請。<br/>如有查詢，請致電3910 2462 （張小姐）或電郵jcicp@hku.hk。`,
+              descriptionOther: `賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
+              button_text: "連結",
+            },
+            [
+              {
+                cid: "logo_base64",
+                filename: "logo.png",
+                encoding: "base64",
+                content: logoBase64,
+              },
+              {
+                cid: "banner_base64",
+                filename: "banner.png",
+                encoding: "base64",
+                content: bannerBase64,
+              },
+            ]
+          );
+        }
+      }
       return true;
     },
 
@@ -849,6 +880,36 @@ export default {
       identity.publishStatus = "approved";
       identity.published = true;
       await identity.save();
+
+        if (identity?.email) {
+          let host = publicRuntimeConfig.HOST_URL ?? "http://localhost:3000";
+
+          sendPortfolioPublishApprove(
+            identity?.email,
+            {
+              url: `${host}`,
+              description: `${identity?.chineseName}你好，<br/>你的機構已處理你於「人才庫」提交的個人履歷，請登入以下網頁查看批核狀態。<br/>`,
+              descriptionOther: `如有查詢，請致電3910 2462 （張小姐）或電郵jcicp@hku.hk。<br/>賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
+              button_text: "連結",
+            },
+            [
+              {
+                cid: "logo_base64",
+                filename: "logo.png",
+                encoding: "base64",
+                content: logoBase64,
+              },
+              {
+                cid: "banner_base64",
+                filename: "banner.png",
+                encoding: "base64",
+                content: bannerBase64,
+              },
+            ]
+          );
+        }
+
+
       return true;
     },
 

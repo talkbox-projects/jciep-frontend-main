@@ -582,14 +582,14 @@ const Event = ({ page, hostname, lang }) => {
                       lang={lang}
                     />
 
-                    <RegistrationRow
+                    {detail?.freeOrCharge !== 'free' && (<RegistrationRow
                       title={wordExtractor(
                         page?.content?.wordings,
                         "price_label"
                       )}
                       value={detail?.price}
                       lang={lang}
-                    />
+                    />)}
 
                     <RegistrationRow
                       title={wordExtractor(

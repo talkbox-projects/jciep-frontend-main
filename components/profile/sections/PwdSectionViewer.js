@@ -66,11 +66,11 @@ const PwdSectionViewer = () => {
 
   const organizationId = identity?.organizationRole?.[0]?.organization?.id;
   const staffAccess = useMemo(() => {
-    if (type === "staff" && organizationRole?.length > 0) {
+    if (type === "staff" || type === "public" && organizationRole?.length > 0) {
       return (organizationRole ?? []).find(
         (role) =>
           role.organization.id === organizationRole[0].organization.id &&
-          organizationRole[0].role === "staff" &&
+          (organizationRole[0].role === "staff" || type === "public") &&
           organizationRole[0].status === "joined"
       );
     }

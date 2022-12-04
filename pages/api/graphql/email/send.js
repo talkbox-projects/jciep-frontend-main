@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import html from "./templates/activation.js";
 import htmlResetPasswordTemplate from "./templates/resetPassword.js";
+import htmlPortfolioTemplate from "./templates/portfolioPublishRequest.js";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
@@ -20,8 +21,8 @@ const transporter = {
     port: 2525,
     secure: false,
     auth: {
-      user: "cf787698eb2171",
-      pass: "30b46ed4217152",
+      user: "94964fd2b8c178",
+      pass: "d3cb43ff5e4348",
     },
   }),
 };
@@ -62,6 +63,32 @@ export const sendResetPassword = (receiver, params, attachments) => {
     Object.entries(params).reduce(
       (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
       htmlResetPasswordTemplate
+    ),
+    attachments
+  );
+};
+
+export const sendPortfolioPublishRequest = (receiver, params, attachments) => {
+  const subject = "《賽馬會共融・知行計劃》會員已完成資料庫，等待批核";
+  sendMail(
+    receiver,
+    subject,
+    Object.entries(params).reduce(
+      (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
+      htmlPortfolioTemplate
+    ),
+    attachments
+  );
+};
+
+export const sendPortfolioPublishApprove = (receiver, params, attachments) => {
+  const subject = "《賽馬會共融・知行計劃》個人履歷已批核";
+  sendMail(
+    receiver,
+    subject,
+    Object.entries(params).reduce(
+      (_html, [key, value]) => _html.replace(`{{${key}}}`, value),
+      htmlPortfolioTemplate
     ),
     attachments
   );

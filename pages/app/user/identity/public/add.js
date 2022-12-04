@@ -641,13 +641,11 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                   <FormControl>
                     <LABEL
                       name={page?.content?.form?.residentRestrict?.label}
-                      required={true}
                     />
                     <Controller
                       name="resident_district"
                       isClearable
                       control={control}
-                      rules={{ required: true }}
                       render={({ field }) => (
                         <ReactSelect
                           aria-label={

@@ -41,7 +41,7 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const event = (await getEventDetail(context?.query?.id, true)) ?? {}
+  const event = (await getEventDetail(context?.query?.id, true)) ?? {};
 
   const { req } = context;
   return {
@@ -201,17 +201,17 @@ const Event = ({ page, hostname, lang, event }) => {
       return `${startTime} - ${endTime}`;
     }
   };
-  
+
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
-      <NextSeo
-        title={
-          router.locale === "zh"
-            ? `賽馬會共融．知行計劃｜最新活動｜${event?.name}`
-            : `Jockey Club Collaborative Project for Inclusive Employment｜Events｜${event?.name}`
-        }
-      />
+        <NextSeo
+          title={
+            router.locale === "zh"
+              ? `賽馬會共融．知行計劃｜最新活動｜${event?.name}`
+              : `Jockey Club Collaborative Project for Inclusive Employment｜Events｜${event?.name}`
+          }
+        />
         <Box bgColor="#F6D644" position="relative">
           <Box position="absolute" bottom={0} w="100%">
             <DividerSimple primary="#FD5F53" />
@@ -529,13 +529,15 @@ const Event = ({ page, hostname, lang, event }) => {
                       }
                     />
 
-                    <RegistrationRow
-                      title={wordExtractor(
-                        page?.content?.wordings,
-                        "price_label"
-                      )}
-                      value={detail?.price}
-                    />
+                    {detail?.freeOrCharge !== "free" && (
+                      <RegistrationRow
+                        title={wordExtractor(
+                          page?.content?.wordings,
+                          "price_label"
+                        )}
+                        value={detail?.price}
+                      />
+                    )}
 
                     <RegistrationRow
                       title={wordExtractor(

@@ -276,7 +276,7 @@ const PostDetail = ({ post, setting, page }) => {
                 switch (_template) {
                   case "content-block":
                     return (
-                      <Box className="content-block-wrap">
+                      <Box className="content-block-wrap" key={index}>
                         <Box
                           sx={{
                             a: {
@@ -301,14 +301,13 @@ const PostDetail = ({ post, setting, page }) => {
                           dangerouslySetInnerHTML={{
                             __html: content.html ?? content,
                           }}
-                          key={index}
                           fontSize={"lg"}
                         />
                       </Box>
                     );
                   case "image-block":
                     return (
-                      <VStack align="stretch">
+                      <VStack align="stretch" key={index}>
                         <Image
                           alt={caption ?? imageName}
                           w="100%"
@@ -321,7 +320,7 @@ const PostDetail = ({ post, setting, page }) => {
                   case "video-block": {
                     const youtubeLink = getYoutubeLink(video ?? link);
                     return (
-                      <VStack align="stretch">
+                      <VStack align="stretch" key={index}>
                         <AspectRatio w="100%" ratio={16 / 9}>
                           <iframe
                             title="post"
@@ -342,7 +341,7 @@ const PostDetail = ({ post, setting, page }) => {
       </Container>
 
       <Container maxW={["100%", "100%", 600, 576, 600]} position="relative">
-        {post?.tags?.length > 0 && (
+        {/* {post?.tags?.length > 0 && (
           <VStack align="start" pt={12}>
             <Divider />
             <Text pt={8} textAlign="left">
@@ -367,7 +366,7 @@ const PostDetail = ({ post, setting, page }) => {
               })}
             </Wrap>
           </VStack>
-        )}
+        )} */}
 
         <VStack align="center" py={8}>
           <NextLink href="/sharing">
