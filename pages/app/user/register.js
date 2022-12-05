@@ -18,16 +18,13 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import { useCredential } from "../../../utils/user";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-// import nookies from "nookies";
 import facebook from "../../api/services/facebook";
 import google from "../../api/services/google";
-// import apple from "../../api/services/apple";
 
 const PAGE_KEY = "app_user_register";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  // const cookies = nookies.get(context);
   return {
     props: {
       page,
@@ -35,7 +32,6 @@ export const getServerSideProps = async (context) => {
       isLangAvailable: context.locale === page.lang,
       ...(await getSharedServerSideProps(context))?.props,
       lang: context.locale,
-      // clientType: cookies["jciep-client-type"] ?? null
     },
   };
 };
@@ -196,7 +192,7 @@ const AppUserRegister = ({ page, clientType }) => {
           <Text
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
-                " ",
+                "$",
                 `<b>${appRegistrationInfo?.email}</b>`
               ),
             }}
@@ -207,7 +203,7 @@ const AppUserRegister = ({ page, clientType }) => {
           <Text
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
-                " ",
+                "$",
                 `<b>${appRegistrationInfo?.phone}</b>`
               ),
             }}
@@ -219,7 +215,7 @@ const AppUserRegister = ({ page, clientType }) => {
           <Text
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
-                " ",
+                "$",
                 `<b>${page?.content?.remark?.googleText}</b>`
               ),
             }}
@@ -231,7 +227,7 @@ const AppUserRegister = ({ page, clientType }) => {
           <Text
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
-                " ",
+                "$",
                 `<b>APPLE</b>`
               ),
             }}
@@ -243,7 +239,7 @@ const AppUserRegister = ({ page, clientType }) => {
           <Text
             dangerouslySetInnerHTML={{
               __html: page?.content?.remark?.text?.replace(
-                " ",
+                "$",
                 `<b>${page?.content?.remark?.facebookText}</b>`
               ),
             }}

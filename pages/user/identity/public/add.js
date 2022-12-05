@@ -528,7 +528,7 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                 </GridItem>
 
                 <GridItem colSpan={{ base: 2, md: 1 }}>
-                  <FormControl isRequired>
+                  <FormControl>
                     <FormLabel>
                       {page?.content?.form?.residentRestrict?.label}
                     </FormLabel>
@@ -536,7 +536,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                       name="resident_district"
                       isClearable
                       control={control}
-                      rules={{ required: true }}
                       render={({ field }) => (
                         <ReactSelect
                           aria-label={
@@ -553,16 +552,6 @@ const IdentityPublicAdd = ({ page, api: { organizations } }) => {
                         />
                       )}
                     />
-                    <FormHelperText>
-                      {errors?.resident_district?.type === "required" && (
-                        <Text color="red">
-                          {wordExtractor(
-                            page?.content?.wordings,
-                            "resident_restrict_required"
-                          )}
-                        </Text>
-                      )}
-                    </FormHelperText>
                   </FormControl>
                 </GridItem>
 
