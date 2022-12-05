@@ -81,7 +81,7 @@ export const sendPortfolioPublishRequest = (receiver, params, attachments) => {
   );
 };
 
-export const sendPortfolioPublishApprove = (receiver, params, attachments) => {
+export const sendPortfolioPublishStatusUpdate = (receiver, params, attachments) => {
   const subject = "《賽馬會共融・知行計劃》個人履歷已批核";
   sendMail(
     receiver,

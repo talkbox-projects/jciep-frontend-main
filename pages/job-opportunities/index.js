@@ -619,13 +619,10 @@ const JobOpportunities = ({ page, enums }) => {
                   <>
                     <Stack spacing={2} align="center" py={12}>
                       <Image
-                        alt={wordExtractor(
-                          page?.content?.wordings,
-                          `mode_${job?.mode}`
-                        )}
-                        src={"page?.content?.icon?.jobOpportunitiesIcon"}
+                        alt={"jobOpportunitiesIcon"}
+                        src={page?.content?.icon?.jobOpportunitiesIcon}
                         w={"100%"}
-                        maxW={"480px"}
+                        maxW={"420px"}
                         h={"auto"}
                         px={4}
                         py={2}

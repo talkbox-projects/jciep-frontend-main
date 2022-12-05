@@ -289,12 +289,17 @@ const PostDetail = ({ post, setting, page }) => {
                                 borderWidth: "1px",
                                 borderColor: "gray.500",
                                 bg: "gray.100",
+                                padding: "6px"
                               },
                               td: {
                                 borderWidth: "1px",
                                 borderColor: "gray.500",
+                                padding: "6px"
                               },
                             },
+                            p: {
+                              py: "5px"
+                            }
                           }}
                           w="100%"
                           pt="40px"
