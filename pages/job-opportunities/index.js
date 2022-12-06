@@ -383,7 +383,10 @@ const JobOpportunities = ({ page, enums }) => {
     >
       {(jobListData ?? []).map((job, index) => {
         return (
-          <NextLink href={`/job-opportunities?jobId=${job?.id}`} key={job?.id}>
+          <Box onClick={()=> {
+            let urlParams = job?.id === jobId ? `/job-opportunities` : `/job-opportunities?jobId=${job?.id}`
+            router.push(urlParams)
+          }} key={job?.id}>
             <VStack
               borderColor="#eee"
               borderWidth={1}
@@ -468,7 +471,7 @@ const JobOpportunities = ({ page, enums }) => {
                 <Box>{moment(job?.publishDate)?.format("YYYY-MM-DD")}</Box>
               </HStack>
             </VStack>
-          </NextLink>
+          </Box>
         );
       })}
     </VStack>
@@ -721,7 +724,8 @@ const JobOpportunities = ({ page, enums }) => {
             </GridItem>
           </Grid>
         </Box>
-        <Text fontSize={["lg"]} fontWeight="bold" align="center" px={4}>
+        {jobId === null && (<>{/** Listing */}
+          <Text fontSize={["lg"]} fontWeight="bold" align="center" px={4}>
           {wordExtractor(page?.content?.wordings, "jobs_total").replace(
             "$",
             jobListData?.length
@@ -730,6 +734,7 @@ const JobOpportunities = ({ page, enums }) => {
         <Text fontSize={["md"]} align="center" px={4}>
           {wordExtractor(page?.content?.wordings, "jobs_total_description")}
         </Text>
+        </>)}
         {router.query.jobId ? (
           <VStack align="stretch" p={4} spacing={0}>
             <NextLink href="/job-opportunities">
