@@ -73,7 +73,7 @@ const labelStyles = {
   marginBottom: "0px",
 };
 
-const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
+const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId, lang }) => {
   const router = useRouter();
   const { user, setIdentityId } = useAppContext();
   const [formState, setFormState] = useState([]);
@@ -372,8 +372,8 @@ const IdentityPublicAdd = ({ page, api: { organizations }, currentUserId }) => {
                                 "select_organization_placeholder"
                               )}
                               options={([...organizations] ?? []).map(
-                                ({ chineseCompanyName, id }) => ({
-                                  label: chineseCompanyName,
+                                ({ chineseCompanyName, englishCompanyName, id }) => ({
+                                  label: lang === "en" ? englishCompanyName??chineseCompanyName : chineseCompanyName,
                                   value: id,
                                 })
                               )}
