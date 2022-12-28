@@ -130,16 +130,17 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
             />
 
             <Center>
-              <Flex direction="row" ml={"-30px"} h={'80px'}>
+              <Flex direction="row" ml={"-30px"} alignItems="center" pt={'30px'}>
+                <Box>
                 <Image
                   src={"/images/app/click.svg"}
-                  alt=""
+                  alt="clickIcon"
                   alignSelf={"self-end"}
                   p={"5px"}
                 />
+                </Box>
                 <Box>
                   <Text
-                    marginTop="30px"
                     fontWeight={700}
                     dangerouslySetInnerHTML={{
                       __html: page?.content?.publicSuccess?.content,
@@ -149,13 +150,6 @@ const IdentityPublicAddSuccess = ({ page, token }) => {
               </Flex>
             </Center>
             <br/>
-
-            {/* <Code>
-                identityId: {id}
-                <br />
-                token: {token}
-                <br />
-              </Code> */}
 
             <Box bgColor="#FFF">
               <Box
