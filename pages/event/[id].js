@@ -29,7 +29,7 @@ import moment from "moment";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { HiDownload } from "react-icons/hi";
 import { AiOutlineLink } from "react-icons/ai";
-import { getEventDetail } from "../../utils/event/getEvent";
+import { getEventDetail, getStockPhoto } from "../../utils/event/getEvent";
 import { bookmarkEvent } from "../../utils/event/eventAction";
 import organizationGet from "../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
@@ -42,21 +42,22 @@ const PAGE_KEY = "event";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const event = (await getEventDetail(context?.query?.id, true)) ?? {};
-
-  const { req } = context;
+  
   return {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      api: {
+        stockPhotos: await getStockPhoto(),
+      },
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host,
       event,
       lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, lang, event }) => {
+const Event = ({ page, lang, event, api: { stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -230,11 +231,11 @@ const Event = ({ page, hostname, lang, event }) => {
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
               <Box flex={1}>
                 <BannerSection
-                  hostname={hostname}
                   name={detail?.name}
                   tags={detail?.tags}
                   url={`${detail?.banner?.file?.url}`}
                   stockPhotoId={`${detail?.banner?.stockPhotoId}`}
+                  stockPhotos={stockPhotos}
                 />
                 <Grid
                   templateColumns={{
@@ -647,12 +648,13 @@ const Event = ({ page, hostname, lang, event }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  let imageUrl = ""
-  if(url !== "undefined" && url !== null){
-    imageUrl = url
+const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
+  let imageUrl = "";
+  if (url !== "undefined" && url !== null) {
+    imageUrl = url;
   } else {
-    imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+    const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
+    imageUrl = getStockPhoto?.url
   }
   
   return (

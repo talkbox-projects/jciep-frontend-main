@@ -106,6 +106,13 @@ export const options = {
     other: "其他",
     all: "以上全部",
   },
+  educationLevel: {
+    "masterOrPostgraduate": "碩士或深造文憑",
+    "degree": "學士學位",
+    "nonDegreeTertiary": "副學士或高級文憑",
+    "schoolCertificate": "中學畢業",
+    "primaryOrBelow": "小學程度或以下"
+  },
   district: {
     "centralAndWestern": "中西區",
     "eastern": "東區",

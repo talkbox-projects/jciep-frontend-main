@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getPage } from "../../utils/page/getPage";
 import withPageCMS from "../../utils/page/withPageCMS";
 import { NextSeo } from "next-seo";
@@ -41,7 +41,7 @@ import Container from "../../components/Container";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiFilter2Fill } from "react-icons/ri";
-import { getEvents } from "../../utils/event/getEvent";
+import { getEvents, getStockPhoto } from "../../utils/event/getEvent";
 
 const PAGE_KEY = "event";
 
@@ -55,11 +55,14 @@ export const getServerSideProps = async (context) => {
       ...(await getSharedServerSideProps(context))?.props,
       hostname: req?.headers?.host,
       lang: context.locale,
+      api: {
+        stockPhotos: await getStockPhoto(),
+      },
     },
   };
 };
 
-const Event = ({ page, hostname, lang }) => {
+const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
   const router = useRouter();
   const { query } = router;
   const [filteredEvents, setFiltered] = useState([]);
@@ -317,13 +320,15 @@ const Event = ({ page, hostname, lang }) => {
                         gap={6}
                       >
                         {(filteredEvents[detail] || []).map((d, i) => {
-                          const {url} = d?.banner?.file
-                          const {stockPhotoId} = d?.banner
-                          let imageUrl = ""
-                          if(url !== "undefined" && url !== null){
-                            imageUrl = url
+                          const url = d?.banner?.file?.url
+                          const stockPhotoId = d?.banner?.stockPhotoId
+    
+                          let imageUrl = "";
+                          if (url !== "undefined" && url !== null) {
+                            imageUrl = url;
                           } else {
-                            imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+                            const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
+                            imageUrl = getStockPhoto?.url
                           }
                           return (
                             <GridItem

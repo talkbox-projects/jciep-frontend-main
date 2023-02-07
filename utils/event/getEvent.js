@@ -39,7 +39,7 @@ export const getEventDetail = async (id) => {
 
 export const getStockPhoto = async () => {
   try {
-    const { data: { data } = {} } = await axios.get(`/api/app/stockPhoto`);
+    const { data: { data } = {} } = await axios.get(`${domain}/api/app/stockPhoto`);
     return data;
   } catch (e) {
     return null;

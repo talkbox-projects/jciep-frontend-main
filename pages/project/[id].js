@@ -29,11 +29,12 @@ import { getProjectDetail } from "../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { options } from "../../utils/project/resourceObj";
 
+import { getStockPhoto } from "../../utils/event/getEvent";
+
 const PAGE_KEY = "project";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const { req } = context;
   return {
     props: {
       page,
@@ -43,14 +44,14 @@ export const getServerSideProps = async (context) => {
           status: ["approved"],
           published: true,
         }),
+        stockPhotos: await getStockPhoto()
       },
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host,
     },
   };
 };
 
-const Project = ({ page, api: { organizations }, hostname }) => {
+const Project = ({ page, api: { organizations, stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -74,6 +75,17 @@ const Project = ({ page, api: { organizations }, hostname }) => {
     const result = organizations?.find((d) => d.id === detail?.organizationId);
     setOrganization(result);
   }, [detail, organizations]);
+
+  const RenderListItem = ({ title, content }) => {
+    return (
+      <Flex direction="column" fontSize={{ base: "sm" }}>
+        <Text fontSize={{ base: "xs" }} color="gray.500">
+          {title}
+        </Text>
+        <Text>{content}</Text>
+      </Flex>
+    );
+  };
 
   const RenderResourceListDetail = useCallback(({ data }) => {
     if (!data?.type) {
@@ -102,23 +114,18 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
+                <RenderListItem
+                  title={"期望可容納人數"}
+                  content={data?.maxCapacity}
+                />
               </Flex>
             )}
-            {/* {data?.maxCapacity && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
-              </Flex>
-            )} */}
             {data?.size && (
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.size}</Box>
+                <RenderListItem title={"場地大小"} content={data?.size} />
               </Flex>
             )}
             {data?.openingHours && (
@@ -126,7 +133,10 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.openingHours}</Box>
+                <RenderListItem
+                  title={"場地提供可使用時間"}
+                  content={data?.openingHours}
+                />
               </Flex>
             )}
             {data?.accessibilityRequirement && (
@@ -134,9 +144,10 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {data?.accessibilityRequirement}
-                </Box>
+                <RenderListItem
+                  title={"無障礙設施需求"}
+                  content={data?.accessibilityRequirement}
+                />
               </Flex>
             )}
           </Stack>
@@ -162,15 +173,18 @@ const Project = ({ page, api: { organizations }, hostname }) => {
             fontWeight={700}
             pb={2}
           >
-            {data?.tasks}
+            {data?.tasks} {options["serviceNature"][data?.serviceNature] && `(${options["serviceNature"][data?.serviceNature]})`}
           </Text>
           <Stack spacing={2} direction="column">
-            {data?.tasksDescripwtion && (
+            {data?.tasksDescription && (
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>{data?.tasksDescription}</Box>
+                <RenderListItem
+                  title={"工作介紹"}
+                  content={data?.tasksDescription}
+                />
               </Flex>
             )}
             {data?.skills && (
@@ -179,20 +193,18 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
                 <Box fontSize={{ base: "sm" }}>
-                  {/* {data?.skills?.map((d) => (
-                    <Box key={d} pr={1}>
-                      {d}
-                    </Box>
-                  ))} */}
-                  {data?.skills?.map((d, i) => (
-                    <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
-                      {d}
-                    </Box>
-                  ))}
+                  <RenderListItem
+                    title={"技能"}
+                    content={data?.skills?.map((d, i) => (
+                      <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
+                        {d}
+                      </Box>
+                    ))}
+                  />
                 </Box>
               </Flex>
             )}
-            {data?.serviceNature && (
+            {/* {data?.serviceNature && (
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
@@ -200,6 +212,32 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box fontSize={{ base: "sm" }}>
                   {options["serviceNature"][data?.serviceNature]}
                 </Box>
+              </Flex>
+            )} */}
+
+            {data?.educationLevelRequirement && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <RenderListItem
+                  title={"教育水平要求"}
+                  content={
+                    options["educationLevel"][data?.educationLevelRequirement]
+                  }
+                />
+              </Flex>
+            )}
+
+            {data?.workLocation && (
+              <Flex gap={2} alignItems="center">
+                <Box>
+                  <Image src={"/images/app/resource_click.svg"} alt={""} />
+                </Box>
+                <RenderListItem
+                  title={"工作地點"}
+                  content={data?.workLocation}
+                />
               </Flex>
             )}
           </Stack>
@@ -270,7 +308,7 @@ const Project = ({ page, api: { organizations }, hostname }) => {
             fontWeight={700}
             pb={2}
           >
-            任何支援
+            需要其他資源
           </Text>
           <Stack spacing={2} direction="column">
             {data?.otherResourcesNeeded && (
@@ -278,9 +316,11 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {data?.otherResourcesNeeded}
-                </Box>
+                <RenderListItem
+                  title={"你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃"}
+                  content={data?.otherResourcesNeeded}
+                />
+
               </Flex>
             )}
           </Stack>
@@ -476,11 +516,11 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                     className="print-banner-wrap"
                   >
                     <BannerSection
-                      hostname={hostname}
                       name={detail?.name}
                       tags={detail?.tags}
                       url={`${detail?.banner?.file?.url}`}
                       stockPhotoId={`${detail?.banner?.stockPhotoId}`}
+                      stockPhotos={stockPhotos}
                     />
                   </Box>
                   <Grid
@@ -799,12 +839,13 @@ const Project = ({ page, api: { organizations }, hostname }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  let imageUrl = ""
-  if(url !== "undefined" && url !== null){
-    imageUrl = url
+const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
+  let imageUrl = "";
+  if (url !== "undefined" && url !== null) {
+    imageUrl = url;
   } else {
-    imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+    const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
+    imageUrl = getStockPhoto?.url
   }
 
   return (

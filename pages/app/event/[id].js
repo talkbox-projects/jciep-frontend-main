@@ -25,7 +25,7 @@ import moment from "moment";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
-import { getEventDetail } from "../../../utils/event/getEvent";
+import { getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
 import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
@@ -33,7 +33,6 @@ import {
   bookmarkEvent,
   unBookmarkEvent,
 } from "../../../utils/event/eventAction";
-
 import eventTypes from "../../api/graphql/enum/eventTypes";
 import charge from "../../api/graphql/enum/freeOrCharge";
 
@@ -41,21 +40,21 @@ const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
-  const { req } = context;
   return {
     props: {
       page,
       isApp: true,
       isLangAvailable: context.locale === page.lang,
+      api: {
+        stockPhotos: await getStockPhoto(),
+      },
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host,
       lang: context.locale,
     },
   };
 };
 
-const Event = ({ page, hostname, lang }) => {
+const Event = ({ page, lang, api: { stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
@@ -255,11 +254,11 @@ const Event = ({ page, hostname, lang }) => {
         <Flex direction={{ base: "column", md: "row" }}>
           <Box flex={1}>
             <BannerSection
-              hostname={hostname}
               name={detail?.name}
               tags={detail?.tags}
               url={`${detail?.banner?.file?.url}`}
               stockPhotoId={`${detail?.banner?.stockPhotoId}`}
+              stockPhotos={stockPhotos}
             />
             <Grid
               templateColumns={{
@@ -582,14 +581,16 @@ const Event = ({ page, hostname, lang }) => {
                       lang={lang}
                     />
 
-                    {detail?.freeOrCharge !== 'free' && (<RegistrationRow
-                      title={wordExtractor(
-                        page?.content?.wordings,
-                        "price_label"
-                      )}
-                      value={detail?.price}
-                      lang={lang}
-                    />)}
+                    {detail?.freeOrCharge !== "free" && (
+                      <RegistrationRow
+                        title={wordExtractor(
+                          page?.content?.wordings,
+                          "price_label"
+                        )}
+                        value={detail?.price}
+                        lang={lang}
+                      />
+                    )}
 
                     <RegistrationRow
                       title={wordExtractor(
@@ -844,22 +845,24 @@ const RegistrationModal = ({
 
                 <Divider my={4} />
 
-                {!isNaN(contactNumber) && (<Flex
-                  direction="row"
-                  gap={2}
-                  align="center"
-                  onClick={() => handleOpenWebView(`tel:${contactNumber}`)}
-                >
-                  <Box w={"20px"}>
-                    <Image
-                      src={"/images/app/phone-call.svg"}
-                      alt={""}
-                      fontSize={18}
-                      mx={"auto"}
-                    />
-                  </Box>
-                  <Text fontWeight={700}>{contactEventManager}</Text>
-                </Flex>)}
+                {!isNaN(contactNumber) && (
+                  <Flex
+                    direction="row"
+                    gap={2}
+                    align="center"
+                    onClick={() => handleOpenWebView(`tel:${contactNumber}`)}
+                  >
+                    <Box w={"20px"}>
+                      <Image
+                        src={"/images/app/phone-call.svg"}
+                        alt={""}
+                        fontSize={18}
+                        mx={"auto"}
+                      />
+                    </Box>
+                    <Text fontWeight={700}>{contactEventManager}</Text>
+                  </Flex>
+                )}
               </Box>
 
               <Box borderRadius={"50%"} h={"50px"} mt={6}>
@@ -969,11 +972,15 @@ const VideoModal = ({ onClose, size = "full", isOpen, popupSrc }) => {
   );
 };
 
-const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  const imageUrl =
-    url !== "undefined" && url !== null
-      ? url
-      : `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.png`;
+const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
+  let imageUrl = "";
+  if (url !== "undefined" && url !== null) {
+    imageUrl = url;
+  } else {
+    const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
+    imageUrl = getStockPhoto?.url
+  }
+
   return (
     <Box
       bgImage={`url(${imageUrl})`}
