@@ -18,8 +18,7 @@ import {
   ModalContent,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
-
+  useDisclosure,
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
 import Container from "../../components/Container";
@@ -34,7 +33,7 @@ const PAGE_KEY = "project";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-  const {req} = context;
+  const { req } = context;
   return {
     props: {
       page,
@@ -46,7 +45,7 @@ export const getServerSideProps = async (context) => {
         }),
       },
       ...(await getSharedServerSideProps(context))?.props,
-      hostname: req?.headers?.host
+      hostname: req?.headers?.host,
     },
   };
 };
@@ -56,7 +55,7 @@ const Project = ({ page, api: { organizations }, hostname }) => {
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
   const [popupImage, setPopupImage] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const { query } = router;
@@ -106,14 +105,14 @@ const Project = ({ page, api: { organizations }, hostname }) => {
                 <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
               </Flex>
             )}
-            {data?.maxCapacity && (
+            {/* {data?.maxCapacity && (
               <Flex gap={2} alignItems="center">
                 <Box>
                   <Image src={"/images/app/resource_click.svg"} alt={""} />
                 </Box>
                 <Box fontSize={{ base: "sm" }}>{data?.maxCapacity}</Box>
               </Flex>
-            )}
+            )} */}
             {data?.size && (
               <Flex gap={2} alignItems="center">
                 <Box>
@@ -422,10 +421,16 @@ const Project = ({ page, api: { organizations }, hostname }) => {
 
       default:
         return (
-          <GridItem flex={1} bgColor={"#FFF"} overflow={"hidden"} cursor="pointer" onClick={() => {
-            onOpen()
-            setPopupImage(data?.url)
-          }}>
+          <GridItem
+            flex={1}
+            bgColor={"#FFF"}
+            overflow={"hidden"}
+            cursor="pointer"
+            onClick={() => {
+              onOpen();
+              setPopupImage(data?.url);
+            }}
+          >
             <Image src={data?.url} width="100%" />
           </GridItem>
         );
@@ -466,7 +471,10 @@ const Project = ({ page, api: { organizations }, hostname }) => {
             >
               <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6 }}>
                 <Box flex={1} px={{ base: "10px", md: 0 }}>
-                  <Box mx={{ base: "-10px", md: 0 }} className="print-banner-wrap">
+                  <Box
+                    mx={{ base: "-10px", md: 0 }}
+                    className="print-banner-wrap"
+                  >
                     <BannerSection
                       hostname={hostname}
                       name={detail?.name}
@@ -770,23 +778,21 @@ const Project = ({ page, api: { organizations }, hostname }) => {
           </Box>
         </VStack>
       </Box>
-      <Modal 
-        isOpen={isOpen} 
+      <Modal
+        isOpen={isOpen}
         isCentered
-        onClose={()=>{
-        onClose(
-          setPopupImage("")
-        )
-      }}>
+        onClose={() => {
+          onClose(setPopupImage(""));
+        }}
+      >
         <ModalOverlay />
         <ModalContent maxW={720} w="95%">
           <ModalCloseButton />
           <ModalBody>
-          <Box px={'12px'} py={'32px'}>
-          {popupImage && (<Image src={popupImage} width="100%" />)}
-          </Box>
+            <Box px={"12px"} py={"32px"}>
+              {popupImage && <Image src={popupImage} width="100%" />}
+            </Box>
           </ModalBody>
-
         </ModalContent>
       </Modal>
     </>
@@ -794,9 +800,13 @@ const Project = ({ page, api: { organizations }, hostname }) => {
 };
 
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  const imageUrl =
-    (url !== 'undefined' && url !== null) ? url :
-    `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.png`;
+  let imageUrl = ""
+  if(url !== "undefined" && url !== null){
+    imageUrl = url
+  } else {
+    imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+  }
+
   return (
     <Box
       h={{ base: "320px", md: "360px" }}
@@ -812,6 +822,8 @@ const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
         width="100%"
         height="100%"
         borderRadius={{ base: "0px", md: "15px" }}
+        objectFit="cover"
+        objectPosition="center center"
       />
       <Box position={"absolute"} bottom={"30px"} left={"15px"} zIndex={2}>
         <Container>

@@ -238,13 +238,6 @@ const Sharing = ({ page, setting, lang }) => {
                 router.push(`/sharing/${featuredArticle?.slug}`);
               }}
               cursor="pointer"
-              // p={4}
-              // _hover={{
-              //   bg: "rgba(255,255,255,0.9)",
-              //   boxShadow: "md",
-              //   borderRadius: "xl",
-              //   transition: "all 0.2s",
-              // }}
             >
               <AspectRatio
                 w={"40%"}

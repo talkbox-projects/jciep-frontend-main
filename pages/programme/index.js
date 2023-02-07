@@ -83,15 +83,10 @@ const Programme = ({ page }) => {
       {/* Banner Section */}
       <Anchor id="vision" />
       <Box
-        h="40vh"
-        minH={["40vh", "80vh"]}
         w="100vw"
         position="relative"
         overflowY="visible"
         overflowX="hidden"
-        // backgroundImage={`url(${page?.content?.heroBannerSection?.image})`}
-        // backgroundSize="cover"
-        // backgroundPosition={["center"]}
         zIndex="-1"
       >
         <Slider {...settings}>
@@ -100,10 +95,10 @@ const Programme = ({ page }) => {
               return (
                 <Image
                   alt=""
-                  minH={["40vh", "80vh"]}
+                  minH={[300]}
                   key={index}
                   src={image}
-                  objectFit="cover"
+                  objectFit="contain"
                   objectPosition="center center"
                 />
               );

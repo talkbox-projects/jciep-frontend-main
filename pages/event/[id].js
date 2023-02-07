@@ -648,10 +648,13 @@ const Event = ({ page, hostname, lang, event }) => {
 };
 
 const BannerSection = ({ tags, url, name, stockPhotoId, hostname }) => {
-  const imageUrl =
-    url !== "undefined" && url !== null
-      ? url
-      : `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.png`;
+  let imageUrl = ""
+  if(url !== "undefined" && url !== null){
+    imageUrl = url
+  } else {
+    imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+  }
+  
   return (
     <Box
       bgImage={`url(${imageUrl})`}

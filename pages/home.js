@@ -424,7 +424,7 @@ const Home = ({ setting, page }) => {
             interval={3000}
             showStatus={false}
             showThumbs={false}
-            useKeyboardArrows={false}
+            useKeyboardArrows={true}
             renderArrowPrev={(clickHandler, hasPrev) => {
               return hasPrev ? (
                 <HStack

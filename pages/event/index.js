@@ -317,11 +317,14 @@ const Event = ({ page, hostname, lang }) => {
                         gap={6}
                       >
                         {(filteredEvents[detail] || []).map((d, i) => {
-                          const imageUrl =
-                            d?.banner?.file?.url !== undefined &&
-                            d?.banner?.file?.url !== null
-                              ? d?.banner?.file?.url
-                              : `https://${hostname}/api/app/static/file/stockPhotos/${d?.banner?.stockPhotoId}.png`;
+                          const {url} = d?.banner?.file
+                          const {stockPhotoId} = d?.banner
+                          let imageUrl = ""
+                          if(url !== "undefined" && url !== null){
+                            imageUrl = url
+                          } else {
+                            imageUrl = `https://${hostname}/api/app/static/file/stockPhotos/${stockPhotoId}.jpg`
+                          }
                           return (
                             <GridItem
                               key={`${d.id}${i}`}

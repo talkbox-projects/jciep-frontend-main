@@ -47,6 +47,15 @@ const PAGE_KEY = "pwd";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
 
+  if(/%20/.test(context?.resolvedUrl)){
+    return {
+      redirect: {
+        destination: `/${context?.resolvedUrl?.replaceAll('%20','-').toLowerCase()}`,
+        permanent: false
+      },
+    };
+  }
+
   return {
     props: {
       page,

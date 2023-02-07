@@ -516,7 +516,7 @@ const IdentityPublicAdd = ({
                     </FormHelperText>
                   </FormControl>
                 </GridItem>
-                <GridItem>
+                {/* <GridItem>
                   <FormControl>
                     <LABEL
                       name={page?.content?.form?.englishName}
@@ -542,7 +542,7 @@ const IdentityPublicAdd = ({
                       )}
                     </FormHelperText>
                   </FormControl>
-                </GridItem>
+                </GridItem> */}
 
                 <GridItem>
                   <FormControl>

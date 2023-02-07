@@ -26,7 +26,6 @@ const PAGE_KEY = "pwd";
 
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
-
   return {
     props: {
       page,
@@ -216,7 +215,7 @@ const PwdMain = ({ page, lang }) => {
             <NextLink
               key={i}
               passHref
-              href={`people-with-disabilities/${data.slug}`}
+              href={`people-with-disabilities/${data.slug?.replaceAll(' ','-').toLowerCase()}`}
             >
               <Link>
                 <Box
@@ -236,16 +235,16 @@ const PwdMain = ({ page, lang }) => {
                   justifyContent="center"
                   alignItems="center"
                   px="12px"
-                  onClick={() => router.push()}
+                  // onClick={() => router?.push()}
                   zIndex={1}
                 >
-                  <Image alt={data.name} src={data.icon} h="48px" w="48px" />
+                  <Image alt={data?.name} src={data?.icon} h="48px" w="48px" />
                   <Text
                     fontWeight="bold"
                     fontSize={lang === 'zh' ? ["16px", "16px", "24px"] : ["12px", "14px", "18px"]}
                     textAlign="center"
                   >
-                    {data.name}
+                    {data?.name}
                   </Text>
                 </Box>
               </Link>

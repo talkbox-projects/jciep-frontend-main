@@ -398,6 +398,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
             boxShadow="sm"
             borderWidth={1}
             px={6}
+            role="navigation"
           >
             <HStack
               spacing={0}
@@ -405,7 +406,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
               justifyContent="center"
               h="100%"
               border={0}
-              role="menubar"
+              role="list"
             >
               {(navigation.menu ?? []).map(
                 ({ id, submenu = [], label, path = "/" }, index, arr) => (
@@ -419,7 +420,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       fontWeight: "bold",
                     })}
                     align="center"
-                    role="none"
+                    role="listitem"
                   >
                     <Box
                       {...(arr.length - 1 > index && {
@@ -432,52 +433,64 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       {submenu?.length > 0 ? (
                         <Popover gutter={20}>
                           {({ isOpen }) => (
-                             <>
-                          <PopoverTrigger>
-                            <Box h="100%">
-                              <Button
-                                h="100%"
-                                variant="unstyled"
-                                borderRadius={0}
-                                fontWeight="normal"
-                                fontSize={router?.locale === "zh" ? "md" : "sm"}
-                                maxW={
-                                  router?.locale === "zh" ? "auto" : "120px"
-                                }
-                                style={{
-                                  whiteSpace:
-                                    router?.locale === "zh"
-                                      ? "nowrap"
-                                      : "normal",
-                                  wordWrap: "break-word",
-                                }}
-                                role="none"
-                              >
-                                {label}
-                              </Button>
-                            </Box>
-                          </PopoverTrigger>
-                          <PopoverContent w="fit-content" aria-expanded={isOpen}>
-                            <PopoverBody as={VStack} spacing={4} fontSize="md" role="menu">
-                              {submenu.map(({ id, label, path }) => (
-                                <NextLink key={id} href={path}>
+                            <>
+                              <PopoverTrigger>
+                                <Box h="100%">
                                   <Button
                                     h="100%"
                                     variant="unstyled"
                                     borderRadius={0}
-                                    px={10}
-                                    minW={200}
                                     fontWeight="normal"
-                                    borderColor="transparent"
-                                    role="menuitem"
+                                    fontSize={
+                                      router?.locale === "zh" ? "md" : "sm"
+                                    }
+                                    maxW={
+                                      router?.locale === "zh" ? "auto" : "120px"
+                                    }
+                                    style={{
+                                      whiteSpace:
+                                        router?.locale === "zh"
+                                          ? "nowrap"
+                                          : "normal",
+                                      wordWrap: "break-word",
+                                    }}
+                                    role="link"
                                   >
                                     {label}
                                   </Button>
-                                </NextLink>
-                              ))}
-                            </PopoverBody>
-                          </PopoverContent>
-                          </>
+                                </Box>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                w="fit-content"
+                                aria-expanded={isOpen}
+                              >
+                                <PopoverBody
+                                  as={VStack}
+                                  spacing={4}
+                                  fontSize="md"
+                                  role="listitem"
+                                >
+                                  {submenu.map(({ id, label, path }) => (
+                                    <Box key={id} role="listitem">
+                                      <NextLink href={path}>
+                                        <Button
+                                          h="100%"
+                                          variant="unstyled"
+                                          borderRadius={0}
+                                          px={10}
+                                          minW={200}
+                                          fontWeight="normal"
+                                          borderColor="transparent"
+                                          role="link"
+                                        >
+                                          {label}
+                                        </Button>
+                                      </NextLink>
+                                    </Box>
+                                  ))}
+                                </PopoverBody>
+                              </PopoverContent>
+                            </>
                           )}
                         </Popover>
                       ) : (
@@ -494,7 +507,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 router?.locale === "zh" ? "nowrap" : "normal",
                               wordWrap: "break-word",
                             }}
-                            role="menuitem"
+                            role="link"
                           >
                             {label}
                           </Button>
@@ -523,12 +536,12 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     whiteSpace: router?.locale === "zh" ? "nowrap" : "normal",
                     wordWrap: "break-word",
                   }}
-                  backgroundColor={
-                    router?.query?.slug === "mobileapp"
-                      ? "#e5fffe"
-                      : "transparent"
-                  }
-                  role="menuitem"
+                  // backgroundColor={
+                  //   router?.query?.slug === "mobileapp"
+                  //     ? "#e5fffe"
+                  //     : "transparent"
+                  // }
+                  role="link"
                 >
                   {navigation?.actionButton?.label}
                 </Button>
