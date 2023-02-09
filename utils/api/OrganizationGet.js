@@ -75,9 +75,9 @@ const organizationGet = async ({ id }, context) => {
         published
 
         missionNVision
-        targetGroup
-        targetGroupDisabilities
-        targetGroupDisabilitiesOther
+        # targetGroup
+        # targetGroupDisabilities
+        # targetGroupDisabilitiesOther
 
         submission {
           id
@@ -98,8 +98,8 @@ const organizationGet = async ({ id }, context) => {
 
           missionNVision
           targetGroup
-          targetGroupDisabilities
-          targetGroupDisabilitiesOther
+          # targetGroupDisabilities
+          # targetGroupDisabilitiesOther
 
           contactName
           contactEmail

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getPage } from "../../utils/page/getPage";
-import withPageCMS from "../../utils/page/withPageCMS";
+import { getPage } from "../../../utils/page/getPage";
+import withPageCMS from "../../../utils/page/withPageCMS";
 import { useRouter } from "next/router";
 import {
   Divider,
@@ -21,21 +21,22 @@ import {
   useDisclosure,
   Button,
 } from "@chakra-ui/react";
-import DividerSimple from "../../components/DividerSimple";
-import Container from "../../components/Container";
-import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
-import organizationSearch from "../../utils/api/OrganizationSearch";
-import { getOrganization } from "../../utils/organization/getOrganization";
-import { AiOutlineLink } from "react-icons/ai";
-import { getProjectDetail } from "../../utils/project/getProject";
-import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
-import { options } from "../../utils/project/resourceObj";
+import DividerSimple from "../../../components/DividerSimple";
+import Container from "../../../components/Container";
+import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
+import organizationSearch from "../../../utils/api/OrganizationSearch";
+import { getOrganization } from "../../../utils/organization/getOrganization";
+import { AiOutlineLink } from "react-icons/ai"
 
-import { getStockPhoto } from "../../utils/event/getEvent";
+import { getProjectDetail } from "../../../utils/project/getProject";
+import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
+import { options } from "../../../utils/project/resourceObj";
+
+import { getStockPhoto } from "../../../utils/event/getEvent";
 
 import { BiPhone } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
-import { BsPerson } from "react-icons/bs";
+import { BsPerson} from "react-icons/bs";
 
 const PAGE_KEY = "project";
 
@@ -56,7 +57,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Project = ({ page, api: { organizations, stockPhotos } }) => {
+const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [organization, setOrganization] = useState(null);
@@ -77,6 +78,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
       setOrganization(null);
       return;
     }
+
     async function fetchOrganization() {
       const data = (await getOrganization(detail?.organizationId)) ?? {};
       setOrganization(data);
@@ -553,9 +555,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                 }}
                               />
 
-                              {detail?.websites?.map((d) => (
+                              {detail?.websites?.map((d, i) => (
                                 <Flex
-                                  key={d}
+                                  key={`${d}-${i}`}
                                   color="#0D8282"
                                   align="center"
                                   fontWeight={700}
@@ -856,6 +858,26 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                         </Box>
                       </Flex>
 
+                      {/* <Flex gap={2} direction={"column"} mt={10}>
+                        {organization?.contactEmail && (
+                          <a
+                            href={`mailto:${organization?.contactEmail}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Button
+                              borderRadius="20px"
+                              w={"100%"}
+                              variant="outline"
+                              bgColor={"#F6D644"}
+                              borderColor={"#F6D644"}
+                              _hover={{ opacity: 0.8 }}
+                            >
+                              {`立即聯絡 ${organization?.contactName}`}
+                            </Button>
+                          </a>
+                        )}
+                      </Flex> */}
                     </Stack>
                   </Box>
                 </Box>
@@ -914,9 +936,9 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
       />
       <Box position={"absolute"} bottom={"30px"} left={"15px"} zIndex={2}>
         <Container>
-          {tags?.map((d) => (
+          {tags?.map((d, i) => (
             <Box
-              key={d}
+              key={`${d}-${i}`}
               bgColor="#FFF"
               color="#0D8282"
               px={2}
@@ -956,113 +978,7 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
   );
 };
 
-export default withPageCMS(Project, {
+export default withPageCMS(IdeaBankDetail, {
   key: PAGE_KEY,
-  fields: [
-    {
-      name: "banner",
-      label: "頁面橫幅 Hero Banner",
-      component: "group",
-      fields: [
-        {
-          label: "右下圖片 Image Right",
-          name: "bgImageRight",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-      ],
-    },
-    {
-      name: "icon",
-      label: "圖示 Icon",
-      component: "group",
-      fields: [
-        {
-          label: "工作類型圖標 Employment mode icon",
-          name: "modeIcon",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-        {
-          label: "經驗圖標 Experience icon",
-          name: "expIcon",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-        {
-          label: "地區圖標 Location icon",
-          name: "locationIcon",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-        {
-          label: "時間圖標 Publish Date icon",
-          name: "timeIcon",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-        {
-          label: "申請方法圖標 Apply Methods icon",
-          name: "applyMethodsIcon",
-          component: "image",
-          uploadDir: () => "/job-opportunities",
-          parse: ({ previewSrc }) => previewSrc,
-          previewSrc: (src) => src,
-        },
-      ],
-    },
-    {
-      name: "form",
-      label: "形式 Form",
-      component: "group",
-      fields: [
-        {
-          name: "filter",
-          label: "篩選 Filter Label",
-          component: "group",
-          fields: [
-            {
-              name: "label",
-              label: "標籤 Label",
-              component: "text",
-            },
-            {
-              name: "options",
-              label: "區段  Options",
-              component: "group-list",
-              itemProps: ({ id: key, caption: label }) => ({
-                key,
-                label,
-              }),
-              defaultItem: () => ({
-                id: Math.random().toString(36).substr(2, 9),
-              }),
-              fields: [
-                {
-                  name: "label",
-                  label: "標籤 Label",
-                  component: "text",
-                },
-                {
-                  name: "value",
-                  label: "價值 Value",
-                  component: "text",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  fields: [],
 });
