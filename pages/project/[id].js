@@ -87,14 +87,14 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
   const RenderClickIcon = () => {
     return (
       <Box alignSelf={"flex-start"} pt={1}>
-        <Image src={"/images/app/resource_click.svg"} alt={""} />
+        <Image src={"/images/app/resource_click.svg"} w={'16px'} h={'13px'} alt={""} />
       </Box>
     );
   };
 
   const RenderListItem = ({ title, content }) => {
     return (
-      <Flex direction="column" fontSize={{ base: "sm" }}>
+      <Flex direction="column" fontSize={{ base: "sm" }} flex={1}>
         <Text fontSize={{ base: "xs" }} color="gray.500">
           {title}
         </Text>
