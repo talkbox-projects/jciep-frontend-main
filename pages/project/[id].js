@@ -84,6 +84,14 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     fetchOrganization();
   }, [detail, organizations]);
 
+  const RenderClickIcon = () => {
+    return (
+      <Box alignSelf={"flex-start"} pt={1}>
+        <Image src={"/images/app/resource_click.svg"} alt={""} />
+      </Box>
+    );
+  };
+
   const RenderListItem = ({ title, content }) => {
     return (
       <Flex direction="column" fontSize={{ base: "sm" }}>
@@ -119,9 +127,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.maxCapacity && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                <RenderClickIcon/>
                 <RenderListItem
                   title={"期望可容納人數"}
                   content={data?.maxCapacity}
@@ -130,17 +136,13 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.size && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                 <RenderClickIcon/>
                 <RenderListItem title={"場地大小"} content={data?.size} />
               </Flex>
             )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                 <RenderClickIcon/>
                 <RenderListItem
                   title={"場地提供可使用時間"}
                   content={data?.openingHours}
@@ -149,9 +151,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.accessibilityRequirement && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                 <RenderClickIcon/>
                 <RenderListItem
                   title={"無障礙設施需求"}
                   content={data?.accessibilityRequirement}
@@ -188,9 +188,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                <RenderClickIcon/>
                 <RenderListItem
                   title={"工作介紹"}
                   content={data?.tasksDescription}
@@ -199,9 +197,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.skills && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                <RenderClickIcon/>
                 <Box fontSize={{ base: "sm" }}>
                   <RenderListItem
                     title={"技能"}
@@ -214,22 +210,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                 </Box>
               </Flex>
             )}
-            {/* {data?.serviceNature && (
-              <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
-                <Box fontSize={{ base: "sm" }}>
-                  {options["serviceNature"][data?.serviceNature]}
-                </Box>
-              </Flex>
-            )} */}
-
             {data?.educationLevelRequirement && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                <RenderClickIcon/>
                 <RenderListItem
                   title={"教育水平要求"}
                   content={
@@ -241,9 +224,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
 
             {data?.workLocation && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                <RenderClickIcon/>
                 <RenderListItem
                   title={"工作地點"}
                   content={data?.workLocation}
@@ -271,9 +252,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                 <RenderClickIcon/>
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -297,9 +276,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+                 <RenderClickIcon/>
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -323,9 +300,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.otherResourcesNeeded && (
               <Flex gap={2} alignItems="center">
-                <Box>
-                  <Image src={"/images/app/resource_click.svg"} alt={""} />
-                </Box>
+               <RenderClickIcon/>
                 <RenderListItem
                   title={
                     "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃"
@@ -353,18 +328,14 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           </Text>
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
-              <Box>
-                <Image src={"/images/app/resource_click.svg"} alt={""} />
-              </Box>
+            <RenderClickIcon/>
               <Box fontSize={{ base: "sm" }}>
                 {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
               </Box>
             </Flex>
 
             <Flex gap={2} alignItems="center">
-              <Box>
-                <Image src={"/images/app/resource_click.svg"} alt={""} />
-              </Box>
+            <RenderClickIcon/>
               <Box fontSize={{ base: "sm" }}>
                 {data?.hasReceiveAnyFunding ? "沒有資金援助" : "有一些資金援助"}
               </Box>

@@ -71,6 +71,7 @@ const IdeaBank = ({
 
   const [latestPosts, setLatestPosts] = React.useState([]);
   const pageRef = useRef(1);
+  const offsetRef = useRef(0);
   const totalRef = useRef(0);
   const [featuredArticle, setFeaturedArticle] = React.useState({});
   const skeletonValue = useBreakpointValue({ base: [1], md: [1, 2] });
@@ -90,21 +91,20 @@ const IdeaBank = ({
       textColor: "#FFF",
       bgColor: "#00837F"
     }
-    // return (projectCategories?.data?.list ?? []).find((c) => c.id === id);
   };
 
   const fetchProjects = useCallback(async () => {
     try {
       const { list, total } = await getProjects({
-        offset: pageRef.current,
+        offset: offsetRef.current,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
       });
 
       totalRef.current = total;
       setLatestPosts((latestPosts) =>
-        pageRef.current > 1 ? [...latestPosts, ...list] : list
+        pageRef.current !== 0 ? [...latestPosts, ...list] : list
       );
-      pageRef.current++;
+      offsetRef.current += page?.content?.latestSection?.numOfPostsPerPage ?? 6;
     } catch (err) {
       console.error("***** error", err);
     }
@@ -112,7 +112,7 @@ const IdeaBank = ({
 
   useEffect(() => {
     totalRef.current = 0;
-    pageRef.current = 1;
+    offsetRef.current = 0;
     fetchProjects();
   }, [fetchProjects]);
 
