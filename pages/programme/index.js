@@ -98,7 +98,8 @@ const Programme = ({ page }) => {
                   minH={[300]}
                   key={index}
                   src={image}
-                  objectFit="contain"
+                  objectFit={{base: "cover", md: "contain"}}
+                  mt={{base: "40px", md: "90px"}}
                   objectPosition="center center"
                 />
               );
