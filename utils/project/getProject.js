@@ -17,9 +17,10 @@ export const getProjectDetail = async (id) => {
   }
 };
 
-export const getProjects = async ({limit, offset}) => {
+export const getProjects = async ({limit, offset, category}) => {
+  console.log('domain',domain)
   try {
-    const { data: { data } = {} } = await axios.get(`${domain}/api/app/project`,  { params: { limit, offset } });
+    const { data: { data } = {} } = await axios.get(`${domain}/api/app/project`,  { params: { limit, offset, category } });
 
     return data;
   } catch (e) {

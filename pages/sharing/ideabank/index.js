@@ -27,9 +27,7 @@ import withPageCMS from "../../../utils/page/withPageCMS";
 import { VscQuote } from "react-icons/vsc";
 import Anchor from "../../../components/Anchor";
 import withPostCreatorCMS from "../../../utils/post/withPostCreatorCMS";
-import {
-  getPost,
-} from "../../../utils/post/getPost";
+import { getPost } from "../../../utils/post/getPost";
 import { getStockPhoto } from "../../../utils/event/getEvent";
 import {
   getProjects,
@@ -70,7 +68,6 @@ const IdeaBank = ({
   const categories = setting?.value?.categories;
 
   const [latestPosts, setLatestPosts] = React.useState([]);
-  const pageRef = useRef(1);
   const offsetRef = useRef(0);
   const totalRef = useRef(0);
   const [featuredArticle, setFeaturedArticle] = React.useState({});
@@ -85,24 +82,36 @@ const IdeaBank = ({
   };
 
   const getProjectCategoryData = (id) => {
-    const getCategory = (projectCategories?.list ?? []).find((c) => c.id === id)
+    const getCategory = (projectCategories?.list ?? []).find(
+      (c) => c.id === id
+    );
     return {
       ...getCategory,
       textColor: "#FFF",
-      bgColor: "#00837F"
-    }
+      bgColor: "#00837F",
+    };
   };
 
   const fetchProjects = useCallback(async () => {
+    let categories = projectCategories?.list
+    let categoryId = "";
+    const queryCategory = router?.query?.category
+
+    if(queryCategory){
+      const getCategoryData = categories?.find((d)=> d.chineseName === queryCategory || d.englishName === queryCategory)
+      categoryId = getCategoryData?.id
+    }
+    
     try {
       const { list, total } = await getProjects({
         offset: offsetRef.current,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
+        category: categoryId
       });
 
       totalRef.current = total;
       setLatestPosts((latestPosts) =>
-        pageRef.current !== 0 ? [...latestPosts, ...list] : list
+        offsetRef.current !== 0 ? [...latestPosts, ...list] : list
       );
       offsetRef.current += page?.content?.latestSection?.numOfPostsPerPage ?? 6;
     } catch (err) {
@@ -118,6 +127,7 @@ const IdeaBank = ({
 
   useEffect(() => {
     if (router.query.category) {
+      const {category} = router?.query
       setTimeout(() => {
         document.querySelector(`[data-tag='sharing-list']`).scrollIntoView({
           block: "start",
@@ -125,12 +135,19 @@ const IdeaBank = ({
         });
       }, 300);
 
-      const selectedCategory = projectCategories?.list?.find((d)=> lang === "zh" ? d?.chineseName === router.query.category : d?.englishName === router.query.category)
+      const selectedCategory = projectCategories?.list?.find((d) =>
+        lang === "zh"
+          ? d?.chineseName === category
+          : d?.englishName === category
+      );
 
       setSelectedCategory({
         ...selectedCategory,
-        label: lang === "zh" ? selectedCategory.chineseName : selectedCategory.englishName,
-      })
+        label:
+          lang === "zh"
+            ? selectedCategory.chineseName
+            : selectedCategory.englishName,
+      });
     }
   }, [router]);
 
@@ -412,26 +429,33 @@ const IdeaBank = ({
                 </Box>
               </Box>
               <Wrap spacing={2}>
-                {(projectCategories?.list ?? []).map((category) =>{
+                {(projectCategories?.list ?? []).map((category) => {
                   return (
-                  <WrapItem key={category.id} cursor="pointer">
-                    <NextLink
-                      passHref
-                      href={`/sharing/ideabank?category=${lang === "zh" ? category.chineseName : category.englishName }`}
-                    >
-                      <Link>
-                        <CategoryTag category={{
-                          ...category,
-                          label: lang === "zh" ? category.chineseName : category.englishName,
-                        }}
-                        withIcon={false}
-                        />
-                      </Link>
-                    </NextLink>
-                  </WrapItem>
-                  )
-                }
-                )}
+                    <WrapItem key={category.id} cursor="pointer">
+                      <NextLink
+                        passHref
+                        href={`/sharing/ideabank?category=${
+                          lang === "zh"
+                            ? category.chineseName
+                            : category.englishName
+                        }`}
+                      >
+                        <Link>
+                          <CategoryTag
+                            category={{
+                              ...category,
+                              label:
+                                lang === "zh"
+                                  ? category.chineseName
+                                  : category.englishName,
+                            }}
+                            withIcon={false}
+                          />
+                        </Link>
+                      </NextLink>
+                    </WrapItem>
+                  );
+                })}
               </Wrap>
             </Box>
           </Box>
@@ -536,7 +560,11 @@ const IdeaBank = ({
                       align="stretch"
                       cursor="pointer"
                     >
-                      <NextLink passHref href={`/sharing/ideabank/${post.id}`} key={i}>
+                      <NextLink
+                        passHref
+                        href={`/sharing/ideabank/${post.id}`}
+                        key={i}
+                      >
                         <Link>
                           <AspectRatio ratio={4 / 3}>
                             <Box
@@ -550,22 +578,29 @@ const IdeaBank = ({
                           </AspectRatio>
                           <Box>
                             <Flex>
-                              {post.category && (<Box
-                                fontSize="12px"
-                                color={
-                                  getProjectCategoryData(post.category)?.textColor
-                                }
-                                background={
-                                  getProjectCategoryData(post.category)?.bgColor
-                                }
-                                borderRadius="19px"
-                                px="9px"
-                                mr="9px"
-                                display="inline"
-                                fontWeight="700"
-                              >
-                                {getProjectCategoryData(post.category)?.chineseName}
-                              </Box>)}
+                              {post.category && (
+                                <Box
+                                  fontSize="12px"
+                                  color={
+                                    getProjectCategoryData(post.category)
+                                      ?.textColor
+                                  }
+                                  background={
+                                    getProjectCategoryData(post.category)
+                                      ?.bgColor
+                                  }
+                                  borderRadius="19px"
+                                  px="9px"
+                                  mr="9px"
+                                  display="inline"
+                                  fontWeight="700"
+                                >
+                                  {
+                                    getProjectCategoryData(post.category)
+                                      ?.chineseName
+                                  }
+                                </Box>
+                              )}
                               <Text fontSize="12px" display="inline-block">
                                 {moment(post.startDate).format(
                                   "D MMM, hh:mm a"
