@@ -19,7 +19,6 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Button,
 } from "@chakra-ui/react";
 import DividerSimple from "../../../components/DividerSimple";
 import Container from "../../../components/Container";
@@ -89,7 +88,12 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
   const RenderClickIcon = () => {
     return (
       <Box alignSelf={"flex-start"} pt={1}>
-        <Image src={"/images/app/resource_click.svg"} w={'16px'} h={'13px'} alt={""} />
+        <Image
+          src={"/images/app/resource_click.svg"}
+          w={"16px"}
+          h={"13px"}
+          alt={""}
+        />
       </Box>
     );
   };
@@ -129,7 +133,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.maxCapacity && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"期望可容納人數"}
                   content={data?.maxCapacity}
@@ -138,13 +142,13 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.size && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem title={"場地大小"} content={data?.size} />
               </Flex>
             )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"場地提供可使用時間"}
                   content={data?.openingHours}
@@ -153,7 +157,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.accessibilityRequirement && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"無障礙設施需求"}
                   content={data?.accessibilityRequirement}
@@ -190,7 +194,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
               <Flex gap={2} alignItems="center">
-               <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"工作介紹"}
                   content={data?.tasksDescription}
@@ -199,7 +203,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             )}
             {data?.skills && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>
                   <RenderListItem
                     title={"技能"}
@@ -215,7 +219,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
 
             {data?.educationLevelRequirement && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"教育水平要求"}
                   content={
@@ -227,7 +231,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
 
             {data?.workLocation && (
               <Flex gap={2} alignItems="center">
-               <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={"工作地點"}
                   content={data?.workLocation}
@@ -255,7 +259,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -279,7 +283,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-               <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -303,7 +307,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.otherResourcesNeeded && (
               <Flex gap={2} alignItems="center">
-               <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
                   title={
                     "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃"
@@ -331,14 +335,14 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           </Text>
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
-            <RenderClickIcon/>
+              <RenderClickIcon />
               <Box fontSize={{ base: "sm" }}>
                 {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
               </Box>
             </Flex>
 
             <Flex gap={2} alignItems="center">
-            <RenderClickIcon/>
+              <RenderClickIcon />
               <Box fontSize={{ base: "sm" }}>
                 {data?.hasReceiveAnyFunding ? "沒有資金援助" : "有一些資金援助"}
               </Box>

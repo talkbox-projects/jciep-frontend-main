@@ -22,14 +22,14 @@ import React, { useCallback, useEffect, useRef } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { getPage } from "../../../utils/page/getPage";
-import sharingFieldsForCMS from "../../../utils/tina/sharingFieldsForCMS";
+import projectFieldsForCMS from "../../../utils/tina/projectFieldsForCMS";
 import withPageCMS from "../../../utils/page/withPageCMS";
 import { VscQuote } from "react-icons/vsc";
 import Anchor from "../../../components/Anchor";
 import withPostCreatorCMS from "../../../utils/post/withPostCreatorCMS";
-import { getPost } from "../../../utils/post/getPost";
 import { getStockPhoto } from "../../../utils/event/getEvent";
 import {
+  getProjectDetail,
   getProjects,
   getProjectCategories,
 } from "../../../utils/project/getProject";
@@ -59,27 +59,14 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdeaBank = ({
-  page,
-  setting,
-  lang,
-  api: { stockPhotos, projectCategories },
-}) => {
-  const categories = setting?.value?.categories;
-
+const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
   const [latestPosts, setLatestPosts] = React.useState([]);
   const offsetRef = useRef(0);
   const totalRef = useRef(0);
-  const [featuredArticle, setFeaturedArticle] = React.useState({});
+  const [featuredProject, setFeaturedProject] = React.useState({});
   const skeletonValue = useBreakpointValue({ base: [1], md: [1, 2] });
-  const [hottestPosts, setHottestPosts] = React.useState([]);
   const [selectedCategory, setSelectedCategory] = React.useState([]);
-
   const router = useRouter();
-
-  const getCategoryData = (key) => {
-    return (categories ?? []).find((c) => c.key === key);
-  };
 
   const getProjectCategoryData = (id) => {
     const getCategory = (projectCategories?.list ?? []).find(
@@ -93,20 +80,23 @@ const IdeaBank = ({
   };
 
   const fetchProjects = useCallback(async () => {
-    let categories = projectCategories?.list
+    let categories = projectCategories?.list;
     let categoryId = "";
-    const queryCategory = router?.query?.category
+    const queryCategory = router?.query?.category;
 
-    if(queryCategory){
-      const getCategoryData = categories?.find((d)=> d.chineseName === queryCategory || d.englishName === queryCategory)
-      categoryId = getCategoryData?.id
+    if (queryCategory) {
+      const getCategoryData = categories?.find(
+        (d) =>
+          d.chineseName === queryCategory || d.englishName === queryCategory
+      );
+      categoryId = getCategoryData?.id;
     }
-    
+
     try {
       const { list, total } = await getProjects({
         offset: offsetRef.current,
         limit: page?.content?.latestSection?.numOfPostsPerPage,
-        category: categoryId
+        category: categoryId,
       });
 
       totalRef.current = total;
@@ -127,7 +117,7 @@ const IdeaBank = ({
 
   useEffect(() => {
     if (router.query.category) {
-      const {category} = router?.query
+      const { category } = router?.query;
       setTimeout(() => {
         document.querySelector(`[data-tag='sharing-list']`).scrollIntoView({
           block: "start",
@@ -151,33 +141,20 @@ const IdeaBank = ({
     }
   }, [router]);
 
-  const fetchFeaturedArticle = useCallback(
-    async (slug) => {
-      const post = await getPost({
-        idOrSlug: slug,
-        lang: lang,
-      });
 
-      if (!post) {
-        const otherLangPost = await getPost({
-          idOrSlug: slug,
-          lang: lang === "zh" ? "en" : "zh",
-        });
-        setFeaturedArticle(otherLangPost);
-        return;
-      }
-      setFeaturedArticle(post);
+  const fetchFeaturedProject = useCallback(
+    async ({ id }) => {
+      const project = await getProjectDetail(id);
+      setFeaturedProject(project);
     },
     [lang]
   );
 
   React.useEffect(() => {
     if (page?.content?.featured) {
-      fetchFeaturedArticle(page?.content?.featured);
+      fetchFeaturedProject({ id: page?.content?.featured });
     }
-  }, [fetchFeaturedArticle, hottestPosts, page?.content?.featured]);
-
-  const featuredArticleCategory = getCategoryData(featuredArticle?.category);
+  }, [fetchFeaturedProject, page?.content?.featured]);
 
   const SkeletonPlaceholder = () => (
     <Grid
@@ -219,16 +196,23 @@ const IdeaBank = ({
     </Grid>
   );
 
-  return (
-    <VStack w="100%" align="stretch" spacing={0}>
-      <NextSeo
-        title={
-          router.locale === "zh"
-            ? `賽馬會共融．知行計劃｜創意思維庫`
-            : `Jockey Club Collaborative Project for Inclusive Employment｜Idea Bank`
-        }
-      />
-      {/* Featured Article Section */}
+  const FeaturedProject = useCallback(({ featuredProject }) => {
+    const url = featuredProject?.banner?.file?.url;
+    const stockPhotoId = featuredProject?.banner?.stockPhotoId;
+
+    let imageUrl = "";
+    if (url !== "undefined" && !!url) {
+      imageUrl = url;
+    } else {
+      const getStockPhoto = stockPhotos?.find((d) => d?.id === stockPhotoId);
+      imageUrl = getStockPhoto?.url;
+    }
+
+    const featuredProjectCategory = getProjectCategoryData(
+      featuredProject.category
+    );
+
+    return (
       <Box>
         <Box
           bgColor="#F6D644"
@@ -237,7 +221,7 @@ const IdeaBank = ({
           position="relative"
           zIndex={10}
           w="100%"
-          pb={!featuredArticle ? 0 : 12}
+          pb={!featuredProject ? 0 : 12}
         >
           <VStack
             align="stretch"
@@ -267,7 +251,7 @@ const IdeaBank = ({
               w="100%"
               align="start"
               onClick={() => {
-                router.push(`/sharing/${featuredArticle?.slug}`);
+                router.push(`/sharing/ideabank/${featuredProject?.id}`);
               }}
               cursor="pointer"
             >
@@ -279,10 +263,7 @@ const IdeaBank = ({
                 borderColor="white"
                 overflow="hidden"
               >
-                <Image
-                  alt={featuredArticle?.title}
-                  src={featuredArticle?.coverImage}
-                />
+                <Image alt={featuredProject?.name} src={imageUrl} />
               </AspectRatio>
               <VStack flex={1} minW={0} w="100%" align="start">
                 <Icon
@@ -294,27 +275,33 @@ const IdeaBank = ({
                 <Wrap>
                   <CategoryTag
                     size="sm"
-                    category={featuredArticleCategory}
+                    category={{
+                      ...featuredProjectCategory,
+                      label:
+                        lang === "zh"
+                          ? featuredProjectCategory.chineseName
+                          : featuredProjectCategory.englishName,
+                    }}
                     withIcon={false}
                   />
-                  <Text fontSize="sm">
-                    {moment(featuredArticle?.publishDate).format(
+                  {/* <Text fontSize="sm">
+                    {moment(featuredProject?.publishedAt).format(
                       "D MMM, hh:mm a"
                     )}
-                  </Text>
+                  </Text> */}
                 </Wrap>
                 <Box borderRadius={16} pt={1} px={2} color={1} pb={16}>
                   <Text fontSize={("2xl", "4xl", "4xl")} fontWeight="bold">
-                    {featuredArticle?.title}
+                    {featuredProject?.name}
                   </Text>
-                  <Text>{featuredArticle?.excerpt}</Text>
+                  <Text noOfLines={4}>{featuredProject?.introduction}</Text>
                 </Box>
               </VStack>
             </Stack>
           </Container>
 
           <Box
-            {...(featuredArticle && {
+            {...(featuredProject && {
               position: "absolute",
               left: 0,
               w: "100%",
@@ -328,7 +315,7 @@ const IdeaBank = ({
         <Box
           cursor="pointer"
           onClick={() => {
-            router.push(`/sharing/${featuredArticle?.slug}`);
+            router.push(`/sharing/ideabank/${featuredProject?.id}`);
           }}
           position="relative"
           d={["block", "block", "none"]}
@@ -336,8 +323,8 @@ const IdeaBank = ({
         >
           <AspectRatio w={"100%"} ratio={4 / 3}>
             <Image
-              alt={featuredArticle?.title}
-              src={featuredArticle?.coverImage}
+              alt={featuredProject?.name}
+              src={imageUrl}
             />
           </AspectRatio>
           <DividerSimple flip={true}></DividerSimple>
@@ -364,25 +351,45 @@ const IdeaBank = ({
               <Wrap>
                 <CategoryTag
                   size="sm"
-                  category={featuredArticleCategory}
+                  category={{
+                    ...featuredProjectCategory,
+                    label:
+                      lang === "zh"
+                        ? featuredProjectCategory.chineseName
+                        : featuredProjectCategory.englishName,
+                  }}
                   withIcon={false}
                 />
-                <Text fontSize="sm">
-                  {moment(featuredArticle?.publishDate).format(
+                {/* <Text fontSize="sm">
+                  {moment(featuredProject?.publishedAt).format(
                     "D MMM, hh:mm a"
                   )}
-                </Text>
+                </Text> */}
               </Wrap>
               <Box borderRadius={16} pt={1} px={2} color={1}>
                 <Text fontSize={"xl"} fontWeight="bold">
-                  {featuredArticle?.title}
+                  {featuredProject?.title}
                 </Text>
-                <Text>{featuredArticle?.excerpt}</Text>
+                <Text noOfLines={4}>{featuredProject?.introduction}</Text>
               </Box>
             </VStack>
           </VStack>
         </Box>
       </Box>
+    );
+  },[lang]);
+
+  return (
+    <VStack w="100%" align="stretch" spacing={0}>
+      <NextSeo
+        title={
+          router.locale === "zh"
+            ? `賽馬會共融．知行計劃｜創意構思庫`
+            : `Jockey Club Collaborative Project for Inclusive Employment｜Idea Bank`
+        }
+      />
+      {/* Featured Article Section */}
+      <FeaturedProject featuredProject={featuredProject} />
       {/* Posts Section */}
       <Container alignSelf="center" pt={16}>
         <Stack
@@ -394,7 +401,7 @@ const IdeaBank = ({
           {/* Right Section of Grid */}
           <Box w={["100%", "100%", "33%"]}>
             <Box d={"block"}>
-              <Box mt="70px" mb={4}>
+              <Box mt={["15px", "15px", "70px"]} mb={4}>
                 <Box textAlign="left" fontSize="36px">
                   <Text pos="relative" display="inline-block" pl="8px">
                     <Heading
@@ -576,7 +583,7 @@ const IdeaBank = ({
                               borderWidth={3}
                             ></Box>
                           </AspectRatio>
-                          <Box>
+                          <Box mt={2}>
                             <Flex>
                               {post.category && (
                                 <Box
@@ -595,18 +602,23 @@ const IdeaBank = ({
                                   display="inline"
                                   fontWeight="700"
                                 >
-                                  {
-                                    getProjectCategoryData(post.category)
-                                      ?.chineseName
-                                  }
+                                  <Text noOfLines={1}>
+                                    {
+                                      getProjectCategoryData(post.category)
+                                        ?.chineseName
+                                    }
+                                  </Text>
                                 </Box>
                               )}
-                              <Text fontSize="12px" display="inline-block">
-                                {moment(post.startDate).format(
+                              {/* <Text
+                                fontSize="12px"
+                                display="inline-block"
+                                noOfLines={1}
+                              >
+                                {moment(post.publishedAt).format(
                                   "D MMM, hh:mm a"
                                 )}
-                                -{moment(post.endDate).format("D MMM, hh:mm a")}
-                              </Text>
+                              </Text> */}
                             </Flex>
                             <Text
                               fontSize={{ base: "20px", lg: "24px" }}
@@ -658,6 +670,6 @@ const IdeaBank = ({
 export default withPostCreatorCMS(
   withPageCMS(IdeaBank, {
     key: PAGE_KEY,
-    fields: sharingFieldsForCMS,
+    fields: projectFieldsForCMS,
   })
 );
