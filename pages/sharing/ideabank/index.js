@@ -107,7 +107,7 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
     } catch (err) {
       console.error("***** error", err);
     }
-  }, [page?.content?.latestSection?.numOfPostsPerPage, router.query.category]);
+  }, [page?.content?.latestSection?.numOfPostsPerPage, router?.query?.category]);
 
   useEffect(() => {
     totalRef.current = 0;
@@ -116,8 +116,8 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
   }, [fetchProjects]);
 
   useEffect(() => {
-    if (router.query.category) {
-      const { category } = router?.query;
+    if (router?.query?.category) {
+      const category = router?.query?.category;
       setTimeout(() => {
         document.querySelector(`[data-tag='sharing-list']`).scrollIntoView({
           block: "start",
@@ -209,7 +209,7 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
     }
 
     const featuredProjectCategory = getProjectCategoryData(
-      featuredProject.category
+      featuredProject?.category
     );
 
     return (
@@ -585,15 +585,15 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
                           </AspectRatio>
                           <Box mt={2}>
                             <Flex>
-                              {post.category && (
+                              {post?.category && (
                                 <Box
                                   fontSize="12px"
                                   color={
-                                    getProjectCategoryData(post.category)
+                                    getProjectCategoryData(post?.category)
                                       ?.textColor
                                   }
                                   background={
-                                    getProjectCategoryData(post.category)
+                                    getProjectCategoryData(post?.category)
                                       ?.bgColor
                                   }
                                   borderRadius="19px"
@@ -604,7 +604,7 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
                                 >
                                   <Text noOfLines={1}>
                                     {
-                                      getProjectCategoryData(post.category)
+                                      getProjectCategoryData(post?.category)
                                         ?.chineseName
                                     }
                                   </Text>
