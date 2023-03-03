@@ -814,7 +814,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                         </Box>
                       </Flex>
 
-                      {createdBy?.chineseName && (
+                      {/* {createdBy?.chineseName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BsPerson
@@ -831,32 +831,35 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                             {createdBy?.chineseName}
                           </Box>
                         </Flex>
-                      )}
-
-                      {/* {organization?.contactEmail && (
+                      )} */}
+                      
+                      {organization?.contactName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <AiOutlineMail
-                              style={{
-                                width: "18px",
-                                height: "18px",
-                                paddingLeft: "2px",
-                                paddingTop: "1px",
-                              }}
-                            />
+                            <BsPerson style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>聯絡人電郵</Box>
-                            <u>
-                              <a
-                                href={`mailto:${organization?.contactEmail}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: "#0D8282" }}
-                              >
-                                {organization?.contactEmail}
-                              </a>
-                            </u>
+                            <Box fontWeight={700}>{page?.content?.contactName}</Box>
+                            {organization?.contactName}
+                          </Box>
+                        </Flex>
+                      )}
+
+                      {organization?.contactEmail && (
+                        <Flex align="center" gap={2} alignItems="flex-start">
+                          <Box w={"20px"}>
+                            <AiOutlineMail style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                          </Box>
+                          <Box>
+                            <Box fontWeight={700}>{page?.content?.contactEmail}</Box>
+                            <u><a
+                              href={`mailto:${organization?.contactEmail}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{color: "#0D8282"}}
+                            >
+                              {organization?.contactEmail}
+                            </a></u>
                           </Box>
                         </Flex>
                       )}
@@ -864,21 +867,14 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                       {organization?.contactPhone && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <BiPhone
-                              style={{
-                                width: "18px",
-                                height: "18px",
-                                paddingLeft: "2px",
-                                paddingTop: "1px",
-                              }}
-                            />
+                            <BiPhone style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>聯絡人電話</Box>
+                            <Box fontWeight={700}>{page?.content?.contactPhone}</Box>
                             {organization?.contactPhone}
                           </Box>
                         </Flex>
-                      )} */}
+                      )}
 
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
@@ -1069,6 +1065,16 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "contactName",
       label: "聯絡人名稱 contact name",
+      component: "text",
+    },
+    {
+      name: "contactEmail",
+      label: "聯絡人電郵 contact email",
+      component: "text",
+    },
+    {
+      name: "contactPhone",
+      label: "聯絡人電話 contact phone",
       component: "text",
     },
     {
