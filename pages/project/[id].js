@@ -27,7 +27,10 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import organizationSearch from "../../utils/api/OrganizationSearch";
 import { getOrganization } from "../../utils/organization/getOrganization";
 import { AiOutlineLink } from "react-icons/ai";
-import { getProjectDetail } from "../../utils/project/getProject";
+import {
+  getProjectDetail,
+  getProjectCreatedBy,
+} from "../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { options } from "../../utils/project/resourceObj";
 
@@ -35,6 +38,7 @@ import { getStockPhoto } from "../../utils/event/getEvent";
 
 import { BiPhone } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
+import { TiDocumentText } from "react-icons/ti";
 import { BsPerson } from "react-icons/bs";
 
 const PAGE_KEY = "project";
@@ -59,6 +63,7 @@ export const getServerSideProps = async (context) => {
 const Project = ({ page, api: { organizations, stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [createdBy, setCreatedBy] = useState([]);
   const [organization, setOrganization] = useState(null);
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,6 +72,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     const { query } = router;
     async function fetchData() {
       const data = (await getProjectDetail(query?.id)) ?? {};
+      const createdBy = (await getProjectCreatedBy([data?.createdBy])) ?? {};
+      setCreatedBy(createdBy?.[0]);
       setDetail(data);
     }
     fetchData();
@@ -87,7 +94,12 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
   const RenderClickIcon = () => {
     return (
       <Box alignSelf={"flex-start"} pt={1}>
-        <Image src={"/images/app/resource_click.svg"} w={'16px'} h={'13px'} alt={""} />
+        <Image
+          src={"/images/app/resource_click.svg"}
+          w={"16px"}
+          h={"13px"}
+          alt={""}
+        />
       </Box>
     );
   };
@@ -103,6 +115,40 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     );
   };
 
+  const RenderMoreInformation = ({ content }) => {
+    return (
+      <Box>
+        <Divider my={4} />
+        <Flex gap={1} alignItems="center">
+          <Box alignSelf={"flex-start"}>
+            <TiDocumentText style={{ width: "18px", height: "18px" }} />
+          </Box>
+          <Flex
+            direction={"column"}
+            gap={1}
+            fontSize={{ base: "sm", lg: "sm" }}
+          >
+            <Text fontWeight={"bold"}>{page.content.moreInformation}</Text>
+            <Text>{content}</Text>
+          </Flex>
+        </Flex>
+      </Box>
+    );
+  };
+
+  const RenderTags = ({ tags }) => {
+    if (!tags) {
+      return;
+    }
+    return (
+      <Flex color="#08A3A3" gap={2}>
+        {tags?.map((d) => (
+          <Box key={d}>#{d}</Box>
+        ))}
+      </Flex>
+    );
+  };
+
   const RenderResourceListDetail = useCallback(({ data }) => {
     if (!data?.type) {
       return <></>;
@@ -111,9 +157,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     if (data?.type === "venue") {
       return (
         <Box>
-          <Flex color="#08A3A3" gap={2}>
-            <Box>#{options["district"][data?.district]}</Box>
-          </Flex>
+          <RenderTags tags={data?.tags} />
 
           <Text
             as="h2"
@@ -127,38 +171,51 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.maxCapacity && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"期望可容納人數"}
+                  title={page?.content.venue}
+                  content={options["district"][data?.district]}
+                />
+              </Flex>
+            )}
+            {data?.maxCapacity && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.maxCapacity}
                   content={data?.maxCapacity}
                 />
               </Flex>
             )}
             {data?.size && (
               <Flex gap={2} alignItems="center">
-                 <RenderClickIcon/>
-                <RenderListItem title={"場地大小"} content={data?.size} />
+                <RenderClickIcon />
+                <RenderListItem title={page?.content?.size} content={data?.size} />
               </Flex>
             )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
-                 <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"場地提供可使用時間"}
+                   title={page?.content?.openingHours}
                   content={data?.openingHours}
                 />
               </Flex>
             )}
             {data?.accessibilityRequirement && (
               <Flex gap={2} alignItems="center">
-                 <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"無障礙設施需求"}
+                  title={page?.content?.accessibilityRequirement}
                   content={data?.accessibilityRequirement}
                 />
               </Flex>
             )}
           </Stack>
+
+          {data?.description && (
+            <RenderMoreInformation content={data?.description} />
+          )}
         </Box>
       );
     }
@@ -167,13 +224,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
       const tags = tags;
       return (
         <Box>
-          <Box>
-            {data?.tags?.map((d, i) => (
-              <Box color="#08A3A3" key={`${d}-${i}`} d={"inline-block"} pr={1}>
-                #{d}
-              </Box>
-            ))}
-          </Box>
+          <RenderTags tags={data?.tags} />
           <Text
             as="h2"
             color="#1E1E1E"
@@ -188,19 +239,19 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"工作介紹"}
+                  title={page?.content?.tasksDescription}
                   content={data?.tasksDescription}
                 />
               </Flex>
             )}
             {data?.skills && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>
                   <RenderListItem
-                    title={"技能"}
+                    title={page?.content?.skills}
                     content={data?.skills?.map((d, i) => (
                       <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
                         {d}
@@ -210,11 +261,12 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                 </Box>
               </Flex>
             )}
+
             {data?.educationLevelRequirement && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"教育水平要求"}
+                  title={page?.content?.educationLevel}
                   content={
                     options["educationLevel"][data?.educationLevelRequirement]
                   }
@@ -224,14 +276,45 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
 
             {data?.workLocation && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={"工作地點"}
+                  title={page?.content?.workLocation}
                   content={data?.workLocation}
                 />
               </Flex>
             )}
+
+            {data?.frequency && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem 
+                   title={page?.content?.frequency}
+                  content={data?.frequency} />
+              </Flex>
+            )}
+
+            {data?.durationNeededValue && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.durationNeededValue}
+                  content={`${data?.durationNeededValue} ${data?.durationNeededUnit}`}
+                />
+              </Flex>
+            )}
+
+            {data?.durationNeededOther && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.other}
+                  content={`${data?.durationNeededOther} ${data?.durationNeededOther}`}
+                />
+              </Flex>
+            )}
           </Stack>
+
+          {data?.remark && <RenderMoreInformation content={data?.remark} />}
         </Box>
       );
     }
@@ -239,6 +322,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     if (data?.type === "expertise") {
       return (
         <Box>
+          <RenderTags tags={data?.tags} />
+
           <Text
             as="h2"
             color="#1E1E1E"
@@ -252,7 +337,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-                 <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -264,6 +349,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     if (data?.type === "network") {
       return (
         <Box>
+          <RenderTags tags={data?.tags} />
+
           <Text
             as="h2"
             color="#1E1E1E"
@@ -276,7 +363,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             {data?.description && (
               <Flex gap={2} alignItems="center">
-                 <RenderClickIcon/>
+                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
               </Flex>
             )}
@@ -288,6 +375,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     if (data?.type === "other") {
       return (
         <Box>
+          <RenderTags tags={data?.tags} />
+
           <Text
             as="h2"
             color="#1E1E1E"
@@ -295,16 +384,14 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             fontWeight={700}
             pb={2}
           >
-            需要其他資源
+            {page?.content?.otherResourcesNeeded}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.otherResourcesNeeded && (
               <Flex gap={2} alignItems="center">
-               <RenderClickIcon/>
+                <RenderClickIcon />
                 <RenderListItem
-                  title={
-                    "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃"
-                  }
+                  title={page?.content?.otherResourcesNeededTitle}
                   content={data?.otherResourcesNeeded}
                 />
               </Flex>
@@ -317,6 +404,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     if (data?.type === "funding") {
       return (
         <Box>
+          <RenderTags tags={data?.tags} />
+          
           <Text
             as="h2"
             color="#1E1E1E"
@@ -324,24 +413,24 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             fontWeight={700}
             pb={2}
           >
-            需要資金
+            {page?.content?.needFunding}
           </Text>
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
-            <RenderClickIcon/>
+              <RenderClickIcon />
               <Box fontSize={{ base: "sm" }}>
-                {data?.hasCurrentFunding ? "已有資金" : "沒有資金"}
+                {data?.hasCurrentFunding ? page?.content?.hasCurrentFunding : page?.content?.withoutCurrentFunding}
               </Box>
             </Flex>
 
             <Flex gap={2} alignItems="center">
-            <RenderClickIcon/>
+              <RenderClickIcon />
               <Box fontSize={{ base: "sm" }}>
-                {data?.hasReceiveAnyFunding ? "沒有資金援助" : "有一些資金援助"}
+                {data?.hasReceiveAnyFunding ? page?.content?.hasReceiveAnyFunding : page?.content?.withoutReceiveAnyFunding}
               </Box>
             </Flex>
             <Flex gap={2} alignItems="center">
-              <Box>總數(HKD)</Box>
+              <Box>{page?.content?.totalAmount} (HKD)</Box>
               <Box fontSize={{ base: "sm" }}>
                 <Box>
                   <b>{`${new Intl.NumberFormat("zh-HK").format(
@@ -516,7 +605,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                 fontWeight={700}
                                 fontSize={{ base: "md", md: "lg" }}
                               >
-                                詳細
+                                {page?.content?.description}
                               </Box>
                               <Box
                                 dangerouslySetInnerHTML={{
@@ -550,7 +639,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             <Divider my={4} />
 
                             <Flex gap={2} direction="column">
-                              <Box fontWeight={700}>發起機構</Box>
+                            <Box fontWeight={700}>{page.content.organization}</Box>
                               {organization ? (
                                 <Flex gap={2} alignItems="center">
                                   <Box maxW={"180px"}>
@@ -584,7 +673,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                 fontWeight={700}
                                 fontSize={{ base: "md", md: "lg" }}
                               >
-                                欠缺資源
+                                {page?.content?.requireResources}
                               </Box>
                             </Flex>
 
@@ -644,24 +733,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                         {d?.type && (
                                           <RenderResourceListDetail data={d} />
                                         )}
-
-                                        <Divider my={4} />
-
-                                        <Flex gap={3} alignItems="center">
-                                          <Box>
-                                            <Image
-                                              src={
-                                                "/images/app/resource_bookmark_off.svg"
-                                              }
-                                              alt={""}
-                                            />
-                                          </Box>
-                                          <Box
-                                            fontSize={{ base: "sm", lg: "sm" }}
-                                          >
-                                            {d?.bookmarkCount ?? "0"}人關注中
-                                          </Box>
-                                        </Flex>
+                                        <br />
                                       </Box>
                                     </Box>
                                   </GridItem>
@@ -687,7 +759,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                 fontWeight={700}
                                 fontSize={{ base: "md", md: "lg" }}
                               >
-                                媒體及影片
+                              {page?.content?.media}
                               </Box>
                             </Flex>
 
@@ -717,7 +789,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                   <Box bgColor={"#FFF"} borderRadius={"15px"} py={6} px={4}>
                     <Box>
                       <Text fontWeight={700} mb={2}>
-                        描述
+                        {page?.content?.detail}
                       </Text>
                       <Text as="p" fontSize={"14px"}>
                         {detail?.remark}
@@ -736,12 +808,32 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                           />
                         </Box>
                         <Box>
-                          <Box fontWeight={700}>計劃期限</Box>
+                          <Box fontWeight={700}>{page?.content?.duration}</Box>
                           {detail?.startDate} - {detail?.endDate}{" "}
                         </Box>
                       </Flex>
 
-                      {organization?.contactPhone && (
+                      {createdBy?.chineseName && (
+                        <Flex align="center" gap={2} alignItems="flex-start">
+                          <Box w={"20px"}>
+                            <BsPerson
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
+                          </Box>
+                          <Box>
+                            <Box fontWeight={700}>{page?.content?.contactName}</Box>
+                            {createdBy?.chineseName}
+                          </Box>
+                        </Flex>
+                      )}
+
+                      {/* 
+                      {organization?.contactName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BsPerson style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
@@ -751,9 +843,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             {organization?.contactName}
                           </Box>
                         </Flex>
-                      )}
+                      )} */}
 
-                      {organization?.contactEmail && (
+                      {/* {organization?.contactEmail && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <AiOutlineMail style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
@@ -770,9 +862,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             </a></u>
                           </Box>
                         </Flex>
-                      )}
+                      )} */}
 
-                      {organization?.contactPhone && (
+                      {/* {organization?.contactPhone && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BiPhone style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
@@ -782,8 +874,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             {organization?.contactPhone}
                           </Box>
                         </Flex>
-                      )}
-
+                      )} */}
+                      
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
                           <Image
@@ -795,7 +887,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                         </Box>
                         <Box>
                           <Box fontWeight={700} color="#0D8282">
-                            {detail?.bookmarkCount}人關注中
+                            {detail?.bookmarkCount} {page?.content?.bookmarkCount}
                           </Box>
                         </Box>
                       </Flex>
@@ -822,11 +914,11 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                               window.print();
                             }}
                           >
-                            列印此頁
+                            {page?.content?.print}
                           </Box>
                         </Box>
                       </Flex>
-
+     
                     </Stack>
                   </Box>
                 </Box>
@@ -930,6 +1022,156 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
 export default withPageCMS(Project, {
   key: PAGE_KEY,
   fields: [
+    {
+      name: "description",
+      label: "描述 description",
+      component: "text",
+    },
+    {
+      name: "detail",
+      label: "詳細 detail",
+      component: "text",
+    },
+    {
+      name: "print",
+      label: "列印此頁 print",
+      component: "text",
+    },
+    {
+      name: "bookmarkCount",
+      label: "人關注中 bookmark count",
+      component: "text",
+    },
+    {
+      name: "contactName",
+      label: "聯絡人名稱 contact name",
+      component: "text",
+    },
+    {
+      name: "duration",
+      label: "計劃期限 duration",
+      component: "text",
+    },
+    {
+      name: "media",
+      label: "媒體及影片 media",
+      component: "text",
+    },
+    {
+      name: "requireResources",
+      label: "欠缺資源 require resources",
+      component: "text",
+    },
+    {
+      name: "organization",
+      label: "發起機構 organization",
+      component: "text",
+    },
+    {
+      name: "moreInformation",
+      label: "更多資料 organization",
+      component: "text",
+    },
+    {
+      name: "venue",
+      label: "地區 venue",
+      component: "text",
+    },
+    {
+      name: "maxCapacity",
+      label: "期望可容納人數 max capacity",
+      component: "text",
+    },
+    {
+      name: "size",
+      label: "場地大小 size",
+      component: "text",
+    },
+    {
+      name: "openingHours",
+      label: "場地提供可使用時間 opening hours",
+      component: "text",
+    },
+    {
+      name: "accessibilityRequirement",
+      label: "無障礙設施需求 accessibility requirement",
+      component: "text",
+    },
+    {
+      name: "tasksDescription",
+      label: "工作介紹 tasks description",
+      component: "text",
+    },
+    {
+      name: "skills",
+      label: "技能 tasks description",
+      component: "text",
+    },
+    {
+      name: "educationLevel",
+      label: "教育水平要求 education level",
+      component: "text",
+    },
+    {
+      name: "workLocation",
+      label: "工作地點 work location",
+      component: "text",
+    },
+    {
+      name: "frequency",
+      label: "次數 frequency",
+      component: "text",
+    },
+    {
+      name: "durationNeededValue",
+      label: "所需時間 duration needed value",
+      component: "text",
+    },
+    {
+      name: "other",
+      label: "其他 duration needed value",
+      component: "text",
+    },
+    {
+      name: "otherResourcesNeeded",
+      label: "需要其他資源 other resources needed",
+      component: "text",
+    },
+    {
+      name: "needFunding",
+      label: "需要資金 need funding",
+      component: "text",
+    },
+    {
+      name: "otherResourcesNeededTitle",
+      label: "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃 other resources needed",
+      component: "text",
+    },
+    {
+      name: "hasCurrentFunding",
+      label: "已有資金 has current funding",
+      component: "text",
+    },
+    {
+      name: "withoutCurrentFunding",
+      label: "沒有資金 has current funding",
+      component: "text",
+    },
+    {
+      name: "hasReceiveAnyFunding",
+      label: "有一些資金援助 has receive any funding",
+      component: "text",
+    },
+    {
+      name: "withoutReceiveAnyFunding",
+      label: "沒有資金援助 without any funding",
+      component: "text",
+    },
+    {
+      name: "totalAmount",
+      label: "總數 totalAmount",
+      component: "text",
+    },
     {
       name: "banner",
       label: "頁面橫幅 Hero Banner",

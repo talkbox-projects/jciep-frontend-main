@@ -72,25 +72,34 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
     const kv = {
       0: /^(\/home)/g,
       1: /^(\/programme)/g,
-      2: /^(\/people-with-disabilities)/g,
-      3: /^(\/resources)/g,
-      4: /^(\/job-opportunities)/g,
-      5: /^(\/talants)/g,
-      6: /^(\/sharing)/g,
-      7: /^(\/sharing?category)/g,
+      2: /^(\/resources)/g,
+      3: /^(\/job-opportunities)/g,
+      4: /^(\/talants)/g,
+      5: /^(\/sharing)/g,
+      6: /^(\/sharing?category)/g,
+      7: /^(\/ideabank)/g,
       8: /^(\/event)/g,
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
-        if ("category" in router?.query) {
+
+        if (router?.pathname === '/sharing/ideabank') {
           return "7";
+        }
+
+        if ("category" in router?.query) {
+          return "6";
+        }
+
+        if (router?.pathname.match(/^(\/people-with-disabilities)/)) {
+          return "1";
         }
 
         if (router?.query?.slug === "mobileapp") {
           return tabIndex;
         }
 
-        if (router.pathname.match(regexr)) {
+        if (router?.pathname.match(regexr)) {
           return index;
         } else {
           return tabIndex;
