@@ -907,8 +907,6 @@ export default {
       identity.published = false;
       await identity.save();
 
-      console.log('identity?.email',identity?.email)
-
       if (identity?.email) {
         let host = publicRuntimeConfig.HOST_URL ?? "http://localhost:3000";
 

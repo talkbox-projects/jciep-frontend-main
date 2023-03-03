@@ -128,7 +128,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             gap={1}
             fontSize={{ base: "sm", lg: "sm" }}
           >
-            <Text fontWeight={"bold"}>{page.content.moreInformation}</Text>
+            <Text fontWeight={"bold"}>{page?.content?.moreInformation}</Text>
             <Text>{content}</Text>
           </Flex>
         </Flex>
@@ -173,7 +173,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
-                  title={page?.content.venue}
+                  title={page?.content?.venue}
                   content={options["district"][data?.district]}
                 />
               </Flex>
@@ -639,7 +639,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             <Divider my={4} />
 
                             <Flex gap={2} direction="column">
-                            <Box fontWeight={700}>{page.content.organization}</Box>
+                            <Box fontWeight={700}>{page?.content?.organization}</Box>
                               {organization ? (
                                 <Flex gap={2} alignItems="center">
                                   <Box maxW={"180px"}>
