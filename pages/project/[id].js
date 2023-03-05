@@ -27,10 +27,7 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import organizationSearch from "../../utils/api/OrganizationSearch";
 import { getOrganization } from "../../utils/organization/getOrganization";
 import { AiOutlineLink } from "react-icons/ai";
-import {
-  getProjectDetail,
-  getProjectCreatedBy,
-} from "../../utils/project/getProject";
+import { getProjectDetail } from "../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { options } from "../../utils/project/resourceObj";
 
@@ -63,7 +60,6 @@ export const getServerSideProps = async (context) => {
 const Project = ({ page, api: { organizations, stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
-  const [createdBy, setCreatedBy] = useState([]);
   const [organization, setOrganization] = useState(null);
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,8 +68,6 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
     const { query } = router;
     async function fetchData() {
       const data = (await getProjectDetail(query?.id)) ?? {};
-      const createdBy = (await getProjectCreatedBy([data?.createdBy])) ?? {};
-      setCreatedBy(createdBy?.[0]);
       setDetail(data);
     }
     fetchData();
@@ -190,14 +184,17 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.size && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <RenderListItem title={page?.content?.size} content={data?.size} />
+                <RenderListItem
+                  title={page?.content?.size}
+                  content={data?.size}
+                />
               </Flex>
             )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
-                   title={page?.content?.openingHours}
+                  title={page?.content?.openingHours}
                   content={data?.openingHours}
                 />
               </Flex>
@@ -287,9 +284,10 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.frequency && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <RenderListItem 
-                   title={page?.content?.frequency}
-                  content={data?.frequency} />
+                <RenderListItem
+                  title={page?.content?.frequency}
+                  content={data?.frequency}
+                />
               </Flex>
             )}
 
@@ -334,14 +332,23 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.expertiseType &&
               options["expertiseType"][data?.expertiseType]}
           </Text>
+
           <Stack spacing={2} direction="column">
-            {data?.description && (
+          {data?.description && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+                <RenderListItem
+                  title={page?.content?.description}
+                  content={data?.description}
+                />
               </Flex>
             )}
+          
           </Stack>
+
+          {data?.expertiseTypeOther && (
+            <RenderMoreInformation content={data?.expertiseTypeOther} />
+          )}
         </Box>
       );
     }
@@ -368,6 +375,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
               </Flex>
             )}
           </Stack>
+          {data?.networkTypeOther && (
+            <RenderMoreInformation content={data?.networkTypeOther} />
+          )}
         </Box>
       );
     }
@@ -405,7 +415,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
       return (
         <Box>
           <RenderTags tags={data?.tags} />
-          
+
           <Text
             as="h2"
             color="#1E1E1E"
@@ -418,17 +428,44 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
               <RenderClickIcon />
-              <Box fontSize={{ base: "sm" }}>
-                {data?.hasCurrentFunding ? page?.content?.hasCurrentFunding : page?.content?.withoutCurrentFunding}
-              </Box>
+              <RenderListItem
+                title={page?.content?.venue}
+                content={
+                  data?.hasCurrentFunding
+                    ? page?.content?.hasCurrentFunding
+                    : page?.content?.withoutCurrentFunding
+                }
+              />
             </Flex>
 
             <Flex gap={2} alignItems="center">
               <RenderClickIcon />
-              <Box fontSize={{ base: "sm" }}>
-                {data?.hasReceiveAnyFunding ? page?.content?.hasReceiveAnyFunding : page?.content?.withoutReceiveAnyFunding}
-              </Box>
+              <RenderListItem
+                title={page?.content?.venue}
+                content={
+                  data?.hasReceiveAnyFunding
+                    ? page?.content?.hasReceiveAnyFunding
+                    : page?.content?.withoutReceiveAnyFunding
+                }
+              />
             </Flex>
+
+            {data?.items?.map((data, index) => {
+              return (
+                <Flex
+                  key={`${data?.name}-${index}`}
+                  gap={2}
+                  alignItems="center"
+                >
+                  <RenderClickIcon />
+                  <RenderListItem
+                    title={data?.name}
+                    content={new Intl.NumberFormat("zh-HK").format(data?.amount)}
+                  />
+                </Flex>
+              );
+            })}
+
             <Flex gap={2} alignItems="center">
               <Box>{page?.content?.totalAmount} (HKD)</Box>
               <Box fontSize={{ base: "sm" }}>
@@ -639,7 +676,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             <Divider my={4} />
 
                             <Flex gap={2} direction="column">
-                            <Box fontWeight={700}>{page?.content?.organization}</Box>
+                              <Box fontWeight={700}>
+                                {page?.content?.organization}
+                              </Box>
                               {organization ? (
                                 <Flex gap={2} alignItems="center">
                                   <Box maxW={"180px"}>
@@ -759,7 +798,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                                 fontWeight={700}
                                 fontSize={{ base: "md", md: "lg" }}
                               >
-                              {page?.content?.media}
+                                {page?.content?.media}
                               </Box>
                             </Flex>
 
@@ -813,7 +852,7 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                         </Box>
                       </Flex>
 
-                      {/* {createdBy?.chineseName && (
+                      {organization?.contactName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BsPerson
@@ -826,20 +865,9 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                             />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactName}</Box>
-                            {createdBy?.chineseName}
-                          </Box>
-                        </Flex>
-                      )} */}
-
-                      
-                      {organization?.contactName && (
-                        <Flex align="center" gap={2} alignItems="flex-start">
-                          <Box w={"20px"}>
-                            <BsPerson style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
-                          </Box>
-                          <Box>
-                            <Box fontWeight={700}>{page?.content?.contactName}</Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactName}
+                            </Box>
                             {organization?.contactName}
                           </Box>
                         </Flex>
@@ -848,18 +876,29 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                       {organization?.contactEmail && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <AiOutlineMail style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                            <AiOutlineMail
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactEmail}</Box>
-                            <u><a
-                              href={`mailto:${organization?.contactEmail}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{color: "#0D8282"}}
-                            >
-                              {organization?.contactEmail}
-                            </a></u>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactEmail}
+                            </Box>
+                            <u>
+                              <a
+                                href={`mailto:${organization?.contactEmail}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: "#0D8282" }}
+                              >
+                                {organization?.contactEmail}
+                              </a>
+                            </u>
                           </Box>
                         </Flex>
                       )}
@@ -867,15 +906,24 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                       {organization?.contactPhone && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <BiPhone style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                            <BiPhone
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactPhone}</Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactPhone}
+                            </Box>
                             {organization?.contactPhone}
                           </Box>
                         </Flex>
                       )}
-                      
+
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
                           <Image
@@ -887,7 +935,8 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                         </Box>
                         <Box>
                           <Box fontWeight={700} color="#0D8282">
-                            {detail?.bookmarkCount} {page?.content?.bookmarkCount}
+                            {detail?.bookmarkCount}{" "}
+                            {page?.content?.bookmarkCount}
                           </Box>
                         </Box>
                       </Flex>
@@ -918,7 +967,6 @@ const Project = ({ page, api: { organizations, stockPhotos } }) => {
                           </Box>
                         </Box>
                       </Flex>
-     
                     </Stack>
                   </Box>
                 </Box>
@@ -1154,7 +1202,13 @@ export default withPageCMS(Project, {
     },
     {
       name: "otherResourcesNeededTitle",
-      label: "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃 other resources needed",
+      label:
+        "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃 other resources needed",
+      component: "text",
+    },
+    {
+      name: "currentFunding",
+      label: "現有資金 current funding",
       component: "text",
     },
     {
@@ -1165,6 +1219,11 @@ export default withPageCMS(Project, {
     {
       name: "withoutCurrentFunding",
       label: "沒有資金 has current funding",
+      component: "text",
+    },
+    {
+      name: "receiveAnyFunding",
+      label: "你的計劃有接受任何資金協助嗎 receive any funding",
       component: "text",
     },
     {
@@ -1180,6 +1239,16 @@ export default withPageCMS(Project, {
     {
       name: "totalAmount",
       label: "總數 totalAmount",
+      component: "text",
+    },
+    {
+      name: "description",
+      label: "詳細描述 description",
+      component: "text",
+    },
+    {
+      name: "other",
+      label: "其他 other",
       component: "text",
     },
     {

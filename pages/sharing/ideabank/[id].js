@@ -191,14 +191,17 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.size && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <RenderListItem title={page?.content?.size} content={data?.size} />
+                <RenderListItem
+                  title={page?.content?.size}
+                  content={data?.size}
+                />
               </Flex>
             )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
-                   title={page?.content?.openingHours}
+                  title={page?.content?.openingHours}
                   content={data?.openingHours}
                 />
               </Flex>
@@ -288,9 +291,10 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.frequency && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <RenderListItem 
-                   title={page?.content?.frequency}
-                  content={data?.frequency} />
+                <RenderListItem
+                  title={page?.content?.frequency}
+                  content={data?.frequency}
+                />
               </Flex>
             )}
 
@@ -335,14 +339,23 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             {data?.expertiseType &&
               options["expertiseType"][data?.expertiseType]}
           </Text>
+
           <Stack spacing={2} direction="column">
-            {data?.description && (
+          {data?.description && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
-                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
+                <RenderListItem
+                  title={page?.content?.description}
+                  content={data?.description}
+                />
               </Flex>
             )}
+          
           </Stack>
+
+          {data?.expertiseTypeOther && (
+            <RenderMoreInformation content={data?.expertiseTypeOther} />
+          )}
         </Box>
       );
     }
@@ -369,6 +382,9 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
               </Flex>
             )}
           </Stack>
+          {data?.networkTypeOther && (
+            <RenderMoreInformation content={data?.networkTypeOther} />
+          )}
         </Box>
       );
     }
@@ -406,7 +422,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
       return (
         <Box>
           <RenderTags tags={data?.tags} />
-          
+
           <Text
             as="h2"
             color="#1E1E1E"
@@ -419,17 +435,44 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
               <RenderClickIcon />
-              <Box fontSize={{ base: "sm" }}>
-                {data?.hasCurrentFunding ? page?.content?.hasCurrentFunding : page?.content?.withoutCurrentFunding}
-              </Box>
+              <RenderListItem
+                title={page?.content?.venue}
+                content={
+                  data?.hasCurrentFunding
+                    ? page?.content?.hasCurrentFunding
+                    : page?.content?.withoutCurrentFunding
+                }
+              />
             </Flex>
 
             <Flex gap={2} alignItems="center">
               <RenderClickIcon />
-              <Box fontSize={{ base: "sm" }}>
-                {data?.hasReceiveAnyFunding ? page?.content?.hasReceiveAnyFunding : page?.content?.withoutReceiveAnyFunding}
-              </Box>
+              <RenderListItem
+                title={page?.content?.venue}
+                content={
+                  data?.hasReceiveAnyFunding
+                    ? page?.content?.hasReceiveAnyFunding
+                    : page?.content?.withoutReceiveAnyFunding
+                }
+              />
             </Flex>
+
+            {data?.items?.map((data, index) => {
+              return (
+                <Flex
+                  key={`${data?.name}-${index}`}
+                  gap={2}
+                  alignItems="center"
+                >
+                  <RenderClickIcon />
+                  <RenderListItem
+                    title={data?.name}
+                    content={new Intl.NumberFormat("zh-HK").format(data?.amount)}
+                  />
+                </Flex>
+              );
+            })}
+
             <Flex gap={2} alignItems="center">
               <Box>{page?.content?.totalAmount} (HKD)</Box>
               <Box fontSize={{ base: "sm" }}>
@@ -1174,7 +1217,13 @@ export default withPageCMS(IdeaBankDetail, {
     },
     {
       name: "otherResourcesNeededTitle",
-      label: "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃 other resources needed",
+      label:
+        "你希望透過我們這個平台找到其他哪些資源以協助執行你的計劃 other resources needed",
+      component: "text",
+    },
+    {
+      name: "currentFunding",
+      label: "現有資金 current funding",
       component: "text",
     },
     {
@@ -1185,6 +1234,11 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "withoutCurrentFunding",
       label: "沒有資金 has current funding",
+      component: "text",
+    },
+    {
+      name: "receiveAnyFunding",
+      label: "你的計劃有接受任何資金協助嗎 receive any funding",
       component: "text",
     },
     {
@@ -1200,6 +1254,16 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "totalAmount",
       label: "總數 totalAmount",
+      component: "text",
+    },
+    {
+      name: "description",
+      label: "詳細描述 description",
+      component: "text",
+    },
+    {
+      name: "other",
+      label: "其他 other",
       component: "text",
     },
   ],

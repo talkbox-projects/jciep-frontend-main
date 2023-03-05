@@ -83,7 +83,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
 
-        if (router?.pathname === '/sharing/ideabank') {
+        if (router?.pathname === '/sharing/ideabank' || router?.pathname === '/sharing/ideabank/[id]') {
           return "7";
         }
 
