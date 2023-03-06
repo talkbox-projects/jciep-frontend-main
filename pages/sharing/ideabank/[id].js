@@ -49,6 +49,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      locale: context.locale,
       api: {
         organizations: await organizationSearch({
           status: [],
@@ -60,7 +61,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
+const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [createdBy, setCreatedBy] = useState([]);
@@ -175,7 +176,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.venue}
-                  content={options["district"][data?.district]}
+                  content={options["district"][locale??'zh'][data?.district]}
                 />
               </Flex>
             )}
@@ -237,8 +238,8 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             pb={2}
           >
             {data?.tasks}{" "}
-            {options["serviceNature"][data?.serviceNature] &&
-              `(${options["serviceNature"][data?.serviceNature]})`}
+            {options["serviceNature"][locale??'zh'][data?.serviceNature] &&
+              `(${options["serviceNature"][locale??'zh'][data?.serviceNature]})`}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
@@ -272,7 +273,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                 <RenderListItem
                   title={page?.content?.educationLevel}
                   content={
-                    options["educationLevel"][data?.educationLevelRequirement]
+                    options["educationLevel"][locale??'zh'][data?.educationLevelRequirement]
                   }
                 />
               </Flex>
@@ -293,7 +294,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.frequency}
-                  content={data?.frequency}
+                  content={options["frequency"][locale??'zh'][data?.frequency]}
                 />
               </Flex>
             )}
@@ -303,7 +304,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.durationNeededValue}
-                  content={`${data?.durationNeededValue} ${data?.durationNeededUnit}`}
+                  content={`${data?.durationNeededValue} ${options["durationNeededUnit"][locale??'zh'][data?.durationNeededUnit]}`}
                 />
               </Flex>
             )}
@@ -337,7 +338,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             pb={2}
           >
             {data?.expertiseType &&
-              options["expertiseType"][data?.expertiseType]}
+              options["expertiseType"][locale??'zh'][data?.expertiseType]}
           </Text>
 
           <Stack spacing={2} direction="column">
@@ -372,7 +373,7 @@ const IdeaBankDetail = ({ page, api: { organizations, stockPhotos } }) => {
             fontWeight={700}
             pb={2}
           >
-            {data?.networkType && options["networkType"][data?.networkType]}
+            {data?.networkType && options["networkType"][locale??'zh'][data?.networkType]}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.description && (
