@@ -93,6 +93,7 @@ export default `<!DOCTYPE html>
           box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
           margin: 0px auto;
           max-width: 600px;
+          background-color: #FFFFFF;
         "
       >
         <table
@@ -125,18 +126,20 @@ export default `<!DOCTYPE html>
                     style="width: 100%"
                   >
                     <tr style="vertical-align: top">
-                      <td
-                        background=""
-                        style="
-                          background: #ffffff url(cid:banner_base64) no-repeat
-                            center center / cover;
-                          background-position: center center;
-                          background-repeat: no-repeat;
-                          padding: 0px;
-                          vertical-align: top;
-                        "
-                        height="180"
-                      >
+                      <td>
+                      <img
+                      height="auto"
+                      src="cid:banner_base64"
+                      style="
+                        border: 0;
+                        display: block;
+                        outline: none;
+                        text-decoration: none;
+                        height: auto;
+                        width: 100%;
+                      "
+                      width="100%"
+                    />
                         <!--[if mso | IE]><table border="0" cellpadding="0" cellspacing="0" style="width:600px;" width="600" ><tr><td style=""><![endif]-->
                         <div class="mj-hero-content" style="margin: 0px auto">
                           <table
@@ -326,7 +329,6 @@ export default `<!DOCTYPE html>
                                           Arial, sans-serif;
                                         font-size: 36px;
                                         font-weight: 400;
-                                        line-height: 24px;
                                         text-align: left;
                                         color: #444444;
                                       "
