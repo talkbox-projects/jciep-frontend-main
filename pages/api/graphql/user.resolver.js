@@ -833,7 +833,7 @@ export default {
             organization?.contactEmail,
             {
               url: `${host}`,
-              description: `你好，<br/>你的機構會員 ${identity?.chineseName} 已於「人才庫」完成個人履歷，正等待批核，請登入網頁處理申請。<br/>如有查詢，請致電3910 2462 （張小姐）或電郵jcicp@hku.hk。`,
+              description: `你好，<br/>你的機構會員 ${identity?.chineseName} 已於「人才庫」完成個人履歷，正等待批核，請登入網頁處理申請。<br/>如有查詢，請致電3917 4762（陳小姐）或電郵至<a href="mailto:jcicp@hku.hk">jcicp@hku.hk</a>。`,
               descriptionOther: `賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
               button_text: "連結",
             },
@@ -880,6 +880,36 @@ export default {
       identity.publishStatus = "approved";
       identity.published = true;
       await identity.save();
+
+      if (identity?.email) {
+        let host = publicRuntimeConfig.HOST_URL ?? "http://localhost:3000";
+
+        sendPortfolioPublishStatusUpdate(
+          identity?.email,
+          {
+            url: `${host}`,
+            description: `${identity?.chineseName}你好，<br/>你的機構已處理你於「人才庫」提交的個人履歷，請登入以下網頁查看批核狀態。<br/>`,
+            descriptionOther: `如有查詢，請致電3917 4762（陳小姐）或電郵至<a href="mailto:jcicp@hku.hk">jcicp@hku.hk</a>。`,
+            button_text: "連結",
+          },
+          [
+            {
+              cid: "logo_base64",
+              filename: "logo.png",
+              encoding: "base64",
+              content: logoBase64,
+            },
+            {
+              cid: "banner_base64",
+              filename: "banner.png",
+              encoding: "base64",
+              content: bannerBase64,
+            },
+          ]
+        );
+      }
+
+
       return true;
     },
 
@@ -915,7 +945,7 @@ export default {
           {
             url: `${host}`,
             description: `${identity?.chineseName}你好，<br/>你的機構已處理你於「人才庫」提交的個人履歷，請登入以下網頁查看批核狀態。<br/>`,
-            descriptionOther: `如有查詢，請致電3910 2462 （張小姐）或電郵jcicp@hku.hk。<br/>賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
+            descriptionOther: `如有查詢，請致電3917 4762（陳小姐）或電郵至<a href="mailto:jcicp@hku.hk">jcicp@hku.hk</a>。`,
             button_text: "連結",
           },
           [
@@ -971,7 +1001,7 @@ export default {
           {
             url: `${host}`,
             description: `${identity?.chineseName}你好，<br/>你的機構已處理你於「人才庫」提交的個人履歷，請登入以下網頁查看批核狀態。<br/>`,
-            descriptionOther: `如有查詢，請致電3910 2462 （張小姐）或電郵jcicp@hku.hk。<br/>賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
+            descriptionOther: `如有查詢，請致電3917 4762（陳小姐）或電郵至<a href="mailto:jcicp@hku.hk">jcicp@hku.hk</a>。<br/>賽馬會共融．知行計劃<br/>此電郵由電腦系統自動傳送，請勿回覆此電郵。`,
             button_text: "連結",
           },
           [
