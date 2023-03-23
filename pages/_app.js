@@ -31,6 +31,9 @@ const Avatar = {
 const theme = extendTheme({
   initialColorMode: "light",
   useSystemColorMode: false,
+  shadows:{
+    outline: "0 0 0 3px rgba(66, 153, 225, 1)"
+  },
   colors: {
     red: {
       500: "#D73A3A", // contrast level AA

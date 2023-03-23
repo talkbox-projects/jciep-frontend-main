@@ -463,7 +463,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                           : "normal",
                                       wordWrap: "break-word",
                                     }}
-                                    role="link"
+                                    role="menuitem"
                                   >
                                     {label}
                                   </Button>
@@ -516,7 +516,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                 router?.locale === "zh" ? "nowrap" : "normal",
                               wordWrap: "break-word",
                             }}
-                            role="link"
+                            role="menuitem"
                           >
                             {label}
                           </Button>
@@ -904,6 +904,39 @@ export default withConfigurationCMS(
         {
           label: "社會的 social",
           name: "social",
+          component: "group-list",
+          itemProps: (item) => ({
+            key: item.id,
+            label: item.label,
+          }),
+          defaultItem: () => ({
+            id: Math.random().toString(36).substr(2, 9),
+          }),
+          fields: [
+            {
+              label: "圖標 Icon",
+              name: "icon",
+              component: "image",
+              uploadDir: () => "/navigation",
+              parse: ({ previewSrc }) => previewSrc,
+              previewSrc: (src) => src,
+            },
+            {
+              name: "url",
+              label: "路由 Url",
+              placeholder: "https://",
+              component: "text",
+            },
+            {
+              name: "label",
+              label: "標籤",
+              component: "text",
+            },
+          ],
+        },
+        {
+          label: "App",
+          name: "appDownload",
           component: "group-list",
           itemProps: (item) => ({
             key: item.id,
