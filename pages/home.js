@@ -467,11 +467,13 @@ const Home = ({ setting, page }) => {
             }}
           >
             {(posts ?? []).map((post, index) => {
-              const postImage = post?.content?.feature?.image ?? post?.content?.coverImage
+              let postImage = post?.content?.feature?.image ?? post?.content?.coverImage
               return (
                 <Container key={index} py={28}>
                 <NextLink passHref href={`/sharing/${post?.slug}`}>
-                  <Link d="block">
+                  <Link d="block" _focus={{
+                    boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+                  }}>
                     <Stack
                       cursor="pointer"
                       align="center"
@@ -483,6 +485,10 @@ const Home = ({ setting, page }) => {
                       {postImage && (<Box
                         w={["100%", "60%", "50%", "50%", "40%"]}
                         tabIndex={0}
+                        _focusVisible={{
+                          outline: 'none',
+                          boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+                        }}
                       >
                         <Image
                           alt={post?.content?.feature?.tagline ?? post?.title}
@@ -491,6 +497,11 @@ const Home = ({ setting, page }) => {
                             post?.content?.coverImage
                           }
                           tabIndex={0}
+                          _focusVisible={{
+                            outline: 'none',
+                            boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+                          }}
+                          border={'none'}
                         />
                       </Box>)}
                       <VStack
@@ -565,6 +576,9 @@ const Home = ({ setting, page }) => {
               opacity={carouselAutoPlay === true ? 0.5 : 1}
               disabled={carouselAutoPlay === true}
               aria-label={router.locale === "zh" ? "開始" : "start"}
+              _focus={{
+                boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+              }}
             >
               <BsFillPlayFill fontSize={"24px"} />
             </Button>
@@ -575,6 +589,9 @@ const Home = ({ setting, page }) => {
               opacity={carouselAutoPlay === false ? 0.5 : 1}
               disabled={carouselAutoPlay === false}
               aria-label={router.locale === "zh" ? "暫停" : "pause"}
+              _focus={{
+                boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+              }}
             >
               <BsFillPauseFill fontSize={"24px"} />
             </Button>

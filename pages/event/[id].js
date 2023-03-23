@@ -37,6 +37,8 @@ import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import eventTypes from "../api/graphql/enum/eventTypes";
 import charge from "../api/graphql/enum/freeOrCharge";
 
+import _ from "lodash";
+
 const PAGE_KEY = "event";
 
 export const getServerSideProps = async (context) => {
@@ -613,7 +615,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                       </a>
                     )}
 
-                    {!isNaN(detail?.contactNumber) && (
+                    {/* {!isNaN(detail?.contactNumber) && (
                       <a href={`tel:${detail?.contactNumber}`}>
                         <Button
                           borderRadius="20px"
@@ -631,7 +633,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                           )}
                         </Button>
                       </a>
-                    )}
+                    )} */}
                   </Flex>
                 </Box>
               </Box>
@@ -650,7 +652,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
 
 const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
   let imageUrl = "";
-  if (url !== "undefined" && url !== null) {
+  if (url !== "undefined" && !_.isEmpty(url)) {
     imageUrl = url;
   } else {
     const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)

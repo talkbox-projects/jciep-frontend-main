@@ -83,7 +83,7 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
     let getURLParameter = asPath.replace("/event", "");
 
     if (!getURLParameter) {
-      getURLParameter = "?orderBy=createdAt&orderByAsc=false&ended=false";
+      getURLParameter = "?orderBy=startDate&orderByAsc=true&ended=false";
     }
 
     async function fetchData() {
@@ -322,12 +322,12 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
                         {(filteredEvents[detail] || []).map((d, i) => {
                           const url = d?.banner?.file?.url
                           const stockPhotoId = d?.banner?.stockPhotoId
-    
+
                           let imageUrl = "";
-                          if (url !== "undefined" && url !== null) {
+                          if (url !== "undefined" && !_.isEmpty(url)) {
                             imageUrl = url;
                           } else {
-                            const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
+                            const getStockPhoto = stockPhotos?.find((d)=>d?.id == stockPhotoId)
                             imageUrl = getStockPhoto?.url
                           }
                           return (

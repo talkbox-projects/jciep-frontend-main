@@ -10,7 +10,7 @@ typeof window === "undefined"
 
 
 const defaultParams = {
-  orderBy: "createdAt",
+  orderBy: "startDate",
   orderByAsc: true,
   ended: false,
 };

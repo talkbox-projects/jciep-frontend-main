@@ -41,6 +41,8 @@ import { AiOutlineMail } from "react-icons/ai";
 import { TiDocumentText } from "react-icons/ti";
 import { BsPerson } from "react-icons/bs";
 
+import _ from "lodash";
+
 const PAGE_KEY = "project";
 
 export const getServerSideProps = async (context) => {
@@ -278,11 +280,7 @@ const IdeaBankDetail = ({
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.numberOfConsultantsNeeded}
-                  content={
-                    options["numberOfConsultantsNeeded"][locale ?? "zh"][
-                      data?.numberOfConsultantsNeeded
-                    ]
-                  }
+                  content={data?.numberOfConsultantsNeeded}
                 />
               </Flex>
             )}
@@ -292,11 +290,7 @@ const IdeaBankDetail = ({
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.numberOfVolunteersNeeded}
-                  content={
-                    options["numberOfVolunteersNeeded"][locale ?? "zh"][
-                      data?.numberOfVolunteersNeeded
-                    ]
-                  }
+                  content={data?.numberOfVolunteersNeeded}
                 />
               </Flex>
             )}
@@ -1090,7 +1084,7 @@ const IdeaBankDetail = ({
 
 const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
   let imageUrl = "";
-  if (url !== "undefined" && url !== null) {
+  if (url !== "undefined" && !_.isEmpty(url)) {
     imageUrl = url;
   } else {
     const getStockPhoto = stockPhotos?.find((d) => d?.id === stockPhotoId);
