@@ -61,7 +61,11 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) => {
+const IdeaBankDetail = ({
+  page,
+  locale,
+  api: { organizations, stockPhotos },
+}) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
   const [createdBy, setCreatedBy] = useState([]);
@@ -114,9 +118,9 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
     );
   };
 
-  const RenderTags = ({tags}) => {
-    if(!tags){
-      return
+  const RenderTags = ({ tags }) => {
+    if (!tags) {
+      return;
     }
     return (
       <Flex color="#08A3A3" gap={2}>
@@ -176,7 +180,7 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.venue}
-                  content={options["district"][locale??'zh'][data?.district]}
+                  content={options["district"][locale ?? "zh"][data?.district]}
                 />
               </Flex>
             )}
@@ -238,8 +242,10 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
             pb={2}
           >
             {data?.tasks}{" "}
-            {options["serviceNature"][locale??'zh'][data?.serviceNature] &&
-              `(${options["serviceNature"][locale??'zh'][data?.serviceNature]})`}
+            {options["serviceNature"][locale ?? "zh"][data?.serviceNature] &&
+              `(${
+                options["serviceNature"][locale ?? "zh"][data?.serviceNature]
+              })`}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
@@ -258,12 +264,40 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                   <RenderListItem
                     title={page?.content?.skills}
                     content={data?.skills?.map((d, i) => (
-                      <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
+                      <Box key={`${d}-${i}`} display={"inline-block"} pr={1}>
                         {d}
                       </Box>
                     ))}
                   />
                 </Box>
+              </Flex>
+            )}
+
+            {data?.numberOfConsultantsNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.numberOfConsultantsNeeded}
+                  content={
+                    options["numberOfConsultantsNeeded"][locale ?? "zh"][
+                      data?.numberOfConsultantsNeeded
+                    ]
+                  }
+                />
+              </Flex>
+            )}
+
+            {data?.numberOfVolunteersNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.numberOfVolunteersNeeded}
+                  content={
+                    options["numberOfVolunteersNeeded"][locale ?? "zh"][
+                      data?.numberOfVolunteersNeeded
+                    ]
+                  }
+                />
               </Flex>
             )}
 
@@ -273,7 +307,9 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 <RenderListItem
                   title={page?.content?.educationLevel}
                   content={
-                    options["educationLevel"][locale??'zh'][data?.educationLevelRequirement]
+                    options["educationLevel"][locale ?? "zh"][
+                      data?.educationLevelRequirement
+                    ]
                   }
                 />
               </Flex>
@@ -294,7 +330,9 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.frequency}
-                  content={options["frequency"][locale??'zh'][data?.frequency]}
+                  content={
+                    options["frequency"][locale ?? "zh"][data?.frequency]
+                  }
                 />
               </Flex>
             )}
@@ -304,7 +342,11 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.durationNeededValue}
-                  content={`${data?.durationNeededValue} ${options["durationNeededUnit"][locale??'zh'][data?.durationNeededUnit]}`}
+                  content={`${data?.durationNeededValue} ${
+                    options["durationNeededUnit"][locale ?? "zh"][
+                      data?.durationNeededUnit
+                    ]
+                  }`}
                 />
               </Flex>
             )}
@@ -314,7 +356,7 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.other}
-                  content={`${data?.durationNeededOther} ${data?.durationNeededOther}`}
+                  content={`${data?.durationNeededOther}`}
                 />
               </Flex>
             )}
@@ -338,11 +380,11 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
             pb={2}
           >
             {data?.expertiseType &&
-              options["expertiseType"][locale??'zh'][data?.expertiseType]}
+              options["expertiseType"][locale ?? "zh"][data?.expertiseType]}
           </Text>
 
           <Stack spacing={2} direction="column">
-          {data?.description && (
+            {data?.description && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
@@ -351,7 +393,6 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                 />
               </Flex>
             )}
-          
           </Stack>
 
           {data?.expertiseTypeOther && (
@@ -373,7 +414,8 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
             fontWeight={700}
             pb={2}
           >
-            {data?.networkType && options["networkType"][locale??'zh'][data?.networkType]}
+            {data?.networkType &&
+              options["networkType"][locale ?? "zh"][data?.networkType]}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.description && (
@@ -468,7 +510,9 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                   <RenderClickIcon />
                   <RenderListItem
                     title={data?.name}
-                    content={new Intl.NumberFormat("zh-HK").format(data?.amount)}
+                    content={new Intl.NumberFormat("zh-HK").format(
+                      data?.amount
+                    )}
                   />
                 </Flex>
               );
@@ -684,7 +728,9 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                             <Divider my={4} />
 
                             <Flex gap={2} direction="column">
-                              <Box fontWeight={700}>{page?.content?.organization}</Box>
+                              <Box fontWeight={700}>
+                                {page?.content?.organization}
+                              </Box>
                               {organization ? (
                                 <Flex gap={2} alignItems="center">
                                   <Box maxW={"180px"}>
@@ -876,14 +922,23 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                           </Box>
                         </Flex>
                       )} */}
-                      
+
                       {organization?.contactName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <BsPerson style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                            <BsPerson
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactName}</Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactName}
+                            </Box>
                             {organization?.contactName}
                           </Box>
                         </Flex>
@@ -892,18 +947,29 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                       {organization?.contactEmail && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <AiOutlineMail style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                            <AiOutlineMail
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactEmail}</Box>
-                            <u><a
-                              href={`mailto:${organization?.contactEmail}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{color: "#0D8282"}}
-                            >
-                              {organization?.contactEmail}
-                            </a></u>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactEmail}
+                            </Box>
+                            <u>
+                              <a
+                                href={`mailto:${organization?.contactEmail}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: "#0D8282" }}
+                              >
+                                {organization?.contactEmail}
+                              </a>
+                            </u>
                           </Box>
                         </Flex>
                       )}
@@ -911,10 +977,19 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                       {organization?.contactPhone && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
-                            <BiPhone style={{width: "18px", height: "18px", paddingLeft: "2px", paddingTop: "1px"}}/>
+                            <BiPhone
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
                           </Box>
                           <Box>
-                            <Box fontWeight={700}>{page?.content?.contactPhone}</Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactPhone}
+                            </Box>
                             {organization?.contactPhone}
                           </Box>
                         </Flex>
@@ -931,7 +1006,8 @@ const IdeaBankDetail = ({ page, locale, api: { organizations, stockPhotos } }) =
                         </Box>
                         <Box>
                           <Box fontWeight={700} color="#0D8282">
-                            {detail?.bookmarkCount} {page?.content?.bookmarkCount}
+                            {detail?.bookmarkCount}{" "}
+                            {page?.content?.bookmarkCount}
                           </Box>
                         </Box>
                       </Flex>
@@ -1199,6 +1275,16 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "durationNeededValue",
       label: "所需時間 duration needed value",
+      component: "text",
+    },
+    {
+      name: "numberOfConsultantsNeeded",
+      label: "需要顧問人數 Number Of consultantsNeeded",
+      component: "text",
+    },
+    {
+      name: "numberOfVolunteersNeeded",
+      label: "所需義工人數 number Of VolunteersNeeded",
       component: "text",
     },
     {

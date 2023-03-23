@@ -292,5 +292,21 @@ export const options = {
       tuenMun: "Tuen Mun",
       yuenLong: "Yuen Long"
     },
+  },
+  numberOfConsultantsNeeded: {
+    zh:{
+      numberOfConsultantsNeeded: "需要顧問人數"
+    },
+    en:{
+      numberOfConsultantsNeeded: "Consultants needed"
+    },
+  },
+  numberOfVolunteersNeeded: {
+    zh:{
+      numberOfVolunteersNeeded: "需要的義工人數"
+    },
+    en:{
+      numberOfVolunteersNeeded: "Volunteers Needed"
+    },
   }
 };

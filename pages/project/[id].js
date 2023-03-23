@@ -169,7 +169,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.venue}
-                  content={options["district"][locale??'zh'][data?.district]}
+                  content={options["district"][locale ?? "zh"][data?.district]}
                 />
               </Flex>
             )}
@@ -231,8 +231,10 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             pb={2}
           >
             {data?.tasks}{" "}
-            {options["serviceNature"][locale??'zh'][data?.serviceNature] &&
-              `(${options["serviceNature"][locale??'zh'][data?.serviceNature]})`}
+            {options["serviceNature"][locale ?? "zh"][data?.serviceNature] &&
+              `(${
+                options["serviceNature"][locale ?? "zh"][data?.serviceNature]
+              })`}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.tasksDescription && (
@@ -260,13 +262,43 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               </Flex>
             )}
 
+            {data?.numberOfConsultantsNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.numberOfConsultantsNeeded}
+                  content={
+                    options["numberOfConsultantsNeeded"][locale ?? "zh"][
+                      data?.numberOfConsultantsNeeded
+                    ]
+                  }
+                />
+              </Flex>
+            )}
+
+            {data?.numberOfVolunteersNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderClickIcon />
+                <RenderListItem
+                  title={page?.content?.numberOfVolunteersNeeded}
+                  content={
+                    options["numberOfVolunteersNeeded"][locale ?? "zh"][
+                      data?.numberOfVolunteersNeeded
+                    ]
+                  }
+                />
+              </Flex>
+            )}
+
             {data?.educationLevelRequirement && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.educationLevel}
                   content={
-                    options["educationLevel"][locale??'zh'][data?.educationLevelRequirement]
+                    options["educationLevel"][locale ?? "zh"][
+                      data?.educationLevelRequirement
+                    ]
                   }
                 />
               </Flex>
@@ -287,7 +319,9 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.frequency}
-                  content={options["frequency"][locale??'zh'][data?.frequency]}
+                  content={
+                    options["frequency"][locale ?? "zh"][data?.frequency]
+                  }
                 />
               </Flex>
             )}
@@ -297,7 +331,11 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                 <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.durationNeededValue}
-                  content={`${data?.durationNeededValue} ${options["durationNeededUnit"][locale??'zh'][data?.durationNeededUnit]}`}
+                  content={`${data?.durationNeededValue} ${
+                    options["durationNeededUnit"][locale ?? "zh"][
+                      data?.durationNeededUnit
+                    ]
+                  }`}
                 />
               </Flex>
             )}
@@ -331,11 +369,11 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             pb={2}
           >
             {data?.expertiseType &&
-              options["expertiseType"][locale??'zh'][data?.expertiseType]}
+              options["expertiseType"][locale ?? "zh"][data?.expertiseType]}
           </Text>
 
           <Stack spacing={2} direction="column">
-          {data?.description && (
+            {data?.description && (
               <Flex gap={2} alignItems="center">
                 <RenderClickIcon />
                 <RenderListItem
@@ -344,7 +382,6 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                 />
               </Flex>
             )}
-          
           </Stack>
 
           {data?.expertiseTypeOther && (
@@ -366,7 +403,8 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             fontWeight={700}
             pb={2}
           >
-            {data?.networkType && options["networkType"][locale??'zh'][data?.networkType]}
+            {data?.networkType &&
+              options["networkType"][locale ?? "zh"][data?.networkType]}
           </Text>
           <Stack spacing={2} direction="column">
             {data?.description && (
@@ -461,7 +499,9 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                   <RenderClickIcon />
                   <RenderListItem
                     title={data?.name}
-                    content={new Intl.NumberFormat("zh-HK").format(data?.amount)}
+                    content={new Intl.NumberFormat("zh-HK").format(
+                      data?.amount
+                    )}
                   />
                 </Flex>
               );
@@ -1184,6 +1224,16 @@ export default withPageCMS(Project, {
     {
       name: "durationNeededValue",
       label: "所需時間 duration needed value",
+      component: "text",
+    },
+    {
+      name: "numberOfConsultantsNeeded",
+      label: "需要顧問人數 Number Of consultantsNeeded",
+      component: "text",
+    },
+    {
+      name: "numberOfVolunteersNeeded",
+      label: "所需義工人數 number Of VolunteersNeeded",
       component: "text",
     },
     {
