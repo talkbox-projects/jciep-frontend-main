@@ -275,7 +275,7 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeVenue}
+            {page?.content?.typeManpower}
           </Text>
 
           <Divider my={2} />
@@ -297,10 +297,7 @@ const IdeaBankDetail = ({
               fontWeight={700}
             >
               {page?.content?.iNeed}
-              {options["serviceNature"][locale ?? "zh"][data?.serviceNature] &&
-                `(${
-                  options["serviceNature"][locale ?? "zh"][data?.serviceNature]
-                })`}
+              {page?.content?.typeManpower}
             </Text>
           </Flex>
 
@@ -308,7 +305,7 @@ const IdeaBankDetail = ({
             {data?.tasks && (
               <Flex gap={2} alignItems="center">
                 <RenderListItem
-                  title={page?.content?.tasks}
+                  title={page?.content?.task}
                   content={data?.tasks}
                 />
               </Flex>
@@ -429,7 +426,8 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeExpertise}
+            {data?.expertiseType &&
+              options["expertiseType"][locale ?? "zh"][data?.expertiseType]}
           </Text>
 
           <Divider my={2} />
@@ -452,8 +450,6 @@ const IdeaBankDetail = ({
             >
               {page?.content?.iNeed}
               {page?.content?.typeExpertise}
-              {/* {data?.expertiseType &&
-              options["expertiseType"][locale ?? "zh"][data?.expertiseType]} */}
             </Text>
           </Flex>
 
@@ -484,7 +480,8 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeNetwork}
+            {data?.networkType &&
+              options["networkType"][locale ?? "zh"][data?.networkType]}
           </Text>
 
           <Divider my={2} />
@@ -507,8 +504,6 @@ const IdeaBankDetail = ({
             >
               {page?.content?.iNeed}
               {page?.content?.typeNetwork}
-              {/* {data?.expertiseType &&
-              options["expertiseType"][locale ?? "zh"][data?.expertiseType]} */}
             </Text>
           </Flex>
 
@@ -540,7 +535,7 @@ const IdeaBankDetail = ({
 
           <Divider my={2} />
 
-          <Flex alignItems={"center"} gap={2} pb={2}>
+          {/* <Flex alignItems={"center"} gap={2} pb={2}>
             <Box>
               <Image
                 src={resourceData[data.type]?.icon}
@@ -556,10 +551,9 @@ const IdeaBankDetail = ({
               fontSize={{ base: "md", md: "lg" }}
               fontWeight={700}
             >
-              {page?.content?.iNeed}
               {page?.content?.otherResourcesNeeded}
             </Text>
-          </Flex>
+          </Flex> */}
 
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">

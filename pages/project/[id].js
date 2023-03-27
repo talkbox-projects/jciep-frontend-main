@@ -20,6 +20,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Button,
+  Tag
 } from "@chakra-ui/react";
 import DividerSimple from "../../components/DividerSimple";
 import Container from "../../components/Container";
@@ -104,15 +105,15 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
   const RenderListItem = ({ title, content }) => {
     return (
       <Flex direction="column" fontSize={{ base: "sm" }} flex={1}>
-        <Text fontSize={{ base: "xs" }} color="gray.500">
-          {title}
-        </Text>
-        <Text>{content}</Text>
-      </Flex>
+      <Text fontSize={{ base: "xs" }} color="gray.500">
+        {title}
+      </Text>
+      <Text>{content}</Text>
+    </Flex>
     );
   };
 
-  const RenderMoreInformation = ({ content }) => {
+  const RenderMoreInformation = ({ content, remark }) => {
     return (
       <Box>
         <Divider my={4} />
@@ -125,13 +126,16 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             gap={1}
             fontSize={{ base: "sm", lg: "sm" }}
           >
-            <Text fontWeight={"bold"}>{page?.content?.moreInformation}</Text>
+            <Text fontWeight={"bold"}>
+              {remark ?? page?.content?.moreInformation}
+            </Text>
             <Text>{content}</Text>
           </Flex>
         </Flex>
       </Box>
     );
   };
+
 
   const RenderTags = ({ tags }) => {
     if (!tags) {
@@ -161,41 +165,64 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
-            {data?.title}
+            {page?.content?.typeVenue}
           </Text>
+
+          <Divider my={2} />
+
+          <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.iNeed}
+              {data?.title}
+            </Text>
+          </Flex>
+
           <Stack spacing={2} direction="column">
             {data?.maxCapacity && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
+                {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.venue}
                   content={options["district"][locale ?? "zh"][data?.district]}
                 />
               </Flex>
             )}
-            {data?.maxCapacity && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.maxCapacity}
-                  content={data?.maxCapacity}
-                />
-              </Flex>
-            )}
             {data?.size && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
+                {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.size}
                   content={data?.size}
                 />
               </Flex>
             )}
+            {data?.maxCapacity && (
+              <Flex gap={2} alignItems="center">
+                {/* <RenderClickIcon /> */}
+                <RenderListItem
+                  title={page?.content?.maxCapacity}
+                  content={data?.maxCapacity}
+                />
+              </Flex>
+            )}
             {data?.openingHours && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
+                {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.openingHours}
                   content={data?.openingHours}
@@ -204,7 +231,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             )}
             {data?.accessibilityRequirement && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
+                {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.accessibilityRequirement}
                   content={data?.accessibilityRequirement}
@@ -225,23 +252,52 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
       return (
         <Box>
           <RenderTags tags={data?.tags} />
+
           <Text
             as="h2"
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
-            {data?.tasks}{" "}
-            {options["serviceNature"][locale ?? "zh"][data?.serviceNature] &&
-              `(${
-                options["serviceNature"][locale ?? "zh"][data?.serviceNature]
-              })`}
+            {page?.content?.typeManpower}
           </Text>
+
+          <Divider my={2} />
+
+          <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.iNeed}
+              {page?.content?.typeManpower}
+            </Text>
+          </Flex>
+
           <Stack spacing={2} direction="column">
+            {data?.tasks && (
+              <Flex gap={2} alignItems="center">
+                <RenderListItem
+                  title={page?.content?.task}
+                  content={data?.tasks}
+                />
+              </Flex>
+            )}
+
             {data?.tasksDescription && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
+                {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.tasksDescription}
                   content={data?.tasksDescription}
@@ -250,75 +306,22 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             )}
             {data?.skills && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
                 <Box fontSize={{ base: "sm" }}>
-                  <RenderListItem
-                    title={page?.content?.skills}
-                    content={data?.skills?.map((d, i) => (
-                      <Box key={`${d}-${i}`} d={"inline-block"} pr={1}>
-                        {d}
+                  <RenderListItem title={page?.content?.skills} content={""} />
+
+                  <Flex gap={1} pt={1} direction="row" alignItems={"center"}>
+                    {data?.skills?.map((d, i) => (
+                      <Box key={`${d}-${i}`}>
+                        <Tag borderRadius={"15px"}>{d}</Tag>
                       </Box>
                     ))}
-                  />
+                  </Flex>
                 </Box>
-              </Flex>
-            )}
-
-            {data?.numberOfConsultantsNeeded && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.numberOfConsultantsNeeded}
-                  content={
-                    options["numberOfConsultantsNeeded"][locale ?? "zh"][
-                      data?.numberOfConsultantsNeeded
-                    ]
-                  }
-                />
-              </Flex>
-            )}
-
-            {data?.numberOfVolunteersNeeded && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.numberOfVolunteersNeeded}
-                  content={
-                    options["numberOfVolunteersNeeded"][locale ?? "zh"][
-                      data?.numberOfVolunteersNeeded
-                    ]
-                  }
-                />
-              </Flex>
-            )}
-
-            {data?.educationLevelRequirement && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.educationLevel}
-                  content={
-                    options["educationLevel"][locale ?? "zh"][
-                      data?.educationLevelRequirement
-                    ]
-                  }
-                />
-              </Flex>
-            )}
-
-            {data?.workLocation && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.workLocation}
-                  content={data?.workLocation}
-                />
               </Flex>
             )}
 
             {data?.frequency && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.frequency}
                   content={
@@ -330,7 +333,6 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
 
             {data?.durationNeededValue && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.durationNeededValue}
                   content={`${data?.durationNeededValue} ${
@@ -344,10 +346,49 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
 
             {data?.durationNeededOther && (
               <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
                 <RenderListItem
                   title={page?.content?.other}
-                  content={`${data?.durationNeededOther} ${data?.durationNeededOther}`}
+                  content={`${data?.durationNeededOther}`}
+                />
+              </Flex>
+            )}
+
+            {data?.numberOfConsultantsNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderListItem
+                  title={page?.content?.numberOfConsultantsNeeded}
+                  content={data?.numberOfConsultantsNeeded}
+                />
+              </Flex>
+            )}
+
+            {data?.numberOfVolunteersNeeded && (
+              <Flex gap={2} alignItems="center">
+                <RenderListItem
+                  title={page?.content?.numberOfVolunteersNeeded}
+                  content={data?.numberOfVolunteersNeeded}
+                />
+              </Flex>
+            )}
+
+            {data?.educationLevelRequirement && (
+              <Flex gap={2} alignItems="center">
+                <RenderListItem
+                  title={page?.content?.educationLevel}
+                  content={
+                    options["educationLevel"][locale ?? "zh"][
+                      data?.educationLevelRequirement
+                    ]
+                  }
+                />
+              </Flex>
+            )}
+
+            {data?.workLocation && (
+              <Flex gap={2} alignItems="center">
+                <RenderListItem
+                  title={page?.content?.workLocation}
+                  content={data?.workLocation}
                 />
               </Flex>
             )}
@@ -368,27 +409,46 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
             {data?.expertiseType &&
               options["expertiseType"][locale ?? "zh"][data?.expertiseType]}
           </Text>
 
+          <Divider my={2} />
+
+          <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.iNeed}
+              {page?.content?.typeExpertise}
+            </Text>
+          </Flex>
+
           <Stack spacing={2} direction="column">
-            {data?.description && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.description}
-                  content={data?.description}
-                />
-              </Flex>
-            )}
+            <Flex gap={2} alignItems="center">
+              <RenderListItem
+                title={page?.content?.remark ?? page?.content?.description}
+                content={data?.expertiseTypeOther ?? data?.description}
+              />
+            </Flex>
           </Stack>
 
-          {data?.expertiseTypeOther && (
-            <RenderMoreInformation content={data?.expertiseTypeOther} />
-          )}
+          {/* {data?.expertiseTypeOther && (
+            <RenderMoreInformation remark={page?.content?.remark} content={data?.expertiseTypeOther} />
+          )} */}
         </Box>
       );
     }
@@ -403,22 +463,42 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
             {data?.networkType &&
               options["networkType"][locale ?? "zh"][data?.networkType]}
           </Text>
+
+          <Divider my={2} />
+
+          <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.iNeed}
+              {page?.content?.typeNetwork}
+            </Text>
+          </Flex>
+
           <Stack spacing={2} direction="column">
-            {data?.description && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <Box fontSize={{ base: "sm" }}>{data?.description}</Box>
-              </Flex>
-            )}
+            <Flex gap={2} alignItems="center">
+              <RenderListItem
+                title={page?.content?.remark ?? page?.content?.description}
+                content={data?.networkTypeOther ?? data?.description}
+              />
+            </Flex>
           </Stack>
-          {data?.networkTypeOther && (
-            <RenderMoreInformation content={data?.networkTypeOther} />
-          )}
         </Box>
       );
     }
@@ -433,20 +513,39 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
-            {page?.content?.otherResourcesNeeded}
+            {page?.content?.typeOther}
           </Text>
+
+          <Divider my={2} />
+
+          {/* <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.otherResourcesNeeded}
+            </Text>
+          </Flex> */}
+
           <Stack spacing={2} direction="column">
-            {data?.otherResourcesNeeded && (
-              <Flex gap={2} alignItems="center">
-                <RenderClickIcon />
-                <RenderListItem
-                  title={page?.content?.otherResourcesNeededTitle}
-                  content={data?.otherResourcesNeeded}
-                />
-              </Flex>
-            )}
+            <Flex gap={2} alignItems="center">
+              <RenderListItem
+                title={page?.content?.moreInformation}
+                content={data?.otherResourcesNeeded}
+              />
+            </Flex>
           </Stack>
         </Box>
       );
@@ -462,15 +561,77 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             color="#1E1E1E"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
-            pb={2}
           >
-            {page?.content?.needFunding}
+            {page?.content?.typeFunding}
           </Text>
+
+          <Divider my={2} />
+
+          <Flex alignItems={"center"} gap={2} pb={2}>
+            <Box>
+              <Image
+                src={resourceData[data.type]?.icon}
+                alt={"icon"}
+                color="gray.500"
+                minW={"14px"}
+              />
+            </Box>
+
+            <Text
+              as="h2"
+              color="#1E1E1E"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight={700}
+            >
+              {page?.content?.iNeed}
+              {page?.content?.typeFunding}
+            </Text>
+          </Flex>
+
           <Stack spacing={2} direction="column">
             <Flex gap={2} alignItems="center">
-              <RenderClickIcon />
+              <Flex direction={"column"} gap={2}>
+                <Text fontSize={{ base: "xs" }} color="gray.500">
+                  {page?.content?.projectList ?? "項目清單"}
+                </Text>
+                <Flex direction="column" fontSize={{ base: "sm" }} flex={1}>
+                  <Box flex={1}>
+                    {data?.items?.map((data, index) => {
+                      return (
+                        <Flex
+                          key={`${data?.name}-${index}`}
+                          gap={2}
+                          alignItems="center"
+                        >
+                          <RenderListItem
+                            title={data?.name}
+                            content={new Intl.NumberFormat("zh-HK", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(
+                              data?.amount
+                            )}
+                          />
+                        </Flex>
+                      );
+                    })}
+                  </Box>
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex gap={2} alignItems="center">
               <RenderListItem
-                title={page?.content?.venue}
+                title={page?.content?.totalAmount}
+                content={`
+                ${page?.content?.amountHKD??"金額(HKD)"}
+                ${new Intl.NumberFormat("zh-HK", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(
+                  data?.items?.reduce(function (acc, obj) {
+                    return acc + obj.amount;
+                  }, 0)
+                )}`}
+              />
+            </Flex>
+
+            <Flex gap={2} alignItems="center">
+              <RenderListItem
+                title={page?.content?.currentFunding}
                 content={
                   data?.hasCurrentFunding
                     ? page?.content?.hasCurrentFunding
@@ -480,9 +641,8 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             </Flex>
 
             <Flex gap={2} alignItems="center">
-              <RenderClickIcon />
               <RenderListItem
-                title={page?.content?.venue}
+                title={page?.content?.receiveAnyFunding}
                 content={
                   data?.hasReceiveAnyFunding
                     ? page?.content?.hasReceiveAnyFunding
@@ -491,36 +651,6 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               />
             </Flex>
 
-            {data?.items?.map((data, index) => {
-              return (
-                <Flex
-                  key={`${data?.name}-${index}`}
-                  gap={2}
-                  alignItems="center"
-                >
-                  <RenderClickIcon />
-                  <RenderListItem
-                    title={data?.name}
-                    content={new Intl.NumberFormat("zh-HK").format(
-                      data?.amount
-                    )}
-                  />
-                </Flex>
-              );
-            })}
-
-            <Flex gap={2} alignItems="center">
-              <Box>{page?.content?.totalAmount} (HKD)</Box>
-              <Box fontSize={{ base: "sm" }}>
-                <Box>
-                  <b>{`${new Intl.NumberFormat("zh-HK").format(
-                    data?.items?.reduce(function (acc, obj) {
-                      return acc + obj.amount;
-                    }, 0)
-                  )}`}</b>
-                </Box>
-              </Box>
-            </Flex>
           </Stack>
         </Box>
       );
@@ -1113,6 +1243,61 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
 export default withPageCMS(Project, {
   key: PAGE_KEY,
   fields: [
+    {
+      name: "typeManpower",
+      label: "人加資源 Manpower",
+      component: "text",
+    },
+    {
+      name: "typeVenue",
+      label: "活動場地 Venue",
+      component: "text",
+    },
+    {
+      name: "typeExpertise",
+      label: "專業 Expertise",
+      component: "text",
+    },
+    {
+      name: "typeNetwork",
+      label: "人際網絡 Network",
+      component: "text",
+    },
+    {
+      name: "typeOther",
+      label: "其他資源 Other",
+      component: "text",
+    },
+    {
+      name: "typeFunding",
+      label: "資金 Funding",
+      component: "text",
+    },
+    {
+      name: "projectList",
+      label: "項目清單 project list",
+      component: "text",
+    },
+    {
+      name: "task",
+      label: "刊登工作 Task",
+      component: "text",
+    },
+    {
+      name: "amountHKD",
+      label: "金額(HKD) Amount(HKD)",
+      component: "text",
+    },
+    {
+      name: "iNeed",
+      label: "我需要的 I Need",
+      component: "text",
+    },
+    {
+      name: "remark",
+      label: "備註 Remark",
+      component: "text",
+    },
     {
       name: "description",
       label: "描述 description",
