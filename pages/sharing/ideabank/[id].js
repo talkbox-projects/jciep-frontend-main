@@ -204,7 +204,7 @@ const IdeaBankDetail = ({
               fontWeight={700}
             >
               {page?.content?.iNeed}
-              {data?.title}
+              {page?.content?.typeVenue}
             </Text>
           </Flex>
 
@@ -679,32 +679,50 @@ const IdeaBankDetail = ({
     venue: {
       color: "#97CB8D",
       icon: "/images/app/venue.svg",
-      typeName: "場地",
+      typeName: {
+        zh: "場地",
+        en: "venue"
+      }
     },
     manpower: {
       color: "#00BFBA",
       icon: "/images/app/manpower.svg",
-      typeName: "人力資源",
+      typeName: {
+        zh: "人力資源",
+        en: "manpower"
+      }
     },
     expertise: {
       color: "#FEB534",
       icon: "/images/app/expertise.svg",
-      typeName: "專業",
+      typeName: {
+        zh: "專業",
+        en: "expertise"
+      }
     },
     funding: {
       color: "#F6D644",
       icon: "/images/app/funding.svg",
-      typeName: "資金",
+      typeName: {
+        zh: "資金",
+        en: "funding"
+      }
     },
     network: {
       color: "#D094FF",
       icon: "/images/app/network.svg",
-      typeName: "人際網絡",
+      typeName: {
+        zh: "人際網絡",
+        en: "network"
+      }
     },
     other: {
       color: "#C6C6C6",
       icon: "/images/app/resource_other.svg",
-      typeName: "其他",
+      typeName: {
+        zh: "其他",
+        en: "other"
+      }
     },
   };
 
@@ -957,7 +975,7 @@ const IdeaBankDetail = ({
                                           </Box>
                                           <Box fontSize={"12px"}>
                                             {page?.content?.iNeed}
-                                            {resourceData[d.type]?.typeName}
+                                            {resourceData[d.type]?.typeName[locale ?? "zh"]}
                                           </Box>
                                         </Flex>
                                       </Box>
