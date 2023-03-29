@@ -32,7 +32,7 @@ const theme = extendTheme({
   initialColorMode: "light",
   useSystemColorMode: false,
   shadows:{
-    outline: "0 0 0 3px rgba(66, 153, 225, 1)"
+    outline: "none"
   },
   colors: {
     red: {
