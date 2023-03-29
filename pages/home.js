@@ -471,9 +471,12 @@ const Home = ({ setting, page }) => {
               return (
                 <Container key={index} py={28}>
                 <NextLink passHref href={`/sharing/${post?.slug}`}>
-                  <Link d="block" _focus={{
-                    boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
-                  }}>
+                  <Link d="block" 
+                  _focusVisible={{
+                    outline: 'none !important',
+                    boxShadow: "0 0 0 3px #FFFFE4"
+                  }}
+                  >
                     <Stack
                       cursor="pointer"
                       align="center"
@@ -486,8 +489,8 @@ const Home = ({ setting, page }) => {
                         w={["100%", "60%", "50%", "50%", "40%"]}
                         tabIndex={0}
                         _focusVisible={{
-                          outline: 'none',
-                          boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+                          outline: 'none !important',
+                          boxShadow: "0 0 0 3px #FFFFE4"
                         }}
                       >
                         <Image
@@ -498,8 +501,8 @@ const Home = ({ setting, page }) => {
                           }
                           tabIndex={0}
                           _focusVisible={{
-                            outline: 'none',
-                            boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+                            outline: 'none !important',
+                            boxShadow: "0 0 0 3px #FFFFE4"
                           }}
                           border={'none'}
                         />
@@ -576,8 +579,10 @@ const Home = ({ setting, page }) => {
               opacity={carouselAutoPlay === true ? 0.5 : 1}
               disabled={carouselAutoPlay === true}
               aria-label={router.locale === "zh" ? "開始" : "start"}
-              _focus={{
-                boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+              _focusVisible={{
+                outline: 'none !important',
+                boxShadow: "0 0 0 3px #FFFFE4",
+                bgColor: "#56BC89"
               }}
             >
               <BsFillPlayFill fontSize={"24px"} />
@@ -589,8 +594,10 @@ const Home = ({ setting, page }) => {
               opacity={carouselAutoPlay === false ? 0.5 : 1}
               disabled={carouselAutoPlay === false}
               aria-label={router.locale === "zh" ? "暫停" : "pause"}
-              _focus={{
-                boxShadow: "0 0 0 3px rgba(255, 255, 225, 1)"
+              _focusVisible={{
+                outline: 'none !important',
+                boxShadow: "0 0 0 3px #FFFFE4",
+                bgColor: "#56BC89"
               }}
             >
               <BsFillPauseFill fontSize={"24px"} />

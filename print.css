@@ -37,3 +37,7 @@
 .carousel.carousel-slider li.slide.previous{
   visibility: visible;
 }
+
+*:focus-visible{
+  outline: 3px solid #296161 !important;
+}
