@@ -33,7 +33,7 @@ export const options = {
     zh:{
       consultant: "顧問",
       volunteer: "義工",
-      partime: "廉職",
+      partime: "兼職",
       fulltime: "全職",
     },
     en:{

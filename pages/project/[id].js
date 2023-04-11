@@ -166,7 +166,8 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeVenue}
+            {/* {page?.content?.typeVenue} */}
+            {data?.title}
           </Text>
 
           <Divider my={2} />
@@ -198,7 +199,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                 {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.venue}
-                  content={options["district"][locale ?? "zh"][data?.district]}
+                  content={options["district"][locale ?? "zh"][data?.district]?? locale === "zh" ? "未選擇" : "unSelected"}
                 />
               </Flex>
             )}
