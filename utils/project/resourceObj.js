@@ -78,7 +78,7 @@ export const options = {
       signLanguageInterpretation: "手語翻譯",
       audioVisualDescription: "視聽說明",
       performance: "表演",
-      other: "其他"
+      other: "需要其他專業"
     },
     en:{
       marketing: "marketing",
@@ -107,7 +107,7 @@ export const options = {
   },
   networkType: {
     zh:{
-      foodAndBeverage: "飲食業",
+      foodAndBeverage: "餐飲業",
       manufacturing: "製造業",
       customerService: "客戶管理",
       HRAndAdministration: "人力資源/行政",
@@ -126,7 +126,7 @@ export const options = {
       accommodationAndHospitality: "酒店業",
       informationAndCommunications: "資訊及通訊",
       artsAndCultureAndCreativeIndustry: "藝術/文化/創意",
-      other: "其他",
+      other: "其他人際網絡",
     },
     en:{
       foodAndBeverage: "food and beverage",
@@ -165,10 +165,10 @@ export const options = {
   },
   durationNeededUnit: {
     zh:{
-      day: "日",
-      hour: "小時",
-      week: "星期",
-      month: "月",
+      day: "day",
+      hour: "hour",
+      week: "week",
+      month: "month",
     },
     en:{
       day: "day",
@@ -179,7 +179,7 @@ export const options = {
   },
   frequency: {
     zh:{
-      oneTime: "一次性",
+      oneTime: "一次",
       always: "經常",
     },
     en:{

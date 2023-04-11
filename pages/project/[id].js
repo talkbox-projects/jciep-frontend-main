@@ -188,7 +188,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               fontWeight={700}
             >
               {page?.content?.iNeed}
-              {page?.content?.typeVenue}
+              {locale === "zh" ? "場地" : page?.content?.typeVenue}
             </Text>
           </Flex>
 
@@ -259,7 +259,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeManpower}
+            {page?.content?.typeManpower}({options["serviceNature"][locale ?? "zh"][data?.serviceNature]})
           </Text>
 
           <Divider my={2} />
@@ -357,7 +357,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfConsultantsNeeded}
-                  content={data?.numberOfConsultantsNeeded}
+                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfConsultantsNeeded}`}
                 />
               </Flex>
             )}
@@ -366,7 +366,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfVolunteersNeeded}
-                  content={data?.numberOfVolunteersNeeded}
+                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfVolunteersNeeded}`}
                 />
               </Flex>
             )}
@@ -384,17 +384,34 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               </Flex>
             )}
 
-            {data?.workLocation && (
+            {/* {data?.workLocation && (
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.workLocation}
                   content={data?.workLocation}
                 />
               </Flex>
-            )}
+            )} */}
           </Stack>
 
-          {data?.remark && <RenderMoreInformation content={data?.remark} />}
+          {data?.remark &&  <Box>
+        <Divider my={4} />
+        <Flex gap={1} alignItems="center">
+          <Box alignSelf={"flex-start"}>
+            <TiDocumentText style={{ width: "18px", height: "18px" }} />
+          </Box>
+          <Flex
+            direction={"column"}
+            gap={1}
+            fontSize={{ base: "sm", lg: "sm" }}
+          >
+            <Text fontWeight={"bold"}>
+              {locale==="zh"? "備註" : page?.content?.moreInformation}
+            </Text>
+            <Text>{data?.remark}</Text>
+          </Flex>
+        </Flex>
+      </Box>}
         </Box>
       );
     }
@@ -441,7 +458,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.remark ?? page?.content?.description}
-                content={data?.expertiseTypeOther ?? data?.description}
+                content={data?.description ?? data?.expertiseTypeOther}
               />
             </Flex>
           </Stack>
@@ -495,7 +512,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.remark ?? page?.content?.description}
-                content={data?.networkTypeOther ?? data?.description}
+                content={data?.description ?? data?.networkTypeOther}
               />
             </Flex>
           </Stack>
@@ -519,34 +536,24 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
 
           <Divider my={2} />
 
-          {/* <Flex alignItems={"center"} gap={2} pb={2}>
-            <Box>
-              <Image
-                src={resourceData[data.type]?.icon}
-                alt={"icon"}
-                color="gray.500"
-                minW={"14px"}
-              />
-            </Box>
-
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-            >
-              {page?.content?.otherResourcesNeeded}
-            </Text>
-          </Flex> */}
-
-          <Stack spacing={2} direction="column">
-            <Flex gap={2} alignItems="center">
-              <RenderListItem
-                title={page?.content?.moreInformation}
-                content={data?.otherResourcesNeeded}
-              />
+          <Box>
+            <Flex gap={1} alignItems="center">
+              <Box alignSelf={"flex-start"}>
+                <TiDocumentText style={{ width: "18px", height: "18px" }} />
+              </Box>
+              <Flex
+                direction={"column"}
+                gap={1}
+                fontSize={{ base: "sm", lg: "sm" }}
+              >
+                <Text fontWeight={"bold"}>
+                  {page?.content?.moreInformation}
+                </Text>
+              </Flex>
             </Flex>
-          </Stack>
+            <Text pt={1}>{data?.otherResourcesNeeded}</Text>
+          </Box>
+         
         </Box>
       );
     }
@@ -562,7 +569,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeFunding}
+            {locale === "zh" && "需要"}{page?.content?.typeFunding}
           </Text>
 
           <Divider my={2} />
@@ -640,7 +647,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
               />
             </Flex>
 
-            <Flex gap={2} alignItems="center">
+            {/* <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.receiveAnyFunding}
                 content={
@@ -649,7 +656,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                     : page?.content?.withoutReceiveAnyFunding
                 }
               />
-            </Flex>
+            </Flex> */}
 
           </Stack>
         </Box>
@@ -1420,6 +1427,11 @@ export default withPageCMS(Project, {
     {
       name: "workLocation",
       label: "工作地點 work location",
+      component: "text",
+    },
+    {
+      name: "numberOfPeopleNeeded",
+      label: "需要針對這種職務的人數 Number Of people needed",
       component: "text",
     },
     {

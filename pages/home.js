@@ -474,7 +474,7 @@ const Home = ({ setting, page }) => {
                   <Link d="block" 
                   _focusVisible={{
                     outline: 'none !important',
-                    boxShadow: "0 0 0 3px #FFFFE4"
+                    boxShadow: "0 0 0 3px #404040"
                   }}
                   >
                     <Stack
@@ -490,7 +490,7 @@ const Home = ({ setting, page }) => {
                         tabIndex={0}
                         _focusVisible={{
                           outline: 'none !important',
-                          boxShadow: "0 0 0 3px #FFFFE4"
+                          boxShadow: "0 0 0 3px #404040"
                         }}
                       >
                         <Image
@@ -502,7 +502,7 @@ const Home = ({ setting, page }) => {
                           tabIndex={0}
                           _focusVisible={{
                             outline: 'none !important',
-                            boxShadow: "0 0 0 3px #FFFFE4"
+                            boxShadow: "0 0 0 3px #404040"
                           }}
                           border={'none'}
                         />
@@ -581,8 +581,8 @@ const Home = ({ setting, page }) => {
               aria-label={router.locale === "zh" ? "開始" : "start"}
               _focusVisible={{
                 outline: 'none !important',
-                boxShadow: "0 0 0 3px #FFFFE4",
-                bgColor: "#56BC89"
+                boxShadow: "0 0 0 3px #404040",
+                bgColor: "#FFFFFF"
               }}
             >
               <BsFillPlayFill fontSize={"24px"} />
@@ -596,8 +596,8 @@ const Home = ({ setting, page }) => {
               aria-label={router.locale === "zh" ? "暫停" : "pause"}
               _focusVisible={{
                 outline: 'none !important',
-                boxShadow: "0 0 0 3px #FFFFE4",
-                bgColor: "#56BC89"
+                boxShadow: "0 0 0 3px #404040",
+                bgColor: "#FFFFFF"
               }}
             >
               <BsFillPauseFill fontSize={"24px"} />

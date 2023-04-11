@@ -136,25 +136,6 @@ const IdeaBankDetail = ({
     );
   };
 
-  const RenderClickIcon = () => {
-    return (
-      <Box alignSelf={"flex-start"} pt={1}>
-        <Image
-          src={"/images/app/resource_click.svg"}
-          w={"16px"}
-          h={"13px"}
-          alt={""}
-        />
-        {/* <Image
-          src={"/images/app/notes.svg"}
-          w={"16px"}
-          h={"13px"}
-          alt={""}
-        /> */}
-      </Box>
-    );
-  };
-
   const RenderListItem = ({ title, content }) => {
     return (
       <Flex direction="column" fontSize={{ base: "sm" }} flex={1}>
@@ -204,7 +185,7 @@ const IdeaBankDetail = ({
               fontWeight={700}
             >
               {page?.content?.iNeed}
-              {page?.content?.typeVenue}
+              {locale === "zh" ? "場地" : page?.content?.typeVenue}
             </Text>
           </Flex>
 
@@ -275,7 +256,7 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeManpower}
+            {page?.content?.typeManpower}({options["serviceNature"][locale ?? "zh"][data?.serviceNature]})
           </Text>
 
           <Divider my={2} />
@@ -373,7 +354,7 @@ const IdeaBankDetail = ({
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfConsultantsNeeded}
-                  content={data?.numberOfConsultantsNeeded}
+                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfConsultantsNeeded}`}
                 />
               </Flex>
             )}
@@ -382,7 +363,7 @@ const IdeaBankDetail = ({
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfVolunteersNeeded}
-                  content={data?.numberOfVolunteersNeeded}
+                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfVolunteersNeeded}`}
                 />
               </Flex>
             )}
@@ -400,17 +381,34 @@ const IdeaBankDetail = ({
               </Flex>
             )}
 
-            {data?.workLocation && (
+            {/* {data?.workLocation && (
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.workLocation}
                   content={data?.workLocation}
                 />
               </Flex>
-            )}
+            )} */}
           </Stack>
 
-          {data?.remark && <RenderMoreInformation content={data?.remark} />}
+          {data?.remark &&  <Box>
+        <Divider my={4} />
+        <Flex gap={1} alignItems="center">
+          <Box alignSelf={"flex-start"}>
+            <TiDocumentText style={{ width: "18px", height: "18px" }} />
+          </Box>
+          <Flex
+            direction={"column"}
+            gap={1}
+            fontSize={{ base: "sm", lg: "sm" }}
+          >
+            <Text fontWeight={"bold"}>
+              {locale==="zh"? "備註" : page?.content?.moreInformation}
+            </Text>
+            <Text>{data?.remark}</Text>
+          </Flex>
+        </Flex>
+      </Box>}
         </Box>
       );
     }
@@ -457,7 +455,7 @@ const IdeaBankDetail = ({
             <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.remark ?? page?.content?.description}
-                content={data?.expertiseTypeOther ?? data?.description}
+                content={data?.description ?? data?.expertiseTypeOther}
               />
             </Flex>
           </Stack>
@@ -511,7 +509,7 @@ const IdeaBankDetail = ({
             <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.remark ?? page?.content?.description}
-                content={data?.networkTypeOther ?? data?.description}
+                content={data?.description ?? data?.networkTypeOther}
               />
             </Flex>
           </Stack>
@@ -535,34 +533,24 @@ const IdeaBankDetail = ({
 
           <Divider my={2} />
 
-          {/* <Flex alignItems={"center"} gap={2} pb={2}>
-            <Box>
-              <Image
-                src={resourceData[data.type]?.icon}
-                alt={"icon"}
-                color="gray.500"
-                minW={"14px"}
-              />
-            </Box>
-
-            <Text
-              as="h2"
-              color="#1E1E1E"
-              fontSize={{ base: "md", md: "lg" }}
-              fontWeight={700}
-            >
-              {page?.content?.otherResourcesNeeded}
-            </Text>
-          </Flex> */}
-
-          <Stack spacing={2} direction="column">
-            <Flex gap={2} alignItems="center">
-              <RenderListItem
-                title={page?.content?.moreInformation}
-                content={data?.otherResourcesNeeded}
-              />
+          <Box>
+            <Flex gap={1} alignItems="center">
+              <Box alignSelf={"flex-start"}>
+                <TiDocumentText style={{ width: "18px", height: "18px" }} />
+              </Box>
+              <Flex
+                direction={"column"}
+                gap={1}
+                fontSize={{ base: "sm", lg: "sm" }}
+              >
+                <Text fontWeight={"bold"}>
+                  {page?.content?.moreInformation}
+                </Text>
+              </Flex>
             </Flex>
-          </Stack>
+            <Text pt={1}>{data?.otherResourcesNeeded}</Text>
+          </Box>
+         
         </Box>
       );
     }
@@ -578,7 +566,7 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeFunding}
+            {locale === "zh" && "需要"}{page?.content?.typeFunding}
           </Text>
 
           <Divider my={2} />
@@ -656,7 +644,7 @@ const IdeaBankDetail = ({
               />
             </Flex>
 
-            <Flex gap={2} alignItems="center">
+            {/* <Flex gap={2} alignItems="center">
               <RenderListItem
                 title={page?.content?.receiveAnyFunding}
                 content={
@@ -665,7 +653,7 @@ const IdeaBankDetail = ({
                     : page?.content?.withoutReceiveAnyFunding
                 }
               />
-            </Flex>
+            </Flex> */}
 
           </Stack>
         </Box>
@@ -1415,7 +1403,7 @@ export default withPageCMS(IdeaBankDetail, {
     },
     {
       name: "moreInformation",
-      label: "更多資料 organization",
+      label: "更多資料 more information",
       component: "text",
     },
     {
@@ -1481,6 +1469,11 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "numberOfVolunteersNeeded",
       label: "所需義工人數 number Of VolunteersNeeded",
+      component: "text",
+    },
+    {
+      name: "numberOfPeopleNeeded",
+      label: "需要針對這種職務的人數 Number Of people needed",
       component: "text",
     },
     {
