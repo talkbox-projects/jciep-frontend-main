@@ -163,7 +163,6 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {/* {page?.content?.typeVenue} */}
             {data?.title}
           </Text>
 
