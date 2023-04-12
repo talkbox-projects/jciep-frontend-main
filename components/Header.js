@@ -31,6 +31,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Flex,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
@@ -82,8 +83,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
     };
     return Object.entries(kv).reduce((tabIndex, [index, regexr]) => {
       if (tabIndex === undefined) {
-
-        if (router?.pathname === '/sharing/ideabank' || router?.pathname === '/sharing/ideabank/[id]') {
+        if (
+          router?.pathname === "/sharing/ideabank" ||
+          router?.pathname === "/sharing/ideabank/[id]"
+        ) {
           return "7";
         }
 
@@ -242,7 +245,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                 </MenuList>
               </Menu>
             )}
-            <Box flex={1} minW={0} w="100%" />
+            <Flex alignItems="center" flex={1} minW={0} w="100%" />
             <Select
               border="none"
               size="sm"
@@ -263,13 +266,26 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                 {getWording("header.font_size_level_label")}
               </Link>
             </NextLink>
-            <NextLink href="/contact-us" passHref>
-              <Link fontSize="sm">{getWording("header.contact_us_label")}</Link>
-            </NextLink>
-            <Text>
-              {(navigation.social ?? []).map(({ icon, url, label }, i) => {
-                return (
-                  <a key={i} href={url}>
+
+            {navigation?.appDownload?.map(({ icon, url, label }, i) => {
+              return (
+                <Box key={i} pt={"6px"}>
+                  <a href={url} target="_blank" rel="noreferrer">
+                    <Image
+                      alt={label}
+                      display="inline-flex"
+                      src={icon}
+                      maxW="100px"
+                    />
+                  </a>
+                </Box>
+              );
+            })}
+
+            {(navigation.social ?? []).map(({ icon, url, label }, i) => {
+              return (
+                <Box key={i} pt={1}>
+                  <a href={url}>
                     <Image
                       alt={label}
                       display="inline-flex"
@@ -277,9 +293,10 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       src={icon}
                     />
                   </a>
-                );
-              })}
-            </Text>
+                </Box>
+              );
+            })}
+
             <Popover placement="bottom-end" gutter={20}>
               <PopoverTrigger>
                 {!isLoggedIn ? (
@@ -627,7 +644,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     <option value="zh">繁</option>
                     <option value="en">EN</option>
                   </Select>
-                  <Text>
+                  <Text pt={1}>
                     {(navigation.social ?? []).map(
                       ({ icon, url, label }, i) => {
                         return (
@@ -873,6 +890,21 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                     </NextLink>
                   </VStack>
                 </Accordion>
+
+                {navigation?.appDownload?.map(({ icon, url, label }, i) => {
+                  return (
+                    <Box key={i} pt={"6px"}>
+                      <a href={url} target="_blank" rel="noreferrer">
+                        <Image
+                          alt={label}
+                          display="inline-flex"
+                          src={icon}
+                          maxW={"200px"}
+                        />
+                      </a>
+                    </Box>
+                  );
+                })}
               </VStack>
             </DrawerBody>
           </DrawerContent>
