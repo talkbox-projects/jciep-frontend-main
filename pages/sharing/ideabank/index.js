@@ -284,14 +284,9 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
                     }}
                     withIcon={false}
                   />
-                  {/* <Text fontSize="sm">
-                    {moment(featuredProject?.publishedAt).format(
-                      "D MMM, hh:mm a"
-                    )}
-                  </Text> */}
                 </Wrap>
                 <Box borderRadius={16} pt={1} px={2} color={1} pb={16}>
-                  <Text fontSize={("2xl", "4xl", "4xl")} fontWeight="bold">
+                  <Text fontSize={("2xl", "3xl", "4xl")} fontWeight="bold" noOfLines={2}>
                     {featuredProject?.name}
                   </Text>
                   <Text noOfLines={4}>{featuredProject?.introduction}</Text>
@@ -360,11 +355,6 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
                   }}
                   withIcon={false}
                 />
-                {/* <Text fontSize="sm">
-                  {moment(featuredProject?.publishedAt).format(
-                    "D MMM, hh:mm a"
-                  )}
-                </Text> */}
               </Wrap>
               <Box borderRadius={16} pt={1} px={2} color={1}>
                 <Text fontSize={"xl"} fontWeight="bold">

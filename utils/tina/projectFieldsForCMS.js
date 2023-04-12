@@ -29,6 +29,19 @@ export default [
       ],
     },
     {
+      name: "categorySection",
+      component: "group",
+      description: "Show categories on the right",
+      label: "構思分類 Category Section",
+      fields: [
+        {
+          component: "text",
+          label: "標題 Section Title",
+          name: "title",
+        },
+      ],
+    },
+    {
       name: "postSection",
       component: "group",
       description: "Background Setting For Post Screen",
