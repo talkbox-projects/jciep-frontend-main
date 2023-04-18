@@ -10,15 +10,17 @@ import {
   VStack,
   Wrap,
   WrapItem,
+  Flex
 } from "@chakra-ui/react";
 import withConfigurationCMS from "../utils/configuration/withConfigurationCMS";
 import Container from "./Container";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
-const Footer = ({ footer}) => {
-  const router = useRouter()
-  const footerContentSize = router?.local === 'zh' ? ["xl", "xl", "lg"] : ["lg", "lg", "md"]
+const Footer = ({ footer }) => {
+  const router = useRouter();
+  const footerContentSize =
+    router?.local === "zh" ? ["xl", "xl", "lg"] : ["lg", "lg", "md"];
   return (
     <Box py={8} backgroundColor="#FAFAFA">
       <Container>
@@ -88,15 +90,15 @@ const Footer = ({ footer}) => {
                           fontWeight="bold"
                           fontSize={footerContentSize}
                           style={{
-                                whiteSpace: "normal",
-                                wordWrap: "break-word",
+                            whiteSpace: "normal",
+                            wordWrap: "break-word",
                           }}
                         >
                           {title}
                         </Button>
                       </NextLink>
                     )}
-                    <Box w="100%">
+                    <Flex gap={5} w="100%">
                       {(social ?? []).map(({ icon, id, url, label }) => {
                         return (
                           <a href={url} key={id}>
@@ -104,12 +106,13 @@ const Footer = ({ footer}) => {
                               alt={label}
                               display="inline-flex"
                               src={icon}
-                              height="30px"
-                            ></Image>
+                              w={"26px"}
+                              h={"auto"}
+                            />
                           </a>
                         );
                       })}
-                    </Box>
+                    </Flex>
 
                     {(links ?? []).map(
                       ({ id: _id, url = "/", label = "" }, i) => {
@@ -122,9 +125,9 @@ const Footer = ({ footer}) => {
                               fontWeight="normal"
                               color="black"
                               style={{
-          whiteSpace: "normal",
-          wordWrap: "break-word",
-     }}
+                                whiteSpace: "normal",
+                                wordWrap: "break-word",
+                              }}
                             >
                               {label}
                             </Button>
