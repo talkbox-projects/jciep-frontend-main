@@ -106,11 +106,18 @@ const JobOpportunities = ({ page, enums }) => {
 
   useEffect(() => {
     if (router?.query) {
+      const {jobId} = router?.query
       const updateJobList = page?.content?.jobs
         .filter((d) => checkHasMatchValue(district, d?.location))
         .filter((d) => checkHasMatchValue(jobInterested, d?.jobFunction));
 
       setJobListData(updateJobList);
+      if(jobId){
+        const job = updateJobList?.find((x) => x.id === jobId);
+        if(!job){
+          router.push('/job-opportunities')
+        }
+      }
     }
   }, [router]);
 
@@ -476,6 +483,7 @@ const JobOpportunities = ({ page, enums }) => {
       })}
     </VStack>
   );
+
 
   return (
     <>
