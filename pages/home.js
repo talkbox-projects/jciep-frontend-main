@@ -43,6 +43,12 @@ import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
 import { useAppContext } from "../store/AppStore";
+
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 const PAGE_KEY = "home";
 
 export const getServerSideProps = async (context) => {
@@ -71,6 +77,94 @@ const Home = ({ setting, page }) => {
   const categories = setting?.value?.categories;
   const getCategoryData = (key) => {
     return (categories ?? []).find((c) => c.key === key);
+  };
+
+  const sliderRef = useRef(null);
+  const [currentIndex, setCurrent] = useState(0);
+
+  function PrevArrow(props) {
+    const { style, onClick } = props;
+    const handleSlide = () => {
+      if(props?.currentSlide !== 0){
+        onClick();
+      } else {
+        sliderRef?.current?.slickGoTo(posts.length - 1)
+      }
+    }
+    const handleKeydown = (e) => {
+      if (e?.key === "Enter") { 
+        handleSlide()
+    }
+  }
+    return (
+      <IconButton
+        cursor="pointer"
+        variant="unstyled"
+        rounded="full"
+        style={{ ...style }}
+        top={"50%"}
+        position="absolute"
+        zIndex={10}
+        tabIndex={0}
+        as={FaArrowLeft}
+        onClick={handleSlide}
+        onKeyDown={handleKeydown}
+      />
+    );
+  }
+
+  function NextArrow(props) {
+    const { style, onClick } = props;
+    const handleSlide = () => {
+      if(props?.currentSlide === posts.length - 1){
+        sliderRef?.current?.slickGoTo(0)
+      } else {
+        onClick();
+      }
+    }
+    const handleKeydown = (e) => {
+      if (e?.key === "Enter") { 
+        handleSlide()
+    }
+  }
+    return (
+      <IconButton
+        cursor="pointer"
+        variant="unstyled"
+        rounded="full"
+        style={{ ...style }}
+        top={"50%"}
+        right={0}
+        position="absolute"
+        tabIndex={0}
+        zIndex={10}
+        as={FaArrowRight}
+        onClick={handleSlide}
+        onKeyDown={handleKeydown}
+      />
+    );
+  }
+
+
+  const slickSettings = {
+    dots: true,
+    infinite: false,
+    // autoplay: true,
+    // autoplaySpeed: 10000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    beforeChange: (oldIndex, newIndex) => {
+      setCurrent(newIndex);
+    },
+    // afterChange: (newIndex) => {
+    //   if (newIndex === 4) {
+    //     setTimeout(function () {
+    //       sliderRef?.current?.slickGoTo(0);
+    //     }, 10000);
+    //   }
+    // },
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />
   };
 
   const fetchFeaturePosts = useCallback(async () => {
@@ -103,6 +197,7 @@ const Home = ({ setting, page }) => {
     loginModalDisclosure,
     userGroupModalDisclosure,
   } = useAppContext();
+
   useEffect(() => {
     if (router?.query?.register) {
       registerModalDisclosure.onOpen();
@@ -115,7 +210,7 @@ const Home = ({ setting, page }) => {
       loginModalDisclosure.onOpen();
       router.push("/home");
     }
-  }, [loginModalDisclosure, router, router?.query?.login]);  
+  }, [loginModalDisclosure, router, router?.query?.login]);
 
   return (
     <VStack w="100%" align="stretch" spacing={0}>
@@ -415,195 +510,123 @@ const Home = ({ setting, page }) => {
       {/* Fifth Section */}
 
       <Box bg="#00BFBA" position="relative">
-        {posts?.length > 0 && (
-          <Carousel
-            showArrows={true}
-            showIndicators={false}
-            autoPlay={carouselAutoPlay}
-            infiniteLoop
-            interval={3000}
-            showStatus={false}
-            showThumbs={false}
-            useKeyboardArrows={true}
-            renderArrowPrev={(clickHandler, hasPrev) => {
-              return hasPrev ? (
-                <HStack
-                  px={3}
-                  position="absolute"
-                  h="100%"
-                  zIndex={25}
-                  align="center"
-                  left={[2, 2, 2, 2, 8, "10vw"]}
-                >
-                  <IconButton
-                    cursor="pointer"
-                    onClick={clickHandler}
-                    variant="unstyled"
-                    rounded="full"
-                    as={FaArrowLeft}
-                  />
-                </HStack>
-              ) : null;
+        <Container py={28}>
+          {posts?.length > 0 && (
+            <Box
+            sx={{
+              ".slick-dots": {
+                transform: "translateY(1em)"
+              },
+              ".slick-dots li button": {
+                _before: {
+                  transition: "0.2s",
+                  content: "''",
+                  borderRadius: "100%",
+                  background: "#296161"
+                }
+              }
             }}
-            renderArrowNext={(clickHandler, hasNext) => {
-              return hasNext ? (
-                <HStack
-                  px={3}
-                  top={0}
-                  right={[2, 2, 2, 2, 8, "10vw"]}
-                  position="absolute"
-                  h="100%"
-                  align="center"
-                >
-                  <IconButton
-                    cursor="pointer"
-                    onClick={clickHandler}
-                    variant="unstyled"
-                    rounded="full"
-                    as={FaArrowRight}
-                  />
-                </HStack>
-              ) : null;
-            }}
-          >
-            {(posts ?? []).map((post, index) => {
-              let postImage = post?.content?.feature?.image ?? post?.content?.coverImage
-              return (
-                <Container key={index} py={28}>
-                <NextLink passHref href={`/sharing/${post?.slug}`}>
-                  <Link d="block" 
-                  _focusVisible={{
-                    outline: 'none !important',
-                    boxShadow: "0 0 0 3px #404040"
-                  }}
-                  >
-                    <Stack
-                      cursor="pointer"
-                      align="center"
-                      justifyContent="center"
-                      spacing={[6, 8, 10, 16]}
-                      px="50px"
-                      direction={["column", "column", "column", "row"]}
-                    >
-                      {postImage && (<Box
-                        w={["100%", "60%", "50%", "50%", "40%"]}
-                        tabIndex={0}
-                        _focusVisible={{
-                          outline: 'none !important',
-                          boxShadow: "0 0 0 3px #404040"
-                        }}
+            >
+              <Slider {...slickSettings} ref={sliderRef}>
+                {(posts ?? []).map((post, index) => {
+                  let postImage = post?.content?.feature?.image ?? post?.content?.coverImage
+                  const tabIndex = currentIndex === index ? 0 : -1;
+                  return (
+                    <Box key={index}>
+                      <Stack
+                        cursor="pointer"
+                        align="center"
+                        justifyContent="center"
+                        spacing={[6, 8, 10, 16]}
+                        px="50px"
+                        direction={["column", "column", "column", "row"]}
                       >
-                        <Image
-                          alt={post?.content?.feature?.tagline ?? post?.title}
-                          src={
-                            post?.content?.feature?.image ??
-                            post?.content?.coverImage
-                          }
-                          tabIndex={0}
+                        {postImage && (<Box
+                          w={["100%", "60%", "50%", "50%", "40%"]}
+                          tabIndex={tabIndex}
                           _focusVisible={{
                             outline: 'none !important',
                             boxShadow: "0 0 0 3px #404040"
                           }}
-                          border={'none'}
-                        />
-                      </Box>)}
-                      <VStack
-                        px={8}
-                        align="start"
-                        flex={[0, 0, 0, 1]}
-                        minW={0}
-                        textAlign="left"
-                      >
-                        <HStack>
-                          <Icon
-                            as={VscQuote}
-                            fontSize={36}
-                            color="white"
-                            fontWeight="bold"
+                        >
+                          <Image
+                            alt={post?.content?.feature?.tagline ?? post?.title}
+                            src={
+                              post?.content?.feature?.image ??
+                              post?.content?.coverImage
+                            }
+                            _focusVisible={{
+                              outline: 'none !important',
+                              boxShadow: "0 0 0 3px #404040"
+                            }}
+                            border={'none'}
                           />
-                          <Box
-                            bgColor="#00F5E7"
-                            borderRadius={24}
-                            fontSize="xl"
-                            px={4}
-                            py={0.5}
+                        </Box>)}
+                        <VStack
+                          px={8}
+                          align="start"
+                          flex={[0, 0, 0, 1]}
+                          minW={0}
+                          textAlign="left"
+                          tabIndex={tabIndex}
+                        >
+                          <HStack>
+                            <Icon
+                              as={VscQuote}
+                              fontSize={36}
+                              color="white"
+                              fontWeight="bold"
+                            />
+                            <Box
+                              bgColor="#00F5E7"
+                              borderRadius={24}
+                              fontSize="xl"
+                              px={4}
+                              py={0.5}
+                            >
+                              <Text>
+                                {getCategoryData(post?.category)?.label}
+                              </Text>
+                            </Box>
+                          </HStack>
+                          <Text
+                            fontWeight="bold"
+                            d="block"
+                            pb={4}
+                            lineHeight="xl"
+                            fontSize={["2xl", "2xl", "2xl", "2xl"]}
                           >
-                            <Text>
-                              {getCategoryData(post?.category)?.label}
-                            </Text>
-                          </Box>
-                        </HStack>
-                        <Text
-                          fontWeight="bold"
-                          d="block"
-                          pb={4}
-                          lineHeight="xl"
-                          fontSize={["2xl", "2xl", "2xl", "2xl"]}
-                        >
-                          {post?.content?.feature?.persona}
-                        </Text>
-                        <Text
-                          lineHeight="xl"
-                          fontSize={["2xl", "3xl", "4xl", "4xl"]}
-                          whiteSpace="pre-wrap"
-                          bgColor="white"
-                          fontWeight="bold"
-                        >
-                          {post?.content?.feature?.tagline ?? post?.title}
-                        </Text>
-                        <Text
-                          d="block"
-                          pt={4}
-                          whiteSpace="pre-wrap"
-                          fontSize="2xl"
-                          borderRadius={4}
-                        >
-                          {post?.excerpt}
-                        </Text>
-                      </VStack>
-                    </Stack>
-                  </Link>
-                </NextLink>
-              </Container>
-              )
-            }
-            )}
-          </Carousel>
-        )}
-        {posts && (
-          <Flex justifyContent="center" pb={4} gap={2}>
-            <Button
-              onClick={() => {
-                setCarouselAutoPlay(true);
-              }}
-              opacity={carouselAutoPlay === true ? 0.5 : 1}
-              disabled={carouselAutoPlay === true}
-              aria-label={router.locale === "zh" ? "開始" : "start"}
-              _focusVisible={{
-                outline: 'none !important',
-                boxShadow: "0 0 0 3px #404040",
-                bgColor: "#FFFFFF"
-              }}
-            >
-              <BsFillPlayFill fontSize={"24px"} />
-            </Button>
-            <Button
-              onClick={() => {
-                setCarouselAutoPlay(false);
-              }}
-              opacity={carouselAutoPlay === false ? 0.5 : 1}
-              disabled={carouselAutoPlay === false}
-              aria-label={router.locale === "zh" ? "暫停" : "pause"}
-              _focusVisible={{
-                outline: 'none !important',
-                boxShadow: "0 0 0 3px #404040",
-                bgColor: "#FFFFFF"
-              }}
-            >
-              <BsFillPauseFill fontSize={"24px"} />
-            </Button>
-          </Flex>
-        )}
+                            {post?.content?.feature?.persona}
+                          </Text>
+                          <Text
+                            lineHeight="xl"
+                            fontSize={["2xl", "3xl", "4xl", "4xl"]}
+                            whiteSpace="pre-wrap"
+                            bgColor="white"
+                            fontWeight="bold"
+                          >
+                            {post?.content?.feature?.tagline ?? post?.title}
+                          </Text>
+                          <Text
+                            d="block"
+                            pt={4}
+                            whiteSpace="pre-wrap"
+                            fontSize="2xl"
+                            borderRadius={4}
+                            noOfLines={6}
+                          >
+                            {post?.excerpt}
+                          </Text>
+                        </VStack>
+                      </Stack>
+                    </Box>
+                  )
+                })}
+              </Slider>
+            </Box>
+          )}
+        </Container>
+
       </Box>
 
       {/* role introduction */}
