@@ -446,7 +446,6 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       fontWeight: "bold",
                     })}
                     align="center"
-                    role="listitem"
                   >
                     <Box
                       {...(arr.length - 1 > index && {
@@ -454,7 +453,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                         borderRightColor: "#eee",
                       })}
                       px={2}
-                      role="none"
+                      className={submenu?.length > 0 ? 'has-submenu' : ''}
                     >
                       {submenu?.length > 0 ? (
                         <Popover gutter={20}>
@@ -494,7 +493,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                   as={VStack}
                                   spacing={4}
                                   fontSize="md"
-                                  role="listitem"
+                                  role="menu"
                                 >
                                   {submenu.map(({ id, label, path }) => (
                                     <Box key={id} role="listitem">
@@ -507,7 +506,7 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                           minW={200}
                                           fontWeight="normal"
                                           borderColor="transparent"
-                                          role="link"
+                                          role="menuitem"
                                         >
                                           {label}
                                         </Button>
