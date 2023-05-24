@@ -106,7 +106,7 @@ const Footer = ({ footer }) => {
                               alt={label}
                               display="inline-flex"
                               src={icon}
-                              w={"26px"}
+                              w={label?.includes("w3c") ? "full" : "26px"}
                               h={"auto"}
                             />
                           </a>

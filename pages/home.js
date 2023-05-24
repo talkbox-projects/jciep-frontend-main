@@ -35,7 +35,7 @@ import DividerSimple from "../components/DividerSimple";
 import MultiTextRenderer from "../components/MultiTextRenderer";
 import HighlightHeadline from "../components/HighlightHeadline";
 import ApostropheHeadline from "../components/ApostropheHeadline";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaPlay, FaPause } from "react-icons/fa";
 import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
 import { VscQuote } from "react-icons/vsc";
@@ -43,7 +43,6 @@ import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
 import NextLink from "next/link";
 import { useAppContext } from "../store/AppStore";
-
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -81,21 +80,26 @@ const Home = ({ setting, page }) => {
 
   const sliderRef = useRef(null);
   const [currentIndex, setCurrent] = useState(0);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+
+  const gotoFirstSlide = setTimeout(function () {
+    sliderRef?.current?.slickGoTo(0);
+  }, 10000);
 
   function PrevArrow(props) {
     const { style, onClick } = props;
     const handleSlide = () => {
-      if(props?.currentSlide !== 0){
+      if (props?.currentSlide !== 0) {
         onClick();
       } else {
-        sliderRef?.current?.slickGoTo(posts.length - 1)
+        sliderRef?.current?.slickGoTo(posts.length - 1);
       }
-    }
+    };
     const handleKeydown = (e) => {
-      if (e?.key === "Enter") { 
-        handleSlide()
-    }
-  }
+      if (e?.key === "Enter") {
+        handleSlide();
+      }
+    };
     return (
       <IconButton
         cursor="pointer"
@@ -116,17 +120,17 @@ const Home = ({ setting, page }) => {
   function NextArrow(props) {
     const { style, onClick } = props;
     const handleSlide = () => {
-      if(props?.currentSlide === posts.length - 1){
-        sliderRef?.current?.slickGoTo(0)
+      if (props?.currentSlide === posts.length - 1) {
+        sliderRef?.current?.slickGoTo(0);
       } else {
         onClick();
       }
-    }
+    };
     const handleKeydown = (e) => {
-      if (e?.key === "Enter") { 
-        handleSlide()
-    }
-  }
+      if (e?.key === "Enter") {
+        handleSlide();
+      }
+    };
     return (
       <IconButton
         cursor="pointer"
@@ -145,26 +149,24 @@ const Home = ({ setting, page }) => {
     );
   }
 
-
   const slickSettings = {
-    dots: true,
+    autoplay: true,
+    autoplaySpeed: 10000,
     infinite: false,
-    // autoplay: true,
-    // autoplaySpeed: 10000,
     slidesToShow: 1,
     slidesToScroll: 1,
+    dots: true,
+    dotsClass: "slick-dots slick-thumb",
     beforeChange: (oldIndex, newIndex) => {
       setCurrent(newIndex);
     },
-    // afterChange: (newIndex) => {
-    //   if (newIndex === 4) {
-    //     setTimeout(function () {
-    //       sliderRef?.current?.slickGoTo(0);
-    //     }, 10000);
-    //   }
-    // },
+    afterChange: (newIndex) => {
+      if (newIndex === posts.length - 1 && isAutoPlay) {
+        gotoFirstSlide
+      }
+    },
     nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />
+    prevArrow: <PrevArrow />,
   };
 
   const fetchFeaturePosts = useCallback(async () => {
@@ -513,55 +515,64 @@ const Home = ({ setting, page }) => {
         <Container py={28}>
           {posts?.length > 0 && (
             <Box
-            sx={{
-              ".slick-dots": {
-                transform: "translateY(1em)"
-              },
-              ".slick-dots li button": {
-                _before: {
-                  transition: "0.2s",
-                  content: "''",
-                  borderRadius: "100%",
-                  background: "#296161"
-                }
-              }
-            }}
+              sx={{
+                ".slick-dots": {
+                  transform: "translateY(1em)",
+                  width: "auto",
+                  right: 10,
+                },
+                ".slick-dots li button": {
+                  _before: {
+                    transition: "0.2s",
+                    content: "''",
+                    borderRadius: "100%",
+                    background: "#296161",
+                  },
+                },
+              }}
+              pos={"relative"}
             >
               <Slider {...slickSettings} ref={sliderRef}>
                 {(posts ?? []).map((post, index) => {
-                  let postImage = post?.content?.feature?.image ?? post?.content?.coverImage
+                  let postImage =
+                    post?.content?.feature?.image ?? post?.content?.coverImage;
                   const tabIndex = currentIndex === index ? 0 : -1;
                   return (
-                    <Box key={index}>
+                    <Box key={index} pt={[2]}>
                       <Stack
                         cursor="pointer"
                         align="center"
+                        alignItems="center"
                         justifyContent="center"
                         spacing={[6, 8, 10, 16]}
                         px="50px"
                         direction={["column", "column", "column", "row"]}
                       >
-                        {postImage && (<Box
-                          w={["100%", "60%", "50%", "50%", "40%"]}
-                          tabIndex={tabIndex}
-                          _focusVisible={{
-                            outline: 'none !important',
-                            boxShadow: "0 0 0 3px #404040"
-                          }}
-                        >
-                          <Image
-                            alt={post?.content?.feature?.tagline ?? post?.title}
-                            src={
-                              post?.content?.feature?.image ??
-                              post?.content?.coverImage
-                            }
+                        {postImage && (
+                          <Box
+                            w={["100%", "60%", "50%", "50%", "40%"]}
+                            tabIndex={tabIndex}
                             _focusVisible={{
-                              outline: 'none !important',
-                              boxShadow: "0 0 0 3px #404040"
+                              outline: "none !important",
+                              boxShadow: "0 0 0 3px #404040",
                             }}
-                            border={'none'}
-                          />
-                        </Box>)}
+                          >
+                            <Image
+                              alt={
+                                post?.content?.feature?.tagline ?? post?.title
+                              }
+                              src={
+                                post?.content?.feature?.image ??
+                                post?.content?.coverImage
+                              }
+                              _focusVisible={{
+                                outline: "none !important",
+                                boxShadow: "0 0 0 3px #404040",
+                              }}
+                              border={"none"}
+                            />
+                          </Box>
+                        )}
                         <VStack
                           px={8}
                           align="start"
@@ -620,13 +631,44 @@ const Home = ({ setting, page }) => {
                         </VStack>
                       </Stack>
                     </Box>
-                  )
+                  );
                 })}
               </Slider>
+
+              <Button
+                padding={0}
+                h={"auto"}
+                variant="ghost"
+                zIndex={10}
+                right={3}
+                position="absolute"
+                bottom={"-41px"}
+                cursor="pointer"
+                minW={"auto"}
+                onClick={(e) => {
+
+                  if(isAutoPlay) {
+                    clearTimeout(gotoFirstSlide)
+                    sliderRef?.current?.slickPause()
+                  } else {
+                    sliderRef?.current?.slickPlay();
+                  }
+
+                  setIsAutoPlay(!isAutoPlay);
+                }}
+                _hover={{ background: "transparent" }}
+                _focus={{ background: "transparent" }}
+                _active={{ background: "transparent" }}
+              >
+                {isAutoPlay ? (
+                  <FaPause color="#296161" fontSize={"20px"} />
+                ) : (
+                  <FaPlay color="#296161" fontSize={"20px"} />
+                )}
+              </Button>
             </Box>
           )}
         </Container>
-
       </Box>
 
       {/* role introduction */}
