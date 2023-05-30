@@ -27,8 +27,6 @@ import {
 import Container from "../components/Container";
 import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useCallback, useState } from "react";
 import UserGroupModal from "../components/UserGroupModal";
 import DividerSimple from "../components/DividerSimple";
@@ -70,7 +68,7 @@ const Home = ({ setting, page }) => {
 
   const isMobile = useBreakpointValue([true, false]);
   const videoRef = useRef(undefined);
-  const [carouselAutoPlay, setCarouselAutoPlay] = useState(true);
+  const [timeoutId, setTimeoutId] = useState(null);
   const [hasVideoEnded, setHasVideoEnded] = useState(false);
 
   const categories = setting?.value?.categories;
@@ -81,10 +79,6 @@ const Home = ({ setting, page }) => {
   const sliderRef = useRef(null);
   const [currentIndex, setCurrent] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-
-  const gotoFirstSlide = setTimeout(function () {
-    sliderRef?.current?.slickGoTo(0);
-  }, 10000);
 
   function PrevArrow(props) {
     const { style, onClick } = props;
@@ -149,6 +143,19 @@ const Home = ({ setting, page }) => {
     );
   }
 
+  const startTimeout = (sliderRef) => {
+    const newTimeoutId = setTimeout(() => {
+      sliderRef?.slickGoTo(0);
+    }, 10000);
+
+    setTimeoutId(newTimeoutId);
+  };
+
+  const stopTimeout = () => {
+    clearTimeout(timeoutId);
+    setTimeoutId(null);
+  };
+
   const slickSettings = {
     autoplay: true,
     autoplaySpeed: 10000,
@@ -159,10 +166,11 @@ const Home = ({ setting, page }) => {
     dotsClass: "slick-dots slick-thumb",
     beforeChange: (oldIndex, newIndex) => {
       setCurrent(newIndex);
-    },
-    afterChange: (newIndex) => {
+      sliderRef?.current?.slickGoTo(newIndex);
       if (newIndex === posts.length - 1 && isAutoPlay) {
-        gotoFirstSlide
+        startTimeout(sliderRef?.current)
+      } else {
+          stopTimeout()
       }
     },
     nextArrow: <NextArrow />,
@@ -357,7 +365,12 @@ const Home = ({ setting, page }) => {
                         }
                       }}
                     >
-                      <VStack textAlign="center" fontSize={["xl"]} tabIndex={1} role="button">
+                      <VStack
+                        textAlign="center"
+                        fontSize={["xl"]}
+                        tabIndex={1}
+                        role="button"
+                      >
                         <Image alt={name} w={100} src={icon}></Image>
                         <Text fontWeight="bold">{name}</Text>
                         <Text>{caption}</Text>
@@ -511,7 +524,8 @@ const Home = ({ setting, page }) => {
 
       {/* Fifth Section */}
 
-      <Box bg="#00BFBA" position="relative">
+      <Box className="fifthSection" position="relative">
+        <Box bg="#00BFBA">
         <Container py={28}>
           {posts?.length > 0 && (
             <Box
@@ -532,10 +546,11 @@ const Home = ({ setting, page }) => {
               }}
               pos={"relative"}
             >
-              <Slider {...slickSettings} ref={sliderRef}>
+              <Slider {...slickSettings} ref={sliderRef} style={{background: "#00BFBA"}}>
                 {(posts ?? []).map((post, index) => {
                   let postImage =
-                    post?.content?.feature?.image ?? post?.content?.coverImage;
+                  post?.content?.feature?.image ?? post?.content?.coverImage;
+                  const coverImage = post?.coverImage
                   const tabIndex = currentIndex === index ? 0 : -1;
                   return (
                     <Box key={index} pt={[2]}>
@@ -547,8 +562,9 @@ const Home = ({ setting, page }) => {
                         spacing={[6, 8, 10, 16]}
                         px="50px"
                         direction={["column", "column", "column", "row"]}
+                        my={2}
                       >
-                        {postImage && (
+                        {(postImage||coverImage) && (
                           <Box
                             w={["100%", "60%", "50%", "50%", "40%"]}
                             tabIndex={tabIndex}
@@ -561,10 +577,7 @@ const Home = ({ setting, page }) => {
                               alt={
                                 post?.content?.feature?.tagline ?? post?.title
                               }
-                              src={
-                                post?.content?.feature?.image ??
-                                post?.content?.coverImage
-                              }
+                              src={postImage??coverImage}
                               _focusVisible={{
                                 outline: "none !important",
                                 boxShadow: "0 0 0 3px #404040",
@@ -646,14 +659,17 @@ const Home = ({ setting, page }) => {
                 cursor="pointer"
                 minW={"auto"}
                 onClick={(e) => {
-
                   if(isAutoPlay) {
-                    clearTimeout(gotoFirstSlide)
-                    sliderRef?.current?.slickPause()
+                    stopTimeout()
+                    sliderRef?.current?.slickPause();
                   } else {
+                    // Resume in last slide
+                    if (currentIndex === posts.length - 1) {
+                      sliderRef?.current?.slickGoTo(0);
+                    }
+                    
                     sliderRef?.current?.slickPlay();
                   }
-
                   setIsAutoPlay(!isAutoPlay);
                 }}
                 _hover={{ background: "transparent" }}
@@ -669,6 +685,8 @@ const Home = ({ setting, page }) => {
             </Box>
           )}
         </Container>
+
+        </Box>
       </Box>
 
       {/* role introduction */}
