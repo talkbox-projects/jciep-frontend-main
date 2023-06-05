@@ -27,14 +27,14 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import organizationSearch from "../../../utils/api/OrganizationSearch";
 import { getOrganization } from "../../../utils/organization/getOrganization";
 import { AiOutlineLink } from "react-icons/ai";
-
+import { GrView } from "react-icons/gr";
 import {
   getProjectDetail,
   getProjectCreatedBy,
 } from "../../../utils/project/getProject";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { options } from "../../../utils/project/resourceObj";
-
+import { addView } from "../../../utils/project/viewCount";
 import { getStockPhoto } from "../../../utils/event/getEvent";
 
 import { BiPhone } from "react-icons/bi";
@@ -83,6 +83,7 @@ const IdeaBankDetail = ({
       const createdBy = (await getProjectCreatedBy([data?.createdBy])) ?? {};
       setCreatedBy(createdBy?.[0]);
       setDetail(data);
+      addView(query?.id);
     }
     fetchData();
   }, [router]);
@@ -195,7 +196,12 @@ const IdeaBankDetail = ({
                 {/* <RenderClickIcon /> */}
                 <RenderListItem
                   title={page?.content?.venue}
-                  content={options["district"][locale ?? "zh"][data?.district]?? locale === "zh" ? "未選擇" : "unSelected"}
+                  content={
+                    options["district"][locale ?? "zh"][data?.district] ??
+                    locale === "zh"
+                      ? "未選擇"
+                      : "unSelected"
+                  }
                 />
               </Flex>
             )}
@@ -256,7 +262,8 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {page?.content?.typeManpower}({options["serviceNature"][locale ?? "zh"][data?.serviceNature]})
+            {page?.content?.typeManpower}(
+            {options["serviceNature"][locale ?? "zh"][data?.serviceNature]})
           </Text>
 
           <Divider my={2} />
@@ -354,7 +361,7 @@ const IdeaBankDetail = ({
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfConsultantsNeeded}
-                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfConsultantsNeeded}`}
+                  content={`${data?.numberOfConsultantsNeeded}`}
                 />
               </Flex>
             )}
@@ -363,7 +370,7 @@ const IdeaBankDetail = ({
               <Flex gap={2} alignItems="center">
                 <RenderListItem
                   title={page?.content?.numberOfVolunteersNeeded}
-                  content={`${page?.content?.numberOfPeopleNeeded??"需要針對這種職務的人數"} ${data?.numberOfVolunteersNeeded}`}
+                  content={`${data?.numberOfVolunteersNeeded}`}
                 />
               </Flex>
             )}
@@ -391,24 +398,26 @@ const IdeaBankDetail = ({
             )} */}
           </Stack>
 
-          {data?.remark &&  <Box>
-        <Divider my={4} />
-        <Flex gap={1} alignItems="center">
-          <Box alignSelf={"flex-start"}>
-            <TiDocumentText style={{ width: "18px", height: "18px" }} />
-          </Box>
-          <Flex
-            direction={"column"}
-            gap={1}
-            fontSize={{ base: "sm", lg: "sm" }}
-          >
-            <Text fontWeight={"bold"}>
-              {locale==="zh"? "備註" : page?.content?.moreInformation}
-            </Text>
-            <Text>{data?.remark}</Text>
-          </Flex>
-        </Flex>
-      </Box>}
+          {data?.remark && (
+            <Box>
+              <Divider my={4} />
+              <Flex gap={1} alignItems="center">
+                <Box alignSelf={"flex-start"}>
+                  <TiDocumentText style={{ width: "18px", height: "18px" }} />
+                </Box>
+                <Flex
+                  direction={"column"}
+                  gap={1}
+                  fontSize={{ base: "sm", lg: "sm" }}
+                >
+                  <Text fontWeight={"bold"}>
+                    {locale === "zh" ? "備註" : page?.content?.moreInformation}
+                  </Text>
+                  <Text>{data?.remark}</Text>
+                </Flex>
+              </Flex>
+            </Box>
+          )}
         </Box>
       );
     }
@@ -550,7 +559,6 @@ const IdeaBankDetail = ({
             </Flex>
             <Text pt={1}>{data?.otherResourcesNeeded}</Text>
           </Box>
-         
         </Box>
       );
     }
@@ -566,7 +574,8 @@ const IdeaBankDetail = ({
             fontSize={{ base: "md", md: "lg" }}
             fontWeight={700}
           >
-            {locale === "zh" && "需要"}{page?.content?.typeFunding}
+            {locale === "zh" && "需要"}
+            {page?.content?.typeFunding}
           </Text>
 
           <Divider my={2} />
@@ -609,9 +618,10 @@ const IdeaBankDetail = ({
                         >
                           <RenderListItem
                             title={data?.name}
-                            content={new Intl.NumberFormat("zh-HK", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(
-                              data?.amount
-                            )}
+                            content={new Intl.NumberFormat("zh-HK", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }).format(data?.amount)}
                           />
                         </Flex>
                       );
@@ -624,8 +634,11 @@ const IdeaBankDetail = ({
               <RenderListItem
                 title={page?.content?.totalAmount}
                 content={`
-                ${page?.content?.amountHKD??"金額(HKD)"}
-                ${new Intl.NumberFormat("zh-HK", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(
+                ${page?.content?.amountHKD ?? "金額(HKD)"}
+                ${new Intl.NumberFormat("zh-HK", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(
                   data?.items?.reduce(function (acc, obj) {
                     return acc + obj.amount;
                   }, 0)
@@ -654,7 +667,6 @@ const IdeaBankDetail = ({
                 }
               />
             </Flex> */}
-
           </Stack>
         </Box>
       );
@@ -669,48 +681,48 @@ const IdeaBankDetail = ({
       icon: "/images/app/venue.svg",
       typeName: {
         zh: "場地",
-        en: "venue"
-      }
+        en: "venue",
+      },
     },
     manpower: {
       color: "#00BFBA",
       icon: "/images/app/manpower.svg",
       typeName: {
         zh: "人力資源",
-        en: "manpower"
-      }
+        en: "manpower",
+      },
     },
     expertise: {
       color: "#FEB534",
       icon: "/images/app/expertise.svg",
       typeName: {
         zh: "專業",
-        en: "expertise"
-      }
+        en: "expertise",
+      },
     },
     funding: {
       color: "#F6D644",
       icon: "/images/app/funding.svg",
       typeName: {
         zh: "資金",
-        en: "funding"
-      }
+        en: "funding",
+      },
     },
     network: {
       color: "#D094FF",
       icon: "/images/app/network.svg",
       typeName: {
         zh: "人際網絡",
-        en: "network"
-      }
+        en: "network",
+      },
     },
     other: {
       color: "#C6C6C6",
       icon: "/images/app/resource_other.svg",
       typeName: {
         zh: "其他",
-        en: "other"
-      }
+        en: "other",
+      },
     },
   };
 
@@ -841,7 +853,10 @@ const IdeaBankDetail = ({
                               </Box>
                               <Box
                                 dangerouslySetInnerHTML={{
-                                  __html: detail?.introduction,
+                                  __html: detail?.introduction?.replace(
+                                    /(?:\r|\n|\r\n)/g,
+                                    "<br>"
+                                  ),
                                 }}
                               />
 
@@ -963,7 +978,11 @@ const IdeaBankDetail = ({
                                           </Box>
                                           <Box fontSize={"12px"}>
                                             {page?.content?.iNeed}
-                                            {resourceData[d.type]?.typeName[locale ?? "zh"]}
+                                            {
+                                              resourceData[d.type]?.typeName[
+                                                locale ?? "zh"
+                                              ]
+                                            }
                                           </Box>
                                         </Flex>
                                       </Box>
@@ -1030,9 +1049,16 @@ const IdeaBankDetail = ({
                       <Text fontWeight={700} mb={2}>
                         {page?.content?.detail}
                       </Text>
-                      <Text as="p" fontSize={"14px"}>
-                        {detail?.remark}
-                      </Text>
+                      <Text
+                        as="p"
+                        fontSize={"14px"}
+                        dangerouslySetInnerHTML={{
+                          __html: detail?.detailOrTeamAbility?.replace(
+                            /(?:\r|\n|\r\n)/g,
+                            "<br>"
+                          ),
+                        }}
+                      />
                     </Box>
                     <Divider my={4} />
                     <Stack direction={"column"} spacing={4} fontSize="14px">
@@ -1124,6 +1150,88 @@ const IdeaBankDetail = ({
                         </Flex>
                       )}
 
+                      {detail?.contactPersonName && (
+                        <Flex align="center" gap={2} alignItems="flex-start">
+                          <Box w={"20px"}>
+                            <BsPerson
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
+                          </Box>
+                          <Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactName}
+                            </Box>
+                            {detail?.contactPersonName}
+                          </Box>
+                        </Flex>
+                      )}
+
+                      {detail?.contactEmail && (
+                        <Flex align="center" gap={2} alignItems="flex-start">
+                          <Box w={"20px"}>
+                            <AiOutlineMail
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
+                          </Box>
+                          <Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactEmail}
+                            </Box>
+                            <u>
+                              <a
+                                href={`mailto:${detail?.contactEmail}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ color: "#0D8282" }}
+                              >
+                                {detail?.contactEmail}
+                              </a>
+                            </u>
+                          </Box>
+                        </Flex>
+                      )}
+
+                      {detail?.contactPhone && (
+                        <Flex align="center" gap={2} alignItems="flex-start">
+                          <Box w={"20px"}>
+                            <BiPhone
+                              style={{
+                                width: "18px",
+                                height: "18px",
+                                paddingLeft: "2px",
+                                paddingTop: "1px",
+                              }}
+                            />
+                          </Box>
+                          <Box>
+                            <Box fontWeight={700}>
+                              {page?.content?.contactPhone}
+                            </Box>
+                            {detail?.contactPhone}
+                          </Box>
+                        </Flex>
+                      )}
+
+                      <Flex align="center" gap={2}>
+                        <Box w={"20px"} pl={"4px"}>
+                          <GrView style={{ color: "#0D8282" }} />
+                        </Box>
+                        <Box>
+                          {detail?.viewCount??0}{" "}
+                          {page?.content?.pageView}
+                        </Box>
+                      </Flex>
+
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
                           <Image
@@ -1140,7 +1248,6 @@ const IdeaBankDetail = ({
                           </Box>
                         </Box>
                       </Flex>
-
                       <Flex
                         align="center"
                         gap={2}
@@ -1359,6 +1466,11 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "print",
       label: "列印此頁 print",
+      component: "text",
+    },
+    {
+      name: "pageView",
+      label: "瀏覽人數 page view",
       component: "text",
     },
     {
