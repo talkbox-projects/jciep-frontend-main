@@ -68,6 +68,14 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
   const [organization, setOrganization] = useState(null);
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const contactEmail = organization?.contactEmail ?? detail?.contactPersonEmail
+  const contactPhone = organization?.contactPhone ?? detail?.contactPersonPhone
+  const contactPersonName = organization?.contactName ?? detail?.contactPersonName
+
+  console.log('organization', organization)
+  console.log('detail', detail)
+
   useEffect(() => {
     const { query } = router;
     async function fetchData() {
@@ -1058,28 +1066,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                         </Box>
                       </Flex>
 
-                      {organization?.contactName && (
-                        <Flex align="center" gap={2} alignItems="flex-start">
-                          <Box w={"20px"}>
-                            <BsPerson
-                              style={{
-                                width: "18px",
-                                height: "18px",
-                                paddingLeft: "2px",
-                                paddingTop: "1px",
-                              }}
-                            />
-                          </Box>
-                          <Box>
-                            <Box fontWeight={700}>
-                              {page?.content?.contactName}
-                            </Box>
-                            {organization?.contactName}
-                          </Box>
-                        </Flex>
-                      )}
-
-                      {organization?.contactEmail && (
+                      {contactEmail && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <AiOutlineMail
@@ -1097,19 +1084,19 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                             </Box>
                             <u>
                               <a
-                                href={`mailto:${organization?.contactEmail}`}
+                                href={`mailto:${contactEmail}`}
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{ color: "#0D8282" }}
                               >
-                                {organization?.contactEmail}
+                                {contactEmail}
                               </a>
                             </u>
                           </Box>
                         </Flex>
                       )}
 
-                      {organization?.contactPhone && (
+                      {contactPhone && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BiPhone
@@ -1125,12 +1112,12 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                             <Box fontWeight={700}>
                               {page?.content?.contactPhone}
                             </Box>
-                            {organization?.contactPhone}
+                            {contactPhone}
                           </Box>
                         </Flex>
                       )}
 
-                      {detail?.contactPersonName && (
+                      {contactPersonName && (
                         <Flex align="center" gap={2} alignItems="flex-start">
                           <Box w={"20px"}>
                             <BsPerson
@@ -1146,58 +1133,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                             <Box fontWeight={700}>
                               {page?.content?.contactName}
                             </Box>
-                            {detail?.contactPersonName}
-                          </Box>
-                        </Flex>
-                      )}
-
-                      {detail?.contactEmail && (
-                        <Flex align="center" gap={2} alignItems="flex-start">
-                          <Box w={"20px"}>
-                            <AiOutlineMail
-                              style={{
-                                width: "18px",
-                                height: "18px",
-                                paddingLeft: "2px",
-                                paddingTop: "1px",
-                              }}
-                            />
-                          </Box>
-                          <Box>
-                            <Box fontWeight={700}>
-                              {page?.content?.contactEmail}
-                            </Box>
-                            <u>
-                              <a
-                                href={`mailto:${detail?.contactEmail}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: "#0D8282" }}
-                              >
-                                {detail?.contactEmail}
-                              </a>
-                            </u>
-                          </Box>
-                        </Flex>
-                      )}
-
-                      {detail?.contactPhone && (
-                        <Flex align="center" gap={2} alignItems="flex-start">
-                          <Box w={"20px"}>
-                            <BiPhone
-                              style={{
-                                width: "18px",
-                                height: "18px",
-                                paddingLeft: "2px",
-                                paddingTop: "1px",
-                              }}
-                            />
-                          </Box>
-                          <Box>
-                            <Box fontWeight={700}>
-                              {page?.content?.contactPhone}
-                            </Box>
-                            {detail?.contactPhone}
+                            {contactPersonName}
                           </Box>
                         </Flex>
                       )}
