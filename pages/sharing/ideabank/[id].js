@@ -76,9 +76,9 @@ const IdeaBankDetail = ({
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const contactEmail = organization?.contactEmail ?? detail?.contactPersonEmail
-  const contactPhone = organization?.contactPhone ?? detail?.contactPersonPhone
-  const contactPersonName = organization?.contactName ?? detail?.contactPersonName
+  const contactEmail =  detail?.contactPersonEmail ?? organization?.contactEmail
+  const contactPhone =  detail?.contactPersonPhone ?? organization?.contactPhone
+  const contactPersonName =  detail?.contactPersonName ?? organization?.contactName
 
   useEffect(() => {
     const { query } = router;

@@ -69,12 +69,9 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const contactEmail = organization?.contactEmail ?? detail?.contactPersonEmail
-  const contactPhone = organization?.contactPhone ?? detail?.contactPersonPhone
-  const contactPersonName = organization?.contactName ?? detail?.contactPersonName
-
-  console.log('organization', organization)
-  console.log('detail', detail)
+  const contactEmail =  detail?.contactPersonEmail ?? organization?.contactEmail
+  const contactPhone =  detail?.contactPersonPhone ?? organization?.contactPhone
+  const contactPersonName =  detail?.contactPersonName ?? organization?.contactName
 
   useEffect(() => {
     const { query } = router;
