@@ -20,6 +20,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Tag,
+  Button
 } from "@chakra-ui/react";
 import DividerSimple from "../../../components/DividerSimple";
 import Container from "../../../components/Container";
@@ -1156,16 +1157,6 @@ const IdeaBankDetail = ({
 
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
-                          <GrView style={{ color: "#0D8282" }} />
-                        </Box>
-                        <Box>
-                          {detail?.viewCount??0}{" "}
-                          {page?.content?.pageView}
-                        </Box>
-                      </Flex>
-
-                      <Flex align="center" gap={2}>
-                        <Box w={"20px"} pl={"4px"}>
                           <Image
                             src={"/images/app/bookmark-active.svg"}
                             alt={""}
@@ -1180,6 +1171,17 @@ const IdeaBankDetail = ({
                           </Box>
                         </Box>
                       </Flex>
+
+                      <Flex align="center" gap={2}>
+                        <Box w={"20px"} pl={"4px"}>
+                          <GrView style={{ color: "#0D8282" }} />
+                        </Box>
+                        <Box>
+                          {detail?.viewCount??0}{" "}
+                          {page?.content?.pageView}
+                        </Box>
+                      </Flex>
+                      
                       <Flex
                         align="center"
                         gap={2}
@@ -1205,6 +1207,29 @@ const IdeaBankDetail = ({
                             {page?.content?.print}
                           </Box>
                         </Box>
+                      </Flex>
+
+                      <Flex gap={2} direction={"column"} mt={4}>
+                        {contactPhone && (
+                          <a
+                            href={`tel:${contactPhone}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Button
+                              borderRadius="99"
+                              w={"100%"}
+                              bgColor={"#F6D644"}
+                              borderColor={"#F6D644"}
+                              _hover={{ bgColor: 'gray.200', borderColor: 'gray.200' }}
+                              whiteSpace={"unset"}
+                              height={"auto"}
+                              minH={12}
+                            >
+                              <Text noOfLines={2}>{`${page?.content?.callToAction??"立即聯絡"} ${contactPersonName}`}</Text>
+                            </Button>
+                          </a>
+                        )}
                       </Flex>
 
                       {/* <Flex gap={2} direction={"column"} mt={10}>
@@ -1584,6 +1609,11 @@ export default withPageCMS(IdeaBankDetail, {
     {
       name: "other",
       label: "其他 other",
+      component: "text",
+    },
+    {
+      name: "callToAction",
+      label: "立即聯絡 call To Action",
       component: "text",
     },
   ],

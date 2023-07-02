@@ -42,6 +42,7 @@ import getSharedServerSideProps from "../../utils/server/getSharedServerSideProp
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiFilter2Fill } from "react-icons/ri";
 import { getEvents, getStockPhoto } from "../../utils/event/getEvent";
+import { BsEyeFill } from "react-icons/bs";
 
 const PAGE_KEY = "event";
 
@@ -62,7 +63,7 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
+const Event = ({ page, hostname, lang, api: { stockPhotos } }) => {
   const router = useRouter();
   const { query } = router;
   const [filteredEvents, setFiltered] = useState([]);
@@ -164,13 +165,13 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
   return (
     <>
       <VStack spacing={0} align="stretch" w="100%">
-      <NextSeo
-        title={
-          router.locale === "zh"
-            ? `賽馬會共融．知行計劃｜最新活動`
-            : `Jockey Club Collaborative Project for Inclusive Employment｜Events`
-        }
-      />
+        <NextSeo
+          title={
+            router.locale === "zh"
+              ? `賽馬會共融．知行計劃｜最新活動`
+              : `Jockey Club Collaborative Project for Inclusive Employment｜Events`
+          }
+        />
         <Box bgColor="#F6D644" position="relative">
           <Box position="absolute" bottom={0} w="100%">
             <DividerSimple primary="#FD5F53" />
@@ -320,15 +321,17 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
                         gap={6}
                       >
                         {(filteredEvents[detail] || []).map((d, i) => {
-                          const url = d?.banner?.file?.url
-                          const stockPhotoId = d?.banner?.stockPhotoId
+                          const url = d?.banner?.file?.url;
+                          const stockPhotoId = d?.banner?.stockPhotoId;
 
                           let imageUrl = "";
                           if (url !== "undefined" && !_.isEmpty(url)) {
                             imageUrl = url;
                           } else {
-                            const getStockPhoto = stockPhotos?.find((d)=>d?.id == stockPhotoId)
-                            imageUrl = getStockPhoto?.url
+                            const getStockPhoto = stockPhotos?.find(
+                              (d) => d?.id == stockPhotoId
+                            );
+                            imageUrl = getStockPhoto?.url;
                           }
                           return (
                             <GridItem
@@ -362,7 +365,10 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
                                     </Box>
                                     <Box>
                                       <b>{d.startDate}</b> -{" "}
-                                      {renderEventTime(d?.startTime, d?.endTime)}
+                                      {renderEventTime(
+                                        d?.startTime,
+                                        d?.endTime
+                                      )}
                                     </Box>
                                   </Flex>
                                   <Flex align="center" gap={2}>
@@ -399,6 +405,7 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
                                     </Button>
                                   </Box>
 
+                                  <Flex direction={'row'} gap={2}>
                                   <Flex
                                     direction={"row"}
                                     align="center"
@@ -416,6 +423,18 @@ const Event = ({ page, hostname, lang, api: {stockPhotos} }) => {
                                           ).replace("$", d.bookmarkCount)}
                                     </Box>
                                   </Flex>
+
+                                  <Flex align="center" gap={2}>
+                                    <Box w={"20px"} mx={"2px"}>
+                                      <BsEyeFill fontSize={18} />
+                                    </Box>
+                                    <Box>
+                                      <b>{d?.viewCount ?? 0}</b>
+                                    </Box>
+                                  </Flex>
+                                  </Flex>
+
+                             
                                 </Flex>
                               </Box>
                             </GridItem>

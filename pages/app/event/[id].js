@@ -25,7 +25,7 @@ import moment from "moment";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
-import { getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
+import { getEvents, getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
 import { HiDownload } from "react-icons/hi";
 import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
@@ -35,8 +35,9 @@ import {
 } from "../../../utils/event/eventAction";
 import eventTypes from "../../api/graphql/enum/eventTypes";
 import charge from "../../api/graphql/enum/freeOrCharge";
+import { BsEyeFill } from "react-icons/bs";
 
-import _ from "lodash"
+import _ from "lodash";
 
 const PAGE_KEY = "event";
 
@@ -59,6 +60,7 @@ export const getServerSideProps = async (context) => {
 const Event = ({ page, lang, api: { stockPhotos } }) => {
   const router = useRouter();
   const [detail, setDetail] = useState([]);
+  const [events, setEvents] = useState([]);
   const [bookmarked, setBookmarked] = useState(detail?.bookmarked);
   const [organization, setOrganization] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -410,6 +412,15 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                           </Text>
                         </Stack>
                       )}
+                    </Flex>
+
+                    <Flex align="center" gap={2}>
+                      <Box w={"20px"} mx={'2px'}>
+                        <BsEyeFill fontSize={18} />
+                      </Box>
+                      <Box>
+                        <b>{detail?.viewCount??0}</b>
+                      </Box>
                     </Flex>
                   </Stack>
                   <Divider my={4} />
@@ -979,8 +990,8 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
   if (url !== "undefined" && !_.isEmpty(url)) {
     imageUrl = url;
   } else {
-    const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
-    imageUrl = getStockPhoto?.url
+    const getStockPhoto = stockPhotos?.find((d) => d?.id === stockPhotoId);
+    imageUrl = getStockPhoto?.url;
   }
 
   return (

@@ -33,7 +33,7 @@ import { getEventDetail, getStockPhoto } from "../../utils/event/getEvent";
 import { bookmarkEvent } from "../../utils/event/eventAction";
 import organizationGet from "../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
-
+import { GrView } from "react-icons/gr";
 import eventTypes from "../api/graphql/enum/eventTypes";
 import charge from "../api/graphql/enum/freeOrCharge";
 
@@ -588,9 +588,20 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                             ).replace("$", detail?.bookmarkCount || 0)}
                       </Text>
                     </Stack>
+
+                    <Flex align="center" gap={2}>
+                        <Box w={"20px"} pl={"4px"}>
+                          <GrView style={{ color: "#0D8282" }} />
+                        </Box>
+                        <Box>
+                        {detail?.viewCount??0} {page?.content?.pageView}
+                        </Box>
+                      </Flex>
+
+
                   </Stack>
 
-                  <Flex gap={2} direction={"column"} mt={10}>
+                  <Flex gap={2} direction={"column"} mt={4}>
                     {detail?.registerUrl && (
                       <a
                         href={`${detail?.registerUrl}`}

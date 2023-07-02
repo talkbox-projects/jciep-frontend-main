@@ -39,7 +39,7 @@ import { BiPhone } from "react-icons/bi";
 import { AiOutlineMail } from "react-icons/ai";
 import { TiDocumentText } from "react-icons/ti";
 import { BsPerson } from "react-icons/bs";
-
+import wordExtractor from "../../utils/wordExtractor";
 import _ from "lodash";
 
 const PAGE_KEY = "project";
@@ -69,9 +69,10 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
   const [popupImage, setPopupImage] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const contactEmail =  detail?.contactPersonEmail ?? organization?.contactEmail
-  const contactPhone =  detail?.contactPersonPhone ?? organization?.contactPhone
-  const contactPersonName =  detail?.contactPersonName ?? organization?.contactName
+  const contactEmail = detail?.contactPersonEmail ?? organization?.contactEmail;
+  const contactPhone = detail?.contactPersonPhone ?? organization?.contactPhone;
+  const contactPersonName =
+    detail?.contactPersonName ?? organization?.contactName;
 
   useEffect(() => {
     const { query } = router;
@@ -1137,15 +1138,6 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
 
                       <Flex align="center" gap={2}>
                         <Box w={"20px"} pl={"4px"}>
-                          <GrView style={{ color: "#0D8282" }} />
-                        </Box>
-                        <Box>
-                        {detail?.viewCount??0} {page?.content?.pageView}
-                        </Box>
-                      </Flex>
-
-                      <Flex align="center" gap={2}>
-                        <Box w={"20px"} pl={"4px"}>
                           <Image
                             src={"/images/app/bookmark-active.svg"}
                             alt={""}
@@ -1158,6 +1150,15 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                             {detail?.bookmarkCount}{" "}
                             {page?.content?.bookmarkCount}
                           </Box>
+                        </Box>
+                      </Flex>
+
+                      <Flex align="center" gap={2}>
+                        <Box w={"20px"} pl={"4px"}>
+                          <GrView style={{ color: "#0D8282" }} />
+                        </Box>
+                        <Box>
+                          {detail?.viewCount ?? 0} {page?.content?.pageView}
                         </Box>
                       </Flex>
 
@@ -1187,6 +1188,30 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                           </Box>
                         </Box>
                       </Flex>
+
+                      <Flex gap={2} direction={"column"} mt={4}>
+                        {contactPhone && (
+                          <a
+                            href={`tel:${contactPhone}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Button
+                              borderRadius="99"
+                              w={"100%"}
+                              bgColor={"#F6D644"}
+                              borderColor={"#F6D644"}
+                              _hover={{ bgColor: 'gray.200', borderColor: 'gray.200' }}
+                              whiteSpace={"unset"}
+                              height={"auto"}
+                              minH={12}
+                            >
+                              <Text noOfLines={2}>{`${page?.content?.callToAction??"立即聯絡"} ${contactPersonName}`}</Text>
+                            </Button>
+                          </a>
+                        )}
+                      </Flex>
+                      
                     </Stack>
                   </Box>
                 </Box>
@@ -1544,6 +1569,11 @@ export default withPageCMS(Project, {
     {
       name: "other",
       label: "其他 other",
+      component: "text",
+    },
+    {
+      name: "callToAction",
+      label: "立即聯絡 call To Action",
       component: "text",
     },
     {
