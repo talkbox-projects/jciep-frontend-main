@@ -596,7 +596,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                           <GrView style={{ color: "#0D8282" }} />
                         </Box>
                         <Box>
-                        {detail?.viewCount??0} {page?.content?.pageView}
+                        {detail?.viewCount??0} {wordExtractor(page?.content?.wordings, "page_view")}
                         </Box>
                       </Flex>
 

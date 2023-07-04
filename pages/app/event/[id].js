@@ -421,7 +421,7 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                         <BsEyeFill fontSize={18} />
                       </Box>
                       <Box>
-                        <b>{detail?.viewCount??0}</b>
+                      {detail?.viewCount??0} {wordExtractor(page?.content?.wordings, "page_view")}
                       </Box>
                     </Flex>
                   </Stack>
