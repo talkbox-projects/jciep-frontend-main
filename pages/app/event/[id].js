@@ -25,7 +25,8 @@ import moment from "moment";
 import getSharedServerSideProps from "../../../utils/server/getSharedServerSideProps";
 import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
-import { getEvents, getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
+import { getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
+import { addView } from "../../../utils/project/viewCount";
 import { HiDownload } from "react-icons/hi";
 import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
@@ -85,6 +86,7 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
     const { query } = router;
     const data = (await getEventDetail(query?.id)) ?? {};
     setDetail(data);
+    addView(query?.id);
   };
 
   useEffect(() => {

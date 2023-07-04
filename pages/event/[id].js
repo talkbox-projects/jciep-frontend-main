@@ -32,6 +32,7 @@ import { AiOutlineLink } from "react-icons/ai";
 import { getEventDetail, getStockPhoto } from "../../utils/event/getEvent";
 import { bookmarkEvent } from "../../utils/event/eventAction";
 import organizationGet from "../../utils/api/OrganizationGet";
+import { addView } from "../../utils/event/viewCount";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
 import { GrView } from "react-icons/gr";
 import eventTypes from "../api/graphql/enum/eventTypes";
@@ -72,6 +73,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
     async function fetchData() {
       const data = (await getEventDetail(query?.id)) ?? {};
       setDetail(data);
+      addView(query?.id);
     }
     fetchData();
 
