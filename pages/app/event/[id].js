@@ -26,7 +26,7 @@ import getSharedServerSideProps from "../../../utils/server/getSharedServerSideP
 import { useAppContext } from "../../../store/AppStore";
 import { CloseIcon } from "@chakra-ui/icons";
 import { getEventDetail, getStockPhoto } from "../../../utils/event/getEvent";
-import { addView } from "../../../utils/project/viewCount";
+import { addView } from "../../../utils/event/viewCount";
 import { HiDownload } from "react-icons/hi";
 import organizationGet from "../../../utils/api/OrganizationGet";
 import { AiOutlineFilePdf, AiOutlinePlayCircle } from "react-icons/ai";
