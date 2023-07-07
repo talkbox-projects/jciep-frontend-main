@@ -1137,12 +1137,12 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                       )}
 
                       <Flex align="center" gap={2}>
-                        <Box w={"20px"} pl={"4px"}>
-                          <Image
-                            src={"/images/app/bookmark-active.svg"}
+                      <Box w={"20px"} ml={"1px"}>
+                        <Image
+                            src={"/images/app/bookmark-off.svg"}
                             alt={""}
                             fontSize={18}
-                            maxW={"12px"}
+                            maxW={"full"}
                           />
                         </Box>
                         <Box>
@@ -1206,7 +1206,7 @@ const Project = ({ page, locale, api: { organizations, stockPhotos } }) => {
                               height={"auto"}
                               minH={12}
                             >
-                              <Text noOfLines={2}>{`${page?.content?.callToAction??"立即聯絡"} ${contactPersonName}`}</Text>
+                              <Text noOfLines={2}>{`${page?.content?.callToAction} ${contactPersonName}`}</Text>
                             </Button>
                           </a>
                         )}

@@ -573,11 +573,29 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                     />
                     <Stack
                       direction="row"
-                      spacing={1}
+                      spacing={detail?.liked?1:2}
                       mt={4}
                       cursor="pointer"
                       onClick={() => handleBookmark(detail?.id)}
+                      alignItems={"center"}
                     >
+                     {detail?.liked ? (<Box w={"20px"} ml={"4px"}>
+                          <Image
+                            src={"/images/app/bookmark-active.svg"}
+                            alt={"bookmark"}
+                            fontSize={18}
+                            maxW={"12px"}
+                          />
+                        </Box>) :
+                        (
+                        <Box w={"20px"} ml={"1px"}>
+                        <Image
+                            src={"/images/app/bookmark-off.svg"}
+                            alt={"bookmark"}
+                            fontSize={18}
+                            maxW={"full"}
+                          />
+                        </Box>)}
                       <Text mt={6} color="#0D8282" fontWeight={700}>
                         {detail?.liked
                           ? wordExtractor(

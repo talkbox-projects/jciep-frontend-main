@@ -368,7 +368,7 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                       {currentIdentityId ? (
                         <Stack
                           direction="row"
-                          spacing={1}
+                          spacing={bookmarked?1:2}
                           mt={2}
                           cursor="pointer"
                           onClick={() =>
@@ -377,15 +377,25 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                               : handleBookmark(detail?.id)
                           }
                         >
-                          <Image
-                            src={
-                              bookmarked
-                                ? "/images/app/bookmark-active.svg"
-                                : "/images/app/bookmark-off.svg"
-                            }
-                            alt={""}
-                            fontSize={18}
-                          />
+                          {bookmarked ? (
+                            <Box w={"20px"} ml={"4px"}>
+                              <Image
+                                src={"/images/app/bookmark-active.svg"}
+                                alt={"bookmark"}
+                                fontSize={18}
+                                maxW={"12px"}
+                              />
+                            </Box>
+                          ) : (
+                            <Box w={"20px"} ml={"1px"}>
+                              <Image
+                                src={"/images/app/bookmark-off.svg"}
+                                alt={"bookmark"}
+                                fontSize={18}
+                                maxW={"full"}
+                              />
+                            </Box>
+                          )}
                           <Text mt={2} color="#0D8282" fontWeight={700}>
                             {bookmarked
                               ? wordExtractor(
@@ -401,11 +411,30 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                       ) : (
                         <Stack
                           direction="row"
-                          spacing={1}
+                          spacing={bookmarked?1:2}
                           mt={2}
                           cursor="pointer"
                           onClick={() => handleBookmark(detail?.id)}
                         >
+                          {bookmarked ? (
+                            <Box w={"20px"} ml={"4px"}>
+                              <Image
+                                src={"/images/app/bookmark-active.svg"}
+                                alt={"bookmark"}
+                                fontSize={18}
+                                maxW={"12px"}
+                              />
+                            </Box>
+                          ) : (
+                            <Box w={"20px"} ml={"1px"}>
+                              <Image
+                                src={"/images/app/bookmark-off.svg"}
+                                alt={"bookmark"}
+                                fontSize={18}
+                                maxW={"full"}
+                              />
+                            </Box>
+                          )}
                           <Text mt={2} color="#0D8282" fontWeight={700}>
                             {wordExtractor(
                               page?.content?.wordings,
@@ -417,11 +446,12 @@ const Event = ({ page, lang, api: { stockPhotos } }) => {
                     </Flex>
 
                     <Flex align="center" gap={2}>
-                      <Box w={"20px"} mx={'2px'}>
+                      <Box w={"20px"} mx={"2px"}>
                         <BsEyeFill fontSize={18} />
                       </Box>
                       <Box>
-                      {detail?.viewCount??0} {wordExtractor(page?.content?.wordings, "page_view")}
+                        {detail?.viewCount ?? 0}{" "}
+                        {wordExtractor(page?.content?.wordings, "page_view")}
                       </Box>
                     </Flex>
                   </Stack>
