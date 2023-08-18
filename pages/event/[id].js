@@ -45,7 +45,7 @@ const PAGE_KEY = "event";
 export const getServerSideProps = async (context) => {
   const page = (await getPage({ key: PAGE_KEY, lang: context.locale })) ?? {};
   const event = (await getEventDetail(context?.query?.id, true)) ?? {};
-  
+
   return {
     props: {
       page,
@@ -105,7 +105,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
         <Box minW={"100px"}>
           <Text>{title}</Text>
         </Box>
-        <Text fontWeight={700}>{value}</Text>
+        <Text fontWeight={700} wordBreak={"break-word"} whiteSpace={"pre-line"}>{value}</Text>
       </Flex>
     );
   };
@@ -573,29 +573,31 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                     />
                     <Stack
                       direction="row"
-                      spacing={detail?.liked?1:2}
+                      spacing={detail?.liked ? 1 : 2}
                       mt={4}
                       cursor="pointer"
                       onClick={() => handleBookmark(detail?.id)}
                       alignItems={"center"}
                     >
-                     {detail?.liked ? (<Box w={"20px"} ml={"4px"}>
+                      {detail?.liked ? (
+                        <Box w={"20px"} ml={"4px"}>
                           <Image
                             src={"/images/app/bookmark-active.svg"}
                             alt={"bookmark"}
                             fontSize={18}
                             maxW={"12px"}
                           />
-                        </Box>) :
-                        (
+                        </Box>
+                      ) : (
                         <Box w={"20px"} ml={"1px"}>
-                        <Image
+                          <Image
                             src={"/images/app/bookmark-off.svg"}
                             alt={"bookmark"}
                             fontSize={18}
                             maxW={"full"}
                           />
-                        </Box>)}
+                        </Box>
+                      )}
                       <Text mt={6} color="#0D8282" fontWeight={700}>
                         {detail?.liked
                           ? wordExtractor(
@@ -610,15 +612,14 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
                     </Stack>
 
                     <Flex align="center" gap={2}>
-                        <Box w={"20px"} pl={"4px"}>
-                          <GrView style={{ color: "#0D8282" }} />
-                        </Box>
-                        <Box>
-                        {detail?.viewCount??0} {wordExtractor(page?.content?.wordings, "page_view")}
-                        </Box>
-                      </Flex>
-
-
+                      <Box w={"20px"} pl={"4px"}>
+                        <GrView style={{ color: "#0D8282" }} />
+                      </Box>
+                      <Box>
+                        {detail?.viewCount ?? 0}{" "}
+                        {wordExtractor(page?.content?.wordings, "page_view")}
+                      </Box>
+                    </Flex>
                   </Stack>
 
                   <Flex gap={2} direction={"column"} mt={4}>
@@ -686,10 +687,10 @@ const BannerSection = ({ tags, url, name, stockPhotoId, stockPhotos }) => {
   if (url !== "undefined" && !_.isEmpty(url)) {
     imageUrl = url;
   } else {
-    const getStockPhoto = stockPhotos?.find((d)=>d?.id === stockPhotoId)
-    imageUrl = getStockPhoto?.url
+    const getStockPhoto = stockPhotos?.find((d) => d?.id === stockPhotoId);
+    imageUrl = getStockPhoto?.url;
   }
-  
+
   return (
     <Box
       bgImage={`url(${imageUrl})`}

@@ -1084,7 +1084,7 @@ const RegistrationRow = ({ title, value }) => {
       <Box minW={"100px"} width={"100px"}>
         <Text>{title}</Text>
       </Box>
-      <Text fontWeight={700}>{value}</Text>
+      <Text fontWeight={700} wordBreak={"break-word"} whiteSpace={"pre-line"}>{value}</Text>
     </Flex>
   );
 };
