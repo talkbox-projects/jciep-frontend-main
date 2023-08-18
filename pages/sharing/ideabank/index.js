@@ -289,7 +289,7 @@ const IdeaBank = ({ page, lang, api: { stockPhotos, projectCategories } }) => {
                   <Text fontSize={("2xl", "3xl", "4xl")} fontWeight="bold" noOfLines={2}>
                     {featuredProject?.name}
                   </Text>
-                  <Text noOfLines={4}>{featuredProject?.introduction}</Text>
+                  <Text noOfLines={{base:3, md:4}}>{featuredProject?.introduction}</Text>
                 </Box>
               </VStack>
             </Stack>

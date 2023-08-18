@@ -197,7 +197,7 @@ const Sharing = ({ page, setting, lang }) => {
         }
       />
       {/* Featured Article Section */}
-      <Box>
+      <Box zIndex={1}>
         <Box
           bgColor="#F6D644"
           d={["none", "none", "block"]}
@@ -342,10 +342,10 @@ const Sharing = ({ page, setting, lang }) => {
                 </Text>
               </Wrap>
               <Box borderRadius={16} pt={1} px={2} color={1}>
-                <Text fontSize={"xl"} fontWeight="bold">
+                <Text fontSize={"xl"} fontWeight="bold" noOfLines={2}>
                   {featuredArticle?.title}
                 </Text>
-                <Text>{featuredArticle?.excerpt}</Text>
+                <Text noOfLines={{base:3, md:4}}>{featuredArticle?.excerpt}</Text>
               </Box>
             </VStack>
           </VStack>
