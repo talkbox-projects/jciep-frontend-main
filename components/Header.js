@@ -456,8 +456,8 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                       className={submenu?.length > 0 ? 'has-submenu' : ''}
                     >
                       {submenu?.length > 0 ? (
-                        <Popover gutter={20}>
-                          {({ isOpen }) => (
+                        <Popover gutter={20} trigger="hover">
+                          {({ isOpen, onOpen }) => (
                             <>
                               <PopoverTrigger>
                                 <Box h="100%">
@@ -480,6 +480,8 @@ const Header = ({ navigation, isShowLangSwitcher = false }) => {
                                       wordWrap: "break-word",
                                     }}
                                     role="menuitem"
+                                    // onFocusVisible={()=>console.log('hi')}
+                                    // onFocus={()=>console.log(onOpen)}
                                   >
                                     {label}
                                   </Button>

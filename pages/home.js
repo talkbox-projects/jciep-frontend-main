@@ -55,6 +55,7 @@ export const getServerSideProps = async (context) => {
     props: {
       page,
       isLangAvailable: context.locale === page.lang,
+      lang: context.locale,
       ...(await getSharedServerSideProps(context))?.props,
     },
   };
@@ -62,7 +63,7 @@ export const getServerSideProps = async (context) => {
 
 const Video = chakra("video");
 
-const Home = ({ setting, page }) => {
+const Home = ({ setting, page, lang }) => {
   const [posts, setPosts] = useState([]);
   const router = useRouter();
 
@@ -107,6 +108,9 @@ const Home = ({ setting, page }) => {
         as={FaArrowLeft}
         onClick={handleSlide}
         onKeyDown={handleKeydown}
+        aria-label={lang==='zh' ? "上一張" : "Previous Slide"}
+        title={lang==='zh' ? "上一張" : "Previous Slide"}
+        role="button"
       />
     );
   }
@@ -139,6 +143,9 @@ const Home = ({ setting, page }) => {
         as={FaArrowRight}
         onClick={handleSlide}
         onKeyDown={handleKeydown}
+        aria-label={lang==='zh' ? "下一張" : "Next Slide"}
+        title={lang==='zh' ? "下一張" : "Next Slide"}
+        role="button"
       />
     );
   }
@@ -540,11 +547,19 @@ const Home = ({ setting, page }) => {
                     transition: "0.2s",
                     content: "''",
                     borderRadius: "100%",
-                    background: "#296161",
+                    background: "#000000",
+                    opacity: 0.4,
                   },
                 },
+                ".slick-dots li.slick-active button":{
+                  _before: {
+                    opacity: 1,
+                  },
+                }
               }}
               pos={"relative"}
+              role="button"
+              title={lang==="zh" ? "按鈕": "slide button"}
             >
               <Slider {...slickSettings} ref={sliderRef} style={{background: "#00BFBA"}}>
                 {(posts ?? []).map((post, index) => {
@@ -622,7 +637,7 @@ const Home = ({ setting, page }) => {
                           >
                             {post?.content?.feature?.persona}
                           </Text>
-                          <Text
+                          <Heading
                             lineHeight="xl"
                             fontSize={["2xl", "3xl", "4xl", "4xl"]}
                             whiteSpace="pre-wrap"
@@ -630,7 +645,7 @@ const Home = ({ setting, page }) => {
                             fontWeight="bold"
                           >
                             {post?.content?.feature?.tagline ?? post?.title}
-                          </Text>
+                          </Heading>
                           <Text
                             d="block"
                             pt={4}
@@ -677,9 +692,9 @@ const Home = ({ setting, page }) => {
                 _active={{ background: "transparent" }}
               >
                 {isAutoPlay ? (
-                  <FaPause color="#296161" fontSize={"20px"} />
+                  <FaPause color="#000000" fontSize={"20px"} as="button" role="button" title={lang==="zh" ? "暫停": "pasue"}/>
                 ) : (
-                  <FaPlay color="#296161" fontSize={"20px"} />
+                  <FaPlay color="#000000" fontSize={"20px"} as="button" role="button" title={lang==="zh" ? "開始": "start"}/>
                 )}
               </Button>
             </Box>
