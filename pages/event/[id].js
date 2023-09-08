@@ -105,7 +105,7 @@ const Event = ({ page, lang, event, api: { stockPhotos } }) => {
         <Box minW={"100px"}>
           <Text>{title}</Text>
         </Box>
-        <Text fontWeight={700} wordBreak={"break-word"} whiteSpace={"pre-line"}>{value}</Text>
+        <Text textAlign={"right"} fontWeight={700} wordBreak={"break-word"} whiteSpace={"pre-line"}>{value}</Text>
       </Flex>
     );
   };
