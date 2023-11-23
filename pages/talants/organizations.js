@@ -217,7 +217,7 @@ const IdentityOpportunities = ({ api: { organizations }, page, enums }) => {
                 mt={3}
                 as={Link}
                 target="_blank"
-                href="https://drive.google.com/file/d/1UPStCQEelG6dhV-CXlNVcvflXAhns5il/view"
+                href="https://drive.google.com/file/d/1S_TWnTiuVFGo55RDDMiXekeqkUAw3ots/view"
                 borderRadius="full"
                 color="#000"
                 bg="transparent"
