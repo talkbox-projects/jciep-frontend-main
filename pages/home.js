@@ -460,7 +460,7 @@ const Home = ({ setting, page, lang }) => {
 
 			{/* Fourth Section */}
 
-			<Box bg="#F6D644" position="relative">
+			<Box bg="#f1ca7b" position="relative">
 				<Container>
 					<Box py={32}>
 						<SimpleGrid
