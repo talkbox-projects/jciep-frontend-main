@@ -351,14 +351,14 @@ export default [
 						label: "聯絡 Contacts",
 						component: "group",
 						fields: [
-							{
-								label: "圖標 Logo",
-								name: "logo",
-								component: "image",
-								uploadDir: () => "/programme",
-								parse: ({ previewSrc }) => previewSrc,
-								previewSrc: (src) => src,
-							},
+							// {
+							// 	label: "圖標 Logo",
+							// 	name: "logo",
+							// 	component: "image",
+							// 	uploadDir: () => "/programme",
+							// 	parse: ({ previewSrc }) => previewSrc,
+							// 	previewSrc: (src) => src,
+							// },
 							// {
 							// 	label: "水印 Watermark",
 							// 	name: "watermark",
