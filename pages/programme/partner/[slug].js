@@ -77,7 +77,37 @@ const Partner = ({ page }) => {
 		/>
 	);
 
-	console.log("partner", partner);
+	const contactInfo = (data) => {
+		const emailRegExp = /^\S+@\S+\.\S+$/;
+		const urlRegExp =
+			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+
+		if (emailRegExp.test(data)) {
+			return (
+				<a
+					href={`mailto:${data}`}
+					style={{ textDecoration: "underline", color: "blue" }}
+				>
+					{data}
+				</a>
+			);
+		}
+
+		if (urlRegExp.test(data)) {
+			return (
+				<a
+					href={data}
+					target="_blank"
+					rel="noreferrer"
+					style={{ textDecoration: "underline", color: "blue" }}
+				>
+					{data}
+				</a>
+			);
+		}
+
+		return data;
+	};
 
 	return (
 		<VStack overflowY="visible" w="100%" spacing={0} align="stretch">
@@ -420,36 +450,71 @@ const Partner = ({ page }) => {
 						w="100%"
 						align="top"
 					>
-						<VStack as={GridItem} align="start">
+						{/* <VStack as={GridItem} align="start">
 							<Image
 								alt={partner?.contact?.label}
 								w="310px"
 								src={partner?.contact?.logo}
 							/>
 							<Text>{partner?.contact?.label}</Text>
+						</VStack> */}
+						<VStack as={GridItem} align="stretch">
+							{(partner?.contact?.fields ?? []).map(
+								({ id, label, data }, index) => {
+									return (
+										index % 2 === 0 && (
+											<HStack align="start" w="100%" key={id}>
+												<Text
+													w={24}
+													lineHeight={1.5}
+													fontWeight="bold"
+													color="#666666"
+												>
+													{label}
+												</Text>
+												<Text
+													flex={1}
+													minW={0}
+													lineHeight={1.5}
+													w={"100%"}
+													color="#666666"
+												>
+													{contactInfo(data)}
+												</Text>
+											</HStack>
+										)
+									);
+								}
+							)}
 						</VStack>
 						<VStack as={GridItem} align="stretch">
-							{(partner?.contact?.fields ?? []).map(({ id, label, data }) => (
-								<HStack align="start" w="100%" key={id}>
-									<Text
-										w={24}
-										lineHeight={1.5}
-										fontWeight="bold"
-										color="#666666"
-									>
-										{label}
-									</Text>
-									<Text
-										flex={1}
-										minW={0}
-										lineHeight={1.5}
-										w={"100%"}
-										color="#666666"
-									>
-										{data}
-									</Text>
-								</HStack>
-							))}
+							{(partner?.contact?.fields ?? []).map(
+								({ id, label, data }, index) => {
+									return (
+										index % 2 !== 0 && (
+											<HStack align="start" w="100%" key={id}>
+												<Text
+													w={24}
+													lineHeight={1.5}
+													fontWeight="bold"
+													color="#666666"
+												>
+													{label}
+												</Text>
+												<Text
+													flex={1}
+													minW={0}
+													lineHeight={1.5}
+													w={"100%"}
+													color="#666666"
+												>
+													{contactInfo(data)}
+												</Text>
+											</HStack>
+										)
+									);
+								}
+							)}
 						</VStack>
 					</SimpleGrid>
 				</Container>
