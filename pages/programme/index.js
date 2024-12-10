@@ -15,6 +15,11 @@ import {
 	AccordionButton,
 	Wrap,
 	Link,
+	Tabs,
+	TabList,
+	TabPanels,
+	Tab,
+	TabPanel,
 } from "@chakra-ui/react";
 import Container from "../../components/Container";
 import programmeFieldsForCMS from "../../utils/tina/programmeFieldsForCMS";
@@ -31,6 +36,7 @@ import Slider from "react-slick";
 import Anchor from "../../components/Anchor";
 import getSharedServerSideProps from "../../utils/server/getSharedServerSideProps";
 import { useRouter } from "next/router";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const PAGE_KEY = "programme";
 
@@ -193,7 +199,7 @@ const Programme = ({ page }) => {
 				w="100%"
 			>
 				<Container py={24}>
-					<VStack align="center" w="100%">
+					{/* <VStack align="center" w="100%">
 						<Text
 							fontSize={["3xl", "3xl", "4xl", "4xl"]}
 							textAlign="center"
@@ -266,7 +272,115 @@ const Programme = ({ page }) => {
 								allowFullScreen
 							/>
 						)}
-					</VStack>
+					</VStack> */}
+
+					<Tabs defaultIndex={1}>
+						<TabList border={0} as={HStack} spacing={8}>
+							{(page?.content?.visionSection?.stageTab ?? []).map(
+								({ id, tabLabel }) => (
+									<Tab
+										fontSize={["3xl", "4xl", "5xl"]}
+										fontWeight="bold"
+										px={0}
+										_selected={{
+											color: "black",
+											borderBottomColor: "#FD5F53",
+										}}
+										borderBottomWidth={3}
+										key={id}
+									>
+										<ChevronLeftIcon /> {tabLabel}
+									</Tab>
+								)
+							)}
+						</TabList>
+						<TabPanels>
+							{(page?.content?.visionSection?.stageTab ?? [])?.map(
+								(stage, index) => {
+									return (
+										<TabPanel tabIndex={null} px={0} key={index} py={12}>
+											<VStack align="center" w="100%">
+												<Text
+													fontSize={["3xl", "3xl", "4xl", "4xl"]}
+													textAlign="center"
+													fontWeight="bold"
+													backgroundImage="linear-gradient(#fff, #fff)"
+													backgroundRepeat="no-repeat"
+													backgroundPosition="0 0.7em"
+												>
+													{stage.title}
+												</Text>
+												{/* <Box fontSize={["lg", "xl", "xl"]} textAlign="center">
+												<MultiTextRenderer data={stage?.detail} />
+											</Box> */}
+												{(stage?.sections ?? []).map(
+													({ title, description, id }) => {
+														return (
+															<VStack pt={16} key={id}>
+																<Box
+																	position="relative"
+																	mx={["47px", "47px", "0px"]}
+																>
+																	<Heading
+																		fontWeight="bold"
+																		fontSize="2xl"
+																		textAlign="center"
+																	>
+																		{title}
+																	</Heading>
+																	<Box
+																		width="6.15px"
+																		height="27.69px"
+																		borderRadius="5px"
+																		pos="absolute"
+																		right={["-6", "-6", "-12"]}
+																		bottom="-3"
+																		background="#fff"
+																		transform="rotate(30deg)"
+																	/>
+																	<Box
+																		width="6.15px"
+																		height="27.69px"
+																		borderRadius="5px"
+																		pos="absolute"
+																		left={["-6", "-6", "-12"]}
+																		bottom="-3"
+																		background="#fff"
+																		transform="rotate(-30deg)"
+																	/>
+																</Box>
+																<Box pt={8} px="16px">
+																	<MultiTextRenderer
+																		fontSize={["lg", "xl", "xl"]}
+																		data={description}
+																		textAlign="center"
+																		text
+																	/>
+																</Box>
+															</VStack>
+														);
+													}
+												)}
+												{stage?.videoLink && (
+													<Iframe
+														p={2}
+														pt={16}
+														w="100%"
+														h={["320px", "320px", "480px", "720px"]}
+														src={stage?.videoLink}
+														title="PWD Video"
+														frameBorder="0"
+														allow="accelerometer; autoPlay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+														allowFullScreen
+													/>
+												)}
+											</VStack>
+										</TabPanel>
+									);
+								}
+							)}
+						</TabPanels>
+					</Tabs>
 				</Container>
 			</Box>
 

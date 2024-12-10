@@ -64,45 +64,60 @@ export default [
 		component: "group",
 		fields: [
 			{
-				name: "title",
-				label: "標題 Title",
-				component: "text",
-			},
-			{
-				name: "detail",
-				label: "描述 Description",
-				component: "blocks",
-				templates: metaTextTemplates,
-			},
-			{
-				name: "sections",
-				label: "內容 Sections",
+				name: "stageTab",
+				label: "階段",
 				component: "group-list",
-				itemProps: ({ id: key, title: label }) => ({
-					key,
-					label,
-				}),
 				defaultItem: () => ({
 					id: Math.random().toString(36).substr(2, 9),
 				}),
 				fields: [
+					{
+						name: "tabLabel",
+						label: "標籤名稱 Tab Label",
+						component: "text",
+					},
 					{
 						name: "title",
 						label: "標題 Title",
 						component: "text",
 					},
 					{
-						name: "description",
+						name: "detail",
 						label: "描述 Description",
 						component: "blocks",
 						templates: metaTextTemplates,
 					},
+					{
+						name: "sections",
+						label: "內容 Sections",
+						component: "group-list",
+						itemProps: ({ id: key, title: label }) => ({
+							key,
+							label,
+						}),
+						defaultItem: () => ({
+							id: Math.random().toString(36).substr(2, 9),
+						}),
+						fields: [
+							{
+								name: "title",
+								label: "標題 Title",
+								component: "text",
+							},
+							{
+								name: "description",
+								label: "描述 Description",
+								component: "blocks",
+								templates: metaTextTemplates,
+							},
+						],
+					},
+					{
+						name: "videoLink",
+						label: "Video Link",
+						component: "text",
+					},
 				],
-			},
-			{
-				name: "videoLink",
-				label: "Video Link",
-				component: "text",
 			},
 		],
 	},
