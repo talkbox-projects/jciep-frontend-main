@@ -82,6 +82,9 @@ const Partner = ({ page }) => {
 		const urlRegExp =
 			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 
+		const phoneRegExp = /^\+?[1-9][0-9]{7,14}$/;
+		const _phone = data?.replace(" ", "");
+
 		if (emailRegExp.test(data)) {
 			return (
 				<a
@@ -102,6 +105,17 @@ const Partner = ({ page }) => {
 					style={{ textDecoration: "underline", color: "blue" }}
 				>
 					{data}
+				</a>
+			);
+		}
+
+		if (data && phoneRegExp.test(_phone)) {
+			return (
+				<a
+					href={`tel:${_phone}`}
+					style={{ textDecoration: "underline", color: "blue" }}
+				>
+					{_phone}
 				</a>
 			);
 		}
