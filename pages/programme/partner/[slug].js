@@ -143,24 +143,15 @@ const Partner = ({ page }) => {
 				<Slider {...settings} style={{ textAlign: "center" }}>
 					{(partner?.sliderImage ?? []).map(
 						({ image, imageUrl, isIcon }, index) => {
-							return isIcon ? (
+							return (
 								<Image
 									alt=""
 									key={index}
 									src={image}
-									maxW={["300px", "500px"]}
-									mt={["7rem", "10rem", "14rem"]}
-									objectFit="contain"
-									objectPosition="center"
-									onClick={() => (imageUrl ? window?.open(imageUrl) : null)}
-								/>
-							) : (
-								<Image
-									alt=""
-									minH={["40vh", "60vh"]}
-									key={index}
-									src={image}
-									objectFit="cover"
+									maxW={isIcon ? ["300px", "500px"] : "unset"}
+									minH={isIcon ? "unset" : ["40vh", "60vh"]}
+									mt={isIcon ? ["7rem", "10rem", "14rem"] : "unset"}
+									objectFit={isIcon ? "contain" : "cover"}
 									objectPosition="center center"
 									onClick={() => (imageUrl ? window?.open(imageUrl) : null)}
 								/>
