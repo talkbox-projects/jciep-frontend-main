@@ -64,120 +64,120 @@ const Home = ({ setting, page, lang }) => {
 
 	const isMobile = useBreakpointValue([true, false]);
 	const videoRef = useRef(undefined);
-	const [timeoutId, setTimeoutId] = useState(null);
+	// const [timeoutId, setTimeoutId] = useState(null);
 	const [hasVideoEnded, setHasVideoEnded] = useState(false);
 
-	const categories = setting?.value?.categories;
-	const getCategoryData = (key) => {
-		return (categories ?? []).find((c) => c.key === key);
-	};
+	// const categories = setting?.value?.categories;
+	// const getCategoryData = (key) => {
+	// 	return (categories ?? []).find((c) => c.key === key);
+	// };
 
-	const sliderRef = useRef(null);
-	const [currentIndex, setCurrent] = useState(0);
-	const [isAutoPlay, setIsAutoPlay] = useState(true);
+	// const sliderRef = useRef(null);
+	// const [currentIndex, setCurrent] = useState(0);
+	// const [isAutoPlay, setIsAutoPlay] = useState(true);
 
-	function PrevArrow(props) {
-		const { style, onClick } = props;
-		const handleSlide = () => {
-			if (props?.currentSlide !== 0) {
-				onClick();
-			} else {
-				sliderRef?.current?.slickGoTo(posts.length - 1);
-			}
-		};
-		const handleKeydown = (e) => {
-			if (e?.key === "Enter") {
-				handleSlide();
-			}
-		};
-		return (
-			<IconButton
-				cursor="pointer"
-				variant="unstyled"
-				rounded="full"
-				style={{ ...style }}
-				top={"50%"}
-				position="absolute"
-				zIndex={10}
-				tabIndex={0}
-				as={FaArrowLeft}
-				onClick={handleSlide}
-				onKeyDown={handleKeydown}
-				aria-label={lang === "zh" ? "上一張" : "Previous Slide"}
-				title={lang === "zh" ? "上一張" : "Previous Slide"}
-				role="button"
-			/>
-		);
-	}
+	// function PrevArrow(props) {
+	// 	const { style, onClick } = props;
+	// 	const handleSlide = () => {
+	// 		if (props?.currentSlide !== 0) {
+	// 			onClick();
+	// 		} else {
+	// 			sliderRef?.current?.slickGoTo(posts.length - 1);
+	// 		}
+	// 	};
+	// 	const handleKeydown = (e) => {
+	// 		if (e?.key === "Enter") {
+	// 			handleSlide();
+	// 		}
+	// 	};
+	// 	return (
+	// 		<IconButton
+	// 			cursor="pointer"
+	// 			variant="unstyled"
+	// 			rounded="full"
+	// 			style={{ ...style }}
+	// 			top={"50%"}
+	// 			position="absolute"
+	// 			zIndex={10}
+	// 			tabIndex={0}
+	// 			as={FaArrowLeft}
+	// 			onClick={handleSlide}
+	// 			onKeyDown={handleKeydown}
+	// 			aria-label={lang === "zh" ? "上一張" : "Previous Slide"}
+	// 			title={lang === "zh" ? "上一張" : "Previous Slide"}
+	// 			role="button"
+	// 		/>
+	// 	);
+	// }
 
-	function NextArrow(props) {
-		const { style, onClick } = props;
-		const handleSlide = () => {
-			if (props?.currentSlide === posts.length - 1) {
-				sliderRef?.current?.slickGoTo(0);
-			} else {
-				onClick();
-			}
-		};
-		const handleKeydown = (e) => {
-			if (e?.key === "Enter") {
-				handleSlide();
-			}
-		};
-		return (
-			<IconButton
-				cursor="pointer"
-				variant="unstyled"
-				rounded="full"
-				style={{ ...style }}
-				top={"50%"}
-				right={0}
-				position="absolute"
-				tabIndex={0}
-				zIndex={10}
-				as={FaArrowRight}
-				onClick={handleSlide}
-				onKeyDown={handleKeydown}
-				aria-label={lang === "zh" ? "下一張" : "Next Slide"}
-				title={lang === "zh" ? "下一張" : "Next Slide"}
-				role="button"
-			/>
-		);
-	}
+	// function NextArrow(props) {
+	// 	const { style, onClick } = props;
+	// 	const handleSlide = () => {
+	// 		if (props?.currentSlide === posts.length - 1) {
+	// 			sliderRef?.current?.slickGoTo(0);
+	// 		} else {
+	// 			onClick();
+	// 		}
+	// 	};
+	// 	const handleKeydown = (e) => {
+	// 		if (e?.key === "Enter") {
+	// 			handleSlide();
+	// 		}
+	// 	};
+	// 	return (
+	// 		<IconButton
+	// 			cursor="pointer"
+	// 			variant="unstyled"
+	// 			rounded="full"
+	// 			style={{ ...style }}
+	// 			top={"50%"}
+	// 			right={0}
+	// 			position="absolute"
+	// 			tabIndex={0}
+	// 			zIndex={10}
+	// 			as={FaArrowRight}
+	// 			onClick={handleSlide}
+	// 			onKeyDown={handleKeydown}
+	// 			aria-label={lang === "zh" ? "下一張" : "Next Slide"}
+	// 			title={lang === "zh" ? "下一張" : "Next Slide"}
+	// 			role="button"
+	// 		/>
+	// 	);
+	// }
 
-	const startTimeout = (sliderRef) => {
-		const newTimeoutId = setTimeout(() => {
-			sliderRef?.slickGoTo(0);
-		}, 10000);
+	// const startTimeout = (sliderRef) => {
+	// 	const newTimeoutId = setTimeout(() => {
+	// 		sliderRef?.slickGoTo(0);
+	// 	}, 10000);
 
-		setTimeoutId(newTimeoutId);
-	};
+	// 	setTimeoutId(newTimeoutId);
+	// };
 
-	const stopTimeout = () => {
-		clearTimeout(timeoutId);
-		setTimeoutId(null);
-	};
+	// const stopTimeout = () => {
+	// 	clearTimeout(timeoutId);
+	// 	setTimeoutId(null);
+	// };
 
-	const slickSettings = {
-		autoplay: true,
-		autoplaySpeed: 10000,
-		infinite: false,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-		dots: true,
-		dotsClass: "slick-dots slick-thumb",
-		beforeChange: (oldIndex, newIndex) => {
-			setCurrent(newIndex);
-			sliderRef?.current?.slickGoTo(newIndex);
-			if (newIndex === posts.length - 1 && isAutoPlay) {
-				startTimeout(sliderRef?.current);
-			} else {
-				stopTimeout();
-			}
-		},
-		nextArrow: <NextArrow />,
-		prevArrow: <PrevArrow />,
-	};
+	// const slickSettings = {
+	// 	autoplay: true,
+	// 	autoplaySpeed: 10000,
+	// 	infinite: false,
+	// 	slidesToShow: 1,
+	// 	slidesToScroll: 1,
+	// 	dots: true,
+	// 	dotsClass: "slick-dots slick-thumb",
+	// 	beforeChange: (oldIndex, newIndex) => {
+	// 		setCurrent(newIndex);
+	// 		sliderRef?.current?.slickGoTo(newIndex);
+	// 		if (newIndex === posts.length - 1 && isAutoPlay) {
+	// 			startTimeout(sliderRef?.current);
+	// 		} else {
+	// 			stopTimeout();
+	// 		}
+	// 	},
+	// 	nextArrow: <NextArrow />,
+	// 	prevArrow: <PrevArrow />,
+	// };
 
 	const fetchFeaturePosts = useCallback(async () => {
 		try {
@@ -207,7 +207,7 @@ const Home = ({ setting, page, lang }) => {
 	const {
 		registerModalDisclosure,
 		loginModalDisclosure,
-		userGroupModalDisclosure,
+		// userGroupModalDisclosure,
 	} = useAppContext();
 
 	useEffect(() => {
@@ -223,8 +223,7 @@ const Home = ({ setting, page, lang }) => {
 			router.push("/home");
 		}
 	}, [loginModalDisclosure, router, router?.query?.login]);
-
-	console.log(page);
+	console.log("home page: ", page);
 
 	return (
 		<VStack w="100%" align="stretch" spacing={0}>
