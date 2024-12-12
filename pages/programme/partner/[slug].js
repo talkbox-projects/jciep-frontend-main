@@ -251,7 +251,7 @@ const Partner = ({ page }) => {
 					// zIndex={200}
 					position="relative"
 					pt={24}
-					pb={[16, 16, 16, 24]}
+					// pb={[16, 16, 16, 24]}
 				>
 					<VStack spacing={8}>
 						<HighlightHeadline bgColor={"#F6D644"}>
@@ -315,6 +315,49 @@ const Partner = ({ page }) => {
 					width="100%"
 					fit="contain"
 				/>
+			</Box>
+
+			{/* Service Targets */}
+			<Box bg="#fafafa">
+				<Container>
+					<VStack py={20}>
+						<Box pb={12}>
+							<HighlightHeadline bgColor={"#F6D644"}>
+								{page?.content?.partnerSection?.serviceTarget?.title}
+							</HighlightHeadline>
+						</Box>
+						<Wrap justify="center" spacing={12}>
+							{(partner?.serviceTargets ?? []).map(
+								({ label, description, image }, index) => {
+									return (
+										<VStack key={index} maxW={["35%", "35%", "35%", "20%"]}>
+											<Image
+												alt={label}
+												minW={["100px", "200px"]}
+												src={image}
+											/>
+											<Text
+												textAlign="center"
+												w={["100%", "100%", "150px"]}
+												fontSize={["xl", "2xl"]}
+												fontWeight="semibold"
+											>
+												{label}
+												{description && (
+													<Tooltip hasArrow label={description}>
+														<Text d="inline">
+															<Icon as={AiOutlineInfoCircle}></Icon>
+														</Text>
+													</Tooltip>
+												)}
+											</Text>
+										</VStack>
+									);
+								}
+							)}
+						</Wrap>
+					</VStack>
+				</Container>
 			</Box>
 
 			{/* Services Highlights*/}
@@ -411,49 +454,7 @@ const Partner = ({ page }) => {
 				</Box> */}
 			</Box>
 
-			{/* Service Targets */}
-			<Box bg="#fafafa">
-				<Container>
-					<VStack py={36}>
-						<Box pb={12}>
-							<HighlightHeadline bgColor={"#F6D644"}>
-								{page?.content?.partnerSection?.serviceTarget?.title}
-							</HighlightHeadline>
-						</Box>
-						<Wrap justify="center" spacing={12}>
-							{(partner?.serviceTargets ?? []).map(
-								({ label, description, image }, index) => {
-									return (
-										<VStack key={index} maxW={["35%", "35%", "35%", "20%"]}>
-											<Image
-												alt={label}
-												minW={["100px", "200px"]}
-												src={image}
-											/>
-											<Text
-												textAlign="center"
-												w={["100%", "100%", "150px"]}
-												fontSize={["xl", "2xl"]}
-												fontWeight="semibold"
-											>
-												{label}
-												{description && (
-													<Tooltip hasArrow label={description}>
-														<Text d="inline">
-															<Icon as={AiOutlineInfoCircle}></Icon>
-														</Text>
-													</Tooltip>
-												)}
-											</Text>
-										</VStack>
-									);
-								}
-							)}
-						</Wrap>
-					</VStack>
-				</Container>
-			</Box>
-			<Box bg="#fafafa">
+			<Box bg="#fafafa" pt="20">
 				<Container maxW={1200} mb={8}>
 					<SimpleGrid
 						columns={[1, 1, 2, 2]}
