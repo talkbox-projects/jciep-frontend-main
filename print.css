@@ -1,43 +1,53 @@
 @media print {
-    body{
-      visibility: hidden !important;
-    }
-    #section-to-print{
-      visibility: visible;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-    }
-    .print-banner-wrap{
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
-    .print-banner{
-      border-radius: 15px !important;
-      overflow: hidden !important;
-    }
-    .print-box{
-      box-shadow: none !important;
-      border: 1px solid #ccc !important;
-    }
-    .print-hidden{
-      visibility: hidden !important;
-      height: 0px !important;
-    }
-  }
+	body {
+		visibility: hidden !important;
+	}
+	#section-to-print {
+		visibility: visible;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+	.print-banner-wrap {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+	.print-banner {
+		border-radius: 15px !important;
+		overflow: hidden !important;
+	}
+	.print-box {
+		box-shadow: none !important;
+		border: 1px solid #ccc !important;
+	}
+	.print-hidden {
+		visibility: hidden !important;
+		height: 0px !important;
+	}
+}
 
 /** Main page slide banner */
 .carousel.carousel-slider li.slide {
-  visibility: hidden;
+	visibility: hidden;
 }
 
 .carousel.carousel-slider li.slide.selected,
-.carousel.carousel-slider li.slide.previous{
-  visibility: visible;
+.carousel.carousel-slider li.slide.previous {
+	visibility: visible;
 }
 
-*:focus-visible{
-  outline: 3px solid #296161 !important;
+*:focus-visible {
+	outline: 3px solid #296161 !important;
+}
+
+.homepageBannerSwiper .swiper-pagination-bullet {
+	width: 15px !important;
+	height: 15px !important;
+	background: #fff !important;
+}
+
+.homepageBannerSwiper .swiper-pagination {
+	bottom: 20px !important;
 }
