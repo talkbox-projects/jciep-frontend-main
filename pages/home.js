@@ -29,22 +29,17 @@ import metaTextTemplates from "../utils/tina/metaTextTemplates";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useCallback, useState } from "react";
 import UserGroupModal from "../components/UserGroupModal";
-import DividerSimple from "../components/DividerSimple";
-import MultiTextRenderer from "../components/MultiTextRenderer";
-import HighlightHeadline from "../components/HighlightHeadline";
 import ApostropheHeadline from "../components/ApostropheHeadline";
 import { FaArrowLeft, FaArrowRight, FaPlay, FaPause } from "react-icons/fa";
 import { getFilteredPosts } from "../utils/post/getPost";
 import { useEffect } from "react";
-import { VscQuote } from "react-icons/vsc";
 import getSharedServerSideProps from "../utils/server/getSharedServerSideProps";
 import VisibilitySensor from "react-visibility-sensor";
-import NextLink from "next/link";
 import { useAppContext } from "../store/AppStore";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import HomeBannerSwiper from "../components/HomeBannerSwiper";
 
 const PAGE_KEY = "home";
 
@@ -229,10 +224,12 @@ const Home = ({ setting, page, lang }) => {
 		}
 	}, [loginModalDisclosure, router, router?.query?.login]);
 
+	console.log(page);
+
 	return (
 		<VStack w="100%" align="stretch" spacing={0}>
 			{/* First Section */}
-			<Box
+			{/* <Box
 				h={["100vh", "100vh", "100vh", "130vh"]}
 				position="relative"
 				overflow="hidden"
@@ -310,8 +307,13 @@ const Home = ({ setting, page, lang }) => {
 							</Button>
 						</VStack>
 					</Container>
-					{/* <DividerSimple nextColor="#fafafa"></DividerSimple> */}
+					<DividerSimple nextColor="#fafafa"></DividerSimple>
 				</VStack>
+			</Box> */}
+
+			{/* Banner Section (first section) */}
+			<Box>
+				<HomeBannerSwiper pageBannerGroup={page?.content?.bannerGroup} />
 			</Box>
 
 			{/* Second Section */}
@@ -921,30 +923,70 @@ const Home = ({ setting, page, lang }) => {
 export default withPageCMS(Home, {
 	key: PAGE_KEY,
 	fields: [
+		// {
+		// 	name: "banner",
+		// 	label: "主頁橫幅 Hero Banner",
+		// 	component: "group",
+		// 	fields: [
+		// 		// {
+		// 		//   label: "主頁圖片 Image",
+		// 		//   name: "image",
+		// 		//   component: "image",
+		// 		//   uploadDir: () => "/home",
+		// 		//   parse: ({ previewSrc }) => previewSrc,
+		// 		//   previewSrc: (src) => src,
+		// 		// },
+		// 		{
+		// 			name: "youtube",
+		// 			label: "你管嵌入式鏈接 Youtube embedded link",
+		// 			component: "text",
+		// 			placeholder: "https://www.youtube.com/embed/....",
+		// 		},
+		// 		{
+		// 			name: "video",
+		// 			label: "視頻 Video",
+		// 			component: "text",
+		// 			placeholder: "https://",
+		// 		},
+		// 		{
+		// 			name: "title",
+		// 			label: "主標題 Title",
+		// 			component: "blocks",
+		// 			templates: metaTextTemplates,
+		// 		},
+		// 		{
+		// 			name: "description",
+		// 			label: "副標題  Description",
+		// 			component: "textarea",
+		// 		},
+		// 		{
+		// 			name: "buttonText",
+		// 			label: "按鈕文字 Button Text",
+		// 			component: "text",
+		// 		},
+		// 		{
+		// 			name: "buttonHyperlink",
+		// 			label: "按鈕連結 Button Hyperlink",
+		// 			component: "text",
+		// 		},
+		// 	],
+		// },
 		{
-			name: "banner",
-			label: "主頁橫幅 Hero Banner",
-			component: "group",
+			name: "bannerGroup",
+			label: "主頁橫幅 Banner Group",
+			component: "group-list",
+			// itemProps: ({ id: key, caption: label }) => ({
+			// 	key,
+			// 	label,
+			// })
 			fields: [
-				// {
-				//   label: "主頁圖片 Image",
-				//   name: "image",
-				//   component: "image",
-				//   uploadDir: () => "/home",
-				//   parse: ({ previewSrc }) => previewSrc,
-				//   previewSrc: (src) => src,
-				// },
 				{
-					name: "youtube",
-					label: "你管嵌入式鏈接 Youtube embedded link",
-					component: "text",
-					placeholder: "https://www.youtube.com/embed/....",
-				},
-				{
-					name: "video",
-					label: "視頻 Video",
-					component: "text",
-					placeholder: "https://",
+					label: "主頁圖片 Image",
+					name: "image",
+					component: "image",
+					uploadDir: () => "/home",
+					parse: ({ previewSrc }) => previewSrc,
+					previewSrc: (src) => src,
 				},
 				{
 					name: "title",
@@ -958,13 +1000,8 @@ export default withPageCMS(Home, {
 					component: "textarea",
 				},
 				{
-					name: "buttonText",
-					label: "按鈕文字 Button Text",
-					component: "text",
-				},
-				{
-					name: "buttonHyperlink",
-					label: "按鈕連結 Button Hyperlink",
+					name: "pageLink",
+					label: "連結 Hyperlink",
 					component: "text",
 				},
 			],
@@ -974,81 +1011,81 @@ export default withPageCMS(Home, {
 			label: "動畫 Animation",
 			component: "group",
 			fields: [
-				{
-					name: "startFrame",
-					label: "起始幀 Start Frame",
-					component: "group",
-					fields: [
-						{
-							name: "headline",
-							label: "引子 Headline",
-							component: "text",
-						},
-						{
-							name: "title",
-							label: "標題 Title",
-							component: "blocks",
-							templates: metaTextTemplates,
-						},
-						{
-							name: "roles",
-							label: "角色  Roles",
-							component: "group-list",
-							itemProps: ({ id: key, name: label }) => ({
-								key,
-								label,
-							}),
-							defaultItem: () => ({
-								id: Math.random().toString(36).substr(2, 9),
-							}),
-							fields: [
-								{
-									name: "icon",
-									label: "圖示  Icon",
-									component: "image",
-									uploadDir: () => "/home",
-									parse: ({ previewSrc }) => previewSrc,
-									previewSrc: (src) => src,
-								},
-								{
-									name: "name",
-									label: "名稱  Name",
-									component: "text",
-								},
-								{
-									name: "caption",
-									label: "描述  Caption",
-									component: "text",
-								},
+				// {
+				// 	name: "startFrame",
+				// 	label: "起始幀 Start Frame",
+				// 	component: "group",
+				// 	fields: [
+				// 		{
+				// 			name: "headline",
+				// 			label: "引子 Headline",
+				// 			component: "text",
+				// 		},
+				// 		{
+				// 			name: "title",
+				// 			label: "標題 Title",
+				// 			component: "blocks",
+				// 			templates: metaTextTemplates,
+				// 		},
+				// 		{
+				// 			name: "roles",
+				// 			label: "角色  Roles",
+				// 			component: "group-list",
+				// 			itemProps: ({ id: key, name: label }) => ({
+				// 				key,
+				// 				label,
+				// 			}),
+				// 			defaultItem: () => ({
+				// 				id: Math.random().toString(36).substr(2, 9),
+				// 			}),
+				// 			fields: [
+				// 				{
+				// 					name: "icon",
+				// 					label: "圖示  Icon",
+				// 					component: "image",
+				// 					uploadDir: () => "/home",
+				// 					parse: ({ previewSrc }) => previewSrc,
+				// 					previewSrc: (src) => src,
+				// 				},
+				// 				{
+				// 					name: "name",
+				// 					label: "名稱  Name",
+				// 					component: "text",
+				// 				},
+				// 				{
+				// 					name: "caption",
+				// 					label: "描述  Caption",
+				// 					component: "text",
+				// 				},
 
-								{
-									name: "links",
-									label: "連結 Links",
-									component: "group-list",
-									itemProps: ({ id: key, question: label }) => ({
-										key,
-										label,
-									}),
-									defaultItem: () => ({
-										id: Math.random().toString(36).substr(2, 9),
-									}),
-									fields: [
-										{
-											name: "name",
-											label: "名稱 Name",
-											component: "text",
-										},
-										{
-											name: "link",
-											label: "連結 Link",
-											component: "text",
-										},
-									],
-								},
-							],
-						},
-					],
-				},
+				// 				{
+				// 					name: "links",
+				// 					label: "連結 Links",
+				// 					component: "group-list",
+				// 					itemProps: ({ id: key, question: label }) => ({
+				// 						key,
+				// 						label,
+				// 					}),
+				// 					defaultItem: () => ({
+				// 						id: Math.random().toString(36).substr(2, 9),
+				// 					}),
+				// 					fields: [
+				// 						{
+				// 							name: "name",
+				// 							label: "名稱 Name",
+				// 							component: "text",
+				// 						},
+				// 						{
+				// 							name: "link",
+				// 							label: "連結 Link",
+				// 							component: "text",
+				// 						},
+				// 					],
+				// 				},
+				// 			],
+				// 		},
+				// 	],
+				// },
 				{
 					name: "endFrame",
 					label: "結束幀 End Frame",
@@ -1173,134 +1210,134 @@ export default withPageCMS(Home, {
 		//   ],
 		// },
 
-		{
-			label: "角色介紹 Role Introduction",
-			name: "roleIntroduction",
-			component: "group",
+		// {
+		// 	label: "角色介紹 Role Introduction",
+		// 	name: "roleIntroduction",
+		// 	component: "group",
 
-			fields: [
-				{
-					name: "topLeftImage",
-					label: "左上圖片 Top Left Image",
-					component: "image",
-					uploadDir: () => "/home/roleIntroduction",
-					parse: ({ previewSrc }) => previewSrc,
-					previewSrc: (src) => src,
-				},
-				{
-					name: "bottomRightImage",
-					label: "左上圖片 Bottom Right Image",
-					component: "image",
-					uploadDir: () => "/home/roleIntroduction",
-					parse: ({ previewSrc }) => previewSrc,
-					previewSrc: (src) => src,
-				},
-				{
-					name: "tagline",
-					component: "text",
-					label: "引題 TagLine",
-				},
-				{
-					name: "roles",
-					component: "group-list",
-					label: "角色 Roles",
-					itemProps: ({ id: key, title: label }) => ({
-						key,
-						label,
-					}),
-					defaultItem: () => ({
-						id: Math.random().toString(36).substr(2, 9),
-					}),
-					fields: [
-						{
-							name: "title",
-							component: "text",
-							label: "標題 Title",
-						},
-						{
-							name: "description",
-							component: "blocks",
-							templates: metaTextTemplates,
-							label: "描述 description",
-						},
+		// 	fields: [
+		// 		{
+		// 			name: "topLeftImage",
+		// 			label: "左上圖片 Top Left Image",
+		// 			component: "image",
+		// 			uploadDir: () => "/home/roleIntroduction",
+		// 			parse: ({ previewSrc }) => previewSrc,
+		// 			previewSrc: (src) => src,
+		// 		},
+		// 		{
+		// 			name: "bottomRightImage",
+		// 			label: "左上圖片 Bottom Right Image",
+		// 			component: "image",
+		// 			uploadDir: () => "/home/roleIntroduction",
+		// 			parse: ({ previewSrc }) => previewSrc,
+		// 			previewSrc: (src) => src,
+		// 		},
+		// 		{
+		// 			name: "tagline",
+		// 			component: "text",
+		// 			label: "引題 TagLine",
+		// 		},
+		// 		{
+		// 			name: "roles",
+		// 			component: "group-list",
+		// 			label: "角色 Roles",
+		// 			itemProps: ({ id: key, title: label }) => ({
+		// 				key,
+		// 				label,
+		// 			}),
+		// 			defaultItem: () => ({
+		// 				id: Math.random().toString(36).substr(2, 9),
+		// 			}),
+		// 			fields: [
+		// 				{
+		// 					name: "title",
+		// 					component: "text",
+		// 					label: "標題 Title",
+		// 				},
+		// 				{
+		// 					name: "description",
+		// 					component: "blocks",
+		// 					templates: metaTextTemplates,
+		// 					label: "描述 description",
+		// 				},
 
-						{
-							name: "features",
-							component: "group-list",
-							label: "特色 Features",
-							itemProps: ({ id: key, title: label }) => ({
-								key,
-								label,
-							}),
-							defaultItem: () => ({
-								id: Math.random().toString(36).substr(2, 9),
-							}),
-							fields: [
-								{
-									name: "icon",
-									label: "圖示 Icon",
-									component: "image",
-									uploadDir: () => "/home/roleIntroduction",
-									parse: ({ previewSrc }) => previewSrc,
-									previewSrc: (src) => src,
-								},
-								{
-									name: "title",
-									component: "text",
-									label: "標題 Title",
-								},
-								{
-									name: "link",
-									label: "關聯 Link",
-									component: "text",
-									placeholder: "https://",
-								},
-								{
-									name: "caption",
-									component: "text",
-									label: "描述 Caption",
-								},
-								{
-									name: "remark",
-									component: "text",
-									label: "備註 Remark",
-								},
-							],
-						},
-					],
-				},
-			],
-		},
-		{
-			name: "quote",
-			label: "引句 Quote",
-			component: "group",
-			fields: [
-				{
-					name: "background",
-					label: "背景  Background",
-					component: "image",
-					uploadDir: () => "/home",
-					parse: ({ previewSrc }) => previewSrc,
-					previewSrc: (src) => src,
-				},
-				{
-					name: "audience",
-					component: "text",
-					label: "致 To",
-				},
-				{
-					name: "words",
-					component: "blocks",
-					templates: metaTextTemplates,
-					label: "名言 words",
-				},
-				{
-					name: "reference",
-					component: "text",
-					label: "來源 Reference",
-				},
-			],
-		},
+		// 				{
+		// 					name: "features",
+		// 					component: "group-list",
+		// 					label: "特色 Features",
+		// 					itemProps: ({ id: key, title: label }) => ({
+		// 						key,
+		// 						label,
+		// 					}),
+		// 					defaultItem: () => ({
+		// 						id: Math.random().toString(36).substr(2, 9),
+		// 					}),
+		// 					fields: [
+		// 						{
+		// 							name: "icon",
+		// 							label: "圖示 Icon",
+		// 							component: "image",
+		// 							uploadDir: () => "/home/roleIntroduction",
+		// 							parse: ({ previewSrc }) => previewSrc,
+		// 							previewSrc: (src) => src,
+		// 						},
+		// 						{
+		// 							name: "title",
+		// 							component: "text",
+		// 							label: "標題 Title",
+		// 						},
+		// 						{
+		// 							name: "link",
+		// 							label: "關聯 Link",
+		// 							component: "text",
+		// 							placeholder: "https://",
+		// 						},
+		// 						{
+		// 							name: "caption",
+		// 							component: "text",
+		// 							label: "描述 Caption",
+		// 						},
+		// 						{
+		// 							name: "remark",
+		// 							component: "text",
+		// 							label: "備註 Remark",
+		// 						},
+		// 					],
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// },
+		// {
+		// 	name: "quote",
+		// 	label: "引句 Quote",
+		// 	component: "group",
+		// 	fields: [
+		// 		{
+		// 			name: "background",
+		// 			label: "背景  Background",
+		// 			component: "image",
+		// 			uploadDir: () => "/home",
+		// 			parse: ({ previewSrc }) => previewSrc,
+		// 			previewSrc: (src) => src,
+		// 		},
+		// 		{
+		// 			name: "audience",
+		// 			component: "text",
+		// 			label: "致 To",
+		// 		},
+		// 		{
+		// 			name: "words",
+		// 			component: "blocks",
+		// 			templates: metaTextTemplates,
+		// 			label: "名言 words",
+		// 		},
+		// 		{
+		// 			name: "reference",
+		// 			component: "text",
+		// 			label: "來源 Reference",
+		// 		},
+		// 	],
+		// },
 	],
 });
