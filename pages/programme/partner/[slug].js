@@ -59,7 +59,7 @@ const Partner = ({ page }) => {
 	const sliderRef = useRef(null);
 	const settings = {
 		ref: (c) => (sliderRef.current = c),
-		autoplay: true,
+		autoplay: false,
 		dots: false,
 		speed: 500,
 		slidesToShow: 1,
@@ -131,7 +131,7 @@ const Partner = ({ page }) => {
 				pos="relative"
 				w="100%"
 				h="30vw"
-				minH={["30vh", "60vh"]}
+				minH={["40vh", "60vh"]}
 				position="relative"
 				overflow="hidden"
 			>
@@ -140,14 +140,24 @@ const Partner = ({ page }) => {
 						src: image,
 					}))}
 				/>
-				<Slider {...settings}>
+				<Slider {...settings} style={{ textAlign: "center" }}>
 					{(partner?.sliderImage ?? []).map(
 						({ image, imageUrl, isIcon }, index) => {
-							console.log({ isIcon });
-							return (
+							return isIcon ? (
 								<Image
 									alt=""
-									minH={["30vh", "60vh"]}
+									key={index}
+									src={image}
+									maxW={["300px", "500px"]}
+									mt={["7rem", "10rem", "14rem"]}
+									objectFit="contain"
+									objectPosition="center"
+									onClick={() => (imageUrl ? window?.open(imageUrl) : null)}
+								/>
+							) : (
+								<Image
+									alt=""
+									minH={["40vh", "60vh"]}
 									key={index}
 									src={image}
 									objectFit="cover"
