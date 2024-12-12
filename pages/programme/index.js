@@ -394,6 +394,7 @@ const Programme = ({ page }) => {
 					backgroundRepeat="no-repeat"
 					w="100%"
 					position="relative"
+					pb="5rem"
 				>
 					<Container>
 						<VStack
@@ -471,7 +472,7 @@ const Programme = ({ page }) => {
 						</Wrap>
 					</Container>
 
-					<Image
+					{/* <Image
 						alt=""
 						pos="absolute"
 						zIndex="1"
@@ -480,8 +481,8 @@ const Programme = ({ page }) => {
 						left={["2%", "5%", "10%"]}
 						h={["100px", "150px", "220px"]}
 						w={["100px", "150px", "220px"]}
-					/>
-					<Box
+					/> */}
+					{/* <Box
 						pt={["20%", "20%", "0"]}
 						pos="relative"
 						pb={["124px", "124px", "380px"]}
@@ -496,19 +497,19 @@ const Programme = ({ page }) => {
 							src={page?.content?.partnerSection?.bgImageRight}
 							zIndex="1"
 						/>
-						{/* <Box position="absolute" bottom="0" w="100%">
+						<Box position="absolute" bottom="0" w="100%">
 							<DividerA
 								primaryColor="#F6D644"
 								secondaryColor="#00BFBA"
 								nextColor="white"
 							/>
-						</Box> */}
-					</Box>
+						</Box>
+					</Box> */}
 				</Box>
 			</Box>
-			{/* Reference Section */}
+			{/* Reference Section 凝聚資源 */}
 			<Anchor id="reference" top="-100px" />
-			<Box
+			{/* <Box
 				bg={page?.content?.referenceSection?.bgStyle?.bgColor}
 				w="100%"
 				pt="36px"
@@ -611,15 +612,7 @@ const Programme = ({ page }) => {
 																										<FaShareSquare />
 																									</chakra.span>
 																								</Text>
-																								{/* <Image
-                                                  display="inline-flex"
-                                                  src={
-                                                    page?.content?.icon
-                                                      ?.extrenalLinkIcon
-                                                  }
-                                                  marginLeft="10px"
-                                                  height="25px"
-                                                ></Image> */}
+
 																							</Link>
 																						);
 																					}
@@ -666,7 +659,7 @@ const Programme = ({ page }) => {
 						/>
 					</Box>
 				</Box>
-			</Box>
+			</Box> */}
 		</VStack>
 	);
 };
