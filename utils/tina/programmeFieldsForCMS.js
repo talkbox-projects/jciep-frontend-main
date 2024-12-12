@@ -255,6 +255,17 @@ export default [
 								parse: ({ previewSrc }) => previewSrc,
 								previewSrc: (src) => src,
 							},
+							{
+								label: "Image Url 圖片連結",
+								name: "imageUrl",
+								component: "text",
+							},
+							{
+								label: "是否為圖標？",
+								name: "isIcon",
+								component: "toggle",
+								defaultValue: false,
+							},
 						],
 					},
 

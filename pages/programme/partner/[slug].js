@@ -129,9 +129,9 @@ const Partner = ({ page }) => {
 			{/* First Section */}
 			<Box
 				pos="relative"
-				w="100vw"
-				h="40vw"
-				minH={["40vh", "70vh"]}
+				w="100%"
+				h="30vw"
+				minH={["30vh", "60vh"]}
 				position="relative"
 				overflow="hidden"
 			>
@@ -141,18 +141,22 @@ const Partner = ({ page }) => {
 					}))}
 				/>
 				<Slider {...settings}>
-					{(partner?.sliderImage ?? []).map(({ image }, index) => {
-						return (
-							<Image
-								alt=""
-								minH={["40vh", "70vh"]}
-								key={index}
-								src={image}
-								objectFit="cover"
-								objectPosition="center center"
-							/>
-						);
-					})}
+					{(partner?.sliderImage ?? []).map(
+						({ image, imageUrl, isIcon }, index) => {
+							console.log({ isIcon });
+							return (
+								<Image
+									alt=""
+									minH={["30vh", "60vh"]}
+									key={index}
+									src={image}
+									objectFit="cover"
+									objectPosition="center center"
+									onClick={() => (imageUrl ? window?.open(imageUrl) : null)}
+								/>
+							);
+						}
+					)}
 				</Slider>
 				<VStack
 					align="stretch"
@@ -162,7 +166,7 @@ const Partner = ({ page }) => {
 					w="100%"
 				>
 					<Container>
-						<Box pb={[0, 16]}>
+						<Box pb={[10, 16]}>
 							<VStack mx={8} align="start" spacing={0}>
 								<Box>
 									<Text
